@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<Pathway xmlns="http://genmapp.org/GPML/2007" Name="" Data-Source="GenMAPP 2.0" Version="20060601">
+  <Comment Source="GenMAPP notes"></Comment>
+  <Comment Source="GenMAPP remarks"></Comment>
+  <Graphics BoardWidth="22700.0" BoardHeight="17000.0" WindowWidth="10800.0" WindowHeight="11085.0" />
+  <Label TextLabel="Default" GraphId="db3">
+    <Graphics FontWeight="Bold" FontSize="180" Color="000000" CenterX="1150.0" CenterY="450.5" Width="890.0" Height="285.0" />
+  </Label>
+  <Label TextLabel="Regular" GraphId="ceb">
+    <Graphics FontSize="180" Color="000000" CenterX="1150.0" CenterY="1150.0" Width="890.0" Height="270.0" />
+  </Label>
+  <Label TextLabel="Italic" GraphId="d3d">
+    <Graphics FontStyle="Italic" FontSize="180" Color="000000" CenterX="1150.0" CenterY="1850.5" Width="575.0" Height="285.0" />
+  </Label>
+  <Label TextLabel="Bold Italic" GraphId="aa6">
+    <Graphics FontWeight="Bold" FontStyle="Italic" FontSize="180" Color="000000" CenterX="1250.0" CenterY="3350.0" Width="1175.0" Height="270.0" />
+  </Label>
+  <Label TextLabel="Bold" GraphId="ab7">
+    <Graphics FontWeight="Bold" FontSize="180" Color="000000" CenterX="1150.0" CenterY="2600.0" Width="620.0" Height="285.0" />
+  </Label>
+  <Label TextLabel="Label" GraphId="ee0">
+    <Graphics FontWeight="Bold" FontSize="180" Color="000000" CenterX="2750.0" CenterY="500.0" Width="710.0" Height="285.0" />
+  </Label>
+  <Label TextLabel="Regular Strikeout" GraphId="c96">
+    <Graphics FontStrikethru="Strikethru" FontSize="180" Color="000000" CenterX="2900.0" CenterY="450.0" Width="1880.0" Height="270.0" />
+  </Label>
+  <Label TextLabel="Italic Strikeout" GraphId="cf8">
+    <Graphics FontStyle="Italic" FontStrikethru="Strikethru" FontSize="180" Color="000000" CenterX="2750.0" CenterY="1100.0" Width="1580.0" Height="285.0" />
+  </Label>
+  <Label TextLabel="Bold Strikeout" GraphId="bd7">
+    <Graphics FontWeight="Bold" FontStrikethru="Strikethru" FontSize="180" Color="000000" CenterX="2900.0" CenterY="1800.5" Width="1715.0" Height="285.0" />
+  </Label>
+  <Label TextLabel="Bold Italic Strikeout" GraphId="b67">
+    <Graphics FontWeight="Bold" FontStyle="Italic" FontStrikethru="Strikethru" FontSize="180" Color="000000" CenterX="3200.0" CenterY="2650.0" Width="2270.0" Height="270.0" />
+  </Label>
+  <Label TextLabel="Regular Strikeout Underline" GraphId="a7a">
+    <Graphics FontDecoration="Underline" FontStrikethru="Strikethru" FontSize="180" Color="000000" CenterX="3900.0" CenterY="3900.0" Width="2930.0" Height="270.0" />
+  </Label>
+  <Label TextLabel="Regular Underline" GraphId="de1">
+    <Graphics FontDecoration="Underline" FontSize="180" Color="000000" CenterX="1250.0" CenterY="3850.0" Width="1940.0" Height="270.0" />
+  </Label>
+  <Label TextLabel="Bold underline" GraphId="d06">
+    <Graphics FontWeight="Bold" FontDecoration="Underline" FontSize="180" Color="000000" CenterX="1200.0" CenterY="4600.0" Width="1760.0" Height="285.0" />
+  </Label>
+  <Label TextLabel="Bold strikeout underline" GraphId="ffe">
+    <Graphics FontWeight="Bold" FontDecoration="Underline" FontStrikethru="Strikethru" FontSize="180" Color="000000" CenterX="4000.0" CenterY="4700.0" Width="2825.0" Height="285.0" />
+  </Label>
+  <InfoBox CenterX="0.0" CenterY="0.0" />
+  <Legend CenterX="0.0" CenterY="1701.0" />
+</Pathway>
+

@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<project name="PathVisio-common" basedir=".">
+
+	<property name="debug.mode" value="true"/>
+	<property name="ant.build.javac.target" value="1.6"/>
+	<property name="ant.build.javac.source" value="1.6"/>
+	
+	<property name="pathvisio.version" value="3.4.0"/>
+	<property name="bundle.dest" value=".."/>
+
+	<property name="haltonfailure" value="true"/>
+
+	<target name="prepare-jar-name">
+		<!-- the name of the plug-in jar uses the project name of the calling build file -->
+		<property name="jar.name" value="${bundle.dest}/${ant.project.name}.jar"/>
+	</target>
+	
+	<target name="prepare-common">
+		<mkdir dir="build"/>
+	</target>
+	
+	<target name="prepare">
+	</target>
+	
+	<target name="clean" depends="prepare-jar-name">
+		<delete dir="build"/>
+	</target>
+
+	<target name="dist-clean" depends="clean">
+		<delete file="${jar.name}"/>
+	</target>
+
+	<target name="compile" depends="prepare,prepare-common,prepare-jar-name">
+		<echo>Compiling: ${jar.name}</echo>
+		<javac srcdir="src"
+			   includes="**"
+			   destdir="build"
+			   includeantruntime="false"
+			   debug="${debug.mode}">
+		  <classpath refid="project.class.path"/>
+		</javac>
+	</target>
+
+	<target name="jar" depends="compile"> 
+		<echo>Creating JAR: ${jar.name}</echo>
+		<mkdir dir="resources"/> <!-- workaround in case resources dir doesn't exist -->
+		<jar jarfile="${jar.name}" manifest="META-INF/MANIFEST.MF">
+			<manifest>
+				<attribute name="Permissions" value="all-permissions"/>
+				<attribute name="Codebase" value="*"/>
+				<attribute name="Application-Name" value="PathVisio"/>
+			</manifest>
+
+			<fileset dir="resources">
+				<include name="**/*"/>
+			</fileset>
+			<fileset dir="build">
+				<include name="**/*.class"/>
+			</fileset>
+		</jar>
+	</target>
+	
+	<target name="test">
+		<javac srcdir="test" debug="${debug.mode}"
+					includes="**"
+					destdir="build"
+					includeantruntime="false">
+			<classpath>
+				<path refid="test.class.path"/>
+				<path refid="project.class.path"/>
+			</classpath>
+		</javac>
+		<junit printsummary="on" haltonfailure="${haltonfailure=}" fork="true" dir=".">
+			<formatter type="brief" usefile="false"/>
+			<formatter type="xml" usefile="yes"/>
+			<classpath>
+				<pathelement path="build"/>
+				<pathelement path="resources"/>
+				<path refid="project.class.path"/>
+				<path refid="test.class.path"/>
+			</classpath>
+			<batchtest>
+				<fileset dir="test">
+					<include name="**/*Test*.java"/>
+				</fileset>
+			</batchtest>
+		</junit>
+	</target>
+</project>

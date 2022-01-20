@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jnlp codebase="#BASEURL#" href="pathvisio.jnlp">
+	<information>
+		 <title>PathVisio</title>
+		 <vendor>BiGCaT Bioinformatics, Maastricht University</vendor>
+		 <icon href="bigcateye.gif"/>
+		 <offline-allowed/>
+		<shortcut>
+			<desktop/>
+			<menu submenu="PathVisio"/>
+		</shortcut>
+	</information>
+	<resources>
+		 <j2se version="1.6+" java-vm-args="-Xmx512M -Dfile.encoding=UTF-8"/>
+		 <jar href="pathvisio.jar"/>
+	</resources>
+	<application-desc main-class="org.pathvisio.launcher.PathVisioMain"/>
+	<security>
+		 <all-permissions/>
+	</security>
+</jnlp>
