@@ -19,7 +19,7 @@ package org.pathvisio.pluginmanager.impl.data;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlTransient;
+import jakarta.xml.bind.annotation.XmlTransient;
 
 import org.pathvisio.pluginmanager.impl.StatusMessage;
 

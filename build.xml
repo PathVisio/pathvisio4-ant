@@ -113,11 +113,14 @@
 			</fileset>
 			<fileset dir="lib">
 				<include name="org.apache*.jar"/>
-				<include name="org.w3c*.jar"/>
 				<include name="derby.jar"/>
+				<!--<include name="org.w3c*.jar"/>-->
 				<include name="org.bridgedb*.jar"/>
 				<include name="org.pathvisio.*.jar"/>
-				<include name="javax.*.jar"/>
+				<!--<include name="javax.*.jar"/>-->
+				<include name="com.sun.*.jar"/>
+				<include name="jarkarta*.jar"/>
+				<include name="org.jdom.*.jar"/>
 				<include name="commons-math*.jar"/>
 				<include name="com.springsource*.jar"/>
 				<include name="org.apache.felix.bundlerepository-1.6.6.jar"/>

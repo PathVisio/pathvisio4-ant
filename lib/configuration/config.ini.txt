@@ -1,0 +1,5 @@
+    osgi.bundles=\
+        org.apache.felix.gogo.runtime,\
+        org.apache.felix.gogo.command,\
+        org.apache.felix.gogo.shell,\
+        org.eclipse.equinox.console
