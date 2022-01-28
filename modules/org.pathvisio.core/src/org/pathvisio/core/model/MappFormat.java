@@ -149,18 +149,18 @@ public class MappFormat extends AbstractPathwayFormat
     {
     	String database = DATABASE_BEFORE + filename + DATABASE_AFTER;
 
-    	try
-    	{
-	    	// Load Sun's jdbc-odbc driver
-	        Class.forName("sun.jdbc.odbc.JdbcOdbcDriver");
-    	} catch (ClassNotFoundException cnfe)
-    	{
-    		// decoupling: wrap classnotfoundexception into converterexception
-    		ConverterException ce = new ConverterException("Class not found exception in converter");
-    		ce.setStackTrace(cnfe.getStackTrace());
-    		throw ce;
-    	}
-        Logger.log.debug ("Connection string: " + database);
+//    	try
+//    	{
+//	    	// Load Sun's jdbc-odbc driver TODO
+//	        Class.forName("sun.jdbc.odbc.JdbcOdbcDriver");
+//    	} catch (ClassNotFoundException cnfe)
+//    	{
+//    		// decoupling: wrap classnotfoundexception into converterexception
+//    		ConverterException ce = new ConverterException("Class not found exception in converter");
+//    		ce.setStackTrace(cnfe.getStackTrace());
+//    		throw ce;
+//    	}
+//        Logger.log.debug ("Connection string: " + database);
 
 		// Create the connection to the database
 
@@ -231,8 +231,8 @@ public class MappFormat extends AbstractPathwayFormat
         try {
         	copyResource (mappTemplateFile, new File(filename));
 
-            // Load Sun's jdbc-odbc driver
-            Class.forName("sun.jdbc.odbc.JdbcOdbcDriver");
+//            // Load Sun's jdbc-odbc driver
+//            Class.forName("sun.jdbc.odbc.JdbcOdbcDriver"); //TODO 
 
             // Create the connection to the database
             Connection con = DriverManager.getConnection(database, "", "");
@@ -756,7 +756,7 @@ public class MappFormat extends AbstractPathwayFormat
     	if (syscode == null) syscode = "";
     	syscode = syscode.trim();
 
-        o.setDataSource(DataSource.getBySystemCode(syscode));
+        o.setDataSource(DataSource.getExistingBySystemCode(syscode));
 
         o.setDynamicProperty ("org.pathvisio.model.BackpageHead", mappObject[COL_HEAD]);
         if (mappObject[COL_ID] == null)
