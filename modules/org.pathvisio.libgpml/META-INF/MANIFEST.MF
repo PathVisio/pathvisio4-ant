@@ -1,19 +1,11 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: PathVisio core module
-Bundle-SymbolicName: org.pathvisio.core
+Bundle-Name: PathVisio libgpml module
+Bundle-SymbolicName: org.pathvisio.libgpml
 Bundle-Version: 4.0.0
 Bundle-Vendor: PathVisio developers
-Export-Package: org.pathvisio.core,
- org.pathvisio.core.biopax,
- org.pathvisio.core.data,
- org.pathvisio.core.gui,
- org.pathvisio.core.model,
- org.pathvisio.core.preferences,
- org.pathvisio.core.util,
- org.pathvisio.core.view
-Require-Bundle: org.pathvisio.libgpml;bundle-version="4.0.0",
- org.apache.servicemix.bundles.jdom;bundle-version="2.0.6",
+Export-Package: org.pathvisio.core.debug
+Require-Bundle: org.apache.servicemix.bundles.jdom;bundle-version="2.0.6",
  org.pathvisio.pdftranscoder;bundle-version="1.7.0",
  org.bridgedb;bundle-version="3.0.13",
  org.bridgedb.bio;bundle-version="3.0.13",
@@ -26,5 +18,5 @@ Import-Package: javax.swing,
  org.osgi.framework;version="1.5.0"
 Bundle-License: http://www.apache.org/licenses/LICENSE-2.0
 Bundle-DocURL: http://www.pathvisio.org
-Bundle-Description: This module is the core module of the PathVisio application. It contains the data model and basic preferences of the application.
+Bundle-Description: This module is the libgpml module of the PathVisio application. It contains the data model and basic preferences of the application.
 Bundle-Copyright: 2006-2022 BiGCaT Bioinformatics, WikiPathways

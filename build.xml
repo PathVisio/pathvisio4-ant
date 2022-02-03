@@ -13,13 +13,14 @@
 	<property name="webstart.base.url" value="http://www.pathvisio.org/webstart"/>
 
 	<!-- needed to build zip files correctly -->
-	<property name="pathvisio.version" value="3.4.0"/>
+	<property name="pathvisio.version" value="4.0.0"/>
 	
   	<macrodef name="iterate">
 		<attribute name="target"/>
 		<sequential>
 			<subant target="@{target}">
 				<filelist dir=".">
+					<file name="modules/org.pathvisio.libgpml/build.xml"/>
 					<file name="modules/org.pathvisio.core/build.xml"/>
 					<file name="modules/org.pathvisio.gui/build.xml"/>
 					<file name="modules/org.pathvisio.data/build.xml"/>
@@ -51,6 +52,10 @@
 		<delete file="pathvisio.jar"/>
 		<delete dir="${release.dir}" />
 		<iterate target="dist-clean"/>
+	</target>
+	
+	<target name="libgpml.jar" depends="prepare">
+		<subant target="jar" buildpath="modules/org.pathvisio.libgpml/build.xml"/>
 	</target>
 
 	<target name="core.jar" depends="prepare">
@@ -102,6 +107,7 @@
 		<mkdir dir="build/exe"/>
 		<copy toDir="build/exe">
 			<fileset dir="modules">
+				<include name="org.pathvisio.libgpml.jar"/>
 				<include name="org.pathvisio.core.jar"/>
 				<include name="org.pathvisio.data.jar"/>
 				<include name="org.pathvisio.pluginmanager.jar"/>
@@ -172,6 +178,7 @@
 					<include name="*.jar"/>
 				</fileset>
 			</classpath>
+			<packageset dir="${src.dir}/org.pathvisio.libgpml/src"/>
 			<packageset dir="${src.dir}/org.pathvisio.core/src"/>
 			<packageset dir="${src.dir}/org.pathvisio.data/src"/>
 			<packageset dir="${src.dir}/org.pathvisio.pluginmanager/src"/>
@@ -182,6 +189,7 @@
 			<packageset dir="${src.dir}/org.pathvisio.visualization/src"/>
 			<packageset dir="${src.dir}/org.pathvisio.statistics/src"/>
 			<sourcepath>
+				<pathelement location="${src.dir}/org.pathvisio.libgpml/src"/>
 				<pathelement location="${src.dir}/org.pathvisio.core/src"/>
 				<pathelement location="${src.dir}/org.pathvisio.data/src"/>
 				<pathelement location="${src.dir}/org.pathvisio.pluginmanager/src"/>
@@ -240,6 +248,7 @@
 	<target name="zip" depends="zip.src,zip.bin" description="create both source and binary tarballs and zips"/>
 	
 	<target name="test" depends="desktop.jar">
+		<subant target="test" buildpath="modules/org.pathvisio.libgpml/build.xml"/>
 		<subant target="test" buildpath="modules/org.pathvisio.core/build.xml"/>
 		<subant target="test" buildpath="modules/org.pathvisio.desktop/build.xml"/>
 	</target>

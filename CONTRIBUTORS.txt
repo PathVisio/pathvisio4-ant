@@ -1,5 +1,6 @@
 # DEVELOPERS TEAM
 Martina Kutmon
+Finterly Hu
 Nuno Nunes
 Alexander Pico
 Egon Willighagen
