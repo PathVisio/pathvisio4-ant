@@ -14,11 +14,35 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  ******************************************************************************/
-package org.pathvisio.core.debug;
+package org.pathvisio.libgpml.debug;
 
-/** Use this annotation to indicate that this method is Thread-safe,
- * i.e. it can be safely called from any thread at any time.
- */
-public @interface ThreadSafe {
 
+/**
+   A simple helper class for speed optimizations
+*/
+public class StopWatch
+{
+	boolean running;
+	long start;
+	long last;
+
+	public void start() {
+		start = System.currentTimeMillis();
+		running = true;
+	}
+
+	public long stop() {
+		last = System.currentTimeMillis() - start;
+		running = false;
+		return last;
+	}
+
+	public long look() {
+		if(running) return System.currentTimeMillis() - start;
+		return last;
+	}
+
+	public void stopToLog(String msg) {
+		Logger.log.trace(msg + "\t" + stop());
+	}
 }

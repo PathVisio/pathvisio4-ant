@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  ******************************************************************************/
-package org.pathvisio.core.debug;
+package org.pathvisio.libgpml.debug;
 
 import java.io.File;
 import java.io.FileNotFoundException;

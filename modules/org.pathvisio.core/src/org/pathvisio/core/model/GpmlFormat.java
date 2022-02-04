@@ -31,8 +31,8 @@ import org.jdom2.JDOMException;
 import org.jdom2.Namespace;
 import org.jdom2.input.JDOMParseException;
 import org.jdom2.input.SAXBuilder;
-import org.pathvisio.core.debug.Logger;
 import org.pathvisio.core.util.RootElementFinder;
+import org.pathvisio.libgpml.debug.Logger;
 import org.xml.sax.InputSource;
 
 

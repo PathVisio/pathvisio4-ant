@@ -32,7 +32,7 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.pathvisio.core.debug.Logger;
+import org.pathvisio.libgpml.debug.Logger;
 
 /**
  * Collection of static utility methods dealing with files.

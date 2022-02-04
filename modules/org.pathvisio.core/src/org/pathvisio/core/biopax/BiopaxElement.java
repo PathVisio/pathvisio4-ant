@@ -23,10 +23,10 @@ import java.util.Random;
 
 import org.jdom2.Document;
 import org.jdom2.Element;
-import org.pathvisio.core.debug.Logger;
 import org.pathvisio.core.model.GpmlFormat;
 import org.pathvisio.core.model.ObjectType;
 import org.pathvisio.core.model.PathwayElement;
+import org.pathvisio.libgpml.debug.Logger;
 
 /**
  * This class keeps track of all BioPAX elements in the pathway

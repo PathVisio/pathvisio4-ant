@@ -24,7 +24,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.bridgedb.bio.Organism;
-import org.pathvisio.core.debug.Logger;
 import org.pathvisio.core.model.AlignType;
 import org.pathvisio.core.model.CellularComponentType;
 import org.pathvisio.core.model.DataNodeType;
@@ -43,6 +42,7 @@ import org.pathvisio.core.model.ValignType;
 import org.pathvisio.core.preferences.GlobalPreference;
 import org.pathvisio.core.preferences.Preference;
 import org.pathvisio.core.preferences.PreferenceManager;
+import org.pathvisio.libgpml.debug.Logger;
 
 /**
  * This class manages how properties should be displayed.  It keeps track of TypeHandlers, which properties should be

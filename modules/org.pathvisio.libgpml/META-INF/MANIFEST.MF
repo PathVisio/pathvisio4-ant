@@ -4,7 +4,7 @@ Bundle-Name: PathVisio libgpml module
 Bundle-SymbolicName: org.pathvisio.libgpml
 Bundle-Version: 4.0.0
 Bundle-Vendor: PathVisio developers
-Export-Package: org.pathvisio.core.debug
+Export-Package: org.pathvisio.libgpml.debug
 Require-Bundle: org.apache.servicemix.bundles.jdom;bundle-version="2.0.6",
  org.pathvisio.pdftranscoder;bundle-version="1.7.0",
  org.bridgedb;bundle-version="3.0.13",

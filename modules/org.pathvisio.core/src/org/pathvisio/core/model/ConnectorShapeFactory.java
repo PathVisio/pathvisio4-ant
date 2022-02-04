@@ -19,7 +19,7 @@ package org.pathvisio.core.model;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.pathvisio.core.debug.Logger;
+import org.pathvisio.libgpml.debug.Logger;
 
 
 /**

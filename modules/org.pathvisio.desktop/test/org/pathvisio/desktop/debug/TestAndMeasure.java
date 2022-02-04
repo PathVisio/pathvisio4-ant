@@ -27,7 +27,6 @@ import javax.swing.KeyStroke;
 import org.bridgedb.DataSource;
 import org.bridgedb.Xref;
 import org.pathvisio.core.Engine;
-import org.pathvisio.core.debug.StopWatch;
 import org.pathvisio.core.model.ConverterException;
 import org.pathvisio.core.model.ObjectType;
 import org.pathvisio.core.model.Pathway;
@@ -38,6 +37,7 @@ import org.pathvisio.core.view.Line;
 import org.pathvisio.core.view.VPathway;
 import org.pathvisio.core.view.VPathwayElement;
 import org.pathvisio.gui.view.VPathwaySwing;
+import org.pathvisio.libgpml.debug.StopWatch;
 
 import buildsystem.Measure;
 import junit.framework.TestCase;

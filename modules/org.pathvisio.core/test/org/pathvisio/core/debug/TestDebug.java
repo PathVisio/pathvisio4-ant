@@ -19,6 +19,8 @@ package org.pathvisio.core.debug;
 import java.util.ConcurrentModificationException;
 import java.util.ListIterator;
 
+import org.pathvisio.libgpml.debug.DebugList;
+
 import junit.framework.TestCase;
 
 public class TestDebug extends TestCase

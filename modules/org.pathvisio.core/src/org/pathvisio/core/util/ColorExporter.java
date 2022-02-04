@@ -27,7 +27,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.pathvisio.core.debug.Logger;
 import org.pathvisio.core.model.BatikImageExporter;
 import org.pathvisio.core.model.ConverterException;
 import org.pathvisio.core.model.ImageExporter;
@@ -41,6 +40,7 @@ import org.pathvisio.core.view.VPathway;
 import org.pathvisio.core.view.VPathwayElement;
 import org.pathvisio.core.view.VPathwayEvent;
 import org.pathvisio.core.view.VPathwayEvent.VPathwayEventType;
+import org.pathvisio.libgpml.debug.Logger;
 import org.pathvisio.core.view.VPathwayListener;
 
 /**

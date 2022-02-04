@@ -21,11 +21,11 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.pathvisio.core.debug.Logger;
-import org.pathvisio.core.debug.WorkerThreadOnly;
 import org.pathvisio.core.model.ObjectType;
 import org.pathvisio.core.model.PathwayElement;
 import org.pathvisio.core.util.Resources;
+import org.pathvisio.libgpml.debug.Logger;
+import org.pathvisio.libgpml.debug.WorkerThreadOnly;
 
 /**
  * BackpageTextProvider knows how to generate a html "backpage" for a given

@@ -43,7 +43,6 @@ import org.pathvisio.core.Globals;
 import org.pathvisio.core.data.GdbEvent;
 import org.pathvisio.core.data.GdbManager;
 import org.pathvisio.core.data.GdbManager.GdbEventListener;
-import org.pathvisio.core.debug.Logger;
 import org.pathvisio.core.model.BatikImageExporter;
 import org.pathvisio.core.model.DataNodeListExporter;
 import org.pathvisio.core.model.EUGeneExporter;
@@ -56,6 +55,7 @@ import org.pathvisio.core.util.Resources;
 import org.pathvisio.gui.MainPanel;
 import org.pathvisio.gui.SwingEngine;
 import org.pathvisio.gui.SwingEngine.Browser;
+import org.pathvisio.libgpml.debug.Logger;
 
 /**
  * Main class for the Swing GUI. This class creates and shows the GUI.

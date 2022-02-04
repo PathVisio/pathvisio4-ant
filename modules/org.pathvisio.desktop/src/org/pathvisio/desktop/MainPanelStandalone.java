@@ -36,10 +36,10 @@ import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 
 import org.pathvisio.core.ApplicationEvent;
-import org.pathvisio.core.debug.Logger;
 import org.pathvisio.core.preferences.GlobalPreference;
 import org.pathvisio.core.preferences.PreferenceManager;
 import org.pathvisio.gui.BackpageTextProvider.BackpageAttributes;
+import org.pathvisio.libgpml.debug.Logger;
 import org.pathvisio.gui.DataPaneTextProvider;
 import org.pathvisio.gui.MainPanel;
 import org.pathvisio.gui.SwingEngine;

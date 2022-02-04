@@ -17,7 +17,7 @@
 package org.pathvisio.core.biopax;
 
 import org.jdom2.Element;
-import org.pathvisio.core.debug.Logger;
+import org.pathvisio.libgpml.debug.Logger;
 
 /**
  * Represents a property of a BiopaxElement, such as "Title" for a PublicationXref

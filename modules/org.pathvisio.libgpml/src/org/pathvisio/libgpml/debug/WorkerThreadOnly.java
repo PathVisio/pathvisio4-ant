@@ -14,35 +14,19 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  ******************************************************************************/
-package org.pathvisio.core.util;
+package org.pathvisio.libgpml.debug;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Target;
 
 /**
- * Utility functions for statistics calculations.
+ * Indicates that this class or method should only be accessed by threads
+ * other than the Event Dispatch Thread
+ * <p>
+ * Add this annotation to methods that perform potentially blocking operations,
+ * such as disk, network or database access.
  */
-public class Stats
-{
-	/**
-	 * Calculate z-score based on the hypergeometric distribution,
-	 * where
-	 * 	n = total beads sampled
-	 *  r = red beads sampled
-	 *  N = total beads
-	 *  R = total red beads
-	 *
-	 * resulting score == 0 if the sampled beads are in the same ratio as the total beads
-	 */
-	public static double zscore (int an, double ar, int aBigN, int aBigR)
-	{
-		double n = (double)an;
-		double r = (double)ar;
-		double bigN = (double)aBigN;
-		double bigR = (double)aBigR;
+@Target({ElementType.METHOD, ElementType.TYPE, ElementType.CONSTRUCTOR})
+public @interface WorkerThreadOnly {
 
-		double f1 = r - (n * (bigR / bigN));
-		double f2 = bigR / bigN;
-		double f3 = 1.0 - (bigR / bigN);
-		double f4 = 1.0 - ((n - 1) / (bigN - 1));
-
-		return f1 / Math.sqrt (an * f2 * f3 * f4);
-	}
 }

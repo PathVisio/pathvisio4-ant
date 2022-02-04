@@ -23,8 +23,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 
-import org.pathvisio.core.debug.Logger;
 import org.pathvisio.core.model.ConnectorShape.Segment;
+import org.pathvisio.libgpml.debug.Logger;
 
 /**
  * Package private.

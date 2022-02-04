@@ -43,7 +43,6 @@ import org.pathvisio.core.Engine;
 import org.pathvisio.core.Engine.ApplicationEventListener;
 import org.pathvisio.core.Globals;
 import org.pathvisio.core.data.GdbManager;
-import org.pathvisio.core.debug.Logger;
 import org.pathvisio.core.model.ConverterException;
 import org.pathvisio.core.model.GpmlFormat;
 import org.pathvisio.core.model.Pathway;
@@ -59,6 +58,7 @@ import org.pathvisio.gui.dialogs.NewPathwayDialog;
 import org.pathvisio.gui.dialogs.OkCancelDialog;
 import org.pathvisio.gui.dialogs.PopupDialogHandler;
 import org.pathvisio.gui.view.VPathwaySwing;
+import org.pathvisio.libgpml.debug.Logger;
 
 /**
  * SwingEngine ties together a number of global objects needed both in the

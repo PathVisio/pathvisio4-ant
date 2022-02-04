@@ -20,9 +20,9 @@ import java.awt.Shape;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Point2D;
 
-import org.pathvisio.core.debug.Logger;
 import org.pathvisio.core.view.LinAlg;
 import org.pathvisio.core.view.LinAlg.Point;
+import org.pathvisio.libgpml.debug.Logger;
 
 /**
  * Base class for segmented connectors.

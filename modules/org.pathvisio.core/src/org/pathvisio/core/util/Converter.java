@@ -25,7 +25,6 @@ package org.pathvisio.core.util;
 import java.io.File;
 
 import org.pathvisio.core.Engine;
-import org.pathvisio.core.debug.Logger;
 import org.pathvisio.core.model.BatikImageExporter;
 import org.pathvisio.core.model.ConverterException;
 import org.pathvisio.core.model.DataNodeListExporter;
@@ -39,6 +38,7 @@ import org.pathvisio.core.model.RasterImageExporter;
 import org.pathvisio.core.preferences.GlobalPreference;
 import org.pathvisio.core.preferences.PreferenceManager;
 import org.pathvisio.core.view.MIMShapes;
+import org.pathvisio.libgpml.debug.Logger;
 
 /**
  * @author Thomas Kelder (t.a.j.kelder@student.tue.nl)

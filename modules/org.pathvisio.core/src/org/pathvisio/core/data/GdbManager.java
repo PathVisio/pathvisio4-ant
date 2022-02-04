@@ -27,10 +27,9 @@ import org.bridgedb.BridgeDb;
 import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.IDMapperStack;
-//import org.bridgedb.bio.EnsemblCompatibilityMapper;
-import org.pathvisio.core.debug.Logger;
 import org.pathvisio.core.preferences.GlobalPreference;
 import org.pathvisio.core.preferences.PreferenceManager;
+import org.pathvisio.libgpml.debug.Logger;
 
 /**
  * GdbManager is responsible for maintaining a single

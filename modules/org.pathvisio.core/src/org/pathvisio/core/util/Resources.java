@@ -18,7 +18,7 @@ package org.pathvisio.core.util;
 
 import java.net.URL;
 
-import org.pathvisio.core.debug.Logger;
+import org.pathvisio.libgpml.debug.Logger;
 
 /**
  * Utility function related to getting Resources from the class path.

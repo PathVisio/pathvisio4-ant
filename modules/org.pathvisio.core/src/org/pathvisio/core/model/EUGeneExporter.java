@@ -27,7 +27,7 @@ import java.util.Map;
 
 import org.bridgedb.DataSource;
 import org.bridgedb.Xref;
-import org.pathvisio.core.debug.Logger;
+import org.pathvisio.libgpml.debug.Logger;
 
 /**
  * Exports to pathway format understood by the EuGene pathway statistics

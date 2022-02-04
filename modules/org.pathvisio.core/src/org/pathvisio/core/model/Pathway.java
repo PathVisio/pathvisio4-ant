@@ -35,12 +35,12 @@ import java.util.Set;
 import org.bridgedb.Xref;
 import org.pathvisio.core.biopax.BiopaxElement;
 import org.pathvisio.core.biopax.BiopaxNode;
-import org.pathvisio.core.debug.Logger;
 import org.pathvisio.core.model.GraphLink.GraphIdContainer;
 import org.pathvisio.core.model.GraphLink.GraphRefContainer;
 import org.pathvisio.core.model.PathwayElement.MAnchor;
 import org.pathvisio.core.model.PathwayElement.MPoint;
 import org.pathvisio.core.util.Utils;
+import org.pathvisio.libgpml.debug.Logger;
 
 /**
 * This class is the model for pathway data. It is responsible for
