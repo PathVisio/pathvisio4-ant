@@ -35,12 +35,12 @@ import org.pathvisio.core.model.Pathway;
 import org.pathvisio.core.model.PathwayElement;
 import org.pathvisio.core.preferences.PreferenceManager;
 import org.pathvisio.core.view.Graphics;
-import org.pathvisio.core.view.MIMShapes;
 import org.pathvisio.core.view.VPathway;
 import org.pathvisio.core.view.VPathwayElement;
 import org.pathvisio.core.view.VPathwayEvent;
 import org.pathvisio.core.view.VPathwayEvent.VPathwayEventType;
 import org.pathvisio.libgpml.debug.Logger;
+import org.pathvisio.libgpml.model.shape.MIMShapes;
 import org.pathvisio.core.view.VPathwayListener;
 
 /**

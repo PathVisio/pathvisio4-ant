@@ -32,7 +32,7 @@ import org.pathvisio.core.model.ObjectType;
 import org.pathvisio.core.model.Pathway;
 import org.pathvisio.core.model.PathwayElement;
 import org.pathvisio.core.preferences.PreferenceManager;
-import org.pathvisio.core.view.GeneProduct;
+import org.pathvisio.core.view.VDataNode;
 import org.pathvisio.core.view.Line;
 import org.pathvisio.core.view.VPathway;
 import org.pathvisio.core.view.VPathwayElement;
@@ -218,7 +218,7 @@ public class TestAndMeasure extends TestCase
 				elt.setElementID("3463");
 				elt.setTextLabel("INSR");
 				pwy3.add (elt);
-				VPathwayElement velt = new GeneProduct(vpwy3, elt);
+				VPathwayElement velt = new VDataNode(vpwy3, elt);
 				return velt;
 			}
 

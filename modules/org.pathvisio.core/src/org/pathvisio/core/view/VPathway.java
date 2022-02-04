@@ -137,12 +137,12 @@ public class VPathway implements PathwayListener
 	private VPathwayElement pressedObject = null;
 
 	/**
-	 * {@link InfoBox} object that contains information about this pathway,
+	 * {@link VInfoBox} object that contains information about this pathway,
 	 * currently only used for information in PropertyPanel
 	 * (TODO: has to be implemented to behave the same as any Graphics object
 	 * when displayed on the drawing)
 	 */
-	private InfoBox infoBox;
+	private VInfoBox infoBox;
 
 	private Pathway data;
 
@@ -226,10 +226,10 @@ public class VPathway implements PathwayListener
 		switch (o.getObjectType())
 		{
 		case DATANODE:
-			result = new GeneProduct(this, o);
+			result = new VDataNode(this, o);
 			break;
 		case SHAPE:
-			result = new Shape(this, o);
+			result = new VShape(this, o);
 			break;
 		case LINE:
 			result = new Line(this, o);
@@ -238,18 +238,18 @@ public class VPathway implements PathwayListener
 			result = new Line(this, o);
 			break;	
 		case MAPPINFO:
-			InfoBox mi = new InfoBox(this, o);
+			VInfoBox mi = new VInfoBox(this, o);
 			result = mi;
 			mi.markDirty();
 			break;
 		case LABEL:
-			result = new Label(this, o);
+			result = new VLabel(this, o);
 			break;
 		case GROUP:
-			result = new Group(this, o);
+			result = new VGroup(this, o);
 			break;
 		case STATE:
-			result = new State (this, o);
+			result = new VState (this, o);
 			break;
 		case LEGEND:
 			result = new Legend(this, o);
@@ -348,7 +348,7 @@ public class VPathway implements PathwayListener
 	 *
 	 * @param mappInfo
 	 */
-	public void setMappInfo(InfoBox mappInfo)
+	public void setMappInfo(VInfoBox mappInfo)
 	{
 		this.infoBox = mappInfo;
 	}
@@ -356,7 +356,7 @@ public class VPathway implements PathwayListener
 	/**
 	 * Gets the MappInfo containing information on the pathway
 	 */
-	public InfoBox getMappInfo()
+	public VInfoBox getMappInfo()
 	{
 		return infoBox;
 	}
@@ -708,7 +708,7 @@ public class VPathway implements PathwayListener
 			if(!lastMouseOver.contains(vpe)) {
 				lastMouseOver.add(vpe);
 				stateEntered = true;
-				if(vpe instanceof Label && !((Label)vpe).gdata.getHref().equals("")) {
+				if(vpe instanceof VLabel && !((VLabel)vpe).gdata.getHref().equals("")) {
 					lastEnteredElement = vpe;
 				} else {					
 					fireVElementMouseEvent(new VElementMouseEvent(
@@ -823,8 +823,8 @@ public class VPathway implements PathwayListener
 	
 	 // opens href of a Label with ctrl + click
 	private boolean openHref(MouseEvent e, VPathwayElement o) {
-		if(e.isKeyDown(128) && o != null && o instanceof Label) {
-			String href = ((Label)o).gdata.getHref();
+		if(e.isKeyDown(128) && o != null && o instanceof VLabel) {
+			String href = ((VLabel)o).gdata.getHref();
 			if(selection.getSelection().size() < 1 && !href.equals("")) {
 				fireVPathwayEvent(new VPathwayEvent(this, o, VPathwayEventType.HREF_ACTIVATED));
 				return true;
@@ -1390,7 +1390,7 @@ public class VPathway implements PathwayListener
 	 * this group is returned. If a group is removed, this method will return
 	 * <code>null</code>.
 	 */
-	public Group toggleGroup(List<Graphics> selection)
+	public VGroup toggleGroup(List<Graphics> selection)
 	{
 		// groupSelection will be set to true if we are going to add / expand a group,
 		// false if we're going to remove a group.
@@ -1467,7 +1467,7 @@ public class VPathway implements PathwayListener
 				clearSelection();
 				selectObject(vg);
 			}
-			return (Group)vg;
+			return (VGroup)vg;
 		}
 		return null;
 	}
@@ -2212,7 +2212,7 @@ public class VPathway implements PathwayListener
 		for (VPathwayElement g : drawingObjects)
 		{
 			if (g.isSelected() && g instanceof Graphics
-					&& !(g instanceof SelectionBox) && !((g instanceof Group)))
+					&& !(g instanceof SelectionBox) && !((g instanceof VGroup)))
 			{
 				result.add((Graphics) g);
 			}
@@ -2403,7 +2403,7 @@ public class VPathway implements PathwayListener
 
 			data.add(p); // causes lastAdded to be set
 			lastAdded.select();
-			if (!(lastAdded instanceof Group)){ // avoids "double selecting" grouped objects
+			if (!(lastAdded instanceof VGroup)){ // avoids "double selecting" grouped objects
 				selection.addToSelection(lastAdded);
 			}
 		}
@@ -2690,7 +2690,7 @@ public class VPathway implements PathwayListener
 		for (VPathwayElement o : toMove) 
 		{
 			// skip if parent of state is also in selection.
-			if (o instanceof State && eltIds.contains (((State)o).getPathwayElement().getGraphRef()))
+			if (o instanceof VState && eltIds.contains (((VState)o).getPathwayElement().getGraphRef()))
 					continue;
 			
 			if(o instanceof Graphics) 

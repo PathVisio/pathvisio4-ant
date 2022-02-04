@@ -56,7 +56,7 @@ import org.pathvisio.core.model.PathwayElement;
 import org.pathvisio.core.util.Utils;
 import org.pathvisio.core.view.Graphics;
 import org.pathvisio.core.view.Handle;
-import org.pathvisio.core.view.Label;
+import org.pathvisio.core.view.VLabel;
 import org.pathvisio.core.view.SelectionBox;
 import org.pathvisio.core.view.VPathway;
 import org.pathvisio.core.view.VPathwayElement;
@@ -487,9 +487,9 @@ public class MainPanel extends JPanel implements VPathwayListener, ApplicationEv
 			}
 			break;
 		case HREF_ACTIVATED:
-			if(e.getAffectedElement() instanceof Label) {
+			if(e.getAffectedElement() instanceof VLabel) {
 				try {
-					hyperlinkUpdate(new HyperlinkEvent(e.getSource(), HyperlinkEvent.EventType.ACTIVATED, new URL(((Label)e.getAffectedElement()).getPathwayElement().getHref())));
+					hyperlinkUpdate(new HyperlinkEvent(e.getSource(), HyperlinkEvent.EventType.ACTIVATED, new URL(((VLabel)e.getAffectedElement()).getPathwayElement().getHref())));
 				} catch (MalformedURLException e1) {
 					swingEngine.getEngine().getActiveVPathway().selectObject(e.getAffectedElement());
 					swingEngine.handleMalformedURLException("The specified link address is not valid.", this, e1);

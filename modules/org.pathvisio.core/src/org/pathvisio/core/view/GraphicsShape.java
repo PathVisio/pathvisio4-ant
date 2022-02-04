@@ -39,6 +39,7 @@ import org.pathvisio.core.preferences.GlobalPreference;
 import org.pathvisio.core.preferences.PreferenceManager;
 import org.pathvisio.core.view.Handle.Freedom;
 import org.pathvisio.core.view.LinAlg.Point;
+import org.pathvisio.libgpml.model.shape.ShapeRegistry;
 
 /**
  * This is an {@link Graphics} class representing shapelike forms,
@@ -86,7 +87,7 @@ public abstract class GraphicsShape extends Graphics implements LinkProvider, Ad
 					handleR
 			};
 		}
-		else if (this instanceof State)
+		else if (this instanceof VState)
 		{
 			handleNE = new Handle(Handle.Freedom.NEGFREE, this, this);
 			handleSE = new Handle(Handle.Freedom.FREE, this, this);
@@ -125,8 +126,8 @@ public abstract class GraphicsShape extends Graphics implements LinkProvider, Ad
 			handleSW.setAngle(135);
 			handleNW.setAngle(225);
             
-			if(this instanceof GeneProduct || 
-				this instanceof Label || !gdata.getShapeType().isRotatable())
+			if(this instanceof VDataNode || 
+				this instanceof VLabel || !gdata.getShapeType().isRotatable())
 			{
                 // No rotation handle for these objects
 				handles = new Handle[]

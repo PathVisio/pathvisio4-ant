@@ -38,7 +38,8 @@ import org.jdom2.output.XMLOutputter;
 import org.pathvisio.core.biopax.BiopaxElement;
 import org.pathvisio.core.model.PathwayElement.MAnchor;
 import org.pathvisio.core.model.PathwayElement.MPoint;
-import org.pathvisio.core.view.ShapeRegistry;
+import org.pathvisio.libgpml.model.shape.IShape;
+import org.pathvisio.libgpml.model.shape.ShapeRegistry;
 
 class GpmlFormat2013a extends GpmlFormatAbstract implements GpmlFormatReader, GpmlFormatWriter 
 {

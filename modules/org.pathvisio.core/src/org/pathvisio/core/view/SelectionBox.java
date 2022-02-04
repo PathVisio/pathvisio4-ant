@@ -418,8 +418,8 @@ public class SelectionBox extends VPathwayElement implements Adjustable
 						if (ref != null) {
 							continue;
 						}
-						if(o instanceof Group) {
-							groupObjects.addAll(((Group) o).getGroupGraphics());
+						if(o instanceof VGroup) {
+							groupObjects.addAll(((VGroup) o).getGroupGraphics());
 						}
 					}
 					addToSelection(o);

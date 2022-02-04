@@ -37,7 +37,7 @@ public class DefaultLinkAnchorDelegate extends AbstractLinkAnchorDelegate
 
 	public void showLinkAnchors() 
 	{
-        if (parent instanceof Group && 
+        if (parent instanceof VGroup && 
         	parent.gdata.getGroupStyle().isDisallowLinks()) 
         {
             return;

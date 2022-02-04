@@ -34,15 +34,15 @@ import org.pathvisio.core.model.AnchorType;
 import org.pathvisio.core.model.ConnectorType;
 import org.pathvisio.core.model.GroupStyle;
 import org.pathvisio.core.view.Citation;
-import org.pathvisio.core.view.GeneProduct;
+import org.pathvisio.core.view.VDataNode;
 import org.pathvisio.core.view.Graphics;
-import org.pathvisio.core.view.Group;
+import org.pathvisio.core.view.VGroup;
 import org.pathvisio.core.view.Handle;
-import org.pathvisio.core.view.InfoBox;
-import org.pathvisio.core.view.Label;
+import org.pathvisio.core.view.VInfoBox;
+import org.pathvisio.core.view.VLabel;
 import org.pathvisio.core.view.Line;
 import org.pathvisio.core.view.MouseEvent;
-import org.pathvisio.core.view.State;
+import org.pathvisio.core.view.VState;
 import org.pathvisio.core.view.VAnchor;
 import org.pathvisio.core.view.VPathway;
 import org.pathvisio.core.view.VPathwayElement;
@@ -109,7 +109,7 @@ public class PathwayElementMenuListener implements VPathwayListener {
 		JPopupMenu menu = new JPopupMenu();
 
 		//Don't show delete if the element cannot be deleted
-		if(!(e instanceof InfoBox)) {
+		if(!(e instanceof VInfoBox)) {
 			menu.add(vActions.delete1);
 		}
 
@@ -136,8 +136,8 @@ public class PathwayElementMenuListener implements VPathwayListener {
 		
 
 		//Only show group/ungroup when multiple objects or a group are selected
-		if((e instanceof Group)) {
-			GroupStyle s = ((Group)e).getPathwayElement().getGroupStyle();
+		if((e instanceof VGroup)) {
+			GroupStyle s = ((VGroup)e).getPathwayElement().getGroupStyle();
 			if(s == GroupStyle.GROUP) {
 				menu.add(vActions.toggleGroup);
 			} else {
@@ -149,11 +149,11 @@ public class PathwayElementMenuListener implements VPathwayListener {
 			menu.add(vActions.toggleComplex);
 		}
 
-		if (e instanceof GeneProduct)
+		if (e instanceof VDataNode)
 		{
 			menu.add(vActions.addState);
 		}
-		if (e instanceof State)
+		if (e instanceof VState)
 		{
 			menu.add(vActions.removeState);
 		}
@@ -239,7 +239,7 @@ public class PathwayElementMenuListener implements VPathwayListener {
 			menu.add(pathLitRef);
 		}
 		
-		if(e instanceof Label) {
+		if(e instanceof VLabel) {
 			menu.addSeparator();
 			menu.add(new CommonActions.AddHrefAction(e, swingEngine));
 		}

@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  ******************************************************************************/
-package org.pathvisio.core.view;
+package org.pathvisio.libgpml.model.shape;
 
 import java.awt.geom.Area;
 import java.awt.geom.Ellipse2D;

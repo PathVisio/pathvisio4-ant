@@ -29,6 +29,8 @@ import org.pathvisio.core.model.AnchorType;
 import org.pathvisio.core.model.GraphLink.GraphRefContainer;
 import org.pathvisio.core.model.PathwayElement.MAnchor;
 import org.pathvisio.core.model.PathwayElement.MPoint;
+import org.pathvisio.libgpml.model.shape.AnchorShape;
+import org.pathvisio.libgpml.model.shape.ShapeRegistry;
 
 /**
  * VAnchor is the view representation of {@link MAnchor}.

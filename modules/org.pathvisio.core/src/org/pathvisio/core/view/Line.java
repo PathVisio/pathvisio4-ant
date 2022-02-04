@@ -43,6 +43,8 @@ import org.pathvisio.core.preferences.PreferenceManager;
 import org.pathvisio.libgpml.model.connector.ConnectorShape;
 import org.pathvisio.libgpml.model.connector.ConnectorShape.Segment;
 import org.pathvisio.libgpml.model.connector.ConnectorShape.WayPoint;
+import org.pathvisio.libgpml.model.shape.ArrowShape;
+import org.pathvisio.libgpml.model.shape.ShapeRegistry;
 
 /**
  * This class represents a Line on the pathway, or rather
@@ -295,7 +297,7 @@ public class Line extends Graphics implements Adjustable
 		Shape shape = null;
 		for (VPathwayElement o : canvas.getDrawingObjects())
 		{
-			if (o instanceof GeneProduct ||
+			if (o instanceof VDataNode ||
 					o instanceof Shape)
 				if (o.vContains(point))
 				{

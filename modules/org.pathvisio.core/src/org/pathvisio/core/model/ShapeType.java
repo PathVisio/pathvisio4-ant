@@ -28,9 +28,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.pathvisio.core.view.GenMAPPShapes;
-import org.pathvisio.core.view.GenMAPPShapes.Internal;
-import org.pathvisio.core.view.ShapeRegistry;
+import org.pathvisio.libgpml.model.shape.GenMAPPShapes;
+import org.pathvisio.libgpml.model.shape.IShape;
+import org.pathvisio.libgpml.model.shape.ShapeRegistry;
+import org.pathvisio.libgpml.model.shape.GenMAPPShapes.Internal;
 
 /**
    Extensible enum

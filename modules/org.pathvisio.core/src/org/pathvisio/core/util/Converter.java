@@ -37,8 +37,8 @@ import org.pathvisio.core.model.PathwayImporter;
 import org.pathvisio.core.model.RasterImageExporter;
 import org.pathvisio.core.preferences.GlobalPreference;
 import org.pathvisio.core.preferences.PreferenceManager;
-import org.pathvisio.core.view.MIMShapes;
 import org.pathvisio.libgpml.debug.Logger;
+import org.pathvisio.libgpml.model.shape.MIMShapes;
 
 /**
  * @author Thomas Kelder (t.a.j.kelder@student.tue.nl)

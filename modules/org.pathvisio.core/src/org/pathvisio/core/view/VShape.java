@@ -16,23 +16,22 @@
  ******************************************************************************/
 package org.pathvisio.core.view;
 
-import java.awt.Color;
-
 import org.pathvisio.core.model.PathwayElement;
 
 /**
- * This class implements a geneproduct and
- * provides methods to resize and draw it.
- * //TODO: rename this class to DataNode
+ * Represents the view of a PathwayElement with ObjectType.SHAPE.
+ *
+ * //TODO: rename this class to something other than Shape,
+ * because it is confusing with java.awt.Shape
  */
-public class GeneProduct extends GraphicsShape
+public class VShape extends GraphicsShape
 {
-	public static final Color INITIAL_FILL_COLOR = Color.WHITE;
-
-	//note: not the same as color!
-	Color fillColor = INITIAL_FILL_COLOR;
-
-	public GeneProduct (VPathway canvas, PathwayElement o) {
+	/**
+	 * Constructor for this class
+	 * @param canvas - the VPathway this Shape will be part of
+	 */
+	public VShape(VPathway canvas, PathwayElement o)
+	{
 		super(canvas, o);
 	}
 	

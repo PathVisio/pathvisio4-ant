@@ -36,13 +36,13 @@ import org.pathvisio.core.model.PathwayElement;
  * Also contains the getGroupGraphics method to quickly access all Graphics' that
  * are in this group.
  */
-public class Group extends Graphics implements LinkProvider, VElementMouseListener
+public class VGroup extends Graphics implements LinkProvider, VElementMouseListener
 {
 	public static final int FLAG_SELECTED = 1 << 0;
 	public static final int FLAG_MOUSEOVER = 1 << 1;
 	public static final int FLAG_ANCHORSVISIBLE = 1 << 2;
 
-	public Group(VPathway canvas, PathwayElement pe)
+	public VGroup(VPathway canvas, PathwayElement pe)
 	{
 		super(canvas, pe);
 		canvas.addVElementMouseListener(this);
@@ -61,7 +61,7 @@ public class Group extends Graphics implements LinkProvider, VElementMouseListen
 		// Populate hash map of id-ref pairs for all groups
 		for (VPathwayElement vpe : canvas.getDrawingObjects())
 		{
-			if (vpe instanceof Graphics && vpe instanceof Group)
+			if (vpe instanceof Graphics && vpe instanceof VGroup)
 			{
 				PathwayElement pe = ((Graphics) vpe).getPathwayElement();
 				if (pe.getGroupRef() != null)
@@ -124,7 +124,7 @@ public class Group extends Graphics implements LinkProvider, VElementMouseListen
 		// return false if point falls on any individual element
 		for (VPathwayElement vpe : canvas.getDrawingObjects())
 		{
-			if (vpe instanceof Graphics && !(vpe instanceof Group)
+			if (vpe instanceof Graphics && !(vpe instanceof VGroup)
 					&& vpe.vContains(point))
 			{
 				return false;

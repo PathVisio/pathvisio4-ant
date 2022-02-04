@@ -39,7 +39,8 @@ import org.pathvisio.core.model.GraphLink.GraphRefContainer;
 import org.pathvisio.core.preferences.GlobalPreference;
 import org.pathvisio.core.preferences.PreferenceManager;
 import org.pathvisio.core.util.Utils;
-import org.pathvisio.core.view.State;
+import org.pathvisio.core.view.VState;
+import org.pathvisio.libgpml.model.shape.IShape;
 
 /**
  * PathwayElement is responsible for maintaining the data for all the individual
@@ -1930,7 +1931,7 @@ public class PathwayElement implements GraphIdContainer, Comparable<PathwayEleme
 			// TODO: remove after next GPML update.
 			if (objectType == ObjectType.STATE && v != 0)
 			{
-				setDynamicProperty(State.ROTATION_KEY, "" + v);
+				setDynamicProperty(VState.ROTATION_KEY, "" + v);
 			}
 			
 			fireObjectModifiedEvent(PathwayElementEvent.createCoordinatePropertyEvent(this));

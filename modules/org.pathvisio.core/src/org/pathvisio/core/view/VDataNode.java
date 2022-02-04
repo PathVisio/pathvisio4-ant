@@ -16,20 +16,24 @@
  ******************************************************************************/
 package org.pathvisio.core.view;
 
+import java.awt.Color;
+
 import org.pathvisio.core.model.PathwayElement;
 
 /**
- * Represents the view of a PathwayElement with ObjectType.LABEL.
+ * This class implements a geneproduct and
+ * provides methods to resize and draw it.
+ * //TODO: rename this class to DataNode
  */
-public class Label extends GraphicsShape
+public class VDataNode extends GraphicsShape
 {
-	/**
-	 * Constructor for this class
-	 * @param canvas - the VPathway this label will be part of
-	 */
-	public Label(VPathway canvas, PathwayElement o)
-	{
+	public static final Color INITIAL_FILL_COLOR = Color.WHITE;
+
+	//note: not the same as color!
+	Color fillColor = INITIAL_FILL_COLOR;
+
+	public VDataNode (VPathway canvas, PathwayElement o) {
 		super(canvas, o);
 	}
-
+	
 }

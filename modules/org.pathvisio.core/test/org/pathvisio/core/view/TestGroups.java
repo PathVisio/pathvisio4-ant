@@ -48,7 +48,7 @@ public class TestGroups extends TestCase
 			dn[i].setMCenterY(3000);
 			dn[i].setMWidth(500);
 			dn[i].setMHeight(500);
-			vDn[i] = (GeneProduct)addElement (vpwy, dn[i]);
+			vDn[i] = (VDataNode)addElement (vpwy, dn[i]);
 			dn[i].setGeneratedGraphId();
 		}
 		vLn[0] = (Line)addConnector (vpwy, dn[0], dn[1]);
@@ -66,18 +66,18 @@ public class TestGroups extends TestCase
 		assertNotNull(ref1);
 		assertEquals (ref1, dn[1].getGroupRef());
 		grp1 = vpwy.getPathwayModel().getGroupById(ref1);
-		vGrp1 = (Group)vpwy.getPathwayElementView(grp1);
+		vGrp1 = (VGroup)vpwy.getPathwayElementView(grp1);
 		grp1.setGeneratedGraphId();
 	}
 
 	private VPathway vpwy;
 	private Pathway pwy;
 
-	private GeneProduct[] vDn = new GeneProduct[DATANODE_COUNT];
+	private VDataNode[] vDn = new VDataNode[DATANODE_COUNT];
 	private Line[] vLn = new Line[2];
 	private PathwayElement[] dn = new PathwayElement[DATANODE_COUNT];
 	private PathwayElement grp1 = null;
-	private Group vGrp1 = null;
+	private VGroup vGrp1 = null;
 
 	/** helper for adding elements to a vpathway */
 	private VPathwayElement addElement(VPathway vpwy, PathwayElement pelt)
@@ -116,7 +116,7 @@ public class TestGroups extends TestCase
 		assertNotNull(ref2);
 		assertEquals (ref2, grp1.getGroupRef());
 		PathwayElement grp2 = vpwy.getPathwayModel().getGroupById(ref2);
-		Group vGrp2 = (Group)vpwy.getPathwayElementView(grp2);
+		VGroup vGrp2 = (VGroup)vpwy.getPathwayElementView(grp2);
 	}
 
 	public void testDrag()

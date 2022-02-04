@@ -14,13 +14,22 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  ******************************************************************************/
-package org.pathvisio.core.model;
+package org.pathvisio.core.view;
 
-public interface IShape
+import org.pathvisio.core.model.PathwayElement;
+
+/**
+ * Represents the view of a PathwayElement with ObjectType.LABEL.
+ */
+public class VLabel extends GraphicsShape
 {
-	public String getMappName();
-	public String getName();
-	public boolean isResizeable();
-	public boolean isRotatable();
-	public java.awt.Shape getShape(double mw, double mh);
+	/**
+	 * Constructor for this class
+	 * @param canvas - the VPathway this label will be part of
+	 */
+	public VLabel(VPathway canvas, PathwayElement o)
+	{
+		super(canvas, o);
+	}
+
 }

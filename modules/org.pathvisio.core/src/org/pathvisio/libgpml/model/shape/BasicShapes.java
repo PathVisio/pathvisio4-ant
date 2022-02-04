@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  ******************************************************************************/
-package org.pathvisio.core.view;
+package org.pathvisio.libgpml.model.shape;
 
 import java.awt.Polygon;
 import java.awt.Shape;
@@ -24,6 +24,7 @@ import java.awt.geom.GeneralPath;
 import java.awt.geom.Rectangle2D;
 
 import org.pathvisio.core.model.AnchorType;
+import org.pathvisio.libgpml.model.shape.ArrowShape.FillType;
 
 /**
  * Defines and registers all basic shapes and arrowheads, such Oval,

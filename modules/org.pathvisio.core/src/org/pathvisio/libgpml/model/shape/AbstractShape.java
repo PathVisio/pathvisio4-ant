@@ -14,13 +14,11 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  ******************************************************************************/
-package org.pathvisio.core.model;
+package org.pathvisio.libgpml.model.shape;
 
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
-
-import org.pathvisio.core.view.ShapeRegistry;
 
 public class AbstractShape implements IShape
 {

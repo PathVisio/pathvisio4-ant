@@ -33,7 +33,7 @@ import org.pathvisio.core.model.PathwayElement;
  * This confusion is rooted in inconsistencies in GPML.
  * This should be cleaned up one day.
  */
-public class InfoBox extends Graphics {
+public class VInfoBox extends Graphics {
 	static final int V_SPACING = 5;
 	static final int H_SPACING = 10;
 	static final int INITIAL_SIZE = 200;
@@ -46,7 +46,7 @@ public class InfoBox extends Graphics {
 	int sizeX = 1;
 	int sizeY = 1; //Real size is calculated on first call to draw()
 
-	public InfoBox (VPathway canvas, PathwayElement o) {
+	public VInfoBox (VPathway canvas, PathwayElement o) {
 		super(canvas, o);
 		canvas.setMappInfo(this);
 	}

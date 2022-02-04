@@ -29,7 +29,7 @@ public interface GroupPainter {
 	 * @param g The {@link Graphics2D} object to draw on
 	 * @param group The group to draw
 	 * @param flags Several flags that provide information about the
-	 * group state. These include the {@link Group}.FLAG_* constants.
+	 * group state. These include the {@link VGroup}.FLAG_* constants.
 	 */
-	public void drawGroup(Graphics2D g, Group group, int flags);
+	public void drawGroup(Graphics2D g, VGroup group, int flags);
 }

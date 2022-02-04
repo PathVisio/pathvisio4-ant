@@ -29,7 +29,7 @@ import org.jdom2.Namespace;
 import org.pathvisio.core.biopax.BiopaxElement;
 import org.pathvisio.core.model.PathwayElement.MAnchor;
 import org.pathvisio.core.model.PathwayElement.MPoint;
-import org.pathvisio.core.view.ShapeRegistry;
+import org.pathvisio.libgpml.model.shape.ShapeRegistry;
 
 /**
  * GpmlFormat reader / writer for version 2007 and 2008A.

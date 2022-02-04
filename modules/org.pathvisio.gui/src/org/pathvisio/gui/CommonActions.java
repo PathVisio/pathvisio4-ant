@@ -49,9 +49,8 @@ import org.pathvisio.core.util.Resources;
 import org.pathvisio.core.view.DefaultTemplates;
 import org.pathvisio.core.view.Graphics;
 import org.pathvisio.core.view.Handle;
-import org.pathvisio.core.view.Label;
+import org.pathvisio.core.view.VLabel;
 import org.pathvisio.core.view.LayoutType;
-import org.pathvisio.core.view.MIMShapes;
 import org.pathvisio.core.view.SelectionBox;
 import org.pathvisio.core.view.Template;
 import org.pathvisio.core.view.VPathway;
@@ -60,6 +59,7 @@ import org.pathvisio.core.view.ViewActions;
 import org.pathvisio.gui.dialogs.AboutDlg;
 import org.pathvisio.gui.dialogs.PathwayElementDialog;
 import org.pathvisio.gui.dialogs.PublicationXRefDialog;
+import org.pathvisio.libgpml.model.shape.MIMShapes;
 
 /**
  * A collection of {@link Action}s that may be used throughout the program (e.g. in
@@ -751,8 +751,8 @@ public class CommonActions implements ApplicationEventListener {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			if(vpe instanceof Label) {
-				PathwayElement pe = ((Label) vpe).getPathwayElement();
+			if(vpe instanceof VLabel) {
+				PathwayElement pe = ((VLabel) vpe).getPathwayElement();
 				String currentHref = pe.getHref();
 				String userInput = JOptionPane.showInputDialog(se.getFrame(), "Label hyperlink", currentHref);
 				if(userInput != null) {

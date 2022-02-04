@@ -14,25 +14,13 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  ******************************************************************************/
-package org.pathvisio.core.view;
+package org.pathvisio.libgpml.model.shape;
 
-import org.pathvisio.core.model.PathwayElement;
-
-/**
- * Represents the view of a PathwayElement with ObjectType.SHAPE.
- *
- * //TODO: rename this class to something other than Shape,
- * because it is confusing with java.awt.Shape
- */
-public class Shape extends GraphicsShape
+public interface IShape
 {
-	/**
-	 * Constructor for this class
-	 * @param canvas - the VPathway this Shape will be part of
-	 */
-	public Shape(VPathway canvas, PathwayElement o)
-	{
-		super(canvas, o);
-	}
-	
+	public String getMappName();
+	public String getName();
+	public boolean isResizeable();
+	public boolean isRotatable();
+	public java.awt.Shape getShape(double mw, double mh);
 }

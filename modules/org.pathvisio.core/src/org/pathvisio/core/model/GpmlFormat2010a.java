@@ -37,8 +37,9 @@ import org.jdom2.output.XMLOutputter;
 import org.pathvisio.core.biopax.BiopaxElement;
 import org.pathvisio.core.model.PathwayElement.MAnchor;
 import org.pathvisio.core.model.PathwayElement.MPoint;
-import org.pathvisio.core.view.ShapeRegistry;
-import org.pathvisio.core.view.State;
+import org.pathvisio.core.view.VState;
+import org.pathvisio.libgpml.model.shape.IShape;
+import org.pathvisio.libgpml.model.shape.ShapeRegistry;
 
 class GpmlFormat2010a extends GpmlFormatAbstract implements GpmlFormatReader, GpmlFormatWriter 
 {
@@ -590,11 +591,11 @@ class GpmlFormat2010a extends GpmlFormatAbstract implements GpmlFormatReader, Gp
 		o.setMHeight (Double.parseDouble(getAttribute("State.Graphics", "Height", graphics)));
 
 		// TODO: make rotation a property of State in future update of GPML.
-		if (o.getDynamicProperty(State.ROTATION_KEY) != null)
+		if (o.getDynamicProperty(VState.ROTATION_KEY) != null)
 		{
 			try
 			{
-				double rot = Double.parseDouble(o.getDynamicProperty(State.ROTATION_KEY));
+				double rot = Double.parseDouble(o.getDynamicProperty(VState.ROTATION_KEY));
 				o.setRotation(rot);
 			}
 			catch (NumberFormatException ex) { /* ignore */ }

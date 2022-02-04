@@ -22,7 +22,6 @@ import java.net.URL;
 import org.pathvisio.core.model.CellularComponentType;
 import org.pathvisio.core.model.ConnectorType;
 import org.pathvisio.core.model.DataNodeType;
-import org.pathvisio.core.model.IShape;
 import org.pathvisio.core.model.LineStyle;
 import org.pathvisio.core.model.LineType;
 import org.pathvisio.core.model.MState;
@@ -34,6 +33,8 @@ import org.pathvisio.core.model.ShapeType;
 import org.pathvisio.core.preferences.GlobalPreference;
 import org.pathvisio.core.preferences.PreferenceManager;
 import org.pathvisio.core.util.Resources;
+import org.pathvisio.libgpml.model.shape.IShape;
+import org.pathvisio.libgpml.model.shape.MIMShapes;
 
 /**
  * Contains a set of templates, patterns of PathwayElements that can
@@ -193,7 +194,7 @@ public abstract class DefaultTemplates {
 		}
 
 		public VPathwayElement getDragElement(VPathway vp) {
-			GeneProduct g = (GeneProduct)super.getDragElement(vp);
+			VDataNode g = (VDataNode)super.getDragElement(vp);
 			return g.handleSE;
 		}
 

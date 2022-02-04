@@ -63,7 +63,7 @@ import org.pathvisio.core.preferences.GlobalPreference;
 import org.pathvisio.core.preferences.PreferenceManager;
 import org.pathvisio.core.view.GraphicsShape;
 import org.pathvisio.core.view.Handle;
-import org.pathvisio.core.view.Label;
+import org.pathvisio.core.view.VLabel;
 import org.pathvisio.core.view.VElementMouseEvent;
 import org.pathvisio.core.view.VElementMouseListener;
 import org.pathvisio.core.view.VPathway;
@@ -389,7 +389,7 @@ MouseMotionListener, MouseListener, KeyListener, VPathwayListener, VElementMouse
 			} else if(e.getType() == VElementMouseEvent.TYPE_MOUSEEXIT) {
 				setCursor(Cursor.getDefaultCursor());
 			}
-		} else if (e.getElement() instanceof Label) {
+		} else if (e.getElement() instanceof VLabel) {
 			if(e.getType() == VElementMouseEvent.TYPE_MOUSE_SHOWHAND) {
 				setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			} else if(e.getType() == VElementMouseEvent.TYPE_MOUSE_NOTSHOWHAND) {

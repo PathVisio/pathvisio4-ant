@@ -130,7 +130,7 @@ public class ViewActions implements VPathwayListener, SelectionListener {
 		vp.addSelectionListener(this);
 		vp.addVPathwayListener(this);
 
-		selectDataNodes = new SelectClassAction("DataNode", GeneProduct.class);
+		selectDataNodes = new SelectClassAction("DataNode", VDataNode.class);
 		selectInteractions = new SelectObjectAction("Interactions", ObjectType.LINE);
 		selectLines = new SelectObjectAction("Graphical Lines", ObjectType.GRAPHLINE);
 		selectShapes = new SelectObjectAction("Shapes", ObjectType.SHAPE);
@@ -569,8 +569,8 @@ public class ViewActions implements VPathwayListener, SelectionListener {
 			if(selection.size() > 0) {
 				vPathway.getUndoManager().newAction("Add State");
 				for(Graphics g : selection) {
-					if(g instanceof GeneProduct) {
-						GeneProduct gp = (GeneProduct)g;
+					if(g instanceof VDataNode) {
+						VDataNode gp = (VDataNode)g;
 						PathwayElement elt = PathwayElement.createPathwayElement(STATE);
 						elt.setInitialSize();
 						((MState)elt).linkTo (gp.getPathwayElement(), 1.0, 1.0); 
@@ -597,7 +597,7 @@ public class ViewActions implements VPathwayListener, SelectionListener {
 			List<Graphics> selection = vPathway.getSelectedGraphics();
 			if(selection.size() > 0) {
 				for(Graphics g : selection) {
-					if(g instanceof State) {
+					if(g instanceof VState) {
 						toRemove.add(g);
 					}
 				}
@@ -658,7 +658,7 @@ public class ViewActions implements VPathwayListener, SelectionListener {
 
 		public void actionPerformed(ActionEvent e) {
 			if(!isEnabled()) return; //Don't perform action if not enabled
-			Group g = vPathway.toggleGroup(vPathway.getSelectedGraphics());
+			VGroup g = vPathway.toggleGroup(vPathway.getSelectedGraphics());
 			if(g != null) {
 				g.getPathwayElement().setGroupStyle(groupStyle);
 			}

@@ -14,15 +14,12 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  ******************************************************************************/
-package org.pathvisio.core.view;
+package org.pathvisio.libgpml.model.shape;
 
 import java.awt.Shape;
 import java.awt.geom.GeneralPath;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.pathvisio.core.model.AbstractShape;
-import org.pathvisio.core.model.IShape;
 
 /**
    The Shape registry stores all arrow heads and shapes
