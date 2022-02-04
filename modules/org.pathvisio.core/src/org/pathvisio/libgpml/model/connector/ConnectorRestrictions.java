@@ -14,12 +14,12 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  ******************************************************************************/
-package org.pathvisio.core.model;
+package org.pathvisio.libgpml.model.connector;
 
 import java.awt.Shape;
 import java.awt.geom.Point2D;
 
-import org.pathvisio.core.model.ConnectorShape.WayPoint;
+import org.pathvisio.libgpml.model.connector.ConnectorShape.WayPoint;
 
 /**
  * Methods to provide restrictions for the connector path

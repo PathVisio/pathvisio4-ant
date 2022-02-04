@@ -22,9 +22,13 @@ import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.pathvisio.core.model.ConnectorShape.WayPoint;
 import org.pathvisio.core.model.GraphLink.GraphIdContainer;
 import org.pathvisio.core.util.Utils;
+import org.pathvisio.libgpml.model.connector.ConnectorRestrictions;
+import org.pathvisio.libgpml.model.connector.ConnectorShape;
+import org.pathvisio.libgpml.model.connector.ConnectorShapeFactory;
+import org.pathvisio.libgpml.model.connector.ElbowConnectorShape;
+import org.pathvisio.libgpml.model.connector.ConnectorShape.WayPoint;
 
 /**
  * MLine - basically a PathwayElement, but overrides some methods

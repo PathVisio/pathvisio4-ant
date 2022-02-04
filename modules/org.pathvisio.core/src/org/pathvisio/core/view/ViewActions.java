@@ -38,8 +38,6 @@ import javax.swing.KeyStroke;
 import org.pathvisio.core.ApplicationEvent;
 import org.pathvisio.core.Engine;
 import org.pathvisio.core.Engine.ApplicationEventListener;
-import org.pathvisio.core.model.ConnectorShape;
-import org.pathvisio.core.model.FreeConnectorShape;
 import org.pathvisio.core.model.GroupStyle;
 import org.pathvisio.core.model.MLine;
 import org.pathvisio.core.model.MState;
@@ -51,6 +49,8 @@ import org.pathvisio.core.util.Resources;
 import org.pathvisio.core.util.Utils;
 import org.pathvisio.core.view.SelectionBox.SelectionEvent;
 import org.pathvisio.core.view.SelectionBox.SelectionListener;
+import org.pathvisio.libgpml.model.connector.ConnectorShape;
+import org.pathvisio.libgpml.model.connector.FreeConnectorShape;
 
 import static org.pathvisio.core.model.ObjectType.STATE;
 

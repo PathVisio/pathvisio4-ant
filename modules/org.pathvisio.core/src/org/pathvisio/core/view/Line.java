@@ -30,9 +30,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.pathvisio.core.model.ConnectorShape;
-import org.pathvisio.core.model.ConnectorShape.Segment;
-import org.pathvisio.core.model.ConnectorShape.WayPoint;
 import org.pathvisio.core.model.GraphLink.GraphRefContainer;
 import org.pathvisio.core.model.LineStyle;
 import org.pathvisio.core.model.LineType;
@@ -43,6 +40,9 @@ import org.pathvisio.core.model.PathwayElement.MPoint;
 import org.pathvisio.core.model.PathwayElementEvent;
 import org.pathvisio.core.preferences.GlobalPreference;
 import org.pathvisio.core.preferences.PreferenceManager;
+import org.pathvisio.libgpml.model.connector.ConnectorShape;
+import org.pathvisio.libgpml.model.connector.ConnectorShape.Segment;
+import org.pathvisio.libgpml.model.connector.ConnectorShape.WayPoint;
 
 /**
  * This class represents a Line on the pathway, or rather
@@ -54,7 +54,7 @@ import org.pathvisio.core.preferences.PreferenceManager;
  * The actual implementation of the path is done by implementations
  * of the {@link ConnectorShape} interface.
  * @see ConnectorShape
- * @see org.pathvisio.core.model.ConnectorShapeFactory
+ * @see org.pathvisio.libgpml.model.connector.ConnectorShapeFactory
  */
 public class Line extends Graphics implements Adjustable
 {
