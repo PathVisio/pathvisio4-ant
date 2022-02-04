@@ -49,7 +49,6 @@ import org.pathvisio.core.model.DataNodeListExporter;
 import org.pathvisio.core.model.EUGeneExporter;
 import org.pathvisio.core.model.GpmlFormat;
 import org.pathvisio.core.model.ImageExporter;
-import org.pathvisio.core.model.MappFormat;
 import org.pathvisio.core.model.RasterImageExporter;
 import org.pathvisio.core.preferences.GlobalPreference;
 import org.pathvisio.core.preferences.PreferenceManager;
@@ -369,12 +368,10 @@ public class GuiMain implements GdbEventListener {
 	}
 
 	private void initImporters(Engine engine) {
-		engine.addPathwayImporter(new MappFormat());
 		engine.addPathwayImporter(new GpmlFormat());
 	}
 
 	private void initExporters(Engine engine, GdbManager gdbManager) {
-		engine.addPathwayExporter(new MappFormat());
 		engine.addPathwayExporter(new GpmlFormat());
 
 		engine.addPathwayExporter(new RasterImageExporter(ImageExporter.TYPE_PNG));

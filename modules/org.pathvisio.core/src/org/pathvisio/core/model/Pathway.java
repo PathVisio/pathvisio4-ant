@@ -736,11 +736,6 @@ public class Pathway
 		clearChangedFlag();
 	}
 
-	public void writeToMapp (File file) throws ConverterException
-	{
-		new MappFormat().doExport(file, this);
-	}
-
 	public void writeToSvg (File file) throws ConverterException
 	{
 		//Use Batik instead of SvgFormat
