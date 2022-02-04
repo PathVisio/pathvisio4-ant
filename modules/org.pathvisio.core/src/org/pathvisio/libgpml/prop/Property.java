@@ -14,44 +14,41 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  ******************************************************************************/
-package org.pathvisio.core.model;
-
-import java.util.HashMap;
-import java.util.Map;
+package org.pathvisio.libgpml.prop;
 
 /**
- * Enumeration of vertical alignments.
+ * This interface defines a typed property.
+ *
+ * @author Mark Woon
  */
-public enum ValignType 
-{ 
-	TOP("Top"), MIDDLE("Middle"), BOTTOM("Bottom");
+public interface Property {
 
-	private final String gpmlName;
-	private static Map<String, ValignType> byGpmlName = new HashMap<String, ValignType>();
-	
-	static {
-		for (ValignType t : values()) byGpmlName.put (t.gpmlName, t);
-	}
-	
-	private ValignType(String gpmlName)
-	{
-		this.gpmlName = gpmlName;
-	}
-	
-	public static ValignType fromGpmlName(String value)
-	{
-		return byGpmlName.get(value);
-	}
-	
-	public String getGpmlName()
-	{
-		return gpmlName;
-	}
+	/**
+	 * Gets the Id for this property.  Ids must be unique.
+	 */
+	String getId();
 
-	public static String[] getNames() 
-	{ 
-		String[] result = new String[values().length];
-		for (int i = 0; i < values().length; ++i) result[i] = values()[i].gpmlName;
-		return result;
-	}
+	/**
+	 * @returns Name of property, used e.g. as row header in the properties table.
+	 */
+	String getName();
+
+	/**
+	 * Description of property, used e.g. as tooltip text when mousing over
+	 * the properties table. Descriptions are optional.
+	 * @returns description. May return null.
+	 */
+	String getDescription();
+
+
+	/**
+	 * Gets the data type for this property.
+	 */
+	PropertyType getType();
+
+
+	/**
+	 * Gets whether this property has accepts values.
+	 */
+	boolean isCollection();
 }

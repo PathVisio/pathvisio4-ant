@@ -31,13 +31,13 @@ import org.pathvisio.core.Engine.ApplicationEventListener;
 import org.pathvisio.core.model.PathwayElement;
 import org.pathvisio.core.model.PathwayElementEvent;
 import org.pathvisio.core.model.PathwayElementListener;
-import org.pathvisio.core.model.StaticProperty;
 import org.pathvisio.core.view.Graphics;
 import org.pathvisio.core.view.SelectionBox.SelectionEvent;
 import org.pathvisio.core.view.SelectionBox.SelectionListener;
 import org.pathvisio.core.view.VPathway;
 import org.pathvisio.core.view.VPathwayElement;
 import org.pathvisio.gui.DataPaneTextProvider;
+import org.pathvisio.libgpml.prop.StaticProperty;
 
 /**
  * The backpage panel for the Swing version of PathVisio. This pane shows

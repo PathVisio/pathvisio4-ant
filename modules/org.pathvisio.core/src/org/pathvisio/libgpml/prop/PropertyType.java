@@ -14,41 +14,29 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  ******************************************************************************/
-package org.pathvisio.core.model;
+package org.pathvisio.libgpml.prop;
 
 /**
- * This interface defines a typed property.
+ * This interface represents a type (the <i>Type</i> in Property).
  *
  * @author Mark Woon
  */
-public interface Property {
+public interface PropertyType {
 
 	/**
-	 * Gets the Id for this property.  Ids must be unique.
+	 * The id for this type.
 	 */
 	String getId();
 
 	/**
-	 * @returns Name of property, used e.g. as row header in the properties table.
+	 * Handle the translation of a Property from a (JDOM) GPML element to a PathwayElement.
+	 * This is responsible for copying the value(s) of prop from gpmlElem to pwElem.
 	 */
-	String getName();
+	//void translateFromGpml(Property prop, Element gpmlElem, PathwayElement pwElem) throws ConverterException;
 
 	/**
-	 * Description of property, used e.g. as tooltip text when mousing over
-	 * the properties table. Descriptions are optional.
-	 * @returns description. May return null.
+	 * Handle the translation of a Property from a PathwayElement to a (JDOM) GPML element.
+	 * This is responsible for copying the value(s) of a prop from pwElem to gpmlElem.
 	 */
-	String getDescription();
-
-
-	/**
-	 * Gets the data type for this property.
-	 */
-	PropertyType getType();
-
-
-	/**
-	 * Gets whether this property has accepts values.
-	 */
-	boolean isCollection();
+	//void translateToGpml(Property prop, PathwayElement pwElem, Element gpmlElem) throws ConverterException;
 }

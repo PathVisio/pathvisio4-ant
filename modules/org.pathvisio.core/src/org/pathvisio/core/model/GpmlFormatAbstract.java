@@ -42,6 +42,7 @@ import org.jdom2.output.XMLOutputter;
 import org.pathvisio.core.biopax.BiopaxElement;
 import org.pathvisio.core.model.GraphLink.GraphIdContainer;
 import org.pathvisio.libgpml.debug.Logger;
+import org.pathvisio.libgpml.model.type.GroupStyle;
 import org.xml.sax.SAXException;
 
 /**

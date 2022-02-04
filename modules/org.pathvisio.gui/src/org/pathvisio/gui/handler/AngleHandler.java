@@ -18,7 +18,7 @@ package org.pathvisio.gui.handler;
 
 import java.text.NumberFormat;
 
-import org.pathvisio.core.model.StaticPropertyType;
+import org.pathvisio.libgpml.prop.StaticPropertyType;
 
 /**
  * This class knows how to handle angles.

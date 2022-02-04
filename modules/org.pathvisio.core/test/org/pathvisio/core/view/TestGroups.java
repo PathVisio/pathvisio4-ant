@@ -20,11 +20,11 @@ import java.awt.geom.Point2D;
 
 import junit.framework.TestCase;
 
-import org.pathvisio.core.model.ConnectorType;
 import org.pathvisio.core.model.ObjectType;
 import org.pathvisio.core.model.Pathway;
 import org.pathvisio.core.model.PathwayElement;
 import org.pathvisio.core.preferences.PreferenceManager;
+import org.pathvisio.libgpml.model.type.ConnectorType;
 
 /**
  * Test various operations related to groups, such as 

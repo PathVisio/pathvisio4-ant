@@ -14,10 +14,13 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  ******************************************************************************/
-package org.pathvisio.core.model;
+package org.pathvisio.libgpml.model.type;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import org.pathvisio.libgpml.prop.Property;
+import org.pathvisio.libgpml.prop.PropertyType;
 
 /** Possible values for the cellular component property. 
  * These values describe the biological meaning of an element, it does

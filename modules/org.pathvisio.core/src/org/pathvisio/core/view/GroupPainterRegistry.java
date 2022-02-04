@@ -25,7 +25,7 @@ import java.awt.geom.Rectangle2D;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.pathvisio.core.model.GroupStyle;
+import org.pathvisio.libgpml.model.type.GroupStyle;
 
 /**
  * Keeps track of all GroupPainters.

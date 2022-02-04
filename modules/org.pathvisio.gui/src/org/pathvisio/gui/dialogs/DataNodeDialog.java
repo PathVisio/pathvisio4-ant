@@ -53,7 +53,6 @@ import org.bridgedb.IDMapperException;
 import org.bridgedb.IDMapperStack;
 import org.bridgedb.Xref;
 import org.pathvisio.core.data.XrefWithSymbol;
-import org.pathvisio.core.model.DataNodeType;
 import org.pathvisio.core.model.PathwayElement;
 import org.pathvisio.core.util.ProgressKeeper;
 import org.pathvisio.gui.DataSourceModel;
@@ -65,6 +64,7 @@ import org.pathvisio.gui.completer.OptionProvider;
 import org.pathvisio.gui.handler.DataSourceHandler;
 import org.pathvisio.gui.util.PermissiveComboBox;
 import org.pathvisio.libgpml.debug.Logger;
+import org.pathvisio.libgpml.model.type.DataNodeType;
 
 /**
  * Dialog for editing DataNodes. In addition to the standard comments and literature tabs,

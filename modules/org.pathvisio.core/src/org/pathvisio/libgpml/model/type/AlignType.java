@@ -14,48 +14,43 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  ******************************************************************************/
+package org.pathvisio.libgpml.model.type;
 
-package org.pathvisio.core.model;
+import java.util.HashMap;
+import java.util.Map;
 
-/**
- * The properties in {@link StaticProperty} define properties of different types,
- * all the possible types are defined here.
- */
-public enum StaticPropertyType implements PropertyType
-{
-	BOOLEAN,
-	DOUBLE,
-	INTEGER,
-	DATASOURCE,
-	LINESTYLE,
-	COLOR,
-	STRING,
-	ORIENTATION,
-	SHAPETYPE,
-	LINETYPE,
-	OUTLINETYPE,
-	GENETYPE,
-	FONT,
-	ANGLE,
-	ORGANISM,
-	DB_ID,
-	DB_SYMBOL,
-	BIOPAXREF,
-	COMMENTS,
-	GROUPSTYLETYPE,
-	ALIGNTYPE,
-	VALIGNTYPE;
+/** possible values for the (horizontal) text alignment property */
+public enum AlignType 
+{ 
+	LEFT("Left"), CENTER("Center"), RIGHT("Right");
 
-	private String id;
-
-
-	private StaticPropertyType() {
-		id = "core." + name();
-		PropertyManager.registerPropertyType(this);
+	private final String gpmlName;
+	private static Map<String, AlignType> byGpmlName = new HashMap<String, AlignType>();
+	
+	static {
+		for (AlignType t : values()) byGpmlName.put (t.gpmlName, t);
+	}
+	
+	private AlignType(String gpmlName)
+	{
+		this.gpmlName = gpmlName;
+	}
+	
+	public static AlignType fromGpmlName(String value)
+	{
+		return byGpmlName.get(value);
+	}
+	
+	public String getGpmlName()
+	{
+		return gpmlName;
+	}
+	
+	public static String[] getNames() 
+	{ 
+		String[] result = new String[values().length];
+		for (int i = 0; i < values().length; ++i) result[i] = values()[i].gpmlName;
+		return result;
 	}
 
-
-	public String getId() {
-		return id;
-	}
 }

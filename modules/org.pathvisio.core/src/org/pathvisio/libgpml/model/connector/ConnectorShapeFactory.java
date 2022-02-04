@@ -19,8 +19,8 @@ package org.pathvisio.libgpml.model.connector;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.pathvisio.core.model.ConnectorType;
 import org.pathvisio.libgpml.debug.Logger;
+import org.pathvisio.libgpml.model.type.ConnectorType;
 
 
 /**

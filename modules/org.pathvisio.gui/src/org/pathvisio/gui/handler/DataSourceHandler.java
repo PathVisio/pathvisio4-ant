@@ -37,13 +37,13 @@ import javax.swing.table.TableCellRenderer;
 
 import org.bridgedb.DataSource;
 import org.bridgedb.bio.Organism;
-import org.pathvisio.core.model.DataNodeType;
 import org.pathvisio.core.model.Pathway;
 import org.pathvisio.core.model.PathwayElement;
-import org.pathvisio.core.model.PropertyType;
-import org.pathvisio.core.model.StaticPropertyType;
 import org.pathvisio.gui.SwingEngine;
 import org.pathvisio.gui.util.PermissiveComboBox;
+import org.pathvisio.libgpml.model.type.DataNodeType;
+import org.pathvisio.libgpml.prop.PropertyType;
+import org.pathvisio.libgpml.prop.StaticPropertyType;
 
 /**
  * This class knows how to handle a datasource, which is context sensitive and needs to be updated before use.

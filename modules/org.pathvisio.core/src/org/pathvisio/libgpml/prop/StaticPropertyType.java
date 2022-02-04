@@ -14,29 +14,48 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  ******************************************************************************/
-package org.pathvisio.core.model;
+
+package org.pathvisio.libgpml.prop;
 
 /**
- * This interface represents a type (the <i>Type</i> in Property).
- *
- * @author Mark Woon
+ * The properties in {@link StaticProperty} define properties of different types,
+ * all the possible types are defined here.
  */
-public interface PropertyType {
+public enum StaticPropertyType implements PropertyType
+{
+	BOOLEAN,
+	DOUBLE,
+	INTEGER,
+	DATASOURCE,
+	LINESTYLE,
+	COLOR,
+	STRING,
+	ORIENTATION,
+	SHAPETYPE,
+	LINETYPE,
+	OUTLINETYPE,
+	GENETYPE,
+	FONT,
+	ANGLE,
+	ORGANISM,
+	DB_ID,
+	DB_SYMBOL,
+	BIOPAXREF,
+	COMMENTS,
+	GROUPSTYLETYPE,
+	ALIGNTYPE,
+	VALIGNTYPE;
 
-	/**
-	 * The id for this type.
-	 */
-	String getId();
+	private String id;
 
-	/**
-	 * Handle the translation of a Property from a (JDOM) GPML element to a PathwayElement.
-	 * This is responsible for copying the value(s) of prop from gpmlElem to pwElem.
-	 */
-	//void translateFromGpml(Property prop, Element gpmlElem, PathwayElement pwElem) throws ConverterException;
 
-	/**
-	 * Handle the translation of a Property from a PathwayElement to a (JDOM) GPML element.
-	 * This is responsible for copying the value(s) of a prop from pwElem to gpmlElem.
-	 */
-	//void translateToGpml(Property prop, PathwayElement pwElem, Element gpmlElem) throws ConverterException;
+	private StaticPropertyType() {
+		id = "core." + name();
+		PropertyManager.registerPropertyType(this);
+	}
+
+
+	public String getId() {
+		return id;
+	}
 }

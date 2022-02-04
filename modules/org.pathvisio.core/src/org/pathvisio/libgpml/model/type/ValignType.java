@@ -14,23 +14,44 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  ******************************************************************************/
-package org.pathvisio.core.model;
+package org.pathvisio.libgpml.model.type;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- * LineStyle, either Solid, dashed or double. Not to be confused with LineType, 
- * which defines the appearance of the arrow head.
+ * Enumeration of vertical alignments.
  */
-public class LineStyle {
-	public static final int SOLID = 0;
-	public static final int DASHED = 1;
-	public static final int DOUBLE = 2;
+public enum ValignType 
+{ 
+	TOP("Top"), MIDDLE("Middle"), BOTTOM("Bottom");
 
-	public static String[] getNames() {
-		return new String[] {"Solid", "Dashed", "Double"};
+	private final String gpmlName;
+	private static Map<String, ValignType> byGpmlName = new HashMap<String, ValignType>();
+	
+	static {
+		for (ValignType t : values()) byGpmlName.put (t.gpmlName, t);
 	}
 	
-	//dynamic property key for LineStyle.DOUBLE, until GPML is updated
-	//TODO: remove after next GPML update
-	final static String DOUBLE_LINE_KEY = "org.pathvisio.DoubleLineProperty";
+	private ValignType(String gpmlName)
+	{
+		this.gpmlName = gpmlName;
+	}
+	
+	public static ValignType fromGpmlName(String value)
+	{
+		return byGpmlName.get(value);
+	}
+	
+	public String getGpmlName()
+	{
+		return gpmlName;
+	}
 
+	public static String[] getNames() 
+	{ 
+		String[] result = new String[values().length];
+		for (int i = 0; i < values().length; ++i) result[i] = values()[i].gpmlName;
+		return result;
+	}
 }

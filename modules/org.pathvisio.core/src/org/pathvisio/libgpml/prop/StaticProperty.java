@@ -15,10 +15,12 @@
  * the License.
  ******************************************************************************/
 
-package org.pathvisio.core.model;
+package org.pathvisio.libgpml.prop;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import org.pathvisio.core.model.PathwayElement;
 
 /**
  * Static properties for ObjectTypes, linked in {@link PathwayElement}.

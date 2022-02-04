@@ -16,6 +16,7 @@
  ******************************************************************************/
 package org.pathvisio.core.model;
 
+import org.pathvisio.libgpml.prop.Property;
 
 /**
  * This event is used to notify {@link PathwayElementListener}s of changes to properties of a PathwayElement.  

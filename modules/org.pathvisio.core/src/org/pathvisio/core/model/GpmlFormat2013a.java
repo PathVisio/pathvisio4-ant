@@ -40,6 +40,13 @@ import org.pathvisio.core.model.PathwayElement.MAnchor;
 import org.pathvisio.core.model.PathwayElement.MPoint;
 import org.pathvisio.libgpml.model.shape.IShape;
 import org.pathvisio.libgpml.model.shape.ShapeRegistry;
+import org.pathvisio.libgpml.model.type.AlignType;
+import org.pathvisio.libgpml.model.type.AnchorType;
+import org.pathvisio.libgpml.model.type.ConnectorType;
+import org.pathvisio.libgpml.model.type.LineStyle;
+import org.pathvisio.libgpml.model.type.LineType;
+import org.pathvisio.libgpml.model.type.ShapeType;
+import org.pathvisio.libgpml.model.type.ValignType;
 
 class GpmlFormat2013a extends GpmlFormatAbstract implements GpmlFormatReader, GpmlFormatWriter 
 {

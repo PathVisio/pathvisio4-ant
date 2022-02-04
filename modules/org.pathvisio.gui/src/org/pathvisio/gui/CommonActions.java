@@ -35,16 +35,10 @@ import org.pathvisio.core.Engine.ApplicationEventListener;
 import org.pathvisio.core.Globals;
 import org.pathvisio.core.biopax.BiopaxReferenceManager;
 import org.pathvisio.core.biopax.PublicationXref;
-import org.pathvisio.core.model.CellularComponentType;
-import org.pathvisio.core.model.ConnectorType;
-import org.pathvisio.core.model.DataNodeType;
-import org.pathvisio.core.model.LineStyle;
-import org.pathvisio.core.model.LineType;
 import org.pathvisio.core.model.Pathway;
 import org.pathvisio.core.model.Pathway.StatusFlagEvent;
 import org.pathvisio.core.model.Pathway.StatusFlagListener;
 import org.pathvisio.core.model.PathwayElement;
-import org.pathvisio.core.model.ShapeType;
 import org.pathvisio.core.util.Resources;
 import org.pathvisio.core.view.DefaultTemplates;
 import org.pathvisio.core.view.Graphics;
@@ -60,6 +54,12 @@ import org.pathvisio.gui.dialogs.AboutDlg;
 import org.pathvisio.gui.dialogs.PathwayElementDialog;
 import org.pathvisio.gui.dialogs.PublicationXRefDialog;
 import org.pathvisio.libgpml.model.shape.MIMShapes;
+import org.pathvisio.libgpml.model.type.CellularComponentType;
+import org.pathvisio.libgpml.model.type.ConnectorType;
+import org.pathvisio.libgpml.model.type.DataNodeType;
+import org.pathvisio.libgpml.model.type.LineStyle;
+import org.pathvisio.libgpml.model.type.LineType;
+import org.pathvisio.libgpml.model.type.ShapeType;
 
 /**
  * A collection of {@link Action}s that may be used throughout the program (e.g. in

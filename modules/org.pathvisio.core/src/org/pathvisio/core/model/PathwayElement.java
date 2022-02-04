@@ -41,6 +41,17 @@ import org.pathvisio.core.preferences.PreferenceManager;
 import org.pathvisio.core.util.Utils;
 import org.pathvisio.core.view.VState;
 import org.pathvisio.libgpml.model.shape.IShape;
+import org.pathvisio.libgpml.model.type.AlignType;
+import org.pathvisio.libgpml.model.type.AnchorType;
+import org.pathvisio.libgpml.model.type.ConnectorType;
+import org.pathvisio.libgpml.model.type.DataNodeType;
+import org.pathvisio.libgpml.model.type.GroupStyle;
+import org.pathvisio.libgpml.model.type.LineStyle;
+import org.pathvisio.libgpml.model.type.LineType;
+import org.pathvisio.libgpml.model.type.OrientationType;
+import org.pathvisio.libgpml.model.type.ShapeType;
+import org.pathvisio.libgpml.model.type.ValignType;
+import org.pathvisio.libgpml.prop.StaticProperty;
 
 /**
  * PathwayElement is responsible for maintaining the data for all the individual

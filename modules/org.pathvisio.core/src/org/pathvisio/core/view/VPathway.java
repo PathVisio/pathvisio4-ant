@@ -45,7 +45,6 @@ import javax.swing.Timer;
 import org.pathvisio.core.Engine;
 import org.pathvisio.core.biopax.BiopaxElement;
 import org.pathvisio.core.model.GraphLink.GraphIdContainer;
-import org.pathvisio.core.model.GroupStyle;
 import org.pathvisio.core.model.MLine;
 import org.pathvisio.core.model.ObjectType;
 import org.pathvisio.core.model.Pathway;
@@ -63,6 +62,7 @@ import org.pathvisio.core.view.VPathwayEvent.VPathwayEventType;
 import org.pathvisio.core.view.ViewActions.KeyMoveAction;
 import org.pathvisio.core.view.ViewActions.TextFormattingAction;
 import org.pathvisio.libgpml.debug.Logger;
+import org.pathvisio.libgpml.model.type.GroupStyle;
 
 /**
  * This class implements and handles a drawing. Graphics objects are stored in

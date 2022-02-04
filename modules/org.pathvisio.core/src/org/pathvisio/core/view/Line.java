@@ -31,8 +31,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.pathvisio.core.model.GraphLink.GraphRefContainer;
-import org.pathvisio.core.model.LineStyle;
-import org.pathvisio.core.model.LineType;
 import org.pathvisio.core.model.MLine;
 import org.pathvisio.core.model.PathwayElement;
 import org.pathvisio.core.model.PathwayElement.MAnchor;
@@ -45,6 +43,8 @@ import org.pathvisio.libgpml.model.connector.ConnectorShape.Segment;
 import org.pathvisio.libgpml.model.connector.ConnectorShape.WayPoint;
 import org.pathvisio.libgpml.model.shape.ArrowShape;
 import org.pathvisio.libgpml.model.shape.ShapeRegistry;
+import org.pathvisio.libgpml.model.type.LineStyle;
+import org.pathvisio.libgpml.model.type.LineType;
 
 /**
  * This class represents a Line on the pathway, or rather

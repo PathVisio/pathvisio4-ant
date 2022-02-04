@@ -26,9 +26,9 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
 import org.pathvisio.core.model.PathwayElement;
-import org.pathvisio.core.model.Property;
 import org.pathvisio.core.view.VPathway;
 import org.pathvisio.gui.SwingEngine;
+import org.pathvisio.libgpml.prop.Property;
 
 /**
  * PropertyView ties together functionality to view / edit a property

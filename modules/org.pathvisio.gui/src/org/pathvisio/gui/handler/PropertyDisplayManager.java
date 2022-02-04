@@ -24,25 +24,25 @@ import java.util.Map;
 import java.util.Set;
 
 import org.bridgedb.bio.Organism;
-import org.pathvisio.core.model.AlignType;
-import org.pathvisio.core.model.CellularComponentType;
-import org.pathvisio.core.model.DataNodeType;
-import org.pathvisio.core.model.GroupStyle;
-import org.pathvisio.core.model.LineStyle;
-import org.pathvisio.core.model.LineType;
 import org.pathvisio.core.model.ObjectType;
-import org.pathvisio.core.model.OrientationType;
 import org.pathvisio.core.model.PathwayElement;
-import org.pathvisio.core.model.Property;
-import org.pathvisio.core.model.PropertyType;
-import org.pathvisio.core.model.ShapeType;
-import org.pathvisio.core.model.StaticProperty;
-import org.pathvisio.core.model.StaticPropertyType;
-import org.pathvisio.core.model.ValignType;
 import org.pathvisio.core.preferences.GlobalPreference;
 import org.pathvisio.core.preferences.Preference;
 import org.pathvisio.core.preferences.PreferenceManager;
 import org.pathvisio.libgpml.debug.Logger;
+import org.pathvisio.libgpml.model.type.AlignType;
+import org.pathvisio.libgpml.model.type.CellularComponentType;
+import org.pathvisio.libgpml.model.type.DataNodeType;
+import org.pathvisio.libgpml.model.type.GroupStyle;
+import org.pathvisio.libgpml.model.type.LineStyle;
+import org.pathvisio.libgpml.model.type.LineType;
+import org.pathvisio.libgpml.model.type.OrientationType;
+import org.pathvisio.libgpml.model.type.ShapeType;
+import org.pathvisio.libgpml.model.type.ValignType;
+import org.pathvisio.libgpml.prop.Property;
+import org.pathvisio.libgpml.prop.PropertyType;
+import org.pathvisio.libgpml.prop.StaticProperty;
+import org.pathvisio.libgpml.prop.StaticPropertyType;
 
 /**
  * This class manages how properties should be displayed.  It keeps track of TypeHandlers, which properties should be

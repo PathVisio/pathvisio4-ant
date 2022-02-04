@@ -29,10 +29,10 @@ import javax.swing.table.TableCellRenderer;
 
 import org.pathvisio.core.model.Pathway;
 import org.pathvisio.core.model.PathwayElement;
-import org.pathvisio.core.model.PropertyType;
-import org.pathvisio.core.model.StaticPropertyType;
 import org.pathvisio.gui.SwingEngine;
 import org.pathvisio.gui.dialogs.PathwayElementDialog;
+import org.pathvisio.libgpml.prop.PropertyType;
+import org.pathvisio.libgpml.prop.StaticPropertyType;
 
 /**
  * This class knows how to edit comments.

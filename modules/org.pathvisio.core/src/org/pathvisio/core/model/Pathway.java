@@ -41,6 +41,7 @@ import org.pathvisio.core.model.PathwayElement.MAnchor;
 import org.pathvisio.core.model.PathwayElement.MPoint;
 import org.pathvisio.core.util.Utils;
 import org.pathvisio.libgpml.debug.Logger;
+import org.pathvisio.libgpml.prop.StaticProperty;
 
 /**
 * This class is the model for pathway data. It is responsible for

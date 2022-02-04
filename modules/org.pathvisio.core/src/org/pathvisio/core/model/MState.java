@@ -19,6 +19,7 @@ package org.pathvisio.core.model;
 import org.pathvisio.core.model.GraphLink.GraphIdContainer;
 import org.pathvisio.core.model.GraphLink.GraphRefContainer;
 import org.pathvisio.core.util.Utils;
+import org.pathvisio.libgpml.prop.StaticProperty;
 
 /**
  * State-specific implementation of methods that calculate derived

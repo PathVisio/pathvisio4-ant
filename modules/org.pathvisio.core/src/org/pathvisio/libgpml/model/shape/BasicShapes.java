@@ -23,8 +23,8 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Rectangle2D;
 
-import org.pathvisio.core.model.AnchorType;
 import org.pathvisio.libgpml.model.shape.ArrowShape.FillType;
+import org.pathvisio.libgpml.model.type.AnchorType;
 
 /**
  * Defines and registers all basic shapes and arrowheads, such Oval,

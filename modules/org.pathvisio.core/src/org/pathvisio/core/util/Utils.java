@@ -29,7 +29,7 @@ import org.pathvisio.core.model.GraphLink.GraphIdContainer;
 import org.pathvisio.core.model.GraphLink.GraphRefContainer;
 import org.pathvisio.core.model.PathwayElement;
 import org.pathvisio.core.model.PathwayElement.MPoint;
-import org.pathvisio.core.model.StaticProperty;
+import org.pathvisio.libgpml.prop.StaticProperty;
 
 /**
  * Various utility functions

@@ -26,13 +26,13 @@ import javax.swing.JTabbedPane;
 
 import org.pathvisio.core.model.Pathway;
 import org.pathvisio.core.model.PathwayElement;
-import org.pathvisio.core.model.StaticProperty;
 import org.pathvisio.core.view.UndoAction;
 import org.pathvisio.core.view.VPathway;
 import org.pathvisio.gui.SwingEngine;
 import org.pathvisio.gui.panels.CommentPanel;
 import org.pathvisio.gui.panels.LitReferencePanel;
 import org.pathvisio.gui.panels.PathwayElementPanel;
+import org.pathvisio.libgpml.prop.StaticProperty;
 
 /**
  * Dialog that allows you to display and edit properties of a PathwayElement

@@ -30,9 +30,6 @@ import javax.swing.JPopupMenu;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.SwingUtilities;
 
-import org.pathvisio.core.model.AnchorType;
-import org.pathvisio.core.model.ConnectorType;
-import org.pathvisio.core.model.GroupStyle;
 import org.pathvisio.core.view.Citation;
 import org.pathvisio.core.view.VDataNode;
 import org.pathvisio.core.view.Graphics;
@@ -55,6 +52,9 @@ import org.pathvisio.gui.CommonActions.EditLiteratureAction;
 import org.pathvisio.gui.CommonActions.PropertiesAction;
 import org.pathvisio.gui.dialogs.PathwayElementDialog;
 import org.pathvisio.gui.view.VPathwaySwing;
+import org.pathvisio.libgpml.model.type.AnchorType;
+import org.pathvisio.libgpml.model.type.ConnectorType;
+import org.pathvisio.libgpml.model.type.GroupStyle;
 
 /**
  * Implementation of {@link VPathwayListener} that handles righ-click events to
