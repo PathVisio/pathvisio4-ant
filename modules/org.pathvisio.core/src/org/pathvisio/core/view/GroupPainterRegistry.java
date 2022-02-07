@@ -25,7 +25,7 @@ import java.awt.geom.Rectangle2D;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.pathvisio.libgpml.model.type.GroupStyle;
+import org.pathvisio.libgpml.model.type.GroupType;
 
 /**
  * Keeps track of all GroupPainters.
@@ -36,7 +36,7 @@ public class GroupPainterRegistry {
 
 	/**
 	 * Register a painter that will be used for the given group style.
-	 * @param name The name of the group style (use {@link GroupStyle#toString()}.
+	 * @param name The name of the group style (use {@link GroupType#toString()}.
 	 * @param painter The painter that will draw the group style
 	 */
 	public static void registerPainter(String name, GroupPainter painter) {
@@ -45,7 +45,7 @@ public class GroupPainterRegistry {
 
 	/**
 	 * Get the registered painter for the given group style.
-	 * @param name The name of the group style (use {@link GroupStyle#toString()}.
+	 * @param name The name of the group style (use {@link GroupType#toString()}.
 	 * @return The registered painter, or the default painter if no custom painters
 	 * are registered for the given group style.
 	 */
@@ -111,7 +111,7 @@ public class GroupPainterRegistry {
 			
 			float vMargin = (float)Math.min (
 					Math.min(vRect.getWidth() / 2.5, vRect.getHeight() / 2.5), 
-					group.vFromM (GroupStyle.COMPLEX_M_MARGIN * 1.5)); 
+					group.vFromM (GroupType.COMPLEX_M_MARGIN * 1.5)); 
 		
 			GeneralPath outline = new GeneralPath();
 			outline.moveTo(vLeft + vMargin, vTop);
@@ -229,9 +229,9 @@ public class GroupPainterRegistry {
 	
 	//Register default painters
 	static {
-		registerPainter(GroupStyle.COMPLEX.toString(), complexPainter);
-		registerPainter(GroupStyle.NONE.toString(), defaultPainter);
-		registerPainter(GroupStyle.GROUP.toString(), groupPainter);
-		registerPainter(GroupStyle.PATHWAY.toString(), pathwayPainter);
+		registerPainter(GroupType.COMPLEX.toString(), complexPainter);
+		registerPainter(GroupType.NONE.toString(), defaultPainter);
+		registerPainter(GroupType.GROUP.toString(), groupPainter);
+		registerPainter(GroupType.PATHWAY.toString(), pathwayPainter);
 	}
 }

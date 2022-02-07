@@ -19,26 +19,24 @@ package org.pathvisio.libgpml.model.type;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Enumeration of vertical alignments.
- */
-public enum ValignType 
+/** possible values for the (horizontal) text alignment property */
+public enum HAlignType 
 { 
-	TOP("Top"), MIDDLE("Middle"), BOTTOM("Bottom");
+	LEFT("Left"), CENTER("Center"), RIGHT("Right");
 
 	private final String gpmlName;
-	private static Map<String, ValignType> byGpmlName = new HashMap<String, ValignType>();
+	private static Map<String, HAlignType> byGpmlName = new HashMap<String, HAlignType>();
 	
 	static {
-		for (ValignType t : values()) byGpmlName.put (t.gpmlName, t);
+		for (HAlignType t : values()) byGpmlName.put (t.gpmlName, t);
 	}
 	
-	private ValignType(String gpmlName)
+	private HAlignType(String gpmlName)
 	{
 		this.gpmlName = gpmlName;
 	}
 	
-	public static ValignType fromGpmlName(String value)
+	public static HAlignType fromGpmlName(String value)
 	{
 		return byGpmlName.get(value);
 	}
@@ -47,11 +45,12 @@ public enum ValignType
 	{
 		return gpmlName;
 	}
-
+	
 	public static String[] getNames() 
 	{ 
 		String[] result = new String[values().length];
 		for (int i = 0; i < values().length; ++i) result[i] = values()[i].gpmlName;
 		return result;
 	}
+
 }

@@ -27,38 +27,38 @@ import java.util.Map;
  * other kinds of line endings.
  * A Line in PathVisio has two endings that each can have a different "LineType"
  */
-public class LineType
+public class ArrowHeadType
 {
-	private static Map<String, LineType> nameMappings = new HashMap<String, LineType>();
-	private static List<LineType> values = new ArrayList<LineType>();
-	private static List<LineType> visible = new ArrayList<LineType>();
+	private static Map<String, ArrowHeadType> nameMappings = new HashMap<String, ArrowHeadType>();
+	private static List<ArrowHeadType> values = new ArrayList<ArrowHeadType>();
+	private static List<ArrowHeadType> visible = new ArrayList<ArrowHeadType>();
 
 	/** LineType LINE means the absence of an arrowhead */
-	public static final LineType LINE = new LineType("Line", "Line");
-	public static final LineType ARROW = new LineType("Arrow", "Arrow");
-	public static final LineType TBAR = new LineType("TBar", "TBar");
+	public static final ArrowHeadType LINE = new ArrowHeadType("Line", "Line");
+	public static final ArrowHeadType ARROW = new ArrowHeadType("Arrow", "Arrow");
+	public static final ArrowHeadType TBAR = new ArrowHeadType("TBar", "TBar");
 	
 	@Deprecated
-	public static final LineType RECEPTOR = new LineType("Receptor", "Receptor", true);
+	public static final ArrowHeadType RECEPTOR = new ArrowHeadType("Receptor", "Receptor", true);
 	@Deprecated
-	public static final LineType LIGAND_SQUARE = new LineType("LigandSquare","LigandSq", true);
+	public static final ArrowHeadType LIGAND_SQUARE = new ArrowHeadType("LigandSquare","LigandSq", true);
 	@Deprecated
-	public static final LineType RECEPTOR_SQUARE = new LineType("ReceptorSquare", "ReceptorSq", true);
+	public static final ArrowHeadType RECEPTOR_SQUARE = new ArrowHeadType("ReceptorSquare", "ReceptorSq", true);
 	@Deprecated
-	public static final LineType LIGAND_ROUND = new LineType("LigandRound", "LigandRd", true);
+	public static final ArrowHeadType LIGAND_ROUND = new ArrowHeadType("LigandRound", "LigandRd", true);
 	@Deprecated
-	public static final LineType RECEPTOR_ROUND = new LineType("ReceptorRound", "ReceptorRd", true);
+	public static final ArrowHeadType RECEPTOR_ROUND = new ArrowHeadType("ReceptorRound", "ReceptorRd", true);
 		
 	/**
 	   mappName may be null for new shapes that don't have a .mapp
 	   equivalent.
 	 */
-	private LineType (String name, String mappName)
+	private ArrowHeadType (String name, String mappName)
 	{
 		this (name, mappName, false);
 	}
 
-	private LineType (String name, String mappName, boolean hidden)
+	private ArrowHeadType (String name, String mappName, boolean hidden)
 	{
 		if (name == null) { throw new NullPointerException(); }
 
@@ -76,7 +76,7 @@ public class LineType
 
 	   For extending the enum.
 	 */
-	public static LineType create (String name, String mappName)
+	public static ArrowHeadType create (String name, String mappName)
 	{
 		if (nameMappings.containsKey (name))
 		{
@@ -84,7 +84,7 @@ public class LineType
 		}
 		else
 		{
-			return new LineType (name, mappName);
+			return new ArrowHeadType (name, mappName);
 		}
 	}
 
@@ -95,7 +95,7 @@ public class LineType
 
 	public String getName() { return name; }
 
-	public static LineType fromName(String value)
+	public static ArrowHeadType fromName(String value)
 	{
 		return nameMappings.get (value);
 	}
@@ -115,14 +115,14 @@ public class LineType
 		return result;
 	}
 
-	static public LineType[] getValues()
+	static public ArrowHeadType[] getValues()
 	{
-		return nameMappings.values().toArray (new LineType[nameMappings.size()]);
+		return nameMappings.values().toArray (new ArrowHeadType[nameMappings.size()]);
 	}
 
-	static public LineType[] getVisibleValues()
+	static public ArrowHeadType[] getVisibleValues()
 	{
-		return visible.toArray (new LineType[0]);
+		return visible.toArray (new ArrowHeadType[0]);
 	}
 
 	public String toString()

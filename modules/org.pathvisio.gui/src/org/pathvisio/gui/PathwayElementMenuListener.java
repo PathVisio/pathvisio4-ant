@@ -52,9 +52,9 @@ import org.pathvisio.gui.CommonActions.EditLiteratureAction;
 import org.pathvisio.gui.CommonActions.PropertiesAction;
 import org.pathvisio.gui.dialogs.PathwayElementDialog;
 import org.pathvisio.gui.view.VPathwaySwing;
-import org.pathvisio.libgpml.model.type.AnchorType;
+import org.pathvisio.libgpml.model.type.AnchorShapeType;
 import org.pathvisio.libgpml.model.type.ConnectorType;
-import org.pathvisio.libgpml.model.type.GroupStyle;
+import org.pathvisio.libgpml.model.type.GroupType;
 
 /**
  * Implementation of {@link VPathwayListener} that handles righ-click events to
@@ -137,8 +137,8 @@ public class PathwayElementMenuListener implements VPathwayListener {
 
 		//Only show group/ungroup when multiple objects or a group are selected
 		if((e instanceof VGroup)) {
-			GroupStyle s = ((VGroup)e).getPathwayElement().getGroupStyle();
-			if(s == GroupStyle.GROUP) {
+			GroupType s = ((VGroup)e).getPathwayElement().getGroupStyle();
+			if(s == GroupType.GROUP) {
 				menu.add(vActions.toggleGroup);
 			} else {
 				menu.add(vActions.toggleComplex);
@@ -199,11 +199,11 @@ public class PathwayElementMenuListener implements VPathwayListener {
 			ActionListener listener = new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					anchor.getMAnchor().setShape(
-							AnchorType.fromName(e.getActionCommand()));
+							AnchorShapeType.fromName(e.getActionCommand()));
 				}
 			};
 
-			for(AnchorType at : AnchorType.getValues()) {
+			for(AnchorShapeType at : AnchorShapeType.getValues()) {
 				JRadioButtonMenuItem mi = new JRadioButtonMenuItem(at.getName());
 				mi.setActionCommand(at.getName());
 				mi.setSelected(at.equals(anchor.getMAnchor().getShape()));

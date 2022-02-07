@@ -61,7 +61,7 @@ import org.pathvisio.libgpml.model.GraphLink.LinkableTo;
 import org.pathvisio.libgpml.model.Pathway.StatusFlagEvent;
 import org.pathvisio.libgpml.model.PathwayElement.MAnchor;
 import org.pathvisio.libgpml.model.PathwayElement.MPoint;
-import org.pathvisio.libgpml.model.type.GroupStyle;
+import org.pathvisio.libgpml.model.type.GroupType;
 import org.pathvisio.libgpml.util.Utils;
 
 /**
@@ -1449,7 +1449,7 @@ public class VPathway implements PathwayListener
 			// Form new group with all selected elementsselectPathwayObjects
 			PathwayElement group = PathwayElement.createPathwayElement(ObjectType.GROUP);
 			data.add(group);
-			group.setGroupStyle(GroupStyle.NONE);
+			group.setGroupStyle(GroupType.NONE);
 			String id = group.createGroupId();
 
 			for (Graphics g : selection)

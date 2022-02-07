@@ -42,7 +42,7 @@ import org.jdom2.output.XMLOutputter;
 import org.pathvisio.core.biopax.BiopaxElement;
 import org.pathvisio.libgpml.debug.Logger;
 import org.pathvisio.libgpml.model.GraphLink.LinkableTo;
-import org.pathvisio.libgpml.model.type.GroupStyle;
+import org.pathvisio.libgpml.model.type.GroupType;
 import org.xml.sax.SAXException;
 
 /**
@@ -409,7 +409,7 @@ public abstract class GpmlFormatAbstract
 		mapGraphId(o, e);
 
 		//Style
-		o.setGroupStyle(GroupStyle.fromName(getAttribute("Group", "Style", e)));
+		o.setGroupStyle(GroupType.fromName(getAttribute("Group", "Style", e)));
 		//Label
 		String textLabel = getAttribute("Group", "TextLabel", e);
 		if(textLabel != null) {

@@ -27,47 +27,47 @@ import java.util.TreeSet;
  * Groups can have different biological meanings (e.g. protein Complex), and
  * can be rendered in different ways based on that.
  */
-public class GroupStyle implements Comparable<GroupStyle> {
-	private static Map<String, GroupStyle> nameMappings = new HashMap<String, GroupStyle>();
-	private static Set<GroupStyle> values = new TreeSet<GroupStyle>();
+public class GroupType implements Comparable<GroupType> {
+	private static Map<String, GroupType> nameMappings = new HashMap<String, GroupType>();
+	private static Set<GroupType> values = new TreeSet<GroupType>();
 	
 	public static final double DEFAULT_M_MARGIN = 8; //Make the bounds slightly
 	  //larger than the summed bounds
 	  //of the containing elements
 	public static final double COMPLEX_M_MARGIN = 12;
 	
-	public static final GroupStyle NONE = new GroupStyle ("None");
+	public static final GroupType NONE = new GroupType ("None");
 
 	/**
 	 * Style used to group objects for drawing convenience.
 	 */
-	public static final GroupStyle GROUP = new GroupStyle ("Group");
+	public static final GroupType GROUP = new GroupType ("Group");
 
 	/**
 	 * Style used to represent a group of objects that belong to a complex.
 	 */
-	public static final GroupStyle COMPLEX = new GroupStyle ("Complex", false, COMPLEX_M_MARGIN);
+	public static final GroupType COMPLEX = new GroupType ("Complex", false, COMPLEX_M_MARGIN);
 
 	/**
 	 * Style used to represent a group of objects that belong to a pathway.
 	 */
-	public static final GroupStyle PATHWAY = new GroupStyle ("Pathway");
+	public static final GroupType PATHWAY = new GroupType ("Pathway");
 	
 	private String name;
     private boolean disallowLinks;
     private double mMargin;
     
-	private GroupStyle (String name)
+	private GroupType (String name)
     {
         this(name, false, DEFAULT_M_MARGIN);
     }    
 
-    private GroupStyle (String name, boolean disallowLinks)
+    private GroupType (String name, boolean disallowLinks)
 	{
     	this (name, disallowLinks, DEFAULT_M_MARGIN);
 	}
 
-    private GroupStyle (String name, boolean disallowLinks, double mMargin)
+    private GroupType (String name, boolean disallowLinks, double mMargin)
 	{
 		if (name == null) { throw new NullPointerException(); }
 
@@ -83,9 +83,9 @@ public class GroupStyle implements Comparable<GroupStyle> {
 
 	   For extending the enum.
 	 */
-	public static GroupStyle create (String name)
+	public static GroupType create (String name)
 	{
-		return new GroupStyle(name);
+		return new GroupType(name);
 	}
 
     /**
@@ -93,16 +93,16 @@ public class GroupStyle implements Comparable<GroupStyle> {
 
        For extending the enum.
      */
-    public static GroupStyle create (String name, boolean disallowLinks)
+    public static GroupType create (String name, boolean disallowLinks)
     {
-        return new GroupStyle(name, disallowLinks);
+        return new GroupType(name, disallowLinks);
     }
 
 
     /**
 	   looks up the ConnectorType corresponding to that name.
 	 */
-	public static GroupStyle fromName (String value)
+	public static GroupType fromName (String value)
 	{
 		return nameMappings.get(value);
 	}
@@ -111,7 +111,7 @@ public class GroupStyle implements Comparable<GroupStyle> {
 	   looks up the ConnectorType corresponding to its GPML name.
 	   @deprecated use {@link #fromName(String)} instead.
 	 */
-	public static GroupStyle fromGpmlName (String value) {
+	public static GroupType fromGpmlName (String value) {
 		return nameMappings.get(value);
 	}
 
@@ -119,7 +119,7 @@ public class GroupStyle implements Comparable<GroupStyle> {
 	 * Get the gpml name of the given GroupStyle.
 	 * @deprecated use {@link #getName()} instead.
 	 */
-	public static String toGpmlName(GroupStyle style) {
+	public static String toGpmlName(GroupType style) {
 		return style.getName();
 	}
 
@@ -135,9 +135,9 @@ public class GroupStyle implements Comparable<GroupStyle> {
         return disallowLinks;
     }
 
-    static public GroupStyle[] getValues()
+    static public GroupType[] getValues()
 	{
-		return values.toArray(new GroupStyle[0]);
+		return values.toArray(new GroupType[0]);
 	}
 
 	public static String[] getNames() {
@@ -149,7 +149,7 @@ public class GroupStyle implements Comparable<GroupStyle> {
 		return name;
 	}
 
-	public int compareTo(GroupStyle o) {
+	public int compareTo(GroupType o) {
 		return toString().compareTo(o.toString());
 	}
 

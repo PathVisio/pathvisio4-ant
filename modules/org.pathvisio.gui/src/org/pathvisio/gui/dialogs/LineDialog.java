@@ -50,7 +50,7 @@ import org.pathvisio.gui.completer.CompleterQueryTextField;
 import org.pathvisio.gui.completer.OptionProvider;
 import org.pathvisio.gui.util.PermissiveComboBox;
 import org.pathvisio.libgpml.model.PathwayElement;
-import org.pathvisio.libgpml.model.type.LineType;
+import org.pathvisio.libgpml.model.type.ArrowHeadType;
 
 public class LineDialog extends PathwayElementDialog implements ItemListener {
 
@@ -80,7 +80,7 @@ public class LineDialog extends PathwayElementDialog implements ItemListener {
 		idText.setText(getInput().getElementID());
 		dsm.setSelectedItem(input.getDataSource());
 		String lType = getInput().getEndLineType().toString();
-		typeCombo.setSelectedItem(LineType.fromName(lType));
+		typeCombo.setSelectedItem(ArrowHeadType.fromName(lType));
 		dsm.setInteractionFilter(true);
 		pack();
 	}
@@ -147,7 +147,7 @@ public class LineDialog extends PathwayElementDialog implements ItemListener {
 		dsm.setPrimaryFilter(true);
 		dsm.setSpeciesFilter(swingEngine.getCurrentOrganism());
 		dbCombo = new PermissiveComboBox(dsm);
-		typeCombo = new PermissiveComboBox(LineType.getValues());
+		typeCombo = new PermissiveComboBox(ArrowHeadType.getValues());
 
 		GridBagConstraints c = new GridBagConstraints();
 		c.ipadx = c.ipady = 5;
@@ -200,7 +200,7 @@ public class LineDialog extends PathwayElementDialog implements ItemListener {
 
 		typeCombo.addActionListener(new ActionListener() {
 			public void actionPerformed(final ActionEvent e) {
-				LineType item = (LineType) typeCombo.getSelectedItem();
+				ArrowHeadType item = (ArrowHeadType) typeCombo.getSelectedItem();
 				getInput().setEndLineType(item);
 				refresh();
 			}

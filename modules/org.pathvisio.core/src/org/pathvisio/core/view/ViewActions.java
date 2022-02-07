@@ -50,7 +50,7 @@ import org.pathvisio.libgpml.model.PathwayElement;
 import org.pathvisio.libgpml.model.PathwayElement.MPoint;
 import org.pathvisio.libgpml.model.connector.ConnectorShape;
 import org.pathvisio.libgpml.model.connector.FreeConnectorShape;
-import org.pathvisio.libgpml.model.type.GroupStyle;
+import org.pathvisio.libgpml.model.type.GroupType;
 import org.pathvisio.libgpml.model.type.ShapeType;
 import org.pathvisio.libgpml.util.Utils;
 
@@ -617,7 +617,7 @@ public class ViewActions implements VPathwayListener, SelectionListener {
 				"Create complex", "Break complex",
 				"Create a complex from selected elements",
 				"Break selected complex",
-				GroupStyle.COMPLEX,
+				GroupType.COMPLEX,
 				KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P,
 						Toolkit.getDefaultToolkit().getMenuShortcutKeyMask())
 				);
@@ -630,7 +630,7 @@ public class ViewActions implements VPathwayListener, SelectionListener {
 				"Group", "Ungroup",
 				"Group selected elements",
 				"Ungroup selected group",
-				GroupStyle.GROUP,
+				GroupType.GROUP,
 				KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_G,
 						Toolkit.getDefaultToolkit().getMenuShortcutKeyMask())
 			);
@@ -638,11 +638,11 @@ public class ViewActions implements VPathwayListener, SelectionListener {
 	}
 	private class GroupActionBase extends AbstractAction implements SelectionListener {
 		private String groupLbl, ungroupLbl, groupTt, ungroupTt;
-		private GroupStyle groupStyle;
+		private GroupType groupStyle;
 
 		public GroupActionBase(String groupLbl, String ungroupLbl,
 				String groupTt, String ungroupTt,
-				GroupStyle style, KeyStroke keyStroke) {
+				GroupType style, KeyStroke keyStroke) {
 			super();
 			this.groupStyle = style;
 			this.groupLbl = groupLbl;

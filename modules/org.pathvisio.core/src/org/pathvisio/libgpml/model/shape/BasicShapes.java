@@ -24,7 +24,7 @@ import java.awt.geom.GeneralPath;
 import java.awt.geom.Rectangle2D;
 
 import org.pathvisio.libgpml.model.shape.ArrowShape.FillType;
-import org.pathvisio.libgpml.model.type.AnchorType;
+import org.pathvisio.libgpml.model.type.AnchorShapeType;
 
 /**
  * Defines and registers all basic shapes and arrowheads, such Oval,
@@ -47,8 +47,8 @@ class BasicShapes
 		ShapeRegistry.registerArrow ("ReceptorSquare", getReceptorSquare(), ArrowShape.FillType.WIRE);
 		ShapeRegistry.registerArrow ("LigandSquare", getLigand(), ArrowShape.FillType.CLOSED);
 
-		ShapeRegistry.registerAnchor (AnchorType.NONE.getName(), getAnchorDefault());
-		ShapeRegistry.registerAnchor (AnchorType.CIRCLE.getName(), getAnchorCircle());
+		ShapeRegistry.registerAnchor (AnchorShapeType.NONE.getName(), getAnchorDefault());
+		ShapeRegistry.registerAnchor (AnchorShapeType.CIRCLE.getName(), getAnchorCircle());
 	}
 
 	/**

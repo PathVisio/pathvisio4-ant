@@ -30,7 +30,7 @@ import org.pathvisio.libgpml.model.PathwayElement.MAnchor;
 import org.pathvisio.libgpml.model.PathwayElement.MPoint;
 import org.pathvisio.libgpml.model.shape.AnchorShape;
 import org.pathvisio.libgpml.model.shape.ShapeRegistry;
-import org.pathvisio.libgpml.model.type.AnchorType;
+import org.pathvisio.libgpml.model.type.AnchorShapeType;
 
 /**
  * VAnchor is the view representation of {@link MAnchor}.
@@ -139,7 +139,7 @@ public class VAnchor extends VPathwayElement implements LinkProvider, Adjustable
 	}
 
 	protected void doDraw(Graphics2D g) {
-        if (getMAnchor().getShape().equals(AnchorType.NONE) && getMAnchor().getGraphId() != null) {
+        if (getMAnchor().getShape().equals(AnchorShapeType.NONE) && getMAnchor().getGraphId() != null) {
             return;
         }
         Color c;

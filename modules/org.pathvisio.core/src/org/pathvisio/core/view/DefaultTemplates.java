@@ -31,23 +31,23 @@ import org.pathvisio.libgpml.model.shape.MIMShapes;
 import org.pathvisio.libgpml.model.type.CellularComponentType;
 import org.pathvisio.libgpml.model.type.ConnectorType;
 import org.pathvisio.libgpml.model.type.DataNodeType;
-import org.pathvisio.libgpml.model.type.LineStyle;
-import org.pathvisio.libgpml.model.type.LineType;
+import org.pathvisio.libgpml.model.type.LineStyleType;
+import org.pathvisio.libgpml.model.type.ArrowHeadType;
 import org.pathvisio.libgpml.model.type.ShapeType;
 import org.pathvisio.libgpml.util.Utils;
 
 /**
- * Contains a set of templates, patterns of PathwayElements that can
- * be added to a Pathway, including default values.
+ * Contains a set of templates, patterns of PathwayElements that can be added to
+ * a Pathway, including default values.
  */
 public abstract class DefaultTemplates {
 	public final static Color COLOR_METABOLITE = Color.BLUE;
-	public final static Color COLOR_PATHWAY = new Color(20,150,30);
+	public final static Color COLOR_PATHWAY = new Color(20, 150, 30);
 	public final static Color COLOR_LABEL = Color.DARK_GRAY;
 
 	/**
-	 * Abstract base for templates that only add a single PathwayElement
-	 * to a Pathway
+	 * Abstract base for templates that only add a single PathwayElement to a
+	 * Pathway
 	 */
 	static abstract class SingleElementTemplate implements Template {
 		PathwayElement lastAdded;
@@ -61,16 +61,14 @@ public abstract class DefaultTemplates {
 		 * Default implementation returns the view of the last added object
 		 */
 		public VPathwayElement getDragElement(VPathway vp) {
-			if(lastAdded != null) {
+			if (lastAdded != null) {
 				Graphics g = vp.getPathwayElementView(lastAdded);
-				if(g == null) {
-					throw new IllegalArgumentException(
-							"Given VPathway doesn't contain last added element"
-					);
+				if (g == null) {
+					throw new IllegalArgumentException("Given VPathway doesn't contain last added element");
 				}
 				return g;
 			}
-			return null; //No last object
+			return null; // No last object
 		}
 
 		public String getDescription() {
@@ -78,7 +76,7 @@ public abstract class DefaultTemplates {
 		}
 
 		public URL getIconLocation() {
-			return  Utils.getResourceURL("new" + getName().toLowerCase() + ".gif");
+			return Utils.getResourceURL("new" + getName().toLowerCase() + ".gif");
 		}
 
 		public void postInsert(PathwayElement[] newElements) {
@@ -90,12 +88,12 @@ public abstract class DefaultTemplates {
 	 */
 	public static class LineTemplate extends SingleElementTemplate {
 		int style;
-		LineType startType;
-		LineType endType;
+		ArrowHeadType startType;
+		ArrowHeadType endType;
 		ConnectorType connectorType;
 		String name;
 
-		public LineTemplate(String name, int style, LineType startType, LineType endType, ConnectorType connectorType) {
+		public LineTemplate(String name, int style, ArrowHeadType startType, ArrowHeadType endType, ConnectorType connectorType) {
 			this.style = style;
 			this.startType = startType;
 			this.endType = endType;
@@ -119,16 +117,15 @@ public abstract class DefaultTemplates {
 		}
 
 		public VPathwayElement getDragElement(VPathway vp) {
-			Line l = (Line)super.getDragElement(vp);
+			Line l = (Line) super.getDragElement(vp);
 			return l.getEnd().getHandle();
 		}
 
-		public String getName()
-		{
+		public String getName() {
 			return name;
 		}
 	}
-	
+
 	/**
 	 * Template for adding a Label to a Pathway
 	 */
@@ -145,8 +142,9 @@ public abstract class DefaultTemplates {
 
 			return new PathwayElement[] { e };
 		}
+
 		public VPathwayElement getDragElement(VPathway vp) {
-			return null; //Don't drag label on insert
+			return null; // Don't drag label on insert
 		}
 
 		public String getName() {
@@ -155,7 +153,8 @@ public abstract class DefaultTemplates {
 	}
 
 	/**
-	 * Template for adding a DataNode to a Pathway. Pass a DataNodeType upon creation
+	 * Template for adding a DataNode to a Pathway. Pass a DataNodeType upon
+	 * creation
 	 */
 	public static class DataNodeTemplate extends SingleElementTemplate {
 		DataNodeType type;
@@ -171,21 +170,20 @@ public abstract class DefaultTemplates {
 			e.setMWidth(1);
 			e.setMHeight(1);
 			e.setRotation(0);
-            if (PreferenceManager.getCurrent().getBoolean(GlobalPreference.DATANODES_ROUNDED)) {
-                 e.setShapeType(ShapeType.ROUNDED_RECTANGLE);
-            }
-            e.setGraphId(p.getUniqueGraphId());
+			if (PreferenceManager.getCurrent().getBoolean(GlobalPreference.DATANODES_ROUNDED)) {
+				e.setShapeType(ShapeType.ROUNDED_RECTANGLE);
+			}
+			e.setGraphId(p.getUniqueGraphId());
 			e.setDataNodeType(type);
 
-			//Default colors for different types
+			// Default colors for different types
 			if (type.equals(DataNodeType.METABOLITE)) {
 				e.setColor(COLOR_METABOLITE);
-				e.setShapeType(ShapeType.ROUNDED_RECTANGLE);
 			} else if (type.equals(DataNodeType.PATHWAY)) {
 				e.setColor(COLOR_PATHWAY);
 				e.setMFontSize(12);
 				e.setBold(true);
-				e.setShapeType(ShapeType.NONE);
+				e.setShapeType(ShapeType.ROUNDED_RECTANGLE);
 			}
 
 			e.setTextLabel(type.toString());
@@ -194,7 +192,7 @@ public abstract class DefaultTemplates {
 		}
 
 		public VPathwayElement getDragElement(VPathway vp) {
-			VDataNode g = (VDataNode)super.getDragElement(vp);
+			VDataNode g = (VDataNode) super.getDragElement(vp);
 			return g.handleSE;
 		}
 
@@ -224,14 +222,14 @@ public abstract class DefaultTemplates {
 			e.setGraphId(p.getUniqueGraphId());
 			addElement(e, p);
 
-			//brace
+			// brace
 //			gdata.setOrientation(OrientationType.RIGHT);
 
 			return new PathwayElement[] { e };
 		}
 
 		public VPathwayElement getDragElement(VPathway vp) {
-			GraphicsShape s = (GraphicsShape)super.getDragElement(vp);
+			GraphicsShape s = (GraphicsShape) super.getDragElement(vp);
 			return s.handleSE;
 		}
 
@@ -245,12 +243,13 @@ public abstract class DefaultTemplates {
 	 */
 	public static class GraphicalLineTemplate extends SingleElementTemplate {
 		int style;
-		LineType startType;
-		LineType endType;
+		ArrowHeadType startType;
+		ArrowHeadType endType;
 		ConnectorType connectorType;
 		String name;
 
-		public GraphicalLineTemplate(String name, int style, LineType startType, LineType endType, ConnectorType connectorType) {
+		public GraphicalLineTemplate(String name, int style, ArrowHeadType startType, ArrowHeadType endType,
+				ConnectorType connectorType) {
 			this.style = style;
 			this.startType = startType;
 			this.endType = endType;
@@ -274,25 +273,24 @@ public abstract class DefaultTemplates {
 		}
 
 		public VPathwayElement getDragElement(VPathway vp) {
-			Line l = (Line)super.getDragElement(vp);
+			Line l = (Line) super.getDragElement(vp);
 			return l.getEnd().getHandle();
 		}
 
-		public String getName()
-		{
+		public String getName() {
 			return name;
 		}
 	}
-	
+
 	/**
-	 * Template for adding a Cellular Compartment Shape to a Pathway. Pass a ShapeType upon creation.
+	 * Template for adding a Cellular Compartment Shape to a Pathway. Pass a
+	 * ShapeType upon creation.
 	 */
 	public static class CellularComponentTemplate extends SingleElementTemplate {
 		ShapeType type;
 		CellularComponentType ccType;
 
-		public CellularComponentTemplate(ShapeType type, CellularComponentType ccType)
-		{
+		public CellularComponentTemplate(ShapeType type, CellularComponentType ccType) {
 			this.type = type;
 			this.ccType = ccType;
 		}
@@ -307,15 +305,13 @@ public abstract class DefaultTemplates {
 			e.setRotation(0);
 			e.setColor(Color.LIGHT_GRAY);
 			e.setLineThickness(3.0);
-			if (ccType.equals(CellularComponentType.CELL) 
-					|| ccType.equals(CellularComponentType.NUCLEUS) 
-					|| ccType.equals(CellularComponentType.ORGANELLE))
-			{
-				e.setLineStyle(LineStyle.DOUBLE);
-			} else if (ccType.equals(CellularComponentType.CYTOSOL) || ccType.equals(CellularComponentType.EXTRACELLULAR)
-					|| ccType.equals(CellularComponentType.MEMBRANE))
-			{
-				e.setLineStyle(LineStyle.DASHED);
+			if (ccType.equals(CellularComponentType.CELL) || ccType.equals(CellularComponentType.NUCLEUS)
+					|| ccType.equals(CellularComponentType.ORGANELLE)) {
+				e.setLineStyle(LineStyleType.DOUBLE);
+			} else if (ccType.equals(CellularComponentType.CYTOSOL)
+					|| ccType.equals(CellularComponentType.EXTRACELLULAR)
+					|| ccType.equals(CellularComponentType.MEMBRANE)) {
+				e.setLineStyle(LineStyleType.DASHED);
 				e.setLineThickness(1.0);
 			}
 			e.setGraphId(p.getUniqueGraphId());
@@ -325,7 +321,7 @@ public abstract class DefaultTemplates {
 		}
 
 		public VPathwayElement getDragElement(VPathway vp) {
-			GraphicsShape s = (GraphicsShape)super.getDragElement(vp);
+			GraphicsShape s = (GraphicsShape) super.getDragElement(vp);
 			return s.handleSE;
 		}
 
@@ -343,19 +339,19 @@ public abstract class DefaultTemplates {
 		PathwayElement lastEndNode;
 		PathwayElement lastLine;
 
-		LineType endType;
-		LineType startType;
+		ArrowHeadType endType;
+		ArrowHeadType startType;
 
 		int lineStyle;
 
 		public InteractionTemplate() {
-			endType = LineType.LINE;
-			startType = LineType.LINE;
-			lineStyle = LineStyle.SOLID;
+			endType = ArrowHeadType.LINE;
+			startType = ArrowHeadType.LINE;
+			lineStyle = LineStyleType.SOLID;
 		}
 
 		public PathwayElement[] addElements(Pathway p, double mx, double my) {
-			//Add two GeneProduct DataNodes, connected by a line
+			// Add two GeneProduct DataNodes, connected by a line
 			Template dnt = new DataNodeTemplate(DataNodeType.GENEPRODUCT);
 			lastStartNode = dnt.addElements(p, mx, my)[0];
 			lastStartNode.setInitialSize();
@@ -369,8 +365,6 @@ public abstract class DefaultTemplates {
 
 			return new PathwayElement[] { lastLine, lastStartNode, lastEndNode };
 		}
-		
-	
 
 		public VPathwayElement getDragElement(VPathway vp) {
 			return null;
@@ -385,14 +379,16 @@ public abstract class DefaultTemplates {
 		}
 
 		public URL getIconLocation() {
-			return  Utils.getResourceURL("new" + getName().toLowerCase() + ".gif");
+			return Utils.getResourceURL("new" + getName().toLowerCase() + ".gif");
 		}
 
 		public void postInsert(PathwayElement[] newElements) {
 		}
 	}
+
 	/**
-	 * Template for an inhibition interaction, two datanodes with a MIM_INHIBITION line.
+	 * Template for an inhibition interaction, two datanodes with a MIM_INHIBITION
+	 * line.
 	 */
 	public static class InhibitionInteractionTemplate extends InteractionTemplate {
 		@Override
@@ -401,13 +397,16 @@ public abstract class DefaultTemplates {
 			lastLine.setEndLineType(MIMShapes.MIM_INHIBITION);
 			return new PathwayElement[] { lastLine, lastStartNode, lastEndNode };
 		}
+
 		@Override
 		public String getName() {
 			return "inhibition interaction";
 		}
 	}
+
 	/**
-	 * Template for a stimulation interaction, two datanodes with a MIM_STIMULATION line.
+	 * Template for a stimulation interaction, two datanodes with a MIM_STIMULATION
+	 * line.
 	 */
 	public static class StimulationInteractionTemplate extends InteractionTemplate {
 		@Override
@@ -416,6 +415,7 @@ public abstract class DefaultTemplates {
 			lastLine.setEndLineType(MIMShapes.MIM_STIMULATION);
 			return new PathwayElement[] { lastLine, lastStartNode, lastEndNode };
 		}
+
 		@Override
 		public String getName() {
 			return "stimulation interaction";
@@ -423,13 +423,14 @@ public abstract class DefaultTemplates {
 	}
 
 	/**
-	 * Template for a phosphorylation interaction, two Protein Datanodes with a MIM_MODIFICATION line.
+	 * Template for a phosphorylation interaction, two Protein Datanodes with a
+	 * MIM_MODIFICATION line.
 	 */
 
 	public static class PhosphorylationTemplate extends InteractionTemplate {
-		//static final double OFFSET_CATALYST = 50;
+		// static final double OFFSET_CATALYST = 50;
 		PathwayElement lastPhosphorylation;
-		//PathwayElement lastPhosLine;
+		// PathwayElement lastPhosLine;
 
 		public PathwayElement[] addElements(Pathway p, double mx, double my) {
 			super.addElements(p, mx, my);
@@ -438,16 +439,15 @@ public abstract class DefaultTemplates {
 			lastStartNode.setTextLabel("Protein");
 			lastEndNode.setTextLabel("P-Protein");
 			lastLine.setEndLineType(MIMShapes.MIM_MODIFICATION);
-			
-			
-			PathwayElement elt = PathwayElement.createPathwayElement(ObjectType.STATE);                        
+
+			PathwayElement elt = PathwayElement.createPathwayElement(ObjectType.STATE);
 			elt.setInitialSize();
 			elt.setTextLabel("P");
-			((MState)elt).linkTo (lastEndNode, 1.0, 1.0);
+			((MState) elt).linkTo(lastEndNode, 1.0, 1.0);
 			elt.setShapeType(ShapeType.OVAL);
 			p.add(elt);
-			elt.setGeneratedGraphId();			
-			
+			elt.setGeneratedGraphId();
+
 			return new PathwayElement[] { lastStartNode, lastEndNode, lastLine };
 		}
 
@@ -455,11 +455,10 @@ public abstract class DefaultTemplates {
 			return "Phosphorylation";
 		}
 	}
-	
-	
+
 	/**
-	 * Template for a reaction, two Metabolites with a connecting arrow, and a GeneProduct (enzyme)
-	 * pointing to an anchor on that arrow.
+	 * Template for a reaction, two Metabolites with a connecting arrow, and a
+	 * GeneProduct (enzyme) pointing to an anchor on that arrow.
 	 */
 	public static class ReactionTemplate extends InteractionTemplate {
 		static final double OFFSET_CATALYST = 50;
@@ -482,11 +481,12 @@ public abstract class DefaultTemplates {
 			lastEndNode.setColor(COLOR_METABOLITE);
 			lastEndNode.setShapeType(ShapeType.ROUNDED_RECTANGLE);
 			lastEndNode.setTextLabel("Product");
-			
+
 			lastLine.setEndLineType(MIMShapes.MIM_CONVERSION);
 			MAnchor anchor = lastLine.addMAnchor(0.5);
 
-			Template lnt = new LineTemplate("line", LineStyle.SOLID, LineType.LINE, LineType.LINE, ConnectorType.STRAIGHT);
+			Template lnt = new LineTemplate("line", LineStyleType.SOLID, ArrowHeadType.LINE, ArrowHeadType.LINE,
+					ConnectorType.STRAIGHT);
 			lastCatLine = lnt.addElements(p, mx, my)[0];
 
 			lastCatLine.getMStart().linkTo(lastCatalyst, 0, 1);
@@ -500,10 +500,10 @@ public abstract class DefaultTemplates {
 			return "reaction";
 		}
 	}
-	
+
 	/**
-	 * Template for a reaction, two Metabolites with a connecting arrow, and a GeneProduct (enzyme)
-	 * pointing to an anchor on that arrow.
+	 * Template for a reaction, two Metabolites with a connecting arrow, and a
+	 * GeneProduct (enzyme) pointing to an anchor on that arrow.
 	 */
 	public static class ReversibleReactionTemplate extends InteractionTemplate {
 		static final double OFFSET_CATALYST = 50;
@@ -513,18 +513,18 @@ public abstract class DefaultTemplates {
 		PathwayElement lastCatLine2;
 		PathwayElement lastReverseLine;
 
- 		public PathwayElement[] addElements(Pathway p, double mx, double my) {
+		public PathwayElement[] addElements(Pathway p, double mx, double my) {
 			super.addElements(p, mx, my);
 			Template dnt = new DataNodeTemplate(DataNodeType.PROTEIN);
 			lastCatalyst = dnt.addElements(p, mx + lastStartNode.getMWidth(), my - OFFSET_CATALYST)[0];
 			lastCatalyst.setInitialSize();
 			lastCatalyst.setTextLabel("Catalyst 1");
 
- 			lastCatalyst2 = dnt.addElements(p, mx + lastStartNode.getMWidth(), my + OFFSET_CATALYST)[0];
+			lastCatalyst2 = dnt.addElements(p, mx + lastStartNode.getMWidth(), my + OFFSET_CATALYST)[0];
 			lastCatalyst2.setInitialSize();
 			lastCatalyst2.setTextLabel("Catalyst 2");
 
- 			lastStartNode.setDataNodeType(DataNodeType.METABOLITE);
+			lastStartNode.setDataNodeType(DataNodeType.METABOLITE);
 			lastStartNode.setColor(COLOR_METABOLITE);
 			lastStartNode.setShapeType(ShapeType.ROUNDED_RECTANGLE);
 			lastStartNode.setTextLabel("Metabolite 1");
@@ -535,37 +535,51 @@ public abstract class DefaultTemplates {
 			lastEndNode.setTextLabel("Metabolite 2");
 			lastLine.setEndLineType(MIMShapes.MIM_CONVERSION);
 
- 			MAnchor anchor = lastLine.addMAnchor(0.5);
+			MAnchor anchor = lastLine.addMAnchor(0.5);
 
- 			Template lnt = new LineTemplate("line", LineStyle.SOLID, LineType.LINE, LineType.LINE, ConnectorType.STRAIGHT);
+			Template lnt = new LineTemplate("line", LineStyleType.SOLID, ArrowHeadType.LINE, ArrowHeadType.LINE,
+					ConnectorType.STRAIGHT);
 			lastCatLine = lnt.addElements(p, mx, my)[0];
 
- 			lastCatLine.getMStart().linkTo(lastCatalyst, 0, 1);
+			lastCatLine.getMStart().linkTo(lastCatalyst, 0, 1);
 			lastCatLine.getMEnd().linkTo(anchor, 0, 0);
 			lastCatLine.setEndLineType(MIMShapes.MIM_CATALYSIS);
 
- 			Template rev = new LineTemplate("line", LineStyle.SOLID, LineType.LINE, LineType.LINE, ConnectorType.STRAIGHT);
+			Template rev = new LineTemplate("line", LineStyleType.SOLID, ArrowHeadType.LINE, ArrowHeadType.LINE,
+					ConnectorType.STRAIGHT);
 			lastReverseLine = rev.addElements(p, mx, my)[0];
 
- 			lastReverseLine.getMStart().linkTo(lastEndNode, -1, 0.5);
+			lastReverseLine.getMStart().linkTo(lastEndNode, -1, 0.5);
 			lastReverseLine.getMEnd().linkTo(lastStartNode, 1, 0.5);
 			lastReverseLine.setEndLineType(MIMShapes.MIM_CONVERSION);
 
- 			MAnchor anchor2 = lastReverseLine.addMAnchor(0.5);
+			MAnchor anchor2 = lastReverseLine.addMAnchor(0.5);
 
- 			Template lnt2 = new LineTemplate("line", LineStyle.SOLID, LineType.LINE, LineType.LINE, ConnectorType.STRAIGHT);
+			Template lnt2 = new LineTemplate("line", LineStyleType.SOLID, ArrowHeadType.LINE, ArrowHeadType.LINE,
+					ConnectorType.STRAIGHT);
 			lastCatLine2 = lnt2.addElements(p, mx, my)[0];
 
- 			lastCatLine2.getMStart().linkTo(lastCatalyst2, 0, -1);
+			lastCatLine2.getMStart().linkTo(lastCatalyst2, 0, -1);
 			lastCatLine2.getMEnd().linkTo(anchor2, 0, 0);
 			lastCatLine2.setEndLineType(MIMShapes.MIM_CATALYSIS);
 
- 			return new PathwayElement[] { lastStartNode, lastEndNode, lastLine, lastCatalyst, lastCatalyst2 }; //These elements are selected in PV, so users can move them around.
+			return new PathwayElement[] { lastStartNode, lastEndNode, lastLine, lastCatalyst, lastCatalyst2 }; // These
+																												// elements
+																												// are
+																												// selected
+																												// in
+																												// PV,
+																												// so
+																												// users
+																												// can
+																												// move
+																												// them
+																												// around.
 		}
 
- 		public String getName() {
+		public String getName() {
 			return "ReversibleReaction";
 		}
 	}
-	
+
 }

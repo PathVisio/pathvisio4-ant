@@ -43,8 +43,8 @@ import org.pathvisio.libgpml.model.connector.ConnectorShape.Segment;
 import org.pathvisio.libgpml.model.connector.ConnectorShape.WayPoint;
 import org.pathvisio.libgpml.model.shape.ArrowShape;
 import org.pathvisio.libgpml.model.shape.ShapeRegistry;
-import org.pathvisio.libgpml.model.type.LineStyle;
-import org.pathvisio.libgpml.model.type.LineType;
+import org.pathvisio.libgpml.model.type.LineStyleType;
+import org.pathvisio.libgpml.model.type.ArrowHeadType;
 
 /**
  * This class represents a Line on the pathway, or rather
@@ -218,7 +218,7 @@ public class Line extends Graphics implements Adjustable
 	 * returns the gap that goes with the specified LineType
 	 * If no line ending, the method returns 0
 	 */
-	private double getGap(LineType type) {
+	private double getGap(ArrowHeadType type) {
 
 		double gap = 0;
 		if (type == null)
@@ -377,7 +377,7 @@ public class Line extends Graphics implements Adjustable
 		ArrowShape he = heads[1];
 		
 		float thickness = (float) vFromM(gdata.getLineThickness());
-		if (gdata.getLineStyle() == LineStyle.DOUBLE) thickness *= 4;
+		if (gdata.getLineStyle() == LineStyleType.DOUBLE) thickness *= 4;
 		BasicStroke bs = new BasicStroke (thickness);
 		
 		Area total = new Area(bs.createStrokedShape(l));
@@ -478,7 +478,7 @@ public class Line extends Graphics implements Adjustable
 	   @param mP2	The end point in model coordinates
 	   @return The ArrowShape in view coordinates
 	 */
-	protected ArrowShape getVHead(Point2D mP1, Point2D mP2, LineType type)
+	protected ArrowShape getVHead(Point2D mP1, Point2D mP2, ArrowHeadType type)
 	{
 		double xs = vFromM(mP1.getX());
 		double ys = vFromM(mP1.getY());

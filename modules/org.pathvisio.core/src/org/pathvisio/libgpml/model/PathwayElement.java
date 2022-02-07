@@ -40,16 +40,16 @@ import org.pathvisio.core.view.VState;
 import org.pathvisio.libgpml.model.GraphLink.LinkableTo;
 import org.pathvisio.libgpml.model.GraphLink.LinkableFrom;
 import org.pathvisio.libgpml.model.shape.IShape;
-import org.pathvisio.libgpml.model.type.AlignType;
-import org.pathvisio.libgpml.model.type.AnchorType;
+import org.pathvisio.libgpml.model.type.HAlignType;
+import org.pathvisio.libgpml.model.type.AnchorShapeType;
 import org.pathvisio.libgpml.model.type.ConnectorType;
 import org.pathvisio.libgpml.model.type.DataNodeType;
-import org.pathvisio.libgpml.model.type.GroupStyle;
-import org.pathvisio.libgpml.model.type.LineStyle;
-import org.pathvisio.libgpml.model.type.LineType;
+import org.pathvisio.libgpml.model.type.GroupType;
+import org.pathvisio.libgpml.model.type.LineStyleType;
+import org.pathvisio.libgpml.model.type.ArrowHeadType;
 import org.pathvisio.libgpml.model.type.OrientationType;
 import org.pathvisio.libgpml.model.type.ShapeType;
-import org.pathvisio.libgpml.model.type.ValignType;
+import org.pathvisio.libgpml.model.type.VAlignType;
 import org.pathvisio.libgpml.prop.StaticProperty;
 import org.pathvisio.libgpml.util.Utils;
 
@@ -473,7 +473,7 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 	 *
 	 */
 	public class MAnchor extends GenericPoint {
-		AnchorType shape = AnchorType.NONE;
+		AnchorShapeType shape = AnchorShapeType.NONE;
 
 		public MAnchor(double position) {
 			super(new double[] { position });
@@ -484,7 +484,7 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 			shape = a.shape;
 		}
 
-		public void setShape(AnchorType type) {
+		public void setShape(AnchorShapeType type) {
 			if (!this.shape.equals(type) && type != null) {
 				this.shape = type;
 				fireObjectModifiedEvent(
@@ -492,7 +492,7 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 			}
 		}
 
-		public AnchorType getShape() {
+		public AnchorShapeType getShape() {
 			return shape;
 		}
 
@@ -859,10 +859,10 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 			setMEndY((Double) value);
 			break;
 		case ENDLINETYPE:
-			setEndLineType((LineType) value);
+			setEndLineType((ArrowHeadType) value);
 			break;
 		case STARTLINETYPE:
-			setStartLineType((LineType) value);
+			setStartLineType((ArrowHeadType) value);
 			break;
 		case LINESTYLE:
 			setLineStyle((Integer) value);
@@ -963,17 +963,17 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 			setZOrder((Integer) value);
 			break;
 		case GROUPSTYLE:
-			if (value instanceof GroupStyle) {
-				setGroupStyle((GroupStyle) value);
+			if (value instanceof GroupType) {
+				setGroupStyle((GroupType) value);
 			} else {
-				setGroupStyle(GroupStyle.fromName((String) value));
+				setGroupStyle(GroupType.fromName((String) value));
 			}
 			break;
 		case ALIGN:
-			setAlign((AlignType) value);
+			setAlign((HAlignType) value);
 			break;
 		case VALIGN:
-			setValign((ValignType) value);
+			setValign((VAlignType) value);
 			break;
 		case LINETHICKNESS:
 			setLineThickness((Double) value);
@@ -1307,7 +1307,7 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 		getMEnd().setY(v);
 	}
 
-	protected int lineStyle = LineStyle.SOLID;
+	protected int lineStyle = LineStyleType.SOLID;
 
 	public int getLineStyle() {
 		return lineStyle;
@@ -1318,33 +1318,33 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 			lineStyle = value;
 			// handle LineStyle.DOUBLE until GPML is updated
 			// TODO: remove after next GPML update
-			if (lineStyle == LineStyle.DOUBLE)
-				setDynamicProperty(LineStyle.DOUBLE_LINE_KEY, "Double");
+			if (lineStyle == LineStyleType.DOUBLE)
+				setDynamicProperty(LineStyleType.DOUBLE_LINE_KEY, "Double");
 			else
-				setDynamicProperty(LineStyle.DOUBLE_LINE_KEY, null);
+				setDynamicProperty(LineStyleType.DOUBLE_LINE_KEY, null);
 			fireObjectModifiedEvent(PathwayElementEvent.createSinglePropertyEvent(this, StaticProperty.LINESTYLE));
 		}
 	}
 
-	protected LineType endLineType = LineType.LINE;
-	protected LineType startLineType = LineType.LINE;
+	protected ArrowHeadType endLineType = ArrowHeadType.LINE;
+	protected ArrowHeadType startLineType = ArrowHeadType.LINE;
 
-	public LineType getStartLineType() {
-		return startLineType == null ? LineType.LINE : startLineType;
+	public ArrowHeadType getStartLineType() {
+		return startLineType == null ? ArrowHeadType.LINE : startLineType;
 	}
 
-	public LineType getEndLineType() {
-		return endLineType == null ? LineType.LINE : endLineType;
+	public ArrowHeadType getEndLineType() {
+		return endLineType == null ? ArrowHeadType.LINE : endLineType;
 	}
 
-	public void setStartLineType(LineType value) {
+	public void setStartLineType(ArrowHeadType value) {
 		if (startLineType != value) {
 			startLineType = value;
 			fireObjectModifiedEvent(PathwayElementEvent.createSinglePropertyEvent(this, StaticProperty.STARTLINETYPE));
 		}
 	}
 
-	public void setEndLineType(LineType value) {
+	public void setEndLineType(ArrowHeadType value) {
 		if (endLineType != value) {
 			endLineType = value;
 			fireObjectModifiedEvent(PathwayElementEvent.createSinglePropertyEvent(this, StaticProperty.ENDLINETYPE));
@@ -1909,29 +1909,29 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 		}
 	}
 
-	protected ValignType valign = ValignType.MIDDLE;
+	protected VAlignType valign = VAlignType.MIDDLE;
 
-	public void setValign(ValignType v) {
+	public void setValign(VAlignType v) {
 		if (valign != v) {
 			valign = v;
 			fireObjectModifiedEvent(PathwayElementEvent.createSinglePropertyEvent(this, StaticProperty.VALIGN));
 		}
 	}
 
-	public ValignType getValign() {
+	public VAlignType getValign() {
 		return valign;
 	}
 
-	protected AlignType align = AlignType.CENTER;
+	protected HAlignType align = HAlignType.CENTER;
 
-	public void setAlign(AlignType v) {
+	public void setAlign(HAlignType v) {
 		if (align != v) {
 			align = v;
 			fireObjectModifiedEvent(PathwayElementEvent.createSinglePropertyEvent(this, StaticProperty.ALIGN));
 		}
 	}
 
-	public AlignType getAlign() {
+	public HAlignType getAlign() {
 		return align;
 	}
 
@@ -2038,7 +2038,7 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 
 	protected String groupRef;
 
-	protected GroupStyle groupStyle;
+	protected GroupType groupStyle;
 
 	public String doGetGraphId() {
 		return graphId;
@@ -2075,16 +2075,16 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 		return groupId;
 	}
 
-	public void setGroupStyle(GroupStyle gs) {
+	public void setGroupStyle(GroupType gs) {
 		if (groupStyle != gs) {
 			groupStyle = gs;
 			fireObjectModifiedEvent(PathwayElementEvent.createSinglePropertyEvent(this, StaticProperty.GROUPSTYLE));
 		}
 	}
 
-	public GroupStyle getGroupStyle() {
+	public GroupType getGroupStyle() {
 		if (groupStyle == null) {
-			groupStyle = GroupStyle.NONE;
+			groupStyle = GroupType.NONE;
 		}
 		return groupStyle;
 	}
@@ -2305,7 +2305,7 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 			if (shapeType == ShapeType.BRACE) {
 				setMWidth(M_INITIAL_BRACE_WIDTH);
 				setMHeight(M_INITIAL_BRACE_HEIGHT);
-			} else if (shapeType == ShapeType.MITOCHONDRIA || lineStyle == LineStyle.DOUBLE) {
+			} else if (shapeType == ShapeType.MITOCHONDRIA || lineStyle == LineStyleType.DOUBLE) {
 				setMWidth(M_INITIAL_CELLCOMP_WIDTH);
 				setMHeight(M_INITIAL_CELLCOMP_HEIGHT);
 			} else if (shapeType == ShapeType.SARCOPLASMICRETICULUM || shapeType == ShapeType.ENDOPLASMICRETICULUM

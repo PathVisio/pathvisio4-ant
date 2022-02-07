@@ -51,27 +51,18 @@ public class FontChooser extends OkCancelDialog {
 	public FontChooser(Frame frame, Component locationComp, Font font) {
 		super(frame, "Select font", locationComp, true, true);
 		this.font = font;
-		if(font == null) {
+		if (font == null) {
 			font = UIManager.getFont("Label.font");
 		}
 
-		fontCombo = new JComboBox(
-				GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames()
-		);
+		fontCombo = new JComboBox(GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames());
 		fontCombo.setRenderer(new FontNameRenderer());
 		fontCombo.setSelectedItem(font.getFamily());
 
-		sizeCombo = new JComboBox(
-				new Integer[] {
-						4, 6, 7, 8, 10, 11, 12,
-						14, 16, 18, 20, 24,36,48
-				}
-		);
+		sizeCombo = new JComboBox(new Integer[] { 4, 6, 7, 8, 10, 11, 12, 14, 16, 18, 20, 24, 36, 48 });
 		sizeCombo.setEditable(true);
 
-		((JTextField)sizeCombo.getEditor().getEditorComponent()).setDocument(
-				new IntegerDocument()
-		);
+		((JTextField) sizeCombo.getEditor().getEditorComponent()).setDocument(new IntegerDocument());
 		sizeCombo.setSelectedItem(font.getSize() + "");
 
 		boldCheck = new JCheckBox();
@@ -79,9 +70,7 @@ public class FontChooser extends OkCancelDialog {
 		italicCheck = new JCheckBox();
 		italicCheck.setSelected(font.isItalic());
 
-		DefaultFormBuilder builder = new DefaultFormBuilder(new FormLayout(
-				"pref, 8dlu, pref:grow", ""
-		));
+		DefaultFormBuilder builder = new DefaultFormBuilder(new FormLayout("pref, 8dlu, pref:grow", ""));
 		builder.setDefaultDialogBorder();
 		builder.append("Font:", fontCombo);
 		builder.nextLine();
@@ -100,14 +89,14 @@ public class FontChooser extends OkCancelDialog {
 		int size = 8;
 		try {
 			size = Integer.parseInt(sizeCombo.getSelectedItem().toString());
-		} catch(NumberFormatException e) {
-			//Ignore, use default
+		} catch (NumberFormatException e) {
+			// Ignore, use default
 		}
 		int style = Font.PLAIN;
-		if(boldCheck.isSelected()) {
+		if (boldCheck.isSelected()) {
 			style |= Font.BOLD;
 		}
-		if(italicCheck.isSelected()) {
+		if (italicCheck.isSelected()) {
 			style |= Font.ITALIC;
 		}
 		font = new Font(name, style, size);
@@ -127,8 +116,7 @@ public class FontChooser extends OkCancelDialog {
 			return currentValue;
 		}
 
-		public void insertString(int offset, String string,
-				AttributeSet attributes) throws BadLocationException {
+		public void insertString(int offset, String string, AttributeSet attributes) throws BadLocationException {
 
 			if (string == null) {
 				return;
@@ -139,8 +127,7 @@ public class FontChooser extends OkCancelDialog {
 					newValue = string;
 				} else {
 					String currentContent = getText(0, length);
-					StringBuffer currentBuffer =
-						new StringBuffer(currentContent);
+					StringBuffer currentBuffer = new StringBuffer(currentContent);
 					currentBuffer.insert(offset, string);
 					newValue = currentBuffer.toString();
 				}
@@ -148,19 +135,18 @@ public class FontChooser extends OkCancelDialog {
 				super.insertString(offset, string, attributes);
 			}
 		}
-		public void remove(int offset, int length)
-		throws BadLocationException {
+
+		public void remove(int offset, int length) throws BadLocationException {
 			int currentLength = getLength();
 			String currentContent = getText(0, currentLength);
 			String before = currentContent.substring(0, offset);
-			String after = currentContent.substring(length+offset,
-					currentLength);
+			String after = currentContent.substring(length + offset, currentLength);
 			String newValue = before + after;
 			currentValue = checkInput(newValue, offset);
 			super.remove(offset, length);
 		}
-		public int checkInput(String proposedValue, int offset)
-		throws BadLocationException {
+
+		public int checkInput(String proposedValue, int offset) throws BadLocationException {
 			if (proposedValue.length() > 0) {
 				try {
 					int newValue = Integer.parseInt(proposedValue);

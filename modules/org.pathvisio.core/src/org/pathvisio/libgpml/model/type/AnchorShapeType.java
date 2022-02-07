@@ -24,22 +24,22 @@ import java.util.TreeSet;
 /**
  * Extensible enum for Anchor types
  */
-public class AnchorType implements Comparable<AnchorType> {
-	private static Map<String, AnchorType> nameMappings = new HashMap<String, AnchorType>();
-	private static Set<AnchorType> values = new TreeSet<AnchorType>();
+public class AnchorShapeType implements Comparable<AnchorShapeType> {
+	private static Map<String, AnchorShapeType> nameMappings = new HashMap<String, AnchorShapeType>();
+	private static Set<AnchorShapeType> values = new TreeSet<AnchorShapeType>();
 	
-	public static final AnchorType NONE = new AnchorType("None");
-	public static final AnchorType CIRCLE = new AnchorType("Circle");
+	public static final AnchorShapeType NONE = new AnchorShapeType("None");
+	public static final AnchorShapeType CIRCLE = new AnchorShapeType("Circle");
 	
 	private String name;
     private boolean disallowLinks;
 
-    private AnchorType (String name)
+    private AnchorShapeType (String name)
 	{
 		this(name, false);
 	}
 
-    private AnchorType (String name, final boolean disallowLinks)
+    private AnchorShapeType (String name, final boolean disallowLinks)
 	{
 		if (name == null) { throw new NullPointerException(); }
 		this.disallowLinks = disallowLinks;
@@ -53,9 +53,9 @@ public class AnchorType implements Comparable<AnchorType> {
 
 	   For extending the enum.
 	 */
-	public static AnchorType create (String name)
+	public static AnchorShapeType create (String name)
 	{
-		return new AnchorType(name, false);
+		return new AnchorShapeType(name, false);
 	}
 
     /**
@@ -64,16 +64,16 @@ public class AnchorType implements Comparable<AnchorType> {
      * @param disallowLinks - boolean if set to true nothing will be able to attach to this anchor
      * @return a new AnchorType object
      */
-    public static AnchorType create (String name, final boolean disallowLinks)
+    public static AnchorShapeType create (String name, final boolean disallowLinks)
     {
-        return new AnchorType(name, disallowLinks);
+        return new AnchorShapeType(name, disallowLinks);
     }
 
 
     /**
 	   looks up the AnchorType corresponding to that name.
 	 */
-	public static AnchorType fromName (String value)
+	public static AnchorShapeType fromName (String value)
 	{
 		return nameMappings.get(value);
 	}
@@ -86,9 +86,9 @@ public class AnchorType implements Comparable<AnchorType> {
 		return name;
 	}
 
-	static public AnchorType[] getValues()
+	static public AnchorShapeType[] getValues()
 	{
-		return values.toArray(new AnchorType[0]);
+		return values.toArray(new AnchorShapeType[0]);
 	}
 
 	public String toString()
@@ -100,7 +100,7 @@ public class AnchorType implements Comparable<AnchorType> {
         return disallowLinks;
     }
 
-    public int compareTo(AnchorType o) {
+    public int compareTo(AnchorShapeType o) {
 		return toString().compareTo(o.toString());
 	}
 }

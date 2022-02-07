@@ -32,20 +32,19 @@ import org.pathvisio.libgpml.debug.DebugList;
 import org.pathvisio.libgpml.model.PathwayElement;
 import org.pathvisio.libgpml.model.PathwayElementEvent;
 import org.pathvisio.libgpml.model.PathwayElementListener;
-import org.pathvisio.libgpml.model.type.LineStyle;
+import org.pathvisio.libgpml.model.type.LineStyleType;
 
 /**
- * This class is a parent class for all graphics
- * that can be added to a VPathway.
+ * This class is a parent class for all graphics that can be added to a
+ * VPathway.
  */
-public abstract class Graphics extends VPathwayElement implements PathwayElementListener
-{
+public abstract class Graphics extends VPathwayElement implements PathwayElementListener {
 	protected PathwayElement gdata = null;
-	
+
 	// children is everything that moves when this element is dragged.
 	// includes Citation and State
 	private List<VPathwayElement> children = new DebugList<VPathwayElement>();
-	
+
 	private VCitation citation;
 
 	public Graphics(VPathway canvas, PathwayElement o) {
@@ -55,28 +54,22 @@ public abstract class Graphics extends VPathwayElement implements PathwayElement
 		checkCitation();
 	}
 
-	protected VCitation createCitation()
-	{
+	protected VCitation createCitation() {
 		return new VCitation(canvas, this, new Point2D.Double(1, -1));
 	}
 
-	public final void checkCitation()
-	{
+	public final void checkCitation() {
 		List<PublicationXref> xrefs = gdata.getBiopaxReferenceManager().getPublicationXRefs();
-		if (xrefs.size() > 0 && citation == null)
-		{
+		if (xrefs.size() > 0 && citation == null) {
 			citation = createCitation();
 			children.add(citation);
-		}
-		else if (xrefs.size() == 0 && citation != null)
-		{
+		} else if (xrefs.size() == 0 && citation != null) {
 			citation.destroy();
 			children.remove(citation);
 			citation = null;
 		}
 
-		if (citation != null)
-		{
+		if (citation != null) {
 			// already exists, no need to create / destroy
 			// just redraw...
 			citation.markDirty();
@@ -95,6 +88,7 @@ public abstract class Graphics extends VPathwayElement implements PathwayElement
 
 	/**
 	 * Gets the model representation (PathwayElement) of this class
+	 * 
 	 * @return
 	 */
 	public PathwayElement getPathwayElement() {
@@ -102,9 +96,9 @@ public abstract class Graphics extends VPathwayElement implements PathwayElement
 	}
 
 	boolean listen = true;
+
 	public void gmmlObjectModified(PathwayElementEvent e) {
-		if(listen)
-		{
+		if (listen) {
 			markDirty(); // mark everything dirty
 			checkCitation();
 		}
@@ -115,88 +109,102 @@ public abstract class Graphics extends VPathwayElement implements PathwayElement
 	}
 
 	/**
-	 * Get the x-coordinate of the center point of this object
-	 * adjusted to the current zoom factor
-
+	 * Get the x-coordinate of the center point of this object adjusted to the
+	 * current zoom factor
+	 * 
 	 * @return the center x-coordinate
 	 */
-	public double getVCenterX() { return vFromM(gdata.getMCenterX()); }
+	public double getVCenterX() {
+		return vFromM(gdata.getMCenterX());
+	}
 
 	/**
-	 * Get the y-coordinate of the center point of this object
-	 * adjusted to the current zoom factor
+	 * Get the y-coordinate of the center point of this object adjusted to the
+	 * current zoom factor
 	 *
 	 * @return the center y-coordinate
 	 */
-	public double getVCenterY() { return vFromM(gdata.getMCenterY()); }
+	public double getVCenterY() {
+		return vFromM(gdata.getMCenterY());
+	}
 
 	/**
-	 * Get the x-coordinate of the left side of this object
-	 * adjusted to the current zoom factor, but not taking into
-	 * account rotation
-	 * @note if you want the left side of the rotated object's boundary,
-	 * use {@link #getVShape(true)}.getX();
+	 * Get the x-coordinate of the left side of this object adjusted to the current
+	 * zoom factor, but not taking into account rotation
+	 * 
+	 * @note if you want the left side of the rotated object's boundary, use
+	 *       {@link #getVShape(true)}.getX();
 	 * @return
 	 */
-	public double getVLeft() { return vFromM(gdata.getMLeft()); }
+	public double getVLeft() {
+		return vFromM(gdata.getMLeft());
+	}
 
 	/**
-	 * Get the width of this object
-	 * adjusted to the current zoom factor, but not taking into
-	 * account rotation
-	 * @note if you want the width of the rotated object's boundary,
-	 * use {@link #getVShape(true)}.getWidth();
+	 * Get the width of this object adjusted to the current zoom factor, but not
+	 * taking into account rotation
+	 * 
+	 * @note if you want the width of the rotated object's boundary, use
+	 *       {@link #getVShape(true)}.getWidth();
 	 * @return
 	 */
-	public double getVWidth() { return vFromM(gdata.getMWidth());  }
+	public double getVWidth() {
+		return vFromM(gdata.getMWidth());
+	}
 
 	/**
-	 * Get the y-coordinate of the top side of this object
-	 * adjusted to the current zoom factor, but not taking into
-	 * account rotation
-	 * @note if you want the top side of the rotated object's boundary,
-	 * use {@link #getVShape(true)}.getY();
+	 * Get the y-coordinate of the top side of this object adjusted to the current
+	 * zoom factor, but not taking into account rotation
+	 * 
+	 * @note if you want the top side of the rotated object's boundary, use
+	 *       {@link #getVShape(true)}.getY();
 	 * @return
 	 */
-	public double getVTop() { return vFromM(gdata.getMTop()); }
+	public double getVTop() {
+		return vFromM(gdata.getMTop());
+	}
 
 	/**
-	 * Get the height of this object
-	 * adjusted to the current zoom factor, but not taking into
-	 * account rotation
-	 * @note if you want the height of the rotated object's boundary,
-	 * use {@link #getVShape(true)}.getY();
+	 * Get the height of this object adjusted to the current zoom factor, but not
+	 * taking into account rotation
+	 * 
+	 * @note if you want the height of the rotated object's boundary, use
+	 *       {@link #getVShape(true)}.getY();
 	 * @return
 	 */
-	public double getVHeight() { return vFromM(gdata.getMHeight()); }
+	public double getVHeight() {
+		return vFromM(gdata.getMHeight());
+	}
 
 	/**
 	 * Get the direct view to model translation of this shape
+	 * 
 	 * @param rotate Whether to take into account rotation or not
 	 * @return
 	 */
 	abstract protected Shape getVShape(boolean rotate);
 
 	/**
-	 * Get the rectangle that represents the bounds of the shape's
-	 * direct translation from model to view, without taking into
-	 * account rotation.
-	 * Default implementation is equivalent to <code>getVShape(false).getBounds2D();</code>
+	 * Get the rectangle that represents the bounds of the shape's direct
+	 * translation from model to view, without taking into account rotation. Default
+	 * implementation is equivalent to <code>getVShape(false).getBounds2D();</code>
 	 */
 	protected Rectangle2D getVScaleRectangle() {
 		return getVShape(false).getBounds2D();
 	}
 
 	/**
-	 * Scales the object to the given rectangle, by taking into account
-	 * the rotation (given rectangle will be rotated back before scaling)
+	 * Scales the object to the given rectangle, by taking into account the rotation
+	 * (given rectangle will be rotated back before scaling)
+	 * 
 	 * @param r
 	 */
 	protected abstract void setVScaleRectangle(Rectangle2D r);
 
 	/**
-	 * Default implementation returns the rotated shape.
-	 * Subclasses may override (e.g. to include the stroke)
+	 * Default implementation returns the rotated shape. Subclasses may override
+	 * (e.g. to include the stroke)
+	 * 
 	 * @see {@link VPathwayElement#calculateVOutline()}
 	 */
 	protected Shape calculateVOutline() {
@@ -205,15 +213,16 @@ public abstract class Graphics extends VPathwayElement implements PathwayElement
 
 	/**
 	 * Returns the fontstyle to create a java.awt.Font
+	 * 
 	 * @return the fontstyle, or Font.PLAIN if no font is available
 	 */
 	public int getVFontStyle() {
 		int style = Font.PLAIN;
-		if(gdata.getFontName() != null) {
-			if(gdata.isBold()) {
+		if (gdata.getFontName() != null) {
+			if (gdata.isBold()) {
 				style |= Font.BOLD;
 			}
-			if(gdata.isItalic()) {
+			if (gdata.isItalic()) {
 				style |= Font.ITALIC;
 			}
 		}
@@ -223,14 +232,13 @@ public abstract class Graphics extends VPathwayElement implements PathwayElement
 	protected void destroy() {
 		super.destroy();
 		gdata.removeListener(this);
-		for (VPathwayElement child : children)
-		{
+		for (VPathwayElement child : children) {
 			child.destroy();
 		}
 		children.clear();
 		citation = null;
 
-		//View should not remove its model
+		// View should not remove its model
 //		Pathway parent = gdata.getParent();
 //		if(parent != null) parent.remove(gdata);
 	}
@@ -242,50 +250,36 @@ public abstract class Graphics extends VPathwayElement implements PathwayElement
 		return gdata.getZOrder();
 	}
 
-	protected Color getLineColor()
-	{
+	protected Color getLineColor() {
 		Color linecolor = gdata.getColor();
 		/*
-		 * the selection is not colored red when in edit mode
-		 * it is possible to see a color change immediately
+		 * the selection is not colored red when in edit mode it is possible to see a
+		 * color change immediately
 		 */
-		if(isSelected() && !canvas.isEditMode())
-		{
+		if (isSelected() && !canvas.isEditMode()) {
 			linecolor = selectColor;
 		}
 		return linecolor;
 	}
-	
-	protected void setLineStyle(Graphics2D g)
-	{
+
+	protected void setLineStyle(Graphics2D g) {
 		int ls = gdata.getLineStyle();
 		float lt = (float) vFromM(gdata.getLineThickness());
-		if (ls == LineStyle.SOLID)
-		{
+		if (ls == LineStyleType.SOLID) {
 			g.setStroke(new BasicStroke(lt));
-		}
-		else if (ls == LineStyle.DASHED)
-		{
-			g.setStroke	(new BasicStroke (
-				  lt,
-				  BasicStroke.CAP_SQUARE,
-				  BasicStroke.JOIN_MITER,
-				  10, new float[] {4, 4}, 0));
-		} else if (ls == LineStyle.DOUBLE)
-		{
-			g.setStroke( new CompositeStroke( 
-					new BasicStroke( lt * 2 ), new BasicStroke( lt ) ) );
+		} else if (ls == LineStyleType.DASHED) {
+			g.setStroke(
+					new BasicStroke(lt, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 10, new float[] { 4, 4 }, 0));
+		} else if (ls == LineStyleType.DOUBLE) {
+			g.setStroke(new CompositeStroke(new BasicStroke(lt * 2), new BasicStroke(lt)));
 		}
 	}
-	
 
-	public void addChild(VPathwayElement elt)
-	{
+	public void addChild(VPathwayElement elt) {
 		children.add(elt);
 	}
 
-	public void removeChild(VPathwayElement elt)
-	{
+	public void removeChild(VPathwayElement elt) {
 		children.remove(elt);
 	}
 
@@ -298,12 +292,12 @@ public abstract class Graphics extends VPathwayElement implements PathwayElement
 final class CompositeStroke implements Stroke {
 	private Stroke stroke1, stroke2;
 
-	public CompositeStroke( Stroke stroke1, Stroke stroke2 ) {
+	public CompositeStroke(Stroke stroke1, Stroke stroke2) {
 		this.stroke1 = stroke1;
 		this.stroke2 = stroke2;
 	}
 
-	public Shape createStrokedShape( Shape shape ) {
-		return stroke2.createStrokedShape( stroke1.createStrokedShape( shape ) );
+	public Shape createStrokedShape(Shape shape) {
+		return stroke2.createStrokedShape(stroke1.createStrokedShape(shape));
 	}
 }

@@ -16,41 +16,21 @@
  ******************************************************************************/
 package org.pathvisio.libgpml.model.type;
 
-import java.util.HashMap;
-import java.util.Map;
+/**
+ * LineStyle, either Solid, dashed or double. Not to be confused with LineType, 
+ * which defines the appearance of the arrow head.
+ */
+public class LineStyleType {
+	public static final int SOLID = 0;
+	public static final int DASHED = 1;
+	public static final int DOUBLE = 2;
 
-/** possible values for the (horizontal) text alignment property */
-public enum AlignType 
-{ 
-	LEFT("Left"), CENTER("Center"), RIGHT("Right");
-
-	private final String gpmlName;
-	private static Map<String, AlignType> byGpmlName = new HashMap<String, AlignType>();
-	
-	static {
-		for (AlignType t : values()) byGpmlName.put (t.gpmlName, t);
+	public static String[] getNames() {
+		return new String[] {"Solid", "Dashed", "Double"};
 	}
 	
-	private AlignType(String gpmlName)
-	{
-		this.gpmlName = gpmlName;
-	}
-	
-	public static AlignType fromGpmlName(String value)
-	{
-		return byGpmlName.get(value);
-	}
-	
-	public String getGpmlName()
-	{
-		return gpmlName;
-	}
-	
-	public static String[] getNames() 
-	{ 
-		String[] result = new String[values().length];
-		for (int i = 0; i < values().length; ++i) result[i] = values()[i].gpmlName;
-		return result;
-	}
+	//dynamic property key for LineStyle.DOUBLE, until GPML is updated
+	//TODO: remove after next GPML update
+	public static final String DOUBLE_LINE_KEY = "org.pathvisio.DoubleLineProperty";
 
 }

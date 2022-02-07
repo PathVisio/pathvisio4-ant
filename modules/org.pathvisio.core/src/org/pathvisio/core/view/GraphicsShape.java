@@ -37,7 +37,7 @@ import org.pathvisio.core.view.Handle.Freedom;
 import org.pathvisio.libgpml.model.PathwayElement;
 import org.pathvisio.libgpml.model.PathwayElementEvent;
 import org.pathvisio.libgpml.model.shape.ShapeRegistry;
-import org.pathvisio.libgpml.model.type.LineStyle;
+import org.pathvisio.libgpml.model.type.LineStyleType;
 import org.pathvisio.libgpml.model.type.ShapeType;
 import org.pathvisio.libgpml.util.LinAlg;
 import org.pathvisio.libgpml.util.LinAlg.Point;
@@ -460,7 +460,7 @@ public abstract class GraphicsShape extends Graphics implements LinkProvider, Ad
 		if(sw > 0) 
 			if (mw * mh > 0) // Workaround, batik balks if the shape is zero sized.  
 			{
-				if (gdata.getLineStyle() == LineStyle.DOUBLE){
+				if (gdata.getLineStyle() == LineStyleType.DOUBLE){
 					// correction factor for composite stroke
 					sw = (float) (gdata.getLineThickness() * 4); 
 				}

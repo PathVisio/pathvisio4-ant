@@ -57,7 +57,8 @@ public class Compat implements Engine.ApplicationEventListener {
 			return false; // this pwy is not one of the species to be converted
 
 		for (PathwayElement elt : pwy.getDataObjects()) {
-			if (elt.getObjectType() == ObjectType.DATANODE && elt.getDataSource() == DataSource.getByCompactIdentifierPrefix("ensembl")) {
+			if (elt.getObjectType() == ObjectType.DATANODE
+					&& elt.getDataSource() == DataSource.getByCompactIdentifierPrefix("ensembl")) {
 				return true;
 			}
 		}
@@ -75,7 +76,8 @@ public class Compat implements Engine.ApplicationEventListener {
 			return; // this pwy is not one of the species to be converted
 
 		for (PathwayElement elt : pwy.getDataObjects()) {
-			if (elt.getObjectType() == ObjectType.DATANODE && elt.getDataSource() == DataSource.getByCompactIdentifierPrefix("ensembl")) {
+			if (elt.getObjectType() == ObjectType.DATANODE
+					&& elt.getDataSource() == DataSource.getByCompactIdentifierPrefix("ensembl")) {
 				elt.setDataSource(ensSpecies.get(org));
 			}
 		}

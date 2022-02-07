@@ -21,7 +21,7 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Rectangle2D;
 
-import org.pathvisio.libgpml.model.type.LineType;
+import org.pathvisio.libgpml.model.type.ArrowHeadType;
 
 /**
  * Collection of Shapes and ArrowHeads used in
@@ -29,20 +29,20 @@ import org.pathvisio.libgpml.model.type.LineType;
  */
 public class MIMShapes
 {
-	public static final LineType MIM_NECESSARY_STIMULATION = LineType.create ("mim-necessary-stimulation", "Arrow");
-    public static final LineType MIM_BINDING = LineType.create ("mim-binding", "Arrow");
-    public static final LineType MIM_CONVERSION = LineType.create ("mim-conversion", "Arrow");
-    public static final LineType MIM_TRANSLOCATION = LineType.create ("mim-translocation", "Arrow");
-    public static final LineType MIM_STIMULATION = LineType.create ("mim-stimulation", "Arrow");
-    public static final LineType MIM_MODIFICATION = LineType.create ("mim-modification", "Arrow");
-    public static final LineType MIM_CATALYSIS =LineType.create ("mim-catalysis", "Arrow");
-    public static final LineType MIM_INHIBITION = LineType.create ("mim-inhibition", "Arrow");
-    public static final LineType MIM_CLEAVAGE = LineType.create ("mim-cleavage", "Arrow");
-    public static final LineType MIM_COVALENT_BOND = LineType.create ("mim-covalent-bond", "Arrow");
-    public static final LineType MIM_BRANCHING_LEFT = LineType.create ("mim-branching-left", null);
-    public static final LineType MIM_BRANCHING_RIGHT = LineType.create ("mim-branching-right", null);
-    public static final LineType MIM_TRANSLATION = LineType.create ("mim-transcription-translation", "Arrow");
-    public static final LineType MIM_GAP = LineType.create ("mim-gap", null);
+	public static final ArrowHeadType MIM_NECESSARY_STIMULATION = ArrowHeadType.create ("mim-necessary-stimulation", "Arrow");
+    public static final ArrowHeadType MIM_BINDING = ArrowHeadType.create ("mim-binding", "Arrow");
+    public static final ArrowHeadType MIM_CONVERSION = ArrowHeadType.create ("mim-conversion", "Arrow");
+    public static final ArrowHeadType MIM_TRANSLOCATION = ArrowHeadType.create ("mim-translocation", "Arrow");
+    public static final ArrowHeadType MIM_STIMULATION = ArrowHeadType.create ("mim-stimulation", "Arrow");
+    public static final ArrowHeadType MIM_MODIFICATION = ArrowHeadType.create ("mim-modification", "Arrow");
+    public static final ArrowHeadType MIM_CATALYSIS =ArrowHeadType.create ("mim-catalysis", "Arrow");
+    public static final ArrowHeadType MIM_INHIBITION = ArrowHeadType.create ("mim-inhibition", "Arrow");
+    public static final ArrowHeadType MIM_CLEAVAGE = ArrowHeadType.create ("mim-cleavage", "Arrow");
+    public static final ArrowHeadType MIM_COVALENT_BOND = ArrowHeadType.create ("mim-covalent-bond", "Arrow");
+    public static final ArrowHeadType MIM_BRANCHING_LEFT = ArrowHeadType.create ("mim-branching-left", null);
+    public static final ArrowHeadType MIM_BRANCHING_RIGHT = ArrowHeadType.create ("mim-branching-right", null);
+    public static final ArrowHeadType MIM_TRANSLATION = ArrowHeadType.create ("mim-transcription-translation", "Arrow");
+    public static final ArrowHeadType MIM_GAP = ArrowHeadType.create ("mim-gap", null);
 
     private static final int MIM_PHOSPHORYLATED = 0;
 	private static final int MIM_DEGRADATION = 1;

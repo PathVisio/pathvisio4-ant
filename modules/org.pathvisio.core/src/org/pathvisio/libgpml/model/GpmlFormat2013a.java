@@ -40,13 +40,13 @@ import org.pathvisio.libgpml.model.PathwayElement.MAnchor;
 import org.pathvisio.libgpml.model.PathwayElement.MPoint;
 import org.pathvisio.libgpml.model.shape.IShape;
 import org.pathvisio.libgpml.model.shape.ShapeRegistry;
-import org.pathvisio.libgpml.model.type.AlignType;
-import org.pathvisio.libgpml.model.type.AnchorType;
+import org.pathvisio.libgpml.model.type.HAlignType;
+import org.pathvisio.libgpml.model.type.AnchorShapeType;
 import org.pathvisio.libgpml.model.type.ConnectorType;
-import org.pathvisio.libgpml.model.type.LineStyle;
-import org.pathvisio.libgpml.model.type.LineType;
+import org.pathvisio.libgpml.model.type.LineStyleType;
+import org.pathvisio.libgpml.model.type.ArrowHeadType;
 import org.pathvisio.libgpml.model.type.ShapeType;
-import org.pathvisio.libgpml.model.type.ValignType;
+import org.pathvisio.libgpml.model.type.VAlignType;
 
 class GpmlFormat2013a extends GpmlFormatAbstract implements GpmlFormatReader, GpmlFormatWriter 
 {
@@ -500,7 +500,7 @@ class GpmlFormat2013a extends GpmlFormatAbstract implements GpmlFormatReader, Gp
     		o.setShapeType(s);
        		if (s.equals(ShapeType.ROUNDED_RECTANGLE) 
        				|| s.equals(ShapeType.OVAL)){
-    			o.setLineStyle(LineStyle.DOUBLE);
+    			o.setLineStyle(LineStyleType.DOUBLE);
     			o.setLineThickness(3.0);
     			o.setColor(Color.LIGHT_GRAY);
     		}
@@ -561,8 +561,8 @@ class GpmlFormat2013a extends GpmlFormatAbstract implements GpmlFormatReader, Gp
     	
     	o.setFontName (getAttribute(base + ".Graphics", "FontName", graphics));
 	    
-		o.setValign(ValignType.fromGpmlName(getAttribute(base + ".Graphics", "Valign", graphics)));
-		o.setAlign(AlignType.fromGpmlName(getAttribute(base + ".Graphics", "Align", graphics)));	    
+		o.setValign(VAlignType.fromGpmlName(getAttribute(base + ".Graphics", "Valign", graphics)));
+		o.setAlign(HAlignType.fromGpmlName(getAttribute(base + ".Graphics", "Align", graphics)));	    
 	}
 	
 	protected void updateFontData(PathwayElement o, Element e) throws ConverterException
@@ -689,13 +689,13 @@ class GpmlFormat2013a extends GpmlFormatAbstract implements GpmlFormatReader, Gp
 		String style = getAttribute (base + ".Graphics", "LineStyle", graphics);
 		
 		//Check for LineStyle.DOUBLE via arbitrary attribute
-		if ("Double".equals (o.getDynamicProperty(LineStyle.DOUBLE_LINE_KEY)))
+		if ("Double".equals (o.getDynamicProperty(LineStyleType.DOUBLE_LINE_KEY)))
 		{
-			o.setLineStyle(LineStyle.DOUBLE);
+			o.setLineStyle(LineStyleType.DOUBLE);
 		}
 		else
 		{
-			o.setLineStyle ((style.equals("Solid")) ? LineStyle.SOLID : LineStyle.DASHED);
+			o.setLineStyle ((style.equals("Solid")) ? LineStyleType.SOLID : LineStyleType.DASHED);
 		}
     	
     	String lt = getAttribute(base + ".Graphics", "LineThickness", graphics);
@@ -738,8 +738,8 @@ class GpmlFormat2013a extends GpmlFormatAbstract implements GpmlFormatReader, Gp
     	}
 
     	o.setMPoints(mPoints);
-		o.setStartLineType (LineType.fromName(startType));
-    	o.setEndLineType (LineType.fromName(endType));
+		o.setStartLineType (ArrowHeadType.fromName(startType));
+    	o.setEndLineType (ArrowHeadType.fromName(endType));
 
     	String connType = getAttribute("Interaction.Graphics", "ConnectorType", graphics);
     	o.setConnectorType(ConnectorType.fromName(connType));
@@ -756,7 +756,7 @@ class GpmlFormat2013a extends GpmlFormatAbstract implements GpmlFormatReader, Gp
     		mapGraphId(anchor, ae);
     		String shape = getAttribute("Interaction.Graphics.Anchor", "Shape", ae);
     		if(shape != null) {
-    			anchor.setShape(AnchorType.fromName(shape));
+    			anchor.setShape(AnchorShapeType.fromName(shape));
     		}
     	}
 	}
@@ -765,7 +765,7 @@ class GpmlFormat2013a extends GpmlFormatAbstract implements GpmlFormatReader, Gp
 	{
 		String base = e.getName();
 		Element graphics = e.getChild("Graphics", e.getNamespace());
-		setAttribute(base + ".Graphics", "LineStyle", graphics, o.getLineStyle() != LineStyle.DASHED ? "Solid" : "Broken");
+		setAttribute(base + ".Graphics", "LineStyle", graphics, o.getLineStyle() != LineStyleType.DASHED ? "Solid" : "Broken");
 		setAttribute (base + ".Graphics", "LineThickness", graphics, "" + o.getLineThickness());
 		updateColor(o, e);
 	}
