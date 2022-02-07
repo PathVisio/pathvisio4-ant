@@ -18,7 +18,7 @@ package org.pathvisio.core.view;
 
 import java.awt.Color;
 
-import org.pathvisio.core.model.PathwayElement;
+import org.pathvisio.libgpml.model.PathwayElement;
 
 /**
  * This class implements a geneproduct and

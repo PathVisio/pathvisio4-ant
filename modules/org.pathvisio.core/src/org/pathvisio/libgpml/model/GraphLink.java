@@ -14,13 +14,13 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  ******************************************************************************/
-package org.pathvisio.core.model;
+package org.pathvisio.libgpml.model;
 
 import java.awt.geom.Point2D;
 import java.util.Collections;
 import java.util.Set;
 
-import org.pathvisio.core.util.Utils;
+import org.pathvisio.libgpml.util.Utils;
 
 /**
  * This class only contains static methods and should not be instantiated.

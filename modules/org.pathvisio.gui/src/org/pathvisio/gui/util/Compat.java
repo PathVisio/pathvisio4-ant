@@ -25,10 +25,10 @@ import org.bridgedb.DataSource;
 import org.bridgedb.bio.Organism;
 import org.pathvisio.core.ApplicationEvent;
 import org.pathvisio.core.Engine;
-import org.pathvisio.core.model.ObjectType;
-import org.pathvisio.core.model.Pathway;
-import org.pathvisio.core.model.PathwayElement;
 import org.pathvisio.gui.SwingEngine;
+import org.pathvisio.libgpml.model.ObjectType;
+import org.pathvisio.libgpml.model.Pathway;
+import org.pathvisio.libgpml.model.PathwayElement;
 
 /**
  * File and schema version compatibilities checks This collects some methods

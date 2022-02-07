@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  ******************************************************************************/
-package org.pathvisio.core.model;
+package org.pathvisio.libgpml.model;
 
 import java.awt.Color;
 import java.awt.geom.AffineTransform;
@@ -34,12 +34,11 @@ import org.bridgedb.DataSource;
 import org.bridgedb.Xref;
 import org.pathvisio.core.biopax.BiopaxElement;
 import org.pathvisio.core.biopax.BiopaxReferenceManager;
-import org.pathvisio.core.model.GraphLink.GraphIdContainer;
-import org.pathvisio.core.model.GraphLink.GraphRefContainer;
 import org.pathvisio.core.preferences.GlobalPreference;
 import org.pathvisio.core.preferences.PreferenceManager;
-import org.pathvisio.core.util.Utils;
 import org.pathvisio.core.view.VState;
+import org.pathvisio.libgpml.model.GraphLink.GraphIdContainer;
+import org.pathvisio.libgpml.model.GraphLink.GraphRefContainer;
 import org.pathvisio.libgpml.model.shape.IShape;
 import org.pathvisio.libgpml.model.type.AlignType;
 import org.pathvisio.libgpml.model.type.AnchorType;
@@ -52,6 +51,7 @@ import org.pathvisio.libgpml.model.type.OrientationType;
 import org.pathvisio.libgpml.model.type.ShapeType;
 import org.pathvisio.libgpml.model.type.ValignType;
 import org.pathvisio.libgpml.prop.StaticProperty;
+import org.pathvisio.libgpml.util.Utils;
 
 /**
  * PathwayElement is responsible for maintaining the data for all the individual

@@ -19,8 +19,8 @@ package org.pathvisio.core.view;
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 
-import org.pathvisio.core.model.MState;
-import org.pathvisio.core.model.PathwayElement;
+import org.pathvisio.libgpml.model.MState;
+import org.pathvisio.libgpml.model.PathwayElement;
 
 /**
  * represents the view of a PathwayElement with ObjectType.STATE.

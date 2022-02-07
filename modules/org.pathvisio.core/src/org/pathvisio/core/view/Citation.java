@@ -26,10 +26,10 @@ import java.util.List;
 
 import org.pathvisio.core.biopax.BiopaxReferenceManager;
 import org.pathvisio.core.biopax.PublicationXref;
-import org.pathvisio.core.model.ObjectType;
-import org.pathvisio.core.model.PathwayElement;
 import org.pathvisio.core.preferences.GlobalPreference;
 import org.pathvisio.core.preferences.PreferenceManager;
+import org.pathvisio.libgpml.model.ObjectType;
+import org.pathvisio.libgpml.model.PathwayElement;
 
 /**
  * Draws a citation number on top of a pathway object.

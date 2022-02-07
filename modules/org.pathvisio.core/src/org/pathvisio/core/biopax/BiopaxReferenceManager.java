@@ -21,8 +21,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import org.pathvisio.core.model.PathwayElement;
 import org.pathvisio.libgpml.debug.Logger;
+import org.pathvisio.libgpml.model.PathwayElement;
 
 /**
  * This class handles all biopax references for a given pathway element

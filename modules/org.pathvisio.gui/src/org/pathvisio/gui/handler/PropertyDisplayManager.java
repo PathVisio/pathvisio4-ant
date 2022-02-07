@@ -24,12 +24,12 @@ import java.util.Map;
 import java.util.Set;
 
 import org.bridgedb.bio.Organism;
-import org.pathvisio.core.model.ObjectType;
-import org.pathvisio.core.model.PathwayElement;
 import org.pathvisio.core.preferences.GlobalPreference;
 import org.pathvisio.core.preferences.Preference;
 import org.pathvisio.core.preferences.PreferenceManager;
 import org.pathvisio.libgpml.debug.Logger;
+import org.pathvisio.libgpml.model.ObjectType;
+import org.pathvisio.libgpml.model.PathwayElement;
 import org.pathvisio.libgpml.model.type.AlignType;
 import org.pathvisio.libgpml.model.type.CellularComponentType;
 import org.pathvisio.libgpml.model.type.DataNodeType;

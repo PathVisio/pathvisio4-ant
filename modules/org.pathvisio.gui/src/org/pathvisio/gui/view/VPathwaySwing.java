@@ -57,8 +57,6 @@ import org.pathvisio.core.gui.PathwayTransferable;
 import org.pathvisio.core.gui.SwingKeyEvent;
 import org.pathvisio.core.gui.SwingMouseEvent;
 import org.pathvisio.core.gui.ToolTipProvider;
-import org.pathvisio.core.model.Pathway;
-import org.pathvisio.core.model.PathwayElement;
 import org.pathvisio.core.preferences.GlobalPreference;
 import org.pathvisio.core.preferences.PreferenceManager;
 import org.pathvisio.core.view.GraphicsShape;
@@ -73,6 +71,8 @@ import org.pathvisio.core.view.VPathwayListener;
 import org.pathvisio.core.view.VPathwayWrapper;
 import org.pathvisio.gui.MainPanel;
 import org.pathvisio.gui.dnd.PathwayImportHandler;
+import org.pathvisio.libgpml.model.Pathway;
+import org.pathvisio.libgpml.model.PathwayElement;
 
 
 /**

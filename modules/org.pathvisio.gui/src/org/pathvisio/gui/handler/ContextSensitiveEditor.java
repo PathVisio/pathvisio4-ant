@@ -18,9 +18,9 @@ package org.pathvisio.gui.handler;
 
 import java.util.Collection;
 
-import org.pathvisio.core.model.Pathway;
-import org.pathvisio.core.model.PathwayElement;
 import org.pathvisio.gui.SwingEngine;
+import org.pathvisio.libgpml.model.Pathway;
+import org.pathvisio.libgpml.model.PathwayElement;
 
 /**
  * This interface indicates that the {@link TypeHandler}'s editor is context sensitive and needs to have additional

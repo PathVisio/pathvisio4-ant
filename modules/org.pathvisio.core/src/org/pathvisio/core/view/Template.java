@@ -18,8 +18,8 @@ package org.pathvisio.core.view;
 
 import java.net.URL;
 
-import org.pathvisio.core.model.Pathway;
-import org.pathvisio.core.model.PathwayElement;
+import org.pathvisio.libgpml.model.Pathway;
+import org.pathvisio.libgpml.model.PathwayElement;
 
 
 /**

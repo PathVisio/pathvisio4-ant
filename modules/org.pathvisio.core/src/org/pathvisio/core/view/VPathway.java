@@ -44,25 +44,25 @@ import javax.swing.Timer;
 
 import org.pathvisio.core.Engine;
 import org.pathvisio.core.biopax.BiopaxElement;
-import org.pathvisio.core.model.GraphLink.GraphIdContainer;
-import org.pathvisio.core.model.MLine;
-import org.pathvisio.core.model.ObjectType;
-import org.pathvisio.core.model.Pathway;
-import org.pathvisio.core.model.Pathway.StatusFlagEvent;
-import org.pathvisio.core.model.PathwayElement;
-import org.pathvisio.core.model.PathwayElement.MAnchor;
-import org.pathvisio.core.model.PathwayElement.MPoint;
-import org.pathvisio.core.model.PathwayEvent;
-import org.pathvisio.core.model.PathwayListener;
 import org.pathvisio.core.preferences.GlobalPreference;
 import org.pathvisio.core.preferences.PreferenceManager;
-import org.pathvisio.core.util.Utils;
 import org.pathvisio.core.view.SelectionBox.SelectionListener;
 import org.pathvisio.core.view.VPathwayEvent.VPathwayEventType;
 import org.pathvisio.core.view.ViewActions.KeyMoveAction;
 import org.pathvisio.core.view.ViewActions.TextFormattingAction;
 import org.pathvisio.libgpml.debug.Logger;
+import org.pathvisio.libgpml.model.MLine;
+import org.pathvisio.libgpml.model.ObjectType;
+import org.pathvisio.libgpml.model.Pathway;
+import org.pathvisio.libgpml.model.PathwayElement;
+import org.pathvisio.libgpml.model.PathwayEvent;
+import org.pathvisio.libgpml.model.PathwayListener;
+import org.pathvisio.libgpml.model.GraphLink.GraphIdContainer;
+import org.pathvisio.libgpml.model.Pathway.StatusFlagEvent;
+import org.pathvisio.libgpml.model.PathwayElement.MAnchor;
+import org.pathvisio.libgpml.model.PathwayElement.MPoint;
 import org.pathvisio.libgpml.model.type.GroupStyle;
+import org.pathvisio.libgpml.util.Utils;
 
 /**
  * This class implements and handles a drawing. Graphics objects are stored in

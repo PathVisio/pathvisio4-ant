@@ -20,6 +20,10 @@ import java.io.File;
 import java.util.Collections;
 import java.util.List;
 
+import org.pathvisio.libgpml.model.ConverterException;
+import org.pathvisio.libgpml.model.Pathway;
+import org.pathvisio.libgpml.model.PathwayExporter;
+
 /**
  * Base class for a couple of image exporters.
  * This class adds the ability to remember (a) valid extension(s) for a

@@ -38,11 +38,11 @@ import javax.swing.KeyStroke;
 import org.pathvisio.core.ApplicationEvent;
 import org.pathvisio.core.Engine.ApplicationEventListener;
 import org.pathvisio.core.Globals;
-import org.pathvisio.core.util.Resources;
 import org.pathvisio.core.view.VPathway;
 import org.pathvisio.core.view.ViewActions;
 import org.pathvisio.desktop.dialog.RunLocalPluginDialog;
 import org.pathvisio.gui.SwingEngine;
+import org.pathvisio.libgpml.util.Utils;
 
 /**
  * collection of menu / toolbar Actions that are only needed
@@ -51,8 +51,8 @@ import org.pathvisio.gui.SwingEngine;
  */
 public class StandaloneActions implements ApplicationEventListener
 {
-	private static final URL IMG_OPEN = Resources.getResourceURL("open.gif");
-	private static final URL IMG_NEW = Resources.getResourceURL("new.gif");
+	private static final URL IMG_OPEN = Utils.getResourceURL("open.gif");
+	private static final URL IMG_NEW = Utils.getResourceURL("new.gif");
 
 	public final Action openAction;
 	public final Action helpAction;

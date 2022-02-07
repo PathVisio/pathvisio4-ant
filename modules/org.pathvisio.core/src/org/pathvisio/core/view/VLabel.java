@@ -16,7 +16,7 @@
  ******************************************************************************/
 package org.pathvisio.core.view;
 
-import org.pathvisio.core.model.PathwayElement;
+import org.pathvisio.libgpml.model.PathwayElement;
 
 /**
  * Represents the view of a PathwayElement with ObjectType.LABEL.

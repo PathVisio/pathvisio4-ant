@@ -27,10 +27,10 @@ import javax.swing.JTable;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
-import org.pathvisio.core.model.Pathway;
-import org.pathvisio.core.model.PathwayElement;
 import org.pathvisio.gui.SwingEngine;
 import org.pathvisio.gui.dialogs.PathwayElementDialog;
+import org.pathvisio.libgpml.model.Pathway;
+import org.pathvisio.libgpml.model.PathwayElement;
 import org.pathvisio.libgpml.prop.PropertyType;
 import org.pathvisio.libgpml.prop.StaticPropertyType;
 

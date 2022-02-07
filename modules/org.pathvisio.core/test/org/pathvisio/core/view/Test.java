@@ -24,10 +24,10 @@ import junit.framework.TestCase;
 
 import org.pathvisio.core.biopax.BiopaxReferenceManager;
 import org.pathvisio.core.biopax.PublicationXref;
-import org.pathvisio.core.model.ObjectType;
-import org.pathvisio.core.model.Pathway;
-import org.pathvisio.core.model.PathwayElement;
 import org.pathvisio.core.preferences.PreferenceManager;
+import org.pathvisio.libgpml.model.ObjectType;
+import org.pathvisio.libgpml.model.Pathway;
+import org.pathvisio.libgpml.model.PathwayElement;
 
 public class Test extends TestCase {
 

@@ -24,7 +24,7 @@ import java.util.ListIterator;
 import java.util.Set;
 
 import org.jdom2.Element;
-import org.pathvisio.core.model.GpmlFormat;
+import org.pathvisio.libgpml.model.GpmlFormat;
 
 /**
  * Represents a fragment of the embedded biopax of a pathway.

@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  ******************************************************************************/
-package org.pathvisio.core.model;
+package org.pathvisio.libgpml.model;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -31,8 +31,8 @@ import org.jdom2.JDOMException;
 import org.jdom2.Namespace;
 import org.jdom2.input.JDOMParseException;
 import org.jdom2.input.SAXBuilder;
-import org.pathvisio.core.util.RootElementFinder;
 import org.pathvisio.libgpml.debug.Logger;
+import org.pathvisio.libgpml.util.RootElementFinder;
 import org.xml.sax.InputSource;
 
 /**

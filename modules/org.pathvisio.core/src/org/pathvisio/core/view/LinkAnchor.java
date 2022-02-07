@@ -24,8 +24,8 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
-import org.pathvisio.core.model.GraphLink.GraphIdContainer;
-import org.pathvisio.core.model.GraphLink.GraphRefContainer;
+import org.pathvisio.libgpml.model.GraphLink.GraphIdContainer;
+import org.pathvisio.libgpml.model.GraphLink.GraphRefContainer;
 
 /**
  * A LinkAnchor is a small round target on a Shape or Line that appears

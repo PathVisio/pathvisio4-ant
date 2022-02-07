@@ -26,7 +26,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.pathvisio.core.model.PathwayElement;
+import org.pathvisio.libgpml.model.PathwayElement;
 
 /**
  * This class implements a selectionbox

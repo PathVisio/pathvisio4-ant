@@ -19,14 +19,13 @@ package org.pathvisio.core.view;
 import java.awt.Color;
 import java.net.URL;
 
-import org.pathvisio.core.model.MState;
-import org.pathvisio.core.model.ObjectType;
-import org.pathvisio.core.model.Pathway;
-import org.pathvisio.core.model.PathwayElement;
-import org.pathvisio.core.model.PathwayElement.MAnchor;
 import org.pathvisio.core.preferences.GlobalPreference;
 import org.pathvisio.core.preferences.PreferenceManager;
-import org.pathvisio.core.util.Resources;
+import org.pathvisio.libgpml.model.MState;
+import org.pathvisio.libgpml.model.ObjectType;
+import org.pathvisio.libgpml.model.Pathway;
+import org.pathvisio.libgpml.model.PathwayElement;
+import org.pathvisio.libgpml.model.PathwayElement.MAnchor;
 import org.pathvisio.libgpml.model.shape.IShape;
 import org.pathvisio.libgpml.model.shape.MIMShapes;
 import org.pathvisio.libgpml.model.type.CellularComponentType;
@@ -35,6 +34,7 @@ import org.pathvisio.libgpml.model.type.DataNodeType;
 import org.pathvisio.libgpml.model.type.LineStyle;
 import org.pathvisio.libgpml.model.type.LineType;
 import org.pathvisio.libgpml.model.type.ShapeType;
+import org.pathvisio.libgpml.util.Utils;
 
 /**
  * Contains a set of templates, patterns of PathwayElements that can
@@ -78,7 +78,7 @@ public abstract class DefaultTemplates {
 		}
 
 		public URL getIconLocation() {
-			return  Resources.getResourceURL("new" + getName().toLowerCase() + ".gif");
+			return  Utils.getResourceURL("new" + getName().toLowerCase() + ".gif");
 		}
 
 		public void postInsert(PathwayElement[] newElements) {
@@ -385,7 +385,7 @@ public abstract class DefaultTemplates {
 		}
 
 		public URL getIconLocation() {
-			return  Resources.getResourceURL("new" + getName().toLowerCase() + ".gif");
+			return  Utils.getResourceURL("new" + getName().toLowerCase() + ".gif");
 		}
 
 		public void postInsert(PathwayElement[] newElements) {

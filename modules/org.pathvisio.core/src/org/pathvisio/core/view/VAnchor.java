@@ -25,9 +25,9 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 
-import org.pathvisio.core.model.GraphLink.GraphRefContainer;
-import org.pathvisio.core.model.PathwayElement.MAnchor;
-import org.pathvisio.core.model.PathwayElement.MPoint;
+import org.pathvisio.libgpml.model.GraphLink.GraphRefContainer;
+import org.pathvisio.libgpml.model.PathwayElement.MAnchor;
+import org.pathvisio.libgpml.model.PathwayElement.MPoint;
 import org.pathvisio.libgpml.model.shape.AnchorShape;
 import org.pathvisio.libgpml.model.shape.ShapeRegistry;
 import org.pathvisio.libgpml.model.type.AnchorType;

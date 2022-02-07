@@ -35,9 +35,9 @@ import javax.swing.JTextArea;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import org.pathvisio.core.model.PathwayElement;
 import org.pathvisio.gui.SwingEngine;
 import org.pathvisio.gui.util.FontChooser;
+import org.pathvisio.libgpml.model.PathwayElement;
 
 /**
  * Dialog to modify label specific properties

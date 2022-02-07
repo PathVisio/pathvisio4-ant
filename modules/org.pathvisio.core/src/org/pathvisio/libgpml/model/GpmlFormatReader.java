@@ -14,18 +14,12 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  ******************************************************************************/
-package org.pathvisio.core.model;
+package org.pathvisio.libgpml.model;
 
-import org.jdom2.Document;
-import org.jdom2.Namespace;
+import org.jdom2.Element;
 
-public interface GpmlFormatVersion 
+public interface GpmlFormatReader extends GpmlFormatVersion 
 {
-	Namespace getGpmlNamespace();
-
-	/**
-	 * validates a JDOM document against the xml-schema definition specified by 'xsdFile'
-	 * @param doc the document to validate
-	 */	
-	void validateDocument(Document doc) throws ConverterException;
+	public PathwayElement mapElement(Element e) throws ConverterException;
+	public void readFromRoot(Element root, Pathway pwy) throws ConverterException;
 }

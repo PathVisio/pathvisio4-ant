@@ -37,10 +37,10 @@ import javax.swing.table.TableCellRenderer;
 
 import org.bridgedb.DataSource;
 import org.bridgedb.bio.Organism;
-import org.pathvisio.core.model.Pathway;
-import org.pathvisio.core.model.PathwayElement;
 import org.pathvisio.gui.SwingEngine;
 import org.pathvisio.gui.util.PermissiveComboBox;
+import org.pathvisio.libgpml.model.Pathway;
+import org.pathvisio.libgpml.model.PathwayElement;
 import org.pathvisio.libgpml.model.type.DataNodeType;
 import org.pathvisio.libgpml.prop.PropertyType;
 import org.pathvisio.libgpml.prop.StaticPropertyType;

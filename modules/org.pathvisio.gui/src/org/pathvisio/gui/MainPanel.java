@@ -52,8 +52,6 @@ import javax.swing.table.TableCellRenderer;
 
 import org.pathvisio.core.ApplicationEvent;
 import org.pathvisio.core.Engine.ApplicationEventListener;
-import org.pathvisio.core.model.PathwayElement;
-import org.pathvisio.core.util.Utils;
 import org.pathvisio.core.view.Graphics;
 import org.pathvisio.core.view.Handle;
 import org.pathvisio.core.view.VLabel;
@@ -68,6 +66,8 @@ import org.pathvisio.gui.CommonActions.ZoomAction;
 import org.pathvisio.gui.dnd.PathwayImportHandler;
 import org.pathvisio.gui.handler.PathwayTableModel;
 import org.pathvisio.libgpml.debug.Logger;
+import org.pathvisio.libgpml.model.PathwayElement;
+import org.pathvisio.libgpml.util.Utils;
 
 import com.mammothsoftware.frwk.ddb.DropDownButton;
 

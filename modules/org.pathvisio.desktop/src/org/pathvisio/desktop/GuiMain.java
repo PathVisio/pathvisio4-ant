@@ -46,16 +46,16 @@ import org.pathvisio.core.data.GdbManager.GdbEventListener;
 import org.pathvisio.core.model.BatikImageExporter;
 import org.pathvisio.core.model.DataNodeListExporter;
 import org.pathvisio.core.model.EUGeneExporter;
-import org.pathvisio.core.model.GpmlFormat;
 import org.pathvisio.core.model.ImageExporter;
 import org.pathvisio.core.model.RasterImageExporter;
 import org.pathvisio.core.preferences.GlobalPreference;
 import org.pathvisio.core.preferences.PreferenceManager;
-import org.pathvisio.core.util.Resources;
 import org.pathvisio.gui.MainPanel;
 import org.pathvisio.gui.SwingEngine;
 import org.pathvisio.gui.SwingEngine.Browser;
 import org.pathvisio.libgpml.debug.Logger;
+import org.pathvisio.libgpml.model.GpmlFormat;
+import org.pathvisio.libgpml.util.Utils;
 
 /**
  * Main class for the Swing GUI. This class creates and shows the GUI.
@@ -211,7 +211,7 @@ public class GuiMain implements GdbEventListener {
 		// dispose on close, otherwise windowClosed event is not called.
 		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
-		URL url = Resources.getResourceURL("bigcateye.gif");
+		URL url = Utils.getResourceURL("bigcateye.gif");
 		frame.setIconImage(Toolkit.getDefaultToolkit().createImage(url));
 
 		frame.add(mainPanel, BorderLayout.CENTER);

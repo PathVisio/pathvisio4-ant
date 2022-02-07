@@ -36,13 +36,13 @@ import org.jdom2.output.XMLOutputter;
 import org.pathvisio.core.Engine;
 import org.pathvisio.core.biopax.BiopaxNode;
 import org.pathvisio.core.biopax.BiopaxReferenceManager;
-import org.pathvisio.core.model.ConverterException;
-import org.pathvisio.core.model.GpmlFormat;
-import org.pathvisio.core.model.ObjectType;
-import org.pathvisio.core.model.Pathway;
-import org.pathvisio.core.model.PathwayElement;
-import org.pathvisio.core.model.PathwayElement.MAnchor;
 import org.pathvisio.libgpml.debug.Logger;
+import org.pathvisio.libgpml.model.ConverterException;
+import org.pathvisio.libgpml.model.GpmlFormat;
+import org.pathvisio.libgpml.model.ObjectType;
+import org.pathvisio.libgpml.model.Pathway;
+import org.pathvisio.libgpml.model.PathwayElement;
+import org.pathvisio.libgpml.model.PathwayElement.MAnchor;
 
 /**
  * helps transfer Pathways or bits of pathway over the clipboard

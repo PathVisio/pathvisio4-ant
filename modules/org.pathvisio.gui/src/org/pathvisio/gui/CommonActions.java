@@ -35,11 +35,6 @@ import org.pathvisio.core.Engine.ApplicationEventListener;
 import org.pathvisio.core.Globals;
 import org.pathvisio.core.biopax.BiopaxReferenceManager;
 import org.pathvisio.core.biopax.PublicationXref;
-import org.pathvisio.core.model.Pathway;
-import org.pathvisio.core.model.Pathway.StatusFlagEvent;
-import org.pathvisio.core.model.Pathway.StatusFlagListener;
-import org.pathvisio.core.model.PathwayElement;
-import org.pathvisio.core.util.Resources;
 import org.pathvisio.core.view.DefaultTemplates;
 import org.pathvisio.core.view.Graphics;
 import org.pathvisio.core.view.Handle;
@@ -53,6 +48,10 @@ import org.pathvisio.core.view.ViewActions;
 import org.pathvisio.gui.dialogs.AboutDlg;
 import org.pathvisio.gui.dialogs.PathwayElementDialog;
 import org.pathvisio.gui.dialogs.PublicationXRefDialog;
+import org.pathvisio.libgpml.model.Pathway;
+import org.pathvisio.libgpml.model.PathwayElement;
+import org.pathvisio.libgpml.model.Pathway.StatusFlagEvent;
+import org.pathvisio.libgpml.model.Pathway.StatusFlagListener;
 import org.pathvisio.libgpml.model.shape.MIMShapes;
 import org.pathvisio.libgpml.model.type.CellularComponentType;
 import org.pathvisio.libgpml.model.type.ConnectorType;
@@ -60,6 +59,7 @@ import org.pathvisio.libgpml.model.type.DataNodeType;
 import org.pathvisio.libgpml.model.type.LineStyle;
 import org.pathvisio.libgpml.model.type.LineType;
 import org.pathvisio.libgpml.model.type.ShapeType;
+import org.pathvisio.libgpml.util.Utils;
 
 /**
  * A collection of {@link Action}s that may be used throughout the program (e.g. in
@@ -69,10 +69,10 @@ import org.pathvisio.libgpml.model.type.ShapeType;
  * @see {@link ViewActions}
  */
 public class CommonActions implements ApplicationEventListener {
-	private static final URL IMG_SAVE = Resources.getResourceURL("save.gif");
-	private static final URL IMG_SAVEAS = Resources.getResourceURL("saveas.gif");
-	private static final URL IMG_IMPORT = Resources.getResourceURL("import.gif");
-	private static final URL IMG_EXPORT = Resources.getResourceURL("export.gif");
+	private static final URL IMG_SAVE = Utils.getResourceURL("save.gif");
+	private static final URL IMG_SAVEAS = Utils.getResourceURL("saveas.gif");
+	private static final URL IMG_IMPORT = Utils.getResourceURL("import.gif");
+	private static final URL IMG_EXPORT = Utils.getResourceURL("export.gif");
 
 	public void applicationEvent(ApplicationEvent e) {
 		if(e.getType() == ApplicationEvent.Type.VPATHWAY_CREATED) {
@@ -645,7 +645,7 @@ public class CommonActions implements ApplicationEventListener {
 			super();
 			this.engine = engine;
 			putValue(NAME, t.getLabel());
-			putValue(SMALL_ICON, new ImageIcon(Resources.getResourceURL(t.getIcon())));
+			putValue(SMALL_ICON, new ImageIcon(Utils.getResourceURL(t.getIcon())));
 			putValue(SHORT_DESCRIPTION, t.getDescription());
 			type = t;
 		}

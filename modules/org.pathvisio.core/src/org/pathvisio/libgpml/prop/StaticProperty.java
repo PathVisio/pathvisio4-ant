@@ -20,7 +20,7 @@ package org.pathvisio.libgpml.prop;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.pathvisio.core.model.PathwayElement;
+import org.pathvisio.libgpml.model.PathwayElement;
 
 /**
  * Static properties for ObjectTypes, linked in {@link PathwayElement}.

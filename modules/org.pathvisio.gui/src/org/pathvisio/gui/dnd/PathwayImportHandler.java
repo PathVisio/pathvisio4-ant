@@ -35,13 +35,13 @@ import javax.swing.JComponent;
 import javax.swing.TransferHandler;
 
 import org.pathvisio.core.gui.PathwayTransferable;
-import org.pathvisio.core.model.ConverterException;
-import org.pathvisio.core.model.GpmlFormat;
-import org.pathvisio.core.model.ObjectType;
-import org.pathvisio.core.model.Pathway;
-import org.pathvisio.core.model.PathwayElement;
 import org.pathvisio.gui.view.VPathwaySwing;
 import org.pathvisio.libgpml.debug.Logger;
+import org.pathvisio.libgpml.model.ConverterException;
+import org.pathvisio.libgpml.model.GpmlFormat;
+import org.pathvisio.libgpml.model.ObjectType;
+import org.pathvisio.libgpml.model.Pathway;
+import org.pathvisio.libgpml.model.PathwayElement;
 
 public class PathwayImportHandler extends TransferHandler implements ClipboardOwner {
 

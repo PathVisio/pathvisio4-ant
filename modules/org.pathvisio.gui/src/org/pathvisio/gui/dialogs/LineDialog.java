@@ -44,12 +44,12 @@ import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.IDMapperStack;
 import org.bridgedb.Xref;
-import org.pathvisio.core.model.PathwayElement;
 import org.pathvisio.gui.DataSourceModel;
 import org.pathvisio.gui.SwingEngine;
 import org.pathvisio.gui.completer.CompleterQueryTextField;
 import org.pathvisio.gui.completer.OptionProvider;
 import org.pathvisio.gui.util.PermissiveComboBox;
+import org.pathvisio.libgpml.model.PathwayElement;
 import org.pathvisio.libgpml.model.type.LineType;
 
 public class LineDialog extends PathwayElementDialog implements ItemListener {

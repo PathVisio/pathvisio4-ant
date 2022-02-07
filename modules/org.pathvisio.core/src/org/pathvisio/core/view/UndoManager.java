@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.pathvisio.core.Engine;
-import org.pathvisio.core.model.Pathway;
+import org.pathvisio.libgpml.model.Pathway;
 
 /** Manages a stack of undo actions */
 public class UndoManager

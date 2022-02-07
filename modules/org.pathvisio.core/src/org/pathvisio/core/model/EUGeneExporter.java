@@ -28,6 +28,11 @@ import java.util.Map;
 import org.bridgedb.DataSource;
 import org.bridgedb.Xref;
 import org.pathvisio.libgpml.debug.Logger;
+import org.pathvisio.libgpml.model.ConverterException;
+import org.pathvisio.libgpml.model.ObjectType;
+import org.pathvisio.libgpml.model.Pathway;
+import org.pathvisio.libgpml.model.PathwayElement;
+import org.pathvisio.libgpml.model.PathwayExporter;
 
 /**
  * Exports to pathway format understood by the EuGene pathway statistics

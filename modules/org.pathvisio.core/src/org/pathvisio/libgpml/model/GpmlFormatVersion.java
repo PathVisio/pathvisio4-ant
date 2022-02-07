@@ -14,28 +14,18 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  ******************************************************************************/
-package org.pathvisio.core.util;
+package org.pathvisio.libgpml.model;
 
-import java.net.URL;
+import org.jdom2.Document;
+import org.jdom2.Namespace;
 
-import org.pathvisio.libgpml.debug.Logger;
-
-/**
- * Utility function related to getting Resources from the class path.
- * TODO: merge with org.pathvisio.util.Utils.
- */
-public class Resources
+public interface GpmlFormatVersion 
 {
-	/**
-	 * Get the {@link URL} for the resource stored in a jar file in the classpath
-	 * @param name  the filename of the resource
-	 * @return the URL pointing to the resource
-	 */
-	public static URL getResourceURL(String name)
-	{
-		URL url = Resources.class.getClassLoader().getResource(name);
-		if (url == null) Logger.log.error ("Couldn't load resource '" + name + "'");
-		return url;
-	}
+	Namespace getGpmlNamespace();
 
+	/**
+	 * validates a JDOM document against the xml-schema definition specified by 'xsdFile'
+	 * @param doc the document to validate
+	 */	
+	void validateDocument(Document doc) throws ConverterException;
 }

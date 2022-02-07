@@ -30,6 +30,11 @@ import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 import org.pathvisio.core.data.GdbManager;
+import org.pathvisio.libgpml.model.ConverterException;
+import org.pathvisio.libgpml.model.ObjectType;
+import org.pathvisio.libgpml.model.Pathway;
+import org.pathvisio.libgpml.model.PathwayElement;
+import org.pathvisio.libgpml.model.PathwayExporter;
 
 /**
  * Exporter that writes a pathway as a list of DataNodes, using their database

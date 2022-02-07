@@ -16,7 +16,7 @@
  ******************************************************************************/
 package org.pathvisio.core.view;
 
-import org.pathvisio.core.model.Pathway;
+import org.pathvisio.libgpml.model.Pathway;
 
 /**
  * a single item on the undo stack.

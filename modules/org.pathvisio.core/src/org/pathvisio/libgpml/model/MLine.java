@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  ******************************************************************************/
-package org.pathvisio.core.model;
+package org.pathvisio.libgpml.model;
 
 import java.awt.Shape;
 import java.awt.geom.Point2D;
@@ -22,13 +22,13 @@ import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.pathvisio.core.model.GraphLink.GraphIdContainer;
-import org.pathvisio.core.util.Utils;
+import org.pathvisio.libgpml.model.GraphLink.GraphIdContainer;
 import org.pathvisio.libgpml.model.connector.ConnectorRestrictions;
 import org.pathvisio.libgpml.model.connector.ConnectorShape;
 import org.pathvisio.libgpml.model.connector.ConnectorShapeFactory;
 import org.pathvisio.libgpml.model.connector.ElbowConnectorShape;
 import org.pathvisio.libgpml.model.connector.ConnectorShape.WayPoint;
+import org.pathvisio.libgpml.util.Utils;
 
 /**
  * MLine - basically a PathwayElement, but overrides some methods

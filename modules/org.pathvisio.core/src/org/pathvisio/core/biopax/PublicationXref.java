@@ -16,10 +16,10 @@
  ******************************************************************************/
 package org.pathvisio.core.biopax;
 
-import org.pathvisio.core.util.Utils;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import org.pathvisio.libgpml.util.Utils;
 
 
 /**

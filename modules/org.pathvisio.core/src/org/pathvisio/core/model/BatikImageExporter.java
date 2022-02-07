@@ -38,6 +38,8 @@ import org.apache.batik.transcoder.image.TIFFTranscoder;
 import org.pathvisio.core.preferences.GlobalPreference;
 import org.pathvisio.core.preferences.PreferenceManager;
 import org.pathvisio.core.view.VPathway;
+import org.pathvisio.libgpml.model.ConverterException;
+import org.pathvisio.libgpml.model.Pathway;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 

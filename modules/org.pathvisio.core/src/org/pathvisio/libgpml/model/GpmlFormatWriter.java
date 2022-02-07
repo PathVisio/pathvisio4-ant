@@ -14,21 +14,18 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  ******************************************************************************/
-package org.pathvisio.core.model;
+package org.pathvisio.libgpml.model;
 
-import java.util.EventListener;
+import java.io.File;
+import java.io.OutputStream;
 
-/**
- * Implement this if you want to be notified of changes to a Pathway.
- *
- * This means addition of new elements to a Pathway and
- * removal of elements from a Pathway, but not
- * changes to properties of a single PathwayElement
- *
- * For example this is used by VPathway to refresh itself when a new
- * element is added.
- */
-public interface PathwayListener extends EventListener
+import org.jdom2.Document;
+import org.jdom2.Element;
+
+public interface GpmlFormatWriter extends GpmlFormatVersion 
 {
-	public void pathwayModified(PathwayEvent e);
+	Document createJdom(Pathway data) throws ConverterException;
+	Element createJdomElement(PathwayElement o) throws ConverterException;
+	void writeToXml(Pathway pwy, File file, boolean validate) throws ConverterException;
+	void writeToXml(Pathway pwy, OutputStream out, boolean validate) throws ConverterException;
 }

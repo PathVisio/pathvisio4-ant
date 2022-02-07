@@ -43,22 +43,22 @@ import org.pathvisio.core.Engine;
 import org.pathvisio.core.Engine.ApplicationEventListener;
 import org.pathvisio.core.Globals;
 import org.pathvisio.core.data.GdbManager;
-import org.pathvisio.core.model.ConverterException;
-import org.pathvisio.core.model.GpmlFormat;
-import org.pathvisio.core.model.Pathway;
-import org.pathvisio.core.model.Pathway.StatusFlagEvent;
-import org.pathvisio.core.model.PathwayIO;
 import org.pathvisio.core.preferences.GlobalPreference;
 import org.pathvisio.core.preferences.Preference;
 import org.pathvisio.core.preferences.PreferenceManager;
 import org.pathvisio.core.util.ProgressKeeper;
-import org.pathvisio.core.util.Utils;
 import org.pathvisio.core.view.VPathwayWrapper;
 import org.pathvisio.gui.dialogs.NewPathwayDialog;
 import org.pathvisio.gui.dialogs.OkCancelDialog;
 import org.pathvisio.gui.dialogs.PopupDialogHandler;
 import org.pathvisio.gui.view.VPathwaySwing;
 import org.pathvisio.libgpml.debug.Logger;
+import org.pathvisio.libgpml.model.ConverterException;
+import org.pathvisio.libgpml.model.GpmlFormat;
+import org.pathvisio.libgpml.model.Pathway;
+import org.pathvisio.libgpml.model.PathwayIO;
+import org.pathvisio.libgpml.model.Pathway.StatusFlagEvent;
+import org.pathvisio.libgpml.util.Utils;
 
 /**
  * SwingEngine ties together a number of global objects needed both in the

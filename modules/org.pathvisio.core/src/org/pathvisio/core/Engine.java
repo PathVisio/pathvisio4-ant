@@ -30,15 +30,15 @@ import java.util.Set;
 
 import javax.swing.SwingUtilities;
 
-import org.pathvisio.core.model.ConverterException;
-import org.pathvisio.core.model.Pathway;
-import org.pathvisio.core.model.PathwayExporter;
-import org.pathvisio.core.model.PathwayImporter;
-import org.pathvisio.core.util.FileUtils;
-import org.pathvisio.core.util.Utils;
 import org.pathvisio.core.view.VPathway;
 import org.pathvisio.core.view.VPathwayWrapper;
 import org.pathvisio.libgpml.debug.Logger;
+import org.pathvisio.libgpml.model.ConverterException;
+import org.pathvisio.libgpml.model.Pathway;
+import org.pathvisio.libgpml.model.PathwayExporter;
+import org.pathvisio.libgpml.model.PathwayImporter;
+import org.pathvisio.libgpml.util.FileUtils;
+import org.pathvisio.libgpml.util.Utils;
 
 /**
  * This class manages loading, importing and exporting a Pathway and VPathway together.

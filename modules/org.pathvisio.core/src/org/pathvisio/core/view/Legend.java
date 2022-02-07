@@ -24,7 +24,7 @@ import java.awt.Shape;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
-import org.pathvisio.core.model.PathwayElement;
+import org.pathvisio.libgpml.model.PathwayElement;
 
 /**
  * Legend objects can be used by plugins to draw a Legend for visualization of 

@@ -28,10 +28,10 @@ import java.awt.geom.Rectangle2D;
 import java.util.List;
 
 import org.pathvisio.core.biopax.PublicationXref;
-import org.pathvisio.core.model.PathwayElement;
-import org.pathvisio.core.model.PathwayElementEvent;
-import org.pathvisio.core.model.PathwayElementListener;
 import org.pathvisio.libgpml.debug.DebugList;
+import org.pathvisio.libgpml.model.PathwayElement;
+import org.pathvisio.libgpml.model.PathwayElementEvent;
+import org.pathvisio.libgpml.model.PathwayElementListener;
 import org.pathvisio.libgpml.model.type.LineStyle;
 
 /**

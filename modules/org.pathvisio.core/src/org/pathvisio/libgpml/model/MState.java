@@ -14,12 +14,12 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  ******************************************************************************/
-package org.pathvisio.core.model;
+package org.pathvisio.libgpml.model;
 
-import org.pathvisio.core.model.GraphLink.GraphIdContainer;
-import org.pathvisio.core.model.GraphLink.GraphRefContainer;
-import org.pathvisio.core.util.Utils;
+import org.pathvisio.libgpml.model.GraphLink.GraphIdContainer;
+import org.pathvisio.libgpml.model.GraphLink.GraphRefContainer;
 import org.pathvisio.libgpml.prop.StaticProperty;
+import org.pathvisio.libgpml.util.Utils;
 
 /**
  * State-specific implementation of methods that calculate derived

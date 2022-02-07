@@ -26,18 +26,18 @@ import java.io.File;
 
 import org.pathvisio.core.Engine;
 import org.pathvisio.core.model.BatikImageExporter;
-import org.pathvisio.core.model.ConverterException;
 import org.pathvisio.core.model.DataNodeListExporter;
 import org.pathvisio.core.model.EUGeneExporter;
-import org.pathvisio.core.model.GpmlFormat;
 import org.pathvisio.core.model.ImageExporter;
-import org.pathvisio.core.model.Pathway;
-import org.pathvisio.core.model.PathwayExporter;
-import org.pathvisio.core.model.PathwayImporter;
 import org.pathvisio.core.model.RasterImageExporter;
 import org.pathvisio.core.preferences.GlobalPreference;
 import org.pathvisio.core.preferences.PreferenceManager;
 import org.pathvisio.libgpml.debug.Logger;
+import org.pathvisio.libgpml.model.ConverterException;
+import org.pathvisio.libgpml.model.GpmlFormat;
+import org.pathvisio.libgpml.model.Pathway;
+import org.pathvisio.libgpml.model.PathwayExporter;
+import org.pathvisio.libgpml.model.PathwayImporter;
 import org.pathvisio.libgpml.model.shape.MIMShapes;
 
 /**
@@ -45,42 +45,32 @@ import org.pathvisio.libgpml.model.shape.MIMShapes;
  */
 public class Converter {
 
-	public static void printUsage()
-	{
-		System.out.println ("GPML Converter\n" +
-				"Usage:\n" +
-				"\tjava Converter <input filename> [<output filename>] [<zoom>] \n" +
-				"\n" +
-				"Converts between GPML format and several other formats:\n" +
-				"\t- GPML (.gpml/.xml) <-> GenMAPP (.mapp)\n" +
-				"\t- GPML (.gpml/.xml) -> SVG (.svg)\n" +
-				"\t- GPML (.gpml/.xml) -> PNG (.png); Zoom value at 100 by default, can be changed for PNG\n" +
-				"\t- GPML (.gpml/.xml) -> TIFF (.tiff)\n" +
-				"\t- GPML (.gpml/.xml) -> PDF (.pdf)\n" +
-				"The conversion direction is determined from the extension of the input file.\n" +
-				"Return codes:\n" +
-				"\t 0: OK\n" +
-				"\t-1: Parameter or file error\n" +
-				"\t-2: Conversion error\n"
-			);
+	public static void printUsage() {
+		System.out.println("GPML Converter\n" + "Usage:\n"
+				+ "\tjava Converter <input filename> [<output filename>] [<zoom>] \n" + "\n"
+				+ "Converts between GPML format and several other formats:\n"
+				+ "\t- GPML (.gpml/.xml) <-> GenMAPP (.mapp)\n" + "\t- GPML (.gpml/.xml) -> SVG (.svg)\n"
+				+ "\t- GPML (.gpml/.xml) -> PNG (.png); Zoom value at 100 by default, can be changed for PNG\n"
+				+ "\t- GPML (.gpml/.xml) -> TIFF (.tiff)\n" + "\t- GPML (.gpml/.xml) -> PDF (.pdf)\n"
+				+ "The conversion direction is determined from the extension of the input file.\n" + "Return codes:\n"
+				+ "\t 0: OK\n" + "\t-1: Parameter or file error\n" + "\t-2: Conversion error\n");
 	}
 
 	/**
-     * Command line arguments:
-     *
-     */
-    public static void main(String[] args)
-    {
-        // Handle command line arguments
-        // Check for custom output path
-        Logger.log.setStream (System.err);
-						//debug, trace, info, warn, error, fatal
-        Logger.log.setLogLevel (false, false, true, true, true, true);
+	 * Command line arguments:
+	 *
+	 */
+	public static void main(String[] args) {
+		// Handle command line arguments
+		// Check for custom output path
+		Logger.log.setStream(System.err);
+		// debug, trace, info, warn, error, fatal
+		Logger.log.setLogLevel(false, false, true, true, true, true);
 
-        PreferenceManager.init();
-    	Engine engine = new Engine();
-    	engine.addPathwayImporter(new GpmlFormat());
-    	engine.addPathwayExporter(new GpmlFormat());
+		PreferenceManager.init();
+		Engine engine = new Engine();
+		engine.addPathwayImporter(new GpmlFormat());
+		engine.addPathwayExporter(new GpmlFormat());
 		engine.addPathwayExporter(new BatikImageExporter(ImageExporter.TYPE_SVG));
 		engine.addPathwayExporter(new RasterImageExporter(ImageExporter.TYPE_PNG));
 		engine.addPathwayExporter(new BatikImageExporter(ImageExporter.TYPE_TIFF));
@@ -89,69 +79,56 @@ public class Converter {
 		engine.addPathwayExporter(new DataNodeListExporter());
 
 		// Transient dependency on Biopax converter
-		try
-		{
+		try {
 			Class<?> c = Class.forName("org.pathvisio.biopax3.BiopaxFormat");
-			Object o  = c.newInstance();
-			engine.addPathwayExporter((PathwayExporter)o);
-			engine.addPathwayImporter((PathwayImporter)o);
-		}
-		catch (ClassNotFoundException ex)
-		{
+			Object o = c.newInstance();
+			engine.addPathwayExporter((PathwayExporter) o);
+			engine.addPathwayImporter((PathwayImporter) o);
+		} catch (ClassNotFoundException ex) {
 			Logger.log.warn("BioPAX converter not in classpath, BioPAX conversion not available today.");
-		}
-		catch (InstantiationException e)
-		{
+		} catch (InstantiationException e) {
 			Logger.log.error("BioPAX instantiation error", e);
-		}
-		catch (IllegalAccessException e)
-		{
+		} catch (IllegalAccessException e) {
 			Logger.log.warn("Access to BioPAX class is Illegal", e);
 		}
-		
-		//Enable MiM support (for export to graphics formats)
+
+		// Enable MiM support (for export to graphics formats)
 		PreferenceManager.getCurrent().setBoolean(GlobalPreference.MIM_SUPPORT, true);
 		MIMShapes.registerShapes();
 
-        File inputFile = null;
-        File outputFile = null;
-        
-        int zoom = 100;
+		File inputFile = null;
+		File outputFile = null;
+
+		int zoom = 100;
 
 		boolean error = false;
-		if (args.length == 0)
-		{
-			Logger.log.error ("Need at least one command line argument");
+		if (args.length == 0) {
+			Logger.log.error("Need at least one command line argument");
 			error = true;
-		}
-		else if (args.length > 3)
-		{
-			Logger.log.error ("Too many arguments");
+		} else if (args.length > 3) {
+			Logger.log.error("Too many arguments");
 			error = true;
-		}
-		else
-		{
+		} else {
 			inputFile = new File(args[0]);
 			outputFile = new File(args[1]);
-			
-			if(inputFile == null || !inputFile.canRead()) {
+
+			if (inputFile == null || !inputFile.canRead()) {
 				Logger.log.error("Unable to read inputfile: " + inputFile);
 				error = true;
 			}
 		}
 
-		if (!error)
-		{
+		if (!error) {
 			try {
 				engine.importPathway(inputFile);
 				Pathway pathway = engine.getActivePathway();
-				if (args.length == 2)				
+				if (args.length == 2)
 					engine.exportPathway(outputFile, pathway);
-				if (args.length == 3){			
+				if (args.length == 3) {
 					zoom = Integer.parseInt(args[2]);
-					engine.exportPathway(outputFile, pathway, zoom);	
+					engine.exportPathway(outputFile, pathway, zoom);
 				}
-			} catch(ConverterException e) {
+			} catch (ConverterException e) {
 				e.printStackTrace();
 				System.exit(-2);
 			}
@@ -159,6 +136,6 @@ public class Converter {
 			printUsage();
 			System.exit(-1);
 		}
-		System.exit(0); //Everything OK, now force exit
-    }
+		System.exit(0); // Everything OK, now force exit
+	}
 }

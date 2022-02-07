@@ -39,14 +39,14 @@ import javax.swing.JTextPane;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import org.pathvisio.core.model.PathwayElement.Comment;
-import org.pathvisio.core.util.Resources;
+import org.pathvisio.libgpml.model.PathwayElement.Comment;
+import org.pathvisio.libgpml.util.Utils;
 
 public class CommentPanel extends PathwayElementPanel implements ActionListener {
 
 	protected static final String ADD = "Add comment";
 	protected static final String REMOVE = "Remove comment";
-	private static final URL IMG_REMOVE = Resources.getResourceURL("cancel.gif");
+	private static final URL IMG_REMOVE = Utils.getResourceURL("cancel.gif");
 
 	JPanel buttonPanel;
 	JScrollPane cmtPanel;

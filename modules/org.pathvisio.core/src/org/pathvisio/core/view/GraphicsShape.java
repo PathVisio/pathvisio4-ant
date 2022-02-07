@@ -31,12 +31,12 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.text.AttributedString;
 
-import org.pathvisio.core.model.PathwayElement;
-import org.pathvisio.core.model.PathwayElementEvent;
 import org.pathvisio.core.preferences.GlobalPreference;
 import org.pathvisio.core.preferences.PreferenceManager;
 import org.pathvisio.core.view.Handle.Freedom;
 import org.pathvisio.core.view.LinAlg.Point;
+import org.pathvisio.libgpml.model.PathwayElement;
+import org.pathvisio.libgpml.model.PathwayElementEvent;
 import org.pathvisio.libgpml.model.shape.ShapeRegistry;
 import org.pathvisio.libgpml.model.type.LineStyle;
 import org.pathvisio.libgpml.model.type.ShapeType;

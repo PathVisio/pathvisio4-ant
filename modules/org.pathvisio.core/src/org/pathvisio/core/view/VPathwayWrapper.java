@@ -23,8 +23,8 @@ import java.util.List;
 import javax.swing.Action;
 import javax.swing.KeyStroke;
 
-import org.pathvisio.core.model.Pathway;
-import org.pathvisio.core.model.PathwayElement;
+import org.pathvisio.libgpml.model.Pathway;
+import org.pathvisio.libgpml.model.PathwayElement;
 
 /**
  * Wrapper for VPathway that handles toolkit (swing / SWT) dependent differences.

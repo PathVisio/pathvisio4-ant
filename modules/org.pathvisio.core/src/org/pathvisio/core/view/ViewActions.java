@@ -16,6 +16,8 @@
  ******************************************************************************/
 package org.pathvisio.core.view;
 
+import static org.pathvisio.libgpml.model.ObjectType.STATE;
+
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -38,21 +40,19 @@ import javax.swing.KeyStroke;
 import org.pathvisio.core.ApplicationEvent;
 import org.pathvisio.core.Engine;
 import org.pathvisio.core.Engine.ApplicationEventListener;
-import org.pathvisio.core.model.MLine;
-import org.pathvisio.core.model.MState;
-import org.pathvisio.core.model.ObjectType;
-import org.pathvisio.core.model.PathwayElement;
-import org.pathvisio.core.model.PathwayElement.MPoint;
-import org.pathvisio.core.util.Resources;
-import org.pathvisio.core.util.Utils;
+import org.pathvisio.libgpml.util.Utils;
 import org.pathvisio.core.view.SelectionBox.SelectionEvent;
 import org.pathvisio.core.view.SelectionBox.SelectionListener;
+import org.pathvisio.libgpml.model.MLine;
+import org.pathvisio.libgpml.model.MState;
+import org.pathvisio.libgpml.model.ObjectType;
+import org.pathvisio.libgpml.model.PathwayElement;
+import org.pathvisio.libgpml.model.PathwayElement.MPoint;
 import org.pathvisio.libgpml.model.connector.ConnectorShape;
 import org.pathvisio.libgpml.model.connector.FreeConnectorShape;
 import org.pathvisio.libgpml.model.type.GroupStyle;
 import org.pathvisio.libgpml.model.type.ShapeType;
-
-import static org.pathvisio.core.model.ObjectType.STATE;
+import org.pathvisio.libgpml.util.Utils;
 
 /**
  * A collection of {@link Action}s related to the pathway view. An instance of this class contains
@@ -68,9 +68,9 @@ import static org.pathvisio.core.model.ObjectType.STATE;
  * @author thomas
  */
 public class ViewActions implements VPathwayListener, SelectionListener {
-	private static final URL IMG_COPY= Resources.getResourceURL("copy.gif");
-	private static final URL IMG_PASTE = Resources.getResourceURL("paste.gif");
-	private static final URL IMG_UNDO = Resources.getResourceURL("undo.gif");
+	private static final URL IMG_COPY= Utils.getResourceURL("copy.gif");
+	private static final URL IMG_PASTE = Utils.getResourceURL("paste.gif");
+	private static final URL IMG_UNDO = Utils.getResourceURL("undo.gif");
 
 	/**
 	 * The group of actions that will be enabled when the VPathway is in edit mode and

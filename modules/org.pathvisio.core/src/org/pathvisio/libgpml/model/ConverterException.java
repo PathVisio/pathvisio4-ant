@@ -14,17 +14,28 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  ******************************************************************************/
-package org.pathvisio.core.model;
-
-import java.util.EventListener;
+package org.pathvisio.libgpml.model;
 
 /**
- * Implement this if you want to be notified of changes to properties of a PathwayElement.
- *
- * For example, this is used by DatanodeDialog or by PropertyTableModel
- * to keep up to date with changes in the selected PathwayElement.
+ * Exception that occurs during import, export, save or load of a Patway.
+ * @see PathwayExporter#doExport
+ * @see PathwayImporter#doImport
+ * @see Pathway#readFromXml
+ * @see Pathway#writeToXml
  */
-public interface PathwayElementListener extends EventListener
-{
-	public void gmmlObjectModified(PathwayElementEvent e);
+public class ConverterException extends Exception {
+
+
+	public ConverterException(String msg)
+	{
+		super(msg);
+	}
+
+	public ConverterException(Exception e)
+	{
+		super(e.getClass() + ": " + e.getMessage(), e);
+		setStackTrace(e.getStackTrace());
+	}
+
+
 }

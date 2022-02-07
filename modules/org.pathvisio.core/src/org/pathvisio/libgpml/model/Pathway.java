@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  ******************************************************************************/
-package org.pathvisio.core.model;
+package org.pathvisio.libgpml.model;
 
 import java.io.File;
 import java.io.InputStream;
@@ -35,13 +35,16 @@ import java.util.Set;
 import org.bridgedb.Xref;
 import org.pathvisio.core.biopax.BiopaxElement;
 import org.pathvisio.core.biopax.BiopaxNode;
-import org.pathvisio.core.model.GraphLink.GraphIdContainer;
-import org.pathvisio.core.model.GraphLink.GraphRefContainer;
-import org.pathvisio.core.model.PathwayElement.MAnchor;
-import org.pathvisio.core.model.PathwayElement.MPoint;
-import org.pathvisio.core.util.Utils;
+import org.pathvisio.core.model.BatikImageExporter;
+import org.pathvisio.core.model.ImageExporter;
+import org.pathvisio.core.model.OntologyTag;
 import org.pathvisio.libgpml.debug.Logger;
+import org.pathvisio.libgpml.model.GraphLink.GraphIdContainer;
+import org.pathvisio.libgpml.model.GraphLink.GraphRefContainer;
+import org.pathvisio.libgpml.model.PathwayElement.MAnchor;
+import org.pathvisio.libgpml.model.PathwayElement.MPoint;
 import org.pathvisio.libgpml.prop.StaticProperty;
+import org.pathvisio.libgpml.util.Utils;
 
 /**
 * This class is the model for pathway data. It is responsible for
