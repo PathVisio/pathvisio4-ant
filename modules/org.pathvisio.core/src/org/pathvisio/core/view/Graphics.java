@@ -46,7 +46,7 @@ public abstract class Graphics extends VPathwayElement implements PathwayElement
 	// includes Citation and State
 	private List<VPathwayElement> children = new DebugList<VPathwayElement>();
 	
-	private Citation citation;
+	private VCitation citation;
 
 	public Graphics(VPathway canvas, PathwayElement o) {
 		super(canvas);
@@ -55,9 +55,9 @@ public abstract class Graphics extends VPathwayElement implements PathwayElement
 		checkCitation();
 	}
 
-	protected Citation createCitation()
+	protected VCitation createCitation()
 	{
-		return new Citation(canvas, this, new Point2D.Double(1, -1));
+		return new VCitation(canvas, this, new Point2D.Double(1, -1));
 	}
 
 	public final void checkCitation()
@@ -89,7 +89,7 @@ public abstract class Graphics extends VPathwayElement implements PathwayElement
 			child.markDirty();
 	}
 
-	protected Citation getCitation() {
+	protected VCitation getCitation() {
 		return citation;
 	}
 

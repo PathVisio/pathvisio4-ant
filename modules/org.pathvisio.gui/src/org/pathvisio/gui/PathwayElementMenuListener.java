@@ -30,7 +30,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.SwingUtilities;
 
-import org.pathvisio.core.view.Citation;
+import org.pathvisio.core.view.VCitation;
 import org.pathvisio.core.view.VDataNode;
 import org.pathvisio.core.view.Graphics;
 import org.pathvisio.core.view.VGroup;
@@ -94,7 +94,7 @@ public class PathwayElementMenuListener implements VPathwayListener {
 	 * @return The {@link JPopupMenu} for the given pathway element
 	 */
 	private JPopupMenu getMenuInstance(SwingEngine swingEngine, VPathwayElement e) {
-		if(e instanceof Citation) return null;
+		if(e instanceof VCitation) return null;
 
 		JMenu pathLitRef = null;
 		if(e instanceof Handle) {
@@ -265,8 +265,8 @@ public class PathwayElementMenuListener implements VPathwayListener {
 	public void vPathwayEvent(VPathwayEvent e) {
 		switch(e.getType()) {
 		case ELEMENT_CLICKED_DOWN:
-			if(e.getAffectedElement() instanceof Citation) {
-				Citation c = (Citation)e.getAffectedElement();
+			if(e.getAffectedElement() instanceof VCitation) {
+				VCitation c = (VCitation)e.getAffectedElement();
 				PathwayElementDialog d = swingEngine.getPopupDialogHandler().getInstance(
 						c.getParent().getPathwayElement(), false, null, null
 				);

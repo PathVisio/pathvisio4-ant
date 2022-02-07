@@ -35,7 +35,7 @@ import org.pathvisio.libgpml.model.PathwayElement;
  * Draws a citation number on top of a pathway object.
  * @author thomas
  */
-public class Citation extends VPathwayElement implements VElementMouseListener {
+public class VCitation extends VPathwayElement implements VElementMouseListener {
 	static final int MFONT_SIZE = 8;
 	static final String FONT_NAME = "Arial";
 	static final Color FONT_COLOR = new Color(0, 0, 128);
@@ -48,7 +48,7 @@ public class Citation extends VPathwayElement implements VElementMouseListener {
 	 * @param parent The Graphics for which the references need to be displayed
 	 * @param rPosition The position to place the references, relative to the parent Graphics
 	 */
-	public Citation(VPathway canvas, Graphics parent, Point2D rPosition) {
+	public VCitation(VPathway canvas, Graphics parent, Point2D rPosition) {
 		super(canvas);
 		this.parent = parent;
 		this.rPosition = rPosition;

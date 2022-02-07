@@ -251,9 +251,6 @@ public class VPathway implements PathwayListener
 		case STATE:
 			result = new VState (this, o);
 			break;
-		case LEGEND:
-			result = new Legend(this, o);
-			break;
 		default:
 			break;
 		}

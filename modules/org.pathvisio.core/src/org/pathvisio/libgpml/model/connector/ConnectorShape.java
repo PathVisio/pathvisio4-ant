@@ -18,8 +18,8 @@ package org.pathvisio.libgpml.model.connector;
 
 import java.awt.geom.Point2D;
 
-import org.pathvisio.core.view.LinAlg;
-import org.pathvisio.core.view.LinAlg.Point;
+import org.pathvisio.libgpml.util.LinAlg;
+import org.pathvisio.libgpml.util.LinAlg.Point;
 
 
 /**

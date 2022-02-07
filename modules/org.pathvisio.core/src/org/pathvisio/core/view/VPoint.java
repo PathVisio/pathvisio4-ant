@@ -18,8 +18,9 @@ package org.pathvisio.core.view;
 
 import org.pathvisio.core.preferences.GlobalPreference;
 import org.pathvisio.core.preferences.PreferenceManager;
-import org.pathvisio.core.view.LinAlg.Point;
 import org.pathvisio.libgpml.model.PathwayElement.MPoint;
+import org.pathvisio.libgpml.util.LinAlg;
+import org.pathvisio.libgpml.util.LinAlg.Point;
 
 /**
  * One of the two endpoints of a line. Carries a single handle.

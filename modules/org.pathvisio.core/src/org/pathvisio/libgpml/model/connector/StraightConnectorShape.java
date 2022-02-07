@@ -19,8 +19,8 @@ package org.pathvisio.libgpml.model.connector;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 
-import org.pathvisio.core.view.LinAlg;
-import org.pathvisio.core.view.LinAlg.Point;
+import org.pathvisio.libgpml.util.LinAlg;
+import org.pathvisio.libgpml.util.LinAlg.Point;
 
 /**
  * Implements a straight connector Shape, i.e. a Connector with

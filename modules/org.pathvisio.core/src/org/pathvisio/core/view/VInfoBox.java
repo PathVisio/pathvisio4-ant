@@ -51,9 +51,9 @@ public class VInfoBox extends Graphics {
 		canvas.setMappInfo(this);
 	}
 
-	protected Citation createCitation()
+	protected VCitation createCitation()
 	{
-		return new Citation(canvas, this, new Point2D.Double(1, 0));
+		return new VCitation(canvas, this, new Point2D.Double(1, 0));
 	}
 
 
