@@ -28,8 +28,8 @@ import java.util.Set;
 
 import org.pathvisio.libgpml.debug.Logger;
 import org.pathvisio.libgpml.model.PathwayElement;
-import org.pathvisio.libgpml.model.GraphLink.GraphIdContainer;
-import org.pathvisio.libgpml.model.GraphLink.GraphRefContainer;
+import org.pathvisio.libgpml.model.GraphLink.LinkableTo;
+import org.pathvisio.libgpml.model.GraphLink.LinkableFrom;
 import org.pathvisio.libgpml.model.PathwayElement.MPoint;
 import org.pathvisio.libgpml.prop.StaticProperty;
 
@@ -260,9 +260,9 @@ public class Utils {
 	/**
 	 * Helper that returns all Lines that point to a given MAnchor or Shape
 	 */
-	public static Set<PathwayElement> getReferringLines(GraphIdContainer elt) {
+	public static Set<PathwayElement> getReferringLines(LinkableTo elt) {
 		Set<PathwayElement> result = new HashSet<PathwayElement>();
-		for (GraphRefContainer grc : elt.getReferences()) {
+		for (LinkableFrom grc : elt.getReferences()) {
 			if (grc instanceof MPoint) {
 				result.add(((MPoint) grc).getParent());
 			}

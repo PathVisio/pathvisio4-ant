@@ -25,7 +25,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 
-import org.pathvisio.libgpml.model.GraphLink.GraphRefContainer;
+import org.pathvisio.libgpml.model.GraphLink.LinkableFrom;
 import org.pathvisio.libgpml.model.PathwayElement.MAnchor;
 import org.pathvisio.libgpml.model.PathwayElement.MPoint;
 import org.pathvisio.libgpml.model.shape.AnchorShape;
@@ -101,7 +101,7 @@ public class VAnchor extends VPathwayElement implements LinkProvider, Adjustable
 		my = mFromV(position.getY());
 
 		//Redraw graphRefs
-		for(GraphRefContainer ref : mAnchor.getReferences()) {
+		for(LinkableFrom ref : mAnchor.getReferences()) {
 			if(ref instanceof MPoint) {
 				VPoint vp = canvas.getPoint((MPoint)ref);
 				if(vp != null && vp.getLine() != line) {

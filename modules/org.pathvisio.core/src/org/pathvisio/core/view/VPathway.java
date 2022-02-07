@@ -57,7 +57,7 @@ import org.pathvisio.libgpml.model.Pathway;
 import org.pathvisio.libgpml.model.PathwayElement;
 import org.pathvisio.libgpml.model.PathwayEvent;
 import org.pathvisio.libgpml.model.PathwayListener;
-import org.pathvisio.libgpml.model.GraphLink.GraphIdContainer;
+import org.pathvisio.libgpml.model.GraphLink.LinkableTo;
 import org.pathvisio.libgpml.model.Pathway.StatusFlagEvent;
 import org.pathvisio.libgpml.model.PathwayElement.MAnchor;
 import org.pathvisio.libgpml.model.PathwayElement.MPoint;
@@ -570,7 +570,7 @@ public class VPathway implements PathwayListener
 			}
 		}
 
-		GraphIdContainer idc = null;
+		LinkableTo idc = null;
 		for (LinkProvider lp : objects)
 		{
 			if (lp instanceof VAnchor && ((VAnchor)lp).getMAnchor().getShape().isDisallowLinks()) {

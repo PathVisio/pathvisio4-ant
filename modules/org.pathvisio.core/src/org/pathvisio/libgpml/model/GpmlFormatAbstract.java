@@ -41,7 +41,7 @@ import org.jdom2.output.SAXOutputter;
 import org.jdom2.output.XMLOutputter;
 import org.pathvisio.core.biopax.BiopaxElement;
 import org.pathvisio.libgpml.debug.Logger;
-import org.pathvisio.libgpml.model.GraphLink.GraphIdContainer;
+import org.pathvisio.libgpml.model.GraphLink.LinkableTo;
 import org.pathvisio.libgpml.model.type.GroupStyle;
 import org.xml.sax.SAXException;
 
@@ -357,7 +357,7 @@ public abstract class GpmlFormatAbstract
 		}
 	}
 
-	protected void mapGraphId (GraphIdContainer o, Element e)
+	protected void mapGraphId (LinkableTo o, Element e)
 	{
 		String id = e.getAttributeValue("GraphId");
 		//Never add graphid until all elements are mapped, to prevent duplcate ids!
@@ -369,7 +369,7 @@ public abstract class GpmlFormatAbstract
 		}
 	}
 
-	protected void updateGraphId (GraphIdContainer o, Element e)
+	protected void updateGraphId (LinkableTo o, Element e)
 	{
 		String id = o.getGraphId();
 		// id has to be unique!
@@ -640,7 +640,7 @@ public abstract class GpmlFormatAbstract
 				String sr = pe.getStartGraphRef();
 				String er = pe.getEndGraphRef();
 				if(sr != null && !"".equals(sr) && !pe.getMStart().relativeSet()) {
-					GraphIdContainer idc = pathway.getGraphIdContainer(sr);
+					LinkableTo idc = pathway.getGraphIdContainer(sr);
 					Point2D relative = idc.toRelativeCoordinate(
 							new Point2D.Double(
 								pe.getMStart().getRawX(),
@@ -650,7 +650,7 @@ public abstract class GpmlFormatAbstract
 					pe.getMStart().setRelativePosition(relative.getX(), relative.getY());
 				}
 				if(er != null && !"".equals(er) && !pe.getMEnd().relativeSet()) {
-					GraphIdContainer idc = pathway.getGraphIdContainer(er);
+					LinkableTo idc = pathway.getGraphIdContainer(er);
 					Point2D relative = idc.toRelativeCoordinate(
 							new Point2D.Double(
 								pe.getMEnd().getRawX(),

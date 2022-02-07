@@ -35,7 +35,7 @@ import org.pathvisio.core.preferences.PreferenceManager;
 import org.pathvisio.libgpml.model.MLine;
 import org.pathvisio.libgpml.model.PathwayElement;
 import org.pathvisio.libgpml.model.PathwayElementEvent;
-import org.pathvisio.libgpml.model.GraphLink.GraphRefContainer;
+import org.pathvisio.libgpml.model.GraphLink.LinkableFrom;
 import org.pathvisio.libgpml.model.PathwayElement.MAnchor;
 import org.pathvisio.libgpml.model.PathwayElement.MPoint;
 import org.pathvisio.libgpml.model.connector.ConnectorShape;
@@ -593,7 +593,7 @@ public class Line extends Graphics implements Adjustable
 			p.moveBy(canvas.mFromV(vdx), canvas.mFromV(vdy));
 		}
 		//Redraw graphRefs
-		for(GraphRefContainer ref : gdata.getReferences()) {
+		for(LinkableFrom ref : gdata.getReferences()) {
 			if(ref instanceof MPoint) {
 				VPoint vp = canvas.getPoint((MPoint)ref);
 				if(vp != null) {

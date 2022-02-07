@@ -22,7 +22,7 @@ import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.pathvisio.libgpml.model.GraphLink.GraphIdContainer;
+import org.pathvisio.libgpml.model.GraphLink.LinkableTo;
 import org.pathvisio.libgpml.model.connector.ConnectorRestrictions;
 import org.pathvisio.libgpml.model.connector.ConnectorShape;
 import org.pathvisio.libgpml.model.connector.ConnectorShapeFactory;
@@ -198,7 +198,7 @@ public class MLine extends PathwayElement implements ConnectorRestrictions {
 	/**
 	 * Returns the element that the start of this line is connected to. Returns null if there isn't any.
 	 */
-	private GraphIdContainer getStartElement() {
+	private LinkableTo getStartElement() {
 		Pathway parent = getParent();
 		if(parent != null) {
 			return parent.getGraphIdContainer(getStartGraphRef());
@@ -209,7 +209,7 @@ public class MLine extends PathwayElement implements ConnectorRestrictions {
 	/**
 	 * Returns the element that the end of this line is connected to. Returns null if there isn't any.
 	 */
-	private GraphIdContainer getEndElement() {
+	private LinkableTo getEndElement() {
 		Pathway parent = getParent();
 		if(parent != null) {
 			return parent.getGraphIdContainer(getEndGraphRef());
@@ -226,7 +226,7 @@ public class MLine extends PathwayElement implements ConnectorRestrictions {
 	public int getStartSide() {
 		int side = SIDE_WEST;
 
-		GraphIdContainer e = getStartElement();
+		LinkableTo e = getStartElement();
 		if(e != null) {
 			if(e instanceof PathwayElement) {
 				side = getSide(getMStart().getRelX(), getMStart().getRelY());
@@ -246,7 +246,7 @@ public class MLine extends PathwayElement implements ConnectorRestrictions {
 	public int getEndSide() {
 		int side = SIDE_EAST;
 
-		GraphIdContainer e = getEndElement();
+		LinkableTo e = getEndElement();
 		if(e != null) {
 			if(e instanceof PathwayElement) {
 				side = getSide(getMEnd().getRelX(), getMEnd().getRelY());

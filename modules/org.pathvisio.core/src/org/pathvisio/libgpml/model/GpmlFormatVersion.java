@@ -19,13 +19,23 @@ package org.pathvisio.libgpml.model;
 import org.jdom2.Document;
 import org.jdom2.Namespace;
 
-public interface GpmlFormatVersion 
-{
+/**
+ * Interface for GPML format versions.
+ * 
+ * @author unknown
+ */
+public interface GpmlFormatVersion {
+	
+	/**
+	 * Returns the GPML namespace.
+	 */
 	Namespace getGpmlNamespace();
 
 	/**
-	 * validates a JDOM document against the xml-schema definition specified by 'xsdFile'
+	 * validates a JDOM document against the xml-schema definition specified by
+	 * 'xsdFile'
+	 * 
 	 * @param doc the document to validate
-	 */	
+	 */
 	void validateDocument(Document doc) throws ConverterException;
 }

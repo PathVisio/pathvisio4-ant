@@ -23,7 +23,7 @@ package org.pathvisio.core.preferences;
  * <li>a default value
  * </ol>
  * Anything that implements this interface can be stored as a preference.
- * We recommend defining mulitple Preferences in an enum, but that is not absolutely
+ * We recommend defining multiple Preferences in an enum, but that is not absolutely
  * required.
  */
 public interface Preference

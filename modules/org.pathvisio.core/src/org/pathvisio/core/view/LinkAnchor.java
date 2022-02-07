@@ -24,8 +24,8 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
-import org.pathvisio.libgpml.model.GraphLink.GraphIdContainer;
-import org.pathvisio.libgpml.model.GraphLink.GraphRefContainer;
+import org.pathvisio.libgpml.model.GraphLink.LinkableTo;
+import org.pathvisio.libgpml.model.GraphLink.LinkableFrom;
 
 /**
  * A LinkAnchor is a small round target on a Shape or Line that appears
@@ -39,10 +39,10 @@ public class LinkAnchor extends VPathwayElement
 	static final int HINT_STROKE_SIZE = 10;
 
 	double relX, relY;
-	GraphIdContainer idContainer;
+	LinkableTo idContainer;
 	VPathwayElement parent;
 	
-	public LinkAnchor(VPathway canvas, VPathwayElement parent, GraphIdContainer idContainer, double relX, double relY) 
+	public LinkAnchor(VPathway canvas, VPathwayElement parent, LinkableTo idContainer, double relX, double relY) 
 	{
 		super (canvas);
 		this.relX = relX;
@@ -133,11 +133,11 @@ public class LinkAnchor extends VPathwayElement
 		g2d.draw(shape);
 	}
 
-	public GraphIdContainer getGraphIdContainer() {
+	public LinkableTo getGraphIdContainer() {
 		return idContainer;
 	}
 
-	public void link(GraphRefContainer ref) {
+	public void link(LinkableFrom ref) {
 		ref.linkTo(idContainer, relX, relY);
 	}
 

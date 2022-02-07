@@ -16,8 +16,8 @@
  ******************************************************************************/
 package org.pathvisio.libgpml.model;
 
-import org.pathvisio.libgpml.model.GraphLink.GraphIdContainer;
-import org.pathvisio.libgpml.model.GraphLink.GraphRefContainer;
+import org.pathvisio.libgpml.model.GraphLink.LinkableTo;
+import org.pathvisio.libgpml.model.GraphLink.LinkableFrom;
 import org.pathvisio.libgpml.prop.StaticProperty;
 import org.pathvisio.libgpml.util.Utils;
 
@@ -25,7 +25,7 @@ import org.pathvisio.libgpml.util.Utils;
  * State-specific implementation of methods that calculate derived
  * coordinates that are not stored in GPML directly
  */
-public class MState extends PathwayElement implements GraphRefContainer
+public class MState extends PathwayElement implements LinkableFrom
 {
 	protected MState()
 	{
@@ -61,7 +61,7 @@ public class MState extends PathwayElement implements GraphRefContainer
 		}
 	}
 
-	public void linkTo(GraphIdContainer idc, double relX, double relY)
+	public void linkTo(LinkableTo idc, double relX, double relY)
 	{
 		String id = idc.getGraphId();
 		if(id == null) id = idc.setGeneratedGraphId();

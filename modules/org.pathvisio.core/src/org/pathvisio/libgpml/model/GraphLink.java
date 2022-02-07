@@ -25,64 +25,65 @@ import org.pathvisio.libgpml.util.Utils;
 /**
  * This class only contains static methods and should not be instantiated.
  */
-public abstract class GraphLink
-{
+public abstract class GraphLink {
 
 	/**
-	 * All classes that have a graphId must implement this interface.
-	 * Those are PathwayElement.MPoint (i.e. points)
-	 * and PathwayElement (i.e. DataNodes, Shapes, etc).
-	 * They are needed for being refered to.
+	 * All classes that have a graphId must implement this interface. Those are
+	 * PathwayElement.MPoint (i.e. points) and PathwayElement (i.e. DataNodes,
+	 * Shapes, etc). They are needed for being refered to.
 	 *
-	 * This interface exists so we can easily iterate through all
-	 * objects containing a graphId.
+	 * This interface exists so we can easily iterate through all objects containing
+	 * a graphId.
 	 */
-	public interface GraphIdContainer
-	{
+	public interface LinkableTo {
 		String getGraphId();
+
 		void setGraphId(String id);
+
 		/** generate a unique graph Id and use that. */
 		String setGeneratedGraphId();
-		Set<GraphRefContainer> getReferences();
+
+		Set<LinkableFrom> getReferences();
+
 		/**
-		 * return the parent Gmmldata Object,
-		 * needed for maintaining a consistent list of graphId's
+		 * return the parent Gmmldata Object, needed for maintaining a consistent list
+		 * of graphId's
 		 */
 		Pathway getPathway();
 
 		/**
-		 * Convert a point to shape coordinates (relative
-		 * to the bounds of the GraphIdContainer)
+		 * Convert a point to shape coordinates (relative to the bounds of the
+		 * GraphIdContainer)
 		 */
 		Point2D toRelativeCoordinate(Point2D p);
 
 		/**
-		 * Convert a point to pathway coordinates (relative
-		 * to the pathway)
+		 * Convert a point to pathway coordinates (relative to the pathway)
 		 */
 		Point2D toAbsoluteCoordinate(Point2D p);
 	}
 
 	/**
-	 * All classes that want to refer *to* a GraphIdContainer must
-	 * implement this interface. At this time that only goes for
-	 * PathwayElement.MPoint.
+	 * All classes that want to refer *to* a GraphIdContainer must implement this
+	 * interface. At this time that only goes for PathwayElement.MPoint.
 	 */
-	public interface GraphRefContainer
-	{
+	public interface LinkableFrom {
 		String getGraphRef();
-		void linkTo(GraphIdContainer idc, double relX, double relY);
+
+		void linkTo(LinkableTo idc, double relX, double relY);
+
 		void unlink();
-		
+
 		double getRelX();
+
 		double getRelY();
 
 		/**
-		 * return the parent Pathway object,
-		 * needed for maintaining a consistent list of graphId's
+		 * return the parent Pathway object, needed for maintaining a consistent list of
+		 * graphId's
 		 */
 		Pathway getPathway();
-		
+
 		/**
 		 * Called whenever the object being referred to changes coordinates.
 		 */
@@ -90,29 +91,25 @@ public abstract class GraphLink
 	}
 
 	/**
-	 * Give an object that implements the graphId interface
-	 * a graphId, thereby possibly linking it to new objects.
+	 * Give an object that implements the graphId interface a graphId, thereby
+	 * possibly linking it to new objects.
 	 *
-	 * This is a helper for classes that need to implement the GraphIdContainer interface,
-	 * to avoid duplication.
+	 * This is a helper for classes that need to implement the GraphIdContainer
+	 * interface, to avoid duplication.
 	 *
-	 * @param v the graphId
-	 * @param c the object to is going to get the new graphId
-	 * @param gd the pathway model, which is maintaining a complete list of all graphId's in this pathway
+	 * @param v  the graphId
+	 * @param c  the object to is going to get the new graphId
+	 * @param gd the pathway model, which is maintaining a complete list of all
+	 *           graphId's in this pathway
 	 */
-	protected static void setGraphId(String v, GraphIdContainer c, Pathway data)
-	{
+	protected static void setGraphId(String v, LinkableTo c, Pathway data) {
 		String graphId = c.getGraphId();
-		if (graphId == null || !graphId.equals(v))
-		{
-			if (data != null)
-			{
-				if (graphId != null)
-				{
+		if (graphId == null || !graphId.equals(v)) {
+			if (data != null) {
+				if (graphId != null) {
 					data.removeGraphId(graphId);
 				}
-				if (v != null)
-				{
+				if (v != null) {
 					data.addGraphId(v, c);
 				}
 			}
@@ -120,19 +117,17 @@ public abstract class GraphLink
 	}
 
 	/**
-	 * Return a list of GraphRefContainers (i.e. points)
-	 * referring to a certain GraphId.
+	 * Return a list of GraphRefContainers (i.e. points) referring to a certain
+	 * GraphId.
 	 *
 	 * @param gid
 	 * @param gd
 	 * @return
 	 */
-	public static Set<GraphRefContainer> getReferences(GraphIdContainer gid, Pathway gd)
-	{
-		if (gd == null || Utils.isEmpty(gid.getGraphId())) 
+	public static Set<LinkableFrom> getReferences(LinkableTo gid, Pathway gd) {
+		if (gd == null || Utils.isEmpty(gid.getGraphId()))
 			return Collections.emptySet();
 		else
 			return gd.getReferringObjects(gid.getGraphId());
 	}
 }
-
