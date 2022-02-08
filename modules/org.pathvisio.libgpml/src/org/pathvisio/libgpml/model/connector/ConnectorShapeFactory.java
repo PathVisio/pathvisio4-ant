@@ -24,13 +24,14 @@ import org.pathvisio.libgpml.model.type.ConnectorType;
 
 
 /**
- * Constructs connector shapes. This class allows you to register
- * a custom connector shape class. The class to register must have
- * a public constructor without arguments!
+ * Constructs connector shapes. This class allows you to register a custom
+ * connector shape class. The class to register must have a public constructor
+ * without arguments!
+ * 
  * @author thomas
- *
  */
 public abstract class ConnectorShapeFactory {
+
 	private static Map<String, Class<? extends ConnectorShape>> shapes = new HashMap<String, Class<? extends ConnectorShape>>();
 
 	static {
@@ -41,25 +42,27 @@ public abstract class ConnectorShapeFactory {
 	}
 
 	public static void registerShape(String name, Class<? extends ConnectorShape> shapeClass) {
-		if(name == null || shapeClass == null) {
+		if (name == null || shapeClass == null) {
 			throw new IllegalArgumentException("null argument provided");
 		}
 		shapes.put(name, shapeClass);
 	}
 
 	/**
-	 * Create an instance of a the implementor of ConnectorShape identified by the
+	 * Creates an instance of a the implementor of ConnectorShape identified by the
 	 * given name.
-	 * @param name The name of the connector shape
-	 * @return The connector shape, or the shape for {@link ConnectorType#STRAIGHT} when
-	 * a shape by the given name could not be found.
+	 * 
+	 * @param name the name of the connector shape
+	 * @return shape the connector shape, or the shape for
+	 *         {@link ConnectorType#STRAIGHT} when a shape by the given name could
+	 *         not be found.
 	 */
 	public static ConnectorShape createConnectorShape(String name) {
 		Class<? extends ConnectorShape> shapeClass = shapes.get(name);
 		ConnectorShape shape = null;
 		try {
 			shape = shapeClass.getConstructor().newInstance();
-		} catch(Exception e) {
+		} catch (Exception e) {
 			Logger.log.error("Unable to create instance of connectorshape " + shapeClass, e);
 			shape = new StraightConnectorShape();
 		}
@@ -68,7 +71,9 @@ public abstract class ConnectorShapeFactory {
 
 	/**
 	 * Get the class that implements ConnectorShape identified by the given name
-	 * @return The class, or null if no class is registered by the given name
+	 * 
+	 * @param name the string.
+	 * @return the class, or null if no class is registered by the given name
 	 */
 	public static Class<? extends ConnectorShape> getImplementingClass(String name) {
 		return shapes.get(name);

@@ -177,12 +177,12 @@ public class MLine extends PathwayElement implements ConnectorRestrictions {
 	}
 
 	/** converts end point from MPoint to Point2D */
-	public Point2D getEndPoint() {
+	public Point2D getEndPoint2D() {
 		return getMEnd().toPoint2D();
 	}
 
 	/** converts start point from MPoint to Point2D */
-	public Point2D getStartPoint() {
+	public Point2D getStartPoint2D() {
 		return getMStart().toPoint2D();
 	}
 
@@ -308,11 +308,11 @@ public class MLine extends PathwayElement implements ConnectorRestrictions {
         	angle still as either horizontal or vertical */
                 // X axis
         if ((side == SIDE_EAST) || (side == SIDE_WEST)) {
-            double angleDegree = (180/Math.PI)*Math.atan2(Math.abs(getStartPoint().getY() - getEndPoint().getY()), Math.abs(getStartPoint().getX() - getEndPoint().getX()));
+            double angleDegree = (180/Math.PI)*Math.atan2(Math.abs(getStartPoint2D().getY() - getEndPoint2D().getY()), Math.abs(getStartPoint2D().getX() - getEndPoint2D().getX()));
             if (angleDegree <= MAXOFFSET)
                 return true;
         } else {//north south or Y axis
-            double angleDegree = (180/Math.PI)*Math.atan2(Math.abs(getStartPoint().getX() - getEndPoint().getX()), Math.abs(getStartPoint().getY() - getEndPoint().getY()));
+            double angleDegree = (180/Math.PI)*Math.atan2(Math.abs(getStartPoint2D().getX() - getEndPoint2D().getX()), Math.abs(getStartPoint2D().getY() - getEndPoint2D().getY()));
             if (angleDegree <= MAXOFFSET)
                 return true;
         }
