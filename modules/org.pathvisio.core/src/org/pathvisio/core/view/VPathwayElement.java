@@ -38,9 +38,9 @@ public abstract class VPathwayElement implements Comparable<VPathwayElement>
 {
 	protected static final BasicStroke DEFAULT_STROKE = new BasicStroke();
 
-	protected VPathway canvas;
+	protected VPathwayModel canvas;
 
-	protected VPathwayElement(VPathway canvas)
+	protected VPathwayElement(VPathwayModel canvas)
 	{
 		this.canvas = canvas;
 		canvas.addObject(this);
@@ -115,7 +115,7 @@ public abstract class VPathwayElement implements Comparable<VPathwayElement>
 	/**
 	 * Get the drawing this object belongs to
 	 */
-	public VPathway getDrawing()
+	public VPathwayModel getDrawing()
 	{
 		return canvas;
 	}

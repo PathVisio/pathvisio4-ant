@@ -36,6 +36,7 @@ import org.jdom2.Namespace;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 import org.pathvisio.libgpml.biopax.BiopaxElement;
+import org.pathvisio.libgpml.io.ConverterException;
 import org.pathvisio.libgpml.model.PathwayElement.MAnchor;
 import org.pathvisio.libgpml.model.PathwayElement.MPoint;
 import org.pathvisio.libgpml.model.shape.IShape;
@@ -44,6 +45,7 @@ import org.pathvisio.libgpml.model.type.HAlignType;
 import org.pathvisio.libgpml.model.type.AnchorShapeType;
 import org.pathvisio.libgpml.model.type.ConnectorType;
 import org.pathvisio.libgpml.model.type.LineStyleType;
+import org.pathvisio.libgpml.model.type.ObjectType;
 import org.pathvisio.libgpml.model.type.ArrowHeadType;
 import org.pathvisio.libgpml.model.type.ShapeType;
 import org.pathvisio.libgpml.model.type.VAlignType;
@@ -368,7 +370,7 @@ class GpmlFormat2013a extends GpmlFormatAbstract implements GpmlFormatReader, Gp
 	   Create a single PathwayElement based on a piece of Jdom tree. Used also by Patch utility
 	   Pathway p may be null
 	 */
-	public PathwayElement mapElement(Element e, Pathway p) throws ConverterException
+	public PathwayElement mapElement(Element e, PathwayModel p) throws ConverterException
 	{
 		String tag = e.getName();
 		if(tag.equalsIgnoreCase("Interaction")){
@@ -807,7 +809,7 @@ class GpmlFormat2013a extends GpmlFormatAbstract implements GpmlFormatReader, Gp
 		setAttribute("Interaction.Graphics", "ZOrder", jdomGraphics, "" + o.getZOrder());
 	}
 
-	public Document createJdom(Pathway data) throws ConverterException
+	public Document createJdom(PathwayModel data) throws ConverterException
 	{
 		Document doc = new Document();
 
@@ -869,7 +871,7 @@ class GpmlFormat2013a extends GpmlFormatAbstract implements GpmlFormatReader, Gp
 	 * 		or the xsd is not in the classpath, an exception will be thrown.
 	 * @throws ConverterException
 	 */
-	public void writeToXml(Pathway pwy, OutputStream out, boolean validate) throws ConverterException {
+	public void writeToXml(PathwayModel pwy, OutputStream out, boolean validate) throws ConverterException {
 		Document doc = createJdom(pwy);
 		
 		//Validate the JDOM document
@@ -898,7 +900,7 @@ class GpmlFormat2013a extends GpmlFormatAbstract implements GpmlFormatReader, Gp
 	 * @param validate if true, validate the dom structure before writing to file. If there is a validation error,
 	 * 		or the xsd is not in the classpath, an exception will be thrown.
 	 */
-	public void writeToXml(Pathway pwy, File file, boolean validate) throws ConverterException
+	public void writeToXml(PathwayModel pwy, File file, boolean validate) throws ConverterException
 	{
 		OutputStream out;
 		try
@@ -927,7 +929,7 @@ class GpmlFormat2013a extends GpmlFormatAbstract implements GpmlFormatReader, Gp
 		}
 	}
 
-	protected void mapBiopax(PathwayElement o, Element e, Pathway p) throws ConverterException
+	protected void mapBiopax(PathwayElement o, Element e, PathwayModel p) throws ConverterException
 	{
 		//this method clones all content,
 		//getContent will leave them attached to the parent, which we don't want

@@ -28,8 +28,8 @@ import org.pathvisio.core.preferences.GlobalPreference;
 import org.pathvisio.core.preferences.PreferenceManager;
 import org.pathvisio.libgpml.biopax.BiopaxReferenceManager;
 import org.pathvisio.libgpml.biopax.PublicationXref;
-import org.pathvisio.libgpml.model.ObjectType;
 import org.pathvisio.libgpml.model.PathwayElement;
+import org.pathvisio.libgpml.model.type.ObjectType;
 
 /**
  * Draws a citation number on top of a pathway object.
@@ -50,7 +50,7 @@ public class VCitation extends VPathwayElement implements VElementMouseListener 
 	 * @param rPosition The position to place the references, relative to the parent
 	 *                  Graphics
 	 */
-	public VCitation(VPathway canvas, Graphics parent, Point2D rPosition) {
+	public VCitation(VPathwayModel canvas, Graphics parent, Point2D rPosition) {
 		super(canvas);
 		this.parent = parent;
 		this.rPosition = rPosition;

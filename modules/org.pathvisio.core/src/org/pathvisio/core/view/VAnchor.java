@@ -40,13 +40,13 @@ import org.pathvisio.libgpml.model.type.AnchorShapeType;
  */
 public class VAnchor extends VPathwayElement implements LinkProvider, Adjustable {
 	private MAnchor mAnchor;
-	private Line line;
+	private VLineElement line;
 	private Handle handle;
 
 	private double mx = Double.NaN;
 	private double my = Double.NaN;
 
-	public VAnchor(MAnchor mAnchor, Line parent) {
+	public VAnchor(MAnchor mAnchor, VLineElement parent) {
 		super(parent.getDrawing());
 		this.mAnchor = mAnchor;
 		this.line = parent;

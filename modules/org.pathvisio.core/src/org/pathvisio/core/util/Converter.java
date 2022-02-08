@@ -33,11 +33,11 @@ import org.pathvisio.core.model.RasterImageExporter;
 import org.pathvisio.core.preferences.GlobalPreference;
 import org.pathvisio.core.preferences.PreferenceManager;
 import org.pathvisio.libgpml.debug.Logger;
-import org.pathvisio.libgpml.model.ConverterException;
+import org.pathvisio.libgpml.io.ConverterException;
+import org.pathvisio.libgpml.io.PathwayModelExporter;
+import org.pathvisio.libgpml.io.PathwayModelImporter;
 import org.pathvisio.libgpml.model.GpmlFormat;
-import org.pathvisio.libgpml.model.Pathway;
-import org.pathvisio.libgpml.model.PathwayExporter;
-import org.pathvisio.libgpml.model.PathwayImporter;
+import org.pathvisio.libgpml.model.PathwayModel;
 import org.pathvisio.libgpml.model.shape.MIMShapes;
 
 /**
@@ -69,21 +69,21 @@ public class Converter {
 
 		PreferenceManager.init();
 		Engine engine = new Engine();
-		engine.addPathwayImporter(new GpmlFormat());
-		engine.addPathwayExporter(new GpmlFormat());
-		engine.addPathwayExporter(new BatikImageExporter(ImageExporter.TYPE_SVG));
-		engine.addPathwayExporter(new RasterImageExporter(ImageExporter.TYPE_PNG));
-		engine.addPathwayExporter(new BatikImageExporter(ImageExporter.TYPE_TIFF));
-		engine.addPathwayExporter(new BatikImageExporter(ImageExporter.TYPE_PDF));
-		engine.addPathwayExporter(new EUGeneExporter());
-		engine.addPathwayExporter(new DataNodeListExporter());
+		engine.addPathwayModelImporter(new GpmlFormat());
+		engine.addPathwayModelExporter(new GpmlFormat());
+		engine.addPathwayModelExporter(new BatikImageExporter(ImageExporter.TYPE_SVG));
+		engine.addPathwayModelExporter(new RasterImageExporter(ImageExporter.TYPE_PNG));
+		engine.addPathwayModelExporter(new BatikImageExporter(ImageExporter.TYPE_TIFF));
+		engine.addPathwayModelExporter(new BatikImageExporter(ImageExporter.TYPE_PDF));
+		engine.addPathwayModelExporter(new EUGeneExporter());
+		engine.addPathwayModelExporter(new DataNodeListExporter());
 
 		// Transient dependency on Biopax converter
 		try {
 			Class<?> c = Class.forName("org.pathvisio.biopax3.BiopaxFormat");
 			Object o = c.newInstance();
-			engine.addPathwayExporter((PathwayExporter) o);
-			engine.addPathwayImporter((PathwayImporter) o);
+			engine.addPathwayModelExporter((PathwayModelExporter) o);
+			engine.addPathwayModelImporter((PathwayModelImporter) o);
 		} catch (ClassNotFoundException ex) {
 			Logger.log.warn("BioPAX converter not in classpath, BioPAX conversion not available today.");
 		} catch (InstantiationException e) {
@@ -120,13 +120,13 @@ public class Converter {
 
 		if (!error) {
 			try {
-				engine.importPathway(inputFile);
-				Pathway pathway = engine.getActivePathway();
+				engine.importPathwayModel(inputFile);
+				PathwayModel pathway = engine.getActivePathwayModel();
 				if (args.length == 2)
-					engine.exportPathway(outputFile, pathway);
+					engine.exportPathwayModel(outputFile, pathway);
 				if (args.length == 3) {
 					zoom = Integer.parseInt(args[2]);
-					engine.exportPathway(outputFile, pathway, zoom);
+					engine.exportPathwayModel(outputFile, pathway, zoom);
 				}
 			} catch (ConverterException e) {
 				e.printStackTrace();

@@ -28,6 +28,7 @@ import org.pathvisio.libgpml.model.connector.ConnectorShape;
 import org.pathvisio.libgpml.model.connector.ConnectorShapeFactory;
 import org.pathvisio.libgpml.model.connector.ElbowConnectorShape;
 import org.pathvisio.libgpml.model.connector.ConnectorShape.WayPoint;
+import org.pathvisio.libgpml.model.type.ObjectType;
 import org.pathvisio.libgpml.util.Utils;
 
 /**
@@ -37,10 +38,10 @@ import org.pathvisio.libgpml.util.Utils;
  * For other shapes, the centerX coordinate is stored in GPML. Lines however
  * store the end-points, the center can be calculated based on that.
  */
-public class MLine extends PathwayElement implements ConnectorRestrictions {
+public class LineElement extends PathwayElement implements ConnectorRestrictions {
 	ConnectorShape shape;
 
-	public MLine(ObjectType ot) {
+	public LineElement(ObjectType ot) {
 		super(ot);
 	}
 
@@ -199,7 +200,7 @@ public class MLine extends PathwayElement implements ConnectorRestrictions {
 	 * Returns the element that the start of this line is connected to. Returns null if there isn't any.
 	 */
 	private LinkableTo getStartElement() {
-		Pathway parent = getParent();
+		PathwayModel parent = getParent();
 		if(parent != null) {
 			return parent.getGraphIdContainer(getStartGraphRef());
 		}
@@ -210,7 +211,7 @@ public class MLine extends PathwayElement implements ConnectorRestrictions {
 	 * Returns the element that the end of this line is connected to. Returns null if there isn't any.
 	 */
 	private LinkableTo getEndElement() {
-		Pathway parent = getParent();
+		PathwayModel parent = getParent();
 		if(parent != null) {
 			return parent.getGraphIdContainer(getEndGraphRef());
 		}
@@ -260,7 +261,7 @@ public class MLine extends PathwayElement implements ConnectorRestrictions {
     private int getAttachedLineDirection(MAnchor anchor) {
         int side;
         double pos = anchor.getPosition();
-        MLine attLine = ((MLine)anchor.getParent());
+        LineElement attLine = ((LineElement)anchor.getParent());
         if (attLine.getConnectorShape() instanceof ElbowConnectorShape) {
             ConnectorShape.Segment attSeg = findAnchorSegment(attLine, pos);
             int orientationX = Utils.getDirectionX(attSeg.getMStart(), attSeg.getMEnd());
@@ -275,7 +276,7 @@ public class MLine extends PathwayElement implements ConnectorRestrictions {
         return side;
     }
 
-    private ConnectorShape.Segment findAnchorSegment(MLine attLine, double pos) {
+    private ConnectorShape.Segment findAnchorSegment(LineElement attLine, double pos) {
         ConnectorShape.Segment[] segments = attLine.getConnectorShape().getSegments();
         Double totLength = 0.0;
         ConnectorShape.Segment attSeg = null;
@@ -427,7 +428,7 @@ public class MLine extends PathwayElement implements ConnectorRestrictions {
 	 * the connector may not cross. Returning null is allowed for implementing classes.
 	 */
 	public Shape mayCross(Point2D point) {
-		Pathway parent = getParent();
+		PathwayModel parent = getParent();
 		Rectangle2D rect = null;
 		if(parent != null) {
 			for(PathwayElement e : parent.getDataObjects()) {

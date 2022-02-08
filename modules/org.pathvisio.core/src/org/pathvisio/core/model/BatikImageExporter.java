@@ -37,9 +37,9 @@ import org.apache.batik.transcoder.image.PNGTranscoder;
 import org.apache.batik.transcoder.image.TIFFTranscoder;
 import org.pathvisio.core.preferences.GlobalPreference;
 import org.pathvisio.core.preferences.PreferenceManager;
-import org.pathvisio.core.view.VPathway;
-import org.pathvisio.libgpml.model.ConverterException;
-import org.pathvisio.libgpml.model.Pathway;
+import org.pathvisio.core.view.VPathwayModel;
+import org.pathvisio.libgpml.io.ConverterException;
+import org.pathvisio.libgpml.model.PathwayModel;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 
@@ -53,11 +53,11 @@ public class BatikImageExporter extends ImageExporter {
 		super(type);
 	}
 
-	public void doExport(File file, VPathway vPathway) throws ConverterException {
-		doExport(file, vPathway, null);
+	public void doExport(File file, VPathwayModel vPathwayModel) throws ConverterException {
+		doExport(file, vPathwayModel, null);
 	}
 
-	public void doExport(File file, VPathway vPathway, TranscodingHints hints) throws ConverterException {
+	public void doExport(File file, VPathwayModel vPathwayModel, TranscodingHints hints) throws ConverterException {
 		DOMImplementation domImpl = GenericDOMImplementation.getDOMImplementation();
 		Document svg = domImpl.createDocument ("http://www.w3.org/2000/svg", "svg", null);
 
@@ -66,11 +66,11 @@ public class BatikImageExporter extends ImageExporter {
 		boolean textAsPath = PreferenceManager.getCurrent().getBoolean(GlobalPreference.SVG_TEXT_AS_PATH);
 		SVGGraphics2D svgG2d = new SVGGraphics2D(ctx, textAsPath);
 		
-		vPathway.draw(svgG2d);
+		vPathwayModel.draw(svgG2d);
 
 		//Force recalculation of size after drawing once, this allows size of text
 		//to be calculated correctly
-		Dimension size = vPathway.calculateVSize();
+		Dimension size = vPathwayModel.calculateVSize();
 		svgG2d.setSVGCanvasSize(size);
 
 		Transcoder t = null;
@@ -124,12 +124,12 @@ public class BatikImageExporter extends ImageExporter {
 		}
 	}
 
-	public void doExport(File file, Pathway pathway) throws ConverterException
+	public void doExport(File file, PathwayModel pathwayModel) throws ConverterException
 	{
-		VPathway vPathway = new VPathway(null);
-		vPathway.fromModel(pathway);
+		VPathwayModel vPathwayModel = new VPathwayModel(null);
+		vPathwayModel.fromModel(pathwayModel);
 
-		doExport(file, vPathway);
-		vPathway.dispose();
+		doExport(file, vPathwayModel);
+		vPathwayModel.dispose();
 	}
 }

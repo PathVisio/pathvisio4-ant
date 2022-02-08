@@ -35,14 +35,14 @@ public class VElementMouseEvent extends EventObject {
 	public VPathwayElement element;
 	public MouseEvent mouseEvent;
 
-	public VElementMouseEvent(VPathway source, int type, VPathwayElement element, MouseEvent mouseEvent) {
+	public VElementMouseEvent(VPathwayModel source, int type, VPathwayElement element, MouseEvent mouseEvent) {
 		super(source);
 		this.type = type;
 		this.element = element;
 		this.mouseEvent = mouseEvent;
 	}
 	
-	public VElementMouseEvent(VPathway source, int type, VPathwayElement element) {
+	public VElementMouseEvent(VPathwayModel source, int type, VPathwayElement element) {
 		super(source);
 		this.type = type;
 		this.element = element;

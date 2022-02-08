@@ -22,9 +22,8 @@ import java.net.URL;
 import org.pathvisio.core.preferences.GlobalPreference;
 import org.pathvisio.core.preferences.PreferenceManager;
 import org.pathvisio.core.util.Resources;
-import org.pathvisio.libgpml.model.MState;
-import org.pathvisio.libgpml.model.ObjectType;
-import org.pathvisio.libgpml.model.Pathway;
+import org.pathvisio.libgpml.model.State;
+import org.pathvisio.libgpml.model.PathwayModel;
 import org.pathvisio.libgpml.model.PathwayElement;
 import org.pathvisio.libgpml.model.PathwayElement.MAnchor;
 import org.pathvisio.libgpml.model.shape.IShape;
@@ -33,6 +32,7 @@ import org.pathvisio.libgpml.model.type.CellularComponentType;
 import org.pathvisio.libgpml.model.type.ConnectorType;
 import org.pathvisio.libgpml.model.type.DataNodeType;
 import org.pathvisio.libgpml.model.type.LineStyleType;
+import org.pathvisio.libgpml.model.type.ObjectType;
 import org.pathvisio.libgpml.model.type.ArrowHeadType;
 import org.pathvisio.libgpml.model.type.ShapeType;
 
@@ -52,7 +52,7 @@ public abstract class DefaultTemplates {
 	static abstract class SingleElementTemplate implements Template {
 		PathwayElement lastAdded;
 
-		protected void addElement(PathwayElement e, Pathway p) {
+		protected void addElement(PathwayElement e, PathwayModel p) {
 			p.add(e);
 			lastAdded = e;
 		}
@@ -60,7 +60,7 @@ public abstract class DefaultTemplates {
 		/**
 		 * Default implementation returns the view of the last added object
 		 */
-		public VPathwayElement getDragElement(VPathway vp) {
+		public VPathwayElement getDragElement(VPathwayModel vp) {
 			if (lastAdded != null) {
 				Graphics g = vp.getPathwayElementView(lastAdded);
 				if (g == null) {
@@ -101,7 +101,7 @@ public abstract class DefaultTemplates {
 			this.name = name;
 		}
 
-		public PathwayElement[] addElements(Pathway p, double mx, double my) {
+		public PathwayElement[] addElements(PathwayModel p, double mx, double my) {
 			PathwayElement e = PathwayElement.createPathwayElement(ObjectType.LINE);
 			e.setMStartX(mx);
 			e.setMStartY(my);
@@ -116,8 +116,8 @@ public abstract class DefaultTemplates {
 			return new PathwayElement[] { e };
 		}
 
-		public VPathwayElement getDragElement(VPathway vp) {
-			Line l = (Line) super.getDragElement(vp);
+		public VPathwayElement getDragElement(VPathwayModel vp) {
+			VLineElement l = (VLineElement) super.getDragElement(vp);
 			return l.getEnd().getHandle();
 		}
 
@@ -130,7 +130,7 @@ public abstract class DefaultTemplates {
 	 * Template for adding a Label to a Pathway
 	 */
 	public static class LabelTemplate extends SingleElementTemplate {
-		public PathwayElement[] addElements(Pathway p, double mx, double my) {
+		public PathwayElement[] addElements(PathwayModel p, double mx, double my) {
 			PathwayElement e = PathwayElement.createPathwayElement(ObjectType.LABEL);
 			e.setMCenterX(mx);
 			e.setMCenterY(my);
@@ -143,7 +143,7 @@ public abstract class DefaultTemplates {
 			return new PathwayElement[] { e };
 		}
 
-		public VPathwayElement getDragElement(VPathway vp) {
+		public VPathwayElement getDragElement(VPathwayModel vp) {
 			return null; // Don't drag label on insert
 		}
 
@@ -163,7 +163,7 @@ public abstract class DefaultTemplates {
 			this.type = type;
 		}
 
-		public PathwayElement[] addElements(Pathway p, double mx, double my) {
+		public PathwayElement[] addElements(PathwayModel p, double mx, double my) {
 			PathwayElement e = PathwayElement.createPathwayElement(ObjectType.DATANODE);
 			e.setMCenterX(mx);
 			e.setMCenterY(my);
@@ -191,7 +191,7 @@ public abstract class DefaultTemplates {
 			return new PathwayElement[] { e };
 		}
 
-		public VPathwayElement getDragElement(VPathway vp) {
+		public VPathwayElement getDragElement(VPathwayModel vp) {
 			VDataNode g = (VDataNode) super.getDragElement(vp);
 			return g.handleSE;
 		}
@@ -211,7 +211,7 @@ public abstract class DefaultTemplates {
 			this.type = type;
 		}
 
-		public PathwayElement[] addElements(Pathway p, double mx, double my) {
+		public PathwayElement[] addElements(PathwayModel p, double mx, double my) {
 			PathwayElement e = PathwayElement.createPathwayElement(ObjectType.SHAPE);
 			e.setShapeType(type);
 			e.setMCenterX(mx);
@@ -228,7 +228,7 @@ public abstract class DefaultTemplates {
 			return new PathwayElement[] { e };
 		}
 
-		public VPathwayElement getDragElement(VPathway vp) {
+		public VPathwayElement getDragElement(VPathwayModel vp) {
 			GraphicsShape s = (GraphicsShape) super.getDragElement(vp);
 			return s.handleSE;
 		}
@@ -257,7 +257,7 @@ public abstract class DefaultTemplates {
 			this.name = name;
 		}
 
-		public PathwayElement[] addElements(Pathway p, double mx, double my) {
+		public PathwayElement[] addElements(PathwayModel p, double mx, double my) {
 			PathwayElement e = PathwayElement.createPathwayElement(ObjectType.GRAPHLINE);
 			e.setMStartX(mx);
 			e.setMStartY(my);
@@ -272,8 +272,8 @@ public abstract class DefaultTemplates {
 			return new PathwayElement[] { e };
 		}
 
-		public VPathwayElement getDragElement(VPathway vp) {
-			Line l = (Line) super.getDragElement(vp);
+		public VPathwayElement getDragElement(VPathwayModel vp) {
+			VLineElement l = (VLineElement) super.getDragElement(vp);
 			return l.getEnd().getHandle();
 		}
 
@@ -295,7 +295,7 @@ public abstract class DefaultTemplates {
 			this.ccType = ccType;
 		}
 
-		public PathwayElement[] addElements(Pathway p, double mx, double my) {
+		public PathwayElement[] addElements(PathwayModel p, double mx, double my) {
 			PathwayElement e = PathwayElement.createPathwayElement(ObjectType.SHAPE);
 			e.setShapeType(type);
 			e.setMCenterX(mx);
@@ -320,7 +320,7 @@ public abstract class DefaultTemplates {
 			return new PathwayElement[] { e };
 		}
 
-		public VPathwayElement getDragElement(VPathway vp) {
+		public VPathwayElement getDragElement(VPathwayModel vp) {
 			GraphicsShape s = (GraphicsShape) super.getDragElement(vp);
 			return s.handleSE;
 		}
@@ -350,7 +350,7 @@ public abstract class DefaultTemplates {
 			lineStyle = LineStyleType.SOLID;
 		}
 
-		public PathwayElement[] addElements(Pathway p, double mx, double my) {
+		public PathwayElement[] addElements(PathwayModel p, double mx, double my) {
 			// Add two GeneProduct DataNodes, connected by a line
 			Template dnt = new DataNodeTemplate(DataNodeType.GENEPRODUCT);
 			lastStartNode = dnt.addElements(p, mx, my)[0];
@@ -366,7 +366,7 @@ public abstract class DefaultTemplates {
 			return new PathwayElement[] { lastLine, lastStartNode, lastEndNode };
 		}
 
-		public VPathwayElement getDragElement(VPathway vp) {
+		public VPathwayElement getDragElement(VPathwayModel vp) {
 			return null;
 		}
 
@@ -392,7 +392,7 @@ public abstract class DefaultTemplates {
 	 */
 	public static class InhibitionInteractionTemplate extends InteractionTemplate {
 		@Override
-		public PathwayElement[] addElements(Pathway p, double mx, double my) {
+		public PathwayElement[] addElements(PathwayModel p, double mx, double my) {
 			super.addElements(p, mx, my);
 			lastLine.setEndLineType(MIMShapes.MIM_INHIBITION);
 			return new PathwayElement[] { lastLine, lastStartNode, lastEndNode };
@@ -410,7 +410,7 @@ public abstract class DefaultTemplates {
 	 */
 	public static class StimulationInteractionTemplate extends InteractionTemplate {
 		@Override
-		public PathwayElement[] addElements(Pathway p, double mx, double my) {
+		public PathwayElement[] addElements(PathwayModel p, double mx, double my) {
 			super.addElements(p, mx, my);
 			lastLine.setEndLineType(MIMShapes.MIM_STIMULATION);
 			return new PathwayElement[] { lastLine, lastStartNode, lastEndNode };
@@ -432,7 +432,7 @@ public abstract class DefaultTemplates {
 		PathwayElement lastPhosphorylation;
 		// PathwayElement lastPhosLine;
 
-		public PathwayElement[] addElements(Pathway p, double mx, double my) {
+		public PathwayElement[] addElements(PathwayModel p, double mx, double my) {
 			super.addElements(p, mx, my);
 			lastStartNode.setDataNodeType(DataNodeType.PROTEIN);
 			lastEndNode.setDataNodeType(DataNodeType.PROTEIN);
@@ -443,7 +443,7 @@ public abstract class DefaultTemplates {
 			PathwayElement elt = PathwayElement.createPathwayElement(ObjectType.STATE);
 			elt.setInitialSize();
 			elt.setTextLabel("P");
-			((MState) elt).linkTo(lastEndNode, 1.0, 1.0);
+			((State) elt).linkTo(lastEndNode, 1.0, 1.0);
 			elt.setShapeType(ShapeType.OVAL);
 			p.add(elt);
 			elt.setGeneratedGraphId();
@@ -465,7 +465,7 @@ public abstract class DefaultTemplates {
 		PathwayElement lastCatalyst;
 		PathwayElement lastCatLine;
 
-		public PathwayElement[] addElements(Pathway p, double mx, double my) {
+		public PathwayElement[] addElements(PathwayModel p, double mx, double my) {
 			super.addElements(p, mx, my);
 			Template dnt = new DataNodeTemplate(DataNodeType.GENEPRODUCT);
 			lastCatalyst = dnt.addElements(p, mx + lastStartNode.getMWidth(), my - OFFSET_CATALYST)[0];
@@ -513,7 +513,7 @@ public abstract class DefaultTemplates {
 		PathwayElement lastCatLine2;
 		PathwayElement lastReverseLine;
 
-		public PathwayElement[] addElements(Pathway p, double mx, double my) {
+		public PathwayElement[] addElements(PathwayModel p, double mx, double my) {
 			super.addElements(p, mx, my);
 			Template dnt = new DataNodeTemplate(DataNodeType.PROTEIN);
 			lastCatalyst = dnt.addElements(p, mx + lastStartNode.getMWidth(), my - OFFSET_CATALYST)[0];

@@ -56,10 +56,10 @@ import org.pathvisio.core.view.Graphics;
 import org.pathvisio.core.view.Handle;
 import org.pathvisio.core.view.VLabel;
 import org.pathvisio.core.view.SelectionBox;
-import org.pathvisio.core.view.VPathway;
+import org.pathvisio.core.view.VPathwayModel;
 import org.pathvisio.core.view.VPathwayElement;
-import org.pathvisio.core.view.VPathwayEvent;
-import org.pathvisio.core.view.VPathwayListener;
+import org.pathvisio.core.view.VPathwayModelEvent;
+import org.pathvisio.core.view.VPathwayModelListener;
 import org.pathvisio.gui.BackpageTextProvider.BackpageAttributes;
 import org.pathvisio.gui.BackpageTextProvider.BackpageXrefs;
 import org.pathvisio.gui.CommonActions.ZoomAction;
@@ -78,7 +78,7 @@ import com.mammothsoftware.frwk.ddb.DropDownButton;
  * For the standalone application, the derived class MainPanelStandalone is
  * used.
  */
-public class MainPanel extends JPanel implements VPathwayListener, ApplicationEventListener {
+public class MainPanel extends JPanel implements VPathwayModelListener, ApplicationEventListener {
 
 	private JSplitPane splitPane;
 
@@ -277,7 +277,7 @@ public class MainPanel extends JPanel implements VPathwayListener, ApplicationEv
 	 * active pathway
 	 */
 	public void updateZoomCombo() {
-		VPathway vpwy = swingEngine.getEngine().getActiveVPathway();
+		VPathwayModel vpwy = swingEngine.getEngine().getActiveVPathwayModel();
 		if (vpwy != null) {
 			DecimalFormat df = new DecimalFormat("###.#");
 			zoomCombo.setSelectedItem(df.format(vpwy.getPctZoom()) + "%");
@@ -458,8 +458,8 @@ public class MainPanel extends JPanel implements VPathwayListener, ApplicationEv
 		return backpagePane;
 	}
 
-	public void vPathwayEvent(VPathwayEvent e) {
-		VPathway vp = (VPathway) e.getSource();
+	public void vPathwayModelEvent(VPathwayModelEvent e) {
+		VPathwayModel vp = (VPathwayModel) e.getSource();
 		switch (e.getType()) {
 		case ELEMENT_DOUBLE_CLICKED:
 			VPathwayElement pwe = e.getAffectedElement();
@@ -489,7 +489,7 @@ public class MainPanel extends JPanel implements VPathwayListener, ApplicationEv
 					hyperlinkUpdate(new HyperlinkEvent(e.getSource(), HyperlinkEvent.EventType.ACTIVATED,
 							new URL(((VLabel) e.getAffectedElement()).getPathwayElement().getHref())));
 				} catch (MalformedURLException e1) {
-					swingEngine.getEngine().getActiveVPathway().selectObject(e.getAffectedElement());
+					swingEngine.getEngine().getActiveVPathwayModel().selectObject(e.getAffectedElement());
 					swingEngine.handleMalformedURLException("The specified link address is not valid.", this, e1);
 				}
 			}
@@ -503,7 +503,7 @@ public class MainPanel extends JPanel implements VPathwayListener, ApplicationEv
 	public void applicationEvent(ApplicationEvent e) {
 		switch (e.getType()) {
 		case VPATHWAY_CREATED: {
-			VPathway vp = (VPathway) e.getSource();
+			VPathwayModel vp = (VPathwayModel) e.getSource();
 			vp.addVPathwayListener(this);
 			vp.addVPathwayListener(pathwayElementMenuListener);
 			for (Component b : getToolbarGroup(TB_GROUP_SHOW_IF_VPATHWAY)) {
@@ -512,7 +512,7 @@ public class MainPanel extends JPanel implements VPathwayListener, ApplicationEv
 		}
 			break;
 		case VPATHWAY_DISPOSED: {
-			VPathway vp = (VPathway) e.getSource();
+			VPathwayModel vp = (VPathwayModel) e.getSource();
 			vp.removeVPathwayListener(this);
 			vp.removeVPathwayListener(pathwayElementMenuListener);
 		}

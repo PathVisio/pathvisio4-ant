@@ -14,28 +14,16 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  ******************************************************************************/
-package org.pathvisio.libgpml.model;
+package org.pathvisio.core.view;
 
 /**
- * Exception that occurs during import, export, save or load of a Patway.
- * @see PathwayExporter#doExport
- * @see PathwayImporter#doImport
- * @see Pathway#readFromXml
- * @see Pathway#writeToXml
+ * Implement this if you wish to receive events when a VPathwayModel is
+ * modified.
+ * 
+ * @author unknown
  */
-public class ConverterException extends Exception {
-
-
-	public ConverterException(String msg)
-	{
-		super(msg);
-	}
-
-	public ConverterException(Exception e)
-	{
-		super(e.getClass() + ": " + e.getMessage(), e);
-		setStackTrace(e.getStackTrace());
-	}
-
-
+public interface VPathwayModelListener {
+	
+	public void vPathwayModelEvent(VPathwayModelEvent e);
+	
 }

@@ -21,10 +21,10 @@ import java.awt.geom.Point2D;
 import junit.framework.TestCase;
 
 import org.pathvisio.core.preferences.PreferenceManager;
-import org.pathvisio.libgpml.model.ObjectType;
-import org.pathvisio.libgpml.model.Pathway;
+import org.pathvisio.libgpml.model.PathwayModel;
 import org.pathvisio.libgpml.model.PathwayElement;
 import org.pathvisio.libgpml.model.type.ConnectorType;
+import org.pathvisio.libgpml.model.type.ObjectType;
 
 /**
  * Test various operations related to groups, such as 
@@ -37,8 +37,8 @@ public class TestGroups extends TestCase
 	public void setUp()
 	{
 		PreferenceManager.init();
-		vpwy = new VPathway(null);
-		pwy = new Pathway();
+		vpwy = new VPathwayModel(null);
+		pwy = new PathwayModel();
 		vpwy.fromModel(pwy);
 
 		for (int i = 0; i < DATANODE_COUNT; ++i)
@@ -51,8 +51,8 @@ public class TestGroups extends TestCase
 			vDn[i] = (VDataNode)addElement (vpwy, dn[i]);
 			dn[i].setGeneratedGraphId();
 		}
-		vLn[0] = (Line)addConnector (vpwy, dn[0], dn[1]);
-		vLn[1] = (Line)addConnector (vpwy, dn[0], dn[2]);
+		vLn[0] = (VLineElement)addConnector (vpwy, dn[0], dn[1]);
+		vLn[1] = (VLineElement)addConnector (vpwy, dn[0], dn[2]);
 
 		vpwy.clearSelection();
 		assertNull (dn[0].getGroupRef());
@@ -70,17 +70,17 @@ public class TestGroups extends TestCase
 		grp1.setGeneratedGraphId();
 	}
 
-	private VPathway vpwy;
-	private Pathway pwy;
+	private VPathwayModel vpwy;
+	private PathwayModel pwy;
 
 	private VDataNode[] vDn = new VDataNode[DATANODE_COUNT];
-	private Line[] vLn = new Line[2];
+	private VLineElement[] vLn = new VLineElement[2];
 	private PathwayElement[] dn = new PathwayElement[DATANODE_COUNT];
 	private PathwayElement grp1 = null;
 	private VGroup vGrp1 = null;
 
 	/** helper for adding elements to a vpathway */
-	private VPathwayElement addElement(VPathway vpwy, PathwayElement pelt)
+	private VPathwayElement addElement(VPathwayModel vpwy, PathwayElement pelt)
 	{
 		vpwy.getPathwayModel().add(pelt);
 
@@ -90,7 +90,7 @@ public class TestGroups extends TestCase
 	}
 
 	/** helper for adding connectors to a vpathway */
-	private VPathwayElement addConnector (VPathway vpwy, PathwayElement l1, PathwayElement l2)
+	private VPathwayElement addConnector (VPathwayModel vpwy, PathwayElement l1, PathwayElement l2)
 	{
 		PathwayElement elt = PathwayElement.createPathwayElement(ObjectType.LINE);
 		elt.setConnectorType(ConnectorType.ELBOW);
@@ -163,7 +163,7 @@ public class TestGroups extends TestCase
 	 */
 	public void testDelete()
 	{
-		Line vLn3 = (Line)addConnector (vpwy, dn[0], grp1);
+		VLineElement vLn3 = (VLineElement)addConnector (vpwy, dn[0], grp1);
 		
 		double oldEx = vLn3.getVEndX();
 		double oldEy = vLn3.getVEndY();

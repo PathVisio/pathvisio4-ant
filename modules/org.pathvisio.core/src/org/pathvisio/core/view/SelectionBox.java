@@ -64,7 +64,7 @@ public class SelectionBox extends VPathwayElement implements Adjustable
 
 	boolean isVisible;
 
-	public SelectionBox(VPathway canvas)
+	public SelectionBox(VPathwayModel canvas)
 	{
 		super(canvas);
 
@@ -592,7 +592,7 @@ public class SelectionBox extends VPathwayElement implements Adjustable
 	}
 
 	protected int getZOrder() {
-		return VPathway.ZORDER_SELECTIONBOX;
+		return VPathwayModel.ZORDER_SELECTIONBOX;
 	}
 	
 	public double getVWidth() { return vFromM(mWidth);  }

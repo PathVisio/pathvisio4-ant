@@ -33,8 +33,8 @@ import org.pathvisio.core.util.Resources;
 import org.pathvisio.gui.DataPaneTextProvider.DataHook;
 import org.pathvisio.libgpml.debug.Logger;
 import org.pathvisio.libgpml.debug.WorkerThreadOnly;
-import org.pathvisio.libgpml.model.ObjectType;
 import org.pathvisio.libgpml.model.PathwayElement;
+import org.pathvisio.libgpml.model.type.ObjectType;
 import org.pathvisio.libgpml.util.Utils;
 
 /**

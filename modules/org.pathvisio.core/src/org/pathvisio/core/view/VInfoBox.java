@@ -46,7 +46,7 @@ public class VInfoBox extends Graphics {
 	int sizeX = 1;
 	int sizeY = 1; //Real size is calculated on first call to draw()
 
-	public VInfoBox (VPathway canvas, PathwayElement o) {
+	public VInfoBox (VPathwayModel canvas, PathwayElement o) {
 		super(canvas, o);
 		canvas.setMappInfo(this);
 	}

@@ -31,17 +31,17 @@ import org.pathvisio.core.model.BatikImageExporter;
 import org.pathvisio.core.model.ImageExporter;
 import org.pathvisio.core.preferences.PreferenceManager;
 import org.pathvisio.core.view.Graphics;
-import org.pathvisio.core.view.VPathway;
+import org.pathvisio.core.view.VPathwayModel;
 import org.pathvisio.core.view.VPathwayElement;
-import org.pathvisio.core.view.VPathwayEvent;
-import org.pathvisio.core.view.VPathwayEvent.VPathwayEventType;
+import org.pathvisio.core.view.VPathwayModelEvent;
+import org.pathvisio.core.view.VPathwayModelEvent.VPathwayModelEventType;
 import org.pathvisio.libgpml.debug.Logger;
-import org.pathvisio.libgpml.model.ConverterException;
-import org.pathvisio.libgpml.model.ObjectType;
-import org.pathvisio.libgpml.model.Pathway;
+import org.pathvisio.libgpml.io.ConverterException;
+import org.pathvisio.libgpml.model.PathwayModel;
 import org.pathvisio.libgpml.model.PathwayElement;
 import org.pathvisio.libgpml.model.shape.MIMShapes;
-import org.pathvisio.core.view.VPathwayListener;
+import org.pathvisio.libgpml.model.type.ObjectType;
+import org.pathvisio.core.view.VPathwayModelListener;
 
 /**
  * Utility that takes a set of graphId/Color pairs and exports a pathway image
@@ -49,13 +49,13 @@ import org.pathvisio.core.view.VPathwayListener;
  * 
  * @author thomas
  */
-public class ColorExporter implements VPathwayListener {
+public class ColorExporter implements VPathwayModelListener {
 	Map<PathwayElement, List<Color>> colors;
-	VPathway vPathway;
+	VPathwayModel vPathway;
 
-	public ColorExporter(Pathway pathway, Map<PathwayElement, List<Color>> colors) {
+	public ColorExporter(PathwayModel pathway, Map<PathwayElement, List<Color>> colors) {
 		this.colors = colors;
-		vPathway = new VPathway(null);
+		vPathway = new VPathwayModel(null);
 		vPathway.fromModel(pathway);
 	}
 
@@ -69,8 +69,8 @@ public class ColorExporter implements VPathwayListener {
 		exporter.doExport(outputFile, vPathway);
 	}
 
-	public void vPathwayEvent(VPathwayEvent e) {
-		if (e.getType() == VPathwayEventType.ELEMENT_DRAWN) {
+	public void vPathwayModelEvent(VPathwayModelEvent e) {
+		if (e.getType() == VPathwayModelEventType.ELEMENT_DRAWN) {
 			VPathwayElement vpwe = e.getAffectedElement();
 			if (vpwe instanceof Graphics) {
 				PathwayElement pwe = ((Graphics) vpwe).getPathwayElement();
@@ -164,7 +164,7 @@ public class ColorExporter implements VPathwayListener {
 
 			File inputFile = new File(inStr);
 			File outputFile = new File(outStr);
-			Pathway pathway = new Pathway();
+			PathwayModel pathway = new PathwayModel();
 			pathway.readFromXml(inputFile, true);
 
 			// Parse commandline arguments

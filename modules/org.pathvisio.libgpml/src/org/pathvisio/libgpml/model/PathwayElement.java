@@ -46,6 +46,7 @@ import org.pathvisio.libgpml.model.type.ConnectorType;
 import org.pathvisio.libgpml.model.type.DataNodeType;
 import org.pathvisio.libgpml.model.type.GroupType;
 import org.pathvisio.libgpml.model.type.LineStyleType;
+import org.pathvisio.libgpml.model.type.ObjectType;
 import org.pathvisio.libgpml.model.type.ArrowHeadType;
 import org.pathvisio.libgpml.model.type.OrientationType;
 import org.pathvisio.libgpml.model.type.ShapeType;
@@ -254,7 +255,7 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 			return GraphLink.getReferences(this, parent);
 		}
 
-		public Pathway getPathway() {
+		public PathwayModel getPathway() {
 			return parent;
 		}
 
@@ -349,7 +350,7 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 		 * @return true if the coordinates are relative, false if not
 		 */
 		public boolean isRelative() {
-			Pathway p = getPathway();
+			PathwayModel p = getPathway();
 			if (p != null) {
 				LinkableTo gc = getPathway().getGraphIdContainer(graphRef);
 				return gc != null;
@@ -511,12 +512,12 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 		}
 
 		public Point2D toAbsoluteCoordinate(Point2D p) {
-			Point2D l = ((MLine) getParent()).getConnectorShape().fromLineCoordinate(getPosition());
+			Point2D l = ((LineElement) getParent()).getConnectorShape().fromLineCoordinate(getPosition());
 			return new Point2D.Double(p.getX() + l.getX(), p.getY() + l.getY());
 		}
 
 		public Point2D toRelativeCoordinate(Point2D p) {
-			Point2D l = ((MLine) getParent()).getConnectorShape().fromLineCoordinate(getPosition());
+			Point2D l = ((LineElement) getParent()).getConnectorShape().fromLineCoordinate(getPosition());
 			return new Point2D.Double(p.getX() - l.getX(), p.getY() - l.getY());
 		}
 	}
@@ -589,16 +590,16 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 			e = new BiopaxElement();
 			break;
 		case GROUP:
-			e = new MGroup();
+			e = new Group();
 			break;
 		case LINE:
-			e = new MLine(ObjectType.LINE);
+			e = new LineElement(ObjectType.LINE);
 			break;
 		case GRAPHLINE:
-			e = new MLine(ObjectType.GRAPHLINE);
+			e = new LineElement(ObjectType.GRAPHLINE);
 			break;
 		case STATE:
-			e = new MState();
+			e = new State();
 			break;
 		default:
 			e = new PathwayElement(ot);
@@ -642,9 +643,9 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 	/**
 	 * Parent of this object: may be null (for example, when object is in clipboard)
 	 */
-	protected Pathway parent = null;
+	protected PathwayModel parent = null;
 
-	public Pathway getParent() {
+	public PathwayModel getParent() {
 		return parent;
 	}
 
@@ -652,7 +653,7 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 	 * Get the parent pathway. Same as {@link #getParent()}, but necessary to comply
 	 * to the {@link LinkableTo} interface.
 	 */
-	public Pathway getPathway() {
+	public PathwayModel getPathway() {
 		return parent;
 	}
 
@@ -662,7 +663,7 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 	 * 
 	 * @param v the parentGENEID
 	 */
-	void setParent(Pathway v) {
+	void setParent(PathwayModel v) {
 		parent = v;
 	}
 
@@ -2093,7 +2094,7 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 	/**
 	 * Set groupId. This id must be any string unique within the Pathway object
 	 *
-	 * @see Pathway#getUniqueId(java.util.Set)
+	 * @see PathwayModel#getUniqueId(java.util.Set)
 	 */
 	public void setGroupId(String w) {
 		if (groupId == null || !groupId.equals(w)) {
@@ -2178,7 +2179,7 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 	/**
 	 * Set graphId. This id must be any string unique within the Pathway object
 	 *
-	 * @see Pathway#getUniqueId(java.util.Set)
+	 * @see PathwayModel#getUniqueId(java.util.Set)
 	 */
 	public void setGraphId(String v) {
 		GraphLink.setGraphId(v, this, parent);
@@ -2401,7 +2402,7 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 
 	public void printRefsDebugInfo() {
 		System.err.println(objectType + " " + getGraphId());
-		if (this instanceof MLine) {
+		if (this instanceof LineElement) {
 			for (MPoint p : getMPoints()) {
 				System.err.println("  p: " + p.getGraphId());
 			}
@@ -2409,7 +2410,7 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 				System.err.println("  a: " + a.getGraphId());
 			}
 		}
-		if (this instanceof MState) {
+		if (this instanceof State) {
 			System.err.println("  " + getGraphRef());
 		}
 	}

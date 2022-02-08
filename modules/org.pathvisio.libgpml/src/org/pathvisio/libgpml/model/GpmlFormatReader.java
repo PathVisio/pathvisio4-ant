@@ -17,6 +17,7 @@
 package org.pathvisio.libgpml.model;
 
 import org.jdom2.Element;
+import org.pathvisio.libgpml.io.ConverterException;
 
 /**
  * Interface for GPML reading.
@@ -27,5 +28,5 @@ public interface GpmlFormatReader extends GpmlFormatVersion {
 	
 	public PathwayElement mapElement(Element e) throws ConverterException;
 
-	public void readFromRoot(Element root, Pathway pwy) throws ConverterException;
+	public void readFromRoot(Element root, PathwayModel pwy) throws ConverterException;
 }

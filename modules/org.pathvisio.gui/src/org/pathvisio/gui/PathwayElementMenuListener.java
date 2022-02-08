@@ -37,14 +37,14 @@ import org.pathvisio.core.view.VGroup;
 import org.pathvisio.core.view.Handle;
 import org.pathvisio.core.view.VInfoBox;
 import org.pathvisio.core.view.VLabel;
-import org.pathvisio.core.view.Line;
+import org.pathvisio.core.view.VLineElement;
 import org.pathvisio.core.view.MouseEvent;
 import org.pathvisio.core.view.VState;
 import org.pathvisio.core.view.VAnchor;
-import org.pathvisio.core.view.VPathway;
+import org.pathvisio.core.view.VPathwayModel;
 import org.pathvisio.core.view.VPathwayElement;
-import org.pathvisio.core.view.VPathwayEvent;
-import org.pathvisio.core.view.VPathwayListener;
+import org.pathvisio.core.view.VPathwayModelEvent;
+import org.pathvisio.core.view.VPathwayModelListener;
 import org.pathvisio.core.view.ViewActions;
 import org.pathvisio.core.view.ViewActions.PositionPasteAction;
 import org.pathvisio.gui.CommonActions.AddLiteratureAction;
@@ -57,13 +57,13 @@ import org.pathvisio.libgpml.model.type.ConnectorType;
 import org.pathvisio.libgpml.model.type.GroupType;
 
 /**
- * Implementation of {@link VPathwayListener} that handles righ-click events to
+ * Implementation of {@link VPathwayModelListener} that handles righ-click events to
  * show a popup menu when a {@link VPathwayElement} is clicked.
  *
  * This class is responsible for maintaining a list of {@link PathwayElementMenuHook}'s,
- * There should be a single Listener per MainPanel, possibly listening to multiple {@link VPathway}'s.
+ * There should be a single Listener per MainPanel, possibly listening to multiple {@link VPathwayModel}'s.
  */
-public class PathwayElementMenuListener implements VPathwayListener {
+public class PathwayElementMenuListener implements VPathwayModelListener {
 
 	private List<PathwayElementMenuHook> hooks = new ArrayList<PathwayElementMenuHook>();
 	
@@ -102,7 +102,7 @@ public class PathwayElementMenuListener implements VPathwayListener {
 			pathLitRef = new JMenu("Literature for pathway");
 		}
 
-		VPathway vp = e.getDrawing();
+		VPathwayModel vp = e.getDrawing();
 		VPathwaySwing component = (VPathwaySwing)vp.getWrapper();
 		ViewActions vActions = vp.getViewActions();
 
@@ -158,8 +158,8 @@ public class PathwayElementMenuListener implements VPathwayListener {
 			menu.add(vActions.removeState);
 		}
 		
-		if((e instanceof Line)) {
-			final Line line = (Line)e;
+		if((e instanceof VLineElement)) {
+			final VLineElement line = (VLineElement)e;
 
 			menu.add(vActions.addAnchor);
 			
@@ -234,8 +234,8 @@ public class PathwayElementMenuListener implements VPathwayListener {
 		
 		if(pathLitRef != null) {
 			menu.addSeparator();
-			pathLitRef.add(new AddLiteratureAction(swingEngine, component, swingEngine.getEngine().getActiveVPathway().getMappInfo()));
-			pathLitRef.add(new EditLiteratureAction(swingEngine, component, swingEngine.getEngine().getActiveVPathway().getMappInfo()));
+			pathLitRef.add(new AddLiteratureAction(swingEngine, component, swingEngine.getEngine().getActiveVPathwayModel().getMappInfo()));
+			pathLitRef.add(new EditLiteratureAction(swingEngine, component, swingEngine.getEngine().getActiveVPathwayModel().getMappInfo()));
 			menu.add(pathLitRef);
 		}
 		
@@ -262,7 +262,7 @@ public class PathwayElementMenuListener implements VPathwayListener {
 		this.swingEngine = swingEngine;
 	}
 
-	public void vPathwayEvent(VPathwayEvent e) {
+	public void vPathwayModelEvent(VPathwayModelEvent e) {
 		switch(e.getType()) {
 		case ELEMENT_CLICKED_DOWN:
 			if(e.getAffectedElement() instanceof VCitation) {
@@ -275,11 +275,11 @@ public class PathwayElementMenuListener implements VPathwayListener {
 				break;
 			}
 		case ELEMENT_CLICKED_UP:
-			assert(e.getVPathway() != null);
-			assert(e.getVPathway().getWrapper() instanceof VPathwaySwing);
+			assert(e.getVPathwayModel() != null);
+			assert(e.getVPathwayModel().getWrapper() instanceof VPathwaySwing);
 			
 			if(e.getMouseEvent().isPopupTrigger()) {
-				Component invoker = (VPathwaySwing)e.getVPathway().getWrapper();
+				Component invoker = (VPathwaySwing)e.getVPathwayModel().getWrapper();
 				MouseEvent me = e.getMouseEvent();
 				JPopupMenu m = getMenuInstance(swingEngine, e.getAffectedElement());
 				if(m != null) {

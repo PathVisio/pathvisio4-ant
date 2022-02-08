@@ -14,42 +14,30 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  ******************************************************************************/
-package org.pathvisio.libgpml.model;
+package org.pathvisio.libgpml.io;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import org.pathvisio.libgpml.model.PathwayModel;
 
 /**
- * base implementation of PathwayImporter and PathwayExporter warnings mechanism. 
+ * Exception that occurs during import, export, save or load of a Patway.
+ * @see PathwayModelExporter#doExport
+ * @see PathwayModelImporter#doImport
+ * @see PathwayModel#readFromXml
+ * @see PathwayModel#writeToXml
  */
-public abstract class AbstractPathwayFormat implements PathwayImporter, PathwayExporter
-{
-	private List<String> warnings = new ArrayList<String>();
-	
-	protected void clearWarnings()
+public class ConverterException extends Exception {
+
+
+	public ConverterException(String msg)
 	{
-		warnings.clear();
-	}
-	
-	/**
-	 * Can be used by overriding classes to add to the list of warnings. Don't forget to call {@link clearWarnings} at the start of conversion.
-	 */
-	protected void emitWarning (String warning)
-	{
-		warnings.add (warning);
-	}
-	
-	@Override
-	public boolean isCorrectType(File f)
-	{
-		return true;
+		super(msg);
 	}
 
-	@Override
-	public List<String> getWarnings()
+	public ConverterException(Exception e)
 	{
-		return warnings;
+		super(e.getClass() + ": " + e.getMessage(), e);
+		setStackTrace(e.getStackTrace());
 	}
+
 
 }

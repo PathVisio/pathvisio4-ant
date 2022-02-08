@@ -39,7 +39,7 @@ import org.pathvisio.core.ApplicationEvent;
 import org.pathvisio.core.Engine.ApplicationEventListener;
 import org.pathvisio.core.Globals;
 import org.pathvisio.core.util.Resources;
-import org.pathvisio.core.view.VPathway;
+import org.pathvisio.core.view.VPathwayModel;
 import org.pathvisio.core.view.ViewActions;
 import org.pathvisio.desktop.dialog.RunLocalPluginDialog;
 import org.pathvisio.gui.SwingEngine;
@@ -87,7 +87,7 @@ public class StandaloneActions implements ApplicationEventListener {
 
 	public void applicationEvent(ApplicationEvent e) {
 		if (e.getType() == ApplicationEvent.Type.VPATHWAY_CREATED) {
-			ViewActions va = ((VPathway) e.getSource()).getViewActions();
+			ViewActions va = ((VPathwayModel) e.getSource()).getViewActions();
 			va.registerToGroup(printAction, ViewActions.GROUP_ENABLE_VPATHWAY_LOADED);
 			va.resetGroupStates();
 		}
@@ -314,7 +314,7 @@ public class StandaloneActions implements ApplicationEventListener {
 					if (pageIndex > 0) {
 						return Printable.NO_SUCH_PAGE;
 					}
-					VPathway vPathway = swingEngine.getEngine().getActiveVPathway();
+					VPathwayModel vPathway = swingEngine.getEngine().getActiveVPathwayModel();
 					Graphics2D g2 = (Graphics2D) graphics;
 					double xScale = pageFormat.getImageableWidth() / vPathway.getVWidth();
 					double yScale = pageFormat.getImageableHeight() / vPathway.getVHeight();

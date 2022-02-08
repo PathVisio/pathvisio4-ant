@@ -42,7 +42,7 @@ public class VGroup extends Graphics implements LinkProvider, VElementMouseListe
 	public static final int FLAG_MOUSEOVER = 1 << 1;
 	public static final int FLAG_ANCHORSVISIBLE = 1 << 2;
 
-	public VGroup(VPathway canvas, PathwayElement pe)
+	public VGroup(VPathwayModel canvas, PathwayElement pe)
 	{
 		super(canvas, pe);
 		canvas.addVElementMouseListener(this);

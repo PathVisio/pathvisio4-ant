@@ -34,7 +34,7 @@ import org.pathvisio.core.Engine.ApplicationEventListener;
 import org.pathvisio.core.view.Graphics;
 import org.pathvisio.core.view.SelectionBox.SelectionEvent;
 import org.pathvisio.core.view.SelectionBox.SelectionListener;
-import org.pathvisio.core.view.VPathway;
+import org.pathvisio.core.view.VPathwayModel;
 import org.pathvisio.gui.SwingEngine;
 import org.pathvisio.libgpml.model.PathwayElement;
 import org.pathvisio.libgpml.model.PathwayElementEvent;
@@ -66,7 +66,7 @@ public class PathwayTableModel extends AbstractTableModel implements SelectionLi
 		shownProperties = new ArrayList<PropertyView>();
 		this.swingEngine = swingEngine;
 		swingEngine.getEngine().addApplicationEventListener(this);
-		VPathway vp = swingEngine.getEngine().getActiveVPathway();
+		VPathwayModel vp = swingEngine.getEngine().getActiveVPathwayModel();
 		if(vp != null) vp.addSelectionListener(this);
 	}
 
@@ -140,7 +140,7 @@ public class PathwayTableModel extends AbstractTableModel implements SelectionLi
 		{
 			PropertyView tp = propertyValues.get(o);
 			if(tp == null) {
-				propertyValues.put(o, tp = new PropertyView(swingEngine.getEngine().getActiveVPathway(), o));
+				propertyValues.put(o, tp = new PropertyView(swingEngine.getEngine().getActiveVPathwayModel(), o));
 			}
 			if(remove) {
 				tp.removeElement(e);
@@ -193,7 +193,7 @@ public class PathwayTableModel extends AbstractTableModel implements SelectionLi
 			PropertyView p = getPropertyAt(rowIndex);
 			p.setValue(aValue);
 		}
-		swingEngine.getEngine().getActiveVPathway().redrawDirtyRect();
+		swingEngine.getEngine().getActiveVPathwayModel().redrawDirtyRect();
 	}
 
 	public String getColumnName(int column) {
@@ -203,8 +203,8 @@ public class PathwayTableModel extends AbstractTableModel implements SelectionLi
 
 	public boolean isCellEditable(int rowIndex, int columnIndex) {
 		return columnIndex == 1 &&
-				swingEngine.getEngine().hasVPathway() &&
-				swingEngine.getEngine().getActiveVPathway().isEditMode();
+				swingEngine.getEngine().hasVPathwayModel() &&
+				swingEngine.getEngine().getActiveVPathwayModel().isEditMode();
 	}
 
 	public void selectionEvent(SelectionEvent e) {
@@ -255,10 +255,10 @@ public class PathwayTableModel extends AbstractTableModel implements SelectionLi
 		switch(e.getType())
 		{
 		case VPATHWAY_CREATED:
-			((VPathway)e.getSource()).addSelectionListener(this);
+			((VPathwayModel)e.getSource()).addSelectionListener(this);
 			break;
 		case VPATHWAY_DISPOSED:
-			((VPathway)e.getSource()).removeSelectionListener(this);
+			((VPathwayModel)e.getSource()).removeSelectionListener(this);
 			reset(); // clear selected set
 			break;
 		}

@@ -35,7 +35,7 @@ import org.pathvisio.libgpml.model.PathwayElement;
 import org.pathvisio.libgpml.model.PathwayElementEvent;
 import org.pathvisio.libgpml.model.PathwayElementListener;
 import org.pathvisio.libgpml.prop.StaticProperty;
-import org.pathvisio.core.view.VPathway;
+import org.pathvisio.core.view.VPathwayModel;
 import org.pathvisio.core.view.VPathwayElement;
 
 /**
@@ -63,7 +63,7 @@ public class BackpagePane extends JEditorPane implements ApplicationEventListene
 		super();
 
 		engine.addApplicationEventListener(this);
-		VPathway vp = engine.getActiveVPathway();
+		VPathwayModel vp = engine.getActiveVPathwayModel();
 		if(vp != null) vp.addSelectionListener(this);
 
 		this.engine = engine;
@@ -163,10 +163,10 @@ public class BackpagePane extends JEditorPane implements ApplicationEventListene
 		switch (e.getType())
 		{
 			case VPATHWAY_CREATED:
-				((VPathway)e.getSource()).addSelectionListener(this);
+				((VPathwayModel)e.getSource()).addSelectionListener(this);
 			break;
 			case VPATHWAY_DISPOSED:
-				((VPathway)e.getSource()).removeSelectionListener(this);
+				((VPathwayModel)e.getSource()).removeSelectionListener(this);
 				// remove content of backpage when pathway is closed
 				input = null;
 				setText(bpt.getBackpageHTML(null));
@@ -192,7 +192,7 @@ public class BackpagePane extends JEditorPane implements ApplicationEventListene
 	{
 		assert (!disposed);
 		engine.removeApplicationEventListener(this);
-		VPathway vpwy = engine.getActiveVPathway();
+		VPathwayModel vpwy = engine.getActiveVPathwayModel();
 		if (vpwy != null) vpwy.removeSelectionListener(this);
 		executor.shutdown();
 		disposed = true;

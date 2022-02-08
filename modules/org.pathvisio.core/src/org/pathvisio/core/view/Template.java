@@ -18,7 +18,7 @@ package org.pathvisio.core.view;
 
 import java.net.URL;
 
-import org.pathvisio.libgpml.model.Pathway;
+import org.pathvisio.libgpml.model.PathwayModel;
 import org.pathvisio.libgpml.model.PathwayElement;
 
 
@@ -36,14 +36,14 @@ public interface Template {
 	 * @param my	The y coordinate of the base point
 	 * @return A list with the elements that where added by the template
 	 */
-	PathwayElement[] addElements(Pathway p, double mx, double my);
+	PathwayElement[] addElements(PathwayModel p, double mx, double my);
 
 	/**
 	 * Get the element that will be used to drag the template after
 	 * adding (e.g. the South-East handle in case of a DataNode)
 	 * @return The drag element of the last added template graphics
 	 */
-	VPathwayElement getDragElement(VPathway vp);
+	VPathwayElement getDragElement(VPathwayModel vp);
 
 	/**
 	 * Get the name for this template

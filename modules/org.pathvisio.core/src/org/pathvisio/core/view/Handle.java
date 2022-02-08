@@ -98,7 +98,7 @@ public class Handle extends VPathwayElement
 	 *                   will be selected when this handle is clicked
 	 * @param adjustable The object that is being adjusted by this handle. This is usually,
 	 *                   but not always, the same as parent. For example, a Handle on a {@link VPoint}
-	 *                   has a {@link Line} as parent but the {@link VPoint} as adjustable
+	 *                   has a {@link VLineElement} as parent but the {@link VPoint} as adjustable
 	 */
 	public Handle(Freedom aFreedom, VPathwayElement parent, Adjustable adjustable)
 	{
@@ -276,7 +276,7 @@ public class Handle extends VPathwayElement
 	}
 
 	protected int getZOrder() {
-		return VPathway.ZORDER_HANDLE;
+		return VPathwayModel.ZORDER_HANDLE;
 	}
 
 }

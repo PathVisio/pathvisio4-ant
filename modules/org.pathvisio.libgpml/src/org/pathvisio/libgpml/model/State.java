@@ -17,6 +17,7 @@
 package org.pathvisio.libgpml.model;
 
 import org.pathvisio.libgpml.model.GraphLink.LinkableTo;
+import org.pathvisio.libgpml.model.type.ObjectType;
 import org.pathvisio.libgpml.model.GraphLink.LinkableFrom;
 import org.pathvisio.libgpml.prop.StaticProperty;
 import org.pathvisio.libgpml.util.Utils;
@@ -25,9 +26,9 @@ import org.pathvisio.libgpml.util.Utils;
  * State-specific implementation of methods that calculate derived
  * coordinates that are not stored in GPML directly
  */
-public class MState extends PathwayElement implements LinkableFrom
+public class State extends PathwayElement implements LinkableFrom
 {
-	protected MState()
+	protected State()
 	{
 		super(ObjectType.STATE);
 	}
@@ -42,7 +43,7 @@ public class MState extends PathwayElement implements LinkableFrom
 	
 	public PathwayElement getParentDataNode()
 	{
-		Pathway parent = getParent();
+		PathwayModel parent = getParent();
 		if (parent == null) 
 			return null;
 
@@ -118,7 +119,7 @@ public class MState extends PathwayElement implements LinkableFrom
 	}
 
 	@Override
-	public void setParent(Pathway v)
+	public void setParent(PathwayModel v)
 	{
 		if (parent != v)
 		{

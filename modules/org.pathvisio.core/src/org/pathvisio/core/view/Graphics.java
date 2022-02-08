@@ -47,7 +47,7 @@ public abstract class Graphics extends VPathwayElement implements PathwayElement
 
 	private VCitation citation;
 
-	public Graphics(VPathway canvas, PathwayElement o) {
+	public Graphics(VPathwayModel canvas, PathwayElement o) {
 		super(canvas);
 		o.addListener(this);
 		gdata = o;

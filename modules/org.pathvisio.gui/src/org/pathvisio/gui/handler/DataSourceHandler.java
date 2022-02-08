@@ -39,7 +39,7 @@ import org.bridgedb.DataSource;
 import org.bridgedb.bio.Organism;
 import org.pathvisio.gui.SwingEngine;
 import org.pathvisio.gui.util.PermissiveComboBox;
-import org.pathvisio.libgpml.model.Pathway;
+import org.pathvisio.libgpml.model.PathwayModel;
 import org.pathvisio.libgpml.model.PathwayElement;
 import org.pathvisio.libgpml.model.type.DataNodeType;
 import org.pathvisio.libgpml.prop.PropertyType;
@@ -98,7 +98,7 @@ public class DataSourceHandler extends DefaultCellEditor implements ContextSensi
 	}
 
 	public void updateEditor(SwingEngine swingEngine, Collection<PathwayElement> elements,
-			Pathway pathway, PropertyView propHandler)
+			PathwayModel pathway, PropertyView propHandler)
 	{
 		boolean first = true;
 		String dnType = null;

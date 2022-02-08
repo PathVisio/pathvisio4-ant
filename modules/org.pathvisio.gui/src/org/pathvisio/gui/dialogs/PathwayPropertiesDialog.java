@@ -65,9 +65,9 @@ public class PathwayPropertiesDialog extends PathwayElementDialog {
 		JLabel orgComboLabel = new JLabel ("Organism ");
 		
 		titleField = new JTextField();
-		titleField.setText(swingEngine.getEngine().getActivePathway().getMappInfo().getMapInfoName());
+		titleField.setText(swingEngine.getEngine().getActivePathwayModel().getMappInfo().getMapInfoName());
 		organismComboBox = new PermissiveComboBox(Organism.latinNamesArray());
-		organismComboBox.setSelectedItem(swingEngine.getEngine().getActivePathway().getMappInfo().getOrganism());
+		organismComboBox.setSelectedItem(swingEngine.getEngine().getActivePathwayModel().getMappInfo().getOrganism());
 
 		GridBagConstraints c = new GridBagConstraints();
 		c.anchor = GridBagConstraints.FIRST_LINE_START;
@@ -88,10 +88,10 @@ public class PathwayPropertiesDialog extends PathwayElementDialog {
 	
 	protected void okPressed() {
 		super.okPressed();
-		swingEngine.getEngine().getActivePathway().getMappInfo().setMapInfoName(titleField.getText());
+		swingEngine.getEngine().getActivePathwayModel().getMappInfo().setMapInfoName(titleField.getText());
 		
 		String itemSelectedFromDropDown = (String)organismComboBox.getSelectedItem();
 		if(itemSelectedFromDropDown != null)
-			swingEngine.getEngine().getActivePathway().getMappInfo().setOrganism(itemSelectedFromDropDown);
+			swingEngine.getEngine().getActivePathwayModel().getMappInfo().setOrganism(itemSelectedFromDropDown);
 	}
 }

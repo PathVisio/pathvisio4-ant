@@ -38,10 +38,12 @@ import org.bridgedb.Xref;
 import org.pathvisio.libgpml.biopax.BiopaxElement;
 import org.pathvisio.libgpml.biopax.BiopaxNode;
 import org.pathvisio.libgpml.debug.Logger;
+import org.pathvisio.libgpml.io.ConverterException;
 import org.pathvisio.libgpml.model.GraphLink.LinkableTo;
 import org.pathvisio.libgpml.model.GraphLink.LinkableFrom;
 import org.pathvisio.libgpml.model.PathwayElement.MAnchor;
 import org.pathvisio.libgpml.model.PathwayElement.MPoint;
+import org.pathvisio.libgpml.model.type.ObjectType;
 import org.pathvisio.libgpml.prop.StaticProperty;
 import org.pathvisio.libgpml.util.Utils;
 
@@ -53,7 +55,7 @@ import org.pathvisio.libgpml.util.Utils;
  * have exactly one object of the type MAPPINFO and exactly one object of the
  * type INFOBOX.
  */
-public class Pathway {
+public class PathwayModel {
 	private boolean changed = true;
 
 	/**
@@ -276,7 +278,7 @@ public class Pathway {
 		if (o.getGraphRef() != null) {
 			addGraphRef(o.getGraphRef(), (LinkableFrom) o);
 		}
-		fireObjectModifiedEvent(new PathwayEvent(o, PathwayEvent.ADDED));
+		fireObjectModifiedEvent(new PathwayModelEvent(o, PathwayModelEvent.ADDED));
 		checkMBoardSize(o);
 	}
 
@@ -402,7 +404,7 @@ public class Pathway {
 		if (o.getGraphRef() != null) {
 			removeGraphRef(o.getGraphRef(), (LinkableFrom) o);
 		}
-		fireObjectModifiedEvent(new PathwayEvent(o, PathwayEvent.DELETED));
+		fireObjectModifiedEvent(new PathwayModelEvent(o, PathwayModelEvent.DELETED));
 		o.setParent(null);
 	}
 
@@ -532,7 +534,7 @@ public class Pathway {
 		} else {
 			// redraw group outline
 			if (getGroupById(id) != null) {
-				MGroup group = (MGroup) getGroupById(id);
+				Group group = (Group) getGroupById(id);
 				group.fireObjectModifiedEvent(PathwayElementEvent.createCoordinatePropertyEvent(group));
 			}
 		}
@@ -616,7 +618,7 @@ public class Pathway {
 		if (Math.abs(mBoardWidth - mw) + Math.abs(mBoardHeight - mh) > 0.01) {
 			mBoardWidth = mw;
 			mBoardHeight = mh;
-			fireObjectModifiedEvent(new PathwayEvent(mappInfo, PathwayEvent.RESIZED));
+			fireObjectModifiedEvent(new PathwayModelEvent(mappInfo, PathwayModelEvent.RESIZED));
 		}
 	}
 
@@ -642,7 +644,7 @@ public class Pathway {
 	/**
 	 * Contructor for this class, creates a new gpml document
 	 */
-	public Pathway() {
+	public PathwayModel() {
 		mappInfo = PathwayElement.createPathwayElement(ObjectType.MAPPINFO);
 		this.add(mappInfo);
 		infoBox = PathwayElement.createPathwayElement(ObjectType.INFOBOX);
@@ -746,14 +748,14 @@ public class Pathway {
 		}
 	}
 
-	private List<PathwayListener> listeners = new ArrayList<PathwayListener>();
+	private List<PathwayModelListener> listeners = new ArrayList<PathwayModelListener>();
 
-	public void addListener(PathwayListener v) {
+	public void addListener(PathwayModelListener v) {
 		if (!listeners.contains(v))
 			listeners.add(v);
 	}
 
-	public void removeListener(PathwayListener v) {
+	public void removeListener(PathwayModelListener v) {
 		listeners.remove(v);
 	}
 
@@ -761,15 +763,15 @@ public class Pathway {
 	 * Firing the ObjectModifiedEvent has the side effect of marking the Pathway as
 	 * changed.
 	 */
-	public void fireObjectModifiedEvent(PathwayEvent e) {
+	public void fireObjectModifiedEvent(PathwayModelEvent e) {
 		markChanged();
-		for (PathwayListener g : listeners) {
+		for (PathwayModelListener g : listeners) {
 			g.pathwayModified(e);
 		}
 	}
 
-	public Pathway clone() {
-		Pathway result = new Pathway();
+	public PathwayModel clone() {
+		PathwayModel result = new PathwayModel();
 		for (PathwayElement pe : dataObjects) {
 			result.add(pe.copy());
 		}
@@ -849,7 +851,7 @@ public class Pathway {
 	 * status flag listeners are only interested in status flag events of the active
 	 * copy.
 	 */
-	public void transferStatusFlagListeners(Pathway dest) {
+	public void transferStatusFlagListeners(PathwayModel dest) {
 		for (Iterator<StatusFlagListener> i = statusFlagListeners.iterator(); i.hasNext();) {
 			StatusFlagListener l = i.next();
 			dest.addStatusFlagListener(l);

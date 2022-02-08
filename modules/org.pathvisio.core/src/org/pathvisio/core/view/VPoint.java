@@ -31,9 +31,9 @@ public class VPoint implements Adjustable
 	// This Handle is created, destroyed and generally managed by Line, not by VPoint
 	Handle handle;
 	
-	private Line line;
+	private VLineElement line;
 	private MPoint mPoint;
-	private final VPathway canvas;
+	private final VPathwayModel canvas;
 
 	private boolean isHighlighted = false;
 
@@ -60,7 +60,7 @@ public class VPoint implements Adjustable
 		}
 	}
 
-	VPoint(VPathway canvas, MPoint mPoint, Line line) {
+	VPoint(VPathwayModel canvas, MPoint mPoint, VLineElement line) {
 		this.canvas = canvas;
 		this.mPoint = mPoint;
 		this.line = line;
@@ -86,7 +86,7 @@ public class VPoint implements Adjustable
 		return mPoint;
 	}
 
-	public Line getLine() {
+	public VLineElement getLine() {
 		return line;
 	}
 

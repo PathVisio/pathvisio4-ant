@@ -100,11 +100,11 @@ public class NewPathwayDialog extends OkCancelDialog {
 			JOptionPane.showMessageDialog(this, "The Title is a mandatory field.", "Error", JOptionPane.ERROR_MESSAGE);
 		} else {
 			super.okPressed();
-			swingEngine.getEngine().getActivePathway().getMappInfo().setMapInfoName(titleField.getText());
+			swingEngine.getEngine().getActivePathwayModel().getMappInfo().setMapInfoName(titleField.getText());
 			
 			String itemSelectedFromDropDown = (String)organismComboBox.getSelectedItem();
 			if(itemSelectedFromDropDown != null)
-				swingEngine.getEngine().getActivePathway().getMappInfo().setOrganism(itemSelectedFromDropDown);
+				swingEngine.getEngine().getActivePathwayModel().getMappInfo().setOrganism(itemSelectedFromDropDown);
 		}
 	}
 }

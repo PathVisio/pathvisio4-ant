@@ -28,11 +28,11 @@ import java.util.Map;
 import org.bridgedb.DataSource;
 import org.bridgedb.Xref;
 import org.pathvisio.libgpml.debug.Logger;
-import org.pathvisio.libgpml.model.ConverterException;
-import org.pathvisio.libgpml.model.ObjectType;
-import org.pathvisio.libgpml.model.Pathway;
+import org.pathvisio.libgpml.io.ConverterException;
+import org.pathvisio.libgpml.io.PathwayModelExporter;
+import org.pathvisio.libgpml.model.PathwayModel;
 import org.pathvisio.libgpml.model.PathwayElement;
-import org.pathvisio.libgpml.model.PathwayExporter;
+import org.pathvisio.libgpml.model.type.ObjectType;
 
 /**
  * Exports to pathway format understood by the EuGene pathway statistics
@@ -42,7 +42,7 @@ import org.pathvisio.libgpml.model.PathwayExporter;
  * EuGene supports several id systems but has its own naming for them, this
  * exporter also handles the translation.
  */
-public class EUGeneExporter implements PathwayExporter {
+public class EUGeneExporter implements PathwayModelExporter {
 	public String[] getExtensions() {
 		return new String[] { "pwf" };
 	}
@@ -51,7 +51,7 @@ public class EUGeneExporter implements PathwayExporter {
 		return "Eu.Gene pathway";
 	}
 
-	public void doExport(File file, Pathway pathway) throws ConverterException {
+	public void doExport(File file, PathwayModel pathway) throws ConverterException {
 		EUGenePathway eugPathway = new EUGenePathway(pathway);
 		try {
 			eugPathway.writeToEUGene(file);
@@ -62,13 +62,13 @@ public class EUGeneExporter implements PathwayExporter {
 
 	private static class EUGenePathway {
 		Logger log = Logger.log;
-		Pathway pathway;
+		PathwayModel pathway;
 
 		DataSource system; // The annotation system
 
 		List<Xref> refs;
 
-		public EUGenePathway(Pathway p) {
+		public EUGenePathway(PathwayModel p) {
 			pathway = p;
 			read();
 		}
@@ -180,7 +180,7 @@ public class EUGeneExporter implements PathwayExporter {
 	}
 
 	@Override
-	public void doExport(File file, Pathway pathway, int zoom) throws ConverterException {
+	public void doExport(File file, PathwayModel pathway, int zoom) throws ConverterException {
 		// TODO Auto-generated method stub
 
 	}

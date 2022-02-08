@@ -29,15 +29,15 @@ import org.bridgedb.Xref;
 import org.pathvisio.core.Engine;
 import org.pathvisio.core.preferences.PreferenceManager;
 import org.pathvisio.core.view.VDataNode;
-import org.pathvisio.core.view.Line;
-import org.pathvisio.core.view.VPathway;
+import org.pathvisio.core.view.VLineElement;
+import org.pathvisio.core.view.VPathwayModel;
 import org.pathvisio.core.view.VPathwayElement;
 import org.pathvisio.gui.view.VPathwaySwing;
 import org.pathvisio.libgpml.debug.StopWatch;
-import org.pathvisio.libgpml.model.ConverterException;
-import org.pathvisio.libgpml.model.ObjectType;
-import org.pathvisio.libgpml.model.Pathway;
+import org.pathvisio.libgpml.io.ConverterException;
+import org.pathvisio.libgpml.model.PathwayModel;
 import org.pathvisio.libgpml.model.PathwayElement;
+import org.pathvisio.libgpml.model.type.ObjectType;
 
 import buildsystem.Measure;
 import junit.framework.TestCase;
@@ -142,12 +142,12 @@ public class TestAndMeasure extends TestCase
 	public void testObjectCreation()
 	{
 		PreferenceManager.init();
-		final Pathway pwy1 = new Pathway();
-		final Pathway pwy2 = new Pathway();
-		final Pathway pwy3 = new Pathway();
-		final VPathway vpwy3 = new VPathway(null);
-		final Pathway pwy4 = new Pathway();
-		final VPathway vpwy4 = new VPathway(null);
+		final PathwayModel pwy1 = new PathwayModel();
+		final PathwayModel pwy2 = new PathwayModel();
+		final PathwayModel pwy3 = new PathwayModel();
+		final VPathwayModel vpwy3 = new VPathwayModel(null);
+		final PathwayModel pwy4 = new PathwayModel();
+		final VPathwayModel vpwy4 = new VPathwayModel(null);
 		
 		individialTest(new ObjectTester ()
 		{
@@ -239,7 +239,7 @@ public class TestAndMeasure extends TestCase
 				elt.setStartGraphRef("abc");
 				elt.setEndGraphRef("def");
 				pwy4.add (elt);
-				VPathwayElement velt = new Line(vpwy4, elt);
+				VPathwayElement velt = new VLineElement(vpwy4, elt);
 				return velt;
 			}
 
@@ -259,7 +259,7 @@ public class TestAndMeasure extends TestCase
 		MemWatch mw = new MemWatch();
 		
 		mw.start(); sw.start(); 
-		Pathway pwy = new Pathway();
+		PathwayModel pwy = new PathwayModel();
 		pwy.readFromXml(TEST_PATHWAY, true);
 		measure.add ("Speed::Hs_Apoptosis readFromXml (+validate)", "" + sw.stop(), "msec");
 		measure.add ("Memory::Hs_Apoptosis readFromXml (+validate)", "" + mw.stop() / 1024, "kb");
@@ -269,7 +269,7 @@ public class TestAndMeasure extends TestCase
 		VPathwaySwing wrapper = new VPathwaySwing(sp);
 
 		Engine engine = new Engine();
-		VPathway vpwy = wrapper.createVPathway();
+		VPathwayModel vpwy = wrapper.createVPathwayModel();
 		vpwy.activateUndoManager(engine);
 		vpwy.fromModel(pwy);
 		

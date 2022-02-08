@@ -20,9 +20,9 @@ import java.io.File;
 import java.util.Collections;
 import java.util.List;
 
-import org.pathvisio.libgpml.model.ConverterException;
-import org.pathvisio.libgpml.model.Pathway;
-import org.pathvisio.libgpml.model.PathwayExporter;
+import org.pathvisio.libgpml.io.ConverterException;
+import org.pathvisio.libgpml.io.PathwayModelExporter;
+import org.pathvisio.libgpml.model.PathwayModel;
 
 /**
  * Base class for a couple of image exporters.
@@ -32,7 +32,7 @@ import org.pathvisio.libgpml.model.PathwayExporter;
  *
  * Subclass this to implement specific image types.
  */
-public abstract class ImageExporter implements PathwayExporter {
+public abstract class ImageExporter implements PathwayModelExporter {
 	public static final String TYPE_PNG = "png";
 	public static final String TYPE_TIFF = "tiff";
 	public static final String TYPE_PDF = "pdf";
@@ -77,7 +77,7 @@ public abstract class ImageExporter implements PathwayExporter {
 //		
 //	}
 
-	public void doExport(File file, Pathway pathway, int zoom)
+	public void doExport(File file, PathwayModel pathway, int zoom)
 			throws ConverterException {
 		// TODO Auto-generated method stub
 		

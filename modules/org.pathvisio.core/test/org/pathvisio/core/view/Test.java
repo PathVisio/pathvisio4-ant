@@ -25,21 +25,21 @@ import junit.framework.TestCase;
 import org.pathvisio.core.preferences.PreferenceManager;
 import org.pathvisio.libgpml.biopax.BiopaxReferenceManager;
 import org.pathvisio.libgpml.biopax.PublicationXref;
-import org.pathvisio.libgpml.model.ObjectType;
-import org.pathvisio.libgpml.model.Pathway;
+import org.pathvisio.libgpml.model.PathwayModel;
 import org.pathvisio.libgpml.model.PathwayElement;
+import org.pathvisio.libgpml.model.type.ObjectType;
 
 public class Test extends TestCase {
 
-	Pathway pwy = null;
-	VPathway vPwy = null;
+	PathwayModel pwy = null;
+	VPathwayModel vPwy = null;
 	PathwayElement eltDn = null, eltSh = null, eltLi = null, eltLa = null;
 	Graphics vDn = null, vSh = null, vLi = null, vLa = null;
 
 	public void setUp()
 	{
 		PreferenceManager.init();
-    	pwy = new Pathway();
+    	pwy = new PathwayModel();
     	eltDn = PathwayElement.createPathwayElement(ObjectType.DATANODE);
     	eltDn.setMCenterX(3000);
     	eltDn.setMCenterY(3000);
@@ -67,7 +67,7 @@ public class Test extends TestCase {
     	pwy.add(eltSh);
     	pwy.add(eltLi);
     	pwy.add(eltLa);
-    	vPwy = new VPathway(null);
+    	vPwy = new VPathwayModel(null);
     	vPwy.fromModel(pwy);
 
     	for(VPathwayElement e : vPwy.getDrawingObjects())
@@ -94,8 +94,8 @@ public class Test extends TestCase {
 
 	public void testCopyPaste()
 	{
-    	Pathway pTarget = new Pathway();
-    	VPathway vpTarget = new VPathway(null);
+    	PathwayModel pTarget = new PathwayModel();
+    	VPathwayModel vpTarget = new VPathwayModel(null);
     	vpTarget.fromModel(pTarget);
 
 		vPwy.selectObject(vDn);

@@ -40,14 +40,14 @@ public class ApplicationEvent extends EventObject
 		VPATHWAY_NEW,
 		PATHWAY_SAVE,
 
-		/** whenever a VPathway is closed. */
+		/** whenever a VPathwayModel is closed. */
 		VPATHWAY_DISPOSED
 	}
 
 	private Type type;
 	
 	/**
-	   Event type, e.g. PATHWAY_OPENED when a pathway was opened
+	   Event type, e.g. PATHWAY_OPENED when a pathway model was opened
 	 */
 	public Type getType()
 	{

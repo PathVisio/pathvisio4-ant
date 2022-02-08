@@ -32,7 +32,7 @@ import java.util.Map;
 
 import org.pathvisio.core.preferences.GlobalPreference;
 import org.pathvisio.core.preferences.PreferenceManager;
-import org.pathvisio.libgpml.model.MLine;
+import org.pathvisio.libgpml.model.LineElement;
 import org.pathvisio.libgpml.model.PathwayElement;
 import org.pathvisio.libgpml.model.PathwayElementEvent;
 import org.pathvisio.libgpml.model.GraphLink.LinkableFrom;
@@ -58,7 +58,7 @@ import org.pathvisio.libgpml.model.type.ArrowHeadType;
  * @see ConnectorShape
  * @see org.pathvisio.libgpml.model.connector.ConnectorShapeFactory
  */
-public class Line extends Graphics implements Adjustable
+public class VLineElement extends Graphics implements Adjustable
 {
 	
 	private List<VPoint> points;
@@ -73,7 +73,7 @@ public class Line extends Graphics implements Adjustable
 	 * Constructor for this class
 	 * @param canvas - the VPathway this line will be part of
 	 */
-	public Line(VPathway canvas, PathwayElement o)
+	public VLineElement(VPathwayModel canvas, PathwayElement o)
 	{
 		super(canvas, o);
 
@@ -92,8 +92,8 @@ public class Line extends Graphics implements Adjustable
 		setHandleLocation(vp);
 	}
 
-	private MLine getMLine() {
-		return (MLine)gdata;
+	private LineElement getMLine() {
+		return (LineElement)gdata;
 	}
 
 	public void createHandles()

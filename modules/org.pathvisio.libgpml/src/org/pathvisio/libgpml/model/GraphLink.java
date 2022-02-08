@@ -49,7 +49,7 @@ public abstract class GraphLink {
 		 * return the parent Gmmldata Object, needed for maintaining a consistent list
 		 * of graphId's
 		 */
-		Pathway getPathway();
+		PathwayModel getPathway();
 
 		/**
 		 * Convert a point to shape coordinates (relative to the bounds of the
@@ -82,7 +82,7 @@ public abstract class GraphLink {
 		 * return the parent Pathway object, needed for maintaining a consistent list of
 		 * graphId's
 		 */
-		Pathway getPathway();
+		PathwayModel getPathway();
 
 		/**
 		 * Called whenever the object being referred to changes coordinates.
@@ -102,7 +102,7 @@ public abstract class GraphLink {
 	 * @param gd the pathway model, which is maintaining a complete list of all
 	 *           graphId's in this pathway
 	 */
-	protected static void setGraphId(String v, LinkableTo c, Pathway data) {
+	protected static void setGraphId(String v, LinkableTo c, PathwayModel data) {
 		String graphId = c.getGraphId();
 		if (graphId == null || !graphId.equals(v)) {
 			if (data != null) {
@@ -124,7 +124,7 @@ public abstract class GraphLink {
 	 * @param gd
 	 * @return
 	 */
-	public static Set<LinkableFrom> getReferences(LinkableTo gid, Pathway gd) {
+	public static Set<LinkableFrom> getReferences(LinkableTo gid, PathwayModel gd) {
 		if (gd == null || Utils.isEmpty(gid.getGraphId()))
 			return Collections.emptySet();
 		else

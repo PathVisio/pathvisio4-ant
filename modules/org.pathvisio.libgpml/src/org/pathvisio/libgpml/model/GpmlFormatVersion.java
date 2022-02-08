@@ -18,6 +18,7 @@ package org.pathvisio.libgpml.model;
 
 import org.jdom2.Document;
 import org.jdom2.Namespace;
+import org.pathvisio.libgpml.io.ConverterException;
 
 /**
  * Interface for GPML format versions.

@@ -20,13 +20,15 @@ import java.awt.geom.Rectangle2D;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.pathvisio.libgpml.model.type.ObjectType;
+
 /**
  * Group specific implementation of methods that calculate derived
  * coordinates that are not stored in GPML directly
  * @author thomas
  */
-public class MGroup extends PathwayElement {
-	protected MGroup() {
+public class Group extends PathwayElement {
+	protected Group() {
 		super(ObjectType.GROUP);
 	}
 
@@ -172,7 +174,7 @@ public class MGroup extends PathwayElement {
 	 */
 	public Set<PathwayElement> getGroupElements() {
 		Set<PathwayElement> result = new HashSet<PathwayElement>();
-		Pathway parent = getParent();
+		PathwayModel parent = getParent();
 		if(parent != null) {
 			result = parent.getGroupElements(getGroupId());
 		}

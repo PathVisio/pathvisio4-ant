@@ -14,21 +14,39 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  ******************************************************************************/
-package org.pathvisio.libgpml.model;
+package org.pathvisio.libgpml.io;
 
-import java.util.EventListener;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * Implement this if you want to be notified of changes to a Pathway.
- *
- * This means addition of new elements to a Pathway and
- * removal of elements from a Pathway, but not
- * changes to properties of a single PathwayElement
- *
- * For example this is used by VPathway to refresh itself when a new
- * element is added.
+ * base implementation of PathwayImporter and PathwayExporter warnings
+ * mechanism.
  */
-public interface PathwayListener extends EventListener
-{
-	public void pathwayModified(PathwayEvent e);
+public abstract class AbstractPathwayModelFormat implements PathwayModelImporter, PathwayModelExporter {
+	private List<String> warnings = new ArrayList<String>();
+
+	protected void clearWarnings() {
+		warnings.clear();
+	}
+
+	/**
+	 * Can be used by overriding classes to add to the list of warnings. Don't
+	 * forget to call {@link clearWarnings} at the start of conversion.
+	 */
+	protected void emitWarning(String warning) {
+		warnings.add(warning);
+	}
+
+	@Override
+	public boolean isCorrectType(File f) {
+		return true;
+	}
+
+	@Override
+	public List<String> getWarnings() {
+		return warnings;
+	}
+
 }

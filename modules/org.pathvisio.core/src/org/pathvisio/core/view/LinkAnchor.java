@@ -42,7 +42,7 @@ public class LinkAnchor extends VPathwayElement
 	LinkableTo idContainer;
 	VPathwayElement parent;
 	
-	public LinkAnchor(VPathway canvas, VPathwayElement parent, LinkableTo idContainer, double relX, double relY) 
+	public LinkAnchor(VPathwayModel canvas, VPathwayElement parent, LinkableTo idContainer, double relX, double relY) 
 	{
 		super (canvas);
 		this.relX = relX;

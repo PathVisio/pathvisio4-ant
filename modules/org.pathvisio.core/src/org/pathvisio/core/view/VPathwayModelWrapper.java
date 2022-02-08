@@ -23,31 +23,37 @@ import java.util.List;
 import javax.swing.Action;
 import javax.swing.KeyStroke;
 
-import org.pathvisio.libgpml.model.Pathway;
+import org.pathvisio.libgpml.model.PathwayModel;
 import org.pathvisio.libgpml.model.PathwayElement;
 
 /**
- * Wrapper for VPathway that handles toolkit (swing / SWT) dependent differences.
+ * Wrapper for VPathwayModel that handles toolkit (swing / SWT) dependent
+ * differences.
  */
-public abstract interface VPathwayWrapper
-{
+public abstract interface VPathwayModelWrapper {
 	public void redraw();
+
 	public void redraw(Rectangle r);
+
 	public Rectangle getViewRect();
-	
+
 	/** signal to indicate that the pathway changed size */
 	public void resized();
 
-	public VPathway createVPathway();
+	public VPathwayModel createVPathwayModel();
 
 	public void registerKeyboardAction(KeyStroke k, Action a);
-	public void copyToClipboard(Pathway source, List<PathwayElement> copyElements);
+
+	public void copyToClipboard(PathwayModel source, List<PathwayElement> copyElements);
+
 	public void pasteFromClipboard();
+
 	public void positionPasteFromClipboard(Point cursorPosition);
 
 	/** make sure r is visible */
 	public void scrollTo(Rectangle r);
-	public void scrollCenterTo(int x, int y);	
+
+	public void scrollCenterTo(int x, int y);
 
 	/** called by VPathway.dispose() */
 	public void dispose();

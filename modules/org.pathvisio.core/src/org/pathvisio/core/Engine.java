@@ -30,29 +30,30 @@ import java.util.Set;
 
 import javax.swing.SwingUtilities;
 
-import org.pathvisio.core.view.VPathway;
-import org.pathvisio.core.view.VPathwayWrapper;
+import org.pathvisio.core.view.VPathwayModel;
+import org.pathvisio.core.view.VPathwayModelWrapper;
 import org.pathvisio.libgpml.debug.Logger;
-import org.pathvisio.libgpml.model.ConverterException;
-import org.pathvisio.libgpml.model.Pathway;
-import org.pathvisio.libgpml.model.PathwayExporter;
-import org.pathvisio.libgpml.model.PathwayImporter;
+import org.pathvisio.libgpml.io.ConverterException;
+import org.pathvisio.libgpml.io.PathwayModelExporter;
+import org.pathvisio.libgpml.io.PathwayModelImporter;
+import org.pathvisio.libgpml.model.PathwayModel;
 import org.pathvisio.libgpml.util.FileUtils;
 import org.pathvisio.libgpml.util.Utils;
 
 /**
- * This class manages loading, importing and exporting a Pathway and VPathway together.
+ * This class manages loading, importing and exporting a PathwayModel and VPathwayModel
+ * together.
  *
- * TODO: there are some unrelated Global functions in here, but the intention is to move them away in the future.
+ * TODO: there are some unrelated Global functions in here, but the intention is
+ * to move them away in the future.
  */
-public class Engine
-{
-	private VPathway vPathway; // may be null
-	//TODO: standalone below is a hack to make Converter work
-	private Pathway standalone = null; // only used when vPathway is null
-	private VPathwayWrapper wrapper; // may also be null in case you
-									 // don't need to interact with
-									 // the pathway.
+public class Engine {
+	private VPathwayModel vPathwayModel; // may be null
+	// TODO: standalone below is a hack to make Converter work
+	private PathwayModel standalone = null; // only used when vPathwayModel is null
+	private VPathwayModelWrapper wrapper; // may also be null in case you
+	// don't need to interact with
+	// the pathway.
 
 	public static final String SVG_FILE_EXTENSION = "svg";
 	public static final String SVG_FILTER_NAME = "Scalable Vector Graphics (*." + SVG_FILE_EXTENSION + ")";
@@ -62,110 +63,110 @@ public class Engine
 	public static final String GENMAPP_FILTER_NAME = "GenMAPP Pathway (*." + GENMAPP_FILE_EXTENSION + ")";
 
 	/**
-	 * the transparent color used in the icons for visualization of protein/mrna data
+	 * the transparent color used in the icons for visualization of protein/mrna
+	 * data
 	 */
 	public static final Color TRANSPARENT_COLOR = new Color(255, 0, 255);
 
 	/**
-	   Set this to the toolkit-specific wrapper before opening or
-	   creating a new pathway otherwise Engine can't create a vPathway.
+	 * Set this to the toolkit-specific wrapper before opening or creating a new
+	 * pathway model otherwise Engine can't create a vPathway.
 	 */
-	public void setWrapper (VPathwayWrapper value)
-	{
+	public void setWrapper(VPathwayModelWrapper value) {
 		wrapper = value;
 	}
 
 	/**
 	 * Gets the currently open drawing
 	 */
-	public VPathway getActiveVPathway() {
-		return vPathway;
+	public VPathwayModel getActiveVPathwayModel() {
+		return vPathwayModel;
 	}
 
 	/**
 	 * Returns the currently open Pathway
 	 */
-	public Pathway getActivePathway()
-	{
-		if (vPathway == null)
-		{
+	public PathwayModel getActivePathwayModel() {
+		if (vPathwayModel == null) {
 			return standalone;
-		}
-		else
-		{
-			return vPathway.getPathwayModel();
+		} else {
+			return vPathwayModel.getPathwayModel();
 		}
 	}
-	
-	//TODO: No reason to keep this in engine, it doesn't act on active pathway
-		/**
-		 * Exports given pathway to file. This function doesn't act on the active pathway.
-		 * @param pathway pathway to export
-		 * @param file file to write to.
-		 * @returns a list of warnings that occurred during export, or an empty list if there were none.
-		 */
-	public List<String> exportPathway(File file, Pathway pathway) throws ConverterException 
-	{
-		Logger.log.trace("Exporting pathway to " + file);
-		
-		Set<PathwayExporter> set = getPathwayExporters(file);
-	
-		if (set != null && set.size() == 1)
-		{
-			PathwayExporter exporter = Utils.oneOf(set);
+
+	// TODO: No reason to keep this in engine, it doesn't act on active pathway
+	/**
+	 * Exports given pathway model to file. This function doesn't act on the active
+	 * pathway.
+	 * 
+	 * @param pathway the pathway model to export
+	 * @param file    the file to write to.
+	 * @returns a list of warnings that occurred during export, or an empty list if
+	 *          there were none.
+	 */
+	public List<String> exportPathwayModel(File file, PathwayModel pathway) throws ConverterException {
+		Logger.log.trace("Exporting pathway model to " + file);
+
+		Set<PathwayModelExporter> set = getPathwayModelExporters(file);
+
+		if (set != null && set.size() == 1) {
+			PathwayModelExporter exporter = Utils.oneOf(set);
 			exporter.doExport(file, pathway);
 			return exporter.getWarnings();
-		}
-		else
-			throw new ConverterException( "Could not determine exporter for '" + FileUtils.getExtension(file.toString()) +  "' files" );
+		} else
+			throw new ConverterException(
+					"Could not determine exporter for '" + FileUtils.getExtension(file.toString()) + "' files");
 
 	}
-	
-	//TODO: No reason to keep this in engine, it doesn't act on active pathway
-			/**
-			 * Exports given pathway to file. This function doesn't act on the active pathway.
-			 * @param pathway pathway to export
-			 * @param file file to write to.
-			 * @returns a list of warnings that occurred during export, or an empty list if there were none.
-			 */
-		public List<String> exportPathway(File file, Pathway pathway, int zoom) throws ConverterException 
-		{
-			Logger.log.trace("Exporting pathway to " + file);
-			
-			Set<PathwayExporter> set = getPathwayExporters(file);
-		
-			if (set != null && set.size() == 1)
-			{
-				PathwayExporter exporter = Utils.oneOf(set);
-				exporter.doExport(file, pathway, zoom);
-				return exporter.getWarnings();
-			}
-			else
-				throw new ConverterException( "Could not determine exporter for '" + FileUtils.getExtension(file.toString()) +  "' files" );
 
-		}
-		
-	//TODO: No reason to keep this in engine, it doesn't act on active pathway
+	// TODO: No reason to keep this in engine, it doesn't act on active pathway
 	/**
-	 * Exports given pathway to file. This function doesn't act on the active pathway.
-	 * @param pathway pathway to export
-	 * @param file file to write to.
-	 * @returns a list of warnings that occurred during export, or an empty list if there were none.
+	 * Exports given pathway model to file. This function doesn't act on the active
+	 * pathway.
+	 * 
+	 * @param pathway the pathway model to export
+	 * @param file    file to write to.
+	 * @returns a list of warnings that occurred during export, or an empty list if
+	 *          there were none.
 	 */
-	public List<String> exportPathway(File file, Pathway pathway, String exporterName) throws ConverterException 
-	{
-		Logger.log.trace("Exporting pathway to " + file);
-		
-		Set<PathwayExporter> set = getPathwayExporters(file);
+	public List<String> exportPathwayModel(File file, PathwayModel pathway, int zoom) throws ConverterException {
+		Logger.log.trace("Exporting pathway model to " + file);
+
+		Set<PathwayModelExporter> set = getPathwayModelExporters(file);
+
+		if (set != null && set.size() == 1) {
+			PathwayModelExporter exporter = Utils.oneOf(set);
+			exporter.doExport(file, pathway, zoom);
+			return exporter.getWarnings();
+		} else
+			throw new ConverterException(
+					"Could not determine exporter for '" + FileUtils.getExtension(file.toString()) + "' files");
+
+	}
+
+	// TODO: No reason to keep this in engine, it doesn't act on active pathway
+	/**
+	 * Exports given pathway model to file. This function doesn't act on the active
+	 * pathway.
+	 * 
+	 * @param pathway the pathway model to export
+	 * @param file    file to write to.
+	 * @returns a list of warnings that occurred during export, or an empty list if
+	 *          there were none.
+	 */
+	public List<String> exportPathwayModel(File file, PathwayModel pathway, String exporterName)
+			throws ConverterException {
+		Logger.log.trace("Exporting pathway model to " + file);
+
+		Set<PathwayModelExporter> set = getPathwayModelExporters(file);
 		try {
-			for ( PathwayExporter pExporter : set){			
-				
-				if (pExporter.getName().equals(exporterName))
-					{
-						System.out.println(pExporter.getName());
-						pExporter.doExport(file, pathway);
-						return pExporter.getWarnings();
-					}
+			for (PathwayModelExporter pExporter : set) {
+
+				if (pExporter.getName().equals(exporterName)) {
+					System.out.println(pExporter.getName());
+					pExporter.doExport(file, pathway);
+					return pExporter.getWarnings();
+				}
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -183,82 +184,75 @@ public class Engine
 
 	}
 
-	public void importPathway(File file) throws ConverterException
-	{
-		Logger.log.trace("Importing pathway from " + file);
-		
-		Set<PathwayImporter> set = getPathwayImporters(file);		
-		if (set != null && set.size() == 1)
-		{
-			PathwayImporter importer = Utils.oneOf (set);
-			Pathway pathway = importer.doImport(file);
-			pathway.setSourceFile(file);
-			newPathwayHelper (pathway);
-		}
-		else
-			throw new ConverterException( "Could not determine importer for '" + FileUtils.getExtension(file.toString()) +  "' files" );
+	public void importPathwayModel(File file) throws ConverterException {
+		Logger.log.trace("Importing pathway model from " + file);
+
+		Set<PathwayModelImporter> set = getPathwayModelImporters(file);
+		if (set != null && set.size() == 1) {
+			PathwayModelImporter importer = Utils.oneOf(set);
+			PathwayModel pathwayModel = importer.doImport(file);
+			pathwayModel.setSourceFile(file);
+			newPathwayModelHelper(pathwayModel);
+		} else
+			throw new ConverterException(
+					"Could not determine importer for '" + FileUtils.getExtension(file.toString()) + "' files");
 	}
 
 	/**
-	 * After loading a pathway from disk,
-	 * run createVPathway on EDT thread to prevent concurrentModificationException
+	 * After loading a pathway model from disk, run createVPathway on EDT thread to
+	 * prevent concurrentModificationException
 	 */
-	private void newPathwayHelper(final Pathway pathway) throws ConverterException
-	{
+	private void newPathwayModelHelper(final PathwayModel pathway) throws ConverterException {
 		try {
 			// switch back to EDT
-			SwingUtilities.invokeAndWait(new Runnable()
-			{
-				public void run()
-				{
-					createVPathway(pathway);
+			SwingUtilities.invokeAndWait(new Runnable() {
+				public void run() {
+					createVPathwayModel(pathway);
 					fireApplicationEvent(new ApplicationEvent(pathway, ApplicationEvent.Type.PATHWAY_OPENED));
-					if (vPathway != null)
-					{
-						fireApplicationEvent(new ApplicationEvent(vPathway, ApplicationEvent.Type.VPATHWAY_OPENED));
+					if (vPathwayModel != null) {
+						fireApplicationEvent(
+								new ApplicationEvent(vPathwayModel, ApplicationEvent.Type.VPATHWAY_OPENED));
 					}
 				}
 			});
 		} catch (InterruptedException e) {
-			throw new ConverterException (e);
+			throw new ConverterException(e);
 		} catch (InvocationTargetException e) {
-			throw new ConverterException (e);
+			throw new ConverterException(e);
 		}
 	}
 
-	public void openPathwayFromMemory(Pathway pathway) throws ConverterException
-	{
-		newPathwayHelper(pathway);
+	public void openPathwayModelFromMemory(PathwayModel pathway) throws ConverterException {
+		newPathwayModelHelper(pathway);
 	}
-	
+
 	/**
-	 * Open a pathway from a gpml file
+	 * Open a pathway model from a gpml file
 	 */
-	public void openPathway(File pathwayFile) throws ConverterException
-	{
+	public void openPathwayModel(File pathwayFile) throws ConverterException {
 		String pwf = pathwayFile.toString();
 
 		// initialize new JDOM gpml representation and read the file
-		final Pathway pathway = new Pathway();
-		pathway.readFromXml(new File(pwf), true);
-		//Only set the pathway field after the data is loaded
-		//(Exception thrown on error, this part will not be reached)
-		newPathwayHelper(pathway);
+		final PathwayModel pathwayModel = new PathwayModel();
+		pathwayModel.readFromXml(new File(pwf), true);
+		// Only set the pathwayModel field after the data is loaded
+		// (Exception thrown on error, this part will not be reached)
+		newPathwayModelHelper(pathwayModel);
 	}
 
-	public File openPathway(URL url) throws ConverterException {
-		//TODO insert in recent pathways
+	public File openPathwayModel(URL url) throws ConverterException {
+		// TODO insert in recent pathways
 		String protocol = url.getProtocol();
 		File f = null;
-		if(protocol.equals("file")) {
+		if (protocol.equals("file")) {
 			f = new File(url.getFile());
-			openPathway(f);
+			openPathwayModel(f);
 		} else {
 			try {
 				f = File.createTempFile("urlPathway", "." + Engine.PATHWAY_FILE_EXTENSION);
 				FileUtils.downloadFile(url, f);
-				openPathway(f);
-			} catch(Exception e) {
+				openPathwayModel(f);
+			} catch (Exception e) {
 				throw new ConverterException(e);
 			}
 		}
@@ -267,11 +261,12 @@ public class Engine
 
 	/**
 	 * Save the pathway
-	 * @param p	The pathway to save
+	 * 
+	 * @param p      The pathwayModel to save
 	 * @param toFile The file to save to
 	 * @throws ConverterException
 	 */
-	public void savePathway(Pathway p, File toFile) throws ConverterException {
+	public void savePathwayModel(PathwayModel p, File toFile) throws ConverterException {
 		// make sure there are no problems with references.
 		p.fixReferences();
 		p.writeToXml(toFile, true);
@@ -280,110 +275,110 @@ public class Engine
 
 	/**
 	 * Save the currently active pathway
-	 * @param toFile	The file to save to
+	 * 
+	 * @param toFile The file to save to
 	 * @throws ConverterException
 	 */
-	public void savePathway(File toFile) throws ConverterException
-	{
-		savePathway(getActivePathway(), toFile);
+	public void savePathwayModel(File toFile) throws ConverterException {
+		savePathwayModel(getActivePathwayModel(), toFile);
 	}
 
 	/**
 	 * opposite of createVPathway
 	 */
-	public void disposeVPathway()
-	{
-		assert (vPathway != null);
+	public void disposeVPathwayModel() {
+		assert (vPathwayModel != null);
 		// signal destruction of vPathway
-		fireApplicationEvent(new ApplicationEvent(vPathway, ApplicationEvent.Type.VPATHWAY_DISPOSED));
-		vPathway.dispose();
-		vPathway = null;
+		fireApplicationEvent(new ApplicationEvent(vPathwayModel, ApplicationEvent.Type.VPATHWAY_DISPOSED));
+		vPathwayModel.dispose();
+		vPathwayModel = null;
 	}
 
 	/**
-	   Try to make a vpathway,
-	   replacing pathway with a new one.
+	 * Try to make a vpathway, replacing pathway model with a new one.
 	 */
-	public void createVPathway(Pathway p)
-	{
-		if (wrapper == null)
-		{
+	public void createVPathwayModel(PathwayModel p) {
+		if (wrapper == null) {
 			standalone = p;
-		}
-		else
-		{
+		} else {
 			double zoom = 100;
-			if(hasVPathway())
-			{
+			if (hasVPathwayModel()) {
 				// save zoom Level
-				zoom = getActiveVPathway().getPctZoom();
+				zoom = getActiveVPathwayModel().getPctZoom();
 
-				disposeVPathway();
+				disposeVPathwayModel();
 			}
 
-			vPathway = wrapper.createVPathway();
-			vPathway.registerKeyboardActions(this);
-			vPathway.activateUndoManager(this);
-			vPathway.fromModel(p);
+			vPathwayModel = wrapper.createVPathwayModel();
+			vPathwayModel.registerKeyboardActions(this);
+			vPathwayModel.activateUndoManager(this);
+			vPathwayModel.fromModel(p);
 
-			vPathway.setPctZoom(zoom);
-			fireApplicationEvent(new ApplicationEvent(vPathway, ApplicationEvent.Type.VPATHWAY_CREATED));
+			vPathwayModel.setPctZoom(zoom);
+			fireApplicationEvent(new ApplicationEvent(vPathwayModel, ApplicationEvent.Type.VPATHWAY_CREATED));
 		}
 	}
 
 	/**
-	   used by undo manager
+	 * used by undo manager
 	 */
-	public void replacePathway (Pathway p)
-	{
-		vPathway.replacePathway (p);
-		fireApplicationEvent(new ApplicationEvent(vPathway, ApplicationEvent.Type.VPATHWAY_CREATED));
+	public void replacePathwayModel(PathwayModel p) {
+		vPathwayModel.replacePathway(p);
+		fireApplicationEvent(new ApplicationEvent(vPathwayModel, ApplicationEvent.Type.VPATHWAY_CREATED));
 	}
 
 	/**
-	 * Create a new pathway and view (Pathay and VPathway)
+	 * Create a new pathway model and view (PathwayModel and VPathwayModel)
 	 */
-	public void newPathway() {
-		Pathway pathway = new Pathway();
-		pathway.initMappInfo();
+	public void newPathwayModel() {
+		PathwayModel pathwayModel= new PathwayModel();
+		pathwayModel.initMappInfo();
 
-		createVPathway(pathway);
-		fireApplicationEvent(new ApplicationEvent(pathway, ApplicationEvent.Type.PATHWAY_NEW));
-		if (vPathway != null)
-		{
-			fireApplicationEvent(new ApplicationEvent(vPathway, ApplicationEvent.Type.VPATHWAY_NEW));
+		createVPathwayModel(pathwayModel);
+		fireApplicationEvent(new ApplicationEvent(pathwayModel, ApplicationEvent.Type.PATHWAY_NEW));
+		if (vPathwayModel != null) {
+			fireApplicationEvent(new ApplicationEvent(vPathwayModel, ApplicationEvent.Type.VPATHWAY_NEW));
 		}
 	}
 
 	/**
 	 * Find out whether a drawing is currently open or not
+	 * 
 	 * @return true if a drawing is open, false if not
 	 * @deprecated use {@link #hasVPathway}
 	 */
-	public boolean isDrawingOpen() { return vPathway != null; }
+	public boolean isDrawingOpen() {
+		return vPathwayModel != null;
+	}
 
 	/**
-	 * Find out whether a VPathway is currently available or not
-	 * @return true if a VPathway is currently available, false if not
+	 * Find out whether a VPathwayModel is currently available or not
+	 * 
+	 * @return true if a VPathwayModel is currently available, false if not
 	 */
-	public boolean hasVPathway() { return vPathway != null; }
+	public boolean hasVPathwayModel() {
+		return vPathwayModel != null;
+	}
 
-	private Map<String, Set <PathwayExporter> > exporters = new HashMap<String, Set <PathwayExporter> >();
-	private Map<String, Set <PathwayImporter> > importers = new HashMap<String, Set <PathwayImporter> >();
+	private Map<String, Set<PathwayModelExporter>> exporters = new HashMap<String, Set<PathwayModelExporter>>();
+	private Map<String, Set<PathwayModelImporter>> importers = new HashMap<String, Set<PathwayModelImporter>>();
+
 	/**
-	 * Add a {@link PathwayExporter} that handles export of GPML to another file format
+	 * Add a {@link PathwayModelExporter} that handles export of GPML to another
+	 * file format
+	 * 
 	 * @param export
 	 */
-	public void addPathwayExporter(PathwayExporter export) {
-		for(String ext : export.getExtensions()) {
+	public void addPathwayModelExporter(PathwayModelExporter export) {
+		for (String ext : export.getExtensions()) {
 			Utils.multimapPut(exporters, ext.toLowerCase(), export);
 		}
 	}
-	
-	public void removePathwayExporter(PathwayExporter export) {
-		for(String ext : export.getExtensions()) {
-			if(exporters.containsKey(ext)) {
-				if(exporters.get(ext).size() == 1) {
+
+	public void removePathwayModelExporter(PathwayModelExporter export) {
+		for (String ext : export.getExtensions()) {
+			if (exporters.containsKey(ext)) {
+				if (exporters.get(ext).size() == 1) {
 					exporters.remove(ext);
 				} else {
 					exporters.get(ext).remove(export);
@@ -393,19 +388,21 @@ public class Engine
 	}
 
 	/**
-	 * Add a {@link PathwayImporter} that handles imoprt of GPML to another file format
+	 * Add a {@link PathwayModelImporter} that handles import of GPML to another
+	 * file format
+	 * 
 	 * @param export
 	 */
-	public void addPathwayImporter(PathwayImporter importer) {
-		for(String ext : importer.getExtensions()) {
+	public void addPathwayModelImporter(PathwayModelImporter importer) {
+		for (String ext : importer.getExtensions()) {
 			Utils.multimapPut(importers, ext.toLowerCase(), importer);
 		}
 	}
-	
-	public void removePathwayImporter(PathwayImporter importer) {
-		for(String ext : importer.getExtensions()) {
-			if(importers.containsKey(ext)) {
-				if(importers.get(ext).size() == 1) {
+
+	public void removePathwayModelImporter(PathwayModelImporter importer) {
+		for (String ext : importer.getExtensions()) {
+			if (importers.containsKey(ext)) {
+				if (importers.get(ext).size() == 1) {
 					importers.remove(ext);
 				} else {
 					importers.get(ext).remove(importer);
@@ -416,31 +413,29 @@ public class Engine
 
 	/**
 	 * Find a suitable exporter for the given filename
+	 * 
 	 * @returns null if no suitable exporter could be found
 	 */
-	public Set<PathwayExporter> getPathwayExporters(File f) 
-	{
+	public Set<PathwayModelExporter> getPathwayModelExporters(File f) {
 		return exporters.get(FileUtils.getExtension(f.toString()).toLowerCase());
 	}
 
 	/**
-	 * Find exporters suitable for a given file.
-	 * In case multiple importers match the file extension, the files may be inspected.
+	 * Find exporters suitable for a given file. In case multiple importers match
+	 * the file extension, the files may be inspected.
+	 * 
 	 * @returns null if no suitable importer could be found
 	 */
-	public Set<PathwayImporter> getPathwayImporters(File f) 
-	{
-		Set<PathwayImporter> set = new HashSet<PathwayImporter>();
-		
-		// deep copy, so that we can safely modify our set 
+	public Set<PathwayModelImporter> getPathwayModelImporters(File f) {
+		Set<PathwayModelImporter> set = new HashSet<PathwayModelImporter>();
+
+		// deep copy, so that we can safely modify our set
 		set.addAll(importers.get(FileUtils.getExtension(f.toString()).toLowerCase()));
-		
-		if (set != null && set.size() > 1)
-		{
-			Iterator<PathwayImporter> i = set.iterator();
-			while (i.hasNext())
-			{
-				PathwayImporter j = i.next();
+
+		if (set != null && set.size() > 1) {
+			Iterator<PathwayModelImporter> i = set.iterator();
+			while (i.hasNext()) {
+				PathwayModelImporter j = i.next();
 				if (!j.isCorrectType(f))
 					i.remove();
 			}
@@ -450,31 +445,30 @@ public class Engine
 	}
 
 	/**
-	 * @returns all registered pathway exporters
+	 * @returns all registered pathway model exporters
 	 */
-	public Set<PathwayExporter> getPathwayExporters() 
-	{
+	public Set<PathwayModelExporter> getPathwayModelExporters() {
 		return Utils.multimapValues(exporters);
 	}
 
 	/**
-	 * @returns all registered pathway importers
+	 * @returns all registered pathway model importers
 	 */
-	public Set<PathwayImporter> getPathwayImporters() 
-	{
+	public Set<PathwayModelImporter> getPathwayModelImporters() {
 		return Utils.multimapValues(importers);
 	}
 
-	private List<ApplicationEventListener> applicationEventListeners  = new ArrayList<ApplicationEventListener>();
+	private List<ApplicationEventListener> applicationEventListeners = new ArrayList<ApplicationEventListener>();
 
 	/**
-	 * Add an {@link ApplicationEventListener}, that will be notified if a
-	 * property changes that has an effect throughout the program (e.g. opening a pathway)
+	 * Add an {@link ApplicationEventListener}, that will be notified if a property
+	 * changes that has an effect throughout the program (e.g. opening a pathway)
+	 * 
 	 * @param l The {@link ApplicationEventListener} to add
 	 */
-	public void addApplicationEventListener(ApplicationEventListener l)
-	{
-		if (l == null) throw new NullPointerException();
+	public void addApplicationEventListener(ApplicationEventListener l) {
+		if (l == null)
+			throw new NullPointerException();
 		applicationEventListeners.add(l);
 	}
 
@@ -483,68 +477,65 @@ public class Engine
 	}
 
 	/**
-	 * Fire a {@link ApplicationEvent} to notify all {@link ApplicationEventListener}s registered
-	 * to this class
+	 * Fire a {@link ApplicationEvent} to notify all
+	 * {@link ApplicationEventListener}s registered to this class
+	 * 
 	 * @param e
 	 */
 	private void fireApplicationEvent(ApplicationEvent e) {
-		for(ApplicationEventListener l : applicationEventListeners) l.applicationEvent(e);
+		for (ApplicationEventListener l : applicationEventListeners)
+			l.applicationEvent(e);
 	}
 
 	/**
-	 * Implement this if you want to receive events upon opening / closing
-	 * pathways
+	 * Implement this if you want to receive events upon opening / closing pathways
 	 */
 	public interface ApplicationEventListener {
 		public void applicationEvent(ApplicationEvent e);
 	}
 
 	String appName = "Application name undefined";
+
 	/**
 	 * Return full application name, including version No.
 	 */
-	public String getApplicationName()
-	{
+	public String getApplicationName() {
 		return appName;
 	}
 
-	public void setApplicationName (String value)
-	{
+	public void setApplicationName(String value) {
 		appName = value;
 	}
 
 	/**
-	 * Fire a close event
-	 * TODO: move APPLICATION_CLOSE to other place
+	 * Fire a close event TODO: move APPLICATION_CLOSE to other place
 	 */
-	public void close()
-	{
+	public void close() {
 		ApplicationEvent e = new ApplicationEvent(this, ApplicationEvent.Type.APPLICATION_CLOSE);
 		fireApplicationEvent(e);
 	}
 
 	private boolean disposed = false;
+
 	/**
-	 * free all resources (such as listeners) held by this class.
-	 * Owners of this class must explicitly dispose of it to clean up.
+	 * free all resources (such as listeners) held by this class. Owners of this
+	 * class must explicitly dispose of it to clean up.
 	 */
-	public void dispose()
-	{
+	public void dispose() {
 		assert (!disposed);
-		if (vPathway != null) disposeVPathway();
+		if (vPathwayModel != null)
+			disposeVPathwayModel();
 		applicationEventListeners.clear();
 		disposed = true;
 	}
 
 	/** return the subversion revision at the time of building */
-	public static String getRevision()
-	{
+	public static String getRevision() {
 		return "";
 	}
 
 	/** The current PathVisio version */
-	public static String getVersion()
-	{
+	public static String getVersion() {
 		return Revision.VERSION;
 	}
 

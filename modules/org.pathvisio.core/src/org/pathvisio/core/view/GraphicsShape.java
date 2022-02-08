@@ -66,7 +66,7 @@ public abstract class GraphicsShape extends Graphics implements LinkProvider, Ad
 
 	Handle[] handles = new Handle[] {};
 
-	public GraphicsShape(VPathway canvas, PathwayElement o)
+	public GraphicsShape(VPathwayModel canvas, PathwayElement o)
 	{
 		super(canvas, o);
 	}

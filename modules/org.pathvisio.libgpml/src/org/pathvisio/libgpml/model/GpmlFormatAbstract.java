@@ -41,8 +41,10 @@ import org.jdom2.output.SAXOutputter;
 import org.jdom2.output.XMLOutputter;
 import org.pathvisio.libgpml.biopax.BiopaxElement;
 import org.pathvisio.libgpml.debug.Logger;
+import org.pathvisio.libgpml.io.ConverterException;
 import org.pathvisio.libgpml.model.GraphLink.LinkableTo;
 import org.pathvisio.libgpml.model.type.GroupType;
+import org.pathvisio.libgpml.model.type.ObjectType;
 import org.xml.sax.SAXException;
 
 /**
@@ -260,7 +262,7 @@ public abstract class GpmlFormatAbstract
 		updateMappInfoVariable (root, o);
 	}
 
-	public abstract PathwayElement mapElement(Element e, Pathway p) throws ConverterException;
+	public abstract PathwayElement mapElement(Element e, PathwayModel p) throws ConverterException;
 
 	public PathwayElement mapElement(Element e) throws ConverterException
 	{
@@ -580,7 +582,7 @@ public abstract class GpmlFormatAbstract
 			"White", "Yellow", "Transparent"
 		});
 
-	public void readFromRoot(Element root, Pathway pwy) throws ConverterException
+	public void readFromRoot(Element root, PathwayModel pwy) throws ConverterException
 	{
 		mapElement(root, pwy); // MappInfo
 
@@ -599,7 +601,7 @@ public abstract class GpmlFormatAbstract
 		convertPointCoordinates(pwy);
 	}
 
-	private static void addGraphIds(Pathway pathway) throws ConverterException {
+	private static void addGraphIds(PathwayModel pathway) throws ConverterException {
 		for(PathwayElement pe : pathway.getDataObjects()) {
 			String id = pe.getGraphId();
 			if(id == null || "".equals(id))
@@ -633,7 +635,7 @@ public abstract class GpmlFormatAbstract
 		}
 	}
 
-	private static void convertPointCoordinates(Pathway pathway) throws ConverterException
+	private static void convertPointCoordinates(PathwayModel pathway) throws ConverterException
 	{
 		for(PathwayElement pe : pathway.getDataObjects()) {
 			if(pe.getObjectType() == ObjectType.LINE || pe.getObjectType() == ObjectType.GRAPHLINE) {
@@ -659,7 +661,7 @@ public abstract class GpmlFormatAbstract
 					);
 					pe.getMEnd().setRelativePosition(relative.getX(), relative.getY());
 				}
-                ((MLine)pe).getConnectorShape().recalculateShape(((MLine)pe));
+                ((LineElement)pe).getConnectorShape().recalculateShape(((LineElement)pe));
 			}
 		}
 	}
@@ -670,7 +672,7 @@ public abstract class GpmlFormatAbstract
 	 */
 	public void validateDocument(Document doc) throws ConverterException
 	{
-		ClassLoader cl = Pathway.class.getClassLoader();
+		ClassLoader cl = PathwayModel.class.getClassLoader();
 		InputStream is = cl.getResourceAsStream(xsdFile);
 		if(is != null) {
 			Schema schema;

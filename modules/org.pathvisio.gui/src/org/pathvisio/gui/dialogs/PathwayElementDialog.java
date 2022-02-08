@@ -25,12 +25,12 @@ import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 
 import org.pathvisio.core.view.UndoAction;
-import org.pathvisio.core.view.VPathway;
+import org.pathvisio.core.view.VPathwayModel;
 import org.pathvisio.gui.SwingEngine;
 import org.pathvisio.gui.panels.CommentPanel;
 import org.pathvisio.gui.panels.LitReferencePanel;
 import org.pathvisio.gui.panels.PathwayElementPanel;
-import org.pathvisio.libgpml.model.Pathway;
+import org.pathvisio.libgpml.model.PathwayModel;
 import org.pathvisio.libgpml.model.PathwayElement;
 import org.pathvisio.libgpml.prop.StaticProperty;
 
@@ -48,7 +48,7 @@ public class PathwayElementDialog extends OkCancelDialog {
 	private JTabbedPane dialogPane;
 	private Map<String, PathwayElementPanel> panels;
 	private Map<StaticProperty, Object> state = new HashMap<StaticProperty, Object>();
-	private Pathway originalPathway; //Used for undo event
+	private PathwayModel originalPathway; //Used for undo event
 
 	protected boolean readonly;
 	protected SwingEngine swingEngine;
@@ -103,7 +103,7 @@ public class PathwayElementDialog extends OkCancelDialog {
 	 */
 	protected void storeState() {
 		PathwayElement e = getInput();
-		originalPathway = (Pathway) e.getParent().clone();
+		originalPathway = (PathwayModel) e.getParent().clone();
 		for(StaticProperty t : e.getStaticPropertyKeys()) {
 			state.put(t, e.getStaticProperty(t));
 		}
@@ -183,7 +183,7 @@ public class PathwayElementDialog extends OkCancelDialog {
 			}
 		}
 		if(done) {
-			VPathway p = swingEngine.getEngine().getActiveVPathway();
+			VPathwayModel p = swingEngine.getEngine().getActiveVPathwayModel();
 			p.getUndoManager().newAction(
 					new UndoAction("Modified element properties", originalPathway)
 			);

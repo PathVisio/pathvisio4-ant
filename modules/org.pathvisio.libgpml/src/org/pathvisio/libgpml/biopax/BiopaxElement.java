@@ -25,8 +25,8 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 import org.pathvisio.libgpml.debug.Logger;
 import org.pathvisio.libgpml.model.GpmlFormat;
-import org.pathvisio.libgpml.model.ObjectType;
 import org.pathvisio.libgpml.model.PathwayElement;
+import org.pathvisio.libgpml.model.type.ObjectType;
 
 /**
  * This class keeps track of all BioPAX elements in the pathway

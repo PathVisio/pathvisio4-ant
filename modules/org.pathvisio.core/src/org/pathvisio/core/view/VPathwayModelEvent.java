@@ -24,10 +24,10 @@ import java.util.List;
 /**
  * event sent by VPathway upon modification of one or more VPathwayElements.
  */
-public class VPathwayEvent extends EventObject {
+public class VPathwayModelEvent extends EventObject {
 
 	/** Possible event types */
-	public static enum VPathwayEventType
+	public static enum VPathwayModelEventType
 	{
 		ELEMENT_ADDED,
 		EDIT_MODE_ON,
@@ -41,39 +41,39 @@ public class VPathwayEvent extends EventObject {
 		HREF_ACTIVATED;
 	}
 
-	private VPathwayEventType type;
+	private VPathwayModelEventType type;
 	private List<VPathwayElement> affectedElements;
 	private Graphics2D g2d;
 	private MouseEvent mouseEvent;
 
-	public VPathwayEvent(VPathway source, VPathwayEventType type) {
+	public VPathwayModelEvent(VPathwayModel source, VPathwayModelEventType type) {
 		super(source);
 		this.type = type;
 	}
 
-	public VPathwayEvent(VPathway source, List<VPathwayElement> affectedElements, VPathwayEventType type) {
+	public VPathwayModelEvent(VPathwayModel source, List<VPathwayElement> affectedElements, VPathwayModelEventType type) {
 		this(source, type);
 		this.affectedElements = affectedElements;
 	}
 
-	public VPathwayEvent(VPathway source, VPathwayElement affectedElement, VPathwayEventType type) {
+	public VPathwayModelEvent(VPathwayModel source, VPathwayElement affectedElement, VPathwayModelEventType type) {
 		this(source, type);
 		List<VPathwayElement> afe = new ArrayList<VPathwayElement>();
 		afe.add(affectedElement);
 		this.affectedElements = afe;
 	}
 
-	public VPathwayEvent(VPathway source, VPathwayElement affectedElement, Graphics2D g2d, VPathwayEventType type) {
+	public VPathwayModelEvent(VPathwayModel source, VPathwayElement affectedElement, Graphics2D g2d, VPathwayModelEventType type) {
 		this(source, affectedElement, type);
 		this.g2d = g2d;
 	}
 
-	public VPathwayEvent(VPathway source, VPathwayElement affectedElement, MouseEvent e, VPathwayEventType type) {
+	public VPathwayModelEvent(VPathwayModel source, VPathwayElement affectedElement, MouseEvent e, VPathwayModelEventType type) {
 		this(source, affectedElement, type);
 		mouseEvent = e;
 	}
 
-	public VPathwayEvent(VPathway source, List<VPathwayElement> affectedElements, MouseEvent e, VPathwayEventType type) {
+	public VPathwayModelEvent(VPathwayModel source, List<VPathwayElement> affectedElements, MouseEvent e, VPathwayModelEventType type) {
 		this(source, affectedElements, type);
 		mouseEvent = e;
 	}
@@ -90,7 +90,7 @@ public class VPathwayEvent extends EventObject {
 		return affectedElements;
 	}
 
-	public VPathwayEventType getType() {
+	public VPathwayModelEventType getType() {
 		return type;
 	}
 
@@ -98,7 +98,7 @@ public class VPathwayEvent extends EventObject {
 		return g2d;
 	}
 
-	public VPathway getVPathway() {
-		return (VPathway)getSource();
+	public VPathwayModel getVPathwayModel() {
+		return (VPathwayModel)getSource();
 	}
 }

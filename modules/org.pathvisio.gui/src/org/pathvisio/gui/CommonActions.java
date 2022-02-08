@@ -41,7 +41,7 @@ import org.pathvisio.core.view.VLabel;
 import org.pathvisio.core.view.LayoutType;
 import org.pathvisio.core.view.SelectionBox;
 import org.pathvisio.core.view.Template;
-import org.pathvisio.core.view.VPathway;
+import org.pathvisio.core.view.VPathwayModel;
 import org.pathvisio.core.view.VPathwayElement;
 import org.pathvisio.core.view.ViewActions;
 import org.pathvisio.gui.dialogs.AboutDlg;
@@ -49,10 +49,10 @@ import org.pathvisio.gui.dialogs.PathwayElementDialog;
 import org.pathvisio.gui.dialogs.PublicationXRefDialog;
 import org.pathvisio.libgpml.biopax.BiopaxReferenceManager;
 import org.pathvisio.libgpml.biopax.PublicationXref;
-import org.pathvisio.libgpml.model.Pathway;
+import org.pathvisio.libgpml.model.PathwayModel;
 import org.pathvisio.libgpml.model.PathwayElement;
-import org.pathvisio.libgpml.model.Pathway.StatusFlagEvent;
-import org.pathvisio.libgpml.model.Pathway.StatusFlagListener;
+import org.pathvisio.libgpml.model.PathwayModel.StatusFlagEvent;
+import org.pathvisio.libgpml.model.PathwayModel.StatusFlagListener;
 import org.pathvisio.libgpml.model.shape.MIMShapes;
 import org.pathvisio.libgpml.model.type.CellularComponentType;
 import org.pathvisio.libgpml.model.type.ConnectorType;
@@ -64,7 +64,7 @@ import org.pathvisio.libgpml.model.type.ShapeType;
 /**
  * A collection of {@link Action}s that may be used throughout the program (e.g. in
  * toolbars, menubars and right-click menu). These actions are registered to the proper
- * group in {@ViewActions} when a new {@link VPathway} is created.
+ * group in {@ViewActions} when a new {@link VPathwayModel} is created.
  * @author thomas
  * @see {@link ViewActions}
  */
@@ -76,7 +76,7 @@ public class CommonActions implements ApplicationEventListener {
 
 	public void applicationEvent(ApplicationEvent e) {
 		if(e.getType() == ApplicationEvent.Type.VPATHWAY_CREATED) {
-			ViewActions va = ((VPathway)e.getSource()).getViewActions();
+			ViewActions va = ((VPathwayModel)e.getSource()).getViewActions();
 			va.registerToGroup(saveAction, 	ViewActions.GROUP_ENABLE_VPATHWAY_LOADED);
 			va.registerToGroup(saveAsAction,	ViewActions.GROUP_ENABLE_VPATHWAY_LOADED);
 			va.registerToGroup(importAction, 	ViewActions.GROUP_ENABLE_EDITMODE);
@@ -423,7 +423,7 @@ public class CommonActions implements ApplicationEventListener {
 
 		public void actionPerformed(ActionEvent e)
 		{
-			VPathway vPathway = engine.getActiveVPathway();
+			VPathwayModel vPathway = engine.getActiveVPathwayModel();
 			if(vPathway != null)
 			{
 				double zoomFactor = vPathway.getFitZoomFactor();
@@ -455,7 +455,7 @@ public class CommonActions implements ApplicationEventListener {
 		}
 
 		public void actionPerformed(ActionEvent e) {
-			VPathway vPathway = engine.getActiveVPathway();
+			VPathwayModel vPathway = engine.getActiveVPathwayModel();
 			if(vPathway != null) {
 				vPathway.centeredZoom(zoomFactor);
 			}
@@ -499,7 +499,7 @@ public class CommonActions implements ApplicationEventListener {
 						Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 			}
 			swingEngine.getEngine().addApplicationEventListener(this);
-			Pathway p = swingEngine.getEngine().getActivePathway();
+			PathwayModel p = swingEngine.getEngine().getActivePathwayModel();
 			if(p != null) {
 				p.addStatusFlagListener(this);
 				handleStatus(p.hasChanged());
@@ -534,7 +534,7 @@ public class CommonActions implements ApplicationEventListener {
 			switch(e.getType()) {
 			case PATHWAY_NEW:
 			case PATHWAY_OPENED:
-				Pathway p = swingEngine.getEngine().getActivePathway();
+				PathwayModel p = swingEngine.getEngine().getActivePathwayModel();
 				p.addStatusFlagListener(this);
 				handleStatus(p.hasChanged());
 				break;
@@ -611,7 +611,7 @@ public class CommonActions implements ApplicationEventListener {
 		}
 
 		public void actionPerformed(ActionEvent e) {
-			VPathway vp = engine.getActiveVPathway();
+			VPathwayModel vp = engine.getActiveVPathwayModel();
 			if(vp != null) {
 //				vp.addVPathwayListener(this);
 				vp.setNewTemplate(template);
@@ -651,7 +651,7 @@ public class CommonActions implements ApplicationEventListener {
 		}
 
 		public void actionPerformed(ActionEvent e) {
-			VPathway vp = engine.getActiveVPathway();
+			VPathwayModel vp = engine.getActiveVPathwayModel();
 			if(vp != null) vp.layoutSelected(type);
 		}
 	}

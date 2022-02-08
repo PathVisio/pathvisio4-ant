@@ -27,7 +27,7 @@ public class VLabel extends GraphicsShape
 	 * Constructor for this class
 	 * @param canvas - the VPathway this label will be part of
 	 */
-	public VLabel(VPathway canvas, PathwayElement o)
+	public VLabel(VPathwayModel canvas, PathwayElement o)
 	{
 		super(canvas, o);
 	}

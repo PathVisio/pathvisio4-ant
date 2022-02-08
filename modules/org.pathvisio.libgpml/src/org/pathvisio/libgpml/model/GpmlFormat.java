@@ -32,6 +32,8 @@ import org.jdom2.Namespace;
 import org.jdom2.input.JDOMParseException;
 import org.jdom2.input.SAXBuilder;
 import org.pathvisio.libgpml.debug.Logger;
+import org.pathvisio.libgpml.io.AbstractPathwayModelFormat;
+import org.pathvisio.libgpml.io.ConverterException;
 import org.pathvisio.libgpml.util.RootElementFinder;
 import org.xml.sax.InputSource;
 
@@ -40,7 +42,7 @@ import org.xml.sax.InputSource;
  * gpml-specific constants, and should be the only class (apart from svgFormat)
  * that needs to import jdom
  */
-public class GpmlFormat extends AbstractPathwayFormat {
+public class GpmlFormat extends AbstractPathwayModelFormat {
 	static private final GpmlFormat2013a CURRENT = GpmlFormat2013a.GPML_2013A;
 
 	public static final Namespace RDF = Namespace.getNamespace("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
@@ -53,14 +55,14 @@ public class GpmlFormat extends AbstractPathwayFormat {
 		DataSourceTxt.init();
 	}
 
-	public Pathway doImport(File file) throws ConverterException {
-		Pathway pathway = new Pathway();
+	public PathwayModel doImport(File file) throws ConverterException {
+		PathwayModel pathway = new PathwayModel();
 		readFromXml(pathway, file, true);
 		pathway.clearChangedFlag();
 		return pathway;
 	}
 
-	public void doExport(File file, Pathway pathway) throws ConverterException {
+	public void doExport(File file, PathwayModel pathway) throws ConverterException {
 		writeToXml(pathway, file, true);
 	}
 
@@ -72,7 +74,7 @@ public class GpmlFormat extends AbstractPathwayFormat {
 		return "GPML file";
 	}
 
-	public static Document createJdom(Pathway data) throws ConverterException {
+	public static Document createJdom(PathwayModel data) throws ConverterException {
 		return CURRENT.createJdom(data);
 	}
 
@@ -92,15 +94,15 @@ public class GpmlFormat extends AbstractPathwayFormat {
 	 *                 If there is a validation error, or the xsd is not in the
 	 *                 classpath, an exception will be thrown.
 	 */
-	static public void writeToXml(Pathway pwy, File file, boolean validate) throws ConverterException {
+	static public void writeToXml(PathwayModel pwy, File file, boolean validate) throws ConverterException {
 		CURRENT.writeToXml(pwy, file, validate);
 	}
 
-	static public void writeToXml(Pathway pwy, OutputStream out, boolean validate) throws ConverterException {
+	static public void writeToXml(PathwayModel pwy, OutputStream out, boolean validate) throws ConverterException {
 		CURRENT.writeToXml(pwy, out, validate);
 	}
 
-	static public void readFromXml(Pathway pwy, File file, boolean validate) throws ConverterException {
+	static public void readFromXml(PathwayModel pwy, File file, boolean validate) throws ConverterException {
 		InputStream inf;
 		try {
 			inf = new FileInputStream(file);
@@ -110,11 +112,11 @@ public class GpmlFormat extends AbstractPathwayFormat {
 		readFromXmlImpl(pwy, new InputSource(inf), validate);
 	}
 
-	static public void readFromXml(Pathway pwy, InputStream in, boolean validate) throws ConverterException {
+	static public void readFromXml(PathwayModel pwy, InputStream in, boolean validate) throws ConverterException {
 		readFromXmlImpl(pwy, new InputSource(in), validate);
 	}
 
-	static public void readFromXml(Pathway pwy, Reader in, boolean validate) throws ConverterException {
+	static public void readFromXml(PathwayModel pwy, Reader in, boolean validate) throws ConverterException {
 		readFromXmlImpl(pwy, new InputSource(in), validate);
 	}
 
@@ -128,7 +130,7 @@ public class GpmlFormat extends AbstractPathwayFormat {
 		return null;
 	}
 
-	private static void readFromXmlImpl(Pathway pwy, InputSource in, boolean validate) throws ConverterException {
+	private static void readFromXmlImpl(PathwayModel pwy, InputSource in, boolean validate) throws ConverterException {
 		// Start XML processing
 
 		SAXBuilder builder = new SAXBuilder(false); // no validation when reading the xml file
@@ -187,7 +189,7 @@ public class GpmlFormat extends AbstractPathwayFormat {
 	}
 
 	@Override
-	public void doExport(File file, Pathway pathway, int zoom) throws ConverterException {
+	public void doExport(File file, PathwayModel pathway, int zoom) throws ConverterException {
 		// TODO Auto-generated method stub
 
 	}

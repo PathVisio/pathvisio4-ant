@@ -19,7 +19,7 @@ package org.pathvisio.core.view;
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 
-import org.pathvisio.libgpml.model.MState;
+import org.pathvisio.libgpml.model.State;
 import org.pathvisio.libgpml.model.PathwayElement;
 
 /**
@@ -29,7 +29,7 @@ public class VState extends GraphicsShape
 {	
 	public static final String ROTATION_KEY = "org.pathvisio.core.StateRotation";
 
-	public VState (VPathway canvas, PathwayElement o) {
+	public VState (VPathwayModel canvas, PathwayElement o) {
 		super(canvas, o);
 	}
 
@@ -48,7 +48,7 @@ public class VState extends GraphicsShape
 	protected void vMoveBy(double vdx, double vdy)
 	{
 		Point2D mNewPos = new Point2D.Double (mFromV(getVCenterX() + vdx), mFromV(getVCenterY() + vdy)); 
-		Point2D newRel = ((MState)gdata).getParentDataNode().toRelativeCoordinate(mNewPos);
+		Point2D newRel = ((State)gdata).getParentDataNode().toRelativeCoordinate(mNewPos);
 		double x = newRel.getX();
 		double y = newRel.getY();
 		if (x > 1) x = 1;

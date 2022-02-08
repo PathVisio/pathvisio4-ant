@@ -16,16 +16,17 @@
  ******************************************************************************/
 // Copyright 2015-2019 BiGCaT Bioinformatics
 package org.pathvisio.libgpml.model;
+
 /**
  * Class storing information about ontology tags for pathways.
+ * 
  * @author jonathan
- *
  */
 public class OntologyTag {
 	private String id;
 	private String term;
 	private String ontology;
-		
+
 	public OntologyTag(String id, String term, String ontology) {
 		this.id = id;
 		this.term = term;
@@ -43,6 +44,5 @@ public class OntologyTag {
 	public String getOntology() {
 		return ontology;
 	}
-
 
 }

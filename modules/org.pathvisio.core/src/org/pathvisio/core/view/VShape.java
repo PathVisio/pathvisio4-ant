@@ -30,7 +30,7 @@ public class VShape extends GraphicsShape
 	 * Constructor for this class
 	 * @param canvas - the VPathway this Shape will be part of
 	 */
-	public VShape(VPathway canvas, PathwayElement o)
+	public VShape(VPathwayModel canvas, PathwayElement o)
 	{
 		super(canvas, o);
 	}

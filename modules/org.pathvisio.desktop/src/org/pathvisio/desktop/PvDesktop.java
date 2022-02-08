@@ -35,7 +35,7 @@ import org.pathvisio.core.data.GdbEvent;
 import org.pathvisio.core.data.GdbManager.GdbEventListener;
 import org.pathvisio.core.preferences.GlobalPreference;
 import org.pathvisio.core.preferences.PreferenceManager;
-import org.pathvisio.core.view.VPathway;
+import org.pathvisio.core.view.VPathwayModel;
 import org.pathvisio.desktop.data.DBConnDerby;
 import org.pathvisio.desktop.data.DBConnectorSwing;
 import org.pathvisio.desktop.plugin.IPluginManager;
@@ -43,7 +43,7 @@ import org.pathvisio.desktop.plugin.PluginRepoPreference;
 import org.pathvisio.desktop.util.StandaloneCompat;
 import org.pathvisio.gui.PathwayElementMenuListener.PathwayElementMenuHook;
 import org.pathvisio.libgpml.debug.Logger;
-import org.pathvisio.libgpml.model.Pathway;
+import org.pathvisio.libgpml.model.PathwayModel;
 import org.pathvisio.gui.SwingEngine;
 
 /**

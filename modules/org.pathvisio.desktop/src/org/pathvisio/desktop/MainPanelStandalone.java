@@ -159,7 +159,7 @@ public class MainPanelStandalone extends MainPanel {
 		switch (e.getType()) {
 		case PATHWAY_OPENED:
 		case PATHWAY_SAVE:
-			putInRecentPathwayList(swingEngine.getEngine().getActivePathway().getSourceFile());
+			putInRecentPathwayList(swingEngine.getEngine().getActivePathwayModel().getSourceFile());
 			refreshRecentPathwaysMenu();
 			break;
 		}

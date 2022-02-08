@@ -25,9 +25,9 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
-import org.pathvisio.core.view.VPathway;
-import org.pathvisio.libgpml.model.ConverterException;
-import org.pathvisio.libgpml.model.Pathway;
+import org.pathvisio.core.view.VPathwayModel;
+import org.pathvisio.libgpml.io.ConverterException;
+import org.pathvisio.libgpml.model.PathwayModel;
 
 /**
  * A Pathway exporter for Bitmap formats, based on the javax.imageio library
@@ -64,7 +64,7 @@ public class RasterImageExporter extends ImageExporter {
 			throw new IllegalArgumentException("Unkown Image type " + type);
 	}
 
-	public void doExport(File file, Pathway pathway) throws ConverterException {
+	public void doExport(File file, PathwayModel pathway) throws ConverterException {
 		try {
 			BufferedImage image = exportAsImage(pathway);
 			ImageIO.write(image, getType(), file);
@@ -74,7 +74,7 @@ public class RasterImageExporter extends ImageExporter {
 	}
 
 	@Override
-	public void doExport(File file, Pathway pathway, int zoom) throws ConverterException {
+	public void doExport(File file, PathwayModel pathway, int zoom) throws ConverterException {
 		// TODO Auto-generated method stub
 		try {
 
@@ -85,8 +85,8 @@ public class RasterImageExporter extends ImageExporter {
 		}
 	}
 
-	public BufferedImage exportAsImage(Pathway pathway) {
-		VPathway vPathway = new VPathway(null);
+	public BufferedImage exportAsImage(PathwayModel pathway) {
+		VPathwayModel vPathway = new VPathwayModel(null);
 		try {
 			vPathway.fromModel(pathway);
 			BufferedImage image = new BufferedImage(vPathway.getVWidth(), vPathway.getVHeight(),
@@ -100,8 +100,8 @@ public class RasterImageExporter extends ImageExporter {
 		}
 	}
 
-	public BufferedImage exportAsImage(Pathway pathway, int zoom) {
-		VPathway vPathway = new VPathway(null);
+	public BufferedImage exportAsImage(PathwayModel pathway, int zoom) {
+		VPathwayModel vPathway = new VPathwayModel(null);
 		try {
 			vPathway.fromModel(pathway);
 

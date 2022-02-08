@@ -24,8 +24,8 @@ import java.util.List;
 import org.pathvisio.core.util.Resources;
 import org.pathvisio.libgpml.debug.Logger;
 import org.pathvisio.libgpml.debug.WorkerThreadOnly;
-import org.pathvisio.libgpml.model.ObjectType;
 import org.pathvisio.libgpml.model.PathwayElement;
+import org.pathvisio.libgpml.model.type.ObjectType;
 
 /**
  * BackpageTextProvider knows how to generate a html "backpage" for a given

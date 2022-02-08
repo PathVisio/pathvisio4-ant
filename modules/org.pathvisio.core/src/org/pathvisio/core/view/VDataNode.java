@@ -32,7 +32,7 @@ public class VDataNode extends GraphicsShape
 	//note: not the same as color!
 	Color fillColor = INITIAL_FILL_COLOR;
 
-	public VDataNode (VPathway canvas, PathwayElement o) {
+	public VDataNode (VPathwayModel canvas, PathwayElement o) {
 		super(canvas, o);
 	}
 	

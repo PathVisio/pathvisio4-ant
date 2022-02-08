@@ -14,12 +14,14 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  ******************************************************************************/
-package org.pathvisio.libgpml.model;
+package org.pathvisio.libgpml.io;
 
 import java.io.File;
 
+import org.pathvisio.libgpml.model.PathwayModel;
+
 /** implemented by classes that can import a pathway from various different types */
-public interface PathwayImporter extends PathwayIO 
+public interface PathwayModelImporter extends PathwayModelIO 
 {
 	/**
 	 * Inspect the file and determine if the file is suitable for import using this importer.
@@ -40,5 +42,5 @@ public interface PathwayImporter extends PathwayIO
 	 * @throws ConverterException if the input file could not be read or parsed,
 	 * 		or doesn't contain correct pathway information.
 	 */
-	public Pathway doImport(File file) throws ConverterException;
+	public PathwayModel doImport(File file) throws ConverterException;
 }

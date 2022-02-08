@@ -53,7 +53,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.TransferHandler;
 import javax.swing.UIManager;
 
-import org.pathvisio.core.gui.PathwayTransferable;
+import org.pathvisio.core.gui.PathwayModelTransferable;
 import org.pathvisio.core.gui.SwingKeyEvent;
 import org.pathvisio.core.gui.SwingMouseEvent;
 import org.pathvisio.core.gui.ToolTipProvider;
@@ -64,24 +64,24 @@ import org.pathvisio.core.view.Handle;
 import org.pathvisio.core.view.VLabel;
 import org.pathvisio.core.view.VElementMouseEvent;
 import org.pathvisio.core.view.VElementMouseListener;
-import org.pathvisio.core.view.VPathway;
+import org.pathvisio.core.view.VPathwayModel;
 import org.pathvisio.core.view.VPathwayElement;
-import org.pathvisio.core.view.VPathwayEvent;
-import org.pathvisio.core.view.VPathwayListener;
-import org.pathvisio.core.view.VPathwayWrapper;
+import org.pathvisio.core.view.VPathwayModelEvent;
+import org.pathvisio.core.view.VPathwayModelListener;
+import org.pathvisio.core.view.VPathwayModelWrapper;
 import org.pathvisio.gui.MainPanel;
 import org.pathvisio.gui.dnd.PathwayImportHandler;
-import org.pathvisio.libgpml.model.Pathway;
+import org.pathvisio.libgpml.model.PathwayModel;
 import org.pathvisio.libgpml.model.PathwayElement;
 
 
 /**
  * swing-dependent implementation of VPathway.
  */
-public class VPathwaySwing extends JPanel implements VPathwayWrapper,
-MouseMotionListener, MouseListener, KeyListener, VPathwayListener, VElementMouseListener, MouseWheelListener {
+public class VPathwaySwing extends JPanel implements VPathwayModelWrapper,
+MouseMotionListener, MouseListener, KeyListener, VPathwayModelListener, VElementMouseListener, MouseWheelListener {
 
-	protected VPathway child;
+	protected VPathwayModel child;
 
 	protected JScrollPane container;
 
@@ -104,13 +104,13 @@ MouseMotionListener, MouseListener, KeyListener, VPathwayListener, VElementMouse
 						GlobalPreference.ENABLE_DOUBLE_BUFFERING));
 	}
 
-	public void setChild(VPathway c) {
+	public void setChild(VPathwayModel c) {
 		child = c;
 		child.addVPathwayListener(this);
 		child.addVElementMouseListener(this);
 	}
 
-	public VPathway getChild() {
+	public VPathwayModel getChild() {
 		return child;
 	}
 
@@ -231,12 +231,12 @@ MouseMotionListener, MouseListener, KeyListener, VPathwayListener, VElementMouse
 		//super.registerKeyboardAction(a, k, WHEN_IN_FOCUSED_WINDOW);
 	}
 
-	public VPathway createVPathway() {
-		setChild(new VPathway(this));
+	public VPathwayModel createVPathwayModel() {
+		setChild(new VPathwayModel(this));
 		return child;
 	}
 
-	public void vPathwayEvent(VPathwayEvent e) {
+	public void vPathwayModelEvent(VPathwayModelEvent e) {
 		switch(e.getType()) {
 		case MODEL_LOADED:
 			if(e.getSource() == child) {
@@ -275,9 +275,9 @@ MouseMotionListener, MouseListener, KeyListener, VPathwayListener, VElementMouse
 
 	List<PathwayElement> lastCopied;
 
-	public void copyToClipboard(Pathway source, List<PathwayElement> copyElements) {
+	public void copyToClipboard(PathwayModel source, List<PathwayElement> copyElements) {
 		Clipboard clip = Toolkit.getDefaultToolkit().getSystemClipboard();
-		clip.setContents(new PathwayTransferable(source, copyElements),
+		clip.setContents(new PathwayModelTransferable(source, copyElements),
 				(PathwayImportHandler)getTransferHandler());
 		((PathwayImportHandler)getTransferHandler()).obtainedOwnership();
 	}
@@ -288,7 +288,7 @@ MouseMotionListener, MouseListener, KeyListener, VPathwayListener, VElementMouse
 		toolTipProviders.add(p);
 	}
 
-	public void showToolTip(final VPathwayEvent e) {
+	public void showToolTip(final VPathwayModelEvent e) {
 		if(toolTipProviders.size() == 0) return;
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {

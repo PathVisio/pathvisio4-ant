@@ -27,9 +27,9 @@ import javax.swing.SwingUtilities;
 import org.pathvisio.core.Engine;
 import org.pathvisio.gui.SwingEngine;
 import org.pathvisio.libgpml.debug.Logger;
-import org.pathvisio.libgpml.model.ConverterException;
+import org.pathvisio.libgpml.io.ConverterException;
 import org.pathvisio.libgpml.model.GpmlFormat;
-import org.pathvisio.libgpml.model.Pathway;
+import org.pathvisio.libgpml.model.PathwayModel;
 
 /**
  * Collection of methods for autosave and recovery of PathVisio files
@@ -52,7 +52,7 @@ public class AutoSave {
 	}
 
 	private void autoSaveFile() throws ConverterException {
-		Pathway p = engine.getActivePathway();
+		PathwayModel p = engine.getActivePathwayModel();
 		if (p != null) {
 			GpmlFormat.writeToXml(p, autoSaveFile, true);
 			Logger.log.info("Autosaved");

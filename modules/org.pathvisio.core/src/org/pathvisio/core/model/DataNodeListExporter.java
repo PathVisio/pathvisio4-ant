@@ -30,11 +30,11 @@ import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 import org.pathvisio.core.data.GdbManager;
-import org.pathvisio.libgpml.model.ConverterException;
-import org.pathvisio.libgpml.model.ObjectType;
-import org.pathvisio.libgpml.model.Pathway;
+import org.pathvisio.libgpml.io.ConverterException;
+import org.pathvisio.libgpml.io.PathwayModelExporter;
+import org.pathvisio.libgpml.model.PathwayModel;
 import org.pathvisio.libgpml.model.PathwayElement;
-import org.pathvisio.libgpml.model.PathwayExporter;
+import org.pathvisio.libgpml.model.type.ObjectType;
 
 /**
  * Exporter that writes a pathway as a list of DataNodes, using their database
@@ -42,7 +42,7 @@ import org.pathvisio.libgpml.model.PathwayExporter;
  * 
  * @author thomas
  */
-public class DataNodeListExporter implements PathwayExporter {
+public class DataNodeListExporter implements PathwayModelExporter {
 	/**
 	 * Use this String as argument in {@link #setResultCode(String)} to indicate
 	 * that the exporter has to keep the original database code as used in the
@@ -101,7 +101,7 @@ public class DataNodeListExporter implements PathwayExporter {
 		return resultDs;
 	}
 
-	public void doExport(File file, Pathway pathway) throws ConverterException {
+	public void doExport(File file, PathwayModel pathway) throws ConverterException {
 		if (!DB_ORIGINAL.equals(getResultCode())) {
 			// Check gene database connection
 			if (gdbManager == null || !gdbManager.isConnected()) {
@@ -187,7 +187,7 @@ public class DataNodeListExporter implements PathwayExporter {
 	}
 
 	@Override
-	public void doExport(File file, Pathway pathway, int zoom) throws ConverterException {
+	public void doExport(File file, PathwayModel pathway, int zoom) throws ConverterException {
 		// TODO Auto-generated method stub
 
 	}

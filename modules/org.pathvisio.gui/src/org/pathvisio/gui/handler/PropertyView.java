@@ -25,7 +25,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
-import org.pathvisio.core.view.VPathway;
+import org.pathvisio.core.view.VPathwayModel;
 import org.pathvisio.gui.SwingEngine;
 import org.pathvisio.libgpml.model.PathwayElement;
 import org.pathvisio.libgpml.prop.Property;
@@ -35,7 +35,7 @@ import org.pathvisio.libgpml.prop.Property;
  * on one or more PathwayElements at the same time.
  */
 public class PropertyView implements Comparable<PropertyView> {
-	private VPathway vPathway;
+	private VPathwayModel vPathway;
 	Collection<PathwayElement> elements;
 	private Object value;
 	private Object type;
@@ -49,7 +49,7 @@ public class PropertyView implements Comparable<PropertyView> {
 	 * @param aVPathway is used to register undo actions when setting a value
 	 * to this property. May be null, in which case no undo actions are registered.
 	 */
-	public PropertyView(VPathway aVPathway, Object aType) {
+	public PropertyView(VPathwayModel aVPathway, Object aType) {
 		type = aType;
 		if (!(type instanceof String || type instanceof Property))
 		{

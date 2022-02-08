@@ -16,57 +16,51 @@
  ******************************************************************************/
 package org.pathvisio.core.view;
 
-import org.pathvisio.libgpml.model.Pathway;
+import org.pathvisio.libgpml.model.PathwayModel;
 
 /**
- * a single item on the undo stack.
- * Stores a complete copy of the Pathway as it was before the user modified it, so
- * it can be restored.
+ * a single item on the undo stack. Stores a complete copy of the Pathway as it
+ * was before the user modified it, so it can be restored.
  *
  * TODO: remember selection state as well.
  */
-public class UndoAction
-{
-	public UndoAction(String aMessage,
-					  Pathway current)
-	{
+public class UndoAction {
+	public UndoAction(String aMessage, PathwayModel current) {
 		message = aMessage;
 		originalState = current;
 	}
 
 	private String message;
-	private Pathway originalState;
+	private PathwayModel originalState;
 	private UndoManager undoMgr;
 
 	/**
-	 * Set the undo manager that will be used to perform
-	 * the undo. This will be set by {@link UndoManager#newAction}
+	 * Set the undo manager that will be used to perform the undo. This will be set
+	 * by {@link UndoManager#newAction}
+	 * 
 	 * @param undoMgr
 	 */
 	protected void setUndoManager(UndoManager undoMgr) {
 		this.undoMgr = undoMgr;
 	}
 
-	public String getMessage()
-	{
+	public String getMessage() {
 		return message;
 	}
 
-	void printSummary()
-	{
-		System.out.printf ("'%20s'\n", message);
-		System.out.print ("" + originalState.summary());
+	void printSummary() {
+		System.out.printf("'%20s'\n", message);
+		System.out.print("" + originalState.summary());
 	}
 
-	public void undo()
-	{
+	public void undo() {
 		/*
-		UndoManager um = Engine.getCurrent().getActiveVPathway().getUndoManager();
-		Engine.getCurrent().createVPathway (originalState);
-		Engine.getCurrent().getActiveVPathway().setUndoManager(um);
-		*/
-		if(undoMgr != null) {
-			undoMgr.getEngine().replacePathway (originalState);
+		 * UndoManager um = Engine.getCurrent().getActiveVPathway().getUndoManager();
+		 * Engine.getCurrent().createVPathway (originalState);
+		 * Engine.getCurrent().getActiveVPathway().setUndoManager(um);
+		 */
+		if (undoMgr != null) {
+			undoMgr.getEngine().replacePathwayModel(originalState);
 		}
 	}
 }

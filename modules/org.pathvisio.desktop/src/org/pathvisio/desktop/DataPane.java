@@ -31,7 +31,7 @@ import org.pathvisio.core.Engine.ApplicationEventListener;
 import org.pathvisio.core.view.Graphics;
 import org.pathvisio.core.view.SelectionBox.SelectionEvent;
 import org.pathvisio.core.view.SelectionBox.SelectionListener;
-import org.pathvisio.core.view.VPathway;
+import org.pathvisio.core.view.VPathwayModel;
 import org.pathvisio.core.view.VPathwayElement;
 import org.pathvisio.gui.DataPaneTextProvider;
 import org.pathvisio.libgpml.model.PathwayElement;
@@ -64,7 +64,7 @@ public class DataPane extends JEditorPane implements ApplicationEventListener,
 		super();
 
 		engine.addApplicationEventListener(this);
-		VPathway vp = engine.getActiveVPathway();
+		VPathwayModel vp = engine.getActiveVPathwayModel();
 		if (vp != null)
 			vp.addSelectionListener(this);
 
@@ -162,10 +162,10 @@ public class DataPane extends JEditorPane implements ApplicationEventListener,
 	public void applicationEvent(ApplicationEvent e) {
 		switch (e.getType()) {
 		case VPATHWAY_CREATED:
-			((VPathway) e.getSource()).addSelectionListener(this);
+			((VPathwayModel) e.getSource()).addSelectionListener(this);
 			break;
 		case VPATHWAY_DISPOSED:
-			((VPathway) e.getSource()).removeSelectionListener(this);
+			((VPathwayModel) e.getSource()).removeSelectionListener(this);
 			// remove content of backpage when pathway is closed
 			input = null;
 			setText(dpt.getAnnotationHTML(null));
@@ -192,7 +192,7 @@ public class DataPane extends JEditorPane implements ApplicationEventListener,
 	public void dispose() {
 		assert (!disposed);
 		engine.removeApplicationEventListener(this);
-		VPathway vpwy = engine.getActiveVPathway();
+		VPathwayModel vpwy = engine.getActiveVPathwayModel();
 		if (vpwy != null)
 			vpwy.removeSelectionListener(this);
 		executor.shutdown();

@@ -22,7 +22,7 @@ package org.pathvisio.core.view;
 public class DefaultLinkAnchorDelegate extends AbstractLinkAnchorDelegate 
 {
 	private final Graphics parent;
-	private final VPathway canvas;
+	private final VPathwayModel canvas;
 	
 	DefaultLinkAnchorDelegate(Graphics parent)
 	{

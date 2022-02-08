@@ -6,6 +6,7 @@ Bundle-Version: 4.0.0
 Bundle-Vendor: PathVisio developers
 Export-Package: org.pathvisio.libgpml.biopax,
  org.pathvisio.libgpml.debug,
+ org.pathvisio.libgpml.io,
  org.pathvisio.libgpml.model,
  org.pathvisio.libgpml.model.connector,
  org.pathvisio.libgpml.model.shape,
