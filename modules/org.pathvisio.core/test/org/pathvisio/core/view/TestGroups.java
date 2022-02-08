@@ -44,12 +44,12 @@ public class TestGroups extends TestCase
 		for (int i = 0; i < DATANODE_COUNT; ++i)
 		{
 			dn[i] = PathwayElement.createPathwayElement(ObjectType.DATANODE);
-			dn[i].setMCenterX(i * 1000);
-			dn[i].setMCenterY(3000);
-			dn[i].setMWidth(500);
-			dn[i].setMHeight(500);
+			dn[i].setCenterX(i * 1000);
+			dn[i].setCenterY(3000);
+			dn[i].setWidth(500);
+			dn[i].setHeight(500);
 			vDn[i] = (VDataNode)addElement (vpwy, dn[i]);
-			dn[i].setGeneratedGraphId();
+			dn[i].setGeneratedElementId();
 		}
 		vLn[0] = (VLineElement)addConnector (vpwy, dn[0], dn[1]);
 		vLn[1] = (VLineElement)addConnector (vpwy, dn[0], dn[2]);
@@ -67,7 +67,7 @@ public class TestGroups extends TestCase
 		assertEquals (ref1, dn[1].getGroupRef());
 		grp1 = vpwy.getPathwayModel().getGroupById(ref1);
 		vGrp1 = (VGroup)vpwy.getPathwayElementView(grp1);
-		grp1.setGeneratedGraphId();
+		grp1.setGeneratedElementId();
 	}
 
 	private VPathwayModel vpwy;
@@ -94,12 +94,12 @@ public class TestGroups extends TestCase
 	{
 		PathwayElement elt = PathwayElement.createPathwayElement(ObjectType.LINE);
 		elt.setConnectorType(ConnectorType.ELBOW);
-		elt.setStartGraphRef(l1.getGraphId());
-		elt.setEndGraphRef(l2.getGraphId());
-		elt.setMStartX(l1.getMCenterX());
-		elt.setMStartY(l1.getMCenterY());
-		elt.setMEndX(l2.getMCenterX());
-		elt.setMEndY(l2.getMCenterY());
+		elt.setStartElementRef(l1.getElementId());
+		elt.setEndElementRef(l2.getElementId());
+		elt.setStartLinePointX(l1.getCenterX());
+		elt.setStartLinePointY(l1.getCenterY());
+		elt.setEndLinePointX(l2.getCenterX());
+		elt.setEndLinePointY(l2.getCenterY());
 
 		return addElement (vpwy, elt);
 	}
@@ -169,8 +169,8 @@ public class TestGroups extends TestCase
 		double oldEy = vLn3.getVEndY();
 		assertEquals (vGrp1.getVCenterX(), oldEx, 0.01);
 		assertEquals (vGrp1.getVCenterY(), oldEy, 0.01);
-		assertEquals (grp1.getGraphId(), vLn3.getPathwayElement().getEndGraphRef());
-		assertNotNull (vLn3.getPathwayElement().getEndGraphRef());
+		assertEquals (grp1.getElementId(), vLn3.getPathwayElement().getEndElementRef());
+		assertNotNull (vLn3.getPathwayElement().getEndElementRef());
 		
 		vpwy.clearSelection();
 		vGrp1.select();
@@ -180,7 +180,7 @@ public class TestGroups extends TestCase
 		// assure that line hasn't moved by deletion of group (bug #1058)
 		assertEquals (oldEx, vLn3.getVEndX(), 0.01);
 		assertEquals (oldEy, vLn3.getVEndY(), 0.01);
-		assertNull (vLn3.getPathwayElement().getEndGraphRef());
+		assertNull (vLn3.getPathwayElement().getEndElementRef());
 		
 	}
 

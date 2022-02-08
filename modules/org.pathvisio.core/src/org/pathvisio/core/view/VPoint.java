@@ -18,7 +18,7 @@ package org.pathvisio.core.view;
 
 import org.pathvisio.core.preferences.GlobalPreference;
 import org.pathvisio.core.preferences.PreferenceManager;
-import org.pathvisio.libgpml.model.PathwayElement.MPoint;
+import org.pathvisio.libgpml.model.PathwayElement.LinePoint;
 import org.pathvisio.libgpml.util.LinAlg;
 import org.pathvisio.libgpml.util.LinAlg.Point;
 
@@ -32,7 +32,7 @@ public class VPoint implements Adjustable
 	Handle handle;
 	
 	private VLineElement line;
-	private MPoint mPoint;
+	private LinePoint mPoint;
 	private final VPathwayModel canvas;
 
 	private boolean isHighlighted = false;
@@ -60,14 +60,14 @@ public class VPoint implements Adjustable
 		}
 	}
 
-	VPoint(VPathwayModel canvas, MPoint mPoint, VLineElement line) {
+	VPoint(VPathwayModel canvas, LinePoint mPoint, VLineElement line) {
 		this.canvas = canvas;
 		this.mPoint = mPoint;
 		this.line = line;
 	}
 
 	protected void unlink() {
-		mPoint.setGraphRef(null);
+		mPoint.setElementRef(null);
 	}
 
 	protected double getVX() { return canvas.vFromM(getMPoint().getX()); }
@@ -82,7 +82,7 @@ public class VPoint implements Adjustable
 		mPoint.moveBy(canvas.mFromV(dx), canvas.mFromV(dy));
 	}
 
-	public MPoint getMPoint() {
+	public LinePoint getMPoint() {
 		return mPoint;
 	}
 

@@ -37,8 +37,8 @@ import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 import org.pathvisio.libgpml.biopax.BiopaxElement;
 import org.pathvisio.libgpml.io.ConverterException;
-import org.pathvisio.libgpml.model.PathwayElement.MAnchor;
-import org.pathvisio.libgpml.model.PathwayElement.MPoint;
+import org.pathvisio.libgpml.model.PathwayElement.Anchor;
+import org.pathvisio.libgpml.model.PathwayElement.LinePoint;
 import org.pathvisio.libgpml.model.shape.IShape;
 import org.pathvisio.libgpml.model.shape.ShapeRegistry;
 import org.pathvisio.libgpml.model.type.HAlignType;
@@ -503,7 +503,7 @@ class GpmlFormat2013a extends GpmlFormatAbstract implements GpmlFormatReader, Gp
        		if (s.equals(ShapeType.ROUNDED_RECTANGLE) 
        				|| s.equals(ShapeType.OVAL)){
     			o.setLineStyle(LineStyleType.DOUBLE);
-    			o.setLineThickness(3.0);
+    			o.setLineWidth(3.0);
     			o.setColor(Color.LIGHT_GRAY);
     		}
     	} 
@@ -549,22 +549,22 @@ class GpmlFormat2013a extends GpmlFormatAbstract implements GpmlFormatReader, Gp
     	Element graphics = e.getChild("Graphics", e.getNamespace());
 
     	String fontSizeString = getAttribute(base + ".Graphics", "FontSize", graphics);
-    	o.setMFontSize (Integer.parseInt(fontSizeString));
+    	o.setFontSize (Integer.parseInt(fontSizeString));
 
     	String fontWeight = getAttribute(base + ".Graphics", "FontWeight", graphics);
     	String fontStyle = getAttribute(base + ".Graphics", "FontStyle", graphics);
     	String fontDecoration = getAttribute(base + ".Graphics", "FontDecoration", graphics);
     	String fontStrikethru = getAttribute(base + ".Graphics", "FontStrikethru", graphics);
 
-    	o.setBold (fontWeight != null && fontWeight.equals("Bold"));
-    	o.setItalic (fontStyle != null && fontStyle.equals("Italic"));
-    	o.setUnderline (fontDecoration != null && fontDecoration.equals("Underline"));
-    	o.setStrikethru (fontStrikethru != null && fontStrikethru.equals("Strikethru"));
+    	o.setFontWeight (fontWeight != null && fontWeight.equals("Bold"));
+    	o.setFontStyle (fontStyle != null && fontStyle.equals("Italic"));
+    	o.setFontDecoration (fontDecoration != null && fontDecoration.equals("Underline"));
+    	o.setFontStrikethru (fontStrikethru != null && fontStrikethru.equals("Strikethru"));
     	
     	o.setFontName (getAttribute(base + ".Graphics", "FontName", graphics));
 	    
-		o.setValign(VAlignType.fromName(getAttribute(base + ".Graphics", "Valign", graphics)));
-		o.setAlign(HAlignType.fromName(getAttribute(base + ".Graphics", "Align", graphics)));	    
+		o.setVAlign(VAlignType.fromName(getAttribute(base + ".Graphics", "Valign", graphics)));
+		o.setHAlign(HAlignType.fromName(getAttribute(base + ".Graphics", "Align", graphics)));	    
 	}
 	
 	protected void updateFontData(PathwayElement o, Element e) throws ConverterException
@@ -577,23 +577,23 @@ class GpmlFormat2013a extends GpmlFormatAbstract implements GpmlFormatReader, Gp
 		
 		Element graphics = e.getChild("Graphics", e.getNamespace());
 		setAttribute(base + ".Graphics", "FontName", graphics, o.getFontName() == null ? "" : o.getFontName());
-		setAttribute(base + ".Graphics", "FontWeight", graphics, o.isBold() ? "Bold" : "Normal");
-		setAttribute(base + ".Graphics", "FontStyle", graphics, o.isItalic() ? "Italic" : "Normal");
-		setAttribute(base + ".Graphics", "FontDecoration", graphics, o.isUnderline() ? "Underline" : "Normal");
-		setAttribute(base + ".Graphics", "FontStrikethru", graphics, o.isStrikethru() ? "Strikethru" : "Normal");
-		setAttribute(base + ".Graphics", "FontSize", graphics, Integer.toString((int)o.getMFontSize()));
-		setAttribute(base + ".Graphics", "Valign", graphics, o.getValign().getName());
-		setAttribute(base + ".Graphics", "Align", graphics, o.getAlign().getName());
+		setAttribute(base + ".Graphics", "FontWeight", graphics, o.getFontWeight() ? "Bold" : "Normal");
+		setAttribute(base + ".Graphics", "FontStyle", graphics, o.getFontStyle() ? "Italic" : "Normal");
+		setAttribute(base + ".Graphics", "FontDecoration", graphics, o.getFontDecoration() ? "Underline" : "Normal");
+		setAttribute(base + ".Graphics", "FontStrikethru", graphics, o.getFontStrikethru() ? "Strikethru" : "Normal");
+		setAttribute(base + ".Graphics", "FontSize", graphics, Integer.toString((int)o.getFontSize()));
+		setAttribute(base + ".Graphics", "Valign", graphics, o.getVAlign().getName());
+		setAttribute(base + ".Graphics", "Align", graphics, o.getHAlign().getName());
 	}
 
 	protected void mapShapePosition(PathwayElement o, Element e) throws ConverterException
 	{
 		String base = e.getName();
 		Element graphics = e.getChild("Graphics", e.getNamespace());
-    	o.setMCenterX (Double.parseDouble(getAttribute(base + ".Graphics", "CenterX", graphics)));
-    	o.setMCenterY (Double.parseDouble(getAttribute(base + ".Graphics", "CenterY", graphics)));
-		o.setMWidth (Double.parseDouble(getAttribute(base + ".Graphics", "Width", graphics)));
-		o.setMHeight (Double.parseDouble(getAttribute(base + ".Graphics", "Height", graphics)));
+    	o.setCenterX (Double.parseDouble(getAttribute(base + ".Graphics", "CenterX", graphics)));
+    	o.setCenterY (Double.parseDouble(getAttribute(base + ".Graphics", "CenterY", graphics)));
+		o.setWidth (Double.parseDouble(getAttribute(base + ".Graphics", "Width", graphics)));
+		o.setHeight (Double.parseDouble(getAttribute(base + ".Graphics", "Height", graphics)));
 		String zorder = graphics.getAttributeValue("ZOrder");
 		if (zorder != null)
 			o.setZOrder(Integer.parseInt(zorder));
@@ -604,10 +604,10 @@ class GpmlFormat2013a extends GpmlFormatAbstract implements GpmlFormatReader, Gp
 		String base = e.getName();
 		Element graphics = e.getChild("Graphics", e.getNamespace());
 		
-		setAttribute(base + ".Graphics", "CenterX", graphics, "" + o.getMCenterX());
-		setAttribute(base + ".Graphics", "CenterY", graphics, "" + o.getMCenterY());
-		setAttribute(base + ".Graphics", "Width", graphics, "" + o.getMWidth());
-		setAttribute(base + ".Graphics", "Height", graphics, "" + o.getMHeight());
+		setAttribute(base + ".Graphics", "CenterX", graphics, "" + o.getCenterX());
+		setAttribute(base + ".Graphics", "CenterY", graphics, "" + o.getCenterY());
+		setAttribute(base + ".Graphics", "Width", graphics, "" + o.getWidth());
+		setAttribute(base + ".Graphics", "Height", graphics, "" + o.getHeight());
 		setAttribute(base + ".Graphics", "ZOrder", graphics, "" + o.getZOrder());
 	}
 
@@ -615,7 +615,7 @@ class GpmlFormat2013a extends GpmlFormatAbstract implements GpmlFormatReader, Gp
 	{
 		o.setDataNodeType (getAttribute("DataNode", "Type", e));
 		Element xref = e.getChild ("Xref", e.getNamespace());
-		o.setElementID (getAttribute("DataNode.Xref", "ID", xref));
+		o.setIdentifier (getAttribute("DataNode.Xref", "ID", xref));
 		o.setDataSource (DataSource.getExistingByFullName (getAttribute("DataNode.Xref", "Database", xref)));
 	}
 
@@ -625,13 +625,13 @@ class GpmlFormat2013a extends GpmlFormatAbstract implements GpmlFormatReader, Gp
 		Element xref = e.getChild("Xref", e.getNamespace());
 		String database = o.getDataSource() == null ? "" : o.getDataSource().getFullName();
 		setAttribute ("DataNode.Xref", "Database", xref, database == null ? "" : database);
-		setAttribute ("DataNode.Xref", "ID", xref, o.getElementID());
+		setAttribute ("DataNode.Xref", "ID", xref, o.getIdentifier());
 	}
 	
 	protected void mapLine(PathwayElement o, Element e) throws ConverterException
 	{
 		Element xref = e.getChild ("Xref", e.getNamespace());
-		o.setElementID (getAttribute("Interaction.Xref", "ID", xref));
+		o.setIdentifier (getAttribute("Interaction.Xref", "ID", xref));
 		o.setDataSource (DataSource.getExistingByFullName (getAttribute("Interaction.Xref", "Database", xref)));
 	}
 
@@ -641,27 +641,27 @@ class GpmlFormat2013a extends GpmlFormatAbstract implements GpmlFormatReader, Gp
 		Element xref = e.getChild("Xref", e.getNamespace());
 		String database = o.getDataSource() == null ? "" : o.getDataSource().getFullName();
 		setAttribute ("Interaction.Xref", "Database", xref, database == null ? "" : database);
-		setAttribute ("Interaction.Xref", "ID", xref, o.getElementID());
+		setAttribute ("Interaction.Xref", "ID", xref, o.getIdentifier());
 	}
 
 	protected void mapStateData(PathwayElement o, Element e) throws ConverterException
 	{
     	String ref = getAttribute("State", "GraphRef", e);
     	if (ref != null) {
-    		o.setGraphRef(ref);
+    		o.setElementRef(ref);
     	}
 
     	Element graphics = e.getChild("Graphics", e.getNamespace());
 
     	o.setRelX(Double.parseDouble(getAttribute("State.Graphics", "RelX", graphics)));
     	o.setRelY(Double.parseDouble(getAttribute("State.Graphics", "RelY", graphics)));
-		o.setMWidth (Double.parseDouble(getAttribute("State.Graphics", "Width", graphics)));
-		o.setMHeight (Double.parseDouble(getAttribute("State.Graphics", "Height", graphics)));
+		o.setWidth (Double.parseDouble(getAttribute("State.Graphics", "Width", graphics)));
+		o.setHeight (Double.parseDouble(getAttribute("State.Graphics", "Height", graphics)));
 
 		o.setDataNodeType (getAttribute("State", "StateType", e));
-		o.setGraphRef(getAttribute("State", "GraphRef", e));
+		o.setElementRef(getAttribute("State", "GraphRef", e));
 		Element xref = e.getChild ("Xref", e.getNamespace());
-		o.setElementID (getAttribute("State.Xref", "ID", xref));
+		o.setIdentifier (getAttribute("State.Xref", "ID", xref));
 		o.setDataSource (DataSource.getExistingByFullName (getAttribute("State.Xref", "Database", xref)));
 	}
 
@@ -672,15 +672,15 @@ class GpmlFormat2013a extends GpmlFormatAbstract implements GpmlFormatReader, Gp
 
 		setAttribute(base + ".Graphics", "RelX", graphics, "" + o.getRelX());
 		setAttribute(base + ".Graphics", "RelY", graphics, "" + o.getRelY());
-		setAttribute(base + ".Graphics", "Width", graphics, "" + o.getMWidth());
-		setAttribute(base + ".Graphics", "Height", graphics, "" + o.getMHeight());
+		setAttribute(base + ".Graphics", "Width", graphics, "" + o.getWidth());
+		setAttribute(base + ".Graphics", "Height", graphics, "" + o.getHeight());
 		
 		setAttribute ("State", "StateType", e, o.getDataNodeType());
-		setAttribute ("State", "GraphRef", e, o.getGraphRef());
+		setAttribute ("State", "GraphRef", e, o.getElementRef());
 		Element xref = e.getChild("Xref", e.getNamespace());
 		String database = o.getDataSource() == null ? "" : o.getDataSource().getFullName();
 		setAttribute ("State.Xref", "Database", xref, database == null ? "" : database);
-		setAttribute ("State.Xref", "ID", xref, o.getElementID());
+		setAttribute ("State.Xref", "ID", xref, o.getIdentifier());
 	}
 
 	protected void mapLineStyle(PathwayElement o, Element e) throws ConverterException
@@ -701,7 +701,7 @@ class GpmlFormat2013a extends GpmlFormatAbstract implements GpmlFormatReader, Gp
 		}
     	
     	String lt = getAttribute(base + ".Graphics", "LineThickness", graphics);
-    	o.setLineThickness(lt == null ? 1.0 : Double.parseDouble(lt));
+    	o.setLineWidth(lt == null ? 1.0 : Double.parseDouble(lt));
 		mapColor(o, e); // Color
 	}
 
@@ -709,7 +709,7 @@ class GpmlFormat2013a extends GpmlFormatAbstract implements GpmlFormatReader, Gp
 	{    	
     	Element graphics = e.getChild("Graphics", e.getNamespace());
 
-    	List<MPoint> mPoints = new ArrayList<MPoint>();
+    	List<LinePoint> mPoints = new ArrayList<LinePoint>();
 
     	String startType = null;
     	String endType = null;
@@ -717,14 +717,14 @@ class GpmlFormat2013a extends GpmlFormatAbstract implements GpmlFormatReader, Gp
     	List<Element> pointElements = graphics.getChildren("Point", e.getNamespace());
     	for(int i = 0; i < pointElements.size(); i++) {
     		Element pe = pointElements.get(i);
-    		MPoint mp = o.new MPoint(
+    		LinePoint mp = o.new LinePoint(
     		    	Double.parseDouble(getAttribute("Interaction.Graphics.Point", "X", pe)),
     		    	Double.parseDouble(getAttribute("Interaction.Graphics.Point", "Y", pe))
     		);
     		mPoints.add(mp);
         	String ref = getAttribute("Interaction.Graphics.Point", "GraphRef", pe);
         	if (ref != null) {
-        		mp.setGraphRef(ref);
+        		mp.setElementRef(ref);
         		String srx = pe.getAttributeValue("RelX");
         		String sry = pe.getAttributeValue("RelY");
         		if(srx != null && sry != null) {
@@ -739,7 +739,7 @@ class GpmlFormat2013a extends GpmlFormatAbstract implements GpmlFormatReader, Gp
         	}
     	}
 
-    	o.setMPoints(mPoints);
+    	o.setLinePoints(mPoints);
 		o.setStartLineType (ArrowHeadType.fromName(startType));
     	o.setEndLineType (ArrowHeadType.fromName(endType));
 
@@ -754,7 +754,7 @@ class GpmlFormat2013a extends GpmlFormatAbstract implements GpmlFormatReader, Gp
     	List<Element> anchors = graphics.getChildren("Anchor", e.getNamespace());
     	for(Element ae : anchors) {
     		double position = Double.parseDouble(getAttribute("Interaction.Graphics.Anchor", "Position", ae));
-    		MAnchor anchor = o.addMAnchor(position);
+    		Anchor anchor = o.addAnchor(position);
     		mapGraphId(anchor, ae);
     		String shape = getAttribute("Interaction.Graphics.Anchor", "Shape", ae);
     		if(shape != null) {
@@ -768,24 +768,24 @@ class GpmlFormat2013a extends GpmlFormatAbstract implements GpmlFormatReader, Gp
 		String base = e.getName();
 		Element graphics = e.getChild("Graphics", e.getNamespace());
 		setAttribute(base + ".Graphics", "LineStyle", graphics, o.getLineStyle() != LineStyleType.DASHED ? "Solid" : "Broken");
-		setAttribute (base + ".Graphics", "LineThickness", graphics, "" + o.getLineThickness());
+		setAttribute (base + ".Graphics", "LineThickness", graphics, "" + o.getLineWidth());
 		updateColor(o, e);
 	}
 	
 	protected void updateLineData(PathwayElement o, Element e) throws ConverterException
 	{
 		Element jdomGraphics = e.getChild("Graphics", e.getNamespace());
-		List<MPoint> mPoints = o.getMPoints();
+		List<LinePoint> mPoints = o.getLinePoints();
 
 		for(int i = 0; i < mPoints.size(); i++) {
-			MPoint mp = mPoints.get(i);
+			LinePoint mp = mPoints.get(i);
 			Element pe = new Element("Point", e.getNamespace());
 			jdomGraphics.addContent(pe);
 			setAttribute("Interaction.Graphics.Point", "X", pe, Double.toString(mp.getX()));
 			setAttribute("Interaction.Graphics.Point", "Y", pe, Double.toString(mp.getY()));
-			if (mp.getGraphRef() != null && !mp.getGraphRef().equals(""))
+			if (mp.getElementRef() != null && !mp.getElementRef().equals(""))
 			{
-				setAttribute("Interaction.Graphics.Point", "GraphRef", pe, mp.getGraphRef());
+				setAttribute("Interaction.Graphics.Point", "GraphRef", pe, mp.getElementRef());
 				setAttribute("Interaction.Graphics.Point", "RelX", pe, Double.toString(mp.getRelX()));
 				setAttribute("Interaction.Graphics.Point", "RelY", pe, Double.toString(mp.getRelY()));
 			}
@@ -796,7 +796,7 @@ class GpmlFormat2013a extends GpmlFormatAbstract implements GpmlFormatReader, Gp
 			}
 		}
 
-		for(MAnchor anchor : o.getMAnchors()) {
+		for(Anchor anchor : o.getAnchors()) {
 			Element ae = new Element("Anchor", e.getNamespace());
 			setAttribute("Interaction.Graphics.Anchor", "Position", ae, Double.toString(anchor.getPosition()));
 			setAttribute("Interaction.Graphics.Anchor", "Shape", ae, anchor.getShape().getName());
@@ -916,16 +916,16 @@ class GpmlFormat2013a extends GpmlFormatAbstract implements GpmlFormatReader, Gp
 
 	protected void mapSimpleCenter(PathwayElement o, Element e)
 	{
-		o.setMCenterX (Double.parseDouble(e.getAttributeValue("CenterX")));
-		o.setMCenterY (Double.parseDouble(e.getAttributeValue("CenterY")));
+		o.setCenterX (Double.parseDouble(e.getAttributeValue("CenterX")));
+		o.setCenterY (Double.parseDouble(e.getAttributeValue("CenterY")));
 	}
 
 	protected void updateSimpleCenter(PathwayElement o, Element e)
 	{
 		if(e != null)
 		{
-			e.setAttribute("CenterX", Double.toString(o.getMCenterX()));
-			e.setAttribute("CenterY", Double.toString(o.getMCenterY()));
+			e.setAttribute("CenterX", Double.toString(o.getCenterX()));
+			e.setAttribute("CenterY", Double.toString(o.getCenterY()));
 		}
 	}
 

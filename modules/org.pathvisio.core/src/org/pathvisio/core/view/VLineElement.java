@@ -36,8 +36,8 @@ import org.pathvisio.libgpml.model.LineElement;
 import org.pathvisio.libgpml.model.PathwayElement;
 import org.pathvisio.libgpml.model.PathwayElementEvent;
 import org.pathvisio.libgpml.model.GraphLink.LinkableFrom;
-import org.pathvisio.libgpml.model.PathwayElement.MAnchor;
-import org.pathvisio.libgpml.model.PathwayElement.MPoint;
+import org.pathvisio.libgpml.model.PathwayElement.Anchor;
+import org.pathvisio.libgpml.model.PathwayElement.LinePoint;
 import org.pathvisio.libgpml.model.connector.ConnectorShape;
 import org.pathvisio.libgpml.model.connector.ConnectorShape.Segment;
 import org.pathvisio.libgpml.model.connector.ConnectorShape.WayPoint;
@@ -63,7 +63,7 @@ public class VLineElement extends Graphics implements Adjustable
 	
 	private List<VPoint> points;
 
-	private Map<MAnchor, VAnchor> anchors = new HashMap<MAnchor, VAnchor>();
+	private Map<Anchor, VAnchor> anchors = new HashMap<Anchor, VAnchor>();
 
 	List<Handle> segmentHandles = new ArrayList<Handle>();
 
@@ -78,15 +78,15 @@ public class VLineElement extends Graphics implements Adjustable
 		super(canvas, o);
 
 		points = new ArrayList<VPoint>();
-		addPoint(o.getMStart());
-		addPoint(o.getMEnd());
+		addPoint(o.getStartLinePoint());
+		addPoint(o.getEndLinePoint());
 		setAnchors();
         getConnectorShape().recalculateShape(getMLine());
 //		updateSegmentHandles();
 		updateCitationPosition();
 	}
 
-	private void addPoint(MPoint mp) {
+	private void addPoint(LinePoint mp) {
 		VPoint vp = canvas.newPoint(mp, this);
 		points.add(vp);
 		setHandleLocation(vp);
@@ -168,18 +168,18 @@ public class VLineElement extends Graphics implements Adjustable
 		WayPoint[] waypoints = getConnectorShape().getWayPoints();
 		int index = segmentHandles.indexOf(h);
 		if(index > -1) {
-			List<MPoint> points = gdata.getMPoints();
+			List<LinePoint> points = gdata.getLinePoints();
 			if(points.size() - 2 != (waypoints.length)) {
 				//Recreate points from segments
-				points = new ArrayList<MPoint>();
-				points.add(gdata.getMStart());
+				points = new ArrayList<LinePoint>();
+				points.add(gdata.getStartLinePoint());
 				for(int i = 0; i < waypoints.length; i++) {
-					MPoint p = gdata.new MPoint(waypoints[i].getX(), waypoints[i].getY());
+					LinePoint p = gdata.new LinePoint(waypoints[i].getX(), waypoints[i].getY());
 					points.add(p);
 				}
-				points.add(gdata.getMEnd());
+				points.add(gdata.getEndLinePoint());
 				gdata.dontFireEvents(1);
-				gdata.setMPoints(points);
+				gdata.setLinePoints(points);
 			}
 			points.get(index + 1).moveTo(mFromV(vx), mFromV(vy));
 		}
@@ -376,7 +376,7 @@ public class VLineElement extends Graphics implements Adjustable
 		ArrowShape hs = heads[0];
 		ArrowShape he = heads[1];
 		
-		float thickness = (float) vFromM(gdata.getLineThickness());
+		float thickness = (float) vFromM(gdata.getLineWidth());
 		if (gdata.getLineStyle() == LineStyleType.DOUBLE) thickness *= 4;
 		BasicStroke bs = new BasicStroke (thickness);
 		
@@ -389,14 +389,14 @@ public class VLineElement extends Graphics implements Adjustable
 
 	private void setAnchors() {
 		//Check for new anchors
-		List<MAnchor> manchors = gdata.getMAnchors();
-		for(MAnchor ma : manchors) {
+		List<Anchor> manchors = gdata.getAnchors();
+		for(Anchor ma : manchors) {
 			if(!anchors.containsKey(ma)) {
 				anchors.put(ma, new VAnchor(ma, this));
 			}
 		}
 		//Check for deleted anchors
-		for(MAnchor ma : anchors.keySet()) {
+		for(Anchor ma : anchors.keySet()) {
 			if(!manchors.contains(ma)) {
 				anchors.get(ma).destroy();
 			}
@@ -416,7 +416,7 @@ public class VLineElement extends Graphics implements Adjustable
 
 	void removeVAnchor(VAnchor va) {
 		anchors.remove(va.getMAnchor());
-		gdata.removeMAnchor(va.getMAnchor());
+		gdata.removeAnchor(va.getMAnchor());
 	}
 
 	private void updateAnchorPositions() {
@@ -448,7 +448,7 @@ public class VLineElement extends Graphics implements Adjustable
 		if(head != null)
 		{
 			// reset stroked line to solid, but use given thickness
-			g.setStroke(new BasicStroke((float) vFromM(gdata.getLineThickness())));
+			g.setStroke(new BasicStroke((float) vFromM(gdata.getLineWidth())));
 			switch (head.getFillType())
 			{
 			case OPEN:
@@ -502,7 +502,7 @@ public class VLineElement extends Graphics implements Adjustable
 		if(h != null)
 		{
 			AffineTransform f = new AffineTransform();
-			double scaleFactor = vFromM (1.0 + 0.3 * gdata.getLineThickness());
+			double scaleFactor = vFromM (1.0 + 0.3 * gdata.getLineWidth());
 			f.rotate(Math.atan2 (ye - ys, xe - xs), xe, ye);
 			f.translate (xe, ye);
 			f.scale (scaleFactor, scaleFactor);
@@ -542,36 +542,36 @@ public class VLineElement extends Graphics implements Adjustable
 
 	public double getVCenterX()
 	{
-		return vFromM(gdata.getMCenterX());
+		return vFromM(gdata.getCenterX());
 	}
 
 	public double getVCenterY()
 	{
-		return vFromM(gdata.getMCenterY());
+		return vFromM(gdata.getCenterY());
 	}
 
 	public double getVLeft()
 	{
-		return vFromM(gdata.getMLeft());
+		return vFromM(gdata.getLeft());
 	}
 
 	public double getVWidth()
 	{
-		return vFromM(gdata.getMWidth());
+		return vFromM(gdata.getWidth());
 	}
 
 	public double getVHeight()
 	{
-		return vFromM(gdata.getMHeight());
+		return vFromM(gdata.getHeight());
 	}
 
 	public double getVTop()
 	{
-		return vFromM(gdata.getMTop());
+		return vFromM(gdata.getTop());
 	}
 
 	protected void vMoveWayPointsBy(double vdx, double vdy) {
-		List<MPoint> mps = gdata.getMPoints();
+		List<LinePoint> mps = gdata.getLinePoints();
 		for(int i = 1; i < mps.size() - 1; i++) {
 			mps.get(i).moveBy(mFromV(vdx), mFromV(vdy));
 		}
@@ -588,14 +588,14 @@ public class VLineElement extends Graphics implements Adjustable
 	{
 		// move MPoints directly, not every MPoint is represented
 		// by a VPoint but we want to move them all.
-		for(MPoint p : gdata.getMPoints())
+		for(LinePoint p : gdata.getLinePoints())
 		{
 			p.moveBy(canvas.mFromV(vdx), canvas.mFromV(vdy));
 		}
 		//Redraw graphRefs
 		for(LinkableFrom ref : gdata.getReferences()) {
-			if(ref instanceof MPoint) {
-				VPoint vp = canvas.getPoint((MPoint)ref);
+			if(ref instanceof LinePoint) {
+				VPoint vp = canvas.getPoint((LinePoint)ref);
 				if(vp != null) {
 					vp.getLine().recalculateConnector();
 				}
@@ -606,7 +606,7 @@ public class VLineElement extends Graphics implements Adjustable
 	private void setHandleLocation(VPoint vp)
 	{
 		if (vp.handle == null) return;
-		MPoint mp = vp.getMPoint();
+		LinePoint mp = vp.getMPoint();
 		vp.handle.setMLocation(mp.getX(), mp.getY());
 	}
 
@@ -622,7 +622,7 @@ public class VLineElement extends Graphics implements Adjustable
 		getConnectorShape().recalculateShape(getMLine());
 
 		WayPoint[] wps = getConnectorShape().getWayPoints();
-		List<MPoint> mps = gdata.getMPoints();
+		List<LinePoint> mps = gdata.getLinePoints();
 		if(wps.length == mps.size() - 2 && getConnectorShape().hasValidWaypoints(getMLine())) {
 			getMLine().adjustWayPointPreferences(wps);
 		} else {
@@ -634,7 +634,7 @@ public class VLineElement extends Graphics implements Adjustable
 		for(VPoint p : points) {
 			setHandleLocation(p);
 		}
-		if(gdata.getMAnchors().size() != anchors.size()) {
+		if(gdata.getAnchors().size() != anchors.size()) {
 			setAnchors();
 		}
 		checkCitation();
@@ -657,7 +657,7 @@ public class VLineElement extends Graphics implements Adjustable
 	protected void destroy() {
 		super.destroy();
 
-		for(MPoint p : gdata.getMPoints()) {
+		for(LinePoint p : gdata.getLinePoints()) {
 			canvas.pointsMtoV.remove(p);
 		}
 		List<VAnchor> remove = new ArrayList<VAnchor>(anchors.values());
@@ -671,28 +671,28 @@ public class VLineElement extends Graphics implements Adjustable
 	 * current zoom factor
 	 * @return
 	 */
-	protected double getVStartX() { return (int)(vFromM(gdata.getMStartX())); }
+	protected double getVStartX() { return (int)(vFromM(gdata.getStartLinePointX())); }
 
 	/**
 	 * Returns the y-coordinate of the start point of this line, adjusted to the
 	 * current zoom factor
 	 * @return
 	 */
-	protected double getVStartY() { return (int)(vFromM(gdata.getMStartY())); }
+	protected double getVStartY() { return (int)(vFromM(gdata.getStartLinePointY())); }
 
 	/**
 	 * Returns the x-coordinate of the end point of this line, adjusted to the
 	 * current zoom factor
 	 * @return
 	 */
-	protected double getVEndX() { return (int)(vFromM(gdata.getMEndX())); }
+	protected double getVEndX() { return (int)(vFromM(gdata.getEndLinePointX())); }
 
 	/**
 	 * Returns the y-coordinate of the end point of this line, adjusted to the
 	 * current zoom factor
 	 * @return
 	 */
-	protected double getVEndY() { return (int)(vFromM(gdata.getMEndY())); }
+	protected double getVEndY() { return (int)(vFromM(gdata.getEndLinePointY())); }
 
 	/**
 	 * Translate a line coordinate (1-dimensional) to

@@ -47,7 +47,7 @@ import org.pathvisio.core.view.SelectionBox.SelectionListener;
 import org.pathvisio.libgpml.model.LineElement;
 import org.pathvisio.libgpml.model.State;
 import org.pathvisio.libgpml.model.PathwayElement;
-import org.pathvisio.libgpml.model.PathwayElement.MPoint;
+import org.pathvisio.libgpml.model.PathwayElement.LinePoint;
 import org.pathvisio.libgpml.model.connector.ConnectorShape;
 import org.pathvisio.libgpml.model.connector.FreeConnectorShape;
 import org.pathvisio.libgpml.model.type.GroupType;
@@ -489,9 +489,9 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 			//TODO: Instead of removing the last point, it would be better to adjust the context
 			//menu to remove a specific point (like with anchors). This could be done by making 
 			//VPoint extend VPathwayElement so we can directly get the selected waypoint here.
-			List<MPoint> newPoints = new ArrayList<MPoint>(l.getMPoints());
+			List<LinePoint> newPoints = new ArrayList<LinePoint>(l.getLinePoints());
 			newPoints.remove(newPoints.size() - 2);
-			l.setMPoints(newPoints);
+			l.setLinePoints(newPoints);
 		}
 		
 		private void addWaypoint(FreeConnectorShape s, LineElement l) {
@@ -503,18 +503,18 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 			
 			//We don't have the mouse position, just add the waypoint in the center
 			//with an offset if needed
-			List<MPoint> oldPoints = l.getMPoints();
-			List<MPoint> newPoints = new ArrayList<MPoint>(oldPoints);
+			List<LinePoint> oldPoints = l.getLinePoints();
+			List<LinePoint> newPoints = new ArrayList<LinePoint>(oldPoints);
 			
 			int i = oldPoints.size() - 1; //MPoints size always >= 2
-			MPoint mp = oldPoints.get(i);
-			MPoint mp2 = oldPoints.get(i - 1);
+			LinePoint mp = oldPoints.get(i);
+			LinePoint mp2 = oldPoints.get(i - 1);
 			double mc = s.toLineCoordinate(mp.toPoint2D());
 			double mc2 = s.toLineCoordinate(mp2.toPoint2D());
 			double c = mc2 + (mc - mc2) / 2.0; //Add new waypoint on center of last segment
 			Point2D p = s.fromLineCoordinate(c);
-			newPoints.add(i, l.new MPoint(p.getX(), p.getY()));
-			l.setMPoints(newPoints);
+			newPoints.add(i, l.new LinePoint(p.getX(), p.getY()));
+			l.setLinePoints(newPoints);
 		}
 	}
 	
@@ -549,7 +549,7 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 				for(Graphics g : selection) {
 					if(g instanceof VLineElement) {
 						VLineElement l = (VLineElement)g;
-						l.gdata.addMAnchor(0.4);
+						l.gdata.addAnchor(0.4);
 					}
 				}
 			}
@@ -576,7 +576,7 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 						((State)elt).linkTo (gp.getPathwayElement(), 1.0, 1.0); 
 						elt.setShapeType(ShapeType.OVAL);
 						engine.getActivePathwayModel().add(elt);
-						elt.setGeneratedGraphId();
+						elt.setGeneratedElementId();
 					}
 				}
 			}			
@@ -660,7 +660,7 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 			if(!isEnabled()) return; //Don't perform action if not enabled
 			VGroup g = vPathway.toggleGroup(vPathway.getSelectedGraphics());
 			if(g != null) {
-				g.getPathwayElement().setGroupStyle(groupStyle);
+				g.getPathwayElement().setGroupType(groupStyle);
 			}
 		}
 
@@ -883,8 +883,8 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 				for(PathwayElement pe : vPathway.getPathwayModel().getDataObjects()) {
 					if(pe.getObjectType() == ObjectType.LINE) {
 						VLineElement vl = (VLineElement)vPathway.getPathwayElementView(pe);
-						String grs = pe.getStartGraphRef();
-						String gre = pe.getEndGraphRef();
+						String grs = pe.getStartElementRef();
+						String gre = pe.getEndElementRef();
 						if(grs == null || "".equals(grs)) {
 							vl.getStart().highlight();
 						}
@@ -918,12 +918,12 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 				if (velt instanceof Graphics){
 					PathwayElement o = ((Graphics)velt).getPathwayElement();
 					if(key.equals (VPathwayModel.KEY_BOLD)) {
-                    				if(o.isBold()) o.setBold(false);
-                    				else o.setBold(true);
+                    				if(o.getFontWeight()) o.setFontWeight(false);
+                    				else o.setFontWeight(true);
                     }
 					else if(key.equals (VPathwayModel.KEY_ITALIC)) {
-						if(o.isItalic()) o.setItalic(false);
-						else o.setItalic(true);						
+						if(o.getFontStyle()) o.setFontStyle(false);
+						else o.setFontStyle(true);						
 					}
 				}
 			}

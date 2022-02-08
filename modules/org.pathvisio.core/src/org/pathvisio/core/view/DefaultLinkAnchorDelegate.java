@@ -38,7 +38,7 @@ public class DefaultLinkAnchorDelegate extends AbstractLinkAnchorDelegate
 	public void showLinkAnchors() 
 	{
         if (parent instanceof VGroup && 
-        	parent.gdata.getGroupStyle().isDisallowLinks()) 
+        	parent.gdata.getGroupType().isDisallowLinks()) 
         {
             return;
         }
@@ -50,8 +50,8 @@ public class DefaultLinkAnchorDelegate extends AbstractLinkAnchorDelegate
         if (anchorsCnt != null) {
             numAnchors = Integer.parseInt(anchorsCnt);
         }
-        int numH = parent.gdata.getMWidth() < MIN_SIZE_LA ? 1 : numAnchors;
-		int numV = parent.gdata.getMHeight() < MIN_SIZE_LA ? 1 : numAnchors;
+        int numH = parent.gdata.getWidth() < MIN_SIZE_LA ? 1 : numAnchors;
+		int numV = parent.gdata.getHeight() < MIN_SIZE_LA ? 1 : numAnchors;
 
 		if(numH != numLinkanchorsH || numV != numLinkanchorsV) 
 		{

@@ -41,27 +41,27 @@ public class Test extends TestCase {
 		PreferenceManager.init();
     	pwy = new PathwayModel();
     	eltDn = PathwayElement.createPathwayElement(ObjectType.DATANODE);
-    	eltDn.setMCenterX(3000);
-    	eltDn.setMCenterY(3000);
-    	eltDn.setElementID("1234");
+    	eltDn.setCenterX(3000);
+    	eltDn.setCenterY(3000);
+    	eltDn.setIdentifier("1234");
     	eltDn.setTextLabel("Gene");
-    	eltDn.setMWidth(1000);
-    	eltDn.setMHeight(1000);
+    	eltDn.setWidth(1000);
+    	eltDn.setHeight(1000);
     	eltSh = PathwayElement.createPathwayElement(ObjectType.SHAPE);
-    	eltSh.setMCenterX(6000);
-    	eltSh.setMCenterY(3000);
-    	eltSh.setMWidth(300);
-    	eltSh.setMHeight(700);
+    	eltSh.setCenterX(6000);
+    	eltSh.setCenterY(3000);
+    	eltSh.setWidth(300);
+    	eltSh.setHeight(700);
     	eltLi = PathwayElement.createPathwayElement(ObjectType.LINE);
-    	eltLi.setMStartX(500);
-    	eltLi.setMStartY(1000);
-    	eltLi.setMEndX(2500);
-    	eltLi.setMEndY(4000);
+    	eltLi.setStartLinePointX(500);
+    	eltLi.setStartLinePointY(1000);
+    	eltLi.setEndLinePointX(2500);
+    	eltLi.setEndLinePointY(4000);
     	eltLa = PathwayElement.createPathwayElement(ObjectType.LABEL);
-    	eltLa.setMCenterX(6000);
-    	eltLa.setMCenterY(6000);
-    	eltLa.setMWidth(300);
-    	eltLa.setMHeight(700);
+    	eltLa.setCenterX(6000);
+    	eltLa.setCenterY(6000);
+    	eltLa.setWidth(300);
+    	eltLa.setHeight(700);
     	eltLa.setTextLabel("Test");
     	pwy.add(eltDn);
     	pwy.add(eltSh);
@@ -105,7 +105,7 @@ public class Test extends TestCase {
 
 		PathwayElement pasted = null;
 		for(PathwayElement e : pTarget.getDataObjects()) {
-			if("1234".equals(e.getElementID())) {
+			if("1234".equals(e.getIdentifier())) {
 				pasted = e;
 			}
 		}

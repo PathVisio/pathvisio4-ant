@@ -133,35 +133,35 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 	 */
 	public class Comment implements Cloneable {
 		public Comment(String aComment, String aSource) {
-			source = aSource;
-			comment = aComment;
+			commentSource = aSource;
+			commentText = aComment;
 		}
 
 		public Object clone() throws CloneNotSupportedException {
 			return super.clone();
 		}
 
-		private String source;
-		private String comment;
+		private String commentSource;
+		private String commentText;
 
-		public String getSource() {
-			return source;
+		public String getCommentSource() {
+			return commentSource;
 		}
 
-		public String getComment() {
-			return comment;
+		public String getCommentText() {
+			return commentText;
 		}
 
-		public void setSource(String s) {
-			if (s != null && !source.equals(s)) {
-				source = s;
+		public void setCommentSource(String s) {
+			if (s != null && !commentSource.equals(s)) {
+				commentSource = s;
 				changed();
 			}
 		}
 
-		public void setComment(String c) {
-			if (c != null && !comment.equals(c)) {
-				comment = c;
+		public void setCommentText(String c) {
+			if (c != null && !commentText.equals(c)) {
+				commentText = c;
 				changed();
 			}
 		}
@@ -173,10 +173,10 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 
 		public String toString() {
 			String src = "";
-			if (source != null && !"".equals(source)) {
-				src = " (" + source + ")";
+			if (commentSource != null && !"".equals(commentSource)) {
+				src = " (" + commentSource + ")";
 			}
-			return comment + src;
+			return commentText + src;
 		}
 	}
 
@@ -185,15 +185,15 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 	 * point is automatically a {@link LinkableTo} and therefore lines can link to
 	 * the point.
 	 * 
-	 * @see MPoint
-	 * @see MAnchor
+	 * @see LinePoint
+	 * @see Anchor
 	 * @author thomas
 	 *
 	 */
 	private abstract class GenericPoint implements Cloneable, LinkableTo {
 		private double[] coordinates;
 
-		private String graphId;
+		private String elementId;
 
 		GenericPoint(double[] coordinates) {
 			this.coordinates = coordinates;
@@ -202,8 +202,8 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 		GenericPoint(GenericPoint p) {
 			coordinates = new double[p.coordinates.length];
 			System.arraycopy(p.coordinates, 0, coordinates, 0, coordinates.length);
-			if (p.graphId != null)
-				graphId = p.graphId;
+			if (p.elementId != null)
+				elementId = p.elementId;
 		}
 
 		protected void moveBy(double[] delta) {
@@ -228,26 +228,26 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 			return coordinates[i];
 		}
 
-		public String getGraphId() {
-			return graphId;
+		public String getElementId() {
+			return elementId;
 		}
 
-		public String setGeneratedGraphId() {
-			setGraphId(parent.getUniqueGraphId());
-			return graphId;
+		public String setGeneratedElementId() {
+			setElementId(parent.getUniqueGraphId());
+			return elementId;
 		}
 
-		public void setGraphId(String v) {
+		public void setElementId(String v) {
 			GraphLink.setGraphId(v, this, PathwayElement.this.parent);
-			graphId = v;
+			elementId = v;
 			fireObjectModifiedEvent(
 					PathwayElementEvent.createSinglePropertyEvent(PathwayElement.this, StaticProperty.GRAPHID));
 		}
 
 		public Object clone() throws CloneNotSupportedException {
 			GenericPoint p = (GenericPoint) super.clone();
-			if (graphId != null)
-				p.graphId = graphId;
+			if (elementId != null)
+				p.elementId = elementId;
 			return p;
 		}
 
@@ -255,7 +255,7 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 			return GraphLink.getReferences(this, parent);
 		}
 
-		public PathwayModel getPathway() {
+		public PathwayModel getPathwayModel() {
 			return parent;
 		}
 
@@ -270,18 +270,18 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 	 * @author thomas
 	 *
 	 */
-	public class MPoint extends GenericPoint implements LinkableFrom {
-		private String graphRef;
+	public class LinePoint extends GenericPoint implements LinkableFrom {
+		private String elementRef;
 		private boolean relativeSet;
 
-		public MPoint(double x, double y) {
+		public LinePoint(double x, double y) {
 			super(new double[] { x, y, 0, 0 });
 		}
 
-		MPoint(MPoint p) {
+		LinePoint(LinePoint p) {
 			super(p);
-			if (p.graphRef != null)
-				graphRef = p.graphRef;
+			if (p.elementRef != null)
+				elementRef = p.elementRef;
 		}
 
 		public void moveBy(double dx, double dy) {
@@ -350,9 +350,9 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 		 * @return true if the coordinates are relative, false if not
 		 */
 		public boolean isRelative() {
-			PathwayModel p = getPathway();
+			PathwayModel p = getPathwayModel();
 			if (p != null) {
-				LinkableTo gc = getPathway().getGraphIdContainer(graphRef);
+				LinkableTo gc = getPathwayModel().getGraphIdContainer(elementRef);
 				return gc != null;
 			}
 			return false;
@@ -369,11 +369,11 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 		}
 
 		private LinkableTo getGraphIdContainer() {
-			return getPathway().getGraphIdContainer(graphRef);
+			return getPathwayModel().getGraphIdContainer(elementRef);
 		}
 
-		public String getGraphRef() {
-			return graphRef;
+		public String getElementRef() {
+			return elementRef;
 		}
 
 		/**
@@ -383,24 +383,24 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 		 *
 		 * @param v reference to set.
 		 */
-		public void setGraphRef(String v) {
-			if (!Utils.stringEquals(graphRef, v)) {
+		public void setElementRef(String v) {
+			if (!Utils.stringEquals(elementRef, v)) {
 				if (parent != null) {
-					if (graphRef != null) {
-						parent.removeGraphRef(graphRef, this);
+					if (elementRef != null) {
+						parent.removeGraphRef(elementRef, this);
 					}
 					if (v != null) {
 						parent.addGraphRef(v, this);
 					}
 				}
-				graphRef = v;
+				elementRef = v;
 			}
 		}
 
 		public Object clone() throws CloneNotSupportedException {
-			MPoint p = (MPoint) super.clone();
-			if (graphRef != null)
-				p.graphRef = graphRef;
+			LinePoint p = (LinePoint) super.clone();
+			if (elementRef != null)
+				p.elementRef = elementRef;
 			return p;
 		}
 
@@ -421,10 +421,10 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 		 * Link to an object using the given relative coordinates
 		 */
 		public void linkTo(LinkableTo idc, double relX, double relY) {
-			String id = idc.getGraphId();
+			String id = idc.getElementId();
 			if (id == null)
-				id = idc.setGeneratedGraphId();
-			setGraphRef(idc.getGraphId());
+				id = idc.setGeneratedElementId();
+			setElementRef(idc.getElementId());
 			setRelativePosition(relX, relY);
 		}
 
@@ -433,13 +433,13 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 		 * unlinked
 		 */
 		public void unlink() {
-			if (graphRef != null) {
-				if (getPathway() != null) {
+			if (elementRef != null) {
+				if (getPathwayModel() != null) {
 					Point2D abs = getAbsolute();
 					moveTo(abs.getX(), abs.getY());
 				}
 				relativeSet = false;
-				setGraphRef(null);
+				setElementRef(null);
 				fireObjectModifiedEvent(PathwayElementEvent.createCoordinatePropertyEvent(PathwayElement.this));
 			}
 		}
@@ -457,7 +457,7 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 		 * exists and is not an empty string
 		 */
 		public boolean isLinked() {
-			String ref = getGraphRef();
+			String ref = getElementRef();
 			return ref != null && !"".equals(ref);
 		}
 
@@ -473,14 +473,14 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 	 * @author thomas
 	 *
 	 */
-	public class MAnchor extends GenericPoint {
+	public class Anchor extends GenericPoint {
 		AnchorShapeType shape = AnchorShapeType.NONE;
 
-		public MAnchor(double position) {
+		public Anchor(double position) {
 			super(new double[] { position });
 		}
 
-		public MAnchor(MAnchor a) {
+		public Anchor(Anchor a) {
 			super(a);
 			shape = a.shape;
 		}
@@ -653,7 +653,7 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 	 * Get the parent pathway. Same as {@link #getParent()}, but necessary to comply
 	 * to the {@link LinkableTo} interface.
 	 */
-	public PathwayModel getPathway() {
+	public PathwayModel getPathwayModel() {
 		return parent;
 	}
 
@@ -820,16 +820,16 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 			break;
 
 		case CENTERX:
-			setMCenterX((Double) value);
+			setCenterX((Double) value);
 			break;
 		case CENTERY:
-			setMCenterY((Double) value);
+			setCenterY((Double) value);
 			break;
 		case WIDTH:
-			setMWidth((Double) value);
+			setWidth((Double) value);
 			break;
 		case HEIGHT:
-			setMHeight((Double) value);
+			setHeight((Double) value);
 			break;
 
 		case FILLCOLOR:
@@ -848,16 +848,16 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 			setRelY((Double) value);
 			break;
 		case STARTX:
-			setMStartX((Double) value);
+			setStartLinePointX((Double) value);
 			break;
 		case STARTY:
-			setMStartY((Double) value);
+			setStartLinePointY((Double) value);
 			break;
 		case ENDX:
-			setMEndX((Double) value);
+			setEndLinePointX((Double) value);
 			break;
 		case ENDY:
-			setMEndY((Double) value);
+			setEndLinePointY((Double) value);
 			break;
 		case ENDLINETYPE:
 			setEndLineType((ArrowHeadType) value);
@@ -874,7 +874,7 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 			break;
 
 		case GENEID:
-			setElementID((String) value);
+			setIdentifier((String) value);
 			break;
 		case DATASOURCE:
 			if (value instanceof DataSource) {
@@ -897,22 +897,22 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 			setFontName((String) value);
 			break;
 		case FONTWEIGHT:
-			setBold((Boolean) value);
+			setFontWeight((Boolean) value);
 			break;
 		case FONTSTYLE:
-			setItalic((Boolean) value);
+			setFontStyle((Boolean) value);
 			break;
 		case FONTSIZE:
-			setMFontSize((Double) value);
+			setFontSize((Double) value);
 			break;
 		case MAPINFONAME:
-			setMapInfoName((String) value);
+			setTitle((String) value);
 			break;
 		case ORGANISM:
 			setOrganism((String) value);
 			break;
 		case MAPINFO_DATASOURCE:
-			setMapInfoDataSource((String) value);
+			setSouce((String) value);
 			break;
 		case VERSION:
 			setVersion((String) value);
@@ -939,13 +939,13 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 			// ignore, board width is calculated automatically
 			break;
 		case GRAPHID:
-			setGraphId((String) value);
+			setElementId((String) value);
 			break;
 		case STARTGRAPHREF:
-			setStartGraphRef((String) value);
+			setStartElementRef((String) value);
 			break;
 		case ENDGRAPHREF:
-			setEndGraphRef((String) value);
+			setEndElementRef((String) value);
 			break;
 		case GROUPID:
 			setGroupId((String) value);
@@ -965,19 +965,19 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 			break;
 		case GROUPSTYLE:
 			if (value instanceof GroupType) {
-				setGroupStyle((GroupType) value);
+				setGroupType((GroupType) value);
 			} else {
-				setGroupStyle(GroupType.fromName((String) value));
+				setGroupType(GroupType.fromName((String) value));
 			}
 			break;
 		case ALIGN:
-			setAlign((HAlignType) value);
+			setHAlign((HAlignType) value);
 			break;
 		case VALIGN:
-			setValign((VAlignType) value);
+			setVAlign((VAlignType) value);
 			break;
 		case LINETHICKNESS:
-			setLineThickness((Double) value);
+			setLineWidth((Double) value);
 			break;
 		}
 	}
@@ -996,16 +996,16 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 			break;
 
 		case CENTERX:
-			result = getMCenterX();
+			result = getCenterX();
 			break;
 		case CENTERY:
-			result = getMCenterY();
+			result = getCenterY();
 			break;
 		case WIDTH:
-			result = getMWidth();
+			result = getWidth();
 			break;
 		case HEIGHT:
-			result = getMHeight();
+			result = getHeight();
 			break;
 
 		case FILLCOLOR:
@@ -1024,16 +1024,16 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 			result = getRelY();
 			break;
 		case STARTX:
-			result = getMStartX();
+			result = getStartLinePointX();
 			break;
 		case STARTY:
-			result = getMStartY();
+			result = getStartLinePointY();
 			break;
 		case ENDX:
-			result = getMEndX();
+			result = getEndLinePointX();
 			break;
 		case ENDY:
-			result = getMEndY();
+			result = getEndLinePointY();
 			break;
 		case ENDLINETYPE:
 			result = getEndLineType();
@@ -1050,7 +1050,7 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 			break;
 
 		case GENEID:
-			result = getElementID();
+			result = getIdentifier();
 			break;
 		case DATASOURCE:
 			result = getDataSource();
@@ -1069,23 +1069,23 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 			result = getFontName();
 			break;
 		case FONTWEIGHT:
-			result = isBold();
+			result = getFontWeight();
 			break;
 		case FONTSTYLE:
-			result = isItalic();
+			result = getFontStyle();
 			break;
 		case FONTSIZE:
-			result = getMFontSize();
+			result = getFontSize();
 			break;
 
 		case MAPINFONAME:
-			result = getMapInfoName();
+			result = getTitle();
 			break;
 		case ORGANISM:
 			result = getOrganism();
 			break;
 		case MAPINFO_DATASOURCE:
-			result = getMapInfoDataSource();
+			result = getSource();
 			break;
 		case VERSION:
 			result = getVersion();
@@ -1106,19 +1106,19 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 			result = getCopyright();
 			break;
 		case BOARDWIDTH:
-			result = getMBoardSize()[0];
+			result = getBoardSize()[0];
 			break;
 		case BOARDHEIGHT:
-			result = getMBoardSize()[1];
+			result = getBoardSize()[1];
 			break;
 		case GRAPHID:
-			result = getGraphId();
+			result = getElementId();
 			break;
 		case STARTGRAPHREF:
-			result = getStartGraphRef();
+			result = getStartElementRef();
 			break;
 		case ENDGRAPHREF:
-			result = getEndGraphRef();
+			result = getEndElementRef();
 			break;
 		case GROUPID:
 			result = createGroupId();
@@ -1136,16 +1136,16 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 			result = getZOrder();
 			break;
 		case GROUPSTYLE:
-			result = getGroupStyle().toString();
+			result = getGroupType().toString();
 			break;
 		case ALIGN:
-			result = getAlign();
+			result = getHAlign();
 			break;
 		case VALIGN:
-			result = getValign();
+			result = getVAlign();
 			break;
 		case LINETHICKNESS:
-			result = getLineThickness();
+			result = getLineWidth();
 			break;
 		}
 
@@ -1163,8 +1163,8 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 		attributes = new TreeMap<String, String>(src.attributes); // create copy
 		author = src.author;
 		copyright = src.copyright;
-		mCenterx = src.mCenterx;
-		mCentery = src.mCentery;
+		centerX = src.centerX;
+		centerY = src.centerY;
 		relX = src.relX;
 		relY = src.relY;
 		zOrder = src.zOrder;
@@ -1173,14 +1173,14 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 		dataSource = src.dataSource;
 		email = src.email;
 		fontName = src.fontName;
-		mFontSize = src.mFontSize;
-		fBold = src.fBold;
-		fItalic = src.fItalic;
-		fStrikethru = src.fStrikethru;
-		fUnderline = src.fUnderline;
-		setGeneID = src.setGeneID;
+		fontSize = src.fontSize;
+		fontWeight = src.fontWeight;
+		fontStyle = src.fontStyle;
+		fontStrikethru = src.fontStrikethru;
+		fontDecoration = src.fontDecoration;
+		setIdentifier = src.setIdentifier;
 		dataNodeType = src.dataNodeType;
-		mHeight = src.mHeight;
+		height = src.height;
 		textLabel = src.textLabel;
 		href = src.href;
 		lastModified = src.lastModified;
@@ -1188,20 +1188,20 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 		startLineType = src.startLineType;
 		endLineType = src.endLineType;
 		maintainer = src.maintainer;
-		mapInfoDataSource = src.mapInfoDataSource;
-		mapInfoName = src.mapInfoName;
+		source = src.source;
+		title = src.title;
 		organism = src.organism;
 		rotation = src.rotation;
 		shapeType = src.shapeType;
-		lineThickness = src.lineThickness;
-		align = src.align;
-		valign = src.valign;
-		mPoints = new ArrayList<MPoint>();
-		for (MPoint p : src.mPoints) {
-			mPoints.add(new MPoint(p));
+		lineWidth = src.lineWidth;
+		hAlign = src.hAlign;
+		vAlign = src.vAlign;
+		linePoints = new ArrayList<LinePoint>();
+		for (LinePoint p : src.linePoints) {
+			linePoints.add(new LinePoint(p));
 		}
-		for (MAnchor a : src.anchors) {
-			anchors.add(new MAnchor(a));
+		for (Anchor a : src.anchors) {
+			anchors.add(new Anchor(a));
 		}
 		comments = new ArrayList<Comment>();
 		for (Comment c : src.comments) {
@@ -1213,12 +1213,12 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 			}
 		}
 		version = src.version;
-		mWidth = src.mWidth;
-		graphId = src.graphId;
-		graphRef = src.graphRef;
+		width = src.width;
+		elementId = src.elementId;
+		elementRef = src.elementRef;
 		groupId = src.groupId;
 		groupRef = src.groupRef;
-		groupStyle = src.groupStyle;
+		groupType = src.groupType;
 		connectorType = src.connectorType;
 		biopaxRefs = (List<String>) ((ArrayList<String>) src.biopaxRefs).clone();
 		fireObjectModifiedEvent(PathwayElementEvent.createAllPropertiesEvent(this));
@@ -1244,68 +1244,68 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 	}
 
 	// only for lines
-	private List<MPoint> mPoints = Arrays.asList(new MPoint(0, 0), new MPoint(0, 0));
+	private List<LinePoint> linePoints = Arrays.asList(new LinePoint(0, 0), new LinePoint(0, 0));
 
-	public void setMPoints(List<MPoint> points) {
+	public void setLinePoints(List<LinePoint> points) {
 		if (points != null) {
 			if (points.size() < 2) {
 				throw new IllegalArgumentException("Points array should at least have two elements");
 			}
-			mPoints = points;
+			linePoints = points;
 			fireObjectModifiedEvent(PathwayElementEvent.createCoordinatePropertyEvent(this));
 		}
 	}
 
-	public MPoint getMStart() {
-		return mPoints.get(0);
+	public LinePoint getStartLinePoint() {
+		return linePoints.get(0);
 	}
 
-	public void setMStart(MPoint p) {
-		getMStart().moveTo(p);
+	public void setStartLinePoint(LinePoint p) {
+		getStartLinePoint().moveTo(p);
 	}
 
-	public MPoint getMEnd() {
-		return mPoints.get(mPoints.size() - 1);
+	public LinePoint getEndLinePoint() {
+		return linePoints.get(linePoints.size() - 1);
 	}
 
-	public void setMEnd(MPoint p) {
-		getMEnd().moveTo(p);
+	public void setEndLinePoint(LinePoint p) {
+		getEndLinePoint().moveTo(p);
 	}
 
-	public List<MPoint> getMPoints() {
-		return mPoints;
+	public List<LinePoint> getLinePoints() {
+		return linePoints;
 	}
 
-	public double getMStartX() {
-		return getMStart().getX();
+	public double getStartLinePointX() {
+		return getStartLinePoint().getX();
 	}
 
-	public void setMStartX(double v) {
-		getMStart().setX(v);
+	public void setStartLinePointX(double v) {
+		getStartLinePoint().setX(v);
 	}
 
-	public double getMStartY() {
-		return getMStart().getY();
+	public double getStartLinePointY() {
+		return getStartLinePoint().getY();
 	}
 
-	public void setMStartY(double v) {
-		getMStart().setY(v);
+	public void setStartLinePointY(double v) {
+		getStartLinePoint().setY(v);
 	}
 
-	public double getMEndX() {
-		return mPoints.get(mPoints.size() - 1).getX();
+	public double getEndLinePointX() {
+		return linePoints.get(linePoints.size() - 1).getX();
 	}
 
-	public void setMEndX(double v) {
-		getMEnd().setX(v);
+	public void setEndLinePointX(double v) {
+		getEndLinePoint().setX(v);
 	}
 
-	public double getMEndY() {
-		return getMEnd().getY();
+	public double getEndLinePointY() {
+		return getEndLinePoint().getY();
 	}
 
-	public void setMEndY(double v) {
-		getMEnd().setY(v);
+	public void setEndLinePointY(double v) {
+		getEndLinePoint().setY(v);
 	}
 
 	protected int lineStyle = LineStyleType.SOLID;
@@ -1371,14 +1371,14 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 	}
 
 //TODO: end of new elements
-	protected List<MAnchor> anchors = new ArrayList<MAnchor>();
+	protected List<Anchor> anchors = new ArrayList<Anchor>();
 
 	/**
 	 * Get the anchors for this line.
 	 * 
 	 * @return A list with the anchors, or an empty list, if no anchors are defined
 	 */
-	public List<MAnchor> getMAnchors() {
+	public List<Anchor> getAnchors() {
 		return anchors;
 	}
 
@@ -1388,11 +1388,11 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 	 * @param position The relative position on the line, between 0 (start) to 1
 	 *                 (end).
 	 */
-	public MAnchor addMAnchor(double position) {
+	public Anchor addAnchor(double position) {
 		if (position < 0 || position > 1) {
 			throw new IllegalArgumentException("Invalid position value '" + position + "' must be between 0 and 1");
 		}
-		MAnchor anchor = new MAnchor(position);
+		Anchor anchor = new Anchor(position);
 		anchors.add(anchor);
 		// No property for anchor, use LINESTYLE as dummy property to force redraw on
 		// line
@@ -1403,7 +1403,7 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 	/**
 	 * Remove the given anchor
 	 */
-	public void removeMAnchor(MAnchor anchor) {
+	public void removeAnchor(Anchor anchor) {
 		if (anchors.remove(anchor)) {
 			// No property for anchor, use LINESTYLE as dummy property to force redraw on
 			// line
@@ -1498,39 +1498,25 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 	 */
 	public String findComment(String source) {
 		for (Comment c : comments) {
-			if (source.equals(c.source)) {
-				return c.comment;
+			if (source.equals(c.commentSource)) {
+				return c.commentText;
 			}
 		}
 		return null;
 	}
 
-	protected String setGeneID = "";
+	protected String setIdentifier = "";
 
-	/**
-	 * @deprecated Use {@link #getElementID()} instead
-	 */
-	public String getGeneID() {
-		return getElementID();
+	public String getIdentifier() {
+		return setIdentifier;
 	}
 
-	public String getElementID() {
-		return setGeneID;
-	}
-
-	/**
-	 * @deprecated Use {@link #setElementID(String)} instead
-	 */
-	public void setGeneID(String v) {
-		setElementID(v);
-	}
-
-	public void setElementID(String v) {
+	public void setIdentifier(String v) {
 		if (v == null)
 			throw new IllegalArgumentException();
 		v = v.trim();
-		if (!Utils.stringEquals(setGeneID, v)) {
-			setGeneID = v;
+		if (!Utils.stringEquals(setIdentifier, v)) {
+			setIdentifier = v;
 			fireObjectModifiedEvent(PathwayElementEvent.createSinglePropertyEvent(this, StaticProperty.GENEID));
 		}
 	}
@@ -1579,84 +1565,84 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 	 */
 	public Xref getXref() {
 		// TODO: Store Xref by default, derive setGeneID and dataSource from it.
-		return new Xref(setGeneID, dataSource);
+		return new Xref(setIdentifier, dataSource);
 	}
 
-	protected double mCenterx = 0;
+	protected double centerX = 0;
 
-	public double getMCenterX() {
-		return mCenterx;
+	public double getCenterX() {
+		return centerX;
 	}
 
-	public void setMCenterX(double v) {
-		if (mCenterx != v) {
-			mCenterx = v;
+	public void setCenterX(double v) {
+		if (centerX != v) {
+			centerX = v;
 			fireObjectModifiedEvent(PathwayElementEvent.createCoordinatePropertyEvent(this));
 		}
 	}
 
-	protected double mCentery = 0;
+	protected double centerY = 0;
 
-	public double getMCenterY() {
-		return mCentery;
+	public double getCenterY() {
+		return centerY;
 	}
 
-	public void setMCenterY(double v) {
-		if (mCentery != v) {
-			mCentery = v;
+	public void setCenterY(double v) {
+		if (centerY != v) {
+			centerY = v;
 			fireObjectModifiedEvent(PathwayElementEvent.createCoordinatePropertyEvent(this));
 		}
 	}
 
-	protected double mWidth = 0;
+	protected double width = 0;
 
-	public double getMWidth() {
-		return mWidth;
+	public double getWidth() {
+		return width;
 	}
 
-	public void setMWidth(double v) {
-		if (mWidth < 0) {
+	public void setWidth(double v) {
+		if (width < 0) {
 			throw new IllegalArgumentException("Tried to set dimension < 0: " + v);
 		}
-		if (mWidth != v) {
-			mWidth = v;
+		if (width != v) {
+			width = v;
 			fireObjectModifiedEvent(PathwayElementEvent.createCoordinatePropertyEvent(this));
 		}
 	}
 
-	protected double mHeight = 0;
+	protected double height = 0;
 
-	public double getMHeight() {
-		return mHeight;
+	public double getHeight() {
+		return height;
 	}
 
-	public void setMHeight(double v) {
-		if (mWidth < 0) {
+	public void setHeight(double v) {
+		if (width < 0) {
 			throw new IllegalArgumentException("Tried to set dimension < 0: " + v);
 		}
-		if (mHeight != v) {
-			mHeight = v;
+		if (height != v) {
+			height = v;
 			fireObjectModifiedEvent(PathwayElementEvent.createCoordinatePropertyEvent(this));
 		}
 	}
 
 	// starty for shapes
-	public double getMTop() {
-		return mCentery - mHeight / 2;
+	public double getTop() {
+		return centerY - height / 2;
 	}
 
-	public void setMTop(double v) {
-		mCentery = v + mHeight / 2;
+	public void setTop(double v) {
+		centerY = v + height / 2;
 		fireObjectModifiedEvent(PathwayElementEvent.createCoordinatePropertyEvent(this));
 	}
 
 	// startx for shapes
-	public double getMLeft() {
-		return mCenterx - mWidth / 2;
+	public double getLeft() {
+		return centerX - width / 2;
 	}
 
-	public void setMLeft(double v) {
-		mCenterx = v + mWidth / 2;
+	public void setLeft(double v) {
+		centerX = v + width / 2;
 		fireObjectModifiedEvent(PathwayElementEvent.createCoordinatePropertyEvent(this));
 	}
 
@@ -1727,10 +1713,10 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 	/**
 	 * Get the rectangular bounds of the object after rotation is applied
 	 */
-	public Rectangle2D getRBounds() {
-		Rectangle2D bounds = getMBounds();
+	public Rectangle2D getRotatedBounds() {
+		Rectangle2D bounds = getBounds();
 		AffineTransform t = new AffineTransform();
-		t.rotate(getRotation(), getMCenterX(), getMCenterY());
+		t.rotate(getRotation(), getCenterX(), getCenterY());
 		bounds = t.createTransformedShape(bounds).getBounds2D();
 		return bounds;
 	}
@@ -1738,59 +1724,59 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 	/**
 	 * Get the rectangular bounds of the object without rotation taken into accound
 	 */
-	public Rectangle2D getMBounds() {
-		return new Rectangle2D.Double(getMLeft(), getMTop(), getMWidth(), getMHeight());
+	public Rectangle2D getBounds() {
+		return new Rectangle2D.Double(getLeft(), getTop(), getWidth(), getHeight());
 	}
 
 	// for labels
-	protected boolean fBold = false;
+	protected boolean fontWeight = false;
 
-	public boolean isBold() {
-		return fBold;
+	public boolean getFontWeight() {
+		return fontWeight;
 	}
 
-	public void setBold(boolean v) {
-		if (fBold != v) {
-			fBold = v;
+	public void setFontWeight(boolean v) {
+		if (fontWeight != v) {
+			fontWeight = v;
 			fireObjectModifiedEvent(PathwayElementEvent.createSinglePropertyEvent(this, StaticProperty.FONTWEIGHT));
 		}
 	}
 
-	protected boolean fStrikethru = false;
+	protected boolean fontStrikethru = false;
 
-	public boolean isStrikethru() {
-		return fStrikethru;
+	public boolean getFontStrikethru() {
+		return fontStrikethru;
 	}
 
-	public void setStrikethru(boolean v) {
-		if (fStrikethru != v) {
-			fStrikethru = v;
+	public void setFontStrikethru(boolean v) {
+		if (fontStrikethru != v) {
+			fontStrikethru = v;
 			fireObjectModifiedEvent(PathwayElementEvent.createSinglePropertyEvent(this, StaticProperty.FONTSTYLE));
 		}
 	}
 
-	protected boolean fUnderline = false;
+	protected boolean fontDecoration = false;
 
-	public boolean isUnderline() {
-		return fUnderline;
+	public boolean getFontDecoration() {
+		return fontDecoration;
 	}
 
-	public void setUnderline(boolean v) {
-		if (fUnderline != v) {
-			fUnderline = v;
+	public void setFontDecoration(boolean v) {
+		if (fontDecoration != v) {
+			fontDecoration = v;
 			fireObjectModifiedEvent(PathwayElementEvent.createSinglePropertyEvent(this, StaticProperty.FONTSTYLE));
 		}
 	}
 
-	protected boolean fItalic = false;
+	protected boolean fontStyle = false;
 
-	public boolean isItalic() {
-		return fItalic;
+	public boolean getFontStyle() {
+		return fontStyle;
 	}
 
-	public void setItalic(boolean v) {
-		if (fItalic != v) {
-			fItalic = v;
+	public void setFontStyle(boolean v) {
+		if (fontStyle != v) {
+			fontStyle = v;
 			fireObjectModifiedEvent(PathwayElementEvent.createSinglePropertyEvent(this, StaticProperty.FONTSTYLE));
 		}
 	}
@@ -1842,44 +1828,44 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 		}
 	}
 
-	private double lineThickness = 1.0;
+	private double lineWidth = 1.0;
 
-	public double getLineThickness() {
-		return lineThickness;
+	public double getLineWidth() {
+		return lineWidth;
 	}
 
-	public void setLineThickness(double v) {
-		if (lineThickness != v) {
-			lineThickness = v;
+	public void setLineWidth(double v) {
+		if (lineWidth != v) {
+			lineWidth = v;
 			fireObjectModifiedEvent(PathwayElementEvent.createSinglePropertyEvent(this, StaticProperty.LINETHICKNESS));
 		}
 	}
 
-	protected double mFontSize = M_INITIAL_FONTSIZE;
+	protected double fontSize = M_INITIAL_FONTSIZE;
 
-	public double getMFontSize() {
-		return mFontSize;
+	public double getFontSize() {
+		return fontSize;
 	}
 
-	public void setMFontSize(double v) {
-		if (mFontSize != v) {
-			mFontSize = v;
+	public void setFontSize(double v) {
+		if (fontSize != v) {
+			fontSize = v;
 			fireObjectModifiedEvent(PathwayElementEvent.createSinglePropertyEvent(this, StaticProperty.FONTSIZE));
 		}
 	}
 
-	protected String mapInfoName = "untitled";
+	protected String title = "untitled";
 
-	public String getMapInfoName() {
-		return mapInfoName;
+	public String getTitle() {
+		return title;
 	}
 
-	public void setMapInfoName(String v) {
+	public void setTitle(String v) {
 		if (v == null)
 			throw new IllegalArgumentException();
 
-		if (!Utils.stringEquals(mapInfoName, v)) {
-			mapInfoName = v;
+		if (!Utils.stringEquals(title, v)) {
+			title = v;
 			fireObjectModifiedEvent(PathwayElementEvent.createSinglePropertyEvent(this, StaticProperty.MAPINFONAME));
 		}
 	}
@@ -1897,44 +1883,44 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 		}
 	}
 
-	protected String mapInfoDataSource = null;
+	protected String source = null;
 
-	public String getMapInfoDataSource() {
-		return mapInfoDataSource;
+	public String getSource() {
+		return source;
 	}
 
-	public void setMapInfoDataSource(String v) {
-		if (!Utils.stringEquals(mapInfoDataSource, v)) {
-			mapInfoDataSource = v;
+	public void setSouce(String v) {
+		if (!Utils.stringEquals(source, v)) {
+			source = v;
 			fireObjectModifiedEvent(
 					PathwayElementEvent.createSinglePropertyEvent(this, StaticProperty.MAPINFO_DATASOURCE));
 		}
 	}
 
-	protected VAlignType valign = VAlignType.MIDDLE;
+	protected VAlignType vAlign = VAlignType.MIDDLE;
 
-	public void setValign(VAlignType v) {
-		if (valign != v) {
-			valign = v;
+	public void setVAlign(VAlignType v) {
+		if (vAlign != v) {
+			vAlign = v;
 			fireObjectModifiedEvent(PathwayElementEvent.createSinglePropertyEvent(this, StaticProperty.VALIGN));
 		}
 	}
 
-	public VAlignType getValign() {
-		return valign;
+	public VAlignType getVAlign() {
+		return vAlign;
 	}
 
-	protected HAlignType align = HAlignType.CENTER;
+	protected HAlignType hAlign = HAlignType.CENTER;
 
-	public void setAlign(HAlignType v) {
-		if (align != v) {
-			align = v;
+	public void setHAlign(HAlignType v) {
+		if (hAlign != v) {
+			hAlign = v;
 			fireObjectModifiedEvent(PathwayElementEvent.createSinglePropertyEvent(this, StaticProperty.ALIGN));
 		}
 	}
 
-	public HAlignType getAlign() {
-		return align;
+	public HAlignType getHAlign() {
+		return hAlign;
 	}
 
 	protected String version = null;
@@ -2021,29 +2007,29 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 	 * 
 	 * @return The drawing size
 	 */
-	public double[] getMBoardSize() {
+	public double[] getBoardSize() {
 		return parent.getMBoardSize();
 	}
 
-	public double getMBoardWidth() {
-		return getMBoardSize()[0];
+	public double getBoardWidth() {
+		return getBoardSize()[0];
 	}
 
-	public double getMBoardHeight() {
-		return getMBoardSize()[1];
+	public double getBoardHeight() {
+		return getBoardSize()[1];
 	}
 
 	/* AP20070508 */
 	protected String groupId;
 
-	protected String graphId;
+	protected String elementId;
 
 	protected String groupRef;
 
-	protected GroupType groupStyle;
+	protected GroupType groupType;
 
-	public String doGetGraphId() {
-		return graphId;
+	public String doGetElementId() {
+		return elementId;
 	}
 
 	public String getGroupRef() {
@@ -2077,18 +2063,18 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 		return groupId;
 	}
 
-	public void setGroupStyle(GroupType gs) {
-		if (groupStyle != gs) {
-			groupStyle = gs;
+	public void setGroupType(GroupType gs) {
+		if (groupType != gs) {
+			groupType = gs;
 			fireObjectModifiedEvent(PathwayElementEvent.createSinglePropertyEvent(this, StaticProperty.GROUPSTYLE));
 		}
 	}
 
-	public GroupType getGroupStyle() {
-		if (groupStyle == null) {
-			groupStyle = GroupType.NONE;
+	public GroupType getGroupType() {
+		if (groupType == null) {
+			groupType = GroupType.NONE;
 		}
-		return groupStyle;
+		return groupType;
 	}
 
 	/**
@@ -2113,21 +2099,21 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 
 	}
 
-	protected String graphRef = null;
+	protected String elementRef = null;
 
 	/** graphRef property, used by Modification */
-	public String getGraphRef() {
-		return graphRef;
+	public String getElementRef() {
+		return elementRef;
 	}
 
 	/**
 	 * set graphRef property, used by State The new graphRef should exist and point
 	 * to an existing DataNode
 	 */
-	public void setGraphRef(String value) {
+	public void setElementRef(String value) {
 		// TODO: check that new graphRef exists and that it points to a DataNode
-		if (!(graphRef == null ? value == null : graphRef.equals(value))) {
-			graphRef = value;
+		if (!(elementRef == null ? value == null : elementRef.equals(value))) {
+			elementRef = value;
 			fireObjectModifiedEvent(PathwayElementEvent.createSinglePropertyEvent(this, StaticProperty.GRAPHREF));
 		}
 	}
@@ -2172,8 +2158,8 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 		}
 	}
 
-	public String getGraphId() {
-		return graphId;
+	public String getElementId() {
+		return elementId;
 	}
 
 	/**
@@ -2181,33 +2167,33 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 	 *
 	 * @see PathwayModel#getUniqueId(java.util.Set)
 	 */
-	public void setGraphId(String v) {
+	public void setElementId(String v) {
 		GraphLink.setGraphId(v, this, parent);
-		graphId = v;
+		elementId = v;
 		fireObjectModifiedEvent(PathwayElementEvent.createSinglePropertyEvent(this, StaticProperty.GRAPHID));
 	}
 
-	public String setGeneratedGraphId() {
-		setGraphId(parent.getUniqueGraphId());
-		return graphId;
+	public String setGeneratedElementId() {
+		setElementId(parent.getUniqueGraphId());
+		return elementId;
 	}
 
-	public String getStartGraphRef() {
-		return mPoints.get(0).getGraphRef();
+	public String getStartElementRef() {
+		return linePoints.get(0).getElementRef();
 	}
 
-	public void setStartGraphRef(String ref) {
-		MPoint start = mPoints.get(0);
-		start.setGraphRef(ref);
+	public void setStartElementRef(String ref) {
+		LinePoint start = linePoints.get(0);
+		start.setElementRef(ref);
 	}
 
-	public String getEndGraphRef() {
-		return mPoints.get(mPoints.size() - 1).getGraphRef();
+	public String getEndElementRef() {
+		return linePoints.get(linePoints.size() - 1).getElementRef();
 	}
 
-	public void setEndGraphRef(String ref) {
-		MPoint end = mPoints.get(mPoints.size() - 1);
-		end.setGraphRef(ref);
+	public void setEndElementRef(String ref) {
+		LinePoint end = linePoints.get(linePoints.size() - 1);
+		end.setElementRef(ref);
 	}
 
 	private BiopaxReferenceManager bpRefMgr;
@@ -2249,20 +2235,20 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 	}
 
 	public PathwayElement[] splitLine() {
-		double centerX = (getMStartX() + getMEndX()) / 2;
-		double centerY = (getMStartY() + getMEndY()) / 2;
+		double centerX = (getStartLinePointX() + getEndLinePointX()) / 2;
+		double centerY = (getStartLinePointY() + getEndLinePointY()) / 2;
 		PathwayElement l1 = new PathwayElement(ObjectType.LINE);
 		l1.copyValuesFrom(this);
-		l1.setMStartX(getMStartX());
-		l1.setMStartY(getMStartY());
-		l1.setMEndX(centerX);
-		l1.setMEndY(centerY);
+		l1.setStartLinePointX(getStartLinePointX());
+		l1.setStartLinePointY(getStartLinePointY());
+		l1.setEndLinePointX(centerX);
+		l1.setEndLinePointY(centerY);
 		PathwayElement l2 = new PathwayElement(ObjectType.LINE);
 		l2.copyValuesFrom(this);
-		l2.setMStartX(centerX);
-		l2.setMStartY(centerY);
-		l2.setMEndX(getMEndX());
-		l2.setMEndY(getMEndY());
+		l2.setStartLinePointX(centerX);
+		l2.setStartLinePointY(centerY);
+		l2.setEndLinePointX(getEndLinePointX());
+		l2.setEndLinePointY(getEndLinePointY());
 		return new PathwayElement[] { l1, l2 };
 	}
 
@@ -2305,39 +2291,39 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 		switch (objectType) {
 		case SHAPE:
 			if (shapeType == ShapeType.BRACE) {
-				setMWidth(M_INITIAL_BRACE_WIDTH);
-				setMHeight(M_INITIAL_BRACE_HEIGHT);
+				setWidth(M_INITIAL_BRACE_WIDTH);
+				setHeight(M_INITIAL_BRACE_HEIGHT);
 			} else if (shapeType == ShapeType.MITOCHONDRIA || lineStyle == LineStyleType.DOUBLE) {
-				setMWidth(M_INITIAL_CELLCOMP_WIDTH);
-				setMHeight(M_INITIAL_CELLCOMP_HEIGHT);
+				setWidth(M_INITIAL_CELLCOMP_WIDTH);
+				setHeight(M_INITIAL_CELLCOMP_HEIGHT);
 			} else if (shapeType == ShapeType.SARCOPLASMICRETICULUM || shapeType == ShapeType.ENDOPLASMICRETICULUM
 					|| shapeType == ShapeType.GOLGIAPPARATUS) {
-				setMWidth(M_INITIAL_CELLCOMP_HEIGHT);
-				setMHeight(M_INITIAL_CELLCOMP_WIDTH);
+				setWidth(M_INITIAL_CELLCOMP_HEIGHT);
+				setHeight(M_INITIAL_CELLCOMP_WIDTH);
 			} else {
-				setMWidth(M_INITIAL_SHAPE_SIZE);
-				setMHeight(M_INITIAL_SHAPE_SIZE);
+				setWidth(M_INITIAL_SHAPE_SIZE);
+				setHeight(M_INITIAL_SHAPE_SIZE);
 			}
 			break;
 		case DATANODE:
-			setMWidth(M_INITIAL_GENEPRODUCT_WIDTH);
-			setMHeight(M_INITIAL_GENEPRODUCT_HEIGHT);
+			setWidth(M_INITIAL_GENEPRODUCT_WIDTH);
+			setHeight(M_INITIAL_GENEPRODUCT_HEIGHT);
 			break;
 		case LINE:
-			setMEndX(getMStartX() + M_INITIAL_LINE_LENGTH);
-			setMEndY(getMStartY() + M_INITIAL_LINE_LENGTH);
+			setEndLinePointX(getStartLinePointX() + M_INITIAL_LINE_LENGTH);
+			setEndLinePointY(getStartLinePointY() + M_INITIAL_LINE_LENGTH);
 			break;
 		case GRAPHLINE:
-			setMEndX(getMStartX() + M_INITIAL_LINE_LENGTH);
-			setMEndY(getMStartY() + M_INITIAL_LINE_LENGTH);
+			setEndLinePointX(getStartLinePointX() + M_INITIAL_LINE_LENGTH);
+			setEndLinePointY(getStartLinePointY() + M_INITIAL_LINE_LENGTH);
 			break;
 		case STATE:
-			setMWidth(M_INITIAL_STATE_SIZE);
-			setMHeight(M_INITIAL_STATE_SIZE);
+			setWidth(M_INITIAL_STATE_SIZE);
+			setHeight(M_INITIAL_STATE_SIZE);
 			break;
 		case LABEL:
-			setMWidth(M_INITIAL_LABEL_WIDTH);
-			setMHeight(M_INITIAL_LABEL_HEIGHT);
+			setWidth(M_INITIAL_LABEL_WIDTH);
+			setHeight(M_INITIAL_LABEL_HEIGHT);
 		}
 	}
 
@@ -2350,8 +2336,8 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 		if (rez != 0) {
 			return rez;
 		}
-		String a = getGraphId();
-		String b = o.getGraphId();
+		String a = getElementId();
+		String b = o.getElementId();
 		if (a == null) {
 			if (b == null) {
 				return 0;
@@ -2367,7 +2353,7 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 	public Point2D toAbsoluteCoordinate(Point2D p) {
 		double x = p.getX();
 		double y = p.getY();
-		Rectangle2D bounds = getRBounds();
+		Rectangle2D bounds = getRotatedBounds();
 		// Scale
 		if (bounds.getWidth() != 0)
 			x *= bounds.getWidth() / 2;
@@ -2388,7 +2374,7 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 	public Point2D toRelativeCoordinate(Point2D mp) {
 		double relX = mp.getX();
 		double relY = mp.getY();
-		Rectangle2D bounds = getRBounds();
+		Rectangle2D bounds = getRotatedBounds();
 		// Translate
 		relX -= bounds.getCenterX();
 		relY -= bounds.getCenterY();
@@ -2401,17 +2387,17 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 	}
 
 	public void printRefsDebugInfo() {
-		System.err.println(objectType + " " + getGraphId());
+		System.err.println(objectType + " " + getElementId());
 		if (this instanceof LineElement) {
-			for (MPoint p : getMPoints()) {
-				System.err.println("  p: " + p.getGraphId());
+			for (LinePoint p : getLinePoints()) {
+				System.err.println("  p: " + p.getElementId());
 			}
-			for (MAnchor a : getMAnchors()) {
-				System.err.println("  a: " + a.getGraphId());
+			for (Anchor a : getAnchors()) {
+				System.err.println("  a: " + a.getElementId());
 			}
 		}
 		if (this instanceof State) {
-			System.err.println("  " + getGraphRef());
+			System.err.println("  " + getElementRef());
 		}
 	}
 }

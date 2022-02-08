@@ -119,7 +119,7 @@ public class CommentPanel extends PathwayElementPanel implements ActionListener 
 					"2dlu, fill:[100dlu,min]:grow, 1dlu, pref, 2dlu", "2dlu, pref, 2dlu"
 			));
 			txt = new JTextPane();
-			txt.setText(comment == null ? "Type your comment here" : comment.getComment());
+			txt.setText(comment == null ? "Type your comment here" : comment.getCommentText());
 			txt.setBorder(BorderFactory.createEtchedBorder());
 			txt.getDocument().addDocumentListener(new DocumentListener() {
 				public void changedUpdate(DocumentEvent e) {
@@ -136,7 +136,7 @@ public class CommentPanel extends PathwayElementPanel implements ActionListener 
 						comment = getInput().new Comment(txt.getText(), "");
 						getInput().addComment(comment);
 					} else {
-						comment.setComment(txt.getText());
+						comment.setCommentText(txt.getText());
 					}
 				}
 			});

@@ -35,84 +35,84 @@ public class Group extends PathwayElement {
 	/**
 	 * Center x of the group bounds
 	 */
-	public double getMCenterX() {
-		return getMBounds().getCenterX();
+	public double getCenterX() {
+		return getBounds().getCenterX();
 	}
 
 	/**
 	 * Center y of the group bounds
 	 */
-	public double getMCenterY() {
-		return getMBounds().getCenterY();
+	public double getCenterY() {
+		return getBounds().getCenterY();
 	}
 
 	/**
 	 * Height of the group bounds
 	 */
-	public double getMHeight() {
-		return getMBounds().getHeight();
+	public double getHeight() {
+		return getBounds().getHeight();
 	}
 
 	/**
 	 * Left of the group bounds
 	 */
-	public double getMLeft() {
-		return getMBounds().getX();
+	public double getLeft() {
+		return getBounds().getX();
 	}
 
 	/**
 	 * Top of the group bounds
 	 */
-	public double getMTop() {
-		return getMBounds().getY();
+	public double getTop() {
+		return getBounds().getY();
 	}
 
 	/**
 	 * Width of the group bounds
 	 */
-	public double getMWidth() {
-		return getMBounds().getWidth();
+	public double getWidth() {
+		return getBounds().getWidth();
 	}
 
-	public void setMCenterX(double v) {
-		double d = v - getMBounds().getCenterX();
+	public void setCenterX(double v) {
+		double d = v - getBounds().getCenterX();
 		for(PathwayElement e : getGroupElements()) {
-			e.setMCenterX(e.getMCenterX() + d);
+			e.setCenterX(e.getCenterX() + d);
 		}
 	}
 
-	public void setMCenterY(double v) {
-		double d = v - getMBounds().getCenterY();
+	public void setCenterY(double v) {
+		double d = v - getBounds().getCenterY();
 		for(PathwayElement e : getGroupElements()) {
-			e.setMCenterY(e.getMCenterY() + d);
+			e.setCenterY(e.getCenterY() + d);
 		}
 	}
 
-	public void setMHeight(double v) {
-		double d = v - getMBounds().getHeight();
+	public void setHeight(double v) {
+		double d = v - getBounds().getHeight();
 		for(PathwayElement e : getGroupElements()) {
-			e.setMHeight(e.getMHeight() + d);
+			e.setHeight(e.getHeight() + d);
 		}
 	}
 
-	public void setMWidth(double v) {
-		double d = v - getMBounds().getWidth();
+	public void setWidth(double v) {
+		double d = v - getBounds().getWidth();
 		for(PathwayElement e : getGroupElements()) {
-			e.setMWidth(e.getMWidth() + d);
+			e.setWidth(e.getWidth() + d);
 		}
 	}
 
-	public void setMLeft(double v) {
-		double d = v - getMBounds().getX();
+	public void setLeft(double v) {
+		double d = v - getBounds().getX();
 		for(PathwayElement e : getGroupElements()) {
-			e.setMLeft(e.getMLeft() + d);
+			e.setLeft(e.getLeft() + d);
 		}
 	}
 
-	public void setMTop(double v) {
-		double d = v - getMBounds().getY();
+	public void setTop(double v) {
+		double d = v - getBounds().getY();
 		for(PathwayElement e : getGroupElements()) {
-			e.setMTop(e.getMTop() + d);
+			e.setTop(e.getTop() + d);
 		}
 	}
 
@@ -120,17 +120,17 @@ public class Group extends PathwayElement {
 	 * Iterates over all group elements to find
 	 * the total rectangular bounds.
 	 * Note: doesn't include rotation of the nested elements.
-	 * If you want to include rotation, use {@link #getRBounds()} instead.
+	 * If you want to include rotation, use {@link #getRotatedBounds()} instead.
 	 */
-	public Rectangle2D getMBounds() {
+	public Rectangle2D getBounds() {
 		Rectangle2D bounds = null;
 		for(PathwayElement e : getGroupElements()) {
 			if(e == this) continue; //To prevent recursion error
-			if(bounds == null) bounds = e.getMBounds();
-			else bounds.add(e.getMBounds());
+			if(bounds == null) bounds = e.getBounds();
+			else bounds.add(e.getBounds());
 		}
 		if(bounds != null) {
-			double margin = getGroupStyle().getMMargin();
+			double margin = getGroupType().getMMargin();
 			return new Rectangle2D.Double(
 				bounds.getX() - margin,
 				bounds.getY() - margin,
@@ -147,15 +147,15 @@ public class Group extends PathwayElement {
 	 * the total rectangular bounds, taking into
 	 * account rotation of the nested elements
 	 */
-	public Rectangle2D getRBounds() {
+	public Rectangle2D getRotatedBounds() {
 		Rectangle2D bounds = null;
 		for(PathwayElement e : getGroupElements()) {
 			if(e == this) continue; //To prevent recursion error
-			if(bounds == null) bounds = e.getRBounds();
-			else bounds.add(e.getRBounds());
+			if(bounds == null) bounds = e.getRotatedBounds();
+			else bounds.add(e.getRotatedBounds());
 		}
 		if(bounds != null) {
-			double margin = groupStyle.getMMargin();
+			double margin = groupType.getMMargin();
 			return new Rectangle2D.Double(
 				bounds.getX() - margin,
 				bounds.getY() - margin,

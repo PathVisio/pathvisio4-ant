@@ -30,7 +30,7 @@ import org.pathvisio.libgpml.debug.Logger;
 import org.pathvisio.libgpml.model.PathwayElement;
 import org.pathvisio.libgpml.model.GraphLink.LinkableTo;
 import org.pathvisio.libgpml.model.GraphLink.LinkableFrom;
-import org.pathvisio.libgpml.model.PathwayElement.MPoint;
+import org.pathvisio.libgpml.model.PathwayElement.LinePoint;
 import org.pathvisio.libgpml.prop.StaticProperty;
 
 /**
@@ -263,8 +263,8 @@ public class Utils {
 	public static Set<PathwayElement> getReferringLines(LinkableTo elt) {
 		Set<PathwayElement> result = new HashSet<PathwayElement>();
 		for (LinkableFrom grc : elt.getReferences()) {
-			if (grc instanceof MPoint) {
-				result.add(((MPoint) grc).getParent());
+			if (grc instanceof LinePoint) {
+				result.add(((LinePoint) grc).getParent());
 			}
 		}
 		return result;

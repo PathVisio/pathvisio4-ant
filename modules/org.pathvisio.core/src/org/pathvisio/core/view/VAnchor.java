@@ -26,27 +26,27 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 
 import org.pathvisio.libgpml.model.GraphLink.LinkableFrom;
-import org.pathvisio.libgpml.model.PathwayElement.MAnchor;
-import org.pathvisio.libgpml.model.PathwayElement.MPoint;
+import org.pathvisio.libgpml.model.PathwayElement.Anchor;
+import org.pathvisio.libgpml.model.PathwayElement.LinePoint;
 import org.pathvisio.libgpml.model.shape.AnchorShape;
 import org.pathvisio.libgpml.model.shape.ShapeRegistry;
 import org.pathvisio.libgpml.model.type.AnchorShapeType;
 
 /**
- * VAnchor is the view representation of {@link MAnchor}.
+ * VAnchor is the view representation of {@link Anchor}.
  *
  * It is stuck to a Line and can move one-dimensionally across it. It has a handle
  * so the user can drag it.
  */
 public class VAnchor extends VPathwayElement implements LinkProvider, Adjustable {
-	private MAnchor mAnchor;
+	private Anchor mAnchor;
 	private VLineElement line;
 	private Handle handle;
 
 	private double mx = Double.NaN;
 	private double my = Double.NaN;
 
-	public VAnchor(MAnchor mAnchor, VLineElement parent) {
+	public VAnchor(Anchor mAnchor, VLineElement parent) {
 		super(parent.getDrawing());
 		this.mAnchor = mAnchor;
 		this.line = parent;
@@ -65,7 +65,7 @@ public class VAnchor extends VPathwayElement implements LinkProvider, Adjustable
 		return handle;
 	}
 
-	public MAnchor getMAnchor() {
+	public Anchor getMAnchor() {
 		return mAnchor;
 	}
 
@@ -102,8 +102,8 @@ public class VAnchor extends VPathwayElement implements LinkProvider, Adjustable
 
 		//Redraw graphRefs
 		for(LinkableFrom ref : mAnchor.getReferences()) {
-			if(ref instanceof MPoint) {
-				VPoint vp = canvas.getPoint((MPoint)ref);
+			if(ref instanceof LinePoint) {
+				VPoint vp = canvas.getPoint((LinePoint)ref);
 				if(vp != null && vp.getLine() != line) {
 					vp.getLine().recalculateConnector();
 				}
@@ -139,7 +139,7 @@ public class VAnchor extends VPathwayElement implements LinkProvider, Adjustable
 	}
 
 	protected void doDraw(Graphics2D g) {
-        if (getMAnchor().getShape().equals(AnchorShapeType.NONE) && getMAnchor().getGraphId() != null) {
+        if (getMAnchor().getShape().equals(AnchorShapeType.NONE) && getMAnchor().getElementId() != null) {
             return;
         }
         Color c;

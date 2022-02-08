@@ -58,8 +58,8 @@ import org.pathvisio.libgpml.model.PathwayModelEvent;
 import org.pathvisio.libgpml.model.PathwayModelListener;
 import org.pathvisio.libgpml.model.GraphLink.LinkableTo;
 import org.pathvisio.libgpml.model.PathwayModel.StatusFlagEvent;
-import org.pathvisio.libgpml.model.PathwayElement.MAnchor;
-import org.pathvisio.libgpml.model.PathwayElement.MPoint;
+import org.pathvisio.libgpml.model.PathwayElement.Anchor;
+import org.pathvisio.libgpml.model.PathwayElement.LinePoint;
 import org.pathvisio.libgpml.model.type.GroupType;
 import org.pathvisio.libgpml.model.type.ObjectType;
 import org.pathvisio.libgpml.util.Utils;
@@ -259,7 +259,7 @@ public class VPathwayModel implements PathwayModelListener {
 		pressedObject = null;
 		data.transferStatusFlagListeners(originalState);
 		data = null;
-		pointsMtoV = new HashMap<MPoint, VPoint>();
+		pointsMtoV = new HashMap<LinePoint, VPoint>();
 		fromModel(originalState);
 
 		if (changed != originalState.hasChanged()) {
@@ -362,13 +362,13 @@ public class VPathwayModel implements PathwayModelListener {
 		return null;
 	}
 
-	Map<MPoint, VPoint> pointsMtoV = new HashMap<MPoint, VPoint>();
+	Map<LinePoint, VPoint> pointsMtoV = new HashMap<LinePoint, VPoint>();
 
-	protected VPoint getPoint(MPoint mPoint) {
+	protected VPoint getPoint(LinePoint mPoint) {
 		return pointsMtoV.get(mPoint);
 	}
 
-	public VPoint newPoint(MPoint mPoint, VLineElement line) {
+	public VPoint newPoint(LinePoint mPoint, VLineElement line) {
 		VPoint p = pointsMtoV.get(mPoint);
 		if (p == null) {
 			p = new VPoint(this, mPoint, line);
@@ -539,14 +539,14 @@ public class VPathwayModel implements PathwayModelListener {
 		}
 
 		if (idc == null && p.getMPoint().isLinked()) {
-			String graphRef = p.getMPoint().getGraphRef();
+			String graphRef = p.getMPoint().getElementRef();
 			p.getMPoint().unlink();
 			if (currentLinkAnchor != null) {
 				if (pe instanceof LineElement && isAnotherLineLinked(graphRef, (LineElement) pe)) {
 
-				} else if (currentLinkAnchor.getGraphIdContainer() instanceof MAnchor
-						&& currentLinkAnchor.getGraphIdContainer().getGraphId().equals(graphRef)) {
-					currentLinkAnchor.getGraphIdContainer().setGraphId(null);
+				} else if (currentLinkAnchor.getGraphIdContainer() instanceof Anchor
+						&& currentLinkAnchor.getGraphIdContainer().getElementId().equals(graphRef)) {
+					currentLinkAnchor.getGraphIdContainer().setElementId(null);
 				}
 				currentLinkAnchor.unhighlight();
 			}
@@ -559,10 +559,10 @@ public class VPathwayModel implements PathwayModelListener {
 				if (element.equals(currLine)) {
 					continue;
 				}
-				for (MPoint point : element.getMPoints()) {
-					if (point.getGraphRef() == null) {
+				for (LinePoint point : element.getLinePoints()) {
+					if (point.getElementRef() == null) {
 						// skip point
-					} else if (graphRef != null && point.getGraphRef().equals(graphRef)) {
+					} else if (graphRef != null && point.getElementRef().equals(graphRef)) {
 						return true;
 					}
 				}
@@ -1293,7 +1293,7 @@ public class VPathwayModel implements PathwayModelListener {
 			// Form new group with all selected elementsselectPathwayObjects
 			PathwayElement group = PathwayElement.createPathwayElement(ObjectType.GROUP);
 			data.add(group);
-			group.setGroupStyle(GroupType.NONE);
+			group.setGroupType(GroupType.NONE);
 			String id = group.createGroupId();
 
 			for (Graphics g : selection) {
@@ -1482,8 +1482,8 @@ public class VPathwayModel implements PathwayModelListener {
 			Graphics deleted = getPathwayElementView(e.getAffectedData());
 			if (deleted != null) {
 				if (deleted.getPathwayElement() instanceof LineElement) {
-					removeRefFromConnectingAnchors(deleted.getPathwayElement().getMStart().getGraphRef(),
-							deleted.getPathwayElement().getMEnd().getGraphRef());
+					removeRefFromConnectingAnchors(deleted.getPathwayElement().getStartLinePoint().getElementRef(),
+							deleted.getPathwayElement().getEndLinePoint().getElementRef());
 				}
 				deleted.markDirty();
 				removeDrawingObject(deleted, false);
@@ -1517,12 +1517,12 @@ public class VPathwayModel implements PathwayModelListener {
 		}
 		for (PathwayElement element : getPathwayModel().getDataObjects()) {
 			if (element instanceof LineElement) {
-				for (MPoint point : element.getMPoints()) {
-					if (point.getGraphRef() == null) {
+				for (LinePoint point : element.getLinePoints()) {
+					if (point.getElementRef() == null) {
 						// skip point
-					} else if (graphId1 != null && point.getGraphRef().equals(graphId1)) {
+					} else if (graphId1 != null && point.getElementRef().equals(graphId1)) {
 						graphId1 = null;
-					} else if (graphId2 != null && point.getGraphRef().equals(graphId2)) {
+					} else if (graphId2 != null && point.getElementRef().equals(graphId2)) {
 						graphId2 = null;
 					}
 				}
@@ -1533,10 +1533,10 @@ public class VPathwayModel implements PathwayModelListener {
 		}
 		for (PathwayElement element : getPathwayModel().getDataObjects()) {
 			if (element instanceof LineElement) {
-				for (MAnchor anchor : element.getMAnchors()) {
-					if (anchor.getGraphId() != null
-							&& (anchor.getGraphId().equals(graphId1) || anchor.getGraphId().equals(graphId2))) {
-						anchor.setGraphId(null);
+				for (Anchor anchor : element.getAnchors()) {
+					if (anchor.getElementId() != null
+							&& (anchor.getElementId().equals(graphId1) || anchor.getElementId().equals(graphId2))) {
+						anchor.setElementId(null);
 					}
 				}
 			}
@@ -1981,17 +1981,17 @@ public class VPathwayModel implements PathwayModelListener {
 	 */
 	private void generateNewIds(List<PathwayElement> elements, Map<String, String> idmap, Set<String> newids) {
 		for (PathwayElement o : elements) {
-			String id = o.getGraphId();
+			String id = o.getElementId();
 			String groupId = o.getGroupId();
 			generatePasteId(id, data.getGraphIds(), idmap, newids);
 			generatePasteId(groupId, data.getGroupIds(), idmap, newids);
 
 			// For a line, also process the point ids
 			if (o.getObjectType() == ObjectType.LINE || o.getObjectType() == ObjectType.GRAPHLINE) {
-				for (MPoint mp : o.getMPoints())
-					generatePasteId(mp.getGraphId(), data.getGraphIds(), idmap, newids);
-				for (MAnchor ma : o.getMAnchors())
-					generatePasteId(ma.getGraphId(), data.getGraphIds(), idmap, newids);
+				for (LinePoint mp : o.getLinePoints())
+					generatePasteId(mp.getElementId(), data.getGraphIds(), idmap, newids);
+				for (Anchor ma : o.getAnchors())
+					generatePasteId(ma.getElementId(), data.getGraphIds(), idmap, newids);
 			}
 		}
 	}
@@ -2010,14 +2010,14 @@ public class VPathwayModel implements PathwayModelListener {
 	 */
 	private void replaceIdsAndRefs(PathwayElement p, Map<String, String> idmap) {
 		// set new unique id
-		if (p.getGraphId() != null) {
-			p.setGraphId(idmap.get(p.getGraphId()));
+		if (p.getElementId() != null) {
+			p.setElementId(idmap.get(p.getElementId()));
 		}
-		for (MPoint mp : p.getMPoints()) {
-			mp.setGraphId(idmap.get(mp.getGraphId()));
+		for (LinePoint mp : p.getLinePoints()) {
+			mp.setElementId(idmap.get(mp.getElementId()));
 		}
-		for (MAnchor ma : p.getMAnchors()) {
-			ma.setGraphId(idmap.get(ma.getGraphId()));
+		for (Anchor ma : p.getAnchors()) {
+			ma.setElementId(idmap.get(ma.getElementId()));
 		}
 		// set new group id
 		String gid = p.getGroupId();
@@ -2025,26 +2025,26 @@ public class VPathwayModel implements PathwayModelListener {
 			p.setGroupId(idmap.get(gid));
 		}
 		// update graphref
-		String y = p.getStartGraphRef();
+		String y = p.getStartElementRef();
 		if (y != null) {
 			if (idmap.containsKey(y)) {
-				p.setStartGraphRef(idmap.get(y));
+				p.setStartElementRef(idmap.get(y));
 			} else {
-				p.setStartGraphRef(null);
+				p.setStartElementRef(null);
 			}
 		}
-		y = p.getEndGraphRef();
+		y = p.getEndElementRef();
 		if (y != null) {
 			if (idmap.containsKey(y)) {
-				p.setEndGraphRef(idmap.get(y));
+				p.setEndElementRef(idmap.get(y));
 			} else {
-				p.setEndGraphRef(null);
+				p.setEndElementRef(null);
 			}
 		}
-		y = p.getGraphRef();
+		y = p.getElementRef();
 		if (y != null) {
 			if (idmap.containsKey(y)) {
-				p.setGraphRef(idmap.get(y));
+				p.setElementRef(idmap.get(y));
 			}
 			// If the ref points to an item outside the selection, keep using original!
 		}
@@ -2085,13 +2085,13 @@ public class VPathwayModel implements PathwayModelListener {
 			lastAdded = null;
 
 			if (o.getObjectType() == ObjectType.LINE || o.getObjectType() == ObjectType.GRAPHLINE) {
-				for (MPoint mp : o.getMPoints()) {
+				for (LinePoint mp : o.getLinePoints()) {
 					mp.setX(mp.getX() + xShift);
 					mp.setY(mp.getY() + yShift);
 				}
 			} else {
-				o.setMLeft(o.getMLeft() + xShift);
-				o.setMTop(o.getMTop() + yShift);
+				o.setLeft(o.getLeft() + xShift);
+				o.setTop(o.getTop() + yShift);
 			}
 
 			// make another copy to preserve clipboard contents for next paste
@@ -2213,14 +2213,14 @@ public class VPathwayModel implements PathwayModelListener {
 	 * Get width of entire Pathway view (taking into account zoom)
 	 */
 	public int getVWidth() {
-		return data == null ? 0 : (int) vFromM(data.getMappInfo().getMBoardWidth());
+		return data == null ? 0 : (int) vFromM(data.getMappInfo().getBoardWidth());
 	}
 
 	/**
 	 * Get height of entire Pathway view (taking into account zoom)
 	 */
 	public int getVHeight() {
-		return data == null ? 0 : (int) vFromM(data.getMappInfo().getMBoardHeight());
+		return data == null ? 0 : (int) vFromM(data.getMappInfo().getBoardHeight());
 	}
 
 	/** sorts graphics by VCenterY */
@@ -2347,7 +2347,7 @@ public class VPathwayModel implements PathwayModelListener {
 		for (VPathwayElement o : toMove) {
 			if (o instanceof Graphics) {
 				PathwayElement elt = ((Graphics) o).getPathwayElement();
-				String id = elt.getGraphId();
+				String id = elt.getElementId();
 				if (id != null)
 					eltIds.add(id);
 				String groupId = elt.getGroupId();
@@ -2358,7 +2358,7 @@ public class VPathwayModel implements PathwayModelListener {
 
 		for (VPathwayElement o : toMove) {
 			// skip if parent of state is also in selection.
-			if (o instanceof VState && eltIds.contains(((VState) o).getPathwayElement().getGraphRef()))
+			if (o instanceof VState && eltIds.contains(((VState) o).getPathwayElement().getElementRef()))
 				continue;
 
 			if (o instanceof Graphics) {

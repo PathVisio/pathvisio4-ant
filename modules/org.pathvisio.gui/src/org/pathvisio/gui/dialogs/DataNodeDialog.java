@@ -89,7 +89,7 @@ public class DataNodeDialog extends PathwayElementDialog {
 	public void refresh() {
 		super.refresh();
 		symText.setText(getInput().getTextLabel());
-		idText.setText(getInput().getElementID());
+		idText.setText(getInput().getIdentifier());
 		dsm.setSelectedItem(input.getDataSource());
 		String dnType = getInput().getDataNodeType();
 		typeCombo.setSelectedItem(DataNodeType.byName(dnType));
@@ -350,7 +350,7 @@ public class DataNodeDialog extends PathwayElementDialog {
 			public void insertUpdate(DocumentEvent e) {	setText(); }
 			public void removeUpdate(DocumentEvent e) { setText(); }
 			private void setText() {
-				getInput().setElementID(idText.getText());
+				getInput().setIdentifier(idText.getText());
 			}
 		});
 

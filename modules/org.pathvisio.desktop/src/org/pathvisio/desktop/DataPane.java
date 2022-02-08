@@ -166,7 +166,7 @@ public class DataPane extends JEditorPane implements ApplicationEventListener,
 			break;
 		case VPATHWAY_DISPOSED:
 			((VPathwayModel) e.getSource()).removeSelectionListener(this);
-			// remove content of backpage when pathway is closed
+			// remove content of backpage when pathway model is closed
 			input = null;
 			setText(dpt.getAnnotationHTML(null));
 			break;
@@ -180,7 +180,7 @@ public class DataPane extends JEditorPane implements ApplicationEventListener,
 		if (input != null
 				&& (e.affectsProperty(StaticProperty.GENEID) || e
 						.affectsProperty(StaticProperty.DATASOURCE))) {
-			Xref nref = new Xref(pe.getElementID(), input.getDataSource());
+			Xref nref = new Xref(pe.getIdentifier(), input.getDataSource());
 			if (!nref.equals(currRef)) {
 				doQuery();
 			}

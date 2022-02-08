@@ -154,18 +154,18 @@ public abstract class GraphicsShape extends Graphics implements LinkProvider, Ad
 	}
 
 	protected void setVScaleRectangle(Rectangle2D r) {
-		gdata.setMWidth(mFromV(r.getWidth()));
-		gdata.setMHeight(mFromV(r.getHeight()));
-		gdata.setMLeft(mFromV(r.getX()));
-		gdata.setMTop(mFromV(r.getY()));
+		gdata.setWidth(mFromV(r.getWidth()));
+		gdata.setHeight(mFromV(r.getHeight()));
+		gdata.setLeft(mFromV(r.getX()));
+		gdata.setTop(mFromV(r.getY()));
 	}
 
 	protected void vMoveBy(double vdx, double vdy)
 	{
 		// both setM operations fire the exact same objectModifiedEvent, one should be enough
 		gdata.dontFireEvents(1);
-		gdata.setMLeft(gdata.getMLeft()  + mFromV(vdx));
-		gdata.setMTop(gdata.getMTop() + mFromV(vdy));
+		gdata.setLeft(gdata.getLeft()  + mFromV(vdx));
+		gdata.setTop(gdata.getTop() + mFromV(vdy));
 	}
 
 	public Handle[] getHandles()
@@ -195,8 +195,8 @@ public abstract class GraphicsShape extends Graphics implements LinkProvider, Ad
 	{
 		Point p = new Point(x, y);
 		Point pr = LinAlg.rotate(p, -gdata.getRotation());
-		pr.x += gdata.getMCenterX();
-		pr.y += gdata.getMCenterY();
+		pr.x += gdata.getCenterX();
+		pr.y += gdata.getCenterY();
 		return pr;
 	}
 
@@ -207,7 +207,7 @@ public abstract class GraphicsShape extends Graphics implements LinkProvider, Ad
 	 */
 	private Point mRelativeToCenter(Point p)
 	{
-		return p.subtract(new Point(gdata.getMCenterX(), gdata.getMCenterY()));
+		return p.subtract(new Point(gdata.getCenterX(), gdata.getCenterY()));
 	}
 
 	/**
@@ -282,8 +282,8 @@ public abstract class GraphicsShape extends Graphics implements LinkProvider, Ad
 		double idy = 0;
 		double idw = 0;
 		double idh = 0;
-		double halfh = gdata.getMHeight () / 2;
-		double halfw = gdata.getMWidth () / 2;
+		double halfh = gdata.getHeight () / 2;
+		double halfw = gdata.getWidth () / 2;
 
 		if	(h == handleN || h == handleNE || h == handleNW)
 		{
@@ -304,8 +304,8 @@ public abstract class GraphicsShape extends Graphics implements LinkProvider, Ad
 			idx = -idw / 2;
 		};
 
-		double neww = gdata.getMWidth() + idw;
-		double newh = gdata.getMHeight() + idh;
+		double neww = gdata.getWidth() + idw;
+		double newh = gdata.getHeight() + idh;
 
 		//In case object had negative width, switch handles
 		if(neww < 0)
@@ -319,11 +319,11 @@ public abstract class GraphicsShape extends Graphics implements LinkProvider, Ad
 			newh = -newh;
 		}
 
-		gdata.setMWidth(neww);
-		gdata.setMHeight(newh);
+		gdata.setWidth(neww);
+		gdata.setHeight(newh);
 		Point vcr = LinAlg.rotate(new Point (idx, idy), -gdata.getRotation());
-		gdata.setMCenterX (gdata.getMCenterX() + vcr.x);
-		gdata.setMCenterY (gdata.getMCenterY() + vcr.y);
+		gdata.setCenterX (gdata.getCenterX() + vcr.x);
+		gdata.setCenterY (gdata.getCenterY() + vcr.y);
 
 	}
 
@@ -364,28 +364,28 @@ public abstract class GraphicsShape extends Graphics implements LinkProvider, Ad
 			
 			if (handleN != null)
 			{
-				p = mToExternal(0, -gdata.getMHeight()/2);
+				p = mToExternal(0, -gdata.getHeight()/2);
 				handleN.setMLocation(p.x, p.y);
-				p = mToExternal(gdata.getMWidth()/2, 0);
+				p = mToExternal(gdata.getWidth()/2, 0);
 				handleE.setMLocation(p.x, p.y);
-				p = mToExternal(0,  gdata.getMHeight()/2);
+				p = mToExternal(0,  gdata.getHeight()/2);
 				handleS.setMLocation(p.x, p.y);
-				p = mToExternal(-gdata.getMWidth()/2, 0);
+				p = mToExternal(-gdata.getWidth()/2, 0);
 				handleW.setMLocation(p.x, p.y);
 			}
 			
-			p = mToExternal(gdata.getMWidth()/2, -gdata.getMHeight()/2);
+			p = mToExternal(gdata.getWidth()/2, -gdata.getHeight()/2);
 			handleNE.setMLocation(p.x, p.y);
-			p = mToExternal(gdata.getMWidth()/2, gdata.getMHeight()/2);
+			p = mToExternal(gdata.getWidth()/2, gdata.getHeight()/2);
 			handleSE.setMLocation(p.x, p.y);
-			p = mToExternal(-gdata.getMWidth()/2, gdata.getMHeight()/2);
+			p = mToExternal(-gdata.getWidth()/2, gdata.getHeight()/2);
 			handleSW.setMLocation(p.x, p.y);
-			p = mToExternal(-gdata.getMWidth()/2, -gdata.getMHeight()/2);
+			p = mToExternal(-gdata.getWidth()/2, -gdata.getHeight()/2);
 			handleNW.setMLocation(p.x, p.y);
 		}
 		if ((gdata.getShapeType() ==null || gdata.getShapeType().isRotatable()) && (handleR != null))
 		{
-			p = mToExternal(gdata.getMWidth()/2 + M_ROTATION_HANDLE_POSITION, 0);
+			p = mToExternal(gdata.getWidth()/2 + M_ROTATION_HANDLE_POSITION, 0);
 			handleR.setMLocation(p.x, p.y);
 		}
 
@@ -412,7 +412,7 @@ public abstract class GraphicsShape extends Graphics implements LinkProvider, Ad
 	protected Shape getShape(boolean rotate, boolean stroke)
 	{
 		if(stroke) {
-			return getShape(rotate, (float)gdata.getLineThickness());
+			return getShape(rotate, (float)gdata.getLineWidth());
 		} else {
 			return getShape(rotate, 0);
 		}
@@ -430,12 +430,12 @@ public abstract class GraphicsShape extends Graphics implements LinkProvider, Ad
 	 * @return
 	 */
 	protected java.awt.Shape getShape(boolean rotate, float sw) {
-		double mx = gdata.getMLeft();
-		double my = gdata.getMTop();
-		double mw = gdata.getMWidth();
-		double mh = gdata.getMHeight();
-		double mcx = gdata.getMCenterX();
-		double mcy = gdata.getMCenterY();
+		double mx = gdata.getLeft();
+		double my = gdata.getTop();
+		double mw = gdata.getWidth();
+		double mh = gdata.getHeight();
+		double mcx = gdata.getCenterX();
+		double mcy = gdata.getCenterY();
 
 		java.awt.Shape s = null;
 
@@ -462,7 +462,7 @@ public abstract class GraphicsShape extends Graphics implements LinkProvider, Ad
 			{
 				if (gdata.getLineStyle() == LineStyleType.DOUBLE){
 					// correction factor for composite stroke
-					sw = (float) (gdata.getLineThickness() * 4); 
+					sw = (float) (gdata.getLineWidth() * 4); 
 				}
 				Stroke stroke = new BasicStroke(sw);
 				s = stroke.createStrokedShape(s);
@@ -538,7 +538,7 @@ public abstract class GraphicsShape extends Graphics implements LinkProvider, Ad
 			FontMetrics fm = g.getFontMetrics();
 			int lh = fm.getHeight();
 			int yoffset = area.y + fm.getAscent();
-			switch (gdata.getValign())
+			switch (gdata.getVAlign())
 			{
 			case MIDDLE:
 				yoffset += (area.height - (lines.length * lh)) / 2;
@@ -559,7 +559,7 @@ public abstract class GraphicsShape extends Graphics implements LinkProvider, Ad
 				Rectangle2D tb = fm.getStringBounds(ats.getIterator(), 0, lines[i].length(), g);
 
 				int xoffset = area.x;
-				switch (gdata.getAlign())
+				switch (gdata.getHAlign())
 				{
 				case CENTER:
 					xoffset += (int)(area.width / 2) - (int)(tb.getWidth() / 2);
@@ -581,10 +581,10 @@ public abstract class GraphicsShape extends Graphics implements LinkProvider, Ad
 
 	private AttributedString getVAttributedString(String text) {
 		AttributedString ats = new AttributedString(text);
-		if(gdata.isStrikethru()) {
+		if(gdata.getFontStrikethru()) {
 			ats.addAttribute(TextAttribute.STRIKETHROUGH, TextAttribute.STRIKETHROUGH_ON);
 		}
-		if(gdata.isUnderline()) {
+		if(gdata.getFontDecoration()) {
 			ats.addAttribute(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
 		}
 
@@ -595,7 +595,7 @@ public abstract class GraphicsShape extends Graphics implements LinkProvider, Ad
 	protected Font getVFont() {
 		String name = gdata.getFontName();
 		int style = getVFontStyle();
-		return new Font(name, style, 12).deriveFont((float)vFromM(gdata.getMFontSize()));
+		return new Font(name, style, 12).deriveFont((float)vFromM(gdata.getFontSize()));
 	}
 
 	protected void drawShape(Graphics2D g)

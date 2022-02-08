@@ -77,7 +77,7 @@ public class LineDialog extends PathwayElementDialog implements ItemListener {
 
 	public final void refresh() {
 		super.refresh();
-		idText.setText(getInput().getElementID());
+		idText.setText(getInput().getIdentifier());
 		dsm.setSelectedItem(input.getDataSource());
 		String lType = getInput().getEndLineType().toString();
 		typeCombo.setSelectedItem(ArrowHeadType.fromName(lType));
@@ -180,7 +180,7 @@ public class LineDialog extends PathwayElementDialog implements ItemListener {
 			}
 
 			private void setText() {
-				getInput().setElementID(idText.getText());
+				getInput().setIdentifier(idText.getText());
 			}
 		});
 

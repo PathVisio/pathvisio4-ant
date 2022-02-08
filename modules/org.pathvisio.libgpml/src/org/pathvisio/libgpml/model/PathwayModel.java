@@ -41,8 +41,8 @@ import org.pathvisio.libgpml.debug.Logger;
 import org.pathvisio.libgpml.io.ConverterException;
 import org.pathvisio.libgpml.model.GraphLink.LinkableTo;
 import org.pathvisio.libgpml.model.GraphLink.LinkableFrom;
-import org.pathvisio.libgpml.model.PathwayElement.MAnchor;
-import org.pathvisio.libgpml.model.PathwayElement.MPoint;
+import org.pathvisio.libgpml.model.PathwayElement.Anchor;
+import org.pathvisio.libgpml.model.PathwayElement.LinePoint;
 import org.pathvisio.libgpml.model.type.ObjectType;
 import org.pathvisio.libgpml.prop.StaticProperty;
 import org.pathvisio.libgpml.util.Utils;
@@ -116,7 +116,7 @@ public class PathwayModel {
 		// TODO: dataobject should be stored in a hashmap, with the graphId as key!
 		if (graphId != null) {
 			for (PathwayElement e : dataObjects) {
-				if (graphId.equals(e.getGraphId())) {
+				if (graphId.equals(e.getElementId())) {
 					return e;
 				}
 			}
@@ -256,27 +256,27 @@ public class PathwayModel {
 		}
 		dataObjects.add(o);
 		o.setParent(this);
-		for (MPoint p : o.getMPoints()) {
-			if (p.getGraphRef() != null) {
-				addGraphRef(p.getGraphRef(), p);
+		for (LinePoint p : o.getLinePoints()) {
+			if (p.getElementRef() != null) {
+				addGraphRef(p.getElementRef(), p);
 			}
 		}
 		if (o.getGroupRef() != null) {
 			addGroupRef(o.getGroupRef(), o);
 		}
-		for (MAnchor a : o.getMAnchors()) {
-			if (a.getGraphId() != null) {
-				addGraphId(a.getGraphId(), a);
+		for (Anchor a : o.getAnchors()) {
+			if (a.getElementId() != null) {
+				addGraphId(a.getElementId(), a);
 			}
 		}
-		if (o.getGraphId() != null) {
-			addGraphId(o.getGraphId(), o);
+		if (o.getElementId() != null) {
+			addGraphId(o.getElementId(), o);
 		}
 		if (o.getGroupId() != null) {
 			addGroupId(o.getGroupId(), o);
 		}
-		if (o.getGraphRef() != null) {
-			addGraphRef(o.getGraphRef(), (LinkableFrom) o);
+		if (o.getElementRef() != null) {
+			addGraphRef(o.getElementRef(), (LinkableFrom) o);
 		}
 		fireObjectModifiedEvent(new PathwayModelEvent(o, PathwayModelEvent.ADDED));
 		checkMBoardSize(o);
@@ -322,7 +322,7 @@ public class PathwayModel {
 		if (e.isCoordinateChange()) {
 
 			PathwayElement elt = e.getModifiedPathwayElement();
-			for (LinkableFrom refc : getReferringObjects(elt.getGraphId())) {
+			for (LinkableFrom refc : getReferringObjects(elt.getElementId())) {
 				refc.refeeChanged();
 			}
 
@@ -373,7 +373,7 @@ public class PathwayModel {
 	 */
 	private void forceRemove(PathwayElement o) {
 		dataObjects.remove(o);
-		for (LinkableFrom refc : getReferringObjects(o.getGraphId())) {
+		for (LinkableFrom refc : getReferringObjects(o.getElementId())) {
 			refc.unlink();
 		}
 		String groupRef = o.getGroupRef();
@@ -390,19 +390,19 @@ public class PathwayModel {
 					biopaxReferenceToDelete.add(ref);
 			}
 		}
-		for (MAnchor a : o.getMAnchors()) {
-			if (a.getGraphId() != null) {
-				removeGraphId(a.getGraphId());
+		for (Anchor a : o.getAnchors()) {
+			if (a.getElementId() != null) {
+				removeGraphId(a.getElementId());
 			}
 		}
-		if (o.getGraphId() != null) {
-			removeGraphId(o.getGraphId());
+		if (o.getElementId() != null) {
+			removeGraphId(o.getElementId());
 		}
 		if (o.getGroupId() != null) {
 			removeGroupId(o.getGroupId());
 		}
-		if (o.getGraphRef() != null) {
-			removeGraphRef(o.getGraphRef(), (LinkableFrom) o);
+		if (o.getElementRef() != null) {
+			removeGraphRef(o.getElementRef(), (LinkableFrom) o);
 		}
 		fireObjectModifiedEvent(new PathwayModelEvent(o, PathwayModelEvent.DELETED));
 		o.setParent(null);
@@ -602,16 +602,16 @@ public class PathwayModel {
 
 		switch (e.getObjectType()) {
 		case LINE:
-			mw = Math.max(mw, BORDER_SIZE + Math.max(e.getMStartX(), e.getMEndX()));
-			mh = Math.max(mh, BORDER_SIZE + Math.max(e.getMStartY(), e.getMEndY()));
+			mw = Math.max(mw, BORDER_SIZE + Math.max(e.getStartLinePointX(), e.getEndLinePointX()));
+			mh = Math.max(mh, BORDER_SIZE + Math.max(e.getStartLinePointY(), e.getEndLinePointY()));
 			break;
 		case GRAPHLINE:
-			mw = Math.max(mw, BORDER_SIZE + Math.max(e.getMStartX(), e.getMEndX()));
-			mh = Math.max(mh, BORDER_SIZE + Math.max(e.getMStartY(), e.getMEndY()));
+			mw = Math.max(mw, BORDER_SIZE + Math.max(e.getStartLinePointX(), e.getEndLinePointX()));
+			mh = Math.max(mh, BORDER_SIZE + Math.max(e.getStartLinePointY(), e.getEndLinePointY()));
 			break;
 		default:
-			mw = Math.max(mw, BORDER_SIZE + e.getMLeft() + e.getMWidth());
-			mh = Math.max(mh, BORDER_SIZE + e.getMTop() + e.getMHeight());
+			mw = Math.max(mw, BORDER_SIZE + e.getLeft() + e.getWidth());
+			mh = Math.max(mh, BORDER_SIZE + e.getTop() + e.getHeight());
 			break;
 		}
 
@@ -657,7 +657,7 @@ public class PathwayModel {
 	public void initMappInfo() {
 		String dateString = new SimpleDateFormat("yyyyMMdd").format(new Date());
 		mappInfo.setVersion(dateString);
-		mappInfo.setMapInfoName("New Pathway");
+		mappInfo.setTitle("New Pathway");
 	}
 
 	/**
@@ -810,12 +810,12 @@ public class PathwayModel {
 		int result = 0;
 		Set<String> graphIds = new HashSet<String>();
 		for (PathwayElement pe : dataObjects) {
-			String id = pe.getGraphId();
+			String id = pe.getElementId();
 			if (id != null) {
 				graphIds.add(id);
 			}
-			for (PathwayElement.MAnchor pp : pe.getMAnchors()) {
-				String pid = pp.getGraphId();
+			for (PathwayElement.Anchor pp : pe.getAnchors()) {
+				String pid = pp.getElementId();
 				if (pid != null) {
 					graphIds.add(pid);
 				}
@@ -823,15 +823,15 @@ public class PathwayModel {
 		}
 		for (PathwayElement pe : dataObjects) {
 			if (pe.getObjectType() == ObjectType.LINE) {
-				String ref = pe.getStartGraphRef();
+				String ref = pe.getStartElementRef();
 				if (ref != null && !graphIds.contains(ref)) {
-					pe.setStartGraphRef(null);
+					pe.setStartElementRef(null);
 					result++;
 				}
 
-				ref = pe.getEndGraphRef();
+				ref = pe.getEndElementRef();
 				if (ref != null && !graphIds.contains(ref)) {
-					pe.setEndGraphRef(null);
+					pe.setEndElementRef(null);
 					result++;
 				}
 			}

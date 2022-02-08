@@ -205,7 +205,7 @@ public class VGroup extends Graphics implements LinkProvider, VElementMouseListe
 		if(anchorsShowing) flags += FLAG_ANCHORSVISIBLE;
 
 		//Draw the group style appearance
-		GroupPainter p = GroupPainterRegistry.getPainter(gdata.getGroupStyle().toString());
+		GroupPainter p = GroupPainterRegistry.getPainter(gdata.getGroupType().toString());
 		p.drawGroup(g2d, this, flags);
 	}
 
@@ -243,9 +243,9 @@ public class VGroup extends Graphics implements LinkProvider, VElementMouseListe
 	{
 		Rectangle2D mb = null;
 		if(rotate) {
-			mb = gdata.getRBounds();
+			mb = gdata.getRotatedBounds();
 		} else {
-			mb = gdata.getMBounds();
+			mb = gdata.getBounds();
 		}
 		return canvas.vFromM(mb);
 	}

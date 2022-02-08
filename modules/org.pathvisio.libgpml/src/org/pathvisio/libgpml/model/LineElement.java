@@ -65,60 +65,60 @@ public class LineElement extends PathwayElement implements ConnectorRestrictions
 	/**
 	 * returns the center x coordinate of the bounding box around (start, end)
 	 */
-	public double getMCenterX()
+	public double getCenterX()
 	{
-		double start = getMStart().getX();
-		double end = getMEnd().getX();
+		double start = getStartLinePoint().getX();
+		double end = getEndLinePoint().getX();
 		return start + (end - start) / 2;
 	}
 
 	/**
 	 * returns the center y coordinate of the bounding box around (start, end)
 	 */
-	public double getMCenterY()
+	public double getCenterY()
 	{
-		double start = getMStart().getY();
-		double end = getMEnd().getY();
+		double start = getStartLinePoint().getY();
+		double end = getEndLinePoint().getY();
 		return start + (end - start) / 2;
 	}
 
 	/**
 	 * returns the left x coordinate of the bounding box around (start, end)
 	 */
-	public double getMLeft()
+	public double getLeft()
 	{
-		double start = getMStart().getX();
-		double end = getMEnd().getX();
+		double start = getStartLinePoint().getX();
+		double end = getEndLinePoint().getX();
 		return Math.min(start, end);
 	}
 
 	/**
 	 * returns the width of the bounding box around (start, end)
 	 */
-	public double getMWidth()
+	public double getWidth()
 	{
-		double start = getMStart().getX();
-		double end = getMEnd().getX();
+		double start = getStartLinePoint().getX();
+		double end = getEndLinePoint().getX();
 		return Math.abs(start-end);
 	}
 
 	/**
 	 * returns the height of the bounding box around (start, end)
 	 */
-	public double getMHeight()
+	public double getHeight()
 	{
-		double start = getMStart().getY();
-		double end = getMEnd().getY();
+		double start = getStartLinePoint().getY();
+		double end = getEndLinePoint().getY();
 		return Math.abs(start-end);
 	}
 
 	/**
 	 * returns the top y coordinate of the bounding box around (start, end)
 	 */
-	public double getMTop()
+	public double getTop()
 	{
-		double start = getMStart().getY();
-		double end = getMEnd().getY();
+		double start = getStartLinePoint().getY();
+		double end = getEndLinePoint().getY();
 		return Math.min(start, end);
 	}
 
@@ -126,11 +126,11 @@ public class LineElement extends PathwayElement implements ConnectorRestrictions
 	 * Sets the position of the top side
 	 * of the rectangular bounds of the line
 	 */
-	public void setMTop(double v) {
+	public void setTop(double v) {
 		if(getDirectionY() > 0) {
-			setMStartY(v);
+			setStartLinePointY(v);
 		} else {
-			setMEndY(v);
+			setEndLinePointY(v);
 		}
 	}
 
@@ -138,11 +138,11 @@ public class LineElement extends PathwayElement implements ConnectorRestrictions
 	 * Sets the position of the left side
 	 * of the rectangular bounds of the line
 	 */
-	public void setMLeft(double v) {
+	public void setLeft(double v) {
 		if(getDirectionX() > 0) {
-			setMStartX(v);
+			setStartLinePointX(v);
 		} else {
-			setMEndX(v);
+			setEndLinePointX(v);
 		}
 	}
 
@@ -150,47 +150,47 @@ public class LineElement extends PathwayElement implements ConnectorRestrictions
 	 * Sets the x position of the center of the line. This makes
 	 * the line move as a whole
 	 */
-	public void setMCenterX(double v) {
-		double dx = v - getMCenterX();
-		setMStartX(getMStartX() + dx);
-		setMEndX(getMEndX() + dx);
+	public void setCenterX(double v) {
+		double dx = v - getCenterX();
+		setStartLinePointX(getStartLinePointX() + dx);
+		setEndLinePointX(getEndLinePointX() + dx);
 	}
 
 	/**
 	 * Sets the y position of the center of the line. This makes the line
 	 * move as a whole.
 	 */
-	public void setMCenterY(double v) {
-		double dy = v - getMCenterY();
-		setMStartY(getMStartY() + dy);
-		setMEndY(getMEndY() + dy);
+	public void setCenterY(double v) {
+		double dy = v - getCenterY();
+		setStartLinePointY(getStartLinePointY() + dy);
+		setEndLinePointY(getEndLinePointY() + dy);
 	}
 
 
 	/** returns the sign of end.x - start.x */
 	private int getDirectionX() {
-		return (int)Math.signum(getMEndX() - getMStartX());
+		return (int)Math.signum(getEndLinePointX() - getStartLinePointX());
 	}
 
 	/** returns the sign of end.y - start.y */
 	private int getDirectionY() {
-		return (int)Math.signum(getMEndY() - getMStartY());
+		return (int)Math.signum(getEndLinePointY() - getStartLinePointY());
 	}
 
 	/** converts end point from MPoint to Point2D */
 	public Point2D getEndPoint2D() {
-		return getMEnd().toPoint2D();
+		return getEndLinePoint().toPoint2D();
 	}
 
 	/** converts start point from MPoint to Point2D */
 	public Point2D getStartPoint2D() {
-		return getMStart().toPoint2D();
+		return getStartLinePoint().toPoint2D();
 	}
 
 	/** converts all points from MPoint to Point2D */
 	public List<Point2D> getPoints() {
 		List<Point2D> pts = new ArrayList<Point2D>();
-		for(MPoint p : getMPoints()) {
+		for(LinePoint p : getLinePoints()) {
 			pts.add(p.toPoint2D());
 		}
 		return pts;
@@ -202,7 +202,7 @@ public class LineElement extends PathwayElement implements ConnectorRestrictions
 	private LinkableTo getStartElement() {
 		PathwayModel parent = getParent();
 		if(parent != null) {
-			return parent.getGraphIdContainer(getStartGraphRef());
+			return parent.getGraphIdContainer(getStartElementRef());
 		}
 		return null;
 	}
@@ -213,7 +213,7 @@ public class LineElement extends PathwayElement implements ConnectorRestrictions
 	private LinkableTo getEndElement() {
 		PathwayModel parent = getParent();
 		if(parent != null) {
-			return parent.getGraphIdContainer(getEndGraphRef());
+			return parent.getGraphIdContainer(getEndElementRef());
 		}
 		return null;
 	}
@@ -230,9 +230,9 @@ public class LineElement extends PathwayElement implements ConnectorRestrictions
 		LinkableTo e = getStartElement();
 		if(e != null) {
 			if(e instanceof PathwayElement) {
-				side = getSide(getMStart().getRelX(), getMStart().getRelY());
-			} else if(e instanceof MAnchor) {
-                side= getAttachedLineDirection((MAnchor)e);
+				side = getSide(getStartLinePoint().getRelX(), getStartLinePoint().getRelY());
+			} else if(e instanceof Anchor) {
+                side= getAttachedLineDirection((Anchor)e);
             }
 		}
 		return side;
@@ -250,15 +250,15 @@ public class LineElement extends PathwayElement implements ConnectorRestrictions
 		LinkableTo e = getEndElement();
 		if(e != null) {
 			if(e instanceof PathwayElement) {
-				side = getSide(getMEnd().getRelX(), getMEnd().getRelY());
-			} else if(e instanceof MAnchor) {
-                side= getAttachedLineDirection((MAnchor)e);
+				side = getSide(getEndLinePoint().getRelX(), getEndLinePoint().getRelY());
+			} else if(e instanceof Anchor) {
+                side= getAttachedLineDirection((Anchor)e);
             }
 		}
 		return side;
 	}
 
-    private int getAttachedLineDirection(MAnchor anchor) {
+    private int getAttachedLineDirection(Anchor anchor) {
         int side;
         double pos = anchor.getPosition();
         LineElement attLine = ((LineElement)anchor.getParent());
@@ -268,7 +268,7 @@ public class LineElement extends PathwayElement implements ConnectorRestrictions
             int orientationY = Utils.getDirectionY(attSeg.getMStart(), attSeg.getMEnd());
             side = getSide(orientationY, orientationX);
         } else {
-            side = getOppositeSide(getSide(getMEndX(), getMEndY(), getMStartX(), getMStartY()));
+            side = getOppositeSide(getSide(getEndLinePointX(), getEndLinePointY(), getStartLinePointX(), getStartLinePointY()));
             if (attLine.almostPerfectAlignment(side)) {
                 side = getClockwisePerpendicularSide(side);
             }
@@ -339,10 +339,10 @@ public class LineElement extends PathwayElement implements ConnectorRestrictions
 
 
     public void adjustWayPointPreferences(WayPoint[] waypoints) {
-		List<MPoint> mpoints = getMPoints();
+		List<LinePoint> mpoints = getLinePoints();
 		for(int i = 0; i < waypoints.length; i++) {
 			WayPoint wp = waypoints[i];
-			MPoint mp = mpoints.get(i + 1);
+			LinePoint mp = mpoints.get(i + 1);
 			if(mp.getX() != wp.getX() || mp.getY() != wp.getY()) {
 				dontFireEvents(1);
 				mp.moveTo(wp.getX(), wp.getY());
@@ -351,7 +351,7 @@ public class LineElement extends PathwayElement implements ConnectorRestrictions
 	}
 
 	public void resetWayPointPreferences() {
-		List<MPoint> mps = getMPoints();
+		List<LinePoint> mps = getLinePoints();
 		while(mps.size() > 2) {
 			mps.remove(mps.size() - 2);
 		}
@@ -363,7 +363,7 @@ public class LineElement extends PathwayElement implements ConnectorRestrictions
 	 * and the connector shape may decide not to use them if they are invalid.
 	 */
 	public WayPoint[] getWayPointPreferences() {
-		List<MPoint> pts = getMPoints();
+		List<LinePoint> pts = getLinePoints();
 		WayPoint[] wps = new WayPoint[pts.size() - 2];
 		for(int i = 0; i < wps.length; i++) {
 			wps[i] = new WayPoint(pts.get(i + 1).toPoint2D());
@@ -434,7 +434,7 @@ public class LineElement extends PathwayElement implements ConnectorRestrictions
 			for(PathwayElement e : parent.getDataObjects()) {
 				ObjectType ot = e.getObjectType();
 				if(ot == ObjectType.SHAPE || ot == ObjectType.DATANODE || ot == ObjectType.LABEL) {
-					Rectangle2D b = e.getMBounds();
+					Rectangle2D b = e.getBounds();
 					if(b.contains(point)) {
 						if(rect == null) rect = b;
 						else rect.add(b);

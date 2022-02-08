@@ -239,8 +239,8 @@ public abstract class GpmlFormatAbstract
 	
 	protected void updateMappInfo(Element root, PathwayElement o) throws ConverterException
 	{
-		setAttribute("Pathway", "Name", root, o.getMapInfoName());
-		setAttribute("Pathway", "Data-Source", root, o.getMapInfoDataSource());
+		setAttribute("Pathway", "Name", root, o.getTitle());
+		setAttribute("Pathway", "Data-Source", root, o.getSource());
 		setAttribute("Pathway", "Version", root, o.getVersion());
 		setAttribute("Pathway", "Author", root, o.getAuthor());
 		setAttribute("Pathway", "Maintainer", root, o.getMaintainer());
@@ -255,7 +255,7 @@ public abstract class GpmlFormatAbstract
 		Element graphics = new Element("Graphics", nsGPML);
 		root.addContent(graphics);
 
-		double[] size = o.getMBoardSize();
+		double[] size = o.getBoardSize();
 		setAttribute("Pathway.Graphics", "BoardWidth", graphics, "" +size[0]);
 		setAttribute("Pathway.Graphics", "BoardHeight", graphics, "" + size[1]);
 		
@@ -328,8 +328,8 @@ public abstract class GpmlFormatAbstract
 			for (PathwayElement.Comment c : o.getComments())
 			{
 				Element f = new Element ("Comment", e.getNamespace());
-				f.setText (c.getComment());
-				setAttribute("Comment", "Source", f, c.getSource());
+				f.setText (c.getCommentText());
+				setAttribute("Comment", "Source", f, c.getCommentSource());
 				e.addContent(f);
 			}
 		}
@@ -367,17 +367,17 @@ public abstract class GpmlFormatAbstract
 //			id = o.getGmmlData().getUniqueGraphId();
 //		}
 		if(id != null) {
-			o.setGraphId (id);
+			o.setElementId (id);
 		}
 	}
 
 	protected void updateGraphId (LinkableTo o, Element e)
 	{
-		String id = o.getGraphId();
+		String id = o.getElementId();
 		// id has to be unique!
 		if (id != null && !id.equals(""))
 		{
-			e.setAttribute("GraphId", o.getGraphId());
+			e.setAttribute("GraphId", o.getElementId());
 		}
 	}
 
@@ -411,7 +411,7 @@ public abstract class GpmlFormatAbstract
 		mapGraphId(o, e);
 
 		//Style
-		o.setGroupStyle(GroupType.fromName(getAttribute("Group", "Style", e)));
+		o.setGroupType(GroupType.fromName(getAttribute("Group", "Style", e)));
 		//Label
 		String textLabel = getAttribute("Group", "TextLabel", e);
 		if(textLabel != null) {
@@ -430,7 +430,7 @@ public abstract class GpmlFormatAbstract
 		updateGraphId(o, e);
 
 		//Style
-		setAttribute("Group", "Style", e, o.getGroupStyle().getName());
+		setAttribute("Group", "Style", e, o.getGroupType().getName());
 		//Label
 		setAttribute ("Group", "TextLabel", e, o.getTextLabel());
 	}
@@ -439,9 +439,9 @@ public abstract class GpmlFormatAbstract
 	
 	protected void mapMappInfoData(PathwayElement o, Element e) throws ConverterException
 	{
-		o.setMapInfoName (getAttribute("Pathway", "Name", e));
+		o.setTitle (getAttribute("Pathway", "Name", e));
 		o.setOrganism (getAttribute("Pathway", "Organism", e));
-		o.setMapInfoDataSource (getAttribute("Pathway", "Data-Source", e));
+		o.setSouce (getAttribute("Pathway", "Data-Source", e));
 		o.setVersion (getAttribute("Pathway", "Version", e));
 		o.setAuthor (getAttribute("Pathway", "Author", e));
 		o.setMaintainer (getAttribute("Pathway", "Maintainer", e));
@@ -603,7 +603,7 @@ public abstract class GpmlFormatAbstract
 
 	private static void addGraphIds(PathwayModel pathway) throws ConverterException {
 		for(PathwayElement pe : pathway.getDataObjects()) {
-			String id = pe.getGraphId();
+			String id = pe.getElementId();
 			if(id == null || "".equals(id))
 			{
 				if (pe.getObjectType() == ObjectType.LINE || pe.getObjectType() == ObjectType.GRAPHLINE)
@@ -614,10 +614,10 @@ public abstract class GpmlFormatAbstract
 					// This part may be removed for future versions of GPML (2010+)
 
 					StringBuilder builder = new StringBuilder();
-					builder.append(pe.getMStartX());
-					builder.append(pe.getMStartY());
-					builder.append(pe.getMEndX());
-					builder.append(pe.getMEndY());
+					builder.append(pe.getStartLinePointX());
+					builder.append(pe.getStartLinePointY());
+					builder.append(pe.getEndLinePointX());
+					builder.append(pe.getEndLinePointY());
 					builder.append(pe.getStartLineType());
 					builder.append(pe.getEndLineType());
 
@@ -629,7 +629,7 @@ public abstract class GpmlFormatAbstract
 						i++;
 					}
 					while (pathway.getGraphIds().contains(newId));
-					pe.setGraphId(newId);
+					pe.setElementId(newId);
 				}
 			}
 		}
@@ -639,27 +639,27 @@ public abstract class GpmlFormatAbstract
 	{
 		for(PathwayElement pe : pathway.getDataObjects()) {
 			if(pe.getObjectType() == ObjectType.LINE || pe.getObjectType() == ObjectType.GRAPHLINE) {
-				String sr = pe.getStartGraphRef();
-				String er = pe.getEndGraphRef();
-				if(sr != null && !"".equals(sr) && !pe.getMStart().relativeSet()) {
+				String sr = pe.getStartElementRef();
+				String er = pe.getEndElementRef();
+				if(sr != null && !"".equals(sr) && !pe.getStartLinePoint().relativeSet()) {
 					LinkableTo idc = pathway.getGraphIdContainer(sr);
 					Point2D relative = idc.toRelativeCoordinate(
 							new Point2D.Double(
-								pe.getMStart().getRawX(),
-								pe.getMStart().getRawY()
+								pe.getStartLinePoint().getRawX(),
+								pe.getStartLinePoint().getRawY()
 							)
 					);
-					pe.getMStart().setRelativePosition(relative.getX(), relative.getY());
+					pe.getStartLinePoint().setRelativePosition(relative.getX(), relative.getY());
 				}
-				if(er != null && !"".equals(er) && !pe.getMEnd().relativeSet()) {
+				if(er != null && !"".equals(er) && !pe.getEndLinePoint().relativeSet()) {
 					LinkableTo idc = pathway.getGraphIdContainer(er);
 					Point2D relative = idc.toRelativeCoordinate(
 							new Point2D.Double(
-								pe.getMEnd().getRawX(),
-								pe.getMEnd().getRawY()
+								pe.getEndLinePoint().getRawX(),
+								pe.getEndLinePoint().getRawY()
 							)
 					);
-					pe.getMEnd().setRelativePosition(relative.getX(), relative.getY());
+					pe.getEndLinePoint().setRelativePosition(relative.getX(), relative.getY());
 				}
                 ((LineElement)pe).getConnectorShape().recalculateShape(((LineElement)pe));
 			}

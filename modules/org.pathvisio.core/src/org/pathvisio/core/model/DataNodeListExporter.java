@@ -118,7 +118,7 @@ public class DataNodeListExporter implements PathwayModelExporter {
 		for (PathwayElement elm : pathway.getDataObjects()) {
 			if (elm.getObjectType() == ObjectType.DATANODE) {
 				String line = "";
-				String id = elm.getElementID();
+				String id = elm.getIdentifier();
 				DataSource ds = elm.getDataSource();
 				if (!checkString(id) || ds == null) {
 					continue; // Skip empty id/codes

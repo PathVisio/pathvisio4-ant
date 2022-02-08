@@ -95,7 +95,7 @@ public class EUGeneExporter implements PathwayModelExporter {
 			out = new PrintStream(file);
 
 			// Print the data
-			out.println("//PATHWAY_NAME = " + pathway.getMappInfo().getMapInfoName());
+			out.println("//PATHWAY_NAME = " + pathway.getMappInfo().getTitle());
 			out.println("//PATHWAY_SOURCE = GenMAPP");
 			out.println("//PATHWAY_MARKER = " + euGeneSystem);
 			if (missedGenes.length() > 0)

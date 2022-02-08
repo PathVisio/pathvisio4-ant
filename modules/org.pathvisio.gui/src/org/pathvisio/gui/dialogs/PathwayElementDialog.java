@@ -168,13 +168,13 @@ public class PathwayElementDialog extends OkCancelDialog {
 	protected void okPressed() {
 		boolean done = true;
 		if(this instanceof DataNodeDialog || this instanceof LineDialog) {
-			if(!input.getElementID().equals("") && input.getDataSource() == null) {
+			if(!input.getIdentifier().equals("") && input.getDataSource() == null) {
 				done = false;
 				JOptionPane.showMessageDialog(this,
 						"You annotated this pathway element with an identifier but no database.\n Please specify a database system.",
 						"Error",
 						JOptionPane.ERROR_MESSAGE);
-			} else if (input.getElementID().equals("") && input.getDataSource() != null) {
+			} else if (input.getIdentifier().equals("") && input.getDataSource() != null) {
 				done = false;
 				JOptionPane.showMessageDialog(this,
 						"You annotated this pathway element with a database but no identifier.\n Please specify an identifier.",

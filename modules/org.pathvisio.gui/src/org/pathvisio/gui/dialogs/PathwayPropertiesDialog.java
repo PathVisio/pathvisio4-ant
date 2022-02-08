@@ -65,7 +65,7 @@ public class PathwayPropertiesDialog extends PathwayElementDialog {
 		JLabel orgComboLabel = new JLabel ("Organism ");
 		
 		titleField = new JTextField();
-		titleField.setText(swingEngine.getEngine().getActivePathwayModel().getMappInfo().getMapInfoName());
+		titleField.setText(swingEngine.getEngine().getActivePathwayModel().getMappInfo().getTitle());
 		organismComboBox = new PermissiveComboBox(Organism.latinNamesArray());
 		organismComboBox.setSelectedItem(swingEngine.getEngine().getActivePathwayModel().getMappInfo().getOrganism());
 
@@ -88,7 +88,7 @@ public class PathwayPropertiesDialog extends PathwayElementDialog {
 	
 	protected void okPressed() {
 		super.okPressed();
-		swingEngine.getEngine().getActivePathwayModel().getMappInfo().setMapInfoName(titleField.getText());
+		swingEngine.getEngine().getActivePathwayModel().getMappInfo().setTitle(titleField.getText());
 		
 		String itemSelectedFromDropDown = (String)organismComboBox.getSelectedItem();
 		if(itemSelectedFromDropDown != null)

@@ -47,7 +47,7 @@ public class State extends PathwayElement implements LinkableFrom
 		if (parent == null) 
 			return null;
 
-		return parent.getElementById(getGraphRef());
+		return parent.getElementById(getElementRef());
 	}
 	
 	private void updateCoordinates()
@@ -55,18 +55,18 @@ public class State extends PathwayElement implements LinkableFrom
 		PathwayElement dn = getParentDataNode();
 		if (dn != null)
 		{
-			double centerx = dn.getMCenterX() + (getRelX() * dn.getMWidth() / 2);
-			double centery = dn.getMCenterY() + (getRelY() * dn.getMHeight() / 2);
-			setMCenterY(centery);
-			setMCenterX(centerx);
+			double centerx = dn.getCenterX() + (getRelX() * dn.getWidth() / 2);
+			double centery = dn.getCenterY() + (getRelY() * dn.getHeight() / 2);
+			setCenterY(centery);
+			setCenterX(centerx);
 		}
 	}
 
 	public void linkTo(LinkableTo idc, double relX, double relY)
 	{
-		String id = idc.getGraphId();
-		if(id == null) id = idc.setGeneratedGraphId();
-		setGraphRef(idc.getGraphId());
+		String id = idc.getElementId();
+		if(id == null) id = idc.setGeneratedElementId();
+		setElementRef(idc.getElementId());
 		setRelX(relX);
 		setRelY(relY);
 	}
@@ -97,15 +97,15 @@ public class State extends PathwayElement implements LinkableFrom
 		updateCoordinates();
 	}
 
-	public void setGraphRef(String v)
+	public void setElementRef(String v)
 	{
-		if (!Utils.stringEquals(graphRef, v))
+		if (!Utils.stringEquals(elementRef, v))
 		{
 			if (parent != null)
 			{
-				if (graphRef != null)
+				if (elementRef != null)
 				{
-					parent.removeGraphRef(graphRef, this);
+					parent.removeGraphRef(elementRef, this);
 				}
 				if (v != null)
 				{
@@ -113,7 +113,7 @@ public class State extends PathwayElement implements LinkableFrom
 					updateCoordinates();
 				}
 			}
-			graphRef = v;
+			elementRef = v;
 			fireObjectModifiedEvent(PathwayElementEvent.createSinglePropertyEvent(this, StaticProperty.GRAPHREF));
 		}
 	}
@@ -124,7 +124,7 @@ public class State extends PathwayElement implements LinkableFrom
 		if (parent != v)
 		{
 			super.setParent(v);
-			if (parent != null && graphRef != null)
+			if (parent != null && elementRef != null)
 			{
 				updateCoordinates();
 			}

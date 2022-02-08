@@ -115,7 +115,7 @@ public abstract class Graphics extends VPathwayElement implements PathwayElement
 	 * @return the center x-coordinate
 	 */
 	public double getVCenterX() {
-		return vFromM(gdata.getMCenterX());
+		return vFromM(gdata.getCenterX());
 	}
 
 	/**
@@ -125,7 +125,7 @@ public abstract class Graphics extends VPathwayElement implements PathwayElement
 	 * @return the center y-coordinate
 	 */
 	public double getVCenterY() {
-		return vFromM(gdata.getMCenterY());
+		return vFromM(gdata.getCenterY());
 	}
 
 	/**
@@ -137,7 +137,7 @@ public abstract class Graphics extends VPathwayElement implements PathwayElement
 	 * @return
 	 */
 	public double getVLeft() {
-		return vFromM(gdata.getMLeft());
+		return vFromM(gdata.getLeft());
 	}
 
 	/**
@@ -149,7 +149,7 @@ public abstract class Graphics extends VPathwayElement implements PathwayElement
 	 * @return
 	 */
 	public double getVWidth() {
-		return vFromM(gdata.getMWidth());
+		return vFromM(gdata.getWidth());
 	}
 
 	/**
@@ -161,7 +161,7 @@ public abstract class Graphics extends VPathwayElement implements PathwayElement
 	 * @return
 	 */
 	public double getVTop() {
-		return vFromM(gdata.getMTop());
+		return vFromM(gdata.getTop());
 	}
 
 	/**
@@ -173,7 +173,7 @@ public abstract class Graphics extends VPathwayElement implements PathwayElement
 	 * @return
 	 */
 	public double getVHeight() {
-		return vFromM(gdata.getMHeight());
+		return vFromM(gdata.getHeight());
 	}
 
 	/**
@@ -219,10 +219,10 @@ public abstract class Graphics extends VPathwayElement implements PathwayElement
 	public int getVFontStyle() {
 		int style = Font.PLAIN;
 		if (gdata.getFontName() != null) {
-			if (gdata.isBold()) {
+			if (gdata.getFontWeight()) {
 				style |= Font.BOLD;
 			}
-			if (gdata.isItalic()) {
+			if (gdata.getFontStyle()) {
 				style |= Font.ITALIC;
 			}
 		}
@@ -264,7 +264,7 @@ public abstract class Graphics extends VPathwayElement implements PathwayElement
 
 	protected void setLineStyle(Graphics2D g) {
 		int ls = gdata.getLineStyle();
-		float lt = (float) vFromM(gdata.getLineThickness());
+		float lt = (float) vFromM(gdata.getLineWidth());
 		if (ls == LineStyleType.SOLID) {
 			g.setStroke(new BasicStroke(lt));
 		} else if (ls == LineStyleType.DASHED) {

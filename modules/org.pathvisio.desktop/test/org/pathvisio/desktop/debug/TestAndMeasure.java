@@ -167,12 +167,12 @@ public class TestAndMeasure extends TestCase
 			public Object create() 
 			{
 				PathwayElement elt = PathwayElement.createPathwayElement(ObjectType.DATANODE);
-				elt.setMCenterX(5);
-				elt.setMCenterY(10);
-				elt.setMWidth(8);
-				elt.setMHeight(10);
+				elt.setCenterX(5);
+				elt.setCenterY(10);
+				elt.setWidth(8);
+				elt.setHeight(10);
 				elt.setDataSource(DataSource.getByCompactIdentifierPrefix("ncbigene"));
-				elt.setElementID("3463");
+				elt.setIdentifier("3463");
 				elt.setTextLabel("INSR");
 				pwy1.add (elt);
 				return elt;
@@ -188,12 +188,12 @@ public class TestAndMeasure extends TestCase
 			public Object create() 
 			{
 				PathwayElement elt = PathwayElement.createPathwayElement(ObjectType.LINE);
-				elt.setMStartX(5);
-				elt.setMStartY(10);
-				elt.setMEndX(8);
-				elt.setMEndY(10);
-				elt.setStartGraphRef("abc");
-				elt.setEndGraphRef("def");
+				elt.setStartLinePointX(5);
+				elt.setStartLinePointY(10);
+				elt.setEndLinePointX(8);
+				elt.setEndLinePointY(10);
+				elt.setStartElementRef("abc");
+				elt.setEndElementRef("def");
 				pwy2.add (elt);
 				return elt;
 			}
@@ -210,12 +210,12 @@ public class TestAndMeasure extends TestCase
 			public Object create() 
 			{
 				PathwayElement elt = PathwayElement.createPathwayElement(ObjectType.DATANODE);
-				elt.setMCenterX(5);
-				elt.setMCenterY(10);
-				elt.setMWidth(8);
-				elt.setMHeight(10);
+				elt.setCenterX(5);
+				elt.setCenterY(10);
+				elt.setWidth(8);
+				elt.setHeight(10);
 				elt.setDataSource(DataSource.getByCompactIdentifierPrefix("ncbigene"));
-				elt.setElementID("3463");
+				elt.setIdentifier("3463");
 				elt.setTextLabel("INSR");
 				pwy3.add (elt);
 				VPathwayElement velt = new VDataNode(vpwy3, elt);
@@ -232,12 +232,12 @@ public class TestAndMeasure extends TestCase
 			public Object create() 
 			{
 				PathwayElement elt = PathwayElement.createPathwayElement(ObjectType.LINE);
-				elt.setMStartX(5);
-				elt.setMStartY(10);
-				elt.setMEndX(8);
-				elt.setMEndY(10);
-				elt.setStartGraphRef("abc");
-				elt.setEndGraphRef("def");
+				elt.setStartLinePointX(5);
+				elt.setStartLinePointY(10);
+				elt.setEndLinePointX(8);
+				elt.setEndLinePointY(10);
+				elt.setStartElementRef("abc");
+				elt.setEndElementRef("def");
 				pwy4.add (elt);
 				VPathwayElement velt = new VLineElement(vpwy4, elt);
 				return velt;

@@ -67,8 +67,8 @@ public class VInfoBox extends Graphics {
 	protected void vMoveBy(double vdx, double vdy)
 	{
 //		markDirty();
-		gdata.setMTop (gdata.getMTop()  + mFromV(vdy));
-		gdata.setMLeft (gdata.getMLeft() + mFromV(vdx));
+		gdata.setTop (gdata.getTop()  + mFromV(vdy));
+		gdata.setLeft (gdata.getLeft() + mFromV(vdx));
 //		markDirty();
 	}
 
@@ -83,19 +83,19 @@ public class VInfoBox extends Graphics {
 
 		//Draw Name, Organism, Data-Source, Version, Author, Maintained-by, Email, Availability and last modified
 		String[][] text = new String[][] {
-				{"Title: ", gdata.getMapInfoName()},
+				{"Title: ", gdata.getTitle()},
 				{"Maintained by: ", gdata.getMaintainer()},
 				{"Email: ", gdata.getEmail()},
 				{"Availability: ", gdata.getCopyright()},
 				{"Last modified: ", gdata.getLastModified()},
 				{"Organism: ", gdata.getOrganism()},
-				{"Data Source: ", gdata.getMapInfoDataSource()}
+				{"Data Source: ", gdata.getSource()}
 			};
 
 
 		int shift = 0;
-		int vLeft = (int)vFromM(gdata.getMLeft());
-		int vTop = (int)vFromM(gdata.getMTop());
+		int vLeft = (int)vFromM(gdata.getLeft());
+		int vTop = (int)vFromM(gdata.getTop());
 
 		int newSizeX = sizeX;
 		int newSizeY = sizeY;
@@ -134,8 +134,8 @@ public class VInfoBox extends Graphics {
 	}
 
 	protected Shape getVShape(boolean rotate) {
-		double vLeft = vFromM(gdata.getMLeft());
-		double vTop = vFromM(gdata.getMTop());
+		double vLeft = vFromM(gdata.getLeft());
+		double vTop = vFromM(gdata.getTop());
 		double vW = sizeX;
 		double vH = sizeY;
 		if(vW == 1 && vH == 1) {
