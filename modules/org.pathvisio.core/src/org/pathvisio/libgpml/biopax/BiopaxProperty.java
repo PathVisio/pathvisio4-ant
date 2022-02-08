@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  ******************************************************************************/
-package org.pathvisio.core.biopax;
+package org.pathvisio.libgpml.biopax;
 
 import org.jdom2.Element;
 import org.pathvisio.libgpml.debug.Logger;

@@ -5,13 +5,13 @@ Bundle-SymbolicName: org.pathvisio.core
 Bundle-Version: 4.0.0
 Bundle-Vendor: PathVisio developers
 Export-Package: org.pathvisio.core,
- org.pathvisio.core.biopax,
  org.pathvisio.core.data,
  org.pathvisio.core.gui,
  org.pathvisio.core.model,
  org.pathvisio.core.preferences,
  org.pathvisio.core.util,
  org.pathvisio.core.view,
+ org.pathvisio.libgpml.biopax,
  org.pathvisio.libgpml.model,
  org.pathvisio.libgpml.model.shape,
  org.pathvisio.libgpml.model.type,

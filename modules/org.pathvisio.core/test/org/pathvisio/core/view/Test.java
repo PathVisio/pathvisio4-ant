@@ -22,9 +22,9 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
-import org.pathvisio.core.biopax.BiopaxReferenceManager;
-import org.pathvisio.core.biopax.PublicationXref;
 import org.pathvisio.core.preferences.PreferenceManager;
+import org.pathvisio.libgpml.biopax.BiopaxReferenceManager;
+import org.pathvisio.libgpml.biopax.PublicationXref;
 import org.pathvisio.libgpml.model.ObjectType;
 import org.pathvisio.libgpml.model.Pathway;
 import org.pathvisio.libgpml.model.PathwayElement;

@@ -39,7 +39,7 @@ import org.jdom2.Namespace;
 import org.jdom2.output.Format;
 import org.jdom2.output.SAXOutputter;
 import org.jdom2.output.XMLOutputter;
-import org.pathvisio.core.biopax.BiopaxElement;
+import org.pathvisio.libgpml.biopax.BiopaxElement;
 import org.pathvisio.libgpml.debug.Logger;
 import org.pathvisio.libgpml.model.GraphLink.LinkableTo;
 import org.pathvisio.libgpml.model.type.GroupType;

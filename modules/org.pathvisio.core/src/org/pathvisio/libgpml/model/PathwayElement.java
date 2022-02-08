@@ -32,12 +32,12 @@ import java.util.TreeMap;
 
 import org.bridgedb.DataSource;
 import org.bridgedb.Xref;
-import org.pathvisio.core.biopax.BiopaxElement;
-import org.pathvisio.core.biopax.BiopaxReferenceManager;
 import org.pathvisio.core.preferences.GlobalPreference;
 import org.pathvisio.core.preferences.PreferenceManager;
 import org.pathvisio.core.view.VState;
 import org.pathvisio.libgpml.model.GraphLink.LinkableTo;
+import org.pathvisio.libgpml.biopax.BiopaxElement;
+import org.pathvisio.libgpml.biopax.BiopaxReferenceManager;
 import org.pathvisio.libgpml.model.GraphLink.LinkableFrom;
 import org.pathvisio.libgpml.model.shape.IShape;
 import org.pathvisio.libgpml.model.type.HAlignType;

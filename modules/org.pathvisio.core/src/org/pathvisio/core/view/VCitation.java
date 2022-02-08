@@ -24,10 +24,10 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.List;
 
-import org.pathvisio.core.biopax.BiopaxReferenceManager;
-import org.pathvisio.core.biopax.PublicationXref;
 import org.pathvisio.core.preferences.GlobalPreference;
 import org.pathvisio.core.preferences.PreferenceManager;
+import org.pathvisio.libgpml.biopax.BiopaxReferenceManager;
+import org.pathvisio.libgpml.biopax.PublicationXref;
 import org.pathvisio.libgpml.model.ObjectType;
 import org.pathvisio.libgpml.model.PathwayElement;
 

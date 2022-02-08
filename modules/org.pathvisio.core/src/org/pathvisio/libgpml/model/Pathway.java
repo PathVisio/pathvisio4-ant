@@ -33,11 +33,11 @@ import java.util.Random;
 import java.util.Set;
 
 import org.bridgedb.Xref;
-import org.pathvisio.core.biopax.BiopaxElement;
-import org.pathvisio.core.biopax.BiopaxNode;
 import org.pathvisio.core.model.BatikImageExporter;
 import org.pathvisio.core.model.ImageExporter;
 import org.pathvisio.core.model.OntologyTag;
+import org.pathvisio.libgpml.biopax.BiopaxElement;
+import org.pathvisio.libgpml.biopax.BiopaxNode;
 import org.pathvisio.libgpml.debug.Logger;
 import org.pathvisio.libgpml.model.GraphLink.LinkableTo;
 import org.pathvisio.libgpml.model.GraphLink.LinkableFrom;

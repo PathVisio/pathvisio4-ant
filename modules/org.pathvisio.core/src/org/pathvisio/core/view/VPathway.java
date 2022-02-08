@@ -43,13 +43,13 @@ import javax.swing.KeyStroke;
 import javax.swing.Timer;
 
 import org.pathvisio.core.Engine;
-import org.pathvisio.core.biopax.BiopaxElement;
 import org.pathvisio.core.preferences.GlobalPreference;
 import org.pathvisio.core.preferences.PreferenceManager;
 import org.pathvisio.core.view.SelectionBox.SelectionListener;
 import org.pathvisio.core.view.VPathwayEvent.VPathwayEventType;
 import org.pathvisio.core.view.ViewActions.KeyMoveAction;
 import org.pathvisio.core.view.ViewActions.TextFormattingAction;
+import org.pathvisio.libgpml.biopax.BiopaxElement;
 import org.pathvisio.libgpml.debug.Logger;
 import org.pathvisio.libgpml.model.MLine;
 import org.pathvisio.libgpml.model.ObjectType;
