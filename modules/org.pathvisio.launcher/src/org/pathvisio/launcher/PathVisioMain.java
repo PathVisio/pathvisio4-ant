@@ -66,12 +66,10 @@ public class PathVisioMain {
 		"derby",
 		"org.w3c.dom.events",
 		"org.bridgedb.rdb",
+		"org.pathvisio.libgpml",
 		"org.pathvisio.core",
 		"org.pathvisio.gui",
 		"org.pathvisio.desktop",
-		"org.pathvisio.visualization",
-		"org.pathvisio.gex",
-		"org.pathvisio.statistics"	
 	});	
 	
 	private static final String[][] frameworkProperties = { 
