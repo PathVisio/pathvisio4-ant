@@ -39,6 +39,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
+import org.pathvisio.core.util.Resources;
 import org.pathvisio.gui.SwingEngine;
 import org.pathvisio.gui.dialogs.PublicationXRefDialog;
 import org.pathvisio.libgpml.biopax.BiopaxElement;
@@ -46,14 +47,13 @@ import org.pathvisio.libgpml.biopax.BiopaxReferenceManager;
 import org.pathvisio.libgpml.biopax.PublicationXref;
 import org.pathvisio.libgpml.debug.Logger;
 import org.pathvisio.libgpml.model.PathwayElement;
-import org.pathvisio.libgpml.util.Utils;
 
 public class LitReferencePanel extends PathwayElementPanel implements ActionListener {
 	private static final String ADD = "New reference";
 	private static final String REMOVE = "Remove";
 	private static final String EDIT = "Edit";
-	private static final URL IMG_EDIT = Utils.getResourceURL("edit.gif");
-	private static final URL IMG_REMOVE = Utils.getResourceURL("cancel.gif");
+	private static final URL IMG_EDIT = Resources.getResourceURL("edit.gif");
+	private static final URL IMG_REMOVE = Resources.getResourceURL("cancel.gif");
 
 	BiopaxReferenceManager refMgr;
 	BiopaxElement elmMgr;

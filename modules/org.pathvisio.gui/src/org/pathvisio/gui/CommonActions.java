@@ -33,6 +33,7 @@ import org.pathvisio.core.ApplicationEvent;
 import org.pathvisio.core.Engine;
 import org.pathvisio.core.Engine.ApplicationEventListener;
 import org.pathvisio.core.Globals;
+import org.pathvisio.core.util.Resources;
 import org.pathvisio.core.view.DefaultTemplates;
 import org.pathvisio.core.view.Graphics;
 import org.pathvisio.core.view.Handle;
@@ -59,7 +60,6 @@ import org.pathvisio.libgpml.model.type.DataNodeType;
 import org.pathvisio.libgpml.model.type.LineStyleType;
 import org.pathvisio.libgpml.model.type.ArrowHeadType;
 import org.pathvisio.libgpml.model.type.ShapeType;
-import org.pathvisio.libgpml.util.Utils;
 
 /**
  * A collection of {@link Action}s that may be used throughout the program (e.g. in
@@ -69,10 +69,10 @@ import org.pathvisio.libgpml.util.Utils;
  * @see {@link ViewActions}
  */
 public class CommonActions implements ApplicationEventListener {
-	private static final URL IMG_SAVE = Utils.getResourceURL("save.gif");
-	private static final URL IMG_SAVEAS = Utils.getResourceURL("saveas.gif");
-	private static final URL IMG_IMPORT = Utils.getResourceURL("import.gif");
-	private static final URL IMG_EXPORT = Utils.getResourceURL("export.gif");
+	private static final URL IMG_SAVE = Resources.getResourceURL("save.gif");
+	private static final URL IMG_SAVEAS = Resources.getResourceURL("saveas.gif");
+	private static final URL IMG_IMPORT = Resources.getResourceURL("import.gif");
+	private static final URL IMG_EXPORT = Resources.getResourceURL("export.gif");
 
 	public void applicationEvent(ApplicationEvent e) {
 		if(e.getType() == ApplicationEvent.Type.VPATHWAY_CREATED) {
@@ -645,7 +645,7 @@ public class CommonActions implements ApplicationEventListener {
 			super();
 			this.engine = engine;
 			putValue(NAME, t.getLabel());
-			putValue(SMALL_ICON, new ImageIcon(Utils.getResourceURL(t.getIcon())));
+			putValue(SMALL_ICON, new ImageIcon(Resources.getResourceURL(t.getIcon())));
 			putValue(SHORT_DESCRIPTION, t.getDescription());
 			type = t;
 		}

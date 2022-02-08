@@ -38,7 +38,7 @@ import javax.swing.border.LineBorder;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
-import org.pathvisio.libgpml.util.Utils;
+import org.pathvisio.core.util.Resources;
 import org.pathvisio.pluginmanager.impl.PluginManager;
 import org.pathvisio.pluginmanager.impl.data.BundleVersion;
 
@@ -61,7 +61,7 @@ public class PluginCell extends AbstractCellEditor implements TableCellEditor, T
 
 		showButton = getButtonPanel(installed);
 		panel = new JPanel(new BorderLayout());
-		URL imgURL = Utils.getResourceURL("plugin.png");
+		URL imgURL = Resources.getResourceURL("plugin.png");
 		if (imgURL != null) {
 			ImageIcon icon = new ImageIcon(imgURL);
 			JLabel label = new JLabel("   ", icon, JLabel.CENTER);

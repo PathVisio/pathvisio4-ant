@@ -4,7 +4,14 @@ Bundle-Name: PathVisio libgpml module
 Bundle-SymbolicName: org.pathvisio.libgpml
 Bundle-Version: 4.0.0
 Bundle-Vendor: PathVisio developers
-Export-Package: org.pathvisio.libgpml.debug
+Export-Package: org.pathvisio.libgpml.biopax,
+ org.pathvisio.libgpml.debug,
+ org.pathvisio.libgpml.model,
+ org.pathvisio.libgpml.model.connector,
+ org.pathvisio.libgpml.model.shape,
+ org.pathvisio.libgpml.model.type,
+ org.pathvisio.libgpml.prop,
+ org.pathvisio.libgpml.util
 Require-Bundle: org.apache.servicemix.bundles.jdom;bundle-version="2.0.6",
  org.pathvisio.pdftranscoder;bundle-version="1.7.0",
  org.bridgedb;bundle-version="3.0.13",
@@ -20,3 +27,4 @@ Bundle-License: http://www.apache.org/licenses/LICENSE-2.0
 Bundle-DocURL: http://www.pathvisio.org
 Bundle-Description: This module is the libgpml module of the PathVisio application. It contains the data model and basic preferences of the application.
 Bundle-Copyright: 2006-2022 BiGCaT Bioinformatics, WikiPathways
+

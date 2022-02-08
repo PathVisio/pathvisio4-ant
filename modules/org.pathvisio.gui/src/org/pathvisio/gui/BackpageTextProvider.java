@@ -29,6 +29,7 @@ import org.bridgedb.AttributeMapper;
 import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
+import org.pathvisio.core.util.Resources;
 import org.pathvisio.gui.DataPaneTextProvider.DataHook;
 import org.pathvisio.libgpml.debug.Logger;
 import org.pathvisio.libgpml.debug.WorkerThreadOnly;
@@ -242,7 +243,7 @@ public class BackpageTextProvider {
 	private void initializeHeader() {
 		try {
 			BufferedReader input = new BufferedReader(
-					new InputStreamReader(Utils.getResourceURL(HEADERFILE).openStream()));
+					new InputStreamReader(Resources.getResourceURL(HEADERFILE).openStream()));
 			String line;
 			backpagePanelHeader = "";
 			while ((line = input.readLine()) != null) {

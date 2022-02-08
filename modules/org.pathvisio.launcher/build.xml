@@ -15,6 +15,7 @@ pathvisio.version = ${pathvisio.version}
 		<include name="org.eclipse.osgi.jar"/>
 	  </fileset>
 	  <fileset dir="${bundle.dest}">
+		<include name="org.pathvisio.libgpml.jar"/>
 		<include name="org.pathvisio.core.jar"/>
 	  </fileset>
 	</path>

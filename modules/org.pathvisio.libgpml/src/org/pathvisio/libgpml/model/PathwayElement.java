@@ -32,9 +32,9 @@ import java.util.TreeMap;
 
 import org.bridgedb.DataSource;
 import org.bridgedb.Xref;
-import org.pathvisio.core.preferences.GlobalPreference;
-import org.pathvisio.core.preferences.PreferenceManager;
-import org.pathvisio.core.view.VState;
+//import org.pathvisio.core.preferences.GlobalPreference; TODO 
+//import org.pathvisio.core.preferences.PreferenceManager;
+//import org.pathvisio.core.view.VState;
 import org.pathvisio.libgpml.model.GraphLink.LinkableTo;
 import org.pathvisio.libgpml.biopax.BiopaxElement;
 import org.pathvisio.libgpml.biopax.BiopaxReferenceManager;
@@ -181,8 +181,8 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 
 	/**
 	 * Represents a generic point in an coordinates.length dimensional space. The
-	 * point is automatically a {@link LinkableTo} and therefore lines can
-	 * link to the point.
+	 * point is automatically a {@link LinkableTo} and therefore lines can link to
+	 * the point.
 	 * 
 	 * @see MPoint
 	 * @see MAnchor
@@ -1714,9 +1714,9 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 
 			// Rotation is not stored for State, so we use a dynamic property.
 			// TODO: remove after next GPML update.
-			if (objectType == ObjectType.STATE && v != 0) {
-				setDynamicProperty(VState.ROTATION_KEY, "" + v);
-			}
+//			if (objectType == ObjectType.STATE && v != 0) {
+//				setDynamicProperty(VState.ROTATION_KEY, "" + v);
+//			}
 
 			fireObjectModifiedEvent(PathwayElementEvent.createCoordinatePropertyEvent(this));
 		}
@@ -1833,9 +1833,10 @@ public class PathwayElement implements LinkableTo, Comparable<PathwayElement> {
 		String input = (v == null) ? "" : v;
 		if (!Utils.stringEquals(href, input)) {
 			href = input;
-			if (PreferenceManager.getCurrent() == null)
-				PreferenceManager.init();
-			setColor(PreferenceManager.getCurrent().getColor(GlobalPreference.COLOR_LINK));
+//			if (PreferenceManager.getCurrent() == null) { TODO 
+//				PreferenceManager.init();
+//			}
+//			setColor(PreferenceManager.getCurrent().getColor(GlobalPreference.COLOR_LINK));
 			fireObjectModifiedEvent(PathwayElementEvent.createSinglePropertyEvent(this, StaticProperty.HREF));
 		}
 	}

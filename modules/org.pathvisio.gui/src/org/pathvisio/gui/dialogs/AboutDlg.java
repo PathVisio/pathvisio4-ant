@@ -29,8 +29,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.pathvisio.core.Globals;
+import org.pathvisio.core.util.Resources;
 import org.pathvisio.gui.SwingEngine;
-import org.pathvisio.libgpml.util.Utils;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
@@ -40,7 +40,7 @@ import com.jgoodies.forms.layout.FormLayout;
  * the application.
  */
 public class AboutDlg {
-	private static final URL IMG_ABOUT_LOGO = Utils.getResourceURL("new-logo-small.png");
+	private static final URL IMG_ABOUT_LOGO = Resources.getResourceURL("new-logo-small.png");
 
 	private SwingEngine swingEngine;
 

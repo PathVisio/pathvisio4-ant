@@ -1,6 +1,6 @@
 /*******************************************************************************
  * PathVisio, a tool for data visualization and analysis using biological pathways
- * Copyright 2006-2022 BiGCaT Bioinformatics, WikiPathways
+ * Copyright 2006-2019 BiGCaT Bioinformatics
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License.  You may obtain a copy
@@ -14,35 +14,28 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  ******************************************************************************/
-// Copyright 2015-2019 BiGCaT Bioinformatics
-package org.pathvisio.core.model;
+package org.pathvisio.core.util;
+
+import java.net.URL;
+
+import org.pathvisio.libgpml.debug.Logger;
+
 /**
- * Class storing information about ontology tags for pathways.
- * @author jonathan
- *
+ * Utility function related to getting Resources from the class path. TODO:
+ * merge with org.pathvisio.util.Utils.
  */
-public class OntologyTag {
-	private String id;
-	private String term;
-	private String ontology;
-		
-	public OntologyTag(String id, String term, String ontology) {
-		this.id = id;
-		this.term = term;
-		this.ontology = ontology;
+public class Resources {
+	/**
+	 * Get the {@link URL} for the resource stored in a jar file in the classpath
+	 * 
+	 * @param name the filename of the resource
+	 * @return the URL pointing to the resource
+	 */
+	public static URL getResourceURL(String name) {
+		URL url = Resources.class.getClassLoader().getResource(name);
+		if (url == null)
+			Logger.log.error("Couldn't load resource '" + name + "'");
+		return url;
 	}
-
-	public String getId() {
-		return id;
-	}
-
-	public String getTerm() {
-		return term;
-	}
-
-	public String getOntology() {
-		return ontology;
-	}
-
 
 }

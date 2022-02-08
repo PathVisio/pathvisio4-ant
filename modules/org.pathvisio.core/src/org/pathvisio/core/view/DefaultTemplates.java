@@ -21,6 +21,7 @@ import java.net.URL;
 
 import org.pathvisio.core.preferences.GlobalPreference;
 import org.pathvisio.core.preferences.PreferenceManager;
+import org.pathvisio.core.util.Resources;
 import org.pathvisio.libgpml.model.MState;
 import org.pathvisio.libgpml.model.ObjectType;
 import org.pathvisio.libgpml.model.Pathway;
@@ -34,7 +35,6 @@ import org.pathvisio.libgpml.model.type.DataNodeType;
 import org.pathvisio.libgpml.model.type.LineStyleType;
 import org.pathvisio.libgpml.model.type.ArrowHeadType;
 import org.pathvisio.libgpml.model.type.ShapeType;
-import org.pathvisio.libgpml.util.Utils;
 
 /**
  * Contains a set of templates, patterns of PathwayElements that can be added to
@@ -76,7 +76,7 @@ public abstract class DefaultTemplates {
 		}
 
 		public URL getIconLocation() {
-			return Utils.getResourceURL("new" + getName().toLowerCase() + ".gif");
+			return Resources.getResourceURL("new" + getName().toLowerCase() + ".gif");
 		}
 
 		public void postInsert(PathwayElement[] newElements) {
@@ -379,7 +379,7 @@ public abstract class DefaultTemplates {
 		}
 
 		public URL getIconLocation() {
-			return Utils.getResourceURL("new" + getName().toLowerCase() + ".gif");
+			return Resources.getResourceURL("new" + getName().toLowerCase() + ".gif");
 		}
 
 		public void postInsert(PathwayElement[] newElements) {

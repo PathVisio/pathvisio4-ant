@@ -33,9 +33,8 @@ import java.util.Random;
 import java.util.Set;
 
 import org.bridgedb.Xref;
-import org.pathvisio.core.model.BatikImageExporter;
-import org.pathvisio.core.model.ImageExporter;
-import org.pathvisio.core.model.OntologyTag;
+//import org.pathvisio.core.model.BatikImageExporter; TODO 
+//import org.pathvisio.core.model.ImageExporter; TODO 
 import org.pathvisio.libgpml.biopax.BiopaxElement;
 import org.pathvisio.libgpml.biopax.BiopaxNode;
 import org.pathvisio.libgpml.debug.Logger;
@@ -693,11 +692,11 @@ public class Pathway {
 		clearChangedFlag();
 	}
 
-	public void writeToSvg(File file) throws ConverterException {
-		// Use Batik instead of SvgFormat
-		// SvgFormat.writeToSvg (this, file);
-		new BatikImageExporter(ImageExporter.TYPE_SVG).doExport(file, this);
-	}
+//	public void writeToSvg(File file) throws ConverterException { TODO 
+//		// Use Batik instead of SvgFormat
+//		// SvgFormat.writeToSvg (this, file);
+//		new BatikImageExporter(ImageExporter.TYPE_SVG).doExport(file, this);
+//	}
 
 	/**
 	 * Implement this interface if you want to be notified when the "changed" status

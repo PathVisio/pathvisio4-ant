@@ -312,19 +312,4 @@ public class Utils {
 			return msg;
 	}
 
-	/**
-	 * Get the {@link URL} for the resource stored in a jar file in the classpath.
-	 * 
-	 * Utility function related to getting Resources from the class path. Merged
-	 * from org.pathvisio.util.Resources.
-	 * 
-	 * @param name the filename of the resource
-	 * @return the URL pointing to the resource
-	 */
-	public static URL getResourceURL(String name) {
-		URL url = Utils.class.getClassLoader().getResource(name);
-		if (url == null)
-			Logger.log.error("Couldn't load resource '" + name + "'");
-		return url;
-	}
 }

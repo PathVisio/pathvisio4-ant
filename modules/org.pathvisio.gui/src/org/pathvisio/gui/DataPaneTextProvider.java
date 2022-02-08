@@ -21,11 +21,11 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.pathvisio.core.util.Resources;
 import org.pathvisio.libgpml.debug.Logger;
 import org.pathvisio.libgpml.debug.WorkerThreadOnly;
 import org.pathvisio.libgpml.model.ObjectType;
 import org.pathvisio.libgpml.model.PathwayElement;
-import org.pathvisio.libgpml.util.Utils;
 
 /**
  * BackpageTextProvider knows how to generate a html "backpage" for a given
@@ -171,7 +171,7 @@ public class DataPaneTextProvider {
 	private void initializeHeader() {
 		try {
 			BufferedReader input = new BufferedReader(new InputStreamReader(
-					Utils.getResourceURL(HEADERFILE).openStream()));
+					Resources.getResourceURL(HEADERFILE).openStream()));
 			String line;
 			backpagePanelHeader = "";
 			while ((line = input.readLine()) != null) {

@@ -40,6 +40,7 @@ import javax.swing.KeyStroke;
 import org.pathvisio.core.ApplicationEvent;
 import org.pathvisio.core.Engine;
 import org.pathvisio.core.Engine.ApplicationEventListener;
+import org.pathvisio.core.util.Resources;
 import org.pathvisio.libgpml.util.Utils;
 import org.pathvisio.core.view.SelectionBox.SelectionEvent;
 import org.pathvisio.core.view.SelectionBox.SelectionListener;
@@ -52,7 +53,6 @@ import org.pathvisio.libgpml.model.connector.ConnectorShape;
 import org.pathvisio.libgpml.model.connector.FreeConnectorShape;
 import org.pathvisio.libgpml.model.type.GroupType;
 import org.pathvisio.libgpml.model.type.ShapeType;
-import org.pathvisio.libgpml.util.Utils;
 
 /**
  * A collection of {@link Action}s related to the pathway view. An instance of this class contains
@@ -68,9 +68,9 @@ import org.pathvisio.libgpml.util.Utils;
  * @author thomas
  */
 public class ViewActions implements VPathwayListener, SelectionListener {
-	private static final URL IMG_COPY= Utils.getResourceURL("copy.gif");
-	private static final URL IMG_PASTE = Utils.getResourceURL("paste.gif");
-	private static final URL IMG_UNDO = Utils.getResourceURL("undo.gif");
+	private static final URL IMG_COPY= Resources.getResourceURL("copy.gif");
+	private static final URL IMG_PASTE = Resources.getResourceURL("paste.gif");
+	private static final URL IMG_UNDO = Resources.getResourceURL("undo.gif");
 
 	/**
 	 * The group of actions that will be enabled when the VPathway is in edit mode and
