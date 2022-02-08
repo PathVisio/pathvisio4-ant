@@ -4,14 +4,10 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/PathVisio.iml" filepath="$PROJECT_DIR$/.idea/PathVisio.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/org.pathvisio.core.iml" filepath="$PROJECT_DIR$/.idea/org.pathvisio.core.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/org.pathvisio.data.iml" filepath="$PROJECT_DIR$/.idea/org.pathvisio.data.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/org.pathvisio.desktop.iml" filepath="$PROJECT_DIR$/.idea/org.pathvisio.desktop.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/org.pathvisio.gex.iml" filepath="$PROJECT_DIR$/.idea/org.pathvisio.gex.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/org.pathvisio.gui.iml" filepath="$PROJECT_DIR$/.idea/org.pathvisio.gui.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/org.pathvisio.launcher.iml" filepath="$PROJECT_DIR$/.idea/org.pathvisio.launcher.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/org.pathvisio.pluginmanager.iml" filepath="$PROJECT_DIR$/.idea/org.pathvisio.pluginmanager.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/org.pathvisio.statistics.iml" filepath="$PROJECT_DIR$/.idea/org.pathvisio.statistics.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/org.pathvisio.visualization.iml" filepath="$PROJECT_DIR$/.idea/org.pathvisio.visualization.iml" />
     </modules>
   </component>
 </project>
