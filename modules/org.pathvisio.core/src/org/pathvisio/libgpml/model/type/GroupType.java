@@ -24,99 +24,96 @@ import java.util.TreeSet;
 /**
  * Extensible enum type for Group Styles.
  *
- * Groups can have different biological meanings (e.g. protein Complex), and
- * can be rendered in different ways based on that.
+ * Groups can have different biological meanings (e.g. protein Complex), and can
+ * be rendered in different ways based on that.
  */
 public class GroupType implements Comparable<GroupType> {
 	private static Map<String, GroupType> nameMappings = new HashMap<String, GroupType>();
 	private static Set<GroupType> values = new TreeSet<GroupType>();
-	
-	public static final double DEFAULT_M_MARGIN = 8; //Make the bounds slightly
-	  //larger than the summed bounds
-	  //of the containing elements
+
+	public static final double DEFAULT_M_MARGIN = 8; // Make the bounds slightly
+	// larger than the summed bounds
+	// of the containing elements
 	public static final double COMPLEX_M_MARGIN = 12;
-	
-	public static final GroupType NONE = new GroupType ("None");
+
+	public static final GroupType NONE = new GroupType("None");
 
 	/**
 	 * Style used to group objects for drawing convenience.
 	 */
-	public static final GroupType GROUP = new GroupType ("Group");
+	public static final GroupType GROUP = new GroupType("Group");
 
 	/**
 	 * Style used to represent a group of objects that belong to a complex.
 	 */
-	public static final GroupType COMPLEX = new GroupType ("Complex", false, COMPLEX_M_MARGIN);
+	public static final GroupType COMPLEX = new GroupType("Complex", false, COMPLEX_M_MARGIN);
 
 	/**
 	 * Style used to represent a group of objects that belong to a pathway.
 	 */
-	public static final GroupType PATHWAY = new GroupType ("Pathway");
-	
-	private String name;
-    private boolean disallowLinks;
-    private double mMargin;
-    
-	private GroupType (String name)
-    {
-        this(name, false, DEFAULT_M_MARGIN);
-    }    
+	public static final GroupType PATHWAY = new GroupType("Pathway");
 
-    private GroupType (String name, boolean disallowLinks)
-	{
-    	this (name, disallowLinks, DEFAULT_M_MARGIN);
+	private String name;
+	private boolean disallowLinks;
+	private double mMargin;
+
+	private GroupType(String name) {
+		this(name, false, DEFAULT_M_MARGIN);
 	}
 
-    private GroupType (String name, boolean disallowLinks, double mMargin)
-	{
-		if (name == null) { throw new NullPointerException(); }
+	private GroupType(String name, boolean disallowLinks) {
+		this(name, disallowLinks, DEFAULT_M_MARGIN);
+	}
 
-		this.name  = name;
-        this.disallowLinks = disallowLinks;
-        this.mMargin = mMargin;
-        values.add(this);
-		nameMappings.put (name, this);
+	private GroupType(String name, boolean disallowLinks, double mMargin) {
+		if (name == null) {
+			throw new NullPointerException();
+		}
+
+		this.name = name;
+		this.disallowLinks = disallowLinks;
+		this.mMargin = mMargin;
+		values.add(this);
+		nameMappings.put(name, this);
 	}
 
 	/**
-	   Create an object and add it to the list.
-
-	   For extending the enum.
+	 * Create an object and add it to the list.
+	 * 
+	 * For extending the enum.
 	 */
-	public static GroupType create (String name)
-	{
+	public static GroupType create(String name) {
 		return new GroupType(name);
 	}
 
-    /**
-       Create an object and add it to the list.
-
-       For extending the enum.
-     */
-    public static GroupType create (String name, boolean disallowLinks)
-    {
-        return new GroupType(name, disallowLinks);
-    }
-
-
-    /**
-	   looks up the ConnectorType corresponding to that name.
+	/**
+	 * Create an object and add it to the list.
+	 * 
+	 * For extending the enum.
 	 */
-	public static GroupType fromName (String value)
-	{
+	public static GroupType create(String name, boolean disallowLinks) {
+		return new GroupType(name, disallowLinks);
+	}
+
+	/**
+	 * looks up the ConnectorType corresponding to that name.
+	 */
+	public static GroupType fromName(String value) {
 		return nameMappings.get(value);
 	}
 
 	/**
-	   looks up the ConnectorType corresponding to its GPML name.
-	   @deprecated use {@link #fromName(String)} instead.
+	 * looks up the ConnectorType corresponding to its GPML name.
+	 * 
+	 * @deprecated use {@link #fromName(String)} instead.
 	 */
-	public static GroupType fromGpmlName (String value) {
+	public static GroupType fromGpmlName(String value) {
 		return nameMappings.get(value);
 	}
 
 	/**
 	 * Get the gpml name of the given GroupStyle.
+	 * 
 	 * @deprecated use {@link #getName()} instead.
 	 */
 	public static String toGpmlName(GroupType style) {
@@ -124,19 +121,17 @@ public class GroupType implements Comparable<GroupType> {
 	}
 
 	/**
-	   Stable identifier for this ConnectorType.
+	 * Stable identifier for this ConnectorType.
 	 */
-	public String getName ()
-	{
+	public String getName() {
 		return name;
 	}
 
-    public boolean isDisallowLinks() {
-        return disallowLinks;
-    }
+	public boolean isDisallowLinks() {
+		return disallowLinks;
+	}
 
-    static public GroupType[] getValues()
-	{
+	static public GroupType[] getValues() {
 		return values.toArray(new GroupType[0]);
 	}
 
@@ -144,8 +139,7 @@ public class GroupType implements Comparable<GroupType> {
 		return nameMappings.keySet().toArray(new String[nameMappings.size()]);
 	}
 
-	public String toString()
-	{
+	public String toString() {
 		return name;
 	}
 
@@ -154,8 +148,7 @@ public class GroupType implements Comparable<GroupType> {
 	}
 
 	/** Margin of group bounding-box around contained elements */
-	public double getMMargin() 
-	{
+	public double getMMargin() {
 		return mMargin;
 	}
 }

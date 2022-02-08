@@ -19,37 +19,66 @@ package org.pathvisio.libgpml.model.type;
 import java.util.HashMap;
 import java.util.Map;
 
-/** possible values for the (horizontal) text alignment property */
-public enum HAlignType 
-{ 
+/**
+ * This enum class contains possible values for horizontal text alignment
+ * property.
+ * 
+ * @author unknown, finterly
+ */
+public enum HAlignType {
+
 	LEFT("Left"), CENTER("Center"), RIGHT("Right");
 
-	private final String gpmlName;
-	private static Map<String, HAlignType> byGpmlName = new HashMap<String, HAlignType>();
-	
+	private final String name;
+	// Initialize map
+	private static Map<String, HAlignType> nameToHAlignType = new HashMap<String, HAlignType>();
+
+	/**
+	 * Inserts mappings into map by associating specified values with specified
+	 * keys.
+	 */
 	static {
-		for (HAlignType t : values()) byGpmlName.put (t.gpmlName, t);
+		for (HAlignType t : values())
+			nameToHAlignType.put(t.name, t);
 	}
-	
-	private HAlignType(String gpmlName)
-	{
-		this.gpmlName = gpmlName;
+
+	/**
+	 * Constructor to initialize the state of enum types.
+	 * 
+	 * @param name the string.
+	 */
+	private HAlignType(String name) {
+		this.name = name;
 	}
-	
-	public static HAlignType fromGpmlName(String value)
-	{
-		return byGpmlName.get(value);
+
+	/**
+	 * Returns String.
+	 * 
+	 * @return name the string value.
+	 */
+	public String getName() {
+		return name;
 	}
-	
-	public String getGpmlName()
-	{
-		return gpmlName;
+
+	/**
+	 * Returns HAlignType enum constant from given string name.
+	 * 
+	 * @param name the string value.
+	 * @return HAlignType enum constant.
+	 */
+	public static HAlignType fromName(String value) {
+		return nameToHAlignType.get(value);
 	}
-	
-	public static String[] getNames() 
-	{ 
+
+	/**
+	 * Returns String values as an array.
+	 * 
+	 * @return result the string array.
+	 */
+	public static String[] getNames() {
 		String[] result = new String[values().length];
-		for (int i = 0; i < values().length; ++i) result[i] = values()[i].gpmlName;
+		for (int i = 0; i < values().length; ++i)
+			result[i] = values()[i].name;
 		return result;
 	}
 

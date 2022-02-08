@@ -561,8 +561,8 @@ class GpmlFormat2013a extends GpmlFormatAbstract implements GpmlFormatReader, Gp
     	
     	o.setFontName (getAttribute(base + ".Graphics", "FontName", graphics));
 	    
-		o.setValign(VAlignType.fromGpmlName(getAttribute(base + ".Graphics", "Valign", graphics)));
-		o.setAlign(HAlignType.fromGpmlName(getAttribute(base + ".Graphics", "Align", graphics)));	    
+		o.setValign(VAlignType.fromName(getAttribute(base + ".Graphics", "Valign", graphics)));
+		o.setAlign(HAlignType.fromName(getAttribute(base + ".Graphics", "Align", graphics)));	    
 	}
 	
 	protected void updateFontData(PathwayElement o, Element e) throws ConverterException
@@ -580,8 +580,8 @@ class GpmlFormat2013a extends GpmlFormatAbstract implements GpmlFormatReader, Gp
 		setAttribute(base + ".Graphics", "FontDecoration", graphics, o.isUnderline() ? "Underline" : "Normal");
 		setAttribute(base + ".Graphics", "FontStrikethru", graphics, o.isStrikethru() ? "Strikethru" : "Normal");
 		setAttribute(base + ".Graphics", "FontSize", graphics, Integer.toString((int)o.getMFontSize()));
-		setAttribute(base + ".Graphics", "Valign", graphics, o.getValign().getGpmlName());
-		setAttribute(base + ".Graphics", "Align", graphics, o.getAlign().getGpmlName());
+		setAttribute(base + ".Graphics", "Valign", graphics, o.getValign().getName());
+		setAttribute(base + ".Graphics", "Align", graphics, o.getAlign().getName());
 	}
 
 	protected void mapShapePosition(PathwayElement o, Element e) throws ConverterException

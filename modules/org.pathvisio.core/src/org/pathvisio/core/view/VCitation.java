@@ -33,6 +33,7 @@ import org.pathvisio.libgpml.model.PathwayElement;
 
 /**
  * Draws a citation number on top of a pathway object.
+ * 
  * @author thomas
  */
 public class VCitation extends VPathwayElement implements VElementMouseListener {
@@ -44,9 +45,10 @@ public class VCitation extends VPathwayElement implements VElementMouseListener 
 	private Point2D rPosition;
 
 	/**
-	 * @param canvas The parent VPathway
-	 * @param parent The Graphics for which the references need to be displayed
-	 * @param rPosition The position to place the references, relative to the parent Graphics
+	 * @param canvas    The parent VPathway
+	 * @param parent    The Graphics for which the references need to be displayed
+	 * @param rPosition The position to place the references, relative to the parent
+	 *                  Graphics
 	 */
 	public VCitation(VPathway canvas, Graphics parent, Point2D rPosition) {
 		super(canvas);
@@ -62,14 +64,15 @@ public class VCitation extends VPathwayElement implements VElementMouseListener 
 	}
 
 	public void vElementMouseEvent(VElementMouseEvent e) {
-		if(e.getElement() == parent) {
-			if(e.getType() == VElementMouseEvent.TYPE_MOUSEENTER) {
+		if (e.getElement() == parent) {
+			if (e.getType() == VElementMouseEvent.TYPE_MOUSEENTER) {
 				highlight();
-			} else if(e.getType() == VElementMouseEvent.TYPE_MOUSEEXIT) {
+			} else if (e.getType() == VElementMouseEvent.TYPE_MOUSEEXIT) {
 				unhighlight();
 			}
 		}
 	}
+
 	public void setRPosition(Point2D rPosition) {
 		this.rPosition = rPosition;
 		markDirty();
@@ -89,19 +92,15 @@ public class VCitation extends VPathwayElement implements VElementMouseListener 
 		double pd = vFromM(M_PADDING);
 		String xrefStr = getXRefText();
 
-		if(xrefStr == null || "".equals(xrefStr)) {
+		if (xrefStr == null || "".equals(xrefStr)) {
 			tb = new Rectangle2D.Double(vp.getX(), vp.getY(), 0, 0);
-		} else if(g != null) {
+		} else if (g != null) {
 			tb = g.getFontMetrics(getVFont()).getStringBounds(getXRefText(), g);
-			tb.setRect(
-					vp.getX() + tb.getX() - tb.getWidth() / 2 - pd,
-					vp.getY() + tb.getY() - tb.getHeight() / 2 - pd,
-					tb.getWidth() + 2*pd,
-					tb.getHeight() + 2*pd
-			);
-		} else { //No graphics context, we can only guess...
+			tb.setRect(vp.getX() + tb.getX() - tb.getWidth() / 2 - pd, vp.getY() + tb.getY() - tb.getHeight() / 2 - pd,
+					tb.getWidth() + 2 * pd, tb.getHeight() + 2 * pd);
+		} else { // No graphics context, we can only guess...
 			int w = xrefStr.length() * 5;
-			tb = new Rectangle2D.Double(vp.getX() - w/2 - pd, vp.getY() - pd, w + 2*pd, 15 + 2*pd);
+			tb = new Rectangle2D.Double(vp.getX() - w / 2 - pd, vp.getY() - pd, w + 2 * pd, 15 + 2 * pd);
 		}
 		return tb;
 	}
@@ -111,7 +110,7 @@ public class VCitation extends VPathwayElement implements VElementMouseListener 
 	}
 
 	protected int getVFontSize() {
-		return (int)vFromM(MFONT_SIZE);
+		return (int) vFromM(MFONT_SIZE);
 	}
 
 	protected Font getVFont() {
@@ -119,30 +118,31 @@ public class VCitation extends VPathwayElement implements VElementMouseListener 
 	}
 
 	protected String getXRefText() {
-		if(getParent().getPathwayElement().getParent() == null) {
-			return ""; //In case a redraw is called after deletion of the model element
+		if (getParent().getPathwayElement().getParent() == null) {
+			return ""; // In case a redraw is called after deletion of the model element
 		}
 		int maxNr = PreferenceManager.getCurrent().getInt(GlobalPreference.MAX_NR_CITATIONS);
-		if(maxNr == 0) return ""; //Show nothing if limit is set to 0
+		if (maxNr == 0)
+			return ""; // Show nothing if limit is set to 0
 
 		String xrefStr = "";
 		int lastOrdinal = -2;
 		int sequence = 0;
-		int nrShowed = 0; //Counter to check maximum citation numbers
+		int nrShowed = 0; // Counter to check maximum citation numbers
 
 		List<PublicationXref> xrefs = getRefMgr().getPublicationXRefs();
-		for(int i = 0; i < xrefs.size(); i++) {
-			if(nrShowed > 0 && nrShowed >= maxNr) {
+		for (int i = 0; i < xrefs.size(); i++) {
+			if (nrShowed > 0 && nrShowed >= maxNr) {
 				xrefStr = xrefStr.substring(0, xrefStr.length() - 2) + "...  ";
-				break; //Stop after maximum number of citations showed
+				break; // Stop after maximum number of citations showed
 			}
 			int n = getRefMgr().getBiopaxElementManager().getOrdinal(xrefs.get(i));
-			if(n != lastOrdinal + 1) { //End sequence
-				if(sequence > 2) {
+			if (n != lastOrdinal + 1) { // End sequence
+				if (sequence > 2) {
 					xrefStr = xrefStr.substring(0, xrefStr.length() - 2);
 					xrefStr += "-" + lastOrdinal + ", ";
 					nrShowed += 2;
-				} else if(sequence == 2){
+				} else if (sequence == 2) {
 					xrefStr += lastOrdinal + ", ";
 					nrShowed++;
 				}
@@ -153,12 +153,12 @@ public class VCitation extends VPathwayElement implements VElementMouseListener 
 			lastOrdinal = n;
 			sequence++;
 		}
-		if(xrefStr.length() > 2) {
+		if (xrefStr.length() > 2) {
 			xrefStr = xrefStr.substring(0, xrefStr.length() - 2);
 		}
-		if(sequence > 2) {
+		if (sequence > 2) {
 			xrefStr += "-" + lastOrdinal;
-		} else if(sequence == 2) {
+		} else if (sequence == 2) {
 			xrefStr += ", " + lastOrdinal;
 		}
 		return xrefStr;
@@ -168,18 +168,20 @@ public class VCitation extends VPathwayElement implements VElementMouseListener 
 		PathwayElement mParent = parent.getPathwayElement();
 
 		Point2D vp = null;
-		//Check for mappinfo object, needs a special treatment,
-		//since it has no bounds in the model
-		if(mParent.getObjectType() == ObjectType.MAPPINFO) {
+		// Check for mappinfo object, needs a special treatment,
+		// since it has no bounds in the model
+		if (mParent.getObjectType() == ObjectType.MAPPINFO) {
 			Rectangle2D vb = parent.getVBounds();
 			double x = rPosition.getX();
 			double y = rPosition.getY();
-			if(vb.getWidth() != 0) x *= vb.getWidth() / 2;
-			if(vb.getHeight() != 0) y *= vb.getHeight() / 2;
+			if (vb.getWidth() != 0)
+				x *= vb.getWidth() / 2;
+			if (vb.getHeight() != 0)
+				y *= vb.getHeight() / 2;
 			x += vb.getCenterX();
 			y += vb.getCenterY();
 			vp = new Point2D.Double(x, y);
-		} else { //For other objects, use the model bounds
+		} else { // For other objects, use the model bounds
 			Point2D mp = mParent.toAbsoluteCoordinate(rPosition);
 			vp = new Point2D.Double(vFromM(mp.getX()), vFromM(mp.getY()));
 		}
@@ -189,28 +191,30 @@ public class VCitation extends VPathwayElement implements VElementMouseListener 
 	Graphics2D g2d;
 
 	protected void doDraw(Graphics2D g2d) {
-		Graphics2D g = (Graphics2D)g2d.create();
+		Graphics2D g = (Graphics2D) g2d.create();
 
-		if(this.g2d == null) resetShapeCache();
+		if (this.g2d == null)
+			resetShapeCache();
 		this.g2d = g;
 
 		String xrefStr = getXRefText();
-		if("".equals(xrefStr)) return;
+		if ("".equals(xrefStr))
+			return;
 
 		g.setFont(getVFont());
 
 		Rectangle2D bounds = getTextBounds(g);
 		g.setClip(bounds);
 
-		if(isHighlighted()) {
+		if (isHighlighted()) {
 			Color hc = getHighlightColor();
-			g.setColor(new Color(hc.getRed(), hc.getGreen(), hc.getBlue(), (int)(255 * 0.3)));
+			g.setColor(new Color(hc.getRed(), hc.getGreen(), hc.getBlue(), (int) (255 * 0.3)));
 			g.fill(bounds);
 		}
 
 		g.setColor(FONT_COLOR);
-		int pd = (int)vFromM(M_PADDING);
-		g.drawString(xrefStr, (int)bounds.getX() + pd, (int)bounds.getMaxY() - pd);
+		int pd = (int) vFromM(M_PADDING);
+		g.drawString(xrefStr, (int) bounds.getX() + pd, (int) bounds.getMaxY() - pd);
 
 	}
 
@@ -223,8 +227,8 @@ public class VCitation extends VPathwayElement implements VElementMouseListener 
 //		canvas.redrawDirtyRect();
 //	}
 
-	@Override protected void destroy()
-	{
+	@Override
+	protected void destroy() {
 		super.destroy();
 //		getRefMgr().removeBiopaxListener(this);
 		canvas.removeVElementMouseListener(this);

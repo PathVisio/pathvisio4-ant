@@ -52,7 +52,7 @@ public class LitReferencePanel extends PathwayElementPanel implements ActionList
 	private static final String ADD = "New reference";
 	private static final String REMOVE = "Remove";
 	private static final String EDIT = "Edit";
-	private static final URL IMG_EDIT= Utils.getResourceURL("edit.gif");
+	private static final URL IMG_EDIT = Utils.getResourceURL("edit.gif");
 	private static final URL IMG_REMOVE = Utils.getResourceURL("cancel.gif");
 
 	BiopaxReferenceManager refMgr;
@@ -65,8 +65,7 @@ public class LitReferencePanel extends PathwayElementPanel implements ActionList
 
 	final private SwingEngine swingEngine;
 
-	public LitReferencePanel(SwingEngine swingEngine)
-	{
+	public LitReferencePanel(SwingEngine swingEngine) {
 		this.swingEngine = swingEngine;
 		setLayout(new BorderLayout(5, 5));
 		xrefs = new ArrayList<PublicationXref>();
@@ -87,13 +86,12 @@ public class LitReferencePanel extends PathwayElementPanel implements ActionList
 	}
 
 	public void setInput(PathwayElement e) {
-		if(e != getInput()) {
+		if (e != getInput()) {
 			elmMgr = e.getParent().getBiopaxElementManager();
 			refMgr = e.getBiopaxReferenceManager();
 		}
 		super.setInput(e);
 	}
-
 
 	private class XRefPanel extends JPanel implements HyperlinkListener, ActionListener {
 		PublicationXref xref;
@@ -102,16 +100,11 @@ public class LitReferencePanel extends PathwayElementPanel implements ActionList
 		public XRefPanel(PublicationXref xref) {
 			this.xref = xref;
 			setBackground(Color.WHITE);
-			setLayout(new FormLayout(
-					"2dlu, fill:[100dlu,min]:grow, 1dlu, pref, 2dlu", "2dlu, pref, 2dlu"
-			));
+			setLayout(new FormLayout("2dlu, fill:[100dlu,min]:grow, 1dlu, pref, 2dlu", "2dlu, pref, 2dlu"));
 			JTextPane txt = new JTextPane();
 			txt.setContentType("text/html");
 			txt.setEditable(false);
-			txt.setText("<html>" + "<B>" +
-					elmMgr.getOrdinal(xref) + ":</B> " +
-					xref.toHTML() + "</html>"
-			);
+			txt.setText("<html>" + "<B>" + elmMgr.getOrdinal(xref) + ":</B> " + xref.toHTML() + "</html>");
 			txt.addHyperlinkListener(this);
 			CellConstraints cc = new CellConstraints();
 			add(txt, cc.xy(2, 2));
@@ -137,6 +130,7 @@ public class LitReferencePanel extends PathwayElementPanel implements ActionList
 				public void mouseEntered(MouseEvent e) {
 					e.getComponent().setBackground(new Color(200, 200, 255));
 				}
+
 				public void mouseExited(MouseEvent e) {
 					e.getComponent().setBackground(Color.WHITE);
 				}
@@ -152,10 +146,12 @@ public class LitReferencePanel extends PathwayElementPanel implements ActionList
 
 			MouseAdapter maHide = new MouseAdapter() {
 				public void mouseEntered(MouseEvent e) {
-					if(!readonly) btnPanel.setVisible(true);
+					if (!readonly)
+						btnPanel.setVisible(true);
 				}
+
 				public void mouseExited(MouseEvent e) {
-					if(!contains(e.getPoint())) {
+					if (!contains(e.getPoint())) {
 						btnPanel.setVisible(false);
 					}
 				}
@@ -165,14 +161,14 @@ public class LitReferencePanel extends PathwayElementPanel implements ActionList
 		}
 
 		public void hyperlinkUpdate(HyperlinkEvent e) {
-			if(e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
+			if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
 				swingEngine.openUrl(e.getURL());
 			}
 		}
 
 		public void actionPerformed(ActionEvent e) {
 			String action = e.getActionCommand();
-			if(EDIT.equals(action)) {
+			if (EDIT.equals(action)) {
 				edit(xref);
 			} else if (REMOVE.equals(action)) {
 				LitReferencePanel.this.remove(xref);
@@ -181,14 +177,13 @@ public class LitReferencePanel extends PathwayElementPanel implements ActionList
 	}
 
 	public void refresh() {
-		if(refPanel != null) remove(refPanel);
+		if (refPanel != null)
+			remove(refPanel);
 
 		xrefs = refMgr.getPublicationXRefs();
 
-		DefaultFormBuilder b = new DefaultFormBuilder(
-				new FormLayout("fill:pref:grow")
-		);
-		for(PublicationXref xref : xrefs) {
+		DefaultFormBuilder b = new DefaultFormBuilder(new FormLayout("fill:pref:grow"));
+		for (PublicationXref xref : xrefs) {
 			b.append(new XRefPanel(xref));
 			b.nextLine();
 		}
@@ -200,15 +195,15 @@ public class LitReferencePanel extends PathwayElementPanel implements ActionList
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		if(e.getActionCommand().equals(ADD)) {
+		if (e.getActionCommand().equals(ADD)) {
 			addPressed();
 		}
 	}
 
 	private void edit(PublicationXref xref) {
-		if(xref != null) {
-				PublicationXRefDialog d = new PublicationXRefDialog(xref, null, this, false);
-				d.setVisible(true);
+		if (xref != null) {
+			PublicationXRefDialog d = new PublicationXRefDialog(xref, null, this, false);
+			d.setVisible(true);
 		}
 		refresh();
 	}
@@ -222,7 +217,7 @@ public class LitReferencePanel extends PathwayElementPanel implements ActionList
 		PublicationXref xref = new PublicationXref();
 
 		final PublicationXRefDialog d = new PublicationXRefDialog(xref, null, this);
-		if(!SwingUtilities.isEventDispatchThread()) {
+		if (!SwingUtilities.isEventDispatchThread()) {
 			try {
 				SwingUtilities.invokeAndWait(new Runnable() {
 					public void run() {
@@ -235,7 +230,7 @@ public class LitReferencePanel extends PathwayElementPanel implements ActionList
 		} else {
 			d.setVisible(true);
 		}
-		if(d.getExitCode().equals(PublicationXRefDialog.OK)) {
+		if (d.getExitCode().equals(PublicationXRefDialog.OK)) {
 			refMgr.addElementReference(xref);
 			refresh();
 		}

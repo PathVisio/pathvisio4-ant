@@ -20,38 +20,65 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Enumeration of vertical alignments.
+ * This enum class contains possible values for vertical text alignment
+ * property.
+ * 
+ * @author unknown, finterly
  */
-public enum VAlignType 
-{ 
+public enum VAlignType {
+
 	TOP("Top"), MIDDLE("Middle"), BOTTOM("Bottom");
 
-	private final String gpmlName;
-	private static Map<String, VAlignType> byGpmlName = new HashMap<String, VAlignType>();
-	
+	private final String name;
+	// Initialize map
+	private static Map<String, VAlignType> nameToVAlignType = new HashMap<String, VAlignType>();
+
+	/**
+	 * Inserts mappings into map by associating specified values with specified
+	 * keys.
+	 */
 	static {
-		for (VAlignType t : values()) byGpmlName.put (t.gpmlName, t);
-	}
-	
-	private VAlignType(String gpmlName)
-	{
-		this.gpmlName = gpmlName;
-	}
-	
-	public static VAlignType fromGpmlName(String value)
-	{
-		return byGpmlName.get(value);
-	}
-	
-	public String getGpmlName()
-	{
-		return gpmlName;
+		for (VAlignType t : values())
+			nameToVAlignType.put(t.name, t);
 	}
 
-	public static String[] getNames() 
-	{ 
+	/**
+	 * Constructor to initialize the state of enum types.
+	 * 
+	 * @param name the string.
+	 */
+	private VAlignType(String name) {
+		this.name = name;
+	}
+
+	/**
+	 * Returns String.
+	 * 
+	 * @return gpmlName the string value.
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * Returns VAlignType enum constant from given string name.
+	 * 
+	 * @param name the string value.
+	 * @return VAlignType enum constant.
+	 */
+	public static VAlignType fromName(String value) {
+		return nameToVAlignType.get(value);
+	}
+
+	/**
+	 * Returns String values as an array.
+	 * 
+	 * @return result the string array.
+	 */
+	public static String[] getNames() {
 		String[] result = new String[values().length];
-		for (int i = 0; i < values().length; ++i) result[i] = values()[i].gpmlName;
+		for (int i = 0; i < values().length; ++i)
+			result[i] = values()[i].name;
 		return result;
 	}
 }

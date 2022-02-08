@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
-   Extensible enum
+ * Extensible enum
  */
 public class DataNodeType {
 	private static final Map<String, DataNodeType> NAME_MAP = new HashMap<String, DataNodeType>();
@@ -39,78 +39,68 @@ public class DataNodeType {
 	private String name;
 
 	/**
-	   The constructor is private so we have to use the "create"
-	   method to add new ShapeTypes. In the create method we make sure
-	   that the same object can't get added twice.
-	   <p>
-	   Note that mappName may be null for Shapes that are not supported by GenMAPP.
+	 * The constructor is private so we have to use the "create" method to add new
+	 * ShapeTypes. In the create method we make sure that the same object can't get
+	 * added twice.
+	 * <p>
+	 * Note that mappName may be null for Shapes that are not supported by GenMAPP.
 	 */
-	private DataNodeType(String name)
-	{
-		NAME_MAP.put (name, this);
+	private DataNodeType(String name) {
+		NAME_MAP.put(name, this);
 		this.name = name;
 		// and add it to the array list.
-		values.add (this);
+		values.add(this);
 	}
 
 	/**
-	   Create an object and add it to the list.
-
-	   For extending the enum.
+	 * Create an object and add it to the list.
+	 * 
+	 * For extending the enum.
 	 */
-	public static DataNodeType create (String name)
-	{
-		if (NAME_MAP.containsKey (name))
-		{
-			return NAME_MAP.get (name);
-		}
-		else
-		{
+	public static DataNodeType create(String name) {
+		if (NAME_MAP.containsKey(name)) {
+			return NAME_MAP.get(name);
+		} else {
 			return new DataNodeType(name);
 		}
 	}
 
 	/**
-	 *  @param value the name of the DataNodeType to be returned
-     *  @return the DataNodeType corresponding to that name.
+	 * @param value the name of the DataNodeType to be returned
+	 * @return the DataNodeType corresponding to that name.
 	 */
-	public static DataNodeType byName (String value)
-	{
+	public static DataNodeType byName(String value) {
 		return NAME_MAP.get(value);
 	}
 
 	/**
-	   @return Stable identifier for this DataNodeType.
+	 * @return Stable identifier for this DataNodeType.
 	 */
-	public String getName ()
-	{
+	public String getName() {
 		return name;
 	}
 
 	/**
-	   @return the names of all registered DataNode types, in such a way that the index
-	   is equal to it's ordinal value.
-	   <p>
-	   i.e. DataNodeType.fromName(DataNodeType.getNames[n]).getOrdinal() == n
+	 * @return the names of all registered DataNode types, in such a way that the
+	 *         index is equal to it's ordinal value.
+	 *         <p>
+	 *         i.e. DataNodeType.fromName(DataNodeType.getNames[n]).getOrdinal() ==
+	 *         n
 	 */
-	static public String[] getNames()
-	{
+	static public String[] getNames() {
 		String[] result = new String[values.size()];
 
-		for (int i = 0; i < values.size(); ++i)
-		{
+		for (int i = 0; i < values.size(); ++i) {
 			result[i] = values.get(i).getName();
 		}
 		return result;
 	}
 
-	static public DataNodeType[] getValues()
-	{
+	static public DataNodeType[] getValues() {
 		return values.toArray(new DataNodeType[0]);
 	}
 
-	public String toString()
-	{
+	public String toString() {
 		return name;
 	}
 }
