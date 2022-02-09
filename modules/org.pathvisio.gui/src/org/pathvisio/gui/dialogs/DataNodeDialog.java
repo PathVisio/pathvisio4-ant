@@ -63,7 +63,7 @@ import org.pathvisio.gui.completer.OptionProvider;
 import org.pathvisio.gui.handler.DataSourceHandler;
 import org.pathvisio.gui.util.PermissiveComboBox;
 import org.pathvisio.libgpml.debug.Logger;
-import org.pathvisio.libgpml.model.PathwayElement;
+import org.pathvisio.libgpml.model.PathwayObject;
 import org.pathvisio.libgpml.model.type.DataNodeType;
 
 /**
@@ -72,7 +72,7 @@ import org.pathvisio.libgpml.model.type.DataNodeType;
  */
 public class DataNodeDialog extends PathwayElementDialog {
 
-	protected DataNodeDialog(SwingEngine swingEngine, PathwayElement e, boolean readonly, Frame frame, Component locationComp) {
+	protected DataNodeDialog(SwingEngine swingEngine, PathwayObject e, boolean readonly, Frame frame, Component locationComp) {
 		super(swingEngine, e, readonly, frame, "DataNode properties", locationComp);
 		curDlg = this;
 		getRootPane().setDefaultButton(null);

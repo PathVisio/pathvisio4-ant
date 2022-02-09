@@ -27,10 +27,10 @@ import java.util.Map;
 import java.util.Set;
 
 import org.pathvisio.libgpml.debug.Logger;
-import org.pathvisio.libgpml.model.PathwayElement;
+import org.pathvisio.libgpml.model.PathwayObject;
 import org.pathvisio.libgpml.model.GraphLink.LinkableTo;
 import org.pathvisio.libgpml.model.GraphLink.LinkableFrom;
-import org.pathvisio.libgpml.model.PathwayElement.LinePoint;
+import org.pathvisio.libgpml.model.PathwayObject.LinePoint;
 import org.pathvisio.libgpml.prop.StaticProperty;
 
 /**
@@ -226,7 +226,7 @@ public class Utils {
 	}
 
 	/** append a property to the summary */
-	private static void summaryHelper(PathwayElement elt, StringBuilder result, StaticProperty p, String shortHand) {
+	private static void summaryHelper(PathwayObject elt, StringBuilder result, StaticProperty p, String shortHand) {
 		if (!elt.getStaticPropertyKeys().contains(p))
 			return;
 		result.append(',');
@@ -235,7 +235,7 @@ public class Utils {
 		result.append(elt.getStaticProperty(p));
 	}
 
-	public static String summary(PathwayElement elt) {
+	public static String summary(PathwayObject elt) {
 		if (elt == null)
 			return "null"; // TODO, why is this necessary?
 		StringBuilder result = new StringBuilder("[" + elt.getObjectType().getTag());
@@ -260,8 +260,8 @@ public class Utils {
 	/**
 	 * Helper that returns all Lines that point to a given MAnchor or Shape
 	 */
-	public static Set<PathwayElement> getReferringLines(LinkableTo elt) {
-		Set<PathwayElement> result = new HashSet<PathwayElement>();
+	public static Set<PathwayObject> getReferringLines(LinkableTo elt) {
+		Set<PathwayObject> result = new HashSet<PathwayObject>();
 		for (LinkableFrom grc : elt.getReferences()) {
 			if (grc instanceof LinePoint) {
 				result.add(((LinePoint) grc).getParent());

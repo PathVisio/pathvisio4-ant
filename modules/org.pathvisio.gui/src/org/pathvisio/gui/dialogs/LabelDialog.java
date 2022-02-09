@@ -37,7 +37,7 @@ import javax.swing.event.DocumentListener;
 
 import org.pathvisio.gui.SwingEngine;
 import org.pathvisio.gui.util.FontChooser;
-import org.pathvisio.libgpml.model.PathwayElement;
+import org.pathvisio.libgpml.model.PathwayObject;
 
 /**
  * Dialog to modify label specific properties
@@ -48,7 +48,7 @@ public class LabelDialog extends PathwayElementDialog {
 	JTextArea text;
 	JLabel fontPreview;
 
-	protected LabelDialog(SwingEngine swingEngine, PathwayElement e, boolean readonly, Frame frame, Component locationComp) {
+	protected LabelDialog(SwingEngine swingEngine, PathwayObject e, boolean readonly, Frame frame, Component locationComp) {
 		super(swingEngine, e, readonly, frame, "Label properties", locationComp);
 		text.requestFocus();
 	}
@@ -56,7 +56,7 @@ public class LabelDialog extends PathwayElementDialog {
 	protected void refresh() {
 		super.refresh();
 		if(getInput() != null) {
-			PathwayElement input = getInput();
+			PathwayObject input = getInput();
 			text.setText(input.getTextLabel());
 			int style = input.getFontWeight() ? Font.BOLD : Font.PLAIN;
 			style |= input.getFontStyle() ? Font.ITALIC : Font.PLAIN;

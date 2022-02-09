@@ -46,7 +46,7 @@ import org.pathvisio.libgpml.biopax.BiopaxElement;
 import org.pathvisio.libgpml.biopax.BiopaxReferenceManager;
 import org.pathvisio.libgpml.biopax.PublicationXref;
 import org.pathvisio.libgpml.debug.Logger;
-import org.pathvisio.libgpml.model.PathwayElement;
+import org.pathvisio.libgpml.model.PathwayObject;
 
 public class LitReferencePanel extends PathwayElementPanel implements ActionListener {
 	private static final String ADD = "New reference";
@@ -85,7 +85,7 @@ public class LitReferencePanel extends PathwayElementPanel implements ActionList
 		addBtn.setEnabled(!readonly);
 	}
 
-	public void setInput(PathwayElement e) {
+	public void setInput(PathwayObject e) {
 		if (e != getInput()) {
 			elmMgr = e.getParent().getBiopaxElementManager();
 			refMgr = e.getBiopaxReferenceManager();

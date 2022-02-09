@@ -22,7 +22,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.pathvisio.gui.SwingEngine;
-import org.pathvisio.libgpml.model.PathwayElement;
+import org.pathvisio.libgpml.model.PathwayObject;
 
 /**
  * This is a factory class for the PathwayElement Popup dialog, which pops up after double-clicking an element in the pathway.
@@ -49,7 +49,7 @@ public class PopupDialogHandler
 		 * @param e the element which will be edited
 		 * @param dlg A partially constructed dialog, which may be modified by the hook. 
 		 */
-		void popupDialogHook (PathwayElement e, PathwayElementDialog dlg);
+		void popupDialogHook (PathwayObject e, PathwayElementDialog dlg);
 	}
 	
 	private Set<PopupDialogHook> hooks = new HashSet<PopupDialogHook>();
@@ -74,7 +74,7 @@ public class PopupDialogHandler
 	 * @return An instance of a subclass of PathwayElementDialog (depends on the
 	 * type attribute of the given PathwayElement, e.g. type DATANODE returns a DataNodeDialog
 	 */
-	public PathwayElementDialog getInstance(PathwayElement e, boolean readonly, Frame frame, Component locationComp) {
+	public PathwayElementDialog getInstance(PathwayObject e, boolean readonly, Frame frame, Component locationComp) {
 		PathwayElementDialog result = null;
 		
 		switch(e.getObjectType()) {

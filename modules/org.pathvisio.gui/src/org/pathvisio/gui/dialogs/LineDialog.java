@@ -49,7 +49,7 @@ import org.pathvisio.gui.SwingEngine;
 import org.pathvisio.gui.completer.CompleterQueryTextField;
 import org.pathvisio.gui.completer.OptionProvider;
 import org.pathvisio.gui.util.PermissiveComboBox;
-import org.pathvisio.libgpml.model.PathwayElement;
+import org.pathvisio.libgpml.model.PathwayObject;
 import org.pathvisio.libgpml.model.type.ArrowHeadType;
 
 public class LineDialog extends PathwayElementDialog implements ItemListener {
@@ -66,7 +66,7 @@ public class LineDialog extends PathwayElementDialog implements ItemListener {
 	private PermissiveComboBox typeCombo;
 	private DataSourceModel dsm;
 
-	protected LineDialog(final SwingEngine swingEngine, final PathwayElement e,
+	protected LineDialog(final SwingEngine swingEngine, final PathwayObject e,
 			final boolean readonly, final Frame frame,
 			final Component locationComp) {
 		super(swingEngine, e, readonly, frame, "Interaction properties",

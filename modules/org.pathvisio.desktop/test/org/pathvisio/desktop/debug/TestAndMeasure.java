@@ -28,15 +28,15 @@ import org.bridgedb.DataSource;
 import org.bridgedb.Xref;
 import org.pathvisio.core.Engine;
 import org.pathvisio.core.preferences.PreferenceManager;
-import org.pathvisio.core.view.VDataNode;
-import org.pathvisio.core.view.VLineElement;
-import org.pathvisio.core.view.VPathwayModel;
-import org.pathvisio.core.view.VPathwayElement;
+import org.pathvisio.core.view.model.VDataNode;
+import org.pathvisio.core.view.model.VElement;
+import org.pathvisio.core.view.model.VLineElement;
+import org.pathvisio.core.view.model.VPathwayModel;
 import org.pathvisio.gui.view.VPathwaySwing;
 import org.pathvisio.libgpml.debug.StopWatch;
 import org.pathvisio.libgpml.io.ConverterException;
 import org.pathvisio.libgpml.model.PathwayModel;
-import org.pathvisio.libgpml.model.PathwayElement;
+import org.pathvisio.libgpml.model.PathwayObject;
 import org.pathvisio.libgpml.model.type.ObjectType;
 
 import buildsystem.Measure;
@@ -166,7 +166,7 @@ public class TestAndMeasure extends TestCase
 		{
 			public Object create() 
 			{
-				PathwayElement elt = PathwayElement.createPathwayElement(ObjectType.DATANODE);
+				PathwayObject elt = PathwayObject.createPathwayElement(ObjectType.DATANODE);
 				elt.setCenterX(5);
 				elt.setCenterY(10);
 				elt.setWidth(8);
@@ -187,7 +187,7 @@ public class TestAndMeasure extends TestCase
 		{
 			public Object create() 
 			{
-				PathwayElement elt = PathwayElement.createPathwayElement(ObjectType.LINE);
+				PathwayObject elt = PathwayObject.createPathwayElement(ObjectType.LINE);
 				elt.setStartLinePointX(5);
 				elt.setStartLinePointY(10);
 				elt.setEndLinePointX(8);
@@ -209,7 +209,7 @@ public class TestAndMeasure extends TestCase
 		{
 			public Object create() 
 			{
-				PathwayElement elt = PathwayElement.createPathwayElement(ObjectType.DATANODE);
+				PathwayObject elt = PathwayObject.createPathwayElement(ObjectType.DATANODE);
 				elt.setCenterX(5);
 				elt.setCenterY(10);
 				elt.setWidth(8);
@@ -218,7 +218,7 @@ public class TestAndMeasure extends TestCase
 				elt.setIdentifier("3463");
 				elt.setTextLabel("INSR");
 				pwy3.add (elt);
-				VPathwayElement velt = new VDataNode(vpwy3, elt);
+				VElement velt = new VDataNode(vpwy3, elt);
 				return velt;
 			}
 
@@ -231,7 +231,7 @@ public class TestAndMeasure extends TestCase
 		{
 			public Object create() 
 			{
-				PathwayElement elt = PathwayElement.createPathwayElement(ObjectType.LINE);
+				PathwayObject elt = PathwayObject.createPathwayElement(ObjectType.LINE);
 				elt.setStartLinePointX(5);
 				elt.setStartLinePointY(10);
 				elt.setEndLinePointX(8);
@@ -239,7 +239,7 @@ public class TestAndMeasure extends TestCase
 				elt.setStartElementRef("abc");
 				elt.setEndElementRef("def");
 				pwy4.add (elt);
-				VPathwayElement velt = new VLineElement(vpwy4, elt);
+				VElement velt = new VLineElement(vpwy4, elt);
 				return velt;
 			}
 
@@ -287,7 +287,7 @@ public class TestAndMeasure extends TestCase
 		g2.dispose();
 		
 		mw.start(); sw.start(); 
-		for (VPathwayElement elt : vpwy.getDrawingObjects())
+		for (VElement elt : vpwy.getDrawingObjects())
 		{
 			elt.select();
 		}

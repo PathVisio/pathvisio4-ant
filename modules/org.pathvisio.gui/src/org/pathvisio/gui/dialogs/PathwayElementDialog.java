@@ -24,14 +24,14 @@ import java.util.Map;
 import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 
-import org.pathvisio.core.view.UndoAction;
-import org.pathvisio.core.view.VPathwayModel;
+import org.pathvisio.core.view.model.UndoAction;
+import org.pathvisio.core.view.model.VPathwayModel;
 import org.pathvisio.gui.SwingEngine;
 import org.pathvisio.gui.panels.CommentPanel;
 import org.pathvisio.gui.panels.LitReferencePanel;
 import org.pathvisio.gui.panels.PathwayElementPanel;
 import org.pathvisio.libgpml.model.PathwayModel;
-import org.pathvisio.libgpml.model.PathwayElement;
+import org.pathvisio.libgpml.model.PathwayObject;
 import org.pathvisio.libgpml.prop.StaticProperty;
 
 /**
@@ -44,7 +44,7 @@ public class PathwayElementDialog extends OkCancelDialog {
 	public static final String TAB_COMMENTS = "Comments";
 	public static final String TAB_LITERATURE = "Literature";
 
-	PathwayElement input;
+	PathwayObject input;
 	private JTabbedPane dialogPane;
 	private Map<String, PathwayElementPanel> panels;
 	private Map<StaticProperty, Object> state = new HashMap<StaticProperty, Object>();
@@ -53,7 +53,7 @@ public class PathwayElementDialog extends OkCancelDialog {
 	protected boolean readonly;
 	protected SwingEngine swingEngine;
 
-	protected PathwayElementDialog(SwingEngine swingEngine, PathwayElement e, boolean readonly, Frame frame, String title, Component locationComp) {
+	protected PathwayElementDialog(SwingEngine swingEngine, PathwayObject e, boolean readonly, Frame frame, String title, Component locationComp) {
 		super(frame, title, locationComp, true);
 		this.readonly = readonly;
 		this.swingEngine = swingEngine;
@@ -72,14 +72,14 @@ public class PathwayElementDialog extends OkCancelDialog {
 	/**
 	 * Get the pathway element for this dialog
 	 */
-	protected PathwayElement getInput() {
+	protected PathwayObject getInput() {
 		return input;
 	}
 
 	/**
 	 * Set the pathway element for this dialog
 	 */
-	public void setInput(PathwayElement e) {
+	public void setInput(PathwayObject e) {
 		input = e;
 		storeState();
 		refresh();
@@ -102,7 +102,7 @@ public class PathwayElementDialog extends OkCancelDialog {
 	 * the modifications made in the dialog.
 	 */
 	protected void storeState() {
-		PathwayElement e = getInput();
+		PathwayObject e = getInput();
 		originalPathway = (PathwayModel) e.getParent().clone();
 		for(StaticProperty t : e.getStaticPropertyKeys()) {
 			state.put(t, e.getStaticProperty(t));
@@ -114,7 +114,7 @@ public class PathwayElementDialog extends OkCancelDialog {
 	 * cancel button is pressed.
 	 */
 	protected void restoreState() {
-		PathwayElement e = getInput();
+		PathwayObject e = getInput();
 		for(StaticProperty t : state.keySet()) {
 			e.setStaticProperty(t, state.get(t));
 		}

@@ -21,8 +21,8 @@ import java.util.Collection;
 
 import javax.swing.JComponent;
 
-import org.pathvisio.core.view.VPathwayElement;
+import org.pathvisio.core.view.model.VElement;
 
 public interface ToolTipProvider {
-	public Component createToolTipComponent(JComponent parent, Collection<VPathwayElement> elements);
+	public Component createToolTipComponent(JComponent parent, Collection<VElement> elements);
 }

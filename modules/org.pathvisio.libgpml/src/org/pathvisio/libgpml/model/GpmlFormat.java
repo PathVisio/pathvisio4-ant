@@ -78,11 +78,11 @@ public class GpmlFormat extends AbstractPathwayModelFormat {
 		return CURRENT.createJdom(data);
 	}
 
-	static public Element createJdomElement(PathwayElement o) throws ConverterException {
+	static public Element createJdomElement(PathwayObject o) throws ConverterException {
 		return CURRENT.createJdomElement(o);
 	}
 
-	public static PathwayElement mapElement(Element e) throws ConverterException {
+	public static PathwayObject mapElement(Element e) throws ConverterException {
 		return CURRENT.mapElement(e);
 	}
 

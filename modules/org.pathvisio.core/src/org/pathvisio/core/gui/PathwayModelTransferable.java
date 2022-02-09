@@ -40,8 +40,8 @@ import org.pathvisio.libgpml.debug.Logger;
 import org.pathvisio.libgpml.io.ConverterException;
 import org.pathvisio.libgpml.model.GpmlFormat;
 import org.pathvisio.libgpml.model.PathwayModel;
-import org.pathvisio.libgpml.model.PathwayElement;
-import org.pathvisio.libgpml.model.PathwayElement.Anchor;
+import org.pathvisio.libgpml.model.PathwayObject;
+import org.pathvisio.libgpml.model.PathwayObject.Anchor;
 import org.pathvisio.libgpml.model.type.ObjectType;
 
 /**
@@ -59,14 +59,14 @@ public class PathwayModelTransferable implements Transferable {
 	/** @deprecated use GPML_DATA_FLAVOR instead */
 	public static final DataFlavor gpmlDataFlavor = GPML_DATA_FLAVOR;
 
-	List<PathwayElement> elements;
+	List<PathwayObject> elements;
 	PathwayModel pathwayModel;
 
-	public PathwayModelTransferable(List<PathwayElement> elements) {
+	public PathwayModelTransferable(List<PathwayObject> elements) {
 		this(null, elements);
 	}
 
-	public PathwayModelTransferable(PathwayModel source, List<PathwayElement> elements) {
+	public PathwayModelTransferable(PathwayModel source, List<PathwayObject> elements) {
 		this.elements = elements;
 		if(source == null) {
 			source = new PathwayModel();
@@ -85,7 +85,7 @@ public class PathwayModelTransferable implements Transferable {
 		Set<String> groupIds = new HashSet<String>();
 
 		boolean infoFound = false;
-		for(PathwayElement e : elements) {
+		for(PathwayObject e : elements) {
 			if(e.getElementId() != null) {
 				ids.add(e.getElementId());
 			}
@@ -104,15 +104,15 @@ public class PathwayModelTransferable implements Transferable {
 
 		//Create  dummy parent so we can copy over
 		//the referenced biopax elements
-		PathwayElement biopax = pathwayModel.getBiopax();
+		PathwayObject biopax = pathwayModel.getBiopax();
 		PathwayModel dummyParent = new PathwayModel();
 		if(biopax != null) {
 			dummyParent.add(biopax.copy());
 		}
 		
-		for(PathwayElement e : elements) {
+		for(PathwayObject e : elements) {
 			//Check for valid graphRef (with respect to other copied elements)
-			PathwayElement enew = e.copy();
+			PathwayObject enew = e.copy();
 			if(!ids.contains(enew.getStartElementRef())) {
 				enew.setStartElementRef(null);
 			}
@@ -142,7 +142,7 @@ public class PathwayModelTransferable implements Transferable {
 
 		//If no mappinfo, create a dummy one that we can recognize lateron
 		if(!infoFound) {
-			PathwayElement info = PathwayElement.createPathwayElement(ObjectType.MAPPINFO);
+			PathwayObject info = PathwayObject.createPathwayElement(ObjectType.MAPPINFO);
 			info.setSouce(INFO_DATASOURCE);
 			pnew.add(info);
 		}
@@ -240,8 +240,8 @@ public class PathwayModelTransferable implements Transferable {
 		if(xml != null) {
 			GpmlFormat.readFromXml(pnew, new StringReader(xml), true);
 
-			List<PathwayElement> elements = new ArrayList<PathwayElement>();
-			for(PathwayElement elm : pnew.getDataObjects()) {
+			List<PathwayObject> elements = new ArrayList<PathwayObject>();
+			for(PathwayObject elm : pnew.getDataObjects()) {
 				if(elm.getObjectType() != ObjectType.MAPPINFO) {
 					elements.add(elm);
 				} else {

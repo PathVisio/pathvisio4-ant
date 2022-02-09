@@ -28,15 +28,15 @@ import org.bridgedb.Xref;
 import org.pathvisio.core.ApplicationEvent;
 import org.pathvisio.core.Engine;
 import org.pathvisio.core.Engine.ApplicationEventListener;
-import org.pathvisio.core.view.Graphics;
-import org.pathvisio.core.view.SelectionBox.SelectionEvent;
-import org.pathvisio.core.view.SelectionBox.SelectionListener;
-import org.pathvisio.core.view.VPathwayModel;
-import org.pathvisio.core.view.VPathwayElement;
+import org.pathvisio.core.view.model.VElement;
+import org.pathvisio.core.view.model.VPathwayModel;
+import org.pathvisio.core.view.model.VPathwayObject;
+import org.pathvisio.core.view.model.SelectionBox.SelectionEvent;
+import org.pathvisio.core.view.model.SelectionBox.SelectionListener;
 import org.pathvisio.gui.DataPaneTextProvider;
-import org.pathvisio.libgpml.model.PathwayElement;
-import org.pathvisio.libgpml.model.PathwayElementEvent;
-import org.pathvisio.libgpml.model.PathwayElementListener;
+import org.pathvisio.libgpml.model.PathwayObject;
+import org.pathvisio.libgpml.model.PathwayObjectEvent;
+import org.pathvisio.libgpml.model.PathwayObjectListener;
 import org.pathvisio.libgpml.prop.StaticProperty;
 
 /**
@@ -55,7 +55,7 @@ import org.pathvisio.libgpml.prop.StaticProperty;
  * method, otherwise the background thread is not killed.
  */
 public class DataPane extends JEditorPane implements ApplicationEventListener,
-		SelectionListener, PathwayElementListener {
+		SelectionListener, PathwayObjectListener {
 	private final DataPaneTextProvider dpt;
 	private Engine engine;
 	private ExecutorService executor;
@@ -93,9 +93,9 @@ public class DataPane extends JEditorPane implements ApplicationEventListener,
 		});
 	}
 
-	private PathwayElement input;
+	private PathwayObject input;
 
-	public void setInput(final PathwayElement e) {
+	public void setInput(final PathwayObject e) {
 		// System.err.println("===== SetInput Called ==== " + e);
 		if (e == input)
 			return; // Don't set same input twice
@@ -138,14 +138,14 @@ public class DataPane extends JEditorPane implements ApplicationEventListener,
 		switch (e.type) {
 		case SelectionEvent.OBJECT_ADDED:
 			// Just take the first DataNode in the selection
-			Iterator<VPathwayElement> it = e.selection.iterator();
+			Iterator<VElement> it = e.selection.iterator();
 			while (it.hasNext()) {
-				VPathwayElement o = it.next();
+				VElement o = it.next();
 				// works for all Graphics object
 				// the backpage checks and gives the correct error if
 				// it's not a datanode or line
-				if (o instanceof Graphics) {
-					setInput(((Graphics) o).getPathwayElement());
+				if (o instanceof VPathwayObject) {
+					setInput(((VPathwayObject) o).getPathwayObject());
 					break;
 				}
 			}
@@ -175,8 +175,8 @@ public class DataPane extends JEditorPane implements ApplicationEventListener,
 
 	Xref currRef;
 
-	public void gmmlObjectModified(PathwayElementEvent e) {
-		PathwayElement pe = e.getModifiedPathwayElement();
+	public void gmmlObjectModified(PathwayObjectEvent e) {
+		PathwayObject pe = e.getModifiedPathwayElement();
 		if (input != null
 				&& (e.affectsProperty(StaticProperty.GENEID) || e
 						.affectsProperty(StaticProperty.DATASOURCE))) {

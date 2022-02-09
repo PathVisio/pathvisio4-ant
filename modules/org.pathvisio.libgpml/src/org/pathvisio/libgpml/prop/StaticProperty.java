@@ -20,10 +20,10 @@ package org.pathvisio.libgpml.prop;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.pathvisio.libgpml.model.PathwayElement;
+import org.pathvisio.libgpml.model.PathwayObject;
 
 /**
- * Static properties for ObjectTypes, linked in {@link PathwayElement}.
+ * Static properties for ObjectTypes, linked in {@link PathwayObject}.
  */
 public enum StaticProperty implements Property
 {

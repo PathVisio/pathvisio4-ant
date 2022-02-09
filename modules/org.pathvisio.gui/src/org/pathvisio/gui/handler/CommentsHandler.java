@@ -30,7 +30,7 @@ import javax.swing.table.TableCellRenderer;
 import org.pathvisio.gui.SwingEngine;
 import org.pathvisio.gui.dialogs.PathwayElementDialog;
 import org.pathvisio.libgpml.model.PathwayModel;
-import org.pathvisio.libgpml.model.PathwayElement;
+import org.pathvisio.libgpml.model.PathwayObject;
 import org.pathvisio.libgpml.prop.PropertyType;
 import org.pathvisio.libgpml.prop.StaticPropertyType;
 
@@ -44,7 +44,7 @@ public class CommentsHandler extends AbstractCellEditor implements ContextSensit
 
 	private boolean canEdit;
 	private SwingEngine swingEngine;
-	private PathwayElement currentElement;
+	private PathwayObject currentElement;
 
 
 	public CommentsHandler() {
@@ -75,7 +75,7 @@ public class CommentsHandler extends AbstractCellEditor implements ContextSensit
 
 	//-- ContextSensitiveEditor methods --//
 
-	public void updateEditor(SwingEngine aSwingEngine, Collection<PathwayElement> elements,
+	public void updateEditor(SwingEngine aSwingEngine, Collection<PathwayObject> elements,
 			PathwayModel pathway, PropertyView propHandler)
 	{
 		// can only edit comments for a single item at a time

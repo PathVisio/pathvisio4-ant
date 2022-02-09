@@ -37,8 +37,8 @@ import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 import org.pathvisio.libgpml.biopax.BiopaxElement;
 import org.pathvisio.libgpml.io.ConverterException;
-import org.pathvisio.libgpml.model.PathwayElement.Anchor;
-import org.pathvisio.libgpml.model.PathwayElement.LinePoint;
+import org.pathvisio.libgpml.model.PathwayObject.Anchor;
+import org.pathvisio.libgpml.model.PathwayObject.LinePoint;
 import org.pathvisio.libgpml.model.shape.IShape;
 import org.pathvisio.libgpml.model.shape.ShapeRegistry;
 import org.pathvisio.libgpml.model.type.HAlignType;
@@ -235,25 +235,25 @@ class GpmlFormat2013a extends GpmlFormatAbstract implements GpmlFormatReader, Gp
 	}
 
 	@Override
-	protected void mapMappInfoDataVariable(PathwayElement o, Element e)
+	protected void mapMappInfoDataVariable(PathwayObject o, Element e)
 			throws ConverterException {
 		o.setCopyright (getAttribute("Pathway", "License", e));
 	}
 
 	@Override
-	protected void updateMappInfoVariable(Element root, PathwayElement o)
+	protected void updateMappInfoVariable(Element root, PathwayObject o)
 			throws ConverterException {
 		setAttribute("Pathway", "License", root, o.getCopyright());
 	}
 
-	private void updateCommon(PathwayElement o, Element e) throws ConverterException
+	private void updateCommon(PathwayObject o, Element e) throws ConverterException
 	{
 		updateComments(o, e);
 		updateBiopaxRef(o, e);
 		updateAttributes(o, e);
 	}
 
-	private void mapCommon(PathwayElement o, Element e) throws ConverterException
+	private void mapCommon(PathwayObject o, Element e) throws ConverterException
 	{
 		mapComments(o, e);
 		mapBiopaxRef(o, e);
@@ -261,7 +261,7 @@ class GpmlFormat2013a extends GpmlFormatAbstract implements GpmlFormatReader, Gp
 	}
 
 	// common to Label, Shape, State, DataNode
-	private void updateShapeCommon(PathwayElement o, Element e) throws ConverterException
+	private void updateShapeCommon(PathwayObject o, Element e) throws ConverterException
 	{
 		updateShapeColor(o, e); // FillColor and Transparent
 		updateFontData(o, e); // TextLabel. FontName, -Weight, -Style, -Decoration, -StrikeThru, -Size.
@@ -271,7 +271,7 @@ class GpmlFormat2013a extends GpmlFormatAbstract implements GpmlFormatReader, Gp
 	}
 
 	// common to Label, Shape, State, DataNode
-	private void mapShapeCommon(PathwayElement o, Element e) throws ConverterException
+	private void mapShapeCommon(PathwayObject o, Element e) throws ConverterException
 	{
 		mapShapeColor(o, e); // FillColor and Transparent
 		mapFontData(o, e); // TextLabel. FontName, -Weight, -Style, -Decoration, -StrikeThru, -Size.
@@ -279,7 +279,7 @@ class GpmlFormat2013a extends GpmlFormatAbstract implements GpmlFormatReader, Gp
 		mapShapeType(o, e); // ShapeType
 	}
 
-	public Element createJdomElement(PathwayElement o) throws ConverterException
+	public Element createJdomElement(PathwayObject o) throws ConverterException
 	{
 		Element e = null;
 		switch (o.getObjectType())
@@ -370,7 +370,7 @@ class GpmlFormat2013a extends GpmlFormatAbstract implements GpmlFormatReader, Gp
 	   Create a single PathwayElement based on a piece of Jdom tree. Used also by Patch utility
 	   Pathway p may be null
 	 */
-	public PathwayElement mapElement(Element e, PathwayModel p) throws ConverterException
+	public PathwayObject mapElement(Element e, PathwayModel p) throws ConverterException
 	{
 		String tag = e.getName();
 		if(tag.equalsIgnoreCase("Interaction")){
@@ -385,7 +385,7 @@ class GpmlFormat2013a extends GpmlFormatAbstract implements GpmlFormatReader, Gp
 			return null;
 		}
 
-		PathwayElement o = PathwayElement.createPathwayElement(ot);
+		PathwayObject o = PathwayObject.createPathwayElement(ot);
 		if (p != null)
 		{
 			p.add (o);
@@ -458,7 +458,7 @@ class GpmlFormat2013a extends GpmlFormatAbstract implements GpmlFormatReader, Gp
 		return o;
 	}
 
-	protected void mapRotation(PathwayElement o, Element e) throws ConverterException
+	protected void mapRotation(PathwayObject o, Element e) throws ConverterException
 	{
     	Element graphics = e.getChild("Graphics", e.getNamespace());
     	String rotation = getAttribute("Shape.Graphics", "Rotation", graphics);
@@ -492,7 +492,7 @@ class GpmlFormat2013a extends GpmlFormatAbstract implements GpmlFormatReader, Gp
 	 * shape usages.
 	 * 
 	 */ 
-	protected void mapShapeType(PathwayElement o, Element e) throws ConverterException
+	protected void mapShapeType(PathwayObject o, Element e) throws ConverterException
 	{
 		String base = e.getName();
     	Element graphics = e.getChild("Graphics", e.getNamespace());
@@ -514,13 +514,13 @@ class GpmlFormat2013a extends GpmlFormatAbstract implements GpmlFormatReader, Gp
     	}
 	}
 
-	protected void updateRotation(PathwayElement o, Element e) throws ConverterException
+	protected void updateRotation(PathwayObject o, Element e) throws ConverterException
 	{
 		Element jdomGraphics = e.getChild("Graphics", e.getNamespace());
 		setAttribute("Shape.Graphics", "Rotation", jdomGraphics, Double.toString(o.getRotation()));
 	}
 	
-	protected void updateShapeType(PathwayElement o, Element e) throws ConverterException
+	protected void updateShapeType(PathwayObject o, Element e) throws ConverterException
 	{
 		String base = e.getName();
 		Element jdomGraphics = e.getChild("Graphics", e.getNamespace());
@@ -528,17 +528,17 @@ class GpmlFormat2013a extends GpmlFormatAbstract implements GpmlFormatReader, Gp
 		setAttribute(base + ".Graphics", "ShapeType", jdomGraphics, shapeName);
 	}
 	
-	protected void updateHref(PathwayElement o, Element e) throws ConverterException
+	protected void updateHref(PathwayObject o, Element e) throws ConverterException
 	{
 		setAttribute ("Label", "Href", e, o.getHref());
 	}
 	
-	protected void mapHref(PathwayElement o, Element e) throws ConverterException
+	protected void mapHref(PathwayObject o, Element e) throws ConverterException
 	{
 		o.setHref(getAttribute("Label", "Href", e));
 	}
 
-	protected void mapFontData(PathwayElement o, Element e) throws ConverterException
+	protected void mapFontData(PathwayObject o, Element e) throws ConverterException
 	{
 		String base = e.getName();
 		o.setTextLabel (getAttribute(base, "TextLabel", e));
@@ -567,7 +567,7 @@ class GpmlFormat2013a extends GpmlFormatAbstract implements GpmlFormatReader, Gp
 		o.setHAlign(HAlignType.fromName(getAttribute(base + ".Graphics", "Align", graphics)));	    
 	}
 	
-	protected void updateFontData(PathwayElement o, Element e) throws ConverterException
+	protected void updateFontData(PathwayObject o, Element e) throws ConverterException
 	{
 		String base = e.getName();
 		setAttribute(base, "TextLabel", e, o.getTextLabel());
@@ -586,7 +586,7 @@ class GpmlFormat2013a extends GpmlFormatAbstract implements GpmlFormatReader, Gp
 		setAttribute(base + ".Graphics", "Align", graphics, o.getHAlign().getName());
 	}
 
-	protected void mapShapePosition(PathwayElement o, Element e) throws ConverterException
+	protected void mapShapePosition(PathwayObject o, Element e) throws ConverterException
 	{
 		String base = e.getName();
 		Element graphics = e.getChild("Graphics", e.getNamespace());
@@ -599,7 +599,7 @@ class GpmlFormat2013a extends GpmlFormatAbstract implements GpmlFormatReader, Gp
 			o.setZOrder(Integer.parseInt(zorder));
 	}
 
-	protected void updateShapePosition(PathwayElement o, Element e) throws ConverterException
+	protected void updateShapePosition(PathwayObject o, Element e) throws ConverterException
 	{
 		String base = e.getName();
 		Element graphics = e.getChild("Graphics", e.getNamespace());
@@ -611,7 +611,7 @@ class GpmlFormat2013a extends GpmlFormatAbstract implements GpmlFormatReader, Gp
 		setAttribute(base + ".Graphics", "ZOrder", graphics, "" + o.getZOrder());
 	}
 
-	protected void mapDataNode(PathwayElement o, Element e) throws ConverterException
+	protected void mapDataNode(PathwayObject o, Element e) throws ConverterException
 	{
 		o.setDataNodeType (getAttribute("DataNode", "Type", e));
 		Element xref = e.getChild ("Xref", e.getNamespace());
@@ -619,7 +619,7 @@ class GpmlFormat2013a extends GpmlFormatAbstract implements GpmlFormatReader, Gp
 		o.setDataSource (DataSource.getExistingByFullName (getAttribute("DataNode.Xref", "Database", xref)));
 	}
 
-	protected void updateDataNode(PathwayElement o, Element e) throws ConverterException
+	protected void updateDataNode(PathwayObject o, Element e) throws ConverterException
 	{
 		setAttribute ("DataNode", "Type", e, o.getDataNodeType());
 		Element xref = e.getChild("Xref", e.getNamespace());
@@ -628,7 +628,7 @@ class GpmlFormat2013a extends GpmlFormatAbstract implements GpmlFormatReader, Gp
 		setAttribute ("DataNode.Xref", "ID", xref, o.getIdentifier());
 	}
 	
-	protected void mapLine(PathwayElement o, Element e) throws ConverterException
+	protected void mapLine(PathwayObject o, Element e) throws ConverterException
 	{
 		Element xref = e.getChild ("Xref", e.getNamespace());
 		o.setIdentifier (getAttribute("Interaction.Xref", "ID", xref));
@@ -636,7 +636,7 @@ class GpmlFormat2013a extends GpmlFormatAbstract implements GpmlFormatReader, Gp
 	}
 
 	
-	protected void updateLine(PathwayElement o, Element e) throws ConverterException
+	protected void updateLine(PathwayObject o, Element e) throws ConverterException
 	{
 		Element xref = e.getChild("Xref", e.getNamespace());
 		String database = o.getDataSource() == null ? "" : o.getDataSource().getFullName();
@@ -644,7 +644,7 @@ class GpmlFormat2013a extends GpmlFormatAbstract implements GpmlFormatReader, Gp
 		setAttribute ("Interaction.Xref", "ID", xref, o.getIdentifier());
 	}
 
-	protected void mapStateData(PathwayElement o, Element e) throws ConverterException
+	protected void mapStateData(PathwayObject o, Element e) throws ConverterException
 	{
     	String ref = getAttribute("State", "GraphRef", e);
     	if (ref != null) {
@@ -665,7 +665,7 @@ class GpmlFormat2013a extends GpmlFormatAbstract implements GpmlFormatReader, Gp
 		o.setDataSource (DataSource.getExistingByFullName (getAttribute("State.Xref", "Database", xref)));
 	}
 
-	protected void updateStateData(PathwayElement o, Element e) throws ConverterException
+	protected void updateStateData(PathwayObject o, Element e) throws ConverterException
 	{
 		String base = e.getName();
 		Element graphics = e.getChild("Graphics", e.getNamespace());
@@ -683,7 +683,7 @@ class GpmlFormat2013a extends GpmlFormatAbstract implements GpmlFormatReader, Gp
 		setAttribute ("State.Xref", "ID", xref, o.getIdentifier());
 	}
 
-	protected void mapLineStyle(PathwayElement o, Element e) throws ConverterException
+	protected void mapLineStyle(PathwayObject o, Element e) throws ConverterException
 	{
     	Element graphics = e.getChild("Graphics", e.getNamespace());
 
@@ -705,7 +705,7 @@ class GpmlFormat2013a extends GpmlFormatAbstract implements GpmlFormatReader, Gp
 		mapColor(o, e); // Color
 	}
 
-	protected void mapLineData(PathwayElement o, Element e) throws ConverterException
+	protected void mapLineData(PathwayObject o, Element e) throws ConverterException
 	{    	
     	Element graphics = e.getChild("Graphics", e.getNamespace());
 
@@ -763,7 +763,7 @@ class GpmlFormat2013a extends GpmlFormatAbstract implements GpmlFormatReader, Gp
     	}
 	}
 
-	protected void updateLineStyle(PathwayElement o, Element e) throws ConverterException
+	protected void updateLineStyle(PathwayObject o, Element e) throws ConverterException
 	{
 		String base = e.getName();
 		Element graphics = e.getChild("Graphics", e.getNamespace());
@@ -772,7 +772,7 @@ class GpmlFormat2013a extends GpmlFormatAbstract implements GpmlFormatReader, Gp
 		updateColor(o, e);
 	}
 	
-	protected void updateLineData(PathwayElement o, Element e) throws ConverterException
+	protected void updateLineData(PathwayObject o, Element e) throws ConverterException
 	{
 		Element jdomGraphics = e.getChild("Graphics", e.getNamespace());
 		List<LinePoint> mPoints = o.getLinePoints();
@@ -818,9 +818,9 @@ class GpmlFormat2013a extends GpmlFormatAbstract implements GpmlFormatReader, Gp
 
 		List<Element> elementList = new ArrayList<Element>();
 		
-		List<PathwayElement> pathwayElements = data.getDataObjects();
+		List<PathwayObject> pathwayElements = data.getDataObjects();
 		Collections.sort(pathwayElements);
-		for (PathwayElement o : pathwayElements)
+		for (PathwayObject o : pathwayElements)
 		{
 			if (o.getObjectType() == ObjectType.MAPPINFO)
 			{
@@ -914,13 +914,13 @@ class GpmlFormat2013a extends GpmlFormatAbstract implements GpmlFormatReader, Gp
 		writeToXml (pwy, out, validate);
 	}
 
-	protected void mapSimpleCenter(PathwayElement o, Element e)
+	protected void mapSimpleCenter(PathwayObject o, Element e)
 	{
 		o.setCenterX (Double.parseDouble(e.getAttributeValue("CenterX")));
 		o.setCenterY (Double.parseDouble(e.getAttributeValue("CenterY")));
 	}
 
-	protected void updateSimpleCenter(PathwayElement o, Element e)
+	protected void updateSimpleCenter(PathwayObject o, Element e)
 	{
 		if(e != null)
 		{
@@ -929,7 +929,7 @@ class GpmlFormat2013a extends GpmlFormatAbstract implements GpmlFormatReader, Gp
 		}
 	}
 
-	protected void mapBiopax(PathwayElement o, Element e, PathwayModel p) throws ConverterException
+	protected void mapBiopax(PathwayObject o, Element e, PathwayModel p) throws ConverterException
 	{
 		//this method clones all content,
 		//getContent will leave them attached to the parent, which we don't want

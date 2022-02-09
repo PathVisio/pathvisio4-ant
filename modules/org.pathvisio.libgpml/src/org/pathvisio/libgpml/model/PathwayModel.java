@@ -41,8 +41,8 @@ import org.pathvisio.libgpml.debug.Logger;
 import org.pathvisio.libgpml.io.ConverterException;
 import org.pathvisio.libgpml.model.GraphLink.LinkableTo;
 import org.pathvisio.libgpml.model.GraphLink.LinkableFrom;
-import org.pathvisio.libgpml.model.PathwayElement.Anchor;
-import org.pathvisio.libgpml.model.PathwayElement.LinePoint;
+import org.pathvisio.libgpml.model.PathwayObject.Anchor;
+import org.pathvisio.libgpml.model.PathwayObject.LinePoint;
 import org.pathvisio.libgpml.model.type.ObjectType;
 import org.pathvisio.libgpml.prop.StaticProperty;
 import org.pathvisio.libgpml.util.Utils;
@@ -93,7 +93,7 @@ public class PathwayModel {
 	/**
 	 * List of contained dataObjects
 	 */
-	private List<PathwayElement> dataObjects = new ArrayList<PathwayElement>();
+	private List<PathwayObject> dataObjects = new ArrayList<PathwayObject>();
 
 	/**
 	 * Getter for dataobjects contained. There is no setter, you have to add
@@ -101,7 +101,7 @@ public class PathwayModel {
 	 * 
 	 * @return List of dataObjects contained in this pathway
 	 */
-	public List<PathwayElement> getDataObjects() {
+	public List<PathwayObject> getDataObjects() {
 		return dataObjects;
 	}
 
@@ -112,10 +112,10 @@ public class PathwayModel {
 	 * @return The pathway element with the given id, or null when no element was
 	 *         found
 	 */
-	public PathwayElement getElementById(String graphId) {
+	public PathwayObject getElementById(String graphId) {
 		// TODO: dataobject should be stored in a hashmap, with the graphId as key!
 		if (graphId != null) {
-			for (PathwayElement e : dataObjects) {
+			for (PathwayObject e : dataObjects) {
 				if (graphId.equals(e.getElementId())) {
 					return e;
 				}
@@ -131,7 +131,7 @@ public class PathwayModel {
 	 */
 	public List<Xref> getDataNodeXrefs() {
 		List<Xref> result = new ArrayList<Xref>();
-		for (PathwayElement e : dataObjects) {
+		for (PathwayObject e : dataObjects) {
 			if (e.getObjectType() == ObjectType.DATANODE) {
 				result.add(e.getXref());
 			}
@@ -146,7 +146,7 @@ public class PathwayModel {
 	 */
 	public List<Xref> getLineXrefs() {
 		List<Xref> result = new ArrayList<Xref>();
-		for (PathwayElement e : dataObjects) {
+		for (PathwayObject e : dataObjects) {
 			if (e.getObjectType() == ObjectType.LINE) {
 				result.add(e.getXref());
 			}
@@ -154,17 +154,17 @@ public class PathwayModel {
 		return result;
 	}
 
-	private PathwayElement mappInfo = null;
-	private PathwayElement infoBox = null;
+	private PathwayObject mappInfo = null;
+	private PathwayObject infoBox = null;
 	private BiopaxElement biopax = null;
-	private PathwayElement legend = null;
+	private PathwayObject legend = null;
 
 	/**
 	 * get the one and only MappInfo object.
 	 *
 	 * @return a PathwayElement with ObjectType set to mappinfo.
 	 */
-	public PathwayElement getMappInfo() {
+	public PathwayObject getMappInfo() {
 		return mappInfo;
 	}
 
@@ -173,7 +173,7 @@ public class PathwayModel {
 	 *
 	 * @return a PathwayElement with ObjectType set to mappinfo.
 	 */
-	public PathwayElement getInfoBox() {
+	public PathwayObject getInfoBox() {
 		return infoBox;
 	}
 
@@ -184,7 +184,7 @@ public class PathwayModel {
 	 */
 	public BiopaxElement getBiopax() {
 		if (biopax == null) {
-			PathwayElement tmp = PathwayElement.createPathwayElement(ObjectType.BIOPAX);
+			PathwayObject tmp = PathwayObject.createPathwayElement(ObjectType.BIOPAX);
 			this.add(tmp); // biopax will now be set.
 		}
 		return biopax;
@@ -203,7 +203,7 @@ public class PathwayModel {
 	 *
 	 * @param o The object to add
 	 */
-	public void add(PathwayElement o) {
+	public void add(PathwayObject o) {
 		assert (o != null);
 		// There can be only one mappInfo object, so if we're trying to add it, remove
 		// the old one.
@@ -250,7 +250,7 @@ public class PathwayModel {
 		forceAddObject(o);
 	}
 
-	private void forceAddObject(PathwayElement o) {
+	private void forceAddObject(PathwayObject o) {
 		if (o.getParent() != null) {
 			o.getParent().remove(o);
 		}
@@ -290,7 +290,7 @@ public class PathwayModel {
 			return 0;
 
 		int zmax = dataObjects.get(0).getZOrder();
-		for (PathwayElement e : dataObjects) {
+		for (PathwayObject e : dataObjects) {
 			if (e.getZOrder() > zmax)
 				zmax = e.getZOrder();
 		}
@@ -305,7 +305,7 @@ public class PathwayModel {
 			return 0;
 
 		int zmin = dataObjects.get(0).getZOrder();
-		for (PathwayElement e : dataObjects) {
+		for (PathwayObject e : dataObjects) {
 			if (e.getZOrder() < zmin)
 				zmin = e.getZOrder();
 		}
@@ -315,13 +315,13 @@ public class PathwayModel {
 	/**
 	 * only used by children of this Pathway to notify the parent of modifications
 	 */
-	void childModified(PathwayElementEvent e) {
+	void childModified(PathwayObjectEvent e) {
 		markChanged();
 		// a coordinate change could trigger dependent objects such as states,
 		// groups and connectors to be updated as well.
 		if (e.isCoordinateChange()) {
 
-			PathwayElement elt = e.getModifiedPathwayElement();
+			PathwayObject elt = e.getModifiedPathwayElement();
 			for (LinkableFrom refc : getReferringObjects(elt.getElementId())) {
 				refc.refeeChanged();
 			}
@@ -329,8 +329,8 @@ public class PathwayModel {
 			String ref = elt.getGroupRef();
 			if (ref != null && getGroupById(ref) != null) {
 				// identify group object and notify model change to trigger view update
-				PathwayElement group = getGroupById(ref);
-				group.fireObjectModifiedEvent(PathwayElementEvent.createCoordinatePropertyEvent(group));
+				PathwayObject group = getGroupById(ref);
+				group.fireObjectModifiedEvent(PathwayObjectEvent.createCoordinatePropertyEvent(group));
 			}
 
 			checkMBoardSize(e.getModifiedPathwayElement());
@@ -340,7 +340,7 @@ public class PathwayModel {
 	/**
 	 * called for biopax, infobox and mappInfo upon addition.
 	 */
-	private void replaceUnique(PathwayElement oldElt, PathwayElement newElt) {
+	private void replaceUnique(PathwayObject oldElt, PathwayObject newElt) {
 		assert (oldElt.getParent() == this);
 		assert (oldElt.getObjectType() == newElt.getObjectType());
 		assert (newElt.getParent() == null);
@@ -355,7 +355,7 @@ public class PathwayModel {
 	 *
 	 * @param o the object to remove
 	 */
-	public void remove(PathwayElement o) {
+	public void remove(PathwayObject o) {
 		assert (o.getParent() == this); // can only remove direct child objects
 		if (o.getObjectType() == ObjectType.MAPPINFO)
 			throw new IllegalArgumentException("Can't remove mappinfo object!");
@@ -371,7 +371,7 @@ public class PathwayModel {
 	 *
 	 * @param o the object to remove
 	 */
-	private void forceRemove(PathwayElement o) {
+	private void forceRemove(PathwayObject o) {
 		dataObjects.remove(o);
 		for (LinkableFrom refc : getReferringObjects(o.getElementId())) {
 			refc.unlink();
@@ -481,14 +481,14 @@ public class PathwayModel {
 		graphIds.remove(id);
 	}
 
-	private Map<String, PathwayElement> groupIds = new HashMap<String, PathwayElement>();
-	private Map<String, Set<PathwayElement>> groupRefs = new HashMap<String, Set<PathwayElement>>();
+	private Map<String, PathwayObject> groupIds = new HashMap<String, PathwayObject>();
+	private Map<String, Set<PathwayObject>> groupRefs = new HashMap<String, Set<PathwayObject>>();
 
 	public Set<String> getGroupIds() {
 		return groupIds.keySet();
 	}
 
-	void addGroupId(String id, PathwayElement group) {
+	void addGroupId(String id, PathwayObject group) {
 		if (id == null) {
 			throw new IllegalArgumentException("unique id can't be null");
 		}
@@ -500,25 +500,25 @@ public class PathwayModel {
 
 	void removeGroupId(String id) {
 		groupIds.remove(id);
-		Set<PathwayElement> elts = groupRefs.get(id);
+		Set<PathwayObject> elts = groupRefs.get(id);
 		if (elts != null)
-			for (PathwayElement elt : elts) {
+			for (PathwayObject elt : elts) {
 				elt.groupRef = null;
 				elt.fireObjectModifiedEvent(
-						PathwayElementEvent.createSinglePropertyEvent(elt, StaticProperty.GROUPREF));
+						PathwayObjectEvent.createSinglePropertyEvent(elt, StaticProperty.GROUPREF));
 			}
 		groupRefs.remove(id);
 	}
 
-	public PathwayElement getGroupById(String id) {
+	public PathwayObject getGroupById(String id) {
 		return groupIds.get(id);
 	}
 
-	void addGroupRef(String ref, PathwayElement child) {
+	void addGroupRef(String ref, PathwayObject child) {
 		Utils.multimapPut(groupRefs, ref, child);
 	}
 
-	void removeGroupRef(String id, PathwayElement child) {
+	void removeGroupRef(String id, PathwayObject child) {
 		if (!groupRefs.containsKey(id))
 			throw new IllegalArgumentException();
 
@@ -528,14 +528,14 @@ public class PathwayModel {
 		// If so, remove the group as well
 		if (groupRefs.get(id).size() == 0) {
 			groupRefs.remove(id);
-			PathwayElement group = getGroupById(id);
+			PathwayObject group = getGroupById(id);
 			if (group != null)
 				forceRemove(group);
 		} else {
 			// redraw group outline
 			if (getGroupById(id) != null) {
 				Group group = (Group) getGroupById(id);
-				group.fireObjectModifiedEvent(PathwayElementEvent.createCoordinatePropertyEvent(group));
+				group.fireObjectModifiedEvent(PathwayObjectEvent.createCoordinatePropertyEvent(group));
 			}
 		}
 	}
@@ -546,10 +546,10 @@ public class PathwayModel {
 	 * @param id The id of the group
 	 * @return The set of pathway elements part of the group
 	 */
-	public Set<PathwayElement> getGroupElements(String id) {
-		Set<PathwayElement> result = groupRefs.get(id);
+	public Set<PathwayObject> getGroupElements(String id) {
+		Set<PathwayObject> result = groupRefs.get(id);
 		// Return an empty set if the group is empty
-		return result == null ? new HashSet<PathwayElement>() : result;
+		return result == null ? new HashSet<PathwayObject>() : result;
 	}
 
 	public String getUniqueGraphId() {
@@ -592,11 +592,11 @@ public class PathwayModel {
 
 	/**
 	 * Checks whether the board size is still large enough for the given
-	 * {@link PathwayElement} and increases the size if not
+	 * {@link PathwayObject} and increases the size if not
 	 * 
 	 * @param elm The element to check the board size for
 	 */
-	private void checkMBoardSize(PathwayElement e) {
+	private void checkMBoardSize(PathwayObject e) {
 		double mw = mBoardWidth;
 		double mh = mBoardHeight;
 
@@ -645,9 +645,9 @@ public class PathwayModel {
 	 * Contructor for this class, creates a new gpml document
 	 */
 	public PathwayModel() {
-		mappInfo = PathwayElement.createPathwayElement(ObjectType.MAPPINFO);
+		mappInfo = PathwayObject.createPathwayElement(ObjectType.MAPPINFO);
 		this.add(mappInfo);
-		infoBox = PathwayElement.createPathwayElement(ObjectType.INFOBOX);
+		infoBox = PathwayObject.createPathwayElement(ObjectType.INFOBOX);
 		this.add(infoBox);
 	}
 
@@ -772,7 +772,7 @@ public class PathwayModel {
 
 	public PathwayModel clone() {
 		PathwayModel result = new PathwayModel();
-		for (PathwayElement pe : dataObjects) {
+		for (PathwayObject pe : dataObjects) {
 			result.add(pe.copy());
 		}
 		result.changed = changed;
@@ -788,7 +788,7 @@ public class PathwayModel {
 
 	public String summary() {
 		String result = "    " + toString() + "\n    with Objects:";
-		for (PathwayElement pe : dataObjects) {
+		for (PathwayObject pe : dataObjects) {
 			String code = pe.toString();
 			code = code.substring(code.lastIndexOf('@'), code.length() - 1);
 			result += "\n      " + code + " " + pe.getObjectType().getTag() + " " + pe.getParent();
@@ -809,19 +809,19 @@ public class PathwayModel {
 	public int fixReferences() {
 		int result = 0;
 		Set<String> graphIds = new HashSet<String>();
-		for (PathwayElement pe : dataObjects) {
+		for (PathwayObject pe : dataObjects) {
 			String id = pe.getElementId();
 			if (id != null) {
 				graphIds.add(id);
 			}
-			for (PathwayElement.Anchor pp : pe.getAnchors()) {
+			for (PathwayObject.Anchor pp : pe.getAnchors()) {
 				String pid = pp.getElementId();
 				if (pid != null) {
 					graphIds.add(pid);
 				}
 			}
 		}
-		for (PathwayElement pe : dataObjects) {
+		for (PathwayObject pe : dataObjects) {
 			if (pe.getObjectType() == ObjectType.LINE) {
 				String ref = pe.getStartElementRef();
 				if (ref != null && !graphIds.contains(ref)) {
@@ -860,7 +860,7 @@ public class PathwayModel {
 	}
 
 	public void printRefsDebugInfo() {
-		for (PathwayElement elt : dataObjects) {
+		for (PathwayObject elt : dataObjects) {
 			elt.printRefsDebugInfo();
 		}
 	}

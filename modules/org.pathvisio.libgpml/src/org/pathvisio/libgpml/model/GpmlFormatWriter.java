@@ -32,7 +32,7 @@ public interface GpmlFormatWriter extends GpmlFormatVersion {
 	
 	Document createJdom(PathwayModel data) throws ConverterException;
 
-	Element createJdomElement(PathwayElement o) throws ConverterException;
+	Element createJdomElement(PathwayObject o) throws ConverterException;
 
 	void writeToXml(PathwayModel pwy, File file, boolean validate) throws ConverterException;
 

@@ -18,6 +18,9 @@ package org.pathvisio.core.view;
 
 import java.util.EventObject;
 
+import org.pathvisio.core.view.model.VElement;
+import org.pathvisio.core.view.model.VPathwayModel;
+
 /**
  * An event for mouse events that apply to a single VPathwayElement
  * @author thomas
@@ -32,17 +35,17 @@ public class VElementMouseEvent extends EventObject {
 	public static final int TYPE_MOUSE_NOTSHOWHAND = 3;
 
 	public int type;
-	public VPathwayElement element;
+	public VElement element;
 	public MouseEvent mouseEvent;
 
-	public VElementMouseEvent(VPathwayModel source, int type, VPathwayElement element, MouseEvent mouseEvent) {
+	public VElementMouseEvent(VPathwayModel source, int type, VElement element, MouseEvent mouseEvent) {
 		super(source);
 		this.type = type;
 		this.element = element;
 		this.mouseEvent = mouseEvent;
 	}
 	
-	public VElementMouseEvent(VPathwayModel source, int type, VPathwayElement element) {
+	public VElementMouseEvent(VPathwayModel source, int type, VElement element) {
 		super(source);
 		this.type = type;
 		this.element = element;
@@ -52,7 +55,7 @@ public class VElementMouseEvent extends EventObject {
 		return type;
 	}
 
-	public VPathwayElement getElement() {
+	public VElement getElement() {
 		return element;
 	}
 

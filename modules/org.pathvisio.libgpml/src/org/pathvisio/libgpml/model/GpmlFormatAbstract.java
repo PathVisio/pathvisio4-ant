@@ -235,9 +235,9 @@ public abstract class GpmlFormatAbstract
 
 	}
 	
-	protected abstract void updateMappInfoVariable(Element root, PathwayElement o) throws ConverterException;
+	protected abstract void updateMappInfoVariable(Element root, PathwayObject o) throws ConverterException;
 	
-	protected void updateMappInfo(Element root, PathwayElement o) throws ConverterException
+	protected void updateMappInfo(Element root, PathwayObject o) throws ConverterException
 	{
 		setAttribute("Pathway", "Name", root, o.getTitle());
 		setAttribute("Pathway", "Data-Source", root, o.getSource());
@@ -262,21 +262,21 @@ public abstract class GpmlFormatAbstract
 		updateMappInfoVariable (root, o);
 	}
 
-	public abstract PathwayElement mapElement(Element e, PathwayModel p) throws ConverterException;
+	public abstract PathwayObject mapElement(Element e, PathwayModel p) throws ConverterException;
 
-	public PathwayElement mapElement(Element e) throws ConverterException
+	public PathwayObject mapElement(Element e) throws ConverterException
 	{
 		return mapElement (e, null);
 	}
 
-	protected void mapColor(PathwayElement o, Element e) throws ConverterException
+	protected void mapColor(PathwayObject o, Element e) throws ConverterException
 	{
     	Element graphics = e.getChild("Graphics", e.getNamespace());
     	String scol = getAttribute(e.getName() + ".Graphics", "Color", graphics);
     	o.setColor (gmmlString2Color(scol));
 	}
 
-	protected void mapShapeColor(PathwayElement o, Element e) throws ConverterException
+	protected void mapShapeColor(PathwayObject o, Element e) throws ConverterException
 	{
     	Element graphics = e.getChild("Graphics", e.getNamespace());
 		String scol = getAttribute(e.getName() + ".Graphics", "FillColor", graphics);
@@ -288,7 +288,7 @@ public abstract class GpmlFormatAbstract
     	}
 	}
 
-	protected void updateColor(PathwayElement o, Element e) throws ConverterException
+	protected void updateColor(PathwayObject o, Element e) throws ConverterException
 	{
 		if(e != null)
 		{
@@ -300,7 +300,7 @@ public abstract class GpmlFormatAbstract
 		}
 	}
 
-	protected void updateShapeColor(PathwayElement o, Element e) throws ConverterException
+	protected void updateShapeColor(PathwayObject o, Element e) throws ConverterException
 	{
 		if(e != null)
 		{
@@ -313,7 +313,7 @@ public abstract class GpmlFormatAbstract
 		}
 	}
 
-	protected void mapComments(PathwayElement o, Element e) throws ConverterException
+	protected void mapComments(PathwayObject o, Element e) throws ConverterException
 	{
 		for (Object f : e.getChildren("Comment", e.getNamespace()))
 		{
@@ -321,11 +321,11 @@ public abstract class GpmlFormatAbstract
 		}
 	}
 
-	protected void updateComments(PathwayElement o, Element e) throws ConverterException
+	protected void updateComments(PathwayObject o, Element e) throws ConverterException
 	{
 		if(e != null)
 		{
-			for (PathwayElement.Comment c : o.getComments())
+			for (PathwayObject.Comment c : o.getComments())
 			{
 				Element f = new Element ("Comment", e.getNamespace());
 				f.setText (c.getCommentText());
@@ -335,7 +335,7 @@ public abstract class GpmlFormatAbstract
 		}
 	}
 
-	protected void mapAttributes(PathwayElement o, Element e) throws ConverterException
+	protected void mapAttributes(PathwayObject o, Element e) throws ConverterException
 	{
 		for (Object f : e.getChildren("Attribute", e.getNamespace()))
 		{
@@ -345,7 +345,7 @@ public abstract class GpmlFormatAbstract
 		}
 	}
 
-	protected void updateAttributes(PathwayElement o, Element e) throws ConverterException
+	protected void updateAttributes(PathwayObject o, Element e) throws ConverterException
 	{
 		if(e != null)
 		{
@@ -381,7 +381,7 @@ public abstract class GpmlFormatAbstract
 		}
 	}
 
-	protected void mapGroupRef (PathwayElement o, Element e)
+	protected void mapGroupRef (PathwayObject o, Element e)
 	{
 		String id = e.getAttributeValue("GroupRef");
 		if(id != null && !id.equals("")) {
@@ -390,7 +390,7 @@ public abstract class GpmlFormatAbstract
 
 	}
 
-	protected void updateGroupRef (PathwayElement o, Element e)
+	protected void updateGroupRef (PathwayObject o, Element e)
 	{
 		String id = o.getGroupRef();
 		if (id != null && !id.equals(""))
@@ -399,7 +399,7 @@ public abstract class GpmlFormatAbstract
 		}
 	}
 
-	protected void mapGroup (PathwayElement o, Element e) throws ConverterException
+	protected void mapGroup (PathwayObject o, Element e) throws ConverterException
 	{
 		//ID
 		String id = e.getAttributeValue("GroupId");
@@ -419,7 +419,7 @@ public abstract class GpmlFormatAbstract
 		}
 	}
 
-	protected void updateGroup (PathwayElement o, Element e) throws ConverterException
+	protected void updateGroup (PathwayObject o, Element e) throws ConverterException
 	{
 		//ID
 		String id = o.createGroupId();
@@ -435,9 +435,9 @@ public abstract class GpmlFormatAbstract
 		setAttribute ("Group", "TextLabel", e, o.getTextLabel());
 	}
 
-	protected abstract void mapMappInfoDataVariable (PathwayElement o, Element e) throws ConverterException;
+	protected abstract void mapMappInfoDataVariable (PathwayObject o, Element e) throws ConverterException;
 	
-	protected void mapMappInfoData(PathwayElement o, Element e) throws ConverterException
+	protected void mapMappInfoData(PathwayObject o, Element e) throws ConverterException
 	{
 		o.setTitle (getAttribute("Pathway", "Name", e));
 		o.setOrganism (getAttribute("Pathway", "Organism", e));
@@ -451,7 +451,7 @@ public abstract class GpmlFormatAbstract
 		mapMappInfoDataVariable(o, e);
 	}
 	
-	protected void updateBiopax(PathwayElement o, Element e) throws ConverterException
+	protected void updateBiopax(PathwayObject o, Element e) throws ConverterException
 	{
 		Document bp = ((BiopaxElement)o).getBiopax();
 		if(e != null && bp != null) {
@@ -475,7 +475,7 @@ public abstract class GpmlFormatAbstract
 		}
 	}
 
-	protected void mapBiopaxRef(PathwayElement o, Element e) throws ConverterException
+	protected void mapBiopaxRef(PathwayObject o, Element e) throws ConverterException
 	{
 		for (Object f : e.getChildren("BiopaxRef", e.getNamespace()))
 		{
@@ -483,7 +483,7 @@ public abstract class GpmlFormatAbstract
 		}
 	}
 
-	protected void updateBiopaxRef(PathwayElement o, Element e) throws ConverterException
+	protected void updateBiopaxRef(PathwayObject o, Element e) throws ConverterException
 	{
 		if(e != null)
 		{
@@ -602,7 +602,7 @@ public abstract class GpmlFormatAbstract
 	}
 
 	private static void addGraphIds(PathwayModel pathway) throws ConverterException {
-		for(PathwayElement pe : pathway.getDataObjects()) {
+		for(PathwayObject pe : pathway.getDataObjects()) {
 			String id = pe.getElementId();
 			if(id == null || "".equals(id))
 			{
@@ -637,7 +637,7 @@ public abstract class GpmlFormatAbstract
 
 	private static void convertPointCoordinates(PathwayModel pathway) throws ConverterException
 	{
-		for(PathwayElement pe : pathway.getDataObjects()) {
+		for(PathwayObject pe : pathway.getDataObjects()) {
 			if(pe.getObjectType() == ObjectType.LINE || pe.getObjectType() == ObjectType.GRAPHLINE) {
 				String sr = pe.getStartElementRef();
 				String er = pe.getEndElementRef();

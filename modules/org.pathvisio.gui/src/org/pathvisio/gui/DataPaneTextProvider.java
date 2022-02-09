@@ -24,7 +24,7 @@ import java.util.List;
 import org.pathvisio.core.util.Resources;
 import org.pathvisio.libgpml.debug.Logger;
 import org.pathvisio.libgpml.debug.WorkerThreadOnly;
-import org.pathvisio.libgpml.model.PathwayElement;
+import org.pathvisio.libgpml.model.PathwayObject;
 import org.pathvisio.libgpml.model.type.ObjectType;
 
 /**
@@ -54,7 +54,7 @@ public class DataPaneTextProvider {
 //		@WorkerThreadOnly
 //		public String getHtml(SwingEngine swe);
 		@WorkerThreadOnly
-		public Object getHtml(PathwayElement e);
+		public Object getHtml(PathwayObject e);
 	}
 
 	/**
@@ -77,7 +77,7 @@ public class DataPaneTextProvider {
 //		String text = gdb + mdb ;
 
 		@Override
-		public Object getHtml(PathwayElement e) {
+		public Object getHtml(PathwayObject e) {
 			// TODO Auto-generated method stub
 			return null;
 		}
@@ -122,7 +122,7 @@ public class DataPaneTextProvider {
 	 * generates html for a given PathwayElement. Combines the base header with
 	 * fragments from all BackpageHooks into one html String.
 	 */
-	public String getAnnotationHTML(PathwayElement e) {
+	public String getAnnotationHTML(PathwayObject e) {
 		if (e == null) {
 			return "<p>No pathway element is selected.</p>";
 		} else if (e.getObjectType() != ObjectType.DATANODE

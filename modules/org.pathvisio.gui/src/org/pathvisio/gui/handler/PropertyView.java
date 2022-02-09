@@ -25,9 +25,9 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
-import org.pathvisio.core.view.VPathwayModel;
+import org.pathvisio.core.view.model.VPathwayModel;
 import org.pathvisio.gui.SwingEngine;
-import org.pathvisio.libgpml.model.PathwayElement;
+import org.pathvisio.libgpml.model.PathwayObject;
 import org.pathvisio.libgpml.prop.Property;
 
 /**
@@ -36,7 +36,7 @@ import org.pathvisio.libgpml.prop.Property;
  */
 public class PropertyView implements Comparable<PropertyView> {
 	private VPathwayModel vPathway;
-	Collection<PathwayElement> elements;
+	Collection<PathwayObject> elements;
 	private Object value;
 	private Object type;
 	private int counter = 0;
@@ -56,13 +56,13 @@ public class PropertyView implements Comparable<PropertyView> {
 			throw new IllegalArgumentException();
 		}
 		vPathway = aVPathway;
-		elements = new HashSet<PathwayElement>();
+		elements = new HashSet<PathwayObject>();
 	}
 
 	/**
 	 * Add a PathwayElement to the set of elements that are viewed / edited together
 	 */
-	public void addElement(PathwayElement e) {
+	public void addElement(PathwayObject e) {
 		elements.add(e);
 		refreshValue();
 	}
@@ -70,7 +70,7 @@ public class PropertyView implements Comparable<PropertyView> {
 	/**
 	 * Remove a PathwayElement to the set of elements that are viewed / edited together
 	 */
-	public void removeElement(PathwayElement e) {
+	public void removeElement(PathwayObject e) {
 		elements.remove(e);
 		refreshValue();
 	}
@@ -87,7 +87,7 @@ public class PropertyView implements Comparable<PropertyView> {
 		}
 		else {
 			List<Object> SelectionValues = new ArrayList<Object>();
-			for(PathwayElement e : elements) {
+			for(PathwayObject e : elements) {
 				Object o = e.getPropertyEx(type);
 				if(o != null){
 					SelectionValues.add(o);
@@ -160,7 +160,7 @@ public class PropertyView implements Comparable<PropertyView> {
 				vPathway.getUndoManager().newAction (
 					"Change " + type + " property");
 			}
-			for (PathwayElement pe : elements.toArray(new PathwayElement[0])) {
+			for (PathwayObject pe : elements.toArray(new PathwayObject[0])) {
 				pe.setPropertyEx(type, value);
 			}
 		}

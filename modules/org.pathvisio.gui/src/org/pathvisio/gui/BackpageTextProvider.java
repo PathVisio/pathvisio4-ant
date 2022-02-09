@@ -33,7 +33,7 @@ import org.pathvisio.core.util.Resources;
 import org.pathvisio.gui.DataPaneTextProvider.DataHook;
 import org.pathvisio.libgpml.debug.Logger;
 import org.pathvisio.libgpml.debug.WorkerThreadOnly;
-import org.pathvisio.libgpml.model.PathwayElement;
+import org.pathvisio.libgpml.model.PathwayObject;
 import org.pathvisio.libgpml.model.type.ObjectType;
 import org.pathvisio.libgpml.util.Utils;
 
@@ -61,7 +61,7 @@ public class BackpageTextProvider {
 		 * The function getHtml is normally called from a worker thread.
 		 */
 		@WorkerThreadOnly
-		public String getHtml(PathwayElement e);
+		public String getHtml(PathwayObject e);
 	}
 
 	/**
@@ -75,7 +75,7 @@ public class BackpageTextProvider {
 			attributeMapper = attr;
 		}
 
-		public String getType(PathwayElement e) {
+		public String getType(PathwayObject e) {
 			ObjectType obj = e.getObjectType();
 			if (obj.equals(ObjectType.LINE)) {
 				return "Interaction";
@@ -84,7 +84,7 @@ public class BackpageTextProvider {
 			}
 		}
 
-		public String getHtml(PathwayElement e) {
+		public String getHtml(PathwayObject e) {
 			String text = "";
 			String type = getType(e);
 
@@ -150,7 +150,7 @@ public class BackpageTextProvider {
 			gdb = mapper;
 		}
 
-		public String getHtml(PathwayElement e) {
+		public String getHtml(PathwayObject e) {
 			try {
 				if (e.getXref().getId() == null || "".equals(e.getXref().getId())
 						|| e.getXref().getDataSource() == null) {
@@ -213,7 +213,7 @@ public class BackpageTextProvider {
 	 * generates html for a given PathwayElement. Combines the base header with
 	 * fragments from all BackpageHooks into one html String.
 	 */
-	public String getBackpageHTML(PathwayElement e) {
+	public String getBackpageHTML(PathwayObject e) {
 		if (e == null) {
 			return "<p>No pathway element is selected.</p>";
 		} else if (e.getObjectType() != ObjectType.DATANODE && e.getObjectType() != ObjectType.LINE) {

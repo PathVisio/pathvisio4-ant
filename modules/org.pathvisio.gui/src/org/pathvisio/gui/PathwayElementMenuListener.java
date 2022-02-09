@@ -30,23 +30,23 @@ import javax.swing.JPopupMenu;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.SwingUtilities;
 
-import org.pathvisio.core.view.VCitation;
-import org.pathvisio.core.view.VDataNode;
-import org.pathvisio.core.view.Graphics;
-import org.pathvisio.core.view.VGroup;
-import org.pathvisio.core.view.Handle;
-import org.pathvisio.core.view.VInfoBox;
-import org.pathvisio.core.view.VLabel;
-import org.pathvisio.core.view.VLineElement;
 import org.pathvisio.core.view.MouseEvent;
-import org.pathvisio.core.view.VState;
-import org.pathvisio.core.view.VAnchor;
-import org.pathvisio.core.view.VPathwayModel;
-import org.pathvisio.core.view.VPathwayElement;
-import org.pathvisio.core.view.VPathwayModelEvent;
-import org.pathvisio.core.view.VPathwayModelListener;
-import org.pathvisio.core.view.ViewActions;
-import org.pathvisio.core.view.ViewActions.PositionPasteAction;
+import org.pathvisio.core.view.model.Handle;
+import org.pathvisio.core.view.model.VAnchor;
+import org.pathvisio.core.view.model.VCitation;
+import org.pathvisio.core.view.model.VDataNode;
+import org.pathvisio.core.view.model.VElement;
+import org.pathvisio.core.view.model.VGroup;
+import org.pathvisio.core.view.model.VInfoBox;
+import org.pathvisio.core.view.model.VLabel;
+import org.pathvisio.core.view.model.VLineElement;
+import org.pathvisio.core.view.model.VPathwayModel;
+import org.pathvisio.core.view.model.VPathwayModelEvent;
+import org.pathvisio.core.view.model.VPathwayModelListener;
+import org.pathvisio.core.view.model.VPathwayObject;
+import org.pathvisio.core.view.model.VState;
+import org.pathvisio.core.view.model.ViewActions;
+import org.pathvisio.core.view.model.ViewActions.PositionPasteAction;
 import org.pathvisio.gui.CommonActions.AddLiteratureAction;
 import org.pathvisio.gui.CommonActions.EditLiteratureAction;
 import org.pathvisio.gui.CommonActions.PropertiesAction;
@@ -58,7 +58,7 @@ import org.pathvisio.libgpml.model.type.GroupType;
 
 /**
  * Implementation of {@link VPathwayModelListener} that handles righ-click events to
- * show a popup menu when a {@link VPathwayElement} is clicked.
+ * show a popup menu when a {@link VElement} is clicked.
  *
  * This class is responsible for maintaining a list of {@link PathwayElementMenuHook}'s,
  * There should be a single Listener per MainPanel, possibly listening to multiple {@link VPathwayModel}'s.
@@ -84,16 +84,16 @@ public class PathwayElementMenuListener implements VPathwayModelListener {
 	 */
 	public interface PathwayElementMenuHook
 	{
-		public void pathwayElementMenuHook (VPathwayElement e, JPopupMenu menu);
+		public void pathwayElementMenuHook (VElement e, JPopupMenu menu);
 	}
 
 	/**
-	 * Get an instance of a {@link JPopupMenu} for a given {@link VPathwayElement}
-	 * @param e The {@link VPathwayElement} to create the popup menu for. If e is an instance of
+	 * Get an instance of a {@link JPopupMenu} for a given {@link VElement}
+	 * @param e The {@link VElement} to create the popup menu for. If e is an instance of
 	 * {@link Handle}, the menu is based on the parent element.
 	 * @return The {@link JPopupMenu} for the given pathway element
 	 */
-	private JPopupMenu getMenuInstance(SwingEngine swingEngine, VPathwayElement e) {
+	private JPopupMenu getMenuInstance(SwingEngine swingEngine, VElement e) {
 		if(e instanceof VCitation) return null;
 
 		JMenu pathLitRef = null;
@@ -137,7 +137,7 @@ public class PathwayElementMenuListener implements VPathwayModelListener {
 
 		//Only show group/ungroup when multiple objects or a group are selected
 		if((e instanceof VGroup)) {
-			GroupType s = ((VGroup)e).getPathwayElement().getGroupType();
+			GroupType s = ((VGroup)e).getPathwayObject().getGroupType();
 			if(s == GroupType.GROUP) {
 				menu.add(vActions.toggleGroup);
 			} else {
@@ -163,7 +163,7 @@ public class PathwayElementMenuListener implements VPathwayModelListener {
 
 			menu.add(vActions.addAnchor);
 			
-			if (line.getPathwayElement().getConnectorType() == ConnectorType.SEGMENTED) {
+			if (line.getPathwayObject().getConnectorType() == ConnectorType.SEGMENTED) {
 				menu.add(vActions.addWaypoint);
 				menu.add(vActions.removeWaypoint);
 			}
@@ -174,7 +174,7 @@ public class PathwayElementMenuListener implements VPathwayModelListener {
 
 			ActionListener listener = new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					line.getPathwayElement().setConnectorType(
+					line.getPathwayObject().setConnectorType(
 							ConnectorType.fromName(e.getActionCommand())
 					);
 				}
@@ -182,7 +182,7 @@ public class PathwayElementMenuListener implements VPathwayModelListener {
 			for(ConnectorType t : ConnectorType.getValues()) {
 				JRadioButtonMenuItem mi = new JRadioButtonMenuItem(t.getName());
 				mi.setActionCommand(t.getName());
-				mi.setSelected(t.equals(line.getPathwayElement().getConnectorType()));
+				mi.setSelected(t.equals(line.getPathwayObject().getConnectorType()));
 				mi.addActionListener(listener);
 				typeMenu.add(mi);
 				buttons.add(mi);
@@ -222,7 +222,7 @@ public class PathwayElementMenuListener implements VPathwayModelListener {
 		orderMenu.add(vActions.orderDown);
 		menu.add(orderMenu);
 
-		if(e instanceof Graphics) {
+		if(e instanceof VPathwayObject) {
 			JMenu litMenu = new JMenu("Literature");
 			litMenu.add(new AddLiteratureAction(swingEngine, component, e));
 			litMenu.add(new EditLiteratureAction(swingEngine, component, e));
@@ -268,7 +268,7 @@ public class PathwayElementMenuListener implements VPathwayModelListener {
 			if(e.getAffectedElement() instanceof VCitation) {
 				VCitation c = (VCitation)e.getAffectedElement();
 				PathwayElementDialog d = swingEngine.getPopupDialogHandler().getInstance(
-						c.getParent().getPathwayElement(), false, null, null
+						c.getParent().getPathwayObject(), false, null, null
 				);
 				d.selectPathwayElementPanel(PathwayElementDialog.TAB_LITERATURE);
 				d.setVisible(true);

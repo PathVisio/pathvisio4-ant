@@ -30,7 +30,7 @@ import javax.swing.JTextField;
 import org.bridgedb.bio.Organism;
 import org.pathvisio.gui.SwingEngine;
 import org.pathvisio.gui.util.PermissiveComboBox;
-import org.pathvisio.libgpml.model.PathwayElement;
+import org.pathvisio.libgpml.model.PathwayObject;
 
 /**
  * Dialog to easily edit the properties of a pathway, such as the pathway title, organism, etc.
@@ -39,7 +39,7 @@ public class PathwayPropertiesDialog extends PathwayElementDialog {
 	private PermissiveComboBox organismComboBox;
 	private JTextField titleField; 
 	
-	protected PathwayPropertiesDialog(SwingEngine swingEngine, PathwayElement e,
+	protected PathwayPropertiesDialog(SwingEngine swingEngine, PathwayObject e,
 			boolean readonly, Frame frame, String title, Component locationComp) {
 		super(swingEngine, e, readonly, frame, "Pathway properties", locationComp);
 		getRootPane().setDefaultButton(null);

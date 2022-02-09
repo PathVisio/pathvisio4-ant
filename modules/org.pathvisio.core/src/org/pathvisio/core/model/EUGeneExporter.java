@@ -31,7 +31,7 @@ import org.pathvisio.libgpml.debug.Logger;
 import org.pathvisio.libgpml.io.ConverterException;
 import org.pathvisio.libgpml.io.PathwayModelExporter;
 import org.pathvisio.libgpml.model.PathwayModel;
-import org.pathvisio.libgpml.model.PathwayElement;
+import org.pathvisio.libgpml.model.PathwayObject;
 import org.pathvisio.libgpml.model.type.ObjectType;
 
 /**
@@ -109,7 +109,7 @@ public class EUGeneExporter implements PathwayModelExporter {
 			refs = new ArrayList<Xref>();
 			Map<DataSource, Integer> codeCount = new HashMap<DataSource, Integer>();
 
-			for (PathwayElement elm : pathway.getDataObjects()) {
+			for (PathwayObject elm : pathway.getDataObjects()) {
 				if (elm.getObjectType() != ObjectType.DATANODE) {
 					continue; // Skip non-datanodes
 				}

@@ -33,7 +33,7 @@ import org.pathvisio.core.data.GdbManager;
 import org.pathvisio.libgpml.io.ConverterException;
 import org.pathvisio.libgpml.io.PathwayModelExporter;
 import org.pathvisio.libgpml.model.PathwayModel;
-import org.pathvisio.libgpml.model.PathwayElement;
+import org.pathvisio.libgpml.model.PathwayObject;
 import org.pathvisio.libgpml.model.type.ObjectType;
 
 /**
@@ -115,7 +115,7 @@ public class DataNodeListExporter implements PathwayModelExporter {
 			throw new ConverterException(e);
 		}
 		printHeaders(out);
-		for (PathwayElement elm : pathway.getDataObjects()) {
+		for (PathwayObject elm : pathway.getDataObjects()) {
 			if (elm.getObjectType() == ObjectType.DATANODE) {
 				String line = "";
 				String id = elm.getIdentifier();

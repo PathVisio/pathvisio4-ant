@@ -52,21 +52,21 @@ import javax.swing.table.TableCellRenderer;
 
 import org.pathvisio.core.ApplicationEvent;
 import org.pathvisio.core.Engine.ApplicationEventListener;
-import org.pathvisio.core.view.Graphics;
-import org.pathvisio.core.view.Handle;
-import org.pathvisio.core.view.VLabel;
-import org.pathvisio.core.view.SelectionBox;
-import org.pathvisio.core.view.VPathwayModel;
-import org.pathvisio.core.view.VPathwayElement;
-import org.pathvisio.core.view.VPathwayModelEvent;
-import org.pathvisio.core.view.VPathwayModelListener;
+import org.pathvisio.core.view.model.Handle;
+import org.pathvisio.core.view.model.SelectionBox;
+import org.pathvisio.core.view.model.VElement;
+import org.pathvisio.core.view.model.VLabel;
+import org.pathvisio.core.view.model.VPathwayModel;
+import org.pathvisio.core.view.model.VPathwayModelEvent;
+import org.pathvisio.core.view.model.VPathwayModelListener;
+import org.pathvisio.core.view.model.VPathwayObject;
 import org.pathvisio.gui.BackpageTextProvider.BackpageAttributes;
 import org.pathvisio.gui.BackpageTextProvider.BackpageXrefs;
 import org.pathvisio.gui.CommonActions.ZoomAction;
 import org.pathvisio.gui.dnd.PathwayImportHandler;
 import org.pathvisio.gui.handler.PathwayTableModel;
 import org.pathvisio.libgpml.debug.Logger;
-import org.pathvisio.libgpml.model.PathwayElement;
+import org.pathvisio.libgpml.model.PathwayObject;
 import org.pathvisio.libgpml.util.Utils;
 
 import com.mammothsoftware.frwk.ddb.DropDownButton;
@@ -462,12 +462,12 @@ public class MainPanel extends JPanel implements VPathwayModelListener, Applicat
 		VPathwayModel vp = (VPathwayModel) e.getSource();
 		switch (e.getType()) {
 		case ELEMENT_DOUBLE_CLICKED:
-			VPathwayElement pwe = e.getAffectedElement();
+			VElement pwe = e.getAffectedElement();
 			if (pwe instanceof Handle) {
 				pwe = ((Handle) pwe).getParent();
 			}
-			if (pwe instanceof Graphics && !(pwe instanceof SelectionBox)) {
-				PathwayElement p = ((Graphics) pwe).getPathwayElement();
+			if (pwe instanceof VPathwayObject && !(pwe instanceof SelectionBox)) {
+				PathwayObject p = ((VPathwayObject) pwe).getPathwayObject();
 				if (p != null) {
 					swingEngine.getPopupDialogHandler().getInstance(p, !vp.isEditMode(), null, this).setVisible(true);
 				}
@@ -487,7 +487,7 @@ public class MainPanel extends JPanel implements VPathwayModelListener, Applicat
 			if (e.getAffectedElement() instanceof VLabel) {
 				try {
 					hyperlinkUpdate(new HyperlinkEvent(e.getSource(), HyperlinkEvent.EventType.ACTIVATED,
-							new URL(((VLabel) e.getAffectedElement()).getPathwayElement().getHref())));
+							new URL(((VLabel) e.getAffectedElement()).getPathwayObject().getHref())));
 				} catch (MalformedURLException e1) {
 					swingEngine.getEngine().getActiveVPathwayModel().selectObject(e.getAffectedElement());
 					swingEngine.handleMalformedURLException("The specified link address is not valid.", this, e1);

@@ -30,8 +30,8 @@ import java.util.Set;
 
 import javax.swing.SwingUtilities;
 
-import org.pathvisio.core.view.VPathwayModel;
-import org.pathvisio.core.view.VPathwayModelWrapper;
+import org.pathvisio.core.view.model.VPathwayModel;
+import org.pathvisio.core.view.model.VPathwayModelWrapper;
 import org.pathvisio.libgpml.debug.Logger;
 import org.pathvisio.libgpml.io.ConverterException;
 import org.pathvisio.libgpml.io.PathwayModelExporter;

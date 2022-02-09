@@ -27,7 +27,7 @@ import org.pathvisio.core.ApplicationEvent;
 import org.pathvisio.core.Engine;
 import org.pathvisio.gui.SwingEngine;
 import org.pathvisio.libgpml.model.PathwayModel;
-import org.pathvisio.libgpml.model.PathwayElement;
+import org.pathvisio.libgpml.model.PathwayObject;
 import org.pathvisio.libgpml.model.type.ObjectType;
 
 /**
@@ -56,7 +56,7 @@ public class Compat implements Engine.ApplicationEventListener {
 		if (!ensSpecies.containsKey(org))
 			return false; // this pwy is not one of the species to be converted
 
-		for (PathwayElement elt : pwy.getDataObjects()) {
+		for (PathwayObject elt : pwy.getDataObjects()) {
 			if (elt.getObjectType() == ObjectType.DATANODE
 					&& elt.getDataSource() == DataSource.getByCompactIdentifierPrefix("ensembl")) {
 				return true;
@@ -75,7 +75,7 @@ public class Compat implements Engine.ApplicationEventListener {
 		if (!ensSpecies.containsKey(org))
 			return; // this pwy is not one of the species to be converted
 
-		for (PathwayElement elt : pwy.getDataObjects()) {
+		for (PathwayObject elt : pwy.getDataObjects()) {
 			if (elt.getObjectType() == ObjectType.DATANODE
 					&& elt.getDataSource() == DataSource.getByCompactIdentifierPrefix("ensembl")) {
 				elt.setDataSource(ensSpecies.get(org));

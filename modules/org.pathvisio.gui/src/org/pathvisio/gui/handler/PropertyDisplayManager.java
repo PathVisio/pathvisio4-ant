@@ -28,7 +28,7 @@ import org.pathvisio.core.preferences.GlobalPreference;
 import org.pathvisio.core.preferences.Preference;
 import org.pathvisio.core.preferences.PreferenceManager;
 import org.pathvisio.libgpml.debug.Logger;
-import org.pathvisio.libgpml.model.PathwayElement;
+import org.pathvisio.libgpml.model.PathwayObject;
 import org.pathvisio.libgpml.model.type.HAlignType;
 import org.pathvisio.libgpml.model.type.CellularComponentType;
 import org.pathvisio.libgpml.model.type.DataNodeType;
@@ -109,7 +109,7 @@ public class PropertyDisplayManager {
 	/**
 	 * Gets the visible property keys for the given PathwayElement.
 	 */
-	public static Set<Object> getVisiblePropertyKeys (PathwayElement e) {
+	public static Set<Object> getVisiblePropertyKeys (PathwayObject e) {
 
 		Set<Object> result = new HashSet<Object>();
 		// add static properties
@@ -202,7 +202,7 @@ public class PropertyDisplayManager {
 	 * @see #setPropertyScope(Property, EnumSet) for info on how to configure the property
 	 *      scope.
 	 */
-	private static Collection<Property> getManagedDynamicProperties(PathwayElement e) {
+	private static Collection<Property> getManagedDynamicProperties(PathwayObject e) {
 		Set<Property> props = new HashSet<Property>();
 
 		ObjectType type = e.getObjectType();

@@ -59,20 +59,20 @@ import org.pathvisio.core.gui.SwingMouseEvent;
 import org.pathvisio.core.gui.ToolTipProvider;
 import org.pathvisio.core.preferences.GlobalPreference;
 import org.pathvisio.core.preferences.PreferenceManager;
-import org.pathvisio.core.view.GraphicsShape;
-import org.pathvisio.core.view.Handle;
-import org.pathvisio.core.view.VLabel;
 import org.pathvisio.core.view.VElementMouseEvent;
 import org.pathvisio.core.view.VElementMouseListener;
-import org.pathvisio.core.view.VPathwayModel;
-import org.pathvisio.core.view.VPathwayElement;
-import org.pathvisio.core.view.VPathwayModelEvent;
-import org.pathvisio.core.view.VPathwayModelListener;
-import org.pathvisio.core.view.VPathwayModelWrapper;
+import org.pathvisio.core.view.model.Handle;
+import org.pathvisio.core.view.model.VElement;
+import org.pathvisio.core.view.model.VLabel;
+import org.pathvisio.core.view.model.VPathwayModel;
+import org.pathvisio.core.view.model.VPathwayModelEvent;
+import org.pathvisio.core.view.model.VPathwayModelListener;
+import org.pathvisio.core.view.model.VPathwayModelWrapper;
+import org.pathvisio.core.view.model.VShapedElement;
 import org.pathvisio.gui.MainPanel;
 import org.pathvisio.gui.dnd.PathwayImportHandler;
 import org.pathvisio.libgpml.model.PathwayModel;
-import org.pathvisio.libgpml.model.PathwayElement;
+import org.pathvisio.libgpml.model.PathwayObject;
 
 
 /**
@@ -273,9 +273,9 @@ MouseMotionListener, MouseListener, KeyListener, VPathwayModelListener, VElement
 		handler.importDataAtCursorPosition(this, clip.getContents(this), cursorPosition);
 	}
 
-	List<PathwayElement> lastCopied;
+	List<PathwayObject> lastCopied;
 
-	public void copyToClipboard(PathwayModel source, List<PathwayElement> copyElements) {
+	public void copyToClipboard(PathwayModel source, List<PathwayObject> copyElements) {
 		Clipboard clip = Toolkit.getDefaultToolkit().getSystemClipboard();
 		clip.setContents(new PathwayModelTransferable(source, copyElements),
 				(PathwayImportHandler)getTransferHandler());
@@ -292,7 +292,7 @@ MouseMotionListener, MouseListener, KeyListener, VPathwayModelListener, VElement
 		if(toolTipProviders.size() == 0) return;
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				List<VPathwayElement> elements = e.getAffectedElements();
+				List<VElement> elements = e.getAffectedElements();
 				if(elements.size() > 0) {
 					PathwayToolTip tip = new PathwayToolTip(elements);
 
@@ -330,7 +330,7 @@ MouseMotionListener, MouseListener, KeyListener, VPathwayModelListener, VElement
 	class PathwayToolTip extends JPanel {
 		private boolean hasContent;
 
-		public PathwayToolTip(List<VPathwayElement> elements) {
+		public PathwayToolTip(List<VElement> elements) {
 			applyToolTipStyle(this);
 			setLayout(new BorderLayout());
 			DefaultFormBuilder builder = new DefaultFormBuilder(new FormLayout("pref"));
@@ -407,9 +407,9 @@ MouseMotionListener, MouseListener, KeyListener, VPathwayModelListener, VElement
 	 */
 	private int calculateCursorStyle(VElementMouseEvent e) {
 		Handle h = (Handle) e.getElement();
-		if(h.getParent() instanceof GraphicsShape) {
-			GraphicsShape gs = (GraphicsShape) h.getParent();
-			double rotation = gs.getPathwayElement().getRotation();
+		if(h.getParent() instanceof VShapedElement) {
+			VShapedElement gs = (VShapedElement) h.getParent();
+			double rotation = gs.getPathwayObject().getRotation();
 			double degrees = h.getAngle() + (rotation * (180 / Math.PI));
 			
 			if(degrees > 360)  degrees = degrees - 360;

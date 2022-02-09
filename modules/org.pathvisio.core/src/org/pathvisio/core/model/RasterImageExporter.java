@@ -25,7 +25,7 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
-import org.pathvisio.core.view.VPathwayModel;
+import org.pathvisio.core.view.model.VPathwayModel;
 import org.pathvisio.libgpml.io.ConverterException;
 import org.pathvisio.libgpml.model.PathwayModel;
 

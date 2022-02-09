@@ -25,13 +25,13 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 import org.pathvisio.libgpml.debug.Logger;
 import org.pathvisio.libgpml.model.GpmlFormat;
-import org.pathvisio.libgpml.model.PathwayElement;
+import org.pathvisio.libgpml.model.PathwayObject;
 import org.pathvisio.libgpml.model.type.ObjectType;
 
 /**
  * This class keeps track of all BioPAX elements in the pathway
  */
-public class BiopaxElement extends PathwayElement 
+public class BiopaxElement extends PathwayObject 
 {
 	/**
 	 * Constructor for this class. Builds a map of all biopax
@@ -120,7 +120,7 @@ public class BiopaxElement extends PathwayElement
 	 */
 	public boolean hasReferences(BiopaxNode e) {
 		//Check for references in child objects
-		for(PathwayElement pwe : parent.getDataObjects()) {
+		for(PathwayObject pwe : parent.getDataObjects()) {
 			if(pwe.getBiopaxRefs().contains(e.getId())) {
 				return true;
 			}
@@ -330,7 +330,7 @@ public class BiopaxElement extends PathwayElement
 	}
 
 	@Override
-	public void copyValuesFrom(PathwayElement src) {
+	public void copyValuesFrom(PathwayObject src) {
 		super.copyValuesFrom(src);
 		BiopaxElement srcElement = (BiopaxElement) src;
 		this.document = srcElement.getDocument();

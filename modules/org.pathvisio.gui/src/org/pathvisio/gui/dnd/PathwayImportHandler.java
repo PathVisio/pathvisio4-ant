@@ -40,7 +40,7 @@ import org.pathvisio.libgpml.debug.Logger;
 import org.pathvisio.libgpml.io.ConverterException;
 import org.pathvisio.libgpml.model.GpmlFormat;
 import org.pathvisio.libgpml.model.PathwayModel;
-import org.pathvisio.libgpml.model.PathwayElement;
+import org.pathvisio.libgpml.model.PathwayObject;
 import org.pathvisio.libgpml.model.type.ObjectType;
 
 public class PathwayImportHandler extends TransferHandler implements ClipboardOwner {
@@ -99,8 +99,8 @@ public class PathwayImportHandler extends TransferHandler implements ClipboardOw
 		PathwayModel pnew = new PathwayModel();
 		GpmlFormat.readFromXml(pnew, new StringReader(xml), true);
 
-		List<PathwayElement> elements = new ArrayList<PathwayElement>();
-		for(PathwayElement elm : pnew.getDataObjects()) {
+		List<PathwayObject> elements = new ArrayList<PathwayObject>();
+		for(PathwayObject elm : pnew.getDataObjects()) {
 			if(elm.getObjectType() != ObjectType.MAPPINFO) {
 				elements.add(elm);
 			} else {
@@ -131,7 +131,7 @@ public class PathwayImportHandler extends TransferHandler implements ClipboardOw
 		timesPasted = 0;
 	}
 	
-	private Point2D.Double calculateShift(List<PathwayElement> elements, Point cursorPosition) {
+	private Point2D.Double calculateShift(List<PathwayObject> elements, Point cursorPosition) {
 		Point2D.Double topLeftCorner = getTopLeftCorner(elements);
 		double xShift = cursorPosition.x - topLeftCorner.x;
 		double yShift = cursorPosition.y - topLeftCorner.y;
@@ -143,10 +143,10 @@ public class PathwayImportHandler extends TransferHandler implements ClipboardOw
 	 * @param elements = list of PathwayElement objects
 	 * @return
 	 */
-	private Point2D.Double getTopLeftCorner(List<PathwayElement> elements) {
+	private Point2D.Double getTopLeftCorner(List<PathwayObject> elements) {
 		
 		Rectangle2D vr = null;
-		for (PathwayElement o : elements)
+		for (PathwayObject o : elements)
 		{
 			if (o.getObjectType() == ObjectType.INFOBOX) continue;
 			if (o.getObjectType() == ObjectType.BIOPAX) continue;

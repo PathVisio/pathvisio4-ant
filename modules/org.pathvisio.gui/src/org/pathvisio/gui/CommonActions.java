@@ -34,23 +34,23 @@ import org.pathvisio.core.Engine;
 import org.pathvisio.core.Engine.ApplicationEventListener;
 import org.pathvisio.core.Globals;
 import org.pathvisio.core.util.Resources;
-import org.pathvisio.core.view.DefaultTemplates;
-import org.pathvisio.core.view.Graphics;
-import org.pathvisio.core.view.Handle;
-import org.pathvisio.core.view.VLabel;
 import org.pathvisio.core.view.LayoutType;
-import org.pathvisio.core.view.SelectionBox;
-import org.pathvisio.core.view.Template;
-import org.pathvisio.core.view.VPathwayModel;
-import org.pathvisio.core.view.VPathwayElement;
-import org.pathvisio.core.view.ViewActions;
+import org.pathvisio.core.view.model.DefaultTemplates;
+import org.pathvisio.core.view.model.Handle;
+import org.pathvisio.core.view.model.SelectionBox;
+import org.pathvisio.core.view.model.Template;
+import org.pathvisio.core.view.model.VElement;
+import org.pathvisio.core.view.model.VLabel;
+import org.pathvisio.core.view.model.VPathwayModel;
+import org.pathvisio.core.view.model.VPathwayObject;
+import org.pathvisio.core.view.model.ViewActions;
 import org.pathvisio.gui.dialogs.AboutDlg;
 import org.pathvisio.gui.dialogs.PathwayElementDialog;
 import org.pathvisio.gui.dialogs.PublicationXRefDialog;
 import org.pathvisio.libgpml.biopax.BiopaxReferenceManager;
 import org.pathvisio.libgpml.biopax.PublicationXref;
 import org.pathvisio.libgpml.model.PathwayModel;
-import org.pathvisio.libgpml.model.PathwayElement;
+import org.pathvisio.libgpml.model.PathwayObject;
 import org.pathvisio.libgpml.model.PathwayModel.StatusFlagEvent;
 import org.pathvisio.libgpml.model.PathwayModel.StatusFlagListener;
 import org.pathvisio.libgpml.model.shape.MIMShapes;
@@ -664,12 +664,12 @@ public class CommonActions implements ApplicationEventListener {
 	private static abstract class PathwayElementDialogAction extends AbstractAction {
 		//TODO: use parameterization instead of inheritance to create different PathwayElementDialogActions
 		// inheritance is overkill because behaviour of classes is not changed
-		VPathwayElement element;
+		VElement element;
 		Component parent;
 
 		SwingEngine swingEngine;
 
-		public PathwayElementDialogAction(SwingEngine swingEngine, Component parent, VPathwayElement e) {
+		public PathwayElementDialogAction(SwingEngine swingEngine, Component parent, VElement e) {
 			super();
 			this.parent = parent;
 			this.swingEngine = swingEngine;
@@ -692,8 +692,8 @@ public class CommonActions implements ApplicationEventListener {
 		}
 
 		public void actionPerformed(ActionEvent e) {
-			if(element instanceof Graphics) {
-				PathwayElement p = ((Graphics)element).getPathwayElement();
+			if(element instanceof VPathwayObject) {
+				PathwayObject p = ((VPathwayObject)element).getPathwayObject();
 				PathwayElementDialog pd = swingEngine.getPopupDialogHandler().getInstance(
 						p, !element.getDrawing().isEditMode(), null, parent);
 				if(pd != null) {
@@ -712,7 +712,7 @@ public class CommonActions implements ApplicationEventListener {
 	 * the right click menu.
 	 */
 	public static class AddLiteratureAction extends PathwayElementDialogAction {
-		public AddLiteratureAction(SwingEngine swingEngine, Component parent, VPathwayElement e) {
+		public AddLiteratureAction(SwingEngine swingEngine, Component parent, VElement e) {
 			super(swingEngine, parent, e);
 			putValue(NAME, "Add literature reference");
 			putValue(SHORT_DESCRIPTION, "Add a literature reference to this element");
@@ -720,8 +720,8 @@ public class CommonActions implements ApplicationEventListener {
 		}
 
 		public void actionPerformed(ActionEvent e) {
-			if(element instanceof Graphics) {
-				PathwayElement pwElm = ((Graphics)element).getPathwayElement();
+			if(element instanceof VPathwayObject) {
+				PathwayObject pwElm = ((VPathwayObject)element).getPathwayObject();
 				BiopaxReferenceManager m = pwElm.getBiopaxReferenceManager();
 				PublicationXref xref = new PublicationXref();
 
@@ -741,9 +741,9 @@ public class CommonActions implements ApplicationEventListener {
 	public static class AddHrefAction extends AbstractAction {
 		
 		SwingEngine se;
-		VPathwayElement vpe;
+		VElement vpe;
 		
-		public AddHrefAction(VPathwayElement selected, SwingEngine engine) {
+		public AddHrefAction(VElement selected, SwingEngine engine) {
 			super("Hyperlink");
 			se = engine;
 			vpe = selected;
@@ -752,7 +752,7 @@ public class CommonActions implements ApplicationEventListener {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			if(vpe instanceof VLabel) {
-				PathwayElement pe = ((VLabel) vpe).getPathwayElement();
+				PathwayObject pe = ((VLabel) vpe).getPathwayObject();
 				String currentHref = pe.getHref();
 				String userInput = JOptionPane.showInputDialog(se.getFrame(), "Label hyperlink", currentHref);
 				if(userInput != null) {
@@ -772,7 +772,7 @@ public class CommonActions implements ApplicationEventListener {
 	 */
 	public static class EditLiteratureAction extends PathwayElementDialogAction {
 
-		public EditLiteratureAction(SwingEngine swingEngine, Component parent, VPathwayElement e) {
+		public EditLiteratureAction(SwingEngine swingEngine, Component parent, VElement e) {
 			super(swingEngine, parent, e);
 			putValue(NAME, "Edit literature references");
 			putValue(SHORT_DESCRIPTION, "Edit the literature references of this element");
@@ -787,7 +787,7 @@ public class CommonActions implements ApplicationEventListener {
 	/** Pops up the pathway element dialog directly on the comments tab */
 	public static class PropertiesAction extends PathwayElementDialogAction {
 
-		public PropertiesAction(SwingEngine swingEngine, Component parent, VPathwayElement e) {
+		public PropertiesAction(SwingEngine swingEngine, Component parent, VElement e) {
 			super(swingEngine, parent, e);
 			putValue(NAME, "Properties");
 			putValue(SHORT_DESCRIPTION, "View this element's properties");

@@ -38,13 +38,13 @@ public class PathwayModelEvent
 
 	public static final int RESIZED = 4;
 
-	private PathwayElement affectedData;
-	public PathwayElement getAffectedData () { return affectedData; }
+	private PathwayObject affectedData;
+	public PathwayObject getAffectedData () { return affectedData; }
 
 	private int type;
 	public int getType() { return type; }
 
-	public PathwayModelEvent (PathwayElement object, int t)
+	public PathwayModelEvent (PathwayObject object, int t)
 	{
 		affectedData = object;
 		type = t;

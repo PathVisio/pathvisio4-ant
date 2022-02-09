@@ -27,7 +27,7 @@ import org.pathvisio.libgpml.model.type.ObjectType;
  * coordinates that are not stored in GPML directly
  * @author thomas
  */
-public class Group extends PathwayElement {
+public class Group extends PathwayObject {
 	protected Group() {
 		super(ObjectType.GROUP);
 	}
@@ -76,42 +76,42 @@ public class Group extends PathwayElement {
 
 	public void setCenterX(double v) {
 		double d = v - getBounds().getCenterX();
-		for(PathwayElement e : getGroupElements()) {
+		for(PathwayObject e : getGroupElements()) {
 			e.setCenterX(e.getCenterX() + d);
 		}
 	}
 
 	public void setCenterY(double v) {
 		double d = v - getBounds().getCenterY();
-		for(PathwayElement e : getGroupElements()) {
+		for(PathwayObject e : getGroupElements()) {
 			e.setCenterY(e.getCenterY() + d);
 		}
 	}
 
 	public void setHeight(double v) {
 		double d = v - getBounds().getHeight();
-		for(PathwayElement e : getGroupElements()) {
+		for(PathwayObject e : getGroupElements()) {
 			e.setHeight(e.getHeight() + d);
 		}
 	}
 
 	public void setWidth(double v) {
 		double d = v - getBounds().getWidth();
-		for(PathwayElement e : getGroupElements()) {
+		for(PathwayObject e : getGroupElements()) {
 			e.setWidth(e.getWidth() + d);
 		}
 	}
 
 	public void setLeft(double v) {
 		double d = v - getBounds().getX();
-		for(PathwayElement e : getGroupElements()) {
+		for(PathwayObject e : getGroupElements()) {
 			e.setLeft(e.getLeft() + d);
 		}
 	}
 
 	public void setTop(double v) {
 		double d = v - getBounds().getY();
-		for(PathwayElement e : getGroupElements()) {
+		for(PathwayObject e : getGroupElements()) {
 			e.setTop(e.getTop() + d);
 		}
 	}
@@ -124,7 +124,7 @@ public class Group extends PathwayElement {
 	 */
 	public Rectangle2D getBounds() {
 		Rectangle2D bounds = null;
-		for(PathwayElement e : getGroupElements()) {
+		for(PathwayObject e : getGroupElements()) {
 			if(e == this) continue; //To prevent recursion error
 			if(bounds == null) bounds = e.getBounds();
 			else bounds.add(e.getBounds());
@@ -149,7 +149,7 @@ public class Group extends PathwayElement {
 	 */
 	public Rectangle2D getRotatedBounds() {
 		Rectangle2D bounds = null;
-		for(PathwayElement e : getGroupElements()) {
+		for(PathwayObject e : getGroupElements()) {
 			if(e == this) continue; //To prevent recursion error
 			if(bounds == null) bounds = e.getRotatedBounds();
 			else bounds.add(e.getRotatedBounds());
@@ -172,8 +172,8 @@ public class Group extends PathwayElement {
 	 * checks for a valid parent and never returns
 	 * null
 	 */
-	public Set<PathwayElement> getGroupElements() {
-		Set<PathwayElement> result = new HashSet<PathwayElement>();
+	public Set<PathwayObject> getGroupElements() {
+		Set<PathwayObject> result = new HashSet<PathwayObject>();
 		PathwayModel parent = getParent();
 		if(parent != null) {
 			result = parent.getGroupElements(getGroupId());

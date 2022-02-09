@@ -38,7 +38,7 @@ import org.pathvisio.libgpml.util.Utils;
  * For other shapes, the centerX coordinate is stored in GPML. Lines however
  * store the end-points, the center can be calculated based on that.
  */
-public class LineElement extends PathwayElement implements ConnectorRestrictions {
+public class LineElement extends PathwayObject implements ConnectorRestrictions {
 	ConnectorShape shape;
 
 	public LineElement(ObjectType ot) {
@@ -229,7 +229,7 @@ public class LineElement extends PathwayElement implements ConnectorRestrictions
 
 		LinkableTo e = getStartElement();
 		if(e != null) {
-			if(e instanceof PathwayElement) {
+			if(e instanceof PathwayObject) {
 				side = getSide(getStartLinePoint().getRelX(), getStartLinePoint().getRelY());
 			} else if(e instanceof Anchor) {
                 side= getAttachedLineDirection((Anchor)e);
@@ -249,7 +249,7 @@ public class LineElement extends PathwayElement implements ConnectorRestrictions
 
 		LinkableTo e = getEndElement();
 		if(e != null) {
-			if(e instanceof PathwayElement) {
+			if(e instanceof PathwayObject) {
 				side = getSide(getEndLinePoint().getRelX(), getEndLinePoint().getRelY());
 			} else if(e instanceof Anchor) {
                 side= getAttachedLineDirection((Anchor)e);
@@ -431,7 +431,7 @@ public class LineElement extends PathwayElement implements ConnectorRestrictions
 		PathwayModel parent = getParent();
 		Rectangle2D rect = null;
 		if(parent != null) {
-			for(PathwayElement e : parent.getDataObjects()) {
+			for(PathwayObject e : parent.getDataObjects()) {
 				ObjectType ot = e.getObjectType();
 				if(ot == ObjectType.SHAPE || ot == ObjectType.DATANODE || ot == ObjectType.LABEL) {
 					Rectangle2D b = e.getBounds();

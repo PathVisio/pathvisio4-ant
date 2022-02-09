@@ -47,7 +47,7 @@ import org.pathvisio.core.preferences.GlobalPreference;
 import org.pathvisio.core.preferences.Preference;
 import org.pathvisio.core.preferences.PreferenceManager;
 import org.pathvisio.core.util.ProgressKeeper;
-import org.pathvisio.core.view.VPathwayModelWrapper;
+import org.pathvisio.core.view.model.VPathwayModelWrapper;
 import org.pathvisio.gui.dialogs.NewPathwayDialog;
 import org.pathvisio.gui.dialogs.OkCancelDialog;
 import org.pathvisio.gui.dialogs.PopupDialogHandler;

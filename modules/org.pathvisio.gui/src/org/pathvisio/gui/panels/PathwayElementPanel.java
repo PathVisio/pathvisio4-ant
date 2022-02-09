@@ -22,10 +22,10 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
-import org.pathvisio.libgpml.model.PathwayElement;
+import org.pathvisio.libgpml.model.PathwayObject;
 
 public abstract class PathwayElementPanel extends JPanel {
-	private PathwayElement input;
+	private PathwayObject input;
 	JTabbedPane dialogPane;
 	boolean readonly;
 
@@ -33,11 +33,11 @@ public abstract class PathwayElementPanel extends JPanel {
 		this.readonly = readonly;
 	}
 
-	protected PathwayElement getInput() {
+	protected PathwayObject getInput() {
 		return input;
 	}
 
-	public void setInput(PathwayElement e) {
+	public void setInput(PathwayObject e) {
 		input = e;
 		refresh();
 	}

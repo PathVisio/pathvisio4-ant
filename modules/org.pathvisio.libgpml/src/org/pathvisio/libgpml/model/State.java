@@ -26,7 +26,7 @@ import org.pathvisio.libgpml.util.Utils;
  * State-specific implementation of methods that calculate derived
  * coordinates that are not stored in GPML directly
  */
-public class State extends PathwayElement implements LinkableFrom
+public class State extends PathwayObject implements LinkableFrom
 {
 	protected State()
 	{
@@ -36,12 +36,12 @@ public class State extends PathwayElement implements LinkableFrom
 	@Override
 	public int getZOrder()
 	{
-		PathwayElement dn = getParentDataNode();
+		PathwayObject dn = getParentDataNode();
 		if (dn == null) return 0; //TODO: must be cached like centerX etc.
 		return dn.getZOrder() + 1;
 	}
 	
-	public PathwayElement getParentDataNode()
+	public PathwayObject getParentDataNode()
 	{
 		PathwayModel parent = getParent();
 		if (parent == null) 
@@ -52,7 +52,7 @@ public class State extends PathwayElement implements LinkableFrom
 	
 	private void updateCoordinates()
 	{
-		PathwayElement dn = getParentDataNode();
+		PathwayObject dn = getParentDataNode();
 		if (dn != null)
 		{
 			double centerx = dn.getCenterX() + (getRelX() * dn.getWidth() / 2);
@@ -114,7 +114,7 @@ public class State extends PathwayElement implements LinkableFrom
 				}
 			}
 			elementRef = v;
-			fireObjectModifiedEvent(PathwayElementEvent.createSinglePropertyEvent(this, StaticProperty.GRAPHREF));
+			fireObjectModifiedEvent(PathwayObjectEvent.createSinglePropertyEvent(this, StaticProperty.GRAPHREF));
 		}
 	}
 

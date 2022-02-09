@@ -22,7 +22,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.pathvisio.libgpml.debug.Logger;
-import org.pathvisio.libgpml.model.PathwayElement;
+import org.pathvisio.libgpml.model.PathwayObject;
 
 /**
  * This class handles all biopax references for a given pathway element
@@ -30,7 +30,7 @@ import org.pathvisio.libgpml.model.PathwayElement;
  *
  */
 public class BiopaxReferenceManager {
-	private final PathwayElement pwElement;
+	private final PathwayObject pwElement;
 
 	/**
 	 * Constructor for this class
@@ -38,7 +38,7 @@ public class BiopaxReferenceManager {
 	 * for the pathway pathway element <code>e</code> belongs to
 	 * @param e The pathway element to handle the biopax references for
 	 */
-	public BiopaxReferenceManager(PathwayElement e) {
+	public BiopaxReferenceManager(PathwayObject e) {
 		pwElement = e;
 	}
 

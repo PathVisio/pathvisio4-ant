@@ -40,7 +40,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import org.pathvisio.core.util.Resources;
-import org.pathvisio.libgpml.model.PathwayElement.Comment;
+import org.pathvisio.libgpml.model.PathwayObject.Comment;
 import org.pathvisio.libgpml.util.Utils;
 
 public class CommentPanel extends PathwayElementPanel implements ActionListener {
