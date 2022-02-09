@@ -25,6 +25,7 @@ import org.pathvisio.libgpml.model.PathwayObject;
 /**
  * Represents a template that consists of graphics and
  * can be added to a pathway.
+ * 
  * @author thomas
  */
 public interface Template {

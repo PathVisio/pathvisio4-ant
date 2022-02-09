@@ -25,6 +25,7 @@ import org.pathvisio.libgpml.model.PathwayModel;
  * TODO: remember selection state as well.
  */
 public class UndoAction {
+	
 	public UndoAction(String aMessage, PathwayModel current) {
 		message = aMessage;
 		originalState = current;
