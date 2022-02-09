@@ -22,48 +22,46 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
-   The Shape registry stores all arrow heads and shapes
-
-   at this moment the shape registry initializes itself,
-   by calling  registerShape() on BasicShapes, GenMAPPShapes and MIMShapes.
+ * The Shape registry stores all arrow heads and shapes
+ * 
+ * at this moment the shape registry initializes itself, by calling
+ * registerShape() on BasicShapes, GenMAPPShapes and MIMShapes.
  */
 
-public class ShapeRegistry
-{
+public class ShapeRegistry {
 	private static Shape defaultShape = null;
 	public static final IShape DEFAULT_SHAPE;
 	private static ArrowShape defaultArrow = null;
 	private static AnchorShape defaultAnchor = null;
 
-	private static Map <String, IShape> shapeMap = new HashMap <String, IShape>();
-	private static Map <String, ArrowShape> arrowMap = new HashMap <String, ArrowShape>();
-	private static Map <String, AnchorShape> anchorMap = new HashMap <String, AnchorShape>();
+	private static Map<String, IShape> shapeMap = new HashMap<String, IShape>();
+	private static Map<String, ArrowShape> arrowMap = new HashMap<String, ArrowShape>();
+	private static Map<String, AnchorShape> anchorMap = new HashMap<String, AnchorShape>();
 	private static Map<String, IShape> mappMappings = new HashMap<String, IShape>();
 
-	static
-	{
+	static {
 		GeneralPath temp = new GeneralPath();
-		temp.moveTo (-50,-50);
-		temp.lineTo (50,-50);
-		temp.lineTo (50,50);
-		temp.lineTo (-50,50);
-		temp.closePath ();
-		temp.moveTo (-30,-30);
-		temp.lineTo (30,30);
-		temp.moveTo (-30,30);
-		temp.lineTo (30,-30);
-		defaultArrow = new ArrowShape (temp, ArrowShape.FillType.OPEN);
+		temp.moveTo(-50, -50);
+		temp.lineTo(50, -50);
+		temp.lineTo(50, 50);
+		temp.lineTo(-50, 50);
+		temp.closePath();
+		temp.moveTo(-30, -30);
+		temp.lineTo(30, 30);
+		temp.moveTo(-30, 30);
+		temp.lineTo(30, -30);
+		defaultArrow = new ArrowShape(temp, ArrowShape.FillType.OPEN);
 
 		temp = new GeneralPath();
-		temp.moveTo (0,0);
-		temp.lineTo (10,0);
-		temp.lineTo (10,10);
-		temp.lineTo (0,10);
-		temp.closePath ();
-		temp.moveTo (2,2);
-		temp.lineTo (8,8);
-		temp.moveTo (2,8);
-		temp.lineTo (8,2);
+		temp.moveTo(0, 0);
+		temp.lineTo(10, 0);
+		temp.lineTo(10, 10);
+		temp.lineTo(0, 10);
+		temp.closePath();
+		temp.moveTo(2, 2);
+		temp.lineTo(8, 8);
+		temp.moveTo(2, 8);
+		temp.lineTo(8, 2);
 		defaultShape = temp;
 		DEFAULT_SHAPE = new AbstractShape(defaultShape, "default");
 
@@ -73,71 +71,64 @@ public class ShapeRegistry
 	}
 
 	/**
-	   looks up the ShapeType corresponding to that name.
+	 * looks up the ShapeType corresponding to that name.
 	 */
-	public static IShape fromName (String value)
-	{
+	public static IShape fromName(String value) {
 		return shapeMap.get(value);
 	}
 
-    /*
-	 * Warning when using fromMappName: in case value == Poly, 
-	 * this will return Triangle. The caller needs to check for
-	 * this special
-	 * case.
+	/*
+	 * Warning when using fromMappName: in case value == Poly, this will return
+	 * Triangle. The caller needs to check for this special case.
 	 */
-	public static IShape fromMappName (String value)
-	{
+	public static IShape fromMappName(String value) {
 		return mappMappings.get(value);
 	}
 
-	public static void registerShape(IShape ish)
-	{
+	public static void registerShape(IShape ish) {
 		shapeMap.put(ish.getName(), ish);
-		if (ish.getMappName() != null)
-		{
-			mappMappings.put (ish.getMappName(), ish);
+		if (ish.getMappName() != null) {
+			mappMappings.put(ish.getMappName(), ish);
 		}
 	}
 
 	/**
 	 * Register an arrow shape
-	 * @param key The key used to identify the arrow shape
-	 * @param sh The shape used to draw the stroke
-	 * @param fillType The fill type, see {@link ArrowShape}
+	 * 
+	 * @param key              The key used to identify the arrow shape
+	 * @param sh               The shape used to draw the stroke
+	 * @param fillType         The fill type, see {@link ArrowShape}
 	 * @param lineEndingLength The line ending width
 	 */
-	static public void registerArrow (String key, Shape sh, ArrowShape.FillType fillType, int lineEndingLength) {
-		//pass in zero as the gap between line line ending and anchor
-		arrowMap.put(key, new ArrowShape (sh, fillType, lineEndingLength));
+	static public void registerArrow(String key, Shape sh, ArrowShape.FillType fillType, int lineEndingLength) {
+		// pass in zero as the gap between line line ending and anchor
+		arrowMap.put(key, new ArrowShape(sh, fillType, lineEndingLength));
 	}
 
 	/**
 	 * Register an arrow shape
-	 * @param key The key used to identify the arrow shape
-	 * @param sh The shape used to draw the stroke and fill (in case fillType is open or closed)
+	 * 
+	 * @param key      The key used to identify the arrow shape
+	 * @param sh       The shape used to draw the stroke and fill (in case fillType
+	 *                 is open or closed)
 	 * @param fillType The fill type, see {@link ArrowShape}
 	 */
-	static public void registerArrow (String key, Shape sh, ArrowShape.FillType fillType)
-	{
-		arrowMap.put (key, new ArrowShape (sh, fillType));
+	static public void registerArrow(String key, Shape sh, ArrowShape.FillType fillType) {
+		arrowMap.put(key, new ArrowShape(sh, fillType));
 	}
 
-	static public void registerAnchor (String key, Shape sh)
-	{
-		anchorMap.put (key, new AnchorShape (sh));
+	static public void registerAnchor(String key, Shape sh) {
+		anchorMap.put(key, new AnchorShape(sh));
 	}
 
 	/**
-	   Returns a named arrow head. The shape is normalized so that it
-	   fits with a line that goes along the positive x-axis.  The tip
-	   of the arrow head is in 0,0.
+	 * Returns a named arrow head. The shape is normalized so that it fits with a
+	 * line that goes along the positive x-axis. The tip of the arrow head is in
+	 * 0,0.
 	 */
-	public static ArrowShape getArrow(String name)
-	{
-		ArrowShape sh = arrowMap.get (name);
-		if (sh == null)
-		{
+	public static ArrowShape getArrow(String name) {
+		ArrowShape sh = arrowMap.get(name);
+		if (sh == null) {
 			sh = defaultArrow;
 		}
 		return sh;
@@ -151,9 +142,8 @@ public class ShapeRegistry
 	 * Returns an anchor shape
 	 */
 	public static AnchorShape getAnchor(String name) {
-		AnchorShape sh = anchorMap.get (name);
-		if (sh == null)
-		{
+		AnchorShape sh = anchorMap.get(name);
+		if (sh == null) {
 			sh = defaultAnchor;
 		}
 		return sh;

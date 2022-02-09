@@ -24,77 +24,68 @@ import java.util.TreeSet;
 /**
  * Different Connector types
  *
- * This is an extensible enum type, you can't instantiate ConnectorType directly,
- * you have to use the getInstance() method.
+ * This is an extensible enum type, you can't instantiate ConnectorType
+ * directly, you have to use the getInstance() method.
  *
- * default connector types are
- * STRAIGHT -> the shortest path between two points
+ * default connector types are STRAIGHT -> the shortest path between two points
  * ELBOW -> connects with horizontal or vertical segments and 90-degree angles
- * CURVED -> uses splines to generate a smooth curve while keeping the end-points
- * 	perpendicular to the connecting element.
+ * CURVED -> uses splines to generate a smooth curve while keeping the
+ * end-points perpendicular to the connecting element.
  */
 public class ConnectorType implements Comparable<ConnectorType> {
 	private static Map<String, ConnectorType> nameMappings = new HashMap<String, ConnectorType>();
 	private static Set<ConnectorType> values = new TreeSet<ConnectorType>();
 
-	public static final ConnectorType STRAIGHT = new ConnectorType ("Straight");
-	public static final ConnectorType ELBOW = new ConnectorType ("Elbow");
-	public static final ConnectorType CURVED = new ConnectorType ("Curved");
+	public static final ConnectorType STRAIGHT = new ConnectorType("Straight");
+	public static final ConnectorType ELBOW = new ConnectorType("Elbow");
+	public static final ConnectorType CURVED = new ConnectorType("Curved");
 	public static final ConnectorType SEGMENTED = new ConnectorType("Segmented");
 
 	private String name;
 
-	private ConnectorType (String name)
-	{
-		if (name == null) { throw new NullPointerException(); }
+	private ConnectorType(String name) {
+		if (name == null) {
+			throw new NullPointerException();
+		}
 
-		this.name  = name;
+		this.name = name;
 		values.add(this);
-		nameMappings.put (name, this);
+		nameMappings.put(name, this);
 	}
 
 	/**
-	 * returns a connectorType with a given name.
-	 * If the connectorType doesn't exist yet, it is created.
-	 * for extending the enum.
+	 * returns a connectorType with a given name. If the connectorType doesn't exist
+	 * yet, it is created. for extending the enum.
 	 * 
 	 * @deprecated Use {@link #fromName(String)} instead.
 	 */
-	public static ConnectorType getInstance (String name)
-	{
+	public static ConnectorType getInstance(String name) {
 		return fromName(name);
 	}
 
 	/**
-	 * returns a connectorType with a given name.
-	 * If the connectorType doesn't exist yet, it is created.
-	 * for extending the enum.
+	 * returns a connectorType with a given name. If the connectorType doesn't exist
+	 * yet, it is created. for extending the enum.
 	 */
-	public static ConnectorType fromName (String name)
-	{
-		if (nameMappings.containsKey (name))
-		{
+	public static ConnectorType fromName(String name) {
+		if (nameMappings.containsKey(name)) {
 			return nameMappings.get(name);
-		}
-		else
+		} else
 			return new ConnectorType(name);
 	}
 
 	/**
-	   Stable identifier for this ConnectorType.
+	 * Stable identifier for this ConnectorType.
 	 */
-	public String getName ()
-	{
+	public String getName() {
 		return name;
 	}
 
-	static public ConnectorType[] getValues()
-	{
+	static public ConnectorType[] getValues() {
 		return values.toArray(new ConnectorType[0]);
 	}
 
-	public String toString()
-	{
+	public String toString() {
 		return name;
 	}
 
