@@ -1,10 +1,6 @@
 <component name="libraryTable">
   <library name="lib">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/lib/bindex.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/com.springsource.org.apache.commons.logging-1.1.1.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/commons-codec-1.5.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/commons-math-2.0.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/derby.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/derbyclient.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/felix.jar!/" />
@@ -14,7 +10,6 @@
       <root url="jar://$PROJECT_DIR$/lib/jakarta.xml.bind-api-4.0.0-RC2.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/jnlp.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/junit.jar!/" />         
-      <root url="jar://$PROJECT_DIR$/lib/org.apache.commons.discovery_0.2.0.v201004190315.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/org.apache.felix.bundlerepository-1.6.6.jar!/" />     
       <root url="jar://$PROJECT_DIR$/lib/org.apache.felix.gogo.command-1.1.2.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/org.apache.felix.gogo.runtime-1.1.4.jar!/" />
@@ -35,8 +30,6 @@
       <root url="jar://$PROJECT_DIR$/lib/org.hamcrest.core_1.1.0.v20090501071000.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/org.pathvisio.jgoodies.forms.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/org.pathvisio.pdftranscoder.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/org.pathvisio.ws.commons.util.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/org.pathvisio.xerces.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
