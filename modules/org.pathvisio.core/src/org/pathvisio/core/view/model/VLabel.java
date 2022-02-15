@@ -21,14 +21,13 @@ import org.pathvisio.libgpml.model.PathwayObject;
 /**
  * Represents the view of a PathwayElement with ObjectType.LABEL.
  */
-public class VLabel extends VShapedElement
-{
+public class VLabel extends VShapedElement {
 	/**
 	 * Constructor for this class
+	 * 
 	 * @param canvas - the VPathway this label will be part of
 	 */
-	public VLabel(VPathwayModel canvas, PathwayObject o)
-	{
+	public VLabel(VPathwayModel canvas, PathwayObject o) {
 		super(canvas, o);
 	}
 

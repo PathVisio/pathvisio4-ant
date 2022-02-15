@@ -21,18 +21,17 @@ import org.pathvisio.libgpml.model.PathwayObject;
 /**
  * Represents the view of a PathwayElement with ObjectType.SHAPE.
  *
- * //TODO: rename this class to something other than Shape,
- * because it is confusing with java.awt.Shape
+ * //TODO: rename this class to something other than Shape, because it is
+ * confusing with java.awt.Shape
  */
-public class VShape extends VShapedElement
-{
+public class VShape extends VShapedElement {
 	/**
 	 * Constructor for this class
+	 * 
 	 * @param canvas - the VPathway this Shape will be part of
 	 */
-	public VShape(VPathwayModel canvas, PathwayObject o)
-	{
+	public VShape(VPathwayModel canvas, PathwayObject o) {
 		super(canvas, o);
 	}
-	
+
 }

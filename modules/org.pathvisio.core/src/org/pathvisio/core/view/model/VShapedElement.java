@@ -44,9 +44,9 @@ import org.pathvisio.libgpml.util.LinAlg;
 import org.pathvisio.libgpml.util.LinAlg.Point;
 
 /**
- * This is an {@link VPathwayObject} class representing shapelike forms, and provides
- * implementation for containing 8 handles placed in a (rotated) rectangle
- * around the shape and a rotation handle
+ * This is an {@link VPathwayObject} class representing shapelike forms, and
+ * provides implementation for containing 8 handles placed in a (rotated)
+ * rectangle around the shape and a rotation handle
  */
 public abstract class VShapedElement extends VPathwayObject implements LinkProvider, Adjustable {
 

@@ -694,12 +694,6 @@ public class PathwayModel {
 		clearChangedFlag();
 	}
 
-//	public void writeToSvg(File file) throws ConverterException { TODO 
-//		// Use Batik instead of SvgFormat
-//		// SvgFormat.writeToSvg (this, file);
-//		new BatikImageExporter(ImageExporter.TYPE_SVG).doExport(file, this);
-//	}
-
 	/**
 	 * Implement this interface if you want to be notified when the "changed" status
 	 * changes. This happens e.g. when the user makes a change to an unchanged

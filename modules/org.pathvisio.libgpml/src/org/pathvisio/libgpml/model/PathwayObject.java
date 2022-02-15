@@ -1820,10 +1820,6 @@ public class PathwayObject implements LinkableTo, Comparable<PathwayObject> {
 		String input = (v == null) ? "" : v;
 		if (!Utils.stringEquals(href, input)) {
 			href = input;
-//			if (PreferenceManager.getCurrent() == null) { TODO 
-//				PreferenceManager.init();
-//			}
-//			setColor(PreferenceManager.getCurrent().getColor(GlobalPreference.COLOR_LINK));
 			fireObjectModifiedEvent(PathwayObjectEvent.createSinglePropertyEvent(this, StaticProperty.HREF));
 		}
 	}

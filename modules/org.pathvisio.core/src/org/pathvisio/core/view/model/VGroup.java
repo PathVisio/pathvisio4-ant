@@ -32,20 +32,18 @@ import org.pathvisio.core.view.VElementMouseListener;
 import org.pathvisio.libgpml.model.PathwayObject;
 
 /**
- * This represents the view of a PathwayElement with ObjectType.GROUP.
- * This can be drawn as a shaded area, or the group can be invisible.
+ * This represents the view of a PathwayElement with ObjectType.GROUP. This can
+ * be drawn as a shaded area, or the group can be invisible.
  *
- * Also contains the getGroupGraphics method to quickly access all Graphics' that
- * are in this group.
+ * Also contains the getGroupGraphics method to quickly access all Graphics'
+ * that are in this group.
  */
-public class VGroup extends VPathwayObject implements LinkProvider, VElementMouseListener
-{
+public class VGroup extends VPathwayObject implements LinkProvider, VElementMouseListener {
 	public static final int FLAG_SELECTED = 1 << 0;
 	public static final int FLAG_MOUSEOVER = 1 << 1;
 	public static final int FLAG_ANCHORSVISIBLE = 1 << 2;
 
-	public VGroup(VPathwayModel canvas, PathwayObject pe)
-	{
+	public VGroup(VPathwayModel canvas, PathwayObject pe) {
 		super(canvas, pe);
 		canvas.addVElementMouseListener(this);
 	}
@@ -55,19 +53,15 @@ public class VGroup extends VPathwayObject implements LinkProvider, VElementMous
 	 *
 	 * @return HashMap<String, String>
 	 */
-	protected Map<String, String> getIdRefPairs()
-	{
+	protected Map<String, String> getIdRefPairs() {
 		// idRefPairs<id, ref>
 		Map<String, String> idRefPairs = new HashMap<String, String>();
 
 		// Populate hash map of id-ref pairs for all groups
-		for (VElement vpe : canvas.getDrawingObjects())
-		{
-			if (vpe instanceof VPathwayObject && vpe instanceof VGroup)
-			{
+		for (VElement vpe : canvas.getDrawingObjects()) {
+			if (vpe instanceof VPathwayObject && vpe instanceof VGroup) {
 				PathwayObject pe = ((VPathwayObject) vpe).getPathwayObject();
-				if (pe.getGroupRef() != null)
-				{
+				if (pe.getGroupRef() != null) {
 					idRefPairs.put(pe.getGroupId(), pe.getGroupRef());
 				}
 			}
@@ -81,29 +75,24 @@ public class VGroup extends VPathwayObject implements LinkProvider, VElementMous
 	 *
 	 * @return ArrayList<String>
 	 */
-	protected List<String> getRefList()
-	{
+	protected List<String> getRefList() {
 		Map<String, String> idRefPairs = this.getIdRefPairs();
 		List<String> refList = new ArrayList<String>();
 		String thisId = this.getPathwayObject().getGroupId();
 		refList.add(thisId);
 		boolean hit = true;
 
-		while (hit)
-		{
+		while (hit) {
 			hit = false;
 			// search for hits in hash map; add to refList
-			for (String id : idRefPairs.keySet())
-			{
-				if (refList.contains(idRefPairs.get(id)))
-				{
+			for (String id : idRefPairs.keySet()) {
+				if (refList.contains(idRefPairs.get(id))) {
 					refList.add(id);
 					hit = true;
 				}
 			}
 			// remove hits from hash map
-			for (int i = 0; i < refList.size(); i++)
-			{
+			for (int i = 0; i < refList.size(); i++) {
 				idRefPairs.remove(refList.get(i));
 			}
 		}
@@ -111,35 +100,26 @@ public class VGroup extends VPathwayObject implements LinkProvider, VElementMous
 	}
 
 	/**
-	 * Determines whether the area defined by the grouped elements
-	 * contains the point specified. The elements themselves are
-	 * excluded to support individual selection within a group. The
-	 * ultimate effect is then selection of group by clicking the area
-	 * and not the members of the group.
+	 * Determines whether the area defined by the grouped elements contains the
+	 * point specified. The elements themselves are excluded to support individual
+	 * selection within a group. The ultimate effect is then selection of group by
+	 * clicking the area and not the members of the group.
 	 *
-	 * @param point -
-	 *            the point to check
+	 * @param point - the point to check
 	 * @return True if the object contains the point, false otherwise
 	 */
-	protected boolean vContains(Point2D point)
-	{
+	protected boolean vContains(Point2D point) {
 		// return false if point falls on any individual element
-		for (VElement vpe : canvas.getDrawingObjects())
-		{
-			if (vpe instanceof VPathwayObject && !(vpe instanceof VGroup)
-					&& vpe.vContains(point))
-			{
+		for (VElement vpe : canvas.getDrawingObjects()) {
+			if (vpe instanceof VPathwayObject && !(vpe instanceof VGroup) && vpe.vContains(point)) {
 				return false;
 
 			}
 		}
 		// return true if point within bounds of grouped objects
-		if (this.getVShape(true).contains(point))
-		{
+		if (this.getVShape(true).contains(point)) {
 			return true;
-		}
-		else
-		{
+		} else {
 			return false;
 		}
 	}
@@ -149,19 +129,15 @@ public class VGroup extends VPathwayObject implements LinkProvider, VElementMous
 	 *
 	 * @return ArrayList<Graphics>
 	 */
-	public List<VPathwayObject> getGroupGraphics()
-	{
+	public List<VPathwayObject> getGroupGraphics() {
 		List<VPathwayObject> gg = new ArrayList<VPathwayObject>();
 		// return true if group object is referenced by selection
-		for (VElement vpe : canvas.getDrawingObjects())
-		{
-			if (vpe instanceof VPathwayObject && vpe != this)
-			{
+		for (VElement vpe : canvas.getDrawingObjects()) {
+			if (vpe instanceof VPathwayObject && vpe != this) {
 				VPathwayObject vpeg = (VPathwayObject) vpe;
 				PathwayObject pe = vpeg.getPathwayObject();
 				String ref = pe.getGroupRef();
-				if (ref != null && ref.equals(getPathwayObject().getGroupId()))
-				{
+				if (ref != null && ref.equals(getPathwayObject().getGroupId())) {
 					gg.add(vpeg);
 				}
 			}
@@ -170,10 +146,8 @@ public class VGroup extends VPathwayObject implements LinkProvider, VElementMous
 	}
 
 	@Override
-	public void select()
-	{
-		for (VPathwayObject g : getGroupGraphics())
-		{
+	public void select() {
+		for (VPathwayObject g : getGroupGraphics()) {
 			g.select();
 		}
 		super.select();
@@ -181,32 +155,31 @@ public class VGroup extends VPathwayObject implements LinkProvider, VElementMous
 
 	@Override
 	public void deselect() {
-		for (VPathwayObject g : getGroupGraphics())
-		{
+		for (VPathwayObject g : getGroupGraphics()) {
 			g.deselect();
 		}
 		super.deselect();
 	}
 
 	@Override
-	protected void vMoveBy(double dx, double dy)
-	{
+	protected void vMoveBy(double dx, double dy) {
 		canvas.moveMultipleElements(getGroupGraphics(), dx, dy);
 
 		// update group outline
 		markDirty();
 	}
 
-
-	protected void doDraw(Graphics2D g2d)
-	{
-		//Build the flags
+	protected void doDraw(Graphics2D g2d) {
+		// Build the flags
 		int flags = 0;
-		if(isSelected()) flags += FLAG_SELECTED;
-		if(mouseover) flags += FLAG_MOUSEOVER;
-		if(anchorsShowing) flags += FLAG_ANCHORSVISIBLE;
+		if (isSelected())
+			flags += FLAG_SELECTED;
+		if (mouseover)
+			flags += FLAG_MOUSEOVER;
+		if (anchorsShowing)
+			flags += FLAG_ANCHORSVISIBLE;
 
-		//Draw the group style appearance
+		// Draw the group style appearance
 		GroupPainter p = GroupPainterRegistry.getPainter(gdata.getGroupType().toString());
 		p.drawGroup(g2d, this, flags);
 	}
@@ -214,14 +187,14 @@ public class VGroup extends VPathwayObject implements LinkProvider, VElementMous
 	boolean mouseover = false;
 
 	public void vElementMouseEvent(VElementMouseEvent e) {
-		if(e.getElement() == this) {
+		if (e.getElement() == this) {
 			boolean old = mouseover;
-			if(e.getType() == VElementMouseEvent.TYPE_MOUSEENTER) {
+			if (e.getType() == VElementMouseEvent.TYPE_MOUSEENTER) {
 				mouseover = true;
-			} else if(e.getType() == VElementMouseEvent.TYPE_MOUSEEXIT) {
+			} else if (e.getType() == VElementMouseEvent.TYPE_MOUSEEXIT) {
 				mouseover = false;
 			}
-			if(old != mouseover) {
+			if (old != mouseover) {
 				markDirty();
 			}
 		}
@@ -229,22 +202,21 @@ public class VGroup extends VPathwayObject implements LinkProvider, VElementMous
 
 	public void highlight(Color c) {
 		super.highlight(c);
-		//Highlight the children
-		for(VPathwayObject g : getGroupGraphics()) {
+		// Highlight the children
+		for (VPathwayObject g : getGroupGraphics()) {
 			g.highlight();
 		}
 	}
 
 	protected Shape calculateVOutline() {
-		//Include rotation and stroke
+		// Include rotation and stroke
 		Area a = new Area(getVShape(true));
 		return a;
 	}
 
-	protected Shape getVShape(boolean rotate)
-	{
+	protected Shape getVShape(boolean rotate) {
 		Rectangle2D mb = null;
-		if(rotate) {
+		if (rotate) {
 			mb = gdata.getRotatedBounds();
 		} else {
 			mb = gdata.getBounds();
@@ -252,34 +224,30 @@ public class VGroup extends VPathwayObject implements LinkProvider, VElementMous
 		return canvas.vFromM(mb);
 	}
 
-	protected void setVScaleRectangle(Rectangle2D r)
-	{
+	protected void setVScaleRectangle(Rectangle2D r) {
 		// TODO Auto-generated method stub
 
 	}
 
 	private LinkProvider linkAnchorDelegate = new DefaultLinkAnchorDelegate(this);
 	private boolean anchorsShowing = false;
-	
-	public void showLinkAnchors() 
-	{
+
+	public void showLinkAnchors() {
 		anchorsShowing = true;
 		linkAnchorDelegate.showLinkAnchors();
 	}
 
-	public void hideLinkAnchors() 
-	{
+	public void hideLinkAnchors() {
 		anchorsShowing = false;
 		linkAnchorDelegate.hideLinkAnchors();
 	}
 
-	public LinkAnchor getLinkAnchorAt(Point2D p) 
-	{
+	public LinkAnchor getLinkAnchorAt(Point2D p) {
 		return linkAnchorDelegate.getLinkAnchorAt(p);
 	}
 
-	@Override protected void destroy()
-	{
+	@Override
+	protected void destroy() {
 		super.destroy();
 		canvas.removeVElementMouseListener(this);
 	}
@@ -287,9 +255,9 @@ public class VGroup extends VPathwayObject implements LinkProvider, VElementMous
 	/**
 	 * Use this to override default linkAnchorDelegate
 	 */
-	public void setLinkAnchorDelegate (LinkProvider delegate)
-	{
-		if (delegate == null) throw new NullPointerException("passed illegal null value for delegate");
+	public void setLinkAnchorDelegate(LinkProvider delegate) {
+		if (delegate == null)
+			throw new NullPointerException("passed illegal null value for delegate");
 		linkAnchorDelegate = delegate;
 	}
 }

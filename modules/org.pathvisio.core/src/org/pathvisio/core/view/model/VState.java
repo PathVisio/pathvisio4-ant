@@ -25,43 +25,43 @@ import org.pathvisio.libgpml.model.PathwayObject;
 /**
  * represents the view of a PathwayElement with ObjectType.STATE.
  */
-public class VState extends VShapedElement
-{	
+public class VState extends VShapedElement {
 	public static final String ROTATION_KEY = "org.pathvisio.core.StateRotation";
 
-	public VState (VPathwayModel canvas, PathwayObject o) {
+	public VState(VPathwayModel canvas, PathwayObject o) {
 		super(canvas, o);
 	}
 
-	public void doDraw(Graphics2D g)
-	{
+	public void doDraw(Graphics2D g) {
 		g.setColor(getLineColor());
 		setLineStyle(g);
 		drawShape(g);
-		
+
 		g.setFont(getVFont());
 		drawTextLabel(g);
-		
+
 		drawHighlight(g);
 	}
 
-	protected void vMoveBy(double vdx, double vdy)
-	{
-		Point2D mNewPos = new Point2D.Double (mFromV(getVCenterX() + vdx), mFromV(getVCenterY() + vdy)); 
-		Point2D newRel = ((State)gdata).getParentDataNode().toRelativeCoordinate(mNewPos);
+	protected void vMoveBy(double vdx, double vdy) {
+		Point2D mNewPos = new Point2D.Double(mFromV(getVCenterX() + vdx), mFromV(getVCenterY() + vdy));
+		Point2D newRel = ((State) gdata).getParentDataNode().toRelativeCoordinate(mNewPos);
 		double x = newRel.getX();
 		double y = newRel.getY();
-		if (x > 1) x = 1;
-		if (x < -1) x = -1;
-		if (y > 1) y = 1;
-		if (y < -1) y = -1;
+		if (x > 1)
+			x = 1;
+		if (x < -1)
+			x = -1;
+		if (y > 1)
+			y = 1;
+		if (y < -1)
+			y = -1;
 		gdata.setRelX(x);
 		gdata.setRelY(y);
 	}
 
 	@Override
-	public void destroy()
-	{
+	public void destroy() {
 		super.destroy();
 	}
 }

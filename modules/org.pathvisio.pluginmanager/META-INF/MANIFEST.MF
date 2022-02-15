@@ -17,8 +17,9 @@ Require-Bundle: org.apache.felix.bundlerepository;bundle-version="1.6.6",
  org.pathvisio.core;bundle-version="4.0.0",
  org.pathvisio.gui;bundle-version="4.0.0",
  org.pathvisio.desktop;bundle-version="4.0.0",
- jakarta.xml.bind-api;bundle-version="4.0.0.RC2",
- jakarta.activation-api;bundle-version="2.1.0.RC1"
+ jakarta.xml.bind-api;bundle-version="3.0.1",
+ com.sun.activation.jakarta.activation;bundle-version="2.0.1",
+ com.sun.xml.bind.jaxb-osgi;bundle-version="3.0.2"
 Import-Package: org.osgi.framework;version="1.5.0"
 Bundle-Copyright: 2006-2022 BiGCaT Bioinformatics, WikiPathways
 Bundle-DocURL: http://www.pathvisio.org
