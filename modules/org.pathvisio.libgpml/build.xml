@@ -14,6 +14,7 @@
 		<include name="org.bridgedb*.jar"/>
 		<include name="org.bridgedb.bio*.jar"/>
 		<include name="org.bridgedb.rdb*.jar"/>
+		<include name="commons*.jar"/>
 	  </fileset>
 	</path>
 

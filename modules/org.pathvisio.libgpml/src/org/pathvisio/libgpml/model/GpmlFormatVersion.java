@@ -26,11 +26,16 @@ import org.pathvisio.libgpml.io.ConverterException;
  * @author unknown
  */
 public interface GpmlFormatVersion {
-	
+
 	/**
 	 * Returns the GPML namespace.
 	 */
 	Namespace getGpmlNamespace();
+
+	/**
+	 * Returns the GPML schema file.
+	 */
+	String getSchemaFile();
 
 	/**
 	 * validates a JDOM document against the xml-schema definition specified by

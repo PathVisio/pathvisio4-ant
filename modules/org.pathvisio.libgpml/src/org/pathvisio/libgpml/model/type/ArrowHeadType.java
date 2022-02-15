@@ -17,116 +17,117 @@
 package org.pathvisio.libgpml.model.type;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
+
+import org.pathvisio.libgpml.debug.Logger;
+import org.pathvisio.libgpml.model.LineElement;
 
 /**
- * Extensible enum pattern for defining the various possible arrow heads.
- * NB: the name LineType is slightly misleading, as it refers strictly to arrowheads and
- * other kinds of line endings.
- * A Line in PathVisio has two endings that each can have a different "LineType"
+ * This class contains extensible enum pattern for different arrow head types. A
+ * Line in PathVisio has two endings {@link LineElement.LinePoint} that each can have a
+ * different arrow head.
+ * 
+ * NB: previously named LineType.
+ * 
+ * @author unknown, finterly
  */
-public class ArrowHeadType
-{
-	private static Map<String, ArrowHeadType> nameMappings = new HashMap<String, ArrowHeadType>();
-	private static List<ArrowHeadType> values = new ArrayList<ArrowHeadType>();
-	private static List<ArrowHeadType> visible = new ArrayList<ArrowHeadType>();
+public class ArrowHeadType {
 
-	/** LineType LINE means the absence of an arrowhead */
-	public static final ArrowHeadType LINE = new ArrowHeadType("Line", "Line");
-	public static final ArrowHeadType ARROW = new ArrowHeadType("Arrow", "Arrow");
-	public static final ArrowHeadType TBAR = new ArrowHeadType("TBar", "TBar");
+	private static Map<String, ArrowHeadType> nameToArrowHeadType = new TreeMap<String, ArrowHeadType>(String.CASE_INSENSITIVE_ORDER);
+
+	public static final ArrowHeadType UNDIRECTED = new ArrowHeadType("Undirected"); //previous "Line" 
+	public static final ArrowHeadType DIRECTED = new ArrowHeadType("Directed");
+	public static final ArrowHeadType CONVERSION = new ArrowHeadType("Conversion");
+	public static final ArrowHeadType INHIBITION = new ArrowHeadType("Inhibition");
+	public static final ArrowHeadType CATALYSIS = new ArrowHeadType("Catalysis");
+	public static final ArrowHeadType STIMULATION = new ArrowHeadType("Stimulation");
+	public static final ArrowHeadType BINDING = new ArrowHeadType("Binding");
+	public static final ArrowHeadType TRANSLOCATION = new ArrowHeadType("Translocation");
+	public static final ArrowHeadType TRANSCRIPTION_TRANSLATION = new ArrowHeadType("TranscriptionTranslation");
 	
-	@Deprecated
-	public static final ArrowHeadType RECEPTOR = new ArrowHeadType("Receptor", "Receptor", true);
-	@Deprecated
-	public static final ArrowHeadType LIGAND_SQUARE = new ArrowHeadType("LigandSquare","LigandSq", true);
-	@Deprecated
-	public static final ArrowHeadType RECEPTOR_SQUARE = new ArrowHeadType("ReceptorSquare", "ReceptorSq", true);
-	@Deprecated
-	public static final ArrowHeadType LIGAND_ROUND = new ArrowHeadType("LigandRound", "LigandRd", true);
-	@Deprecated
-	public static final ArrowHeadType RECEPTOR_ROUND = new ArrowHeadType("ReceptorRound", "ReceptorRd", true);
-		
-	/**
-	   mappName may be null for new shapes that don't have a .mapp
-	   equivalent.
-	 */
-	private ArrowHeadType (String name, String mappName)
-	{
-		this (name, mappName, false);
-	}
-
-	private ArrowHeadType (String name, String mappName, boolean hidden)
-	{
-		if (name == null) { throw new NullPointerException(); }
-
-		this.mappName = mappName;
-		this.name = name;
-
-		nameMappings.put (name, this);
-
-		values.add (this);		
-		if (!hidden) visible.add (this);
-	}
-	
-	/**
-	   Create an object and add it to the list.
-
-	   For extending the enum.
-	 */
-	public static ArrowHeadType create (String name, String mappName)
-	{
-		if (nameMappings.containsKey (name))
-		{
-			return nameMappings.get (name);
-		}
-		else
-		{
-			return new ArrowHeadType (name, mappName);
-		}
-	}
-
-	private String mappName;
 	private String name;
 
-	public String getMappName() { return mappName; }
-
-	public String getName() { return name; }
-
-	public static ArrowHeadType fromName(String value)
-	{
-		return nameMappings.get (value);
-	}
-
-	static public String[] getNames()
-	{
-		return nameMappings.keySet().toArray(new String[nameMappings.size()]); 
-	}
-
-	static public String[] getVisibleNames()
-	{
-		String[] result = new String [visible.size()];
-		for (int i = 0; i < visible.size(); ++i)
-		{
-			result[i] = visible.get(i).getName();
+	/**
+	 * The constructor is private. ArrowHeadType cannot be directly instantiated.
+	 * Use create() method to instantiate ArrowHeadType.
+	 * 
+	 * @param name the string key of this ArrowHeadType.
+	 * @throws NullPointerException if name is null.
+	 */
+	private ArrowHeadType(String name) {
+		if (name == null) {
+			throw new NullPointerException();
 		}
-		return result;
+		this.name = name;
+		nameToArrowHeadType.put(name, this); // adds this name and ArrowHeadType to map.
 	}
 
-	static public ArrowHeadType[] getValues()
-	{
-		return nameMappings.values().toArray (new ArrowHeadType[nameMappings.size()]);
+	/**
+	 * Returns a ArrowHeadType from a given string identifier name. If the
+	 * ArrowHeadType doesn't exist yet, it is created to extend the enum. The 
+	 * method makes sure that the same object is not added twice.
+	 * 
+	 * @param name the string key.
+	 * @return the ArrowHeadType for given name. If name does not exist, creates and
+	 *         returns a new ArrowHeadType.
+	 */
+	public static ArrowHeadType register(String name) {
+		if (nameToArrowHeadType.containsKey(name)) {
+			return nameToArrowHeadType.get(name);
+		} else {
+			Logger.log.trace("Registered arrowhead type " + name); 
+			return new ArrowHeadType(name);
+		}
 	}
 
-	static public ArrowHeadType[] getVisibleValues()
-	{
-		return visible.toArray (new ArrowHeadType[0]);
+	/**
+	 * Returns the ArrowHeadType from given string name.
+	 * 
+	 * @param name the string.
+	 * @return the ArrowHeadType with given string name.
+	 */
+	public static ArrowHeadType fromName(String name) {
+		return nameToArrowHeadType.get(name);
 	}
 
-	public String toString()
-	{
+	/**
+	 * Returns the name key for this ArrowHeadType.
+	 * 
+	 * @return name the key for this ArrowHeadType.
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * Returns the names of all registered ArrowHeadTypes as a list.
+	 * 
+	 * @return names the names of all registered ArrowHeadTypes in order of
+	 *         insertion.
+	 */
+	static public List<String> getNames() {
+		List<String> names = new ArrayList<>(nameToArrowHeadType.keySet());
+		return names;
+	}
+
+	/**
+	 * Returns the arrow head type values of all ArrowHeadTypes as a list.
+	 * 
+	 * @return arrowHead the list of all registered ArrowHeadTypes.
+	 */
+	static public List<ArrowHeadType> getValues() {
+		List<ArrowHeadType> arrowHeadTypes = new ArrayList<>(nameToArrowHeadType.values());
+		return arrowHeadTypes;
+	}
+
+	/**
+	 * Returns a string representation of this ArrowHeadType.
+	 * 
+	 * @return name the identifier of this ArrowHeadType.
+	 */
+	public String toString() {
 		return name;
 	}
 }

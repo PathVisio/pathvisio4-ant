@@ -37,7 +37,6 @@ public class ShapeRegistry {
 	private static Map<String, IShape> shapeMap = new HashMap<String, IShape>();
 	private static Map<String, ArrowShape> arrowMap = new HashMap<String, ArrowShape>();
 	private static Map<String, AnchorShape> anchorMap = new HashMap<String, AnchorShape>();
-	private static Map<String, IShape> mappMappings = new HashMap<String, IShape>();
 
 	static {
 		GeneralPath temp = new GeneralPath();
@@ -66,8 +65,8 @@ public class ShapeRegistry {
 		DEFAULT_SHAPE = new AbstractShape(defaultShape, "default");
 
 		BasicShapes.registerShapes();
-		GenMAPPShapes.registerShapes();
-		MIMShapes.registerShapes();
+		ShapeCatalog.registerShapes();
+//		MIMShapes.registerShapes(); TODO plugin probably
 	}
 
 	/**
@@ -77,19 +76,8 @@ public class ShapeRegistry {
 		return shapeMap.get(value);
 	}
 
-	/*
-	 * Warning when using fromMappName: in case value == Poly, this will return
-	 * Triangle. The caller needs to check for this special case.
-	 */
-	public static IShape fromMappName(String value) {
-		return mappMappings.get(value);
-	}
-
 	public static void registerShape(IShape ish) {
 		shapeMap.put(ish.getName(), ish);
-		if (ish.getMappName() != null) {
-			mappMappings.put(ish.getMappName(), ish);
-		}
 	}
 
 	/**

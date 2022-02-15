@@ -30,6 +30,7 @@ import org.bridgedb.Xref;
 import org.pathvisio.libgpml.debug.Logger;
 import org.pathvisio.libgpml.io.ConverterException;
 import org.pathvisio.libgpml.io.PathwayModelExporter;
+import org.pathvisio.libgpml.model.DataNode;
 import org.pathvisio.libgpml.model.PathwayModel;
 import org.pathvisio.libgpml.model.PathwayObject;
 import org.pathvisio.libgpml.model.type.ObjectType;
@@ -62,14 +63,14 @@ public class EUGeneExporter implements PathwayModelExporter {
 
 	private static class EUGenePathway {
 		Logger log = Logger.log;
-		PathwayModel pathway;
+		PathwayModel pathwayModel;
 
 		DataSource system; // The annotation system
 
 		List<Xref> refs;
 
 		public EUGenePathway(PathwayModel p) {
-			pathway = p;
+			pathwayModel = p;
 			read();
 		}
 
@@ -95,7 +96,7 @@ public class EUGeneExporter implements PathwayModelExporter {
 			out = new PrintStream(file);
 
 			// Print the data
-			out.println("//PATHWAY_NAME = " + pathway.getMappInfo().getTitle());
+			out.println("//PATHWAY_NAME = " + pathwayModel.getPathway().getTitle());
 			out.println("//PATHWAY_SOURCE = GenMAPP");
 			out.println("//PATHWAY_MARKER = " + euGeneSystem);
 			if (missedGenes.length() > 0)
@@ -109,11 +110,11 @@ public class EUGeneExporter implements PathwayModelExporter {
 			refs = new ArrayList<Xref>();
 			Map<DataSource, Integer> codeCount = new HashMap<DataSource, Integer>();
 
-			for (PathwayObject elm : pathway.getDataObjects()) {
+			for (PathwayObject elm : pathwayModel.getPathwayObjects()) {
 				if (elm.getObjectType() != ObjectType.DATANODE) {
 					continue; // Skip non-datanodes
 				}
-				Xref ref = elm.getXref();
+				Xref ref = ((DataNode) elm).getXref();
 				DataSource ds = ref.getDataSource();
 				if (ref == null || ref.getId().equals("") || ref.getDataSource() == null) {
 					continue; // Skip datanodes with incomplete annotation

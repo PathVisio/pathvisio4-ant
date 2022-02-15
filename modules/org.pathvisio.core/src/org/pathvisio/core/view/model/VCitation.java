@@ -24,35 +24,36 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.List;
 
+import org.pathvisio.libgpml.model.Citation;
+import org.pathvisio.libgpml.model.Groupable;
+import org.pathvisio.libgpml.model.PathwayElement;
+import org.pathvisio.libgpml.model.PathwayElement.CitationRef;
 import org.pathvisio.core.preferences.GlobalPreference;
 import org.pathvisio.core.preferences.PreferenceManager;
 import org.pathvisio.core.view.VElementMouseEvent;
 import org.pathvisio.core.view.VElementMouseListener;
-import org.pathvisio.libgpml.biopax.BiopaxReferenceManager;
-import org.pathvisio.libgpml.biopax.PublicationXref;
-import org.pathvisio.libgpml.model.PathwayObject;
-import org.pathvisio.libgpml.model.type.ObjectType;
 
 /**
  * Draws a citation number on top of a pathway object.
  * 
- * @author thomas
+ * @author thomas, finterly
  */
 public class VCitation extends VElement implements VElementMouseListener {
 	static final int MFONT_SIZE = 8;
 	static final String FONT_NAME = "Arial";
 	static final Color FONT_COLOR = new Color(0, 0, 128);
 	static final int M_PADDING = 3;
-	private VPathwayObject parent;
+	private VPathwayElement parent;
 	private Point2D rPosition;
 
 	/**
-	 * @param canvas    The parent VPathway
-	 * @param parent    The Graphics for which the references need to be displayed
-	 * @param rPosition The position to place the references, relative to the parent
+	 * @param canvas    the parent VPathwayModel
+	 * @param parent    the VPathwayElement for which the references need to be
+	 *                  displayed
+	 * @param rPosition the position to place the references, relative to the parent
 	 *                  Graphics
 	 */
-	public VCitation(VPathwayModel canvas, VPathwayObject parent, Point2D rPosition) {
+	public VCitation(VPathwayModel canvas, VPathwayElement parent, Point2D rPosition) {
 		super(canvas);
 		this.parent = parent;
 		this.rPosition = rPosition;
@@ -61,10 +62,16 @@ public class VCitation extends VElement implements VElementMouseListener {
 		canvas.addVElementMouseListener(this);
 	}
 
+	/**
+	 * @return
+	 */
 	public VPathwayObject getParent() {
 		return parent;
 	}
 
+	/**
+	 *
+	 */
 	public void vElementMouseEvent(VElementMouseEvent e) {
 		if (e.getElement() == parent) {
 			if (e.getType() == VElementMouseEvent.TYPE_MOUSEENTER) {
@@ -75,15 +82,22 @@ public class VCitation extends VElement implements VElementMouseListener {
 		}
 	}
 
+	/**
+	 * @param rPosition
+	 */
 	public void setRPosition(Point2D rPosition) {
 		this.rPosition = rPosition;
 		markDirty();
 	}
 
-	public BiopaxReferenceManager getRefMgr() {
-		return parent.getPathwayObject().getBiopaxReferenceManager();
-	}
+//	public BiopaxReferenceManager getRefMgr() { TODO 
+//	return parent.getPathwayElement().getBiopaxReferenceManager();
+//}
 
+	/**
+	 * @param g
+	 * @return
+	 */
 	protected Rectangle2D getTextBounds(Graphics2D g) {
 		Rectangle2D tb = null;
 		Point2D vp = getVPosition();
@@ -107,20 +121,34 @@ public class VCitation extends VElement implements VElementMouseListener {
 		return tb;
 	}
 
+	/**
+	 *
+	 */
 	protected Shape calculateVOutline() {
 		return getTextBounds(g2d);
 	}
 
+	/**
+	 * @return
+	 */
 	protected int getVFontSize() {
 		return (int) vFromM(MFONT_SIZE);
 	}
 
+	/**
+	 * @return
+	 */
 	protected Font getVFont() {
 		return new Font(FONT_NAME, Font.PLAIN, getVFontSize());
 	}
 
+	/**
+	 * TODO rename Xref??? What does this method actually do?
+	 * 
+	 * @return
+	 */
 	protected String getXRefText() {
-		if (getParent().getPathwayObject().getParent() == null) {
+		if (getParent().getPathwayObject().getPathwayModel() == null) {
 			return ""; // In case a redraw is called after deletion of the model element
 		}
 		int maxNr = PreferenceManager.getCurrent().getInt(GlobalPreference.MAX_NR_CITATIONS);
@@ -132,13 +160,16 @@ public class VCitation extends VElement implements VElementMouseListener {
 		int sequence = 0;
 		int nrShowed = 0; // Counter to check maximum citation numbers
 
-		List<PublicationXref> xrefs = getRefMgr().getPublicationXRefs();
-		for (int i = 0; i < xrefs.size(); i++) {
+		List<CitationRef> citationRefs = parent.getPathwayObject().getCitationRefs();
+		for (int i = 0; i < citationRefs.size(); i++) {
 			if (nrShowed > 0 && nrShowed >= maxNr) {
 				xrefStr = xrefStr.substring(0, xrefStr.length() - 2) + "...  ";
 				break; // Stop after maximum number of citations showed
 			}
-			int n = getRefMgr().getBiopaxElementManager().getOrdinal(xrefs.get(i));
+			// TODO use for now the index of citation
+			CitationRef citationRef = citationRefs.get(i);
+			Citation citation = citationRef.getCitation();
+			int n = canvas.getPathwayModel().getCitations().indexOf(citation);
 			if (n != lastOrdinal + 1) { // End sequence
 				if (sequence > 2) {
 					xrefStr = xrefStr.substring(0, xrefStr.length() - 2);
@@ -166,13 +197,16 @@ public class VCitation extends VElement implements VElementMouseListener {
 		return xrefStr;
 	}
 
+	/**
+	 * @return
+	 */
 	protected Point2D getVPosition() {
-		PathwayObject mParent = parent.getPathwayObject();
+		PathwayElement mParent = parent.getPathwayObject();
 
 		Point2D vp = null;
 		// Check for mappinfo object, needs a special treatment,
 		// since it has no bounds in the model
-		if (mParent.getObjectType() == ObjectType.MAPPINFO) {
+		if (parent.getClass() == VInfoBox.class) {
 			Rectangle2D vb = parent.getVBounds();
 			double x = rPosition.getX();
 			double y = rPosition.getY();
@@ -184,7 +218,7 @@ public class VCitation extends VElement implements VElementMouseListener {
 			y += vb.getCenterY();
 			vp = new Point2D.Double(x, y);
 		} else { // For other objects, use the model bounds
-			Point2D mp = mParent.toAbsoluteCoordinate(rPosition);
+			Point2D mp = ((Groupable) mParent).toAbsoluteCoordinate(rPosition);
 			vp = new Point2D.Double(vFromM(mp.getX()), vFromM(mp.getY()));
 		}
 		return vp;

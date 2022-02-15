@@ -28,39 +28,33 @@ import org.pathvisio.libgpml.model.GraphLink.LinkableTo;
 import org.pathvisio.libgpml.model.GraphLink.LinkableFrom;
 
 /**
- * A LinkAnchor is a small round target on a Shape or Line that appears
- * only when you drag a line end around. If the line end is near a LinkAnchor,
- * the line end "connects" to the Shape or Line.
+ * A LinkAnchor is a small round target on a Shape or Line that appears only
+ * when you drag a line end around. If the line end is near a LinkAnchor, the
+ * line end "connects" to the Shape or Line.
+ * 
+ * @author unknown, finterly
  */
-public class LinkAnchor extends VElement 
-{
+public class LinkAnchor extends VElement {
 	static final double DRAW_RADIUS = 5;
 	static final double MATCH_RADIUS = DRAW_RADIUS + 5;
 	static final int HINT_STROKE_SIZE = 10;
 
 	double relX, relY;
-	LinkableTo idContainer;
-	VElement parent;
-	
-	public LinkAnchor(VPathwayModel canvas, VElement parent, LinkableTo idContainer, double relX, double relY) 
-	{
-		super (canvas);
+	LinkableTo linkableTo;
+	VLinkableTo vLinkableTo;
+
+	public LinkAnchor(VPathwayModel canvas, VLinkableTo parent, LinkableTo idContainer, double relX, double relY) {
+		super(canvas);
 		this.relX = relX;
 		this.relY = relY;
-		this.idContainer = idContainer;
-		this.parent = parent;
+		this.linkableTo = idContainer;
+		this.vLinkableTo = parent;
 	}
 
 	public Shape getMatchArea() {
-		Point2D abs = idContainer.toAbsoluteCoordinate(
-				new Point2D.Double(relX, relY)
-		);
-		return canvas.vFromM(new Ellipse2D.Double(
-				abs.getX() - MATCH_RADIUS,
-				abs.getY() - MATCH_RADIUS,
-				MATCH_RADIUS * 2,
-				MATCH_RADIUS * 2
-		));
+		Point2D abs = linkableTo.toAbsoluteCoordinate(new Point2D.Double(relX, relY));
+		return canvas.vFromM(new Ellipse2D.Double(abs.getX() - MATCH_RADIUS, abs.getY() - MATCH_RADIUS,
+				MATCH_RADIUS * 2, MATCH_RADIUS * 2));
 	}
 
 	public Point2D getPosition() {
@@ -68,14 +62,10 @@ public class LinkAnchor extends VElement
 	}
 
 	private Shape getShape(boolean includeHighlight) {
-		Point2D abs = idContainer.toAbsoluteCoordinate(getPosition());
-		Shape s = canvas.vFromM(new Ellipse2D.Double(
-				abs.getX() - DRAW_RADIUS,
-				abs.getY() -DRAW_RADIUS,
-				DRAW_RADIUS * 2,
-				DRAW_RADIUS * 2
-		));
-		if(drawHighlight && includeHighlight) {
+		Point2D abs = linkableTo.toAbsoluteCoordinate(getPosition());
+		Shape s = canvas.vFromM(new Ellipse2D.Double(abs.getX() - DRAW_RADIUS, abs.getY() - DRAW_RADIUS,
+				DRAW_RADIUS * 2, DRAW_RADIUS * 2));
+		if (drawHighlight && includeHighlight) {
 			return new BasicStroke(HINT_STROKE_SIZE).createStrokedShape(s);
 		} else {
 			return s;
@@ -87,38 +77,22 @@ public class LinkAnchor extends VElement
 	}
 
 	@Override
-	public void doDraw(Graphics2D g2d) 
-	{
-		if(drawHighlight) {
+	public void doDraw(Graphics2D g2d) {
+		if (drawHighlight) {
 			g2d.setColor(new Color(0, 255, 0, 128));
 			g2d.fill(getShape());
 		}
 
-		//Draw a bulls eye
+		// Draw a bulls eye
 		Shape shape = getShape(false);
 		Rectangle2D bounds = shape.getBounds2D();
 		double r = bounds.getWidth() / 2;
 		double cx = bounds.getCenterX();
 		double cy = bounds.getCenterY();
 
-		Ellipse2D outer = new Ellipse2D.Double(
-				cx - r,
-				cy -r,
-				r * 2,
-				r * 2
-		);
-		Ellipse2D white = new Ellipse2D.Double(
-				cx - r * 2 / 3,
-				cy - r * 2 / 3,
-				4 * r / 3,
-				4 * r / 3
-		);
-		Ellipse2D inner = new Ellipse2D.Double(
-				cx - r / 3,
-				cy - r / 3,
-				2 * r / 3,
-				2 * r / 3
-		);
+		Ellipse2D outer = new Ellipse2D.Double(cx - r, cy - r, r * 2, r * 2);
+		Ellipse2D white = new Ellipse2D.Double(cx - r * 2 / 3, cy - r * 2 / 3, 4 * r / 3, 4 * r / 3);
+		Ellipse2D inner = new Ellipse2D.Double(cx - r / 3, cy - r / 3, 2 * r / 3, 2 * r / 3);
 
 		Color fill = new Color(255, 0, 0, 255);
 
@@ -133,42 +107,38 @@ public class LinkAnchor extends VElement
 		g2d.draw(shape);
 	}
 
-	public LinkableTo getGraphIdContainer() {
-		return idContainer;
+	public LinkableTo getLinkableTo() {
+		return linkableTo;
 	}
 
 	public void link(LinkableFrom ref) {
-		ref.linkTo(idContainer, relX, relY);
+		ref.linkTo(linkableTo, relX, relY);
 	}
 
 	private boolean drawHighlight;
 
 	/**
-	 * Display a visual hint to show that this is the anchor that is
-	 * being linked to.
+	 * Display a visual hint to show that this is the anchor that is being linked
+	 * to.
 	 */
-	public void highlight() 
-	{
+	public void highlight() {
 		drawHighlight = true;
 		markDirty();
 	}
 
-	public void unhighlight() 
-	{
+	public void unhighlight() {
 		drawHighlight = false;
 		markDirty();
 	}
 
 	@Override
-	protected Shape calculateVOutline()
-	{
+	protected Shape calculateVOutline() {
 		return getShape();
 	}
 
 	@Override
-	protected int getZOrder()
-	{
-		return parent.getZOrder() + 1;
+	public int getZOrder() {
+		return vLinkableTo.getZOrder() + 1;
 	}
-	
+
 }

@@ -20,6 +20,7 @@ import java.awt.geom.Point2D;
 import java.util.Collections;
 import java.util.Set;
 
+import org.pathvisio.libgpml.model.LineElement.LinePoint;
 import org.pathvisio.libgpml.util.Utils;
 
 /**
@@ -27,29 +28,29 @@ import org.pathvisio.libgpml.util.Utils;
  */
 public abstract class GraphLink {
 
+	// ================================================================================
+	// LinkableTo Class
+	// ================================================================================
 	/**
-	 * All classes that have a graphId must implement this interface. Those are
-	 * PathwayElement.MPoint (i.e. points) and PathwayElement (i.e. DataNodes,
-	 * Shapes, etc). They are needed for being refered to.
-	 *
-	 * This interface exists so we can easily iterate through all objects containing
-	 * a graphId.
+	 * PathwayElements which can be referred to must implement this interface.
+	 * {@link DataNode}, {@link DataNode.State}, {@link LineElement.Anchor},
+	 * {@link Label}, {@link Shape}, and {@link Group} can all be referred to by a
+	 * end {@link LineElement.LinePoint}.
 	 */
 	public interface LinkableTo {
-		String getElementId();
-
-		void setElementId(String id);
-
-		/** generate a unique graph Id and use that. */
-		String setGeneratedElementId();
-
-		Set<LinkableFrom> getReferences();
 
 		/**
-		 * return the parent Gmmldata Object, needed for maintaining a consistent list
-		 * of graphId's
+		 * @return
 		 */
-		PathwayModel getPathwayModel();
+		String getElementId();
+
+		/**
+		 * Returns {@link LinkableFrom}s {@link LineElement.LinePoint} for this pathway
+		 * element.
+		 * 
+		 * @return the LinkableFrom line points.
+		 */
+		Set<LinkableFrom> getLinkableFroms();
 
 		/**
 		 * Convert a point to shape coordinates (relative to the bounds of the
@@ -61,28 +62,58 @@ public abstract class GraphLink {
 		 * Convert a point to pathway coordinates (relative to the pathway)
 		 */
 		Point2D toAbsoluteCoordinate(Point2D p);
+
 	}
 
+	// ================================================================================
+	// LinkableFrom Class
+	// ================================================================================
 	/**
-	 * All classes that want to refer *to* a GraphIdContainer must implement this
-	 * interface. At this time that only goes for PathwayElement.MPoint.
+	 * Classes which want to refer *to* a {@link LinkableTo} PathwayElement must
+	 * implement this interface. At this time that only goes for
+	 * {@link LineElement.LinePoint}.
 	 */
 	public interface LinkableFrom {
-		String getElementRef();
 
-		void linkTo(LinkableTo idc, double relX, double relY);
+		/**
+		 * Returns the {@link LinkableTo} pathway element this {@link LinkableFrom}
+		 * elementRef refers to.
+		 * 
+		 * @return the LinkableTo elementRef refers to.
+		 */
+		LinkableTo getElementRef();
 
-		void unlink();
-
+		/**
+		 * Returns the relative x coordinate. When the given point is linked to a
+		 * pathway element, relX and relY are the relative coordinates on the element,
+		 * where 0,0 is at the center of the object and 1,1 at the bottom right corner
+		 * of the object.
+		 * 
+		 * @return the relative x.
+		 */
 		double getRelX();
 
+		/**
+		 * Returns the relative y coordinate. When the given point is linked to a
+		 * pathway element, relX and relY are the relative coordinates on the element,
+		 * where 0,0 is at the center of the object and 1,1 at the bottom right corner
+		 * of the object.
+		 * 
+		 * @return the relative y.
+		 */
 		double getRelY();
 
 		/**
-		 * return the parent Pathway object, needed for maintaining a consistent list of
-		 * graphId's
+		 * @param elementRef
+		 * @param relX
+		 * @param relY
 		 */
-		PathwayModel getPathwayModel();
+		void linkTo(LinkableTo elementRef, double relX, double relY);
+
+		/**
+		 * 
+		 */
+		void unlink();
 
 		/**
 		 * Called whenever the object being referred to changes coordinates.
@@ -91,43 +122,19 @@ public abstract class GraphLink {
 	}
 
 	/**
-	 * Give an object that implements the graphId interface a graphId, thereby
-	 * possibly linking it to new objects.
+	 * Return a list of {@link LinkableFrom} {@link LinePoint}(s) referring to a
+	 * certain {@link LinkableTo} pathway element or anchor. TODO
 	 *
-	 * This is a helper for classes that need to implement the GraphIdContainer
-	 * interface, to avoid duplication.
-	 *
-	 * @param v  the graphId
-	 * @param c  the object to is going to get the new graphId
-	 * @param gd the pathway model, which is maintaining a complete list of all
-	 *           graphId's in this pathway
-	 */
-	protected static void setGraphId(String v, LinkableTo c, PathwayModel data) {
-		String graphId = c.getElementId();
-		if (graphId == null || !graphId.equals(v)) {
-			if (data != null) {
-				if (graphId != null) {
-					data.removeGraphId(graphId);
-				}
-				if (v != null) {
-					data.addGraphId(v, c);
-				}
-			}
-		}
-	}
-
-	/**
-	 * Return a list of GraphRefContainers (i.e. points) referring to a certain
-	 * GraphId.
-	 *
-	 * @param gid
-	 * @param gd
+	 * @param elementRef   the LinkableTo.
+	 * @param pathwayModel the pathway model.
 	 * @return
 	 */
-	public static Set<LinkableFrom> getReferences(LinkableTo gid, PathwayModel gd) {
-		if (gd == null || Utils.isEmpty(gid.getElementId()))
+	public static Set<LinkableFrom> getReferences(LinkableTo elementRef, PathwayModel pathwayModel) {
+		if (pathwayModel == null || Utils.isEmpty(elementRef.getElementId())) {
 			return Collections.emptySet();
-		else
-			return gd.getReferringObjects(gid.getElementId());
+		} else {
+			return pathwayModel.getReferringLinkableFroms(elementRef);
+
+		}
 	}
 }

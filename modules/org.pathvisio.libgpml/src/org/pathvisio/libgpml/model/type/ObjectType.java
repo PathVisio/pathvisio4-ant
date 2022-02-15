@@ -20,85 +20,100 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
-   Possible values for PathwayElement.getObjectType(), such as "DataNode" or "Shape"
+ * Possible values for PathwayElement.getObjectType(), such as "DataNode" or
+ * "Shape"
  */
-public enum ObjectType
-{
-	/** any shape with width and height */
-	SHAPE ("Shape"),
-	
-	/** a connector. Can be straight, or can consist of multiple line segments */
-	GRAPHLINE ("GraphicalLine"),
-	
-	/** a rectangle that contains a link to an online biological database */
-	DATANODE ("DataNode"),
-	
-	/** a piece of text */
-	LABEL ("Label"),
+public enum ObjectType {
 
-	/** a connector. Can be straight, or can consist of multiple line 
-	 * segments and can contain a that contains a link to an online biological database */
-	LINE ("Line"),
+	/** The pathway description, one per pathway. In GPML this is the root tag. */
+	PATHWAY("Pathway"),
+
+	/**
+	 * A data node pathway element denotes a biological entity that forms a node in
+	 * a pathway.
+	 */
+	DATANODE("DataNode"),
+
+	/**
+	 * A state pathway element represents a specific state of the biological entity.
+	 * A state is linked to a data node.
+	 */
+	STATE("State"),
+
+	/**
+	 * A connector pathway element which represents biological relation between
+	 * entities.
+	 */
+	INTERACTION("Interaction"),
+
+	/** A connector pathway element without semantic meaning. */
+	GRAPHLINE("GraphicalLine"),
 	
-	/** Zero or one per pathway. Placeholder object to let visualization plugins draw a legend */
-	LEGEND ("Legend"),
+	/** A point on a line pathway element. TODO */ 
+	LINEPOINT("Point"),
 	
-	/** One per pathway. TODO: unused. */
-	INFOBOX ("InfoBox"),
-	
-	/** The pathway description, one per pathway. In GPML this is the root tag */
-	MAPPINFO ("Pathway"),
-	
-	/** a grouping of pathway elements */
-	GROUP ("Group"),
-	
-	/** a pool of BioPAX definitions */
-	BIOPAX ("Biopax"),
-	
-	/** similar to DataNode, but State is always
-	 * attached to - and specified relative to - another DataNode */
-	STATE ("State");
+	/** An anchor point on a line pathway element. TODO */
+	ANCHOR("Anchor"),
+
+	/** A pathway element to attach simple labels to the pathway. */
+	LABEL("Label"),
+
+	/** A graphical pathway element with or without a text label. */
+	SHAPE("Shape"),
+
+	/** A pathway element grouping of other pathway elements. */
+	GROUP("Group"),
+
+	/** A reference with additional information, e.g. some Ontology. */
+	ANNOTATION("Annotation"),
+
+	/** A reference to a source of information. */
+	CITATION("Citation"),
+
+	/** A evidence provides information on type of scientific evidence. */
+	EVIDENCE("Evidence");
 
 	private String tag;
+
 	static private final Map<String, ObjectType> TAG_MAP = new HashMap<String, ObjectType>();
-	static
-	{
-		for (ObjectType o : ObjectType.values())
-		{
-			TAG_MAP.put (o.tag, o);
+
+	static {
+		for (ObjectType o : ObjectType.values()) {
+			TAG_MAP.put(o.tag, o);
 		}
 	}
 
 	/**
+	 * Private constructor for object type.
+	 * 
 	 * @param aTag tag used in Gpml for this object type.
 	 */
-	private ObjectType (String aTag)
-	{
+	private ObjectType(String aTag) {
 		tag = aTag;
 	}
 
 	/**
-	 * return the ObjectType that corresponds to a certain tag.
-	 * Returns null if no such ObjectType exists.
+	 * Return the ObjectType that corresponds to a certain tag. Returns null if no
+	 * such ObjectType exists.
+	 * 
+	 * @param value the string value.
+	 * @return the object type for given string.
 	 */
-	public static ObjectType getTagMapping(String value)
-	{
-		if (TAG_MAP.containsKey(value))
-		{
-			return TAG_MAP.get (value);
-		}
-		else
-		{
+	public static ObjectType getTagMapping(String value) {
+		if (TAG_MAP.containsKey(value)) {
+			return TAG_MAP.get(value);
+		} else {
 			return null;
 		}
 	}
 
 	/**
-	 * returns the GPML tag corresponding to this object type,
-	 * can also function as a human-readable description.
+	 * Returns the GPML tag corresponding to this object type, can also function as
+	 * a human-readable description.
+	 * 
+	 * @return the string value for object type.
 	 */
-	public String getTag()
-	{
+	public String getTag() {
 		return tag;
 	}
 }

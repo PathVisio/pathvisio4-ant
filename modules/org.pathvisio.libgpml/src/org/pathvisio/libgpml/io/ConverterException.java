@@ -16,28 +16,26 @@
  ******************************************************************************/
 package org.pathvisio.libgpml.io;
 
-import org.pathvisio.libgpml.model.PathwayModel;
-
 /**
- * Exception that occurs during import, export, save or load of a Patway.
- * @see PathwayModelExporter#doExport
- * @see PathwayModelImporter#doImport
- * @see PathwayModel#readFromXml
- * @see PathwayModel#writeToXml
+ * Exception that occurs during import, export, save or load of a pathway model.
+ * 
+ * @author unknown
  */
 public class ConverterException extends Exception {
 
-
-	public ConverterException(String msg)
-	{
+	/**
+	 * @param msg the string message. 
+	 */
+	public ConverterException(String msg) {
 		super(msg);
 	}
 
-	public ConverterException(Exception e)
-	{
+	/**
+	 * @param e the exception
+	 */
+	public ConverterException(Exception e) {
 		super(e.getClass() + ": " + e.getMessage(), e);
 		setStackTrace(e.getStackTrace());
 	}
-
 
 }

@@ -16,80 +16,121 @@
  ******************************************************************************/
 package org.pathvisio.libgpml.model.type;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.TreeMap;
+
+import org.pathvisio.libgpml.debug.Logger;
 
 /**
- * Different Connector types
+ * This class contains extensible enum for different connectorType property.
  *
- * This is an extensible enum type, you can't instantiate ConnectorType
- * directly, you have to use the getInstance() method.
- *
- * default connector types are STRAIGHT -> the shortest path between two points
- * ELBOW -> connects with horizontal or vertical segments and 90-degree angles
- * CURVED -> uses splines to generate a smooth curve while keeping the
- * end-points perpendicular to the connecting element.
+ * @author unknown, finterly
  */
-public class ConnectorType implements Comparable<ConnectorType> {
-	private static Map<String, ConnectorType> nameMappings = new HashMap<String, ConnectorType>();
-	private static Set<ConnectorType> values = new TreeSet<ConnectorType>();
+public class ConnectorType {
 
-	public static final ConnectorType STRAIGHT = new ConnectorType("Straight");
+	private static Map<String, ConnectorType> nameToConnectorType = new TreeMap<String, ConnectorType>(
+			String.CASE_INSENSITIVE_ORDER);
+
+	public static final ConnectorType STRAIGHT = new ConnectorType("Straight"); // DEFAULT
 	public static final ConnectorType ELBOW = new ConnectorType("Elbow");
 	public static final ConnectorType CURVED = new ConnectorType("Curved");
-	public static final ConnectorType SEGMENTED = new ConnectorType("Segmented");
+	public static final ConnectorType SEGMENTED = new ConnectorType("Segmented"); // has waypoints
 
 	private String name;
 
+	/**
+	 * The constructor is private. ConnectorType cannot be directly instantiated.
+	 * Use create() method to instantiate ConnectorType.
+	 * 
+	 * @param name the string key.
+	 * @throws NullPointerException if name is null.
+	 */
 	private ConnectorType(String name) {
 		if (name == null) {
 			throw new NullPointerException();
 		}
-
 		this.name = name;
-		values.add(this);
-		nameMappings.put(name, this);
+		nameToConnectorType.put(name, this);
 	}
 
 	/**
-	 * returns a connectorType with a given name. If the connectorType doesn't exist
-	 * yet, it is created. for extending the enum.
+	 * Returns a ConnectorType from a given name. If the ConnectorType doesn't exist
+	 * yet, it is created to extend the enum. The method makes sure that the same
+	 * object is not added twice.
 	 * 
-	 * @deprecated Use {@link #fromName(String)} instead.
+	 * @param name the string key.
+	 * @return the ConnectorType for given name or new ConnectorType if name does
+	 *         not exist.
 	 */
-	public static ConnectorType getInstance(String name) {
-		return fromName(name);
-	}
-
-	/**
-	 * returns a connectorType with a given name. If the connectorType doesn't exist
-	 * yet, it is created. for extending the enum.
-	 */
-	public static ConnectorType fromName(String name) {
-		if (nameMappings.containsKey(name)) {
-			return nameMappings.get(name);
+	public static ConnectorType register(String name) {
+		if (nameToConnectorType.containsKey(name)) {
+			return nameToConnectorType.get(name);
 		} else
-			return new ConnectorType(name);
+			Logger.log.trace("Registered connector type " + name);
+		return new ConnectorType(name);
 	}
 
 	/**
-	 * Stable identifier for this ConnectorType.
+	 * Returns the name key for this ConnectorType.
+	 * 
+	 * @return name the key for this ConnectorType.
 	 */
 	public String getName() {
 		return name;
 	}
 
-	static public ConnectorType[] getValues() {
-		return values.toArray(new ConnectorType[0]);
+	/**
+	 * Returns the ConnectorType from given string name.
+	 * 
+	 * @param name the string.
+	 * @return the ConnectorType with given string name.
+	 */
+	public static ConnectorType fromName(String name) {
+		return nameToConnectorType.get(name);
 	}
 
+	/**
+	 * Returns the names of all registered ConnectorTypes as a String array.
+	 * 
+	 * @return names the names of all registered ConnectorTypes in order of
+	 *         insertion.
+	 */
+	static public List<String> getNames() {
+		List<String> names = new ArrayList<>(nameToConnectorType.keySet());
+		return names;
+	}
+
+	/**
+	 * Returns the connector type values of all ConnectorTypes as a list.
+	 * 
+	 * @return connectorTypes the list of all registered ConnectorTypes.
+	 */
+	static public List<ConnectorType> getValues() {
+		List<ConnectorType> connectorTypes = new ArrayList<>(nameToConnectorType.values());
+		return connectorTypes;
+	}
+
+	/**
+	 * Returns a string representation of this ConnectorType.
+	 * 
+	 * @return name the identifier of this ConnectorType.
+	 */
 	public String toString() {
 		return name;
 	}
 
-	public int compareTo(ConnectorType o) {
-		return toString().compareTo(o.toString());
+	/**
+	 * Compares string representations of given ConnectorType lexicographically.
+	 * 
+	 * @param connectorType
+	 * @return positive number (integer difference of character value) if first
+	 *         string is lexicographically greater than second string, negative
+	 *         number if first string is less than second string lexicographically,
+	 *         and 0 if first string is lexicographically equal to second string.
+	 */
+	public int compareTo(ConnectorType connectorType) {
+		return toString().compareTo(connectorType.toString());
 	}
 }

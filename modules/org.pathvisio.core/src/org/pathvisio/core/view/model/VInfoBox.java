@@ -24,128 +24,158 @@ import java.awt.font.TextLayout;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
-import org.pathvisio.libgpml.model.PathwayObject;
+import org.pathvisio.libgpml.model.Pathway;
 
 /**
- * //TODO: view.InfoBox corresponds in some ways to
+ * Infobox contains the meta-information (e.g. title, organism) for a pathway
+ * model. The infobox is always displayed in the top left corner at coordinate
+ * (0,0). Contains information about this pathway, currently only used for
+ * information in PropertyPanel (). TODO
+ * 
+ * view.InfoBox corresponds in some ways to
  * model.PathwayElement(ObjectType.MAPPINFO) and in some ways to
- * model.PathwayElement(ObjectType.INFOBOX).
- * This confusion is rooted in inconsistencies in GPML.
- * This should be cleaned up one day.
+ * model.PathwayElement(ObjectType.INFOBOX). This confusion is rooted in
+ * inconsistencies in GPML. This should be cleaned up one day. TODO: has to be
+ * implemented to behave the same as any Graphics object when displayed on the
+ * drawing
+ * 
+ * @author unknown, finterly
  */
-public class VInfoBox extends VPathwayObject {
+public class VInfoBox extends VPathwayElement {
+
+	/**
+	 * The infobox is always displayed in the top left corner at coordinate (0,0).
+	 */
+	static final double LEFT = 0;
+	static final double TOP = 0;
+
 	static final int V_SPACING = 5;
 	static final int H_SPACING = 10;
 	static final int INITIAL_SIZE = 200;
 
-	//Elements not stored in gpml
-	String fontName			= "Times New Roman";
-	String fontWeight		= "regular";
-	static final double M_INITIAL_FONTSIZE	= 12.0;
+	// graphics for info box not stored in gpml
+	String fontName = "Times New Roman";
+	String fontWeight = "regular";
+	static final double M_INITIAL_FONTSIZE = 12.0;
 
+	// initialize, real size is calculated on first call to draw()
 	int sizeX = 1;
-	int sizeY = 1; //Real size is calculated on first call to draw()
+	int sizeY = 1;
 
-	public VInfoBox (VPathwayModel canvas, PathwayObject o) {
+	public VInfoBox(VPathwayModel canvas, Pathway o) {
 		super(canvas, o);
 		canvas.setMappInfo(this);
 	}
 
-	protected VCitation createCitation()
-	{
+	/**
+	 * Gets the model representation (PathwayElement) of this class
+	 * 
+	 * @return
+	 */
+	@Override
+	public Pathway getPathwayObject() {
+		return (Pathway) super.getPathwayObject();
+	}
+
+	protected VCitation createCitation() {
 		return new VCitation(canvas, this, new Point2D.Double(1, 0));
 	}
 
-
-	//public Point getBoardSize() { return new Point((int)gdata.getMBoardWidth(), (int)gdata.getMBoardHeight()); }
-
-	int getVFontSize()
-	{
-		return (int)(vFromM(M_INITIAL_FONTSIZE));
+	int getVFontSize() {
+		return (int) (vFromM(M_INITIAL_FONTSIZE));
 	}
 
-	protected void vMoveBy(double vdx, double vdy)
-	{
-//		markDirty();
-		gdata.setTop (gdata.getTop()  + mFromV(vdy));
-		gdata.setLeft (gdata.getLeft() + mFromV(vdx));
-//		markDirty();
-	}
-
-	public void doDraw(Graphics2D g)
-	{
+	/**
+	 * Calculates size of infobox based on text length, and draws infobox.
+	 * 
+	 * @param g the {@link Graphics2D}
+	 */
+	public void doDraw(Graphics2D g) {
 		Font f = new Font(fontName, Font.PLAIN, getVFontSize());
 		Font fb = new Font(f.getFontName(), Font.BOLD, f.getSize());
 
-		if(isSelected()) {
+		if (isSelected()) {
 			g.setColor(selectColor);
 		}
 
-		//Draw Name, Organism, Data-Source, Version, Author, Maintained-by, Email, Availability and last modified
-		String[][] text = new String[][] {
-				{"Title: ", gdata.getTitle()},
-				{"Maintained by: ", gdata.getMaintainer()},
-				{"Email: ", gdata.getEmail()},
-				{"Availability: ", gdata.getCopyright()},
-				{"Last modified: ", gdata.getLastModified()},
-				{"Organism: ", gdata.getOrganism()},
-				{"Data Source: ", gdata.getSource()}
-			};
-
-
+		// Draw Name, Organism, Data-Source, Version, Author, Maintained-by, Email,
+		// Availability and last modified
+		String[][] text = new String[][] { { "Title: ", getPathwayObject().getTitle() },
+				{ "Organism: ", getPathwayObject().getOrganism() },
+//				{"Source: ", gdata.getSource()}, //TODO 
+//				{"Version: ", gdata.getVersion()},
+//				{"License: ", gdata.getLicense()},
+//				{"Last modified: ", gdata.getLastModified()},
+//				{"Data Source: ", gdata.getMapInfoDataSource()}
+		};
 		int shift = 0;
-		int vLeft = (int)vFromM(gdata.getLeft());
-		int vTop = (int)vFromM(gdata.getTop());
+		int vLeft = (int) vFromM(LEFT);
+		int vTop = (int) vFromM(TOP);
 
 		int newSizeX = sizeX;
 		int newSizeY = sizeY;
 
 		FontRenderContext frc = g.getFontRenderContext();
-		for(String[] s : text)
-		{
-			if(s[1] == null || s[1].equals("")) continue; //Skip empty labels
+		for (String[] s : text) {
+			if (s[1] == null || s[1].equals("")) {
+				continue; // Skip empty labels
+			}
 			TextLayout tl0 = new TextLayout(s[0], fb, frc);
 			TextLayout tl1 = new TextLayout(s[1], f, frc);
 			Rectangle2D b0 = tl0.getBounds();
 			Rectangle2D b1 = tl1.getBounds();
-			shift += (int)Math.max(b0.getHeight(), b1.getHeight()) + V_SPACING;
+			shift += (int) Math.max(b0.getHeight(), b1.getHeight()) + V_SPACING;
 			g.setFont(fb);
 			tl0.draw(g, vLeft, vTop + shift);
 			g.setFont(f);
 
-			tl1.draw(g, vLeft + (int)b0.getWidth() + H_SPACING, vTop + shift);
+			tl1.draw(g, vLeft + (int) b0.getWidth() + H_SPACING, vTop + shift);
 
 			// add 10 for safety
-			newSizeX = Math.max(
-				newSizeX,
-				(int)b0.getWidth() + (int)b1.getWidth() + H_SPACING + 10);
+			newSizeX = Math.max(newSizeX, (int) b0.getWidth() + (int) b1.getWidth() + H_SPACING + 10);
 		}
 		newSizeY = shift + 10; // add 10 for safety
 
-		// if the size was incorrect, mark dirty and draw again.
-		// note: we can't draw again right away because the clip rect
-		// is set to a too small region.
-		if (newSizeX != sizeX || newSizeY != sizeY)
-		{
+		/*
+		 * If the size was incorrect, mark dirty and draw again.
+		 * 
+		 * Note: we can't draw again right away because the clip rect is set to a too
+		 * small region.
+		 */
+		if (newSizeX != sizeX || newSizeY != sizeY) {
 			sizeX = newSizeX;
 			sizeY = newSizeY;
 			markDirty();
 		}
 	}
 
+	/**
+	 * TODO is this used?
+	 */
 	protected Shape getVShape(boolean rotate) {
-		double vLeft = vFromM(gdata.getLeft());
-		double vTop = vFromM(gdata.getTop());
+		double vLeft = vFromM(LEFT);
+		double vTop = vFromM(TOP);
 		double vW = sizeX;
 		double vH = sizeY;
-		if(vW == 1 && vH == 1) {
+		if (vW == 1 && vH == 1) {
 			vW = INITIAL_SIZE;
 			vH = INITIAL_SIZE;
 		}
 		return new Rectangle2D.Double(vLeft, vTop, vW, vH);
 	}
 
+	/**
+	 * Do nothing. Infobox is always displayed in the top left corner at coordinate
+	 * (0,0) and cannot be moved.
+	 */
+	protected void vMoveBy(double vdx, double vdy) {
+		// do nothing, can't move infobox
+	}
+
+	/**
+	 * Do nothing. Infobox cannot be resized.
+	 */
 	protected void setVScaleRectangle(Rectangle2D r) {
-		//Do nothing, can't resize infobox
+		// do nothing, can't resize infobox
 	}
 }

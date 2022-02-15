@@ -20,17 +20,12 @@ import java.awt.Font;
 import java.awt.geom.Point2D;
 import java.io.InputStream;
 import java.io.PrintStream;
-import java.net.URL;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.pathvisio.libgpml.debug.Logger;
 import org.pathvisio.libgpml.model.PathwayObject;
-import org.pathvisio.libgpml.model.GraphLink.LinkableTo;
-import org.pathvisio.libgpml.model.GraphLink.LinkableFrom;
-import org.pathvisio.libgpml.model.PathwayObject.LinePoint;
 import org.pathvisio.libgpml.prop.StaticProperty;
 
 /**
@@ -235,40 +230,40 @@ public class Utils {
 		result.append(elt.getStaticProperty(p));
 	}
 
-	public static String summary(PathwayObject elt) {
-		if (elt == null)
-			return "null"; // TODO, why is this necessary?
-		StringBuilder result = new StringBuilder("[" + elt.getObjectType().getTag());
-		summaryHelper(elt, result, StaticProperty.TEXTLABEL, "lbl");
-		summaryHelper(elt, result, StaticProperty.WIDTH, "w");
-		summaryHelper(elt, result, StaticProperty.HEIGHT, "h");
-		summaryHelper(elt, result, StaticProperty.CENTERX, "cx");
-		summaryHelper(elt, result, StaticProperty.CENTERY, "cy");
-		summaryHelper(elt, result, StaticProperty.STARTX, "x1");
-		summaryHelper(elt, result, StaticProperty.STARTY, "y1");
-		summaryHelper(elt, result, StaticProperty.ENDX, "x2");
-		summaryHelper(elt, result, StaticProperty.ENDY, "y2");
-		summaryHelper(elt, result, StaticProperty.GRAPHID, "id");
-		summaryHelper(elt, result, StaticProperty.STARTGRAPHREF, "startref");
-		summaryHelper(elt, result, StaticProperty.ENDGRAPHREF, "endref");
-		summaryHelper(elt, result, StaticProperty.MAPINFONAME, "title");
-		summaryHelper(elt, result, StaticProperty.AUTHOR, "author");
-		result.append("]");
-		return result.toString();
-	}
+//	public static String summary(PathwayObject elt) {
+//		if (elt == null)
+//			return "null"; // TODO, why is this necessary?
+//		StringBuilder result = new StringBuilder("[" + elt.getObjectType().getTag());
+//		summaryHelper(elt, result, StaticProperty.TEXTLABEL, "lbl");
+//		summaryHelper(elt, result, StaticProperty.WIDTH, "w");
+//		summaryHelper(elt, result, StaticProperty.HEIGHT, "h");
+//		summaryHelper(elt, result, StaticProperty.CENTERX, "cx");
+//		summaryHelper(elt, result, StaticProperty.CENTERY, "cy");
+//		summaryHelper(elt, result, StaticProperty.STARTX, "x1");
+//		summaryHelper(elt, result, StaticProperty.STARTY, "y1");
+//		summaryHelper(elt, result, StaticProperty.ENDX, "x2");
+//		summaryHelper(elt, result, StaticProperty.ENDY, "y2");
+//		summaryHelper(elt, result, StaticProperty.GRAPHID, "id");
+//		summaryHelper(elt, result, StaticProperty.STARTGRAPHREF, "startref");
+//		summaryHelper(elt, result, StaticProperty.ENDGRAPHREF, "endref");
+//		summaryHelper(elt, result, StaticProperty.TITLE, "title");
+//		summaryHelper(elt, result, StaticProperty.AUTHOR, "author");
+//		result.append("]");
+//		return result.toString();
+//	}
 
-	/**
-	 * Helper that returns all Lines that point to a given MAnchor or Shape
-	 */
-	public static Set<PathwayObject> getReferringLines(LinkableTo elt) {
-		Set<PathwayObject> result = new HashSet<PathwayObject>();
-		for (LinkableFrom grc : elt.getReferences()) {
-			if (grc instanceof LinePoint) {
-				result.add(((LinePoint) grc).getParent());
-			}
-		}
-		return result;
-	}
+//	/** TODO
+//	 * Helper that returns all Lines that point to a given MAnchor or Shape
+//	 */
+//	public static Set<PathwayObject> getReferringLines(LinkableTo elt) {
+//		Set<PathwayObject> result = new HashSet<PathwayObject>();
+//		for (LinkableFrom grc : elt.getReferences()) {
+//			if (grc instanceof LinePoint) {
+//				result.add(((LinePoint) grc).getParent());
+//			}
+//		}
+//		return result;
+//	}
 
 	/**
 	 * Join collection into a single string, with a separator between.

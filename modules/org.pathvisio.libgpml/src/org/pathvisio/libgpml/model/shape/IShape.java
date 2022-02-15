@@ -16,11 +16,18 @@
  ******************************************************************************/
 package org.pathvisio.libgpml.model.shape;
 
-public interface IShape
-{
-	public String getMappName();
+/**
+ * Interface for shapes.
+ * 
+ * @author unknown
+ */
+public interface IShape {
+	
 	public String getName();
+
 	public boolean isResizeable();
+
 	public boolean isRotatable();
+
 	public java.awt.Shape getShape(double mw, double mh);
 }

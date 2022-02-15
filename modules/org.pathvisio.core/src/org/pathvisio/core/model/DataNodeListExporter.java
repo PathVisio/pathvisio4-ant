@@ -30,11 +30,10 @@ import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
 import org.pathvisio.core.data.GdbManager;
-import org.pathvisio.libgpml.io.ConverterException;
 import org.pathvisio.libgpml.io.PathwayModelExporter;
+import org.pathvisio.libgpml.io.ConverterException;
+import org.pathvisio.libgpml.model.DataNode;
 import org.pathvisio.libgpml.model.PathwayModel;
-import org.pathvisio.libgpml.model.PathwayObject;
-import org.pathvisio.libgpml.model.type.ObjectType;
 
 /**
  * Exporter that writes a pathway as a list of DataNodes, using their database
@@ -49,15 +48,14 @@ public class DataNodeListExporter implements PathwayModelExporter {
 	 * pathway
 	 */
 	public static final String DB_ORIGINAL = "original"; // Use the id/code as in database
-	private DataSource resultDs = DataSource.register(DB_ORIGINAL, DB_ORIGINAL).asDataSource(); // workaround by EgonW
-//	private DataSource resultDs = DataSource.getExistingBySystemCode(DB_ORIGINAL);
+	private DataSource resultDs = DataSource.getExistingBySystemCode(DB_ORIGINAL);
 	private String multiRefSep = ", ";
 
 	/**
 	 * Set the separator used to separate multiple references for a single DataNode
 	 * on the pathway. Default is ", ".
 	 * 
-	 * @param sep
+	 * @param sep the String seperator to set.
 	 */
 	public void setMultiRefSep(String sep) {
 		multiRefSep = sep;
@@ -66,9 +64,34 @@ public class DataNodeListExporter implements PathwayModelExporter {
 	/**
 	 * Get the separator used to separate multiple references for a single DataNode
 	 * on the pathway. Default is ", ".
+	 * 
+	 * @return multiRefSep the separator used to separate multiple references.
 	 */
 	public String getMultiRefSep() {
 		return multiRefSep;
+	}
+
+	/**
+	 * Set the database code to which every datanode reference will be mapped to in
+	 * the output file.
+	 * 
+	 * NB: replace the deprecated setResultCode(). TODO
+	 * 
+	 * @see #DB_ORIGINAL
+	 * @param value the data source.
+	 */
+	public void setResultDataSource(DataSource value) {
+		resultDs = value;
+	}
+
+	/**
+	 * Get the database code to which every datanode reference will be mapped to in
+	 * the output file.
+	 * 
+	 * NB: replaced the deprecated getResultCode() TODO
+	 */
+	public DataSource getResultDataSource() {
+		return resultDs;
 	}
 
 	/**
@@ -83,10 +106,6 @@ public class DataNodeListExporter implements PathwayModelExporter {
 		resultDs = DataSource.getExistingBySystemCode(code);
 	}
 
-	public void setResultDataSource(DataSource value) {
-		resultDs = value;
-	}
-
 	/**
 	 * Get the database code to which every datanode reference will be mapped to in
 	 * the output file.
@@ -97,12 +116,13 @@ public class DataNodeListExporter implements PathwayModelExporter {
 		return resultDs.getSystemCode();
 	}
 
-	public DataSource getResultDataSource() {
-		return resultDs;
-	}
-
-	public void doExport(File file, PathwayModel pathway) throws ConverterException {
-		if (!DB_ORIGINAL.equals(getResultCode())) {
+	/**
+	 *
+	 * @param file
+	 * @param pathwayModel
+	 */
+	public void doExport(File file, PathwayModel pathwayModel) throws ConverterException {
+		if (!DB_ORIGINAL.equals(getResultCode())) { // TODO
 			// Check gene database connection
 			if (gdbManager == null || !gdbManager.isConnected()) {
 				throw new ConverterException("No gene database loaded");
@@ -115,33 +135,31 @@ public class DataNodeListExporter implements PathwayModelExporter {
 			throw new ConverterException(e);
 		}
 		printHeaders(out);
-		for (PathwayObject elm : pathway.getDataObjects()) {
-			if (elm.getObjectType() == ObjectType.DATANODE) {
-				String line = "";
-				String id = elm.getIdentifier();
-				DataSource ds = elm.getDataSource();
-				if (!checkString(id) || ds == null) {
-					continue; // Skip empty id/codes
-				}
-				// Use the original id, if code is already the one asked for
-				if (DB_ORIGINAL.equals(getResultCode()) || ds.equals(resultDs)) {
-					line = id + "\t" + ds.getFullName();
-				} else { // Lookup the cross-references for the wanted database code
-					try {
-						Set<Xref> refs = gdbManager.getCurrentGdb().mapID(elm.getXref(), resultDs);
-						for (Xref ref : refs) {
-							line += ref.getId() + multiRefSep;
-						}
-						if (line.length() > multiRefSep.length()) { // Remove the last ', '
-							line = line.substring(0, line.length() - multiRefSep.length());
-							line += "\t" + resultDs.getFullName();
-						}
-					} catch (IDMapperException ex) {
-						throw new ConverterException(ex);
-					}
-				}
-				out.println(line);
+		for (DataNode elm : pathwayModel.getDataNodes()) { // TODO datanodes instead of elm
+			String line = "";
+			String id = elm.getXref().getId();
+			DataSource ds = ((DataNode) elm).getXref().getDataSource();
+			if (!checkString(id) || ds == null) {
+				continue; // Skip empty id/codes
 			}
+			// Use the original id, if code is already the one asked for
+			if (DB_ORIGINAL.equals(getResultCode()) || ds.equals(resultDs)) { // TODO
+				line = id + "\t" + ds.getFullName();
+			} else { // Lookup the cross-references for the wanted database code
+				try {
+					Set<Xref> refs = gdbManager.getCurrentGdb().mapID(elm.getXref(), resultDs);
+					for (Xref ref : refs) {
+						line += ref.getId() + multiRefSep;
+					}
+					if (line.length() > multiRefSep.length()) { // Remove the last ', '
+						line = line.substring(0, line.length() - multiRefSep.length());
+						line += "\t" + resultDs.getFullName();
+					}
+				} catch (IDMapperException ex) {
+					throw new ConverterException(ex);
+				}
+			}
+			out.println(line);
 		}
 		out.close();
 	}
@@ -156,6 +174,12 @@ public class DataNodeListExporter implements PathwayModelExporter {
 		out.println("Identifier\tDatabase");
 	}
 
+	/**
+	 * Returns true if given string is valid.
+	 * 
+	 * @param string the string to check.
+	 * @return true is string is valid, not null with length greater than 0.
+	 */
 	private boolean checkString(String string) {
 		return string != null && string.length() > 0;
 	}
@@ -164,6 +188,9 @@ public class DataNodeListExporter implements PathwayModelExporter {
 		return new String[] { "txt" };
 	}
 
+	/**
+	 *
+	 */
 	public String getName() {
 		return "DataNode list";
 	}
@@ -171,8 +198,10 @@ public class DataNodeListExporter implements PathwayModelExporter {
 	private GdbManager gdbManager = null;
 
 	/**
-	 * Create an exporter that uses the given GdbManager to lookup cross references
+	 * Creates an exporter that uses the given GdbManager to lookup cross references
 	 * for each datanode
+	 * 
+	 * @param gdbManager
 	 */
 	public DataNodeListExporter(GdbManager gdbManager) {
 		this.gdbManager = gdbManager;
@@ -186,6 +215,9 @@ public class DataNodeListExporter implements PathwayModelExporter {
 		return Collections.emptyList();
 	}
 
+	/**
+	 *
+	 */
 	@Override
 	public void doExport(File file, PathwayModel pathway, int zoom) throws ConverterException {
 		// TODO Auto-generated method stub

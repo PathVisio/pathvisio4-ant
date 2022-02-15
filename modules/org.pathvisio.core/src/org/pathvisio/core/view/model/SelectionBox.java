@@ -27,6 +27,8 @@ import java.util.List;
 import java.util.Set;
 
 import org.pathvisio.core.view.Adjustable;
+import org.pathvisio.libgpml.model.Group;
+import org.pathvisio.libgpml.model.Groupable;
 import org.pathvisio.libgpml.model.PathwayObject;
 
 /**
@@ -368,9 +370,9 @@ public class SelectionBox extends VElement implements Adjustable {
 
 				if (o.vIntersects(bounds)) { // && !(o instanceof Group)
 					// exclude objects in a group to avoid double selection
-					if (o instanceof VPathwayObject) {
-						PathwayObject pe = ((VPathwayObject) o).getPathwayObject();
-						String ref = pe.getGroupRef();
+					if (o instanceof VGroupable) {
+						Groupable pe = ((VGroupable) o).getPathwayObject();
+						Group ref = ((Groupable) pe).getGroupRef();
 						if (ref != null) {
 							continue;
 						}

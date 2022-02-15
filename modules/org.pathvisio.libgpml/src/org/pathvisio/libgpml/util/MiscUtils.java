@@ -14,18 +14,23 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  ******************************************************************************/
-package org.pathvisio.libgpml.biopax;
+package org.pathvisio.libgpml.util;
 
-import org.jdom2.Namespace;
-import org.pathvisio.libgpml.model.GpmlFormat;
+import java.util.List;
 
 /**
- * Some namespace constants.
+ * Miscellaneous utility functions
  */
-public class Namespaces {
-	public static final Namespace RDF = GpmlFormat.RDF;
-	public static final Namespace RDFS = GpmlFormat.RDFS;
-	public static final Namespace BIOPAX = GpmlFormat.BIOPAX;
-	public static final Namespace OWL = GpmlFormat.OWL;
+public class MiscUtils {
 
+	/**
+	 * Case insensitive contains method for List.
+	 * 
+	 * @param str     the string.
+	 * @param strList the string list.
+	 * @return true if string list contains given string regardless of case.
+	 */
+	public static boolean containsCaseInsensitive(String str, List<String> strList) {
+		return strList.stream().anyMatch(x -> x.equalsIgnoreCase(str));
+	}
 }

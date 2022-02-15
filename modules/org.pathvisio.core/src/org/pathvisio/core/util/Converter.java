@@ -16,31 +16,29 @@
  ******************************************************************************/
 package org.pathvisio.core.util;
 
-/*
- * Converter.java
- * Command Line GenMAPP to GPML Converter
- * Created on 15 augustus 2005, 20:28
- */
-
 import java.io.File;
 
+import org.bridgedb.bio.DataSourceTxt;
 import org.pathvisio.core.Engine;
+import org.pathvisio.libgpml.debug.Logger;
 import org.pathvisio.core.model.BatikImageExporter;
-import org.pathvisio.core.model.DataNodeListExporter;
+import org.pathvisio.libgpml.io.ConverterException;
 import org.pathvisio.core.model.EUGeneExporter;
+import org.pathvisio.libgpml.model.GpmlFormat;
 import org.pathvisio.core.model.ImageExporter;
+import org.pathvisio.libgpml.model.PathwayModel;
 import org.pathvisio.core.model.RasterImageExporter;
 import org.pathvisio.core.preferences.GlobalPreference;
 import org.pathvisio.core.preferences.PreferenceManager;
-import org.pathvisio.libgpml.debug.Logger;
-import org.pathvisio.libgpml.io.ConverterException;
-import org.pathvisio.libgpml.io.PathwayModelExporter;
-import org.pathvisio.libgpml.io.PathwayModelImporter;
-import org.pathvisio.libgpml.model.GpmlFormat;
-import org.pathvisio.libgpml.model.PathwayModel;
-import org.pathvisio.libgpml.model.shape.MIMShapes;
 
 /**
+ * Converter.java
+ * 
+ * Command Line GenMAPP to GPML Converter. Converts to images. Move to separate
+ * Converter Jar File.
+ * 
+ * Created on 15 augustus 2005, 20:28
+ * 
  * @author Thomas Kelder (t.a.j.kelder@student.tue.nl)
  */
 public class Converter {
@@ -67,34 +65,37 @@ public class Converter {
 		// debug, trace, info, warn, error, fatal
 		Logger.log.setLogLevel(false, false, true, true, true, true);
 
+		DataSourceTxt.init();
 		PreferenceManager.init();
 		Engine engine = new Engine();
 		engine.addPathwayModelImporter(new GpmlFormat());
+//    	engine.addPathwayImporter(new MappFormat()); TODO
+//		engine.addPathwayExporter(new MappFormat()); TODO 
 		engine.addPathwayModelExporter(new GpmlFormat());
 		engine.addPathwayModelExporter(new BatikImageExporter(ImageExporter.TYPE_SVG));
 		engine.addPathwayModelExporter(new RasterImageExporter(ImageExporter.TYPE_PNG));
 		engine.addPathwayModelExporter(new BatikImageExporter(ImageExporter.TYPE_TIFF));
 		engine.addPathwayModelExporter(new BatikImageExporter(ImageExporter.TYPE_PDF));
 		engine.addPathwayModelExporter(new EUGeneExporter());
-		engine.addPathwayModelExporter(new DataNodeListExporter());
+//		engine.addPathwayExporter(new DataNodeListExporter());
 
-		// Transient dependency on Biopax converter
-		try {
-			Class<?> c = Class.forName("org.pathvisio.biopax3.BiopaxFormat");
-			Object o = c.newInstance();
-			engine.addPathwayModelExporter((PathwayModelExporter) o);
-			engine.addPathwayModelImporter((PathwayModelImporter) o);
-		} catch (ClassNotFoundException ex) {
-			Logger.log.warn("BioPAX converter not in classpath, BioPAX conversion not available today.");
-		} catch (InstantiationException e) {
-			Logger.log.error("BioPAX instantiation error", e);
-		} catch (IllegalAccessException e) {
-			Logger.log.warn("Access to BioPAX class is Illegal", e);
-		}
+		// Transient dependency on Biopax converter TODO 
+//		try {
+//			Class<?> c = Class.forName("org.pathvisio.biopax3.BiopaxFormat");
+//			Object o = c.newInstance();
+//			engine.addPathwayModelExporter((PathwayModelExporter) o);
+//			engine.addPathwayModelImporter((PathwayModelImporter) o);
+//		} catch (ClassNotFoundException ex) {
+//			Logger.log.warn("BioPAX converter not in classpath, BioPAX conversion not available today.");
+//		} catch (InstantiationException e) {
+//			Logger.log.error("BioPAX instantiation error", e);
+//		} catch (IllegalAccessException e) {
+//			Logger.log.warn("Access to BioPAX class is Illegal", e);
+//		}
 
 		// Enable MiM support (for export to graphics formats)
 		PreferenceManager.getCurrent().setBoolean(GlobalPreference.MIM_SUPPORT, true);
-		MIMShapes.registerShapes();
+//		MIMShapes.registerShapes(); TODO 
 
 		File inputFile = null;
 		File outputFile = null;
@@ -111,6 +112,8 @@ public class Converter {
 		} else {
 			inputFile = new File(args[0]);
 			outputFile = new File(args[1]);
+
+			System.out.println(inputFile.exists());
 
 			if (inputFile == null || !inputFile.canRead()) {
 				Logger.log.error("Unable to read inputfile: " + inputFile);

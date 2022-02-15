@@ -16,74 +16,35 @@
  ******************************************************************************/
 package org.pathvisio.core.view.model;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.geom.Area;
-import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.List;
 
-import org.pathvisio.libgpml.biopax.PublicationXref;
 import org.pathvisio.libgpml.debug.DebugList;
 import org.pathvisio.libgpml.model.PathwayObject;
 import org.pathvisio.libgpml.model.PathwayObjectEvent;
 import org.pathvisio.libgpml.model.PathwayObjectListener;
-import org.pathvisio.libgpml.model.type.LineStyleType;
 
 /**
  * This class is a parent class for all graphics that can be added to a
  * VPathway.
  */
 public abstract class VPathwayObject extends VElement implements PathwayObjectListener {
+
 	protected PathwayObject gdata = null;
 
-	// children is everything that moves when this element is dragged.
-	// includes Citation and State
+	/**
+	 * Children is everything that moves when this element is dragged, including
+	 * Citation and State
+	 */
 	private List<VElement> children = new DebugList<VElement>();
-
-	private VCitation citation;
 
 	public VPathwayObject(VPathwayModel canvas, PathwayObject o) {
 		super(canvas);
 		o.addListener(this);
 		gdata = o;
-		checkCitation();
-	}
-
-	protected VCitation createCitation() {
-		return new VCitation(canvas, this, new Point2D.Double(1, -1));
-	}
-
-	public final void checkCitation() {
-		List<PublicationXref> xrefs = gdata.getBiopaxReferenceManager().getPublicationXRefs();
-		if (xrefs.size() > 0 && citation == null) {
-			citation = createCitation();
-			children.add(citation);
-		} else if (xrefs.size() == 0 && citation != null) {
-			citation.destroy();
-			children.remove(citation);
-			citation = null;
-		}
-
-		if (citation != null) {
-			// already exists, no need to create / destroy
-			// just redraw...
-			citation.markDirty();
-		}
-	}
-
-	public void markDirty() {
-		super.markDirty();
-		for (VElement child : children)
-			child.markDirty();
-	}
-
-	protected VCitation getCitation() {
-		return citation;
 	}
 
 	/**
@@ -95,12 +56,28 @@ public abstract class VPathwayObject extends VElement implements PathwayObjectLi
 		return gdata;
 	}
 
+	/**
+	 *
+	 */
+	@Override
+	public void markDirty() {
+		super.markDirty();
+		for (VElement child : children)
+			child.markDirty();
+	}
+
+	/**
+	 * 
+	 */
 	boolean listen = true;
 
+	/**
+	 *
+	 */
+	@Override
 	public void gmmlObjectModified(PathwayObjectEvent e) {
 		if (listen) {
 			markDirty(); // mark everything dirty
-			checkCitation();
 		}
 	}
 
@@ -108,73 +85,73 @@ public abstract class VPathwayObject extends VElement implements PathwayObjectLi
 		return new Area(getVBounds());
 	}
 
-	/**
-	 * Get the x-coordinate of the center point of this object adjusted to the
-	 * current zoom factor
-	 * 
-	 * @return the center x-coordinate
-	 */
-	public double getVCenterX() {
-		return vFromM(gdata.getCenterX());
-	}
-
-	/**
-	 * Get the y-coordinate of the center point of this object adjusted to the
-	 * current zoom factor
-	 *
-	 * @return the center y-coordinate
-	 */
-	public double getVCenterY() {
-		return vFromM(gdata.getCenterY());
-	}
-
-	/**
-	 * Get the x-coordinate of the left side of this object adjusted to the current
-	 * zoom factor, but not taking into account rotation
-	 * 
-	 * @note if you want the left side of the rotated object's boundary, use
-	 *       {@link #getVShape(true)}.getX();
-	 * @return
-	 */
-	public double getVLeft() {
-		return vFromM(gdata.getLeft());
-	}
-
-	/**
-	 * Get the width of this object adjusted to the current zoom factor, but not
-	 * taking into account rotation
-	 * 
-	 * @note if you want the width of the rotated object's boundary, use
-	 *       {@link #getVShape(true)}.getWidth();
-	 * @return
-	 */
-	public double getVWidth() {
-		return vFromM(gdata.getWidth());
-	}
-
-	/**
-	 * Get the y-coordinate of the top side of this object adjusted to the current
-	 * zoom factor, but not taking into account rotation
-	 * 
-	 * @note if you want the top side of the rotated object's boundary, use
-	 *       {@link #getVShape(true)}.getY();
-	 * @return
-	 */
-	public double getVTop() {
-		return vFromM(gdata.getTop());
-	}
-
-	/**
-	 * Get the height of this object adjusted to the current zoom factor, but not
-	 * taking into account rotation
-	 * 
-	 * @note if you want the height of the rotated object's boundary, use
-	 *       {@link #getVShape(true)}.getY();
-	 * @return
-	 */
-	public double getVHeight() {
-		return vFromM(gdata.getHeight());
-	}
+//	/**
+//	 * Get the x-coordinate of the center point of this object adjusted to the
+//	 * current zoom factor
+//	 * 
+//	 * @return the center x-coordinate
+//	 */
+//	public double getVCenterX() {
+//		return vFromM(gdata.getCenterX());
+//	}
+//
+//	/**
+//	 * Get the y-coordinate of the center point of this object adjusted to the
+//	 * current zoom factor
+//	 *
+//	 * @return the center y-coordinate
+//	 */
+//	public double getVCenterY() {
+//		return vFromM(gdata.getCenterY());
+//	}
+//
+//	/**
+//	 * Get the width of this object adjusted to the current zoom factor, but not
+//	 * taking into account rotation
+//	 * 
+//	 * @note if you want the width of the rotated object's boundary, use
+//	 *       {@link #getVShape(true)}.getWidth();
+//	 * @return
+//	 */
+//	public double getVWidth() {
+//		return vFromM(gdata.getWidth());
+//	}
+//
+//	/**
+//	 * Get the height of this object adjusted to the current zoom factor, but not
+//	 * taking into account rotation
+//	 * 
+//	 * @note if you want the height of the rotated object's boundary, use
+//	 *       {@link #getVShape(true)}.getY();
+//	 * @return
+//	 */
+//	public double getVHeight() {
+//		return vFromM(gdata.getHeight());
+//	}
+//
+//	/**
+//	 * Get the x-coordinate of the left side of this object adjusted to the current
+//	 * zoom factor, but not taking into account rotation
+//	 * 
+//	 * @note if you want the left side of the rotated object's boundary, use
+//	 *       {@link #getVShape(true)}.getX();
+//	 * @return
+//	 */
+//	public double getVLeft() {
+//		return vFromM(gdata.getLeft());
+//	}
+//
+//	/**
+//	 * Get the y-coordinate of the top side of this object adjusted to the current
+//	 * zoom factor, but not taking into account rotation
+//	 * 
+//	 * @note if you want the top side of the rotated object's boundary, use
+//	 *       {@link #getVShape(true)}.getY();
+//	 * @return
+//	 */
+//	public double getVTop() {
+//		return vFromM(gdata.getTop());
+//	}
 
 	/**
 	 * Get the direct view to model translation of this shape
@@ -189,6 +166,7 @@ public abstract class VPathwayObject extends VElement implements PathwayObjectLi
 	 * translation from model to view, without taking into account rotation. Default
 	 * implementation is equivalent to <code>getVShape(false).getBounds2D();</code>
 	 */
+	@Override
 	protected Rectangle2D getVScaleRectangle() {
 		return getVShape(false).getBounds2D();
 	}
@@ -199,6 +177,7 @@ public abstract class VPathwayObject extends VElement implements PathwayObjectLi
 	 * 
 	 * @param r
 	 */
+	@Override
 	protected abstract void setVScaleRectangle(Rectangle2D r);
 
 	/**
@@ -207,28 +186,15 @@ public abstract class VPathwayObject extends VElement implements PathwayObjectLi
 	 * 
 	 * @see {@link VElement#calculateVOutline()}
 	 */
+	@Override
 	protected Shape calculateVOutline() {
 		return getVShape(true);
 	}
 
 	/**
-	 * Returns the fontstyle to create a java.awt.Font
-	 * 
-	 * @return the fontstyle, or Font.PLAIN if no font is available
+	 *
 	 */
-	public int getVFontStyle() {
-		int style = Font.PLAIN;
-		if (gdata.getFontName() != null) {
-			if (gdata.getFontWeight()) {
-				style |= Font.BOLD;
-			}
-			if (gdata.getFontStyle()) {
-				style |= Font.ITALIC;
-			}
-		}
-		return style;
-	}
-
+	@Override
 	protected void destroy() {
 		super.destroy();
 		gdata.removeListener(this);
@@ -236,8 +202,6 @@ public abstract class VPathwayObject extends VElement implements PathwayObjectLi
 			child.destroy();
 		}
 		children.clear();
-		citation = null;
-
 		// View should not remove its model
 //		Pathway parent = gdata.getParent();
 //		if(parent != null) parent.remove(gdata);
@@ -246,33 +210,10 @@ public abstract class VPathwayObject extends VElement implements PathwayObjectLi
 	/**
 	 * Returns the z-order from the model
 	 */
+	@Override
 	protected int getZOrder() {
-		return gdata.getZOrder();
-	}
-
-	protected Color getLineColor() {
-		Color linecolor = gdata.getColor();
-		/*
-		 * the selection is not colored red when in edit mode it is possible to see a
-		 * color change immediately
-		 */
-		if (isSelected() && !canvas.isEditMode()) {
-			linecolor = selectColor;
-		}
-		return linecolor;
-	}
-
-	protected void setLineStyle(Graphics2D g) {
-		int ls = gdata.getLineStyle();
-		float lt = (float) vFromM(gdata.getLineWidth());
-		if (ls == LineStyleType.SOLID) {
-			g.setStroke(new BasicStroke(lt));
-		} else if (ls == LineStyleType.DASHED) {
-			g.setStroke(
-					new BasicStroke(lt, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 10, new float[] { 4, 4 }, 0));
-		} else if (ls == LineStyleType.DOUBLE) {
-			g.setStroke(new CompositeStroke(new BasicStroke(lt * 2), new BasicStroke(lt)));
-		}
+		return 0x0000;
+//		gdata.getZOrder(); TODO 
 	}
 
 	public void addChild(VElement elt) {
@@ -288,15 +229,24 @@ public abstract class VPathwayObject extends VElement implements PathwayObjectLi
 /**
  * Generates double line stroke, e.g., for cellular compartment shapes.
  *
+ * @author unknown
  */
 final class CompositeStroke implements Stroke {
 	private Stroke stroke1, stroke2;
 
+	/**
+	 * @param stroke1
+	 * @param stroke2
+	 */
 	public CompositeStroke(Stroke stroke1, Stroke stroke2) {
 		this.stroke1 = stroke1;
 		this.stroke2 = stroke2;
 	}
 
+	/**
+	 *
+	 */
+	@Override
 	public Shape createStrokedShape(Shape shape) {
 		return stroke2.createStrokedShape(stroke1.createStrokedShape(shape));
 	}

@@ -16,127 +16,146 @@
  ******************************************************************************/
 package org.pathvisio.core.view.model;
 
+import org.pathvisio.libgpml.model.Drawable;
+import org.pathvisio.libgpml.model.LineElement.LinePoint;
 import org.pathvisio.core.preferences.GlobalPreference;
 import org.pathvisio.core.preferences.PreferenceManager;
 import org.pathvisio.core.view.Adjustable;
-import org.pathvisio.libgpml.model.PathwayObject.LinePoint;
 import org.pathvisio.libgpml.util.LinAlg;
 import org.pathvisio.libgpml.util.LinAlg.Point;
 
 /**
  * One of the two endpoints of a line. Carries a single handle.
+ * 
+ * @author unknown, finterly
  */
-public class VPoint implements Adjustable
-{
+public class VPoint implements VDrawable, Adjustable {
 	// the handle that goes with this VPoint.
-	// This Handle is created, destroyed and generally managed by Line, not by VPoint
+	// This Handle is created, destroyed and generally managed by Line, not by
+	// VPoint
 	Handle handle;
-	
-	private VLineElement line;
-	private LinePoint mPoint;
+
+	private VLineElement vLineElement;
+	private LinePoint linePoint;
 	private final VPathwayModel canvas;
 
 	private boolean isHighlighted = false;
 
-	public boolean isHighlighted()
-	{
+	public boolean isHighlighted() {
 		return isHighlighted;
 	}
 
-	public void highlight()
-	{
-		if (!isHighlighted)
-		{
+	public void highlight() {
+		if (!isHighlighted) {
 			isHighlighted = true;
-			line.markDirty();
+			vLineElement.markDirty();
 		}
 	}
 
-	public void unhighlight()
-	{
-		if (isHighlighted)
-		{
+	public void unhighlight() {
+		if (isHighlighted) {
 			isHighlighted = false;
-			line.markDirty();
+			vLineElement.markDirty();
 		}
 	}
 
 	VPoint(VPathwayModel canvas, LinePoint mPoint, VLineElement line) {
 		this.canvas = canvas;
-		this.mPoint = mPoint;
-		this.line = line;
+		this.linePoint = mPoint;
+		this.vLineElement = line;
+	}
+	
+	/**
+	 * TODO 
+	 */
+	@Override
+	public Drawable getPathwayObject() {
+		return linePoint;
 	}
 
 	protected void unlink() {
-		mPoint.setElementRef(null);
+		linePoint.unlink();
 	}
 
-	protected double getVX() { return canvas.vFromM(getMPoint().getX()); }
-	protected double getVY() { return canvas.vFromM(getMPoint().getY()); }
+	protected double getVX() {
+		return canvas.vFromM(getLinePoint().getX());
+	}
+
+	protected double getVY() {
+		return canvas.vFromM(getLinePoint().getY());
+	}
 
 	protected void setVLocation(double vx, double vy) {
-		mPoint.setX(canvas.mFromV(vx));
-		mPoint.setY(canvas.mFromV(vy));
+		linePoint.setX(canvas.mFromV(vx));
+		linePoint.setY(canvas.mFromV(vy));
 	}
 
 	protected void vMoveBy(double dx, double dy) {
-		mPoint.moveBy(canvas.mFromV(dx), canvas.mFromV(dy));
+		linePoint.moveBy(canvas.mFromV(dx), canvas.mFromV(dy));
 	}
 
-	public LinePoint getMPoint() {
-		return mPoint;
+	public LinePoint getLinePoint() {
+		return linePoint;
 	}
 
 	public VLineElement getLine() {
-		return line;
+		return vLineElement;
 	}
 
-	public void adjustToHandle(Handle h, double vnewx, double vnewy)
-	{
-		double mcx = canvas.mFromV (vnewx);
-		double mcy = canvas.mFromV (vnewy);
+	public void adjustToHandle(Handle h, double vnewx, double vnewy) {
+		double mcx = canvas.mFromV(vnewx);
+		double mcy = canvas.mFromV(vnewy);
 
-		if (PreferenceManager.getCurrent().getBoolean(GlobalPreference.SNAP_TO_ANGLE) ||
-			canvas.isSnapModifierPressed())
-		{
+		if (PreferenceManager.getCurrent().getBoolean(GlobalPreference.SNAP_TO_ANGLE)
+				|| canvas.isSnapModifierPressed()) {
 			// get global preference and convert to radians.
-			double lineSnapStep = PreferenceManager.getCurrent().getInt(
-				GlobalPreference.SNAP_TO_ANGLE_STEP) * Math.PI / 180;
-			VPoint p1 = line.getStart();
-			VPoint p2 = line.getEnd();
+			double lineSnapStep = PreferenceManager.getCurrent().getInt(GlobalPreference.SNAP_TO_ANGLE_STEP) * Math.PI
+					/ 180;
+			VPoint p1 = vLineElement.getStart();
+			VPoint p2 = vLineElement.getEnd();
 			double basex, basey;
 			// base is the static point the line rotates about.
 			// it is equal to the OTHER point, the one we're not moving.
-			if (p1 == this)
-			{
-				basex = p2.getMPoint().getX();
-				basey = p2.getMPoint().getY();
-			}
-			else
-			{
-				basex = p1.getMPoint().getX();
-				basey = p1.getMPoint().getY();
+			if (p1 == this) {
+				basex = p2.getLinePoint().getX();
+				basey = p2.getLinePoint().getY();
+			} else {
+				basex = p1.getLinePoint().getX();
+				basey = p1.getLinePoint().getY();
 			}
 			// calculate rotation and round it off
 			double rotation = Math.atan2(basey - mcy, basex - mcx);
-			rotation = Math.round (rotation / lineSnapStep) * lineSnapStep;
+			rotation = Math.round(rotation / lineSnapStep) * lineSnapStep;
 			// project point mcx, mcy on a line with the desired angle.
-			Point yr = new Point (Math.cos (rotation), Math.sin (rotation));
-			Point prj = LinAlg.project(new Point (basex, basey), new Point(mcx, mcy), yr);
+			Point yr = new Point(Math.cos(rotation), Math.sin(rotation));
+			Point prj = LinAlg.project(new Point(basex, basey), new Point(mcx, mcy), yr);
 			mcx = prj.x;
 			mcy = prj.y;
 		}
 
-		mPoint.setX(mcx);
-		mPoint.setY(mcy);
+		linePoint.setX(mcx);
+		linePoint.setY(mcy);
 	}
 
-	protected Handle getHandle()
-	{
+	protected Handle getHandle() {
 		return handle;
 	}
-	
-	public double getVWidth() { return 0;  }
 
-	public double getVHeight() { return 0;  }
+	public double getVWidth() {
+		return 0;
+	}
+
+	public double getVHeight() {
+		return 0;
+	}
+	
+	/**
+	 * Returns the z-order from the model //TODO public?
+	 */
+	@Override
+	public int getZOrder() {
+		return getLinePoint().getZOrder(); 
+	}
+
+
 }

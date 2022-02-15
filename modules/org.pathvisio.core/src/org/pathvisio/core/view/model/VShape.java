@@ -16,13 +16,12 @@
  ******************************************************************************/
 package org.pathvisio.core.view.model;
 
-import org.pathvisio.libgpml.model.PathwayObject;
+import org.pathvisio.libgpml.model.Shape;
 
 /**
- * Represents the view of a PathwayElement with ObjectType.SHAPE.
+ * This class represents the view of a {@link Shape} PathwayElement.
  *
- * //TODO: rename this class to something other than Shape, because it is
- * confusing with java.awt.Shape
+ * @author unknown, finterly
  */
 public class VShape extends VShapedElement {
 	/**
@@ -30,8 +29,18 @@ public class VShape extends VShapedElement {
 	 * 
 	 * @param canvas - the VPathway this Shape will be part of
 	 */
-	public VShape(VPathwayModel canvas, PathwayObject o) {
+	public VShape(VPathwayModel canvas, Shape o) {
 		super(canvas, o);
+	}
+
+	/**
+	 * Gets the model representation (PathwayElement) of this class
+	 * 
+	 * @return
+	 */
+	@Override
+	public Shape getPathwayObject() {
+		return (Shape) super.getPathwayObject();
 	}
 
 }

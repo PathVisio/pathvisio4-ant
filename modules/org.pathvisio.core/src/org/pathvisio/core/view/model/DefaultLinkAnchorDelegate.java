@@ -16,17 +16,19 @@
  ******************************************************************************/
 package org.pathvisio.core.view.model;
 
+import org.pathvisio.libgpml.model.GraphLink.LinkableTo;
+import org.pathvisio.libgpml.model.ShapedElement;
+
 /**
  * Utility class for creating and destroying LinkAnchors around a rectangular
  * element.
- * 
- * @author unknown 
  */
 public class DefaultLinkAnchorDelegate extends AbstractLinkAnchorDelegate {
-	private final VPathwayObject parent;
+
+	private final VLinkableTo parent;
 	private final VPathwayModel canvas;
 
-	DefaultLinkAnchorDelegate(VPathwayObject parent) {
+	DefaultLinkAnchorDelegate(VLinkableTo parent) {
 		this.parent = parent;
 		this.canvas = parent.getDrawing();
 	}
@@ -37,32 +39,34 @@ public class DefaultLinkAnchorDelegate extends AbstractLinkAnchorDelegate {
 	private static final int MIN_SIZE_LA = 25;
 
 	public void showLinkAnchors() {
-		if (parent instanceof VGroup && parent.gdata.getGroupType().isDisallowLinks()) {
-			return;
-		}
-		// Number of link anchors depends on the size of the object
-		// If the width/height is large enough, there will be three link anchors per
-		// side,
-		// Otherwise there will be only one link anchor per side
-		String anchorsCnt = parent.gdata.getDynamicProperty("NumberOfAnchors");
+		// TODO disallowLinks?
+//		if (parent instanceof VGroup && parent.gdata.getGroupType().isDisallowLinks()) {
+//			return;
+//		}
+		// one link anchor per side. if large enough 3 link anchors per side.
 		int numAnchors = 3;
-		if (anchorsCnt != null) {
-			numAnchors = Integer.parseInt(anchorsCnt);
+		int numH = 1;
+		int numV = 1;
+		// more anchors if linkableTo is a shapedElement of a certain size
+		if (parent.getPathwayObject() instanceof ShapedElement) {
+			numH = ((ShapedElement) parent.getPathwayObject()).getWidth() < MIN_SIZE_LA ? 1 : numAnchors;
+			numV = ((ShapedElement) parent.getPathwayObject()).getHeight() < MIN_SIZE_LA ? 1 : numAnchors;
 		}
-		int numH = parent.gdata.getWidth() < MIN_SIZE_LA ? 1 : numAnchors;
-		int numV = parent.gdata.getHeight() < MIN_SIZE_LA ? 1 : numAnchors;
-
 		if (numH != numLinkanchorsH || numV != numLinkanchorsV) {
 			linkAnchors.clear();
 			double deltaH = 2.0 / (numH + 1);
 			for (int i = 1; i <= numH; i++) {
-				linkAnchors.add(new LinkAnchor(canvas, parent, parent.gdata, -1 + i * deltaH, -1));
-				linkAnchors.add(new LinkAnchor(canvas, parent, parent.gdata, -1 + i * deltaH, 1));
+				linkAnchors.add(
+						new LinkAnchor(canvas, parent, (LinkableTo) parent.getPathwayObject(), -1 + i * deltaH, -1));
+				linkAnchors.add(
+						new LinkAnchor(canvas, parent, (LinkableTo) parent.getPathwayObject(), -1 + i * deltaH, 1));
 			}
 			double deltaV = 2.0 / (numV + 1);
 			for (int i = 1; i <= numV; i++) {
-				linkAnchors.add(new LinkAnchor(canvas, parent, parent.gdata, -1, -1 + i * deltaV));
-				linkAnchors.add(new LinkAnchor(canvas, parent, parent.gdata, 1, -1 + i * deltaV));
+				linkAnchors.add(
+						new LinkAnchor(canvas, parent, (LinkableTo) parent.getPathwayObject(), -1, -1 + i * deltaV));
+				linkAnchors.add(
+						new LinkAnchor(canvas, parent, (LinkableTo) parent.getPathwayObject(), 1, -1 + i * deltaV));
 			}
 			numLinkanchorsH = numH;
 			numLinkanchorsV = numV;

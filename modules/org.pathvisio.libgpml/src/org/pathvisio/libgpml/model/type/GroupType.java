@@ -16,139 +16,125 @@
  ******************************************************************************/
 package org.pathvisio.libgpml.model.type;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.TreeMap;
+
+import org.pathvisio.libgpml.debug.Logger;
 
 /**
- * Extensible enum type for Group Styles.
+ * This class contains extensible enum for Group type property. Groups can have
+ * different biological meanings (e.g. protein Complex), and can be rendered in
+ * different ways based on that.
  *
- * Groups can have different biological meanings (e.g. protein Complex), and can
- * be rendered in different ways based on that.
+ * TODO: Add group type="Transparent" to GPML Schema  
+ * 
+ * NB: group type previously named group style.
+ * 
+ * @author unknown, finterly
  */
-public class GroupType implements Comparable<GroupType> {
-	private static Map<String, GroupType> nameMappings = new HashMap<String, GroupType>();
-	private static Set<GroupType> values = new TreeSet<GroupType>();
+public class GroupType {
 
-	public static final double DEFAULT_M_MARGIN = 8; // Make the bounds slightly
-	// larger than the summed bounds
-	// of the containing elements
-	public static final double COMPLEX_M_MARGIN = 12;
+	private static Map<String, GroupType> nameToGroupType = new TreeMap<String, GroupType>(
+			String.CASE_INSENSITIVE_ORDER);
 
-	public static final GroupType NONE = new GroupType("None");
-
-	/**
-	 * Style used to group objects for drawing convenience.
-	 */
-	public static final GroupType GROUP = new GroupType("Group");
-
-	/**
-	 * Style used to represent a group of objects that belong to a complex.
-	 */
-	public static final GroupType COMPLEX = new GroupType("Complex", false, COMPLEX_M_MARGIN);
-
-	/**
-	 * Style used to represent a group of objects that belong to a pathway.
-	 */
+	public static final GroupType GROUP = new GroupType("Group"); // default: replaces "NONE" of 2013a
+	public static final GroupType TRANSPARENT = new GroupType("Transparent"); // replaces "GROUP" of 2013a
+	public static final GroupType COMPLEX = new GroupType("Complex");
 	public static final GroupType PATHWAY = new GroupType("Pathway");
+	public static final GroupType ANALOG = new GroupType("Analog");
+	public static final GroupType PARALOG = new GroupType("Paralog");
 
 	private String name;
-	private boolean disallowLinks;
-	private double mMargin;
 
+	/**
+	 * The constructor is private. GroupType cannot be directly instantiated. Use
+	 * create() method to instantiate GroupType.
+	 * 
+	 * @param name the string key.
+	 */
 	private GroupType(String name) {
-		this(name, false, DEFAULT_M_MARGIN);
-	}
-
-	private GroupType(String name, boolean disallowLinks) {
-		this(name, disallowLinks, DEFAULT_M_MARGIN);
-	}
-
-	private GroupType(String name, boolean disallowLinks, double mMargin) {
 		if (name == null) {
 			throw new NullPointerException();
 		}
-
 		this.name = name;
-		this.disallowLinks = disallowLinks;
-		this.mMargin = mMargin;
-		values.add(this);
-		nameMappings.put(name, this);
+		nameToGroupType.put(name, this); // adds this name and GroupType to map.
 	}
 
 	/**
-	 * Create an object and add it to the list.
+	 * Returns a GroupType from a given string identifier name. If the GroupType
+	 * doesn't exist yet, it is created to extend the enum. The method makes sure
+	 * that the same object is not added twice.
 	 * 
-	 * For extending the enum.
+	 * @param name the string key.
+	 * @return the GroupType for given name. If name does not exist, creates and
+	 *         returns a new GroupType.
 	 */
-	public static GroupType create(String name) {
-		return new GroupType(name);
+	public static GroupType register(String name) {
+		if (nameToGroupType.containsKey(name)) {
+			return nameToGroupType.get(name);
+		} else {
+			Logger.log.trace("Registered group type " + name);
+			return new GroupType(name);
+		}
 	}
 
 	/**
-	 * Create an object and add it to the list.
+	 * Returns the name key for this GroupType.
 	 * 
-	 * For extending the enum.
-	 */
-	public static GroupType create(String name, boolean disallowLinks) {
-		return new GroupType(name, disallowLinks);
-	}
-
-	/**
-	 * looks up the ConnectorType corresponding to that name.
-	 */
-	public static GroupType fromName(String value) {
-		return nameMappings.get(value);
-	}
-
-	/**
-	 * looks up the ConnectorType corresponding to its GPML name.
-	 * 
-	 * @deprecated use {@link #fromName(String)} instead.
-	 */
-	public static GroupType fromGpmlName(String value) {
-		return nameMappings.get(value);
-	}
-
-	/**
-	 * Get the gpml name of the given GroupStyle.
-	 * 
-	 * @deprecated use {@link #getName()} instead.
-	 */
-	public static String toGpmlName(GroupType style) {
-		return style.getName();
-	}
-
-	/**
-	 * Stable identifier for this ConnectorType.
+	 * @return name the key for this GroupType.
 	 */
 	public String getName() {
 		return name;
 	}
 
-	public boolean isDisallowLinks() {
-		return disallowLinks;
+	/**
+	 * Looks up the ConnectorType corresponding to that name.
+	 */
+	public static GroupType fromName(String name) {
+		return nameToGroupType.get(name);
 	}
 
-	static public GroupType[] getValues() {
-		return values.toArray(new GroupType[0]);
+	/**
+	 * Returns the names of all registered GroupTypes as a list.
+	 * 
+	 * @return names the names of all registered GroupTypes in order of insertion.
+	 */
+	static public List<String> getNames() {
+		List<String> names = new ArrayList<>(nameToGroupType.keySet());
+		return names;
 	}
 
-	public static String[] getNames() {
-		return nameMappings.keySet().toArray(new String[nameMappings.size()]);
+	/**
+	 * Returns the group type values of all GroupTypes as a list.
+	 * 
+	 * @return groupTypes the list of all registered GroupTypes.
+	 */
+	static public List<GroupType> getValues() {
+		List<GroupType> groupTypes = new ArrayList<>(nameToGroupType.values());
+		return groupTypes;
 	}
 
+	/**
+	 * Returns a string representation of this GroupType.
+	 * 
+	 * @return name the identifier of this GroupType.
+	 */
 	public String toString() {
 		return name;
 	}
 
-	public int compareTo(GroupType o) {
-		return toString().compareTo(o.toString());
+	/**
+	 * Compares string representations of given GroupType lexicographically.
+	 * 
+	 * @return positive number (integer difference of character value) if first
+	 *         string is lexicographically greater than second string, negative
+	 *         number if first string is less than second string lexicographically,
+	 *         and 0 if first string is lexicographically equal to second string.
+	 */
+	public int compareTo(GroupType groupType) {
+		return toString().compareTo(groupType.toString());
 	}
 
-	/** Margin of group bounding-box around contained elements */
-	public double getMMargin() {
-		return mMargin;
-	}
 }

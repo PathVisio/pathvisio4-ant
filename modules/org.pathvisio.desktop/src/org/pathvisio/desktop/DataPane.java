@@ -176,7 +176,7 @@ public class DataPane extends JEditorPane implements ApplicationEventListener,
 	Xref currRef;
 
 	public void gmmlObjectModified(PathwayObjectEvent e) {
-		PathwayObject pe = e.getModifiedPathwayElement();
+		PathwayObject pe = e.getModifiedPathwayObject();
 		if (input != null
 				&& (e.affectsProperty(StaticProperty.GENEID) || e
 						.affectsProperty(StaticProperty.DATASOURCE))) {

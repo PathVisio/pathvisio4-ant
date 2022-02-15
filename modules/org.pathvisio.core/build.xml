@@ -30,6 +30,7 @@ class Revision
 			<include name="org.bridgedb.rdb*.jar" />
 			<include name="com.sun.*.jar" />
 			<include name="jarkarta*.jar" />
+			<include name="commons*.jar" />
 		</fileset>
 		<fileset dir="${bundle.dest}">
 			<include name="org.pathvisio.libgpml.jar" />

@@ -25,23 +25,27 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 
-import org.pathvisio.core.view.Adjustable;
+import org.pathvisio.libgpml.model.type.AnchorShapeType;
 import org.pathvisio.libgpml.model.GraphLink.LinkableFrom;
-import org.pathvisio.libgpml.model.PathwayObject.Anchor;
-import org.pathvisio.libgpml.model.PathwayObject.LinePoint;
+import org.pathvisio.libgpml.model.LineElement.Anchor;
+import org.pathvisio.libgpml.model.LineElement.LinePoint;
+import org.pathvisio.libgpml.model.PathwayObject;
+import org.pathvisio.core.view.Adjustable;
 import org.pathvisio.libgpml.model.shape.AnchorShape;
 import org.pathvisio.libgpml.model.shape.ShapeRegistry;
-import org.pathvisio.libgpml.model.type.AnchorShapeType;
 
 /**
  * VAnchor is the view representation of {@link Anchor}.
  *
- * It is stuck to a Line and can move one-dimensionally across it. It has a handle
- * so the user can drag it.
+ * It is stuck to a Line and can move one-dimensionally across it. It has a
+ * handle so the user can drag it.
+ * 
+ * @author unknown, finterly
  */
-public class VAnchor extends VElement implements LinkProvider, Adjustable {
-	private Anchor mAnchor;
-	private VLineElement line;
+public class VAnchor extends VElement implements VLinkableTo, Adjustable {
+
+	private Anchor anchor;
+	private VLineElement vLineElement;
 	private Handle handle;
 
 	private double mx = Double.NaN;
@@ -49,9 +53,18 @@ public class VAnchor extends VElement implements LinkProvider, Adjustable {
 
 	public VAnchor(Anchor mAnchor, VLineElement parent) {
 		super(parent.getDrawing());
-		this.mAnchor = mAnchor;
-		this.line = parent;
+		this.anchor = mAnchor;
+		this.vLineElement = parent;
 		updatePosition();
+	}
+
+	/**
+	 * TODO
+	 */
+	@Override
+	public PathwayObject getPathwayObject() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	public double getVx() {
@@ -66,70 +79,66 @@ public class VAnchor extends VElement implements LinkProvider, Adjustable {
 		return handle;
 	}
 
-	public Anchor getMAnchor() {
-		return mAnchor;
+	public Anchor getAnchor() {
+		return anchor;
 	}
 
 	protected void destroy() {
 		super.destroy();
-		line.removeVAnchor(this);
+		vLineElement.removeVAnchor(this);
 	}
 
-	@Override protected void destroyHandles()
-	{
-		if (handle != null)
-		{
+	@Override
+	protected void destroyHandles() {
+		if (handle != null) {
 			handle.destroy();
 			handle = null;
 		}
 	}
 
-	protected void createHandles()
-	{
+	protected void createHandles() {
 		handle = new Handle(Handle.Freedom.FREE, this, this);
-		double lc = mAnchor.getPosition();
-		Point2D position = line.vFromL(lc);
+		double lc = anchor.getPosition();
+		Point2D position = vLineElement.vFromL(lc);
 		handle.setVLocation(position.getX(), position.getY());
 	}
 
 	void updatePosition() {
-		double lc = mAnchor.getPosition();
+		double lc = anchor.getPosition();
 
-		Point2D position = line.vFromL(lc);
-		if (handle != null) handle.setVLocation(position.getX(), position.getY());
+		Point2D position = vLineElement.vFromL(lc);
+		if (handle != null)
+			handle.setVLocation(position.getX(), position.getY());
 
 		mx = mFromV(position.getX());
 		my = mFromV(position.getY());
 
-		//Redraw graphRefs
-		for(LinkableFrom ref : mAnchor.getReferences()) {
-			if(ref instanceof LinePoint) {
-				VPoint vp = canvas.getPoint((LinePoint)ref);
-				if(vp != null && vp.getLine() != line) {
+		// Redraw graphRefs
+		for (LinkableFrom ref : anchor.getLinkableFroms()) {
+			if (ref instanceof LinePoint) {
+				VPoint vp = canvas.getPoint((LinePoint) ref);
+				if (vp != null && vp.getLine() != vLineElement) {
 					vp.getLine().recalculateConnector();
 				}
 			}
 		}
 	}
 
-	public void adjustToHandle(Handle h, double vx, double vy)
-	{
-		double position = line.lFromV(new Point2D.Double(vx, vy));
-		mAnchor.setPosition(position);
+	public void adjustToHandle(Handle h, double vx, double vy) {
+		double position = vLineElement.lFromV(new Point2D.Double(vx, vy));
+		anchor.setPosition(position);
 	}
 
 	private AnchorShape getAnchorShape() {
-		AnchorShape shape = ShapeRegistry.getAnchor(
-				mAnchor.getShape().getName());
+		AnchorShape shape = ShapeRegistry.getAnchor(anchor.getShapeType().getName());
 
-		if(shape != null)
-		{
+		if (shape != null) {
 			AffineTransform f = new AffineTransform();
-			double scaleFactor = vFromM (1.0);
-			f.translate (getVx(), getVy());
-			f.scale (scaleFactor, scaleFactor);
+			double scaleFactor = vFromM(1.0);
+			f.translate(getVx(), getVy());
+			f.scale(scaleFactor, scaleFactor);
 			Shape sh = f.createTransformedShape(shape.getShape());
-			shape = new AnchorShape (sh);
+			shape = new AnchorShape(sh);
 		}
 		return shape;
 	}
@@ -140,49 +149,43 @@ public class VAnchor extends VElement implements LinkProvider, Adjustable {
 	}
 
 	protected void doDraw(Graphics2D g) {
-        if (getMAnchor().getShape().equals(AnchorShapeType.NONE) && getMAnchor().getElementId() != null) {
-            return;
-        }
-        Color c;
-
-		if(isSelected()) {
-			c = selectColor;
+		if (getAnchor().getShapeType().equals(AnchorShapeType.NONE) && getAnchor().getElementId() != null) {
+			return;
 		}
-		else {
-			c = line.getPathwayObject().getColor();
+		Color c;
+
+		if (isSelected()) {
+			c = selectColor;
+		} else {
+			c = vLineElement.getPathwayObject().getLineColor();
 		}
 
 		AnchorShape arrowShape = getAnchorShape();
-		if(arrowShape != null)
-		{
+		if (arrowShape != null) {
 			g.setStroke(new BasicStroke());
-				g.setPaint (c);
-				g.fill (arrowShape.getShape());
-				g.draw(arrowShape.getShape());
+			g.setPaint(c);
+			g.fill(arrowShape.getShape());
+			g.draw(arrowShape.getShape());
 		}
 
-		if(isHighlighted()) {
+		if (isHighlighted()) {
 			Color hc = getHighlightColor();
-			g.setColor(new Color (hc.getRed(), hc.getGreen(), hc.getBlue(), 128));
-			g.setStroke (new BasicStroke (HIGHLIGHT_STROKE_WIDTH));
-			g.draw (getShape());
+			g.setColor(new Color(hc.getRed(), hc.getGreen(), hc.getBlue(), 128));
+			g.setStroke(new BasicStroke(HIGHLIGHT_STROKE_WIDTH));
+			g.draw(getShape());
 		}
 	}
 
-	//Minimum outline diameter of 15px
+	// Minimum outline diameter of 15px
 	static final double MIN_OUTLINE = 15;
 
 	protected Shape calculateVOutline() {
 		Shape s = getShape();
 		Rectangle b = s.getBounds();
-		//Create a larger shape if the given shape
-		//is smaller than the minimum
-		if(b.getWidth() < MIN_OUTLINE ||
-			b.getHeight() < MIN_OUTLINE) {
-			s = new Ellipse2D.Double(
-					getVx() - MIN_OUTLINE / 2, getVy() - MIN_OUTLINE / 2,
-					MIN_OUTLINE, MIN_OUTLINE
-			);
+		// Create a larger shape if the given shape
+		// is smaller than the minimum
+		if (b.getWidth() < MIN_OUTLINE || b.getHeight() < MIN_OUTLINE) {
+			s = new Ellipse2D.Double(getVx() - MIN_OUTLINE / 2, getVy() - MIN_OUTLINE / 2, MIN_OUTLINE, MIN_OUTLINE);
 		}
 		return s;
 	}
@@ -190,28 +193,28 @@ public class VAnchor extends VElement implements LinkProvider, Adjustable {
 	LinkAnchor linkAnchor = null;
 
 	public LinkAnchor getLinkAnchorAt(Point2D p) {
-		if(linkAnchor != null && linkAnchor.getMatchArea().contains(p)) {
+		if (linkAnchor != null && linkAnchor.getMatchArea().contains(p)) {
 			return linkAnchor;
 		}
 		return null;
 	}
 
-	public void hideLinkAnchors() 
-	{
-		if (linkAnchor != null) linkAnchor.destroy();
+	public void hideLinkAnchors() {
+		if (linkAnchor != null)
+			linkAnchor.destroy();
 		linkAnchor = null;
 	}
 
-	public void showLinkAnchors() 
-	{
-		linkAnchor = new LinkAnchor(canvas, this, mAnchor, 0, 0);
+	public void showLinkAnchors() {
+		linkAnchor = new LinkAnchor(canvas, this, anchor, 0, 0);
 	}
 
 	/**
-	 * Returns the zorder of the parent line
+	 * Returns the z-order from the model //TODO public?
 	 */
-	protected int getZOrder() {
-		return line.getPathwayObject().getZOrder() + 1;
+	@Override
+	public int getZOrder() {
+		return getAnchor().getZOrder();
 	}
-	
+
 }

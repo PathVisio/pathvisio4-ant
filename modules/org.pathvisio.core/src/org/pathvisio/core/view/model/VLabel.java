@@ -16,10 +16,12 @@
  ******************************************************************************/
 package org.pathvisio.core.view.model;
 
-import org.pathvisio.libgpml.model.PathwayObject;
+import org.pathvisio.libgpml.model.Label;
 
 /**
  * Represents the view of a PathwayElement with ObjectType.LABEL.
+ * 
+ * @author unknown, finterly
  */
 public class VLabel extends VShapedElement {
 	/**
@@ -27,8 +29,17 @@ public class VLabel extends VShapedElement {
 	 * 
 	 * @param canvas - the VPathway this label will be part of
 	 */
-	public VLabel(VPathwayModel canvas, PathwayObject o) {
+	public VLabel(VPathwayModel canvas, Label o) {
 		super(canvas, o);
 	}
 
+	/**
+	 * Gets the model representation (PathwayElement) of this class
+	 * 
+	 * @return
+	 */
+	@Override
+	public Label getPathwayObject() {
+		return (Label) super.getPathwayObject();
+	}
 }

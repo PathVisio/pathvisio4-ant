@@ -19,10 +19,9 @@ package org.pathvisio.libgpml.model;
 import java.io.File;
 import java.io.InputStream;
 import java.io.Reader;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
-import java.util.Date;
 import java.util.EventListener;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -31,31 +30,1039 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.bridgedb.Xref;
-//import org.pathvisio.core.model.BatikImageExporter; TODO 
-//import org.pathvisio.core.model.ImageExporter; TODO 
-import org.pathvisio.libgpml.biopax.BiopaxElement;
-import org.pathvisio.libgpml.biopax.BiopaxNode;
 import org.pathvisio.libgpml.debug.Logger;
 import org.pathvisio.libgpml.io.ConverterException;
-import org.pathvisio.libgpml.model.GraphLink.LinkableTo;
+import org.pathvisio.libgpml.model.DataNode.State;
 import org.pathvisio.libgpml.model.GraphLink.LinkableFrom;
-import org.pathvisio.libgpml.model.PathwayObject.Anchor;
-import org.pathvisio.libgpml.model.PathwayObject.LinePoint;
-import org.pathvisio.libgpml.model.type.ObjectType;
-import org.pathvisio.libgpml.prop.StaticProperty;
+import org.pathvisio.libgpml.model.GraphLink.LinkableTo;
 import org.pathvisio.libgpml.util.Utils;
 
 /**
- * This class is the model for pathway data. It is responsible for storing all
- * information necessary for maintaining, loading and saving pathway data.
- *
- * Pathway contains multiple PathwayElements. Pathway is guaranteed to always
- * have exactly one object of the type MAPPINFO and exactly one object of the
- * type INFOBOX.
+ * This class stores information for a Pathway model. Pathway model contains
+ * pathway elements and properties. The pathway model stores all information
+ * necessary for maintaining, loading and saving pathway data; reading in,
+ * writing from.
+ * 
+ * @author unknown, finterly
  */
 public class PathwayModel {
+
+	private Pathway pathway; // pathway information
+	// for elementId to PathwayElement
+	private Map<String, PathwayObject> elementIdToPathwayObject;
+	// for PathwayElement and all LinePoints which point to it
+	private Map<LinkableTo, Set<LinkableFrom>> elementRefToLinePoints;
+	// for Group aliasRef and all DataNode aliases for it
+	private Map<Group, Set<DataNode>> aliasRefToAliases;
+	private List<DataNode> dataNodes; // contains states
+	private List<Interaction> interactions; // contains points and anchors
+	private List<GraphicalLine> graphicalLines; // contains points and anchors
+	private List<Label> labels;
+	private List<Shape> shapes;
+	private List<Group> groups;
+	private List<Annotation> annotations;
+	private List<Citation> citations;
+	private List<Evidence> evidences;
+
+	// ================================================================================
+	// Constructors
+	// ================================================================================
+	/**
+	 * Initializes a pathway model object with default {@link Pathway}.
+	 */
+	public PathwayModel() {
+		this.pathway = new Pathway();
+		pathway.setPathwayModelTo(this); // TODO
+		this.elementIdToPathwayObject = new HashMap<String, PathwayObject>();
+		this.elementRefToLinePoints = new HashMap<LinkableTo, Set<LinkableFrom>>();
+		this.aliasRefToAliases = new HashMap<Group, Set<DataNode>>();
+		this.dataNodes = new ArrayList<DataNode>();
+		this.interactions = new ArrayList<Interaction>();
+		this.graphicalLines = new ArrayList<GraphicalLine>();
+		this.labels = new ArrayList<Label>();
+		this.shapes = new ArrayList<Shape>();
+		this.groups = new ArrayList<Group>();
+		this.annotations = new ArrayList<Annotation>();
+		this.citations = new ArrayList<Citation>();
+		this.evidences = new ArrayList<Evidence>();
+	}
+
+	// ================================================================================
+	// Accessors
+	// ================================================================================
+	/**
+	 * Returns the pathway object containing metadata, e.g. title, organism...
+	 * 
+	 * NB: Pathway cannot be set. There is no setPathway() method. Modify pathway
+	 * information with its accessors (e.g. setTitle(), setOrganism(),..).
+	 * 
+	 * @return pathway the pathway meta information.
+	 */
+	public Pathway getPathway() {
+		return pathway;
+	}
+
+	// TODO
+	/**
+	 * Returns all pathway elements for the pathway model (dataNodes, interactions,
+	 * graphicalLines, labels, shapes, and groups). Excludes pathway? TODO
+	 * 
+	 * @return the pathway elements for this pathway model.
+	 */
+	public List<PathwayElement> getPathwayElements() {
+		return Stream.of(dataNodes, interactions, graphicalLines, labels, shapes, groups).flatMap(Collection::stream)
+				.collect(Collectors.toList());
+	}
+
+	// TODO
+	/**
+	 * Returns all shaped pathway elements for the pathway model (dataNodes, labels,
+	 * shapes, and groups). Excludes state? TODO
+	 * 
+	 * @return the pathway elements for this pathway model.
+	 */
+	public List<ShapedElement> getShapedElements() {
+		List<State> states = new ArrayList<State>();
+		for (DataNode dataNode : dataNodes) {
+			states.addAll(dataNode.getStates());
+		}
+		return Stream.of(dataNodes, states, labels, shapes, groups).flatMap(Collection::stream)
+				.collect(Collectors.toList());
+	}
+
+	// TODO
+	/**
+	 * Returns all shaped pathway elements for the pathway model (dataNodes, labels,
+	 * shapes, and groups) excluding states.
+	 * 
+	 * @return the pathway elements for this pathway model.
+	 */
+	public List<ShapedElement> getShapedElementsExclStates() {
+		return Stream.of(dataNodes, labels, shapes, groups).flatMap(Collection::stream).collect(Collectors.toList());
+	}
+
+	// TODO
+	/**
+	 * Returns all line pathway elements for the pathway model (interactions and
+	 * graphicalLines).
+	 * 
+	 * @return the pathway elements for this pathway model.
+	 */
+	public List<LineElement> getLineElements() {
+		return Stream.of(interactions, graphicalLines).flatMap(Collection::stream).collect(Collectors.toList());
+	}
+
+	// ================================================================================
+	// ElementIdToPathwayObject Map Methods
+	// ================================================================================
+	/**
+	 * Returns a unique elementId.
+	 * 
+	 * @return a unique elementId.
+	 */
+	public String getUniqueElementId() {
+		return getUniqueId(elementIdToPathwayObject.keySet());
+	}
+
+	/**
+	 * Returns Pathway Object for the given String elementId key.
+	 * 
+	 * @param elementId the given elementId key.
+	 * @return the PathwayObject for the given elementId key.
+	 */
+	public PathwayObject getPathwayObject(String elementId) {
+		return elementIdToPathwayObject.get(elementId);
+	}
+
+	/**
+	 * Returns all pathway objects for the pathway model.
+	 * 
+	 * @return pathwayObjects the pathway objects for this pathway model.
+	 */
+	public List<PathwayObject> getPathwayObjects() {
+		List<PathwayObject> pathwayObjects = new ArrayList<>(elementIdToPathwayObject.values());
+		return pathwayObjects;
+	}
+
+	/**
+	 * Checks if the pathway model has the given pathway object.
+	 * 
+	 * @param pathwayObject the pathway object to check for.
+	 * @return true if pathway model has given pathway object, false otherwise.
+	 */
+	public boolean hasPathwayObject(PathwayObject pathwayObject) {
+		return this.getPathwayObjects().contains(pathwayObject);
+	}
+
+	/**
+	 * Returns a set view of String elementId keys from the elementIdToPathwayObject
+	 * hash map.
+	 * 
+	 * @return a list of elementId keys.
+	 */
+	public Set<String> getElementIds() {
+		return elementIdToPathwayObject.keySet();
+	}
+
+	/**
+	 * Adds mapping of elementId key to PathwayObject value in the
+	 * elementIdToPathwayObject hash map.
+	 * 
+	 * @param elementId     the elementId
+	 * @param pathwayObject the pathway object
+	 * @throws IllegalArgumentException if elementId or elementIdContainer are null.
+	 * @throws IllegalArgumentException if elementId is not unique.
+	 */
+	public void addElementId(String elementId, PathwayObject pathwayObject) {
+		if (pathwayObject == null || elementId == null) {
+			throw new IllegalArgumentException("unique elementId can't be null");
+		}
+		if (elementIdToPathwayObject.containsKey(elementId)) {
+			throw new IllegalArgumentException("elementId '" + elementId + "' is not unique");
+		}
+		elementIdToPathwayObject.put(elementId, pathwayObject);
+	}
+
+	/**
+	 * Removes the mapping of given elementId key from the elementIdToPathwayObject
+	 * hash map. TODO public?
+	 * 
+	 * @param elementId the elementId key.
+	 */
+	public void removeElementId(String elementId) {
+		elementIdToPathwayObject.remove(elementId);
+	}
+
+	/**
+	 * Randomly generates a new unique ID, based on strings of hex digits (0..9 or
+	 * a..f) given a set of existing IDs.
+	 * 
+	 * @param ids the collection of already existing IDs.
+	 * @return result the new unique ID.
+	 */
+	public static String getUniqueId(Set<String> ids) {
+		String result;
+		Random random = new Random();
+		int mod = 0x60000; // 3 hex letters
+		int min = 0xa0000; // must start with a letter
+		// add hex letters if set size large
+		if ((ids.size()) > 0x10000) {
+			mod = 0x60000000;
+			min = 0xa0000000;
+		}
+		do {
+			result = Integer.toHexString(Math.abs(random.nextInt()) % mod + min);
+		} while (ids.contains(result));
+		return result;
+	}
+
+	// ================================================================================
+	// ElementRefToLinePoints Map Methods
+	// ================================================================================
+	/**
+	 * Returns all {@link LinkableFrom} {@link LineElement.LinePoint} that refer to
+	 * a {@link LinkableTo} pathway element or anchor.
+	 */
+	public Set<LinkableFrom> getReferringLinkableFroms(LinkableTo elementRef) {
+		Set<LinkableFrom> refs = elementRefToLinePoints.get(elementRef);
+		if (refs != null) {
+			// create defensive copy to prevent problems with ConcurrentModification.
+			return new HashSet<LinkableFrom>(refs);
+		} else {
+			return Collections.emptySet();
+		}
+	}
+
+	/**
+	 * Register a link from a elementRef to a linePoint(s) //TODO check if correct
+	 * 
+	 * @param elementRef the pathway element which can be linked to.
+	 * @param linePoint  the linePoint with given elementRef.
+	 */
+	protected void addElementRef(LinkableTo elementRef, LinkableFrom linePoint) {
+		Utils.multimapPut(elementRefToLinePoints, elementRef, linePoint);
+	}
+
+	/**
+	 * Removes a linePoint linked to a elementRef. //TODO check if correct
+	 * 
+	 * @param elementRef the pathway element which is linked to linePoint.
+	 * @param linePoint  the linePoint with given elementRef.
+	 */
+	protected void removeElementRef(LinkableTo elementRef, LinkableFrom linePoint) {
+		if (!elementRefToLinePoints.containsKey(elementRef))
+			throw new IllegalArgumentException();
+		elementRefToLinePoints.get(elementRef).remove(linePoint); // TODO
+		if (elementRefToLinePoints.get(elementRef).size() == 0) {
+			elementRefToLinePoints.remove(elementRef);
+		}
+	}
+
+	// ================================================================================
+	// AliasRefToAliases Map Methods
+	// ================================================================================
+	/**
+	 * Returns the set of DataNode aliases for a Group aliasRef. When a DataNode has
+	 * type="alias" it may be an alias for a Group pathway element. To get aliasRef
+	 * for a dataNode use {@link DataNode#getAliasRef()}.
+	 * 
+	 * @param aliasRef the group which has datanode aliases.
+	 * @return the datanode aliases for the group aliasRef.
+	 */
+	public Set<DataNode> getAlias(Group aliasRef) {
+		return aliasRefToAliases.get(aliasRef);
+	}
+
+	/**
+	 * Returns true if pathway model has Group aliasRef.
+	 * 
+	 * @param aliasRef the group.
+	 * @return true if pathway model has aliasRef.
+	 */
+	protected boolean hasAliasRef(Group aliasRef) {
+		return aliasRefToAliases.containsKey(aliasRef);
+	}
+
+	/**
+	 * Returns true if pathway model has DataNode alias and Group aliasRef.
+	 * 
+	 * @param aliasRef the group.
+	 * @param alias    the alias datanode.
+	 * @return true if pathway model has alias and aliasRef.
+	 */
+	protected boolean hasAlias(Group aliasRef, DataNode alias) {
+		return aliasRefToAliases.get(aliasRef).contains(alias);
+	}
+
+	/**
+	 * Adds mapping of aliasRef to data node alias in the aliasRefToAliases hash
+	 * map.
+	 * 
+	 * NB: This method is not used directly. It is called by
+	 * {@link DataNode#setAliasRef} when the data node alias is terminated
+	 * {@link DataNode#terminate} or deleted by {@link #removeDataNode}.
+	 * 
+	 * @param aliasRef the group for which a dataNode alias refers.
+	 * @param alias    the datanode which has an aliasRef.
+	 * @throws IllegalArgumentException if elementRef or dataNode are null.
+	 */
+	protected void addAlias(Group aliasRef, DataNode alias) {
+		if (aliasRef == null || alias == null)
+			throw new IllegalArgumentException("AliasRef and alias must be valid.");
+		Set<DataNode> aliases = aliasRefToAliases.get(aliasRef);
+		if (aliases == null) {
+			aliases = new HashSet<DataNode>();
+			aliasRefToAliases.put(aliasRef, aliases);
+		}
+		aliases.add(alias);
+	}
+
+	/**
+	 * Removes the given aliasRef and alias from aliasRefToAliases of this pathway
+	 * model.
+	 * 
+	 * <p>
+	 * NB: This method is not used directly.
+	 * <ol>
+	 * <li>It is called when the data node alias is deleted by
+	 * {@link #removeDataNode}.
+	 * <li>Or when the aliasRef is deleted {@link #removeAliasRef} and thus all
+	 * alias must be deleted.
+	 * </ol>
+	 * 
+	 * @param aliasRef the group for which a dataNode alias refers.
+	 * @param alias    the datanode which has an aliasRef.
+	 */
+	protected void removeAlias(Group aliasRef, DataNode alias) {
+		if (alias == null || aliasRef == null)
+			throw new IllegalArgumentException("AliasRef and alias must be valid.");
+		assert (alias.getAliasRef() == aliasRef);
+		assert (hasAlias(aliasRef, alias));
+		Set<DataNode> aliases = aliasRefToAliases.get(aliasRef);
+		aliases.remove(alias);
+		if (dataNodes.contains(alias)) {
+			removeDataNode(alias);
+		}
+		// removes aliasRef if it has no aliases
+		if (aliases.isEmpty())
+			removeAliasRef(aliasRef);
+	}
+
+	/**
+	 * Removes the mapping of given elementRef key from the elementRefToDataNode
+	 * hash map.
+	 * 
+	 * @param aliasRef the aliasRef key.
+	 */
+	protected void removeAliasRef(Group aliasRef) {
+		assert (hasAliasRef(aliasRef));
+		Set<DataNode> aliases = aliasRefToAliases.get(aliasRef);
+		if (!aliases.isEmpty()) {
+			for (DataNode alias : aliases) {
+				removeAlias(aliasRef, alias);
+			}
+		}
+		aliasRefToAliases.remove(aliasRef);
+	}
+
+	// ================================================================================
+	// PathwayElement List Methods
+	// ================================================================================
+	/**
+	 * Returns the list of data node pathway elements.
+	 * 
+	 * @return dataNodes the list of data nodes.
+	 */
+	public List<DataNode> getDataNodes() {
+		return dataNodes;
+	}
+
+	/**
+	 * Adds the given dataNode to dataNodes list. Sets pathwayModel and elementId,
+	 * and maps to elementIdToPathwayObject.
+	 * 
+	 * @param dataNode the data node to be added.
+	 */
+	public void addDataNode(DataNode dataNode) {
+		addPathwayObject(dataNode);
+		dataNodes.add(dataNode);
+	}
+
+	/**
+	 * Removes the given dataNode from dataNodes list and elementIdToPathwayObject
+	 * map.
+	 * 
+	 * @param dataNode the data node to be removed.
+	 */
+	public void removeDataNode(DataNode dataNode) {
+		dataNodes.remove(dataNode);
+		Group aliasRef = dataNode.getAliasRef();
+		if (aliasRef != null) {
+			if (hasAlias(aliasRef, dataNode)) {
+				removeAlias(aliasRef, dataNode);
+			}
+		}
+		removePathwayObject(dataNode);
+	}
+
+	/**
+	 * Returns the list of interaction pathway elements.
+	 * 
+	 * @return interactions the list of interactions.
+	 */
+	public List<Interaction> getInteractions() {
+		return interactions;
+	}
+
+	/**
+	 * Adds the given interaction to interactions list. Sets pathwayModel and
+	 * elementId, and maps to elementIdToPathwayObject.
+	 * 
+	 * @param interaction the interaction to be added.
+	 */
+	public void addInteraction(Interaction interaction) {
+		addPathwayObject(interaction);
+		interactions.add(interaction);
+	}
+
+	/**
+	 * Removes the given interaction from interactions list and
+	 * elementIdToPathwayObject map..
+	 * 
+	 * @param interaction the interaction to be removed.
+	 */
+	public void removeInteraction(Interaction interaction) {
+		interactions.remove(interaction);
+		removePathwayObject(interaction);
+
+	}
+
+	/**
+	 * Returns the list of graphical line pathway elements.
+	 * 
+	 * @return graphicalLines the list of graphicalLines.
+	 */
+	public List<GraphicalLine> getGraphicalLines() {
+		return graphicalLines;
+	}
+
+	/**
+	 * Adds the given graphicalLine to graphicalLines list. Sets pathwayModel and
+	 * elementId, and maps to elementIdToPathwayObject.
+	 * 
+	 * @param graphicalLine the graphicalLine to be added.
+	 */
+	public void addGraphicalLine(GraphicalLine graphicalLine) {
+		addPathwayObject(graphicalLine);
+		graphicalLines.add(graphicalLine);
+	}
+
+	/**
+	 * Removes the given graphicalLine from graphicalLines list and
+	 * elementIdToPathwayObject map..
+	 * 
+	 * @param graphicalLine the graphicalLine to be removed.
+	 */
+	public void removeGraphicalLine(GraphicalLine graphicalLine) {
+		graphicalLines.remove(graphicalLine);
+		removePathwayObject(graphicalLine);
+
+	}
+
+	/**
+	 * Returns the list of label pathway elements.
+	 * 
+	 * @return labels the list of labels.
+	 */
+	public List<Label> getLabels() {
+		return labels;
+	}
+
+	/**
+	 * Adds the given label to labels list. Sets pathwayModel and elementId, and
+	 * maps to elementIdToPathwayObject.
+	 * 
+	 * @param label the label to be added.
+	 */
+	public void addLabel(Label label) {
+		labels.add(label);
+		addPathwayObject(label);
+	}
+
+	/**
+	 * Removes the given label from labels list and elementIdToPathwayObject map.
+	 * 
+	 * @param label the label to be removed.
+	 */
+	public void removeLabel(Label label) {
+		labels.remove(label);
+		removePathwayObject(label);
+
+	}
+
+	/**
+	 * Returns the list of shape pathway elements.
+	 * 
+	 * @return shapes the list of shapes.
+	 */
+	public List<Shape> getShapes() {
+		return shapes;
+	}
+
+	/**
+	 * Adds the given shape to shapes list.Sets pathwayModel and elementId, and maps
+	 * to elementIdToPathwayObject.
+	 * 
+	 * @param shape the shape to be added.
+	 */
+	public void addShape(Shape shape) {
+		addPathwayObject(shape);
+		shapes.add(shape);
+	}
+
+	/**
+	 * Removes the given shape from shapes list and elementIdToPathwayObject map.
+	 * 
+	 * @param shape the shape to be removed.
+	 */
+	public void removeShape(Shape shape) {
+		shapes.remove(shape);
+		removePathwayObject(shape);
+
+	}
+
+	/**
+	 * Returns the list of group pathway elements.
+	 * 
+	 * @return groups the list of groups.
+	 */
+	public List<Group> getGroups() {
+		return groups;
+	}
+
+	/**
+	 * Adds the given group to groups list. Sets pathwayModel and elementId, and
+	 * maps to elementIdToPathwayObject.
+	 * 
+	 * @param group the group to be added.
+	 */
+	public void addGroup(Group group) {
+		addPathwayObject(group);
+		groups.add(group);
+	}
+
+	/**
+	 * Removes the given group from groups list and elementIdToPathwayObject map.
+	 * Also removes group from aliasRefToAliases if applicable.
+	 * 
+	 * @param group the group to be removed.
+	 */
+	public void removeGroup(Group group) {
+		groups.remove(group);
+		if (hasAliasRef(group)) {
+			removeAliasRef(group);
+		}
+		removePathwayObject(group);
+	}
+
+	// ================================================================================
+	// Annotation, Citation, Evidence List Methods
+	// ================================================================================
+	/**
+	 * Returns the list of annotations.
+	 * 
+	 * @return annotations the list of annotations.
+	 */
+	public List<Annotation> getAnnotations() {
+		return annotations;
+	}
+
+	/**
+	 * Adds given annotation to annotations list. If there is an annotation with
+	 * equivalent properties in the pathway model, the given annotation is not added
+	 * and the equivalent annotation is returned. Also sets pathwayModel and
+	 * elementId, and maps to elementIdToPathwayObject.
+	 * 
+	 * @param annotation the new annotation to be added.
+	 * @return annotation the new annotation or annotationExisting the existing
+	 *         equivalent annotation.
+	 */
+	protected Annotation addAnnotation(Annotation annotation) {
+		Annotation annotationExisting = hasEqualAnnotation(annotation);
+		if (annotationExisting != null) {
+			Logger.log.trace("Annotation not added, information equivalent to " + annotationExisting.getElementId());
+			return annotationExisting;
+		} else {
+			addPathwayObject(annotation);
+			annotations.add(annotation);
+			return annotation;
+		}
+	}
+
+	/**
+	 * Checks if given annotation already exists for the pathway model.
+	 * 
+	 * @param annotation the given annotation to be checked.
+	 * @return annotationExisting the existing equivalent annotation, or null if no
+	 *         equivalent annotation exists for given citation.
+	 */
+	private Annotation hasEqualAnnotation(Annotation annotation) {
+		for (Annotation annotationExisting : annotations) {
+			if (annotation.equalsAnnotation(annotationExisting)) {
+				return annotationExisting;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Removes given annotation from annotations list and elementIdToPathwayObject
+	 * map.
+	 * 
+	 * @param annotation the annotation to be removed.
+	 */
+	public void removeAnnotation(Annotation annotation) {
+		annotations.remove(annotation);
+		removePathwayObject(annotation);
+	}
+
+	/**
+	 * Returns the list of citations.
+	 * 
+	 * @return citation the list of citations.
+	 */
+	public List<Citation> getCitations() {
+		return citations;
+	}
+
+	/**
+	 * Adds given citation to citations list. If there is an citation with
+	 * equivalent properties in the pathway model, the given citation is not added
+	 * and the equivalent citation is returned. Also sets pathwayModel and
+	 * elementId, and maps to elementIdToPathwayObject.
+	 * 
+	 * @param citation the new citation to be added.
+	 * @return citation the new citation or citationExisting the existing equivalent
+	 *         citation.
+	 */
+	protected Citation addCitation(Citation citation) {
+		if (citation != null) {
+			Citation citationExisting = hasEqualCitation(citation);
+			if (citationExisting != null) {
+				Logger.log.trace("Citation not added, information equivalent to " + citationExisting.getElementId());
+				return citationExisting;
+			} else {
+				addPathwayObject(citation);
+				citations.add(citation);
+				return citation;
+			}
+		} else {
+			return null;
+		}
+	}
+
+	/**
+	 * Checks if given citation already exists for the pathway model.
+	 * 
+	 * @param citation the given citation to be checked.
+	 * @return citationExisting the existing equivalent citation, or null if no
+	 *         equivalent citation exists for given citation.
+	 */
+	private Citation hasEqualCitation(Citation citation) {
+		for (Citation citationExisting : citations) {
+			if (citation.equalsCitation(citationExisting)) {
+				return citationExisting;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Removes given citation from citations list and elementIdToPathwayObject map.
+	 * 
+	 * @param citation the citation to be removed.
+	 */
+	public void removeCitation(Citation citation) {
+		citations.remove(citation);// TODO
+		removePathwayObject(citation);
+	}
+
+	/**
+	 * Returns the list of evidences.
+	 * 
+	 * @return evidences the list of evidences.
+	 */
+	public List<Evidence> getEvidences() {
+		return evidences;
+	}
+
+	/**
+	 * Adds given evidence to evidences. If there is an evidence with equivalent
+	 * properties in the pathway model, the given evidence is not added and the
+	 * equivalent evidence is returned. Also sets pathwayModel and elementId, and
+	 * maps to elementIdToPathwayObject.
+	 * 
+	 * @param evidence the evidence to be added.
+	 */
+	protected Evidence addEvidence(Evidence evidence) {
+		Evidence evidenceExisting = hasEqualEvidence(evidence);
+		if (evidenceExisting != null) {
+			Logger.log.trace("Evidence not added, information equivalent to " + evidenceExisting.getElementId());
+			return evidenceExisting;
+		} else {
+			addPathwayObject(evidence);
+			evidences.add(evidence);
+			return evidence;
+		}
+	}
+
+	/**
+	 * Checks if given evidence already exists for the pathway model.
+	 * 
+	 * @param evidence the given evidence to be checked.
+	 * @return evidenceExisting the existing equivalent citation, or null if no
+	 *         equivalent citation exists for given citation.
+	 */
+	private Evidence hasEqualEvidence(Evidence evidence) {
+		for (Evidence evidenceExisting : evidences) {
+			if (evidence.equalsEvidence(evidenceExisting)) {
+				return evidenceExisting;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Removes given evidence from evidences list and elementIdToPathwayObject map.
+	 * 
+	 * @param evidence the evidence to be removed.
+	 */
+	public void removeEvidence(Evidence evidence) {
+		evidences.remove(evidence);
+		removePathwayObject(evidence);
+	}
+
+	// ================================================================================
+	// General PathwayObject Add/Remove Methods
+	// ================================================================================
+
+	/**
+	 * Adds the given pathway object to pathway model. Sets pathwayModel for the
+	 * given pathway object. Sets an unique elementId for given pathway object if
+	 * not already set. Corresponding elementId and given pathway object are added
+	 * to elementIdToPathwayObject map.
+	 * 
+	 * Fires PathwayEvent.ADDED event <i>after</i> addition of the object
+	 * 
+	 * @param pathwayObject the pathway object to add.
+	 */
+	protected void addPathwayObject(PathwayObject pathwayObject) {
+		if (pathwayObject == null) {
+			throw new IllegalArgumentException("Cannot add invalid pathway object to pathway model");
+		}
+		String elementId = pathwayObject.getElementId();
+		// if pathway object already has elementId (from reading), it must be unique
+		if (elementId != null && elementIdToPathwayObject.containsKey(elementId)) {
+			throw new IllegalArgumentException("id '" + elementId + "' is not unique");
+		}
+		// set pathway model
+		pathwayObject.setPathwayModelTo(this);
+		if (pathwayObject.getPathwayModel() != this) {
+			throw new IllegalArgumentException("Pathway object does not refer to this pathway model");
+		}
+		// if pathway object does not yet have id, set a unique elementId
+		if (elementId == null) {
+			elementId = pathwayObject.setGeneratedElementId();
+		}
+		addElementId(elementId, pathwayObject);
+		fireObjectModifiedEvent(new PathwayModelEvent(pathwayObject, PathwayModelEvent.ADDED));
+		checkMBoardSize(pathwayObject);
+	}
+
+	/**
+	 * Removes the given pathway object from pathway model and
+	 * elementIdToPathwayObject map. The pathway object is terminated in the
+	 * process.
+	 * 
+	 * Sets parent of object to null and removed elementId <i>before</i> removal of
+	 * the object. Fires PathwayEvent.DELETED event <i>after</i> removal of the
+	 * object
+	 * 
+	 * @param pathwayObject the pathway object to remove.
+	 */
+	protected void removePathwayObject(PathwayObject pathwayObject) {
+		if (pathwayObject == null) {
+			throw new IllegalArgumentException("Cannot remove invalid pathway object");
+		}
+		if (!hasPathwayObject(pathwayObject)) {
+			throw new IllegalArgumentException("Pathway model does not have this pathway object");
+		}
+		removeElementId(pathwayObject.getElementId());
+		pathwayObject.terminate();
+		fireObjectModifiedEvent(new PathwayModelEvent(pathwayObject, PathwayModelEvent.DELETED));
+	}
+
+	/**
+	 * Adds a PathwayObject to this Pathway. Calls the appropriate add method based
+	 * on PathwayObject class. TODO
+	 *
+	 * @param o the pathway object to add
+	 */
+	public void add(PathwayObject o) {
+		if (o.getClass() == DataNode.class) {
+			addDataNode((DataNode) o);
+		} else if (o.getClass() == Interaction.class) {
+			addInteraction((Interaction) o);
+		} else if (o.getClass() == GraphicalLine.class) {
+			addGraphicalLine((GraphicalLine) o);
+		} else if (o.getClass() == Label.class) {
+			addLabel((Label) o);
+		} else if (o.getClass() == Shape.class) {
+			addShape((Shape) o);
+		} else if (o.getClass() == Group.class) {
+			addGroup((Group) o);
+		} else if (o.getClass() == Annotation.class) {
+			addAnnotation((Annotation) o);
+		} else if (o.getClass() == Citation.class) {
+			addCitation((Citation) o);
+		} else if (o.getClass() == Group.class) {
+			addEvidence((Evidence) o);
+		} else {
+			throw new IllegalArgumentException("Pathway object cannot be directly added to pathway model.");
+		}
+	}
+
+	/**
+	 * Removes a PathwayObject from this Pathway. Calls the appropriate remove
+	 * method based on PathwayObject class. TODO
+	 *
+	 * @param o the pathway object to remove
+	 */
+	public void remove(PathwayObject o) {
+		assert (o.getPathwayModel() == this);
+		if (o.getClass() == DataNode.class) {
+			removeDataNode((DataNode) o);
+		} else if (o.getClass() == Interaction.class) {
+			removeInteraction((Interaction) o);
+		} else if (o.getClass() == GraphicalLine.class) {
+			removeGraphicalLine((GraphicalLine) o);
+		} else if (o.getClass() == Label.class) {
+			removeLabel((Label) o);
+		} else if (o.getClass() == Shape.class) {
+			removeShape((Shape) o);
+		} else if (o.getClass() == Group.class) {
+			removeGroup((Group) o);
+		} else if (o.getClass() == Annotation.class) {
+			removeAnnotation((Annotation) o);
+		} else if (o.getClass() == Citation.class) {
+			removeCitation((Citation) o);
+		} else if (o.getClass() == Group.class) {
+			removeEvidence((Evidence) o);
+		} else {
+			throw new IllegalArgumentException("Pathway object cannot be removed from pathway model.");
+		}
+	}
+
+	// ================================================================================
+	// Xref Methods
+	// ================================================================================
+	/**
+	 * Returns the Xref of all DataNodes in this pathway as a List.
+	 * 
+	 * @return result the list of xref of all datanodes or an empty arraylist if
+	 *         there are no datanodes in this pathway.
+	 */
+	public List<Xref> getDataNodeXrefs() {
+		List<Xref> result = new ArrayList<Xref>();
+		for (DataNode dataNode : dataNodes) {
+			result.add(dataNode.getXref());
+		}
+		return result;
+	}
+
+	/**
+	 * Returns the Xref of all States of all DataNodes in this pathway as a List.
+	 *
+	 * @return result the list of xref of all states or an empty arraylist if there
+	 *         are no interactions in this pathway.
+	 */
+	public List<Xref> getStateXrefs() {
+		List<Xref> result = new ArrayList<Xref>();
+		for (DataNode dataNode : dataNodes) {
+			List<State> states = dataNode.getStates();
+			for (State state : states) {
+				Xref stateXref = state.getXref();
+				if (stateXref != null) {
+					result.add(stateXref);
+				}
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * Returns the Xref of all Interactions in this pathway as a List.
+	 *
+	 * @return result the list of xref of all interactions or an empty arraylist if
+	 *         there are no interactions in this pathway.
+	 */
+	public List<Xref> getInteractionXrefs() {
+		List<Xref> result = new ArrayList<Xref>();
+		for (Interaction interaction : interactions) {
+			result.add(interaction.getXref());
+		}
+		return result;
+	}
+
+	/**
+	 * Returns the Xref of all Groups in this pathway as a List.
+	 *
+	 * @return result the list of xref of all groups or an empty arraylist if there
+	 *         are no interactions in this pathway.
+	 */
+	public List<Xref> getGroupXrefs() {
+		List<Xref> result = new ArrayList<Xref>();
+		for (Group group : groups) {
+			Xref groupXref = group.getXref();
+			if (groupXref != null) {
+				result.add(groupXref);
+			}
+		}
+		return result;
+	}
+
+	// ================================================================================
+	// Clone Methods
+	// ================================================================================
+	public PathwayModel clone() {
+		PathwayModel result = new PathwayModel(); // TODO
+		for (DataNode o : getDataNodes()) {
+			result.add(o.copy().getNewElement()); // TODO
+		}
+		// TODO ...
+		result.changed = changed;
+		if (sourceFile != null) {
+			result.sourceFile = new File(sourceFile.getAbsolutePath());
+		}
+		// do not copy status flag listeners
+//		for(StatusFlagListener l : statusFlagListeners) {
+//			result.addStatusFlagListener(l);
+//		}
+		return result;
+	}
+
+	// ================================================================================
+	// Read Write Methods
+	// ================================================================================
+	private File sourceFile = null;
+
+	/**
+	 * Returns the xml file containing the Gpml/mapp pathway currently displayed
+	 * 
+	 * @return current xml file
+	 */
+	public File getSourceFile() {
+		return sourceFile;
+	}
+
+	public void setSourceFile(File file) {
+		sourceFile = file;
+	}
+
+	/**
+	 * Writes the JDOM document to the file specified
+	 * 
+	 * @param file     the file to which the JDOM document should be saved
+	 * @param validate if true, validate the dom structure before writing to file.
+	 *                 If there is a validation error, or the xsd is not in the
+	 *                 classpath, an exception will be thrown.
+	 */
+	public void writeToXml(File file, boolean validate) throws ConverterException {
+		GpmlFormat.writeToXml(this, file, validate);
+		setSourceFile(file);
+//		clearChangedFlag();
+
+	}
+
+	public void readFromXml(Reader in, boolean validate) throws ConverterException {
+		GpmlFormat.readFromXml(this, in, validate);
+		setSourceFile(null);
+//		clearChangedFlag();
+	}
+
+	public void readFromXml(InputStream in, boolean validate) throws ConverterException {
+		GpmlFormat.readFromXml(this, in, validate);
+		setSourceFile(null);
+//		clearChangedFlag();
+	}
+
+	public void readFromXml(File file, boolean validate) throws ConverterException {
+		Logger.log.info("Start reading the XML file: " + file);
+		GpmlFormat.readFromXml(this, file, validate);
+		setSourceFile(file);
+//		clearChangedFlag();
+	}
+
+//	public void writeToMapp (File file) throws ConverterException
+//	{
+//		new MappFormat().doExport(file, this);
+//	}
+//
+//	public void writeToSvg (File file) throws ConverterException
+//	{
+//		//Use Batik instead of SvgFormat
+//		//SvgFormat.writeToSvg (this, file);
+//		new BatikImageExporter(ImageExporter.TYPE_SVG).doExport(file, this);
+//	}
+//
+
+	// ================================================================================
+	// FireEvent and Listener Methods
+	// ================================================================================
 	private boolean changed = true;
 
 	/**
@@ -91,607 +1098,55 @@ public class PathwayModel {
 	}
 
 	/**
-	 * List of contained dataObjects
-	 */
-	private List<PathwayObject> dataObjects = new ArrayList<PathwayObject>();
-
-	/**
-	 * Getter for dataobjects contained. There is no setter, you have to add
-	 * dataobjects individually
-	 * 
-	 * @return List of dataObjects contained in this pathway
-	 */
-	public List<PathwayObject> getDataObjects() {
-		return dataObjects;
-	}
-
-	/**
-	 * Get a pathway element by it's GraphId
-	 * 
-	 * @param graphId The graphId of the element
-	 * @return The pathway element with the given id, or null when no element was
-	 *         found
-	 */
-	public PathwayObject getElementById(String graphId) {
-		// TODO: dataobject should be stored in a hashmap, with the graphId as key!
-		if (graphId != null) {
-			for (PathwayObject e : dataObjects) {
-				if (graphId.equals(e.getElementId())) {
-					return e;
-				}
-			}
-		}
-		return null;
-	}
-
-	/**
-	 * Takes the Xref of all DataNodes in this pathway and returns them as a List.
-	 *
-	 * returns an empty arraylist if there are no datanodes in this pathway.
-	 */
-	public List<Xref> getDataNodeXrefs() {
-		List<Xref> result = new ArrayList<Xref>();
-		for (PathwayObject e : dataObjects) {
-			if (e.getObjectType() == ObjectType.DATANODE) {
-				result.add(e.getXref());
-			}
-		}
-		return result;
-	}
-
-	/**
-	 * Takes the Xref of all Lines in this pathway and returns them as a List.
-	 *
-	 * returns an empty arraylist if there are no lines in this pathway.
-	 */
-	public List<Xref> getLineXrefs() {
-		List<Xref> result = new ArrayList<Xref>();
-		for (PathwayObject e : dataObjects) {
-			if (e.getObjectType() == ObjectType.LINE) {
-				result.add(e.getXref());
-			}
-		}
-		return result;
-	}
-
-	private PathwayObject mappInfo = null;
-	private PathwayObject infoBox = null;
-	private BiopaxElement biopax = null;
-	private PathwayObject legend = null;
-
-	/**
-	 * get the one and only MappInfo object.
-	 *
-	 * @return a PathwayElement with ObjectType set to mappinfo.
-	 */
-	public PathwayObject getMappInfo() {
-		return mappInfo;
-	}
-
-	/**
-	 * get the one and only InfoBox object.
-	 *
-	 * @return a PathwayElement with ObjectType set to mappinfo.
-	 */
-	public PathwayObject getInfoBox() {
-		return infoBox;
-	}
-
-	/**
-	 * @returns the BioPAX element of this pathway, containing literature references
-	 *          and other optional biopax elements. Guaranteed to not return null.
-	 *          If a BioPAX element does not yet exist, it is automatically created.
-	 */
-	public BiopaxElement getBiopax() {
-		if (biopax == null) {
-			PathwayObject tmp = PathwayObject.createPathwayElement(ObjectType.BIOPAX);
-			this.add(tmp); // biopax will now be set.
-		}
-		return biopax;
-	}
-
-	/** @deprecated use getBiopax() instead */
-	public BiopaxElement getBiopaxElementManager() {
-		return getBiopax();
-	}
-
-	/**
-	 * Add a PathwayElement to this Pathway. takes care of setting parent and
-	 * removing from possible previous parent.
-	 *
-	 * fires PathwayEvent.ADDED event <i>after</i> addition of the object
-	 *
-	 * @param o The object to add
-	 */
-	public void add(PathwayObject o) {
-		assert (o != null);
-		// There can be only one mappInfo object, so if we're trying to add it, remove
-		// the old one.
-		if (o.getObjectType() == ObjectType.MAPPINFO && o != mappInfo) {
-			if (mappInfo != null) {
-				replaceUnique(mappInfo, o);
-				mappInfo = o;
-				return;
-			}
-			mappInfo = o;
-		}
-		// There can be only one InfoBox object, so if we're trying to add it, remove
-		// the old one.
-		if (o.getObjectType() == ObjectType.INFOBOX && o != infoBox) {
-			if (infoBox != null) {
-				replaceUnique(infoBox, o);
-				infoBox = o;
-				return;
-			}
-			infoBox = o;
-		}
-		// There can be zero or one Biopax object, so if we're trying to add it, remove
-		// the old one.
-		if (o instanceof BiopaxElement && o != biopax) {
-			if (biopax != null) {
-				replaceUnique(biopax, o);
-				biopax = (BiopaxElement) o;
-				return;
-			}
-			biopax = (BiopaxElement) o;
-		}
-		// There can be only one Legend object, so if we're trying to add it, remove the
-		// old one.
-		if (o.getObjectType() == ObjectType.LEGEND && o != legend) {
-			if (legend != null) {
-				replaceUnique(legend, o);
-				legend = o;
-				return;
-			}
-			legend = o;
-		}
-		if (o.getParent() == this)
-			return; // trying to re-add the same object
-		forceAddObject(o);
-	}
-
-	private void forceAddObject(PathwayObject o) {
-		if (o.getParent() != null) {
-			o.getParent().remove(o);
-		}
-		dataObjects.add(o);
-		o.setParent(this);
-		for (LinePoint p : o.getLinePoints()) {
-			if (p.getElementRef() != null) {
-				addGraphRef(p.getElementRef(), p);
-			}
-		}
-		if (o.getGroupRef() != null) {
-			addGroupRef(o.getGroupRef(), o);
-		}
-		for (Anchor a : o.getAnchors()) {
-			if (a.getElementId() != null) {
-				addGraphId(a.getElementId(), a);
-			}
-		}
-		if (o.getElementId() != null) {
-			addGraphId(o.getElementId(), o);
-		}
-		if (o.getGroupId() != null) {
-			addGroupId(o.getGroupId(), o);
-		}
-		if (o.getElementRef() != null) {
-			addGraphRef(o.getElementRef(), (LinkableFrom) o);
-		}
-		fireObjectModifiedEvent(new PathwayModelEvent(o, PathwayModelEvent.ADDED));
-		checkMBoardSize(o);
-	}
-
-	/**
-	 * get the highest z-order of all objects
-	 */
-	public int getMaxZOrder() {
-		if (dataObjects.size() == 0)
-			return 0;
-
-		int zmax = dataObjects.get(0).getZOrder();
-		for (PathwayObject e : dataObjects) {
-			if (e.getZOrder() > zmax)
-				zmax = e.getZOrder();
-		}
-		return zmax;
-	}
-
-	/**
-	 * get the lowest z-order of all objects
-	 */
-	public int getMinZOrder() {
-		if (dataObjects.size() == 0)
-			return 0;
-
-		int zmin = dataObjects.get(0).getZOrder();
-		for (PathwayObject e : dataObjects) {
-			if (e.getZOrder() < zmin)
-				zmin = e.getZOrder();
-		}
-		return zmin;
-	}
-
-	/**
-	 * only used by children of this Pathway to notify the parent of modifications
+	 * Used by children of this Pathway to notify the parent of modifications. A
+	 * coordinate change could trigger dependent objects such as states, groups and
+	 * connectors to be updated as well.
 	 */
 	void childModified(PathwayObjectEvent e) {
 		markChanged();
-		// a coordinate change could trigger dependent objects such as states,
-		// groups and connectors to be updated as well.
 		if (e.isCoordinateChange()) {
-
-			PathwayObject elt = e.getModifiedPathwayElement();
-			for (LinkableFrom refc : getReferringObjects(elt.getElementId())) {
-				refc.refeeChanged();
+			// TODO
+			PathwayObject elt = e.getModifiedPathwayObject();
+			if (elt instanceof LinkableTo) {
+				for (LinkableFrom refc : getReferringLinkableFroms((LinkableTo) elt)) {
+					refc.refeeChanged();
+				}
 			}
-
-			String ref = elt.getGroupRef();
-			if (ref != null && getGroupById(ref) != null) {
-				// identify group object and notify model change to trigger view update
-				PathwayObject group = getGroupById(ref);
-				group.fireObjectModifiedEvent(PathwayObjectEvent.createCoordinatePropertyEvent(group));
+			if (elt instanceof Groupable) {
+				Group group = ((Groupable) elt).getGroupRef();
+				if (group != null) {
+					// identify group object and notify model change to trigger view update
+					group.fireObjectModifiedEvent(PathwayObjectEvent.createCoordinatePropertyEvent(group));
+				}
 			}
-
-			checkMBoardSize(e.getModifiedPathwayElement());
+			checkMBoardSize(e.getModifiedPathwayObject());
 		}
 	}
-
-	/**
-	 * called for biopax, infobox and mappInfo upon addition.
-	 */
-	private void replaceUnique(PathwayObject oldElt, PathwayObject newElt) {
-		assert (oldElt.getParent() == this);
-		assert (oldElt.getObjectType() == newElt.getObjectType());
-		assert (newElt.getParent() == null);
-		assert (oldElt != newElt);
-		forceRemove(oldElt);
-		forceAddObject(newElt);
-	}
-
-	/**
-	 * removes object sets parent of object to null fires PathwayEvent.DELETED event
-	 * <i>before</i> removal of the object
-	 *
-	 * @param o the object to remove
-	 */
-	public void remove(PathwayObject o) {
-		assert (o.getParent() == this); // can only remove direct child objects
-		if (o.getObjectType() == ObjectType.MAPPINFO)
-			throw new IllegalArgumentException("Can't remove mappinfo object!");
-		if (o.getObjectType() == ObjectType.INFOBOX)
-			throw new IllegalArgumentException("Can't remove infobox object!");
-		forceRemove(o);
-	}
-
-	/**
-	 * removes object, regardless whether the object may be removed or not sets
-	 * parent of object to null fires PathwayEvent.DELETED event <i>before</i>
-	 * removal of the object
-	 *
-	 * @param o the object to remove
-	 */
-	private void forceRemove(PathwayObject o) {
-		dataObjects.remove(o);
-		for (LinkableFrom refc : getReferringObjects(o.getElementId())) {
-			refc.unlink();
-		}
-		String groupRef = o.getGroupRef();
-		if (groupRef != null) {
-			removeGroupRef(groupRef, o);
-		}
-		// Add one or multiples literature(s) reference(s) to the list to deletion
-		if (o.getBiopaxRefs() != null) {
-			for (String ref : o.getBiopaxRefs()) {
-				BiopaxNode node = getBiopax().getElement(ref);
-				// if no an another pathway element use this literature reference
-				// add to the list to deletion
-				if (!getBiopax().hasReferences(node))
-					biopaxReferenceToDelete.add(ref);
-			}
-		}
-		for (Anchor a : o.getAnchors()) {
-			if (a.getElementId() != null) {
-				removeGraphId(a.getElementId());
-			}
-		}
-		if (o.getElementId() != null) {
-			removeGraphId(o.getElementId());
-		}
-		if (o.getGroupId() != null) {
-			removeGroupId(o.getGroupId());
-		}
-		if (o.getElementRef() != null) {
-			removeGraphRef(o.getElementRef(), (LinkableFrom) o);
-		}
-		fireObjectModifiedEvent(new PathwayModelEvent(o, PathwayModelEvent.DELETED));
-		o.setParent(null);
-	}
-
-	/**
-	 * Stores references of graph ids to other GraphRefContainers
-	 */
-	private Map<String, Set<LinkableFrom>> graphRefs = new HashMap<String, Set<LinkableFrom>>();
-	private Map<String, LinkableTo> graphIds = new HashMap<String, LinkableTo>();
-
-	public Set<String> getGraphIds() {
-		return graphIds.keySet();
-	}
-
-	public LinkableTo getGraphIdContainer(String id) {
-		return graphIds.get(id);
-	}
-
-	/**
-	 * Returns all GraphRefContainers that refer to an object with a particular
-	 * graphId.
-	 */
-	public Set<LinkableFrom> getReferringObjects(String id) {
-		Set<LinkableFrom> refs = graphRefs.get(id);
-		if (refs != null) {
-			// create defensive copy to prevent problems with ConcurrentModification.
-			return new HashSet<LinkableFrom>(refs);
-		} else {
-			return Collections.emptySet();
-		}
-	}
-
-	/**
-	 * Register a link from a graph id to a graph ref
-	 * 
-	 * @param id     The graph id
-	 * @param target The target GraphRefContainer
-	 */
-	public void addGraphRef(String id, LinkableFrom target) {
-		Utils.multimapPut(graphRefs, id, target);
-	}
-
-	/**
-	 * Remove a reference to another Id.
-	 * 
-	 * @param id
-	 * @param target
-	 */
-	void removeGraphRef(String id, LinkableFrom target) {
-		if (!graphRefs.containsKey(id))
-			throw new IllegalArgumentException();
-
-		graphRefs.get(id).remove(target);
-		if (graphRefs.get(id).size() == 0)
-			graphRefs.remove(id);
-	}
-
-	/**
-	 * Registers an id that can subsequently be used for referral. It is tested for
-	 * uniqueness.
-	 * 
-	 * @param id
-	 */
-	public void addGraphId(String id, LinkableTo idc) {
-		if (idc == null || id == null) {
-			throw new IllegalArgumentException("unique id can't be null");
-		}
-		if (graphIds.containsKey(id)) {
-			throw new IllegalArgumentException("id '" + id + "' is not unique");
-		}
-		graphIds.put(id, idc);
-	}
-
-	void removeGraphId(String id) {
-		graphIds.remove(id);
-	}
-
-	private Map<String, PathwayObject> groupIds = new HashMap<String, PathwayObject>();
-	private Map<String, Set<PathwayObject>> groupRefs = new HashMap<String, Set<PathwayObject>>();
-
-	public Set<String> getGroupIds() {
-		return groupIds.keySet();
-	}
-
-	void addGroupId(String id, PathwayObject group) {
-		if (id == null) {
-			throw new IllegalArgumentException("unique id can't be null");
-		}
-		if (groupIds.containsKey(id)) {
-			throw new IllegalArgumentException("id '" + id + "' is not unique");
-		}
-		groupIds.put(id, group);
-	}
-
-	void removeGroupId(String id) {
-		groupIds.remove(id);
-		Set<PathwayObject> elts = groupRefs.get(id);
-		if (elts != null)
-			for (PathwayObject elt : elts) {
-				elt.groupRef = null;
-				elt.fireObjectModifiedEvent(
-						PathwayObjectEvent.createSinglePropertyEvent(elt, StaticProperty.GROUPREF));
-			}
-		groupRefs.remove(id);
-	}
-
-	public PathwayObject getGroupById(String id) {
-		return groupIds.get(id);
-	}
-
-	void addGroupRef(String ref, PathwayObject child) {
-		Utils.multimapPut(groupRefs, ref, child);
-	}
-
-	void removeGroupRef(String id, PathwayObject child) {
-		if (!groupRefs.containsKey(id))
-			throw new IllegalArgumentException();
-
-		groupRefs.get(id).remove(child);
-
-		// Find out if this element is the last one in a group
-		// If so, remove the group as well
-		if (groupRefs.get(id).size() == 0) {
-			groupRefs.remove(id);
-			PathwayObject group = getGroupById(id);
-			if (group != null)
-				forceRemove(group);
-		} else {
-			// redraw group outline
-			if (getGroupById(id) != null) {
-				Group group = (Group) getGroupById(id);
-				group.fireObjectModifiedEvent(PathwayObjectEvent.createCoordinatePropertyEvent(group));
-			}
-		}
-	}
-
-	/**
-	 * Get the pathway elements that are part of the given group
-	 * 
-	 * @param id The id of the group
-	 * @return The set of pathway elements part of the group
-	 */
-	public Set<PathwayObject> getGroupElements(String id) {
-		Set<PathwayObject> result = groupRefs.get(id);
-		// Return an empty set if the group is empty
-		return result == null ? new HashSet<PathwayObject>() : result;
-	}
-
-	public String getUniqueGraphId() {
-		return getUniqueId(graphIds.keySet());
-	}
-
-	public String getUniqueGroupId() {
-		return getUniqueId(groupIds.keySet());
-	}
-
-	/**
-	 * Generate random ids, based on strings of hex digits (0..9 or a..f) Ids are
-	 * unique across both graphIds and groupIds per pathway
-	 * 
-	 * @param ids The collection of already existing ids
-	 * @return an Id unique for this pathway
-	 */
-	public String getUniqueId(Set<String> ids) {
-		String result;
-		Random rn = new Random();
-		int mod = 0x60000; // 3 hex letters
-		int min = 0xa0000; // has to start with a letter
-		// in case this map is getting big, do more hex letters
-		if ((ids.size()) > 0x10000) {
-			mod = 0x60000000;
-			min = 0xa0000000;
-		}
-
-		do {
-			result = Integer.toHexString(Math.abs(rn.nextInt()) % mod + min);
-		} while (ids.contains(result));
-
-		return result;
-	}
-
-	double mBoardWidth = 0;
-	double mBoardHeight = 0;
-
-	private static final int BORDER_SIZE = 30;
 
 	/**
 	 * Checks whether the board size is still large enough for the given
-	 * {@link PathwayObject} and increases the size if not
+	 * {@link PathwayElement} and increases the size if not
 	 * 
-	 * @param elm The element to check the board size for
+	 * @param e The element to check the board size for
 	 */
-	private void checkMBoardSize(PathwayObject e) {
-		double mw = mBoardWidth;
-		double mh = mBoardHeight;
-
-		switch (e.getObjectType()) {
-		case LINE:
-			mw = Math.max(mw, BORDER_SIZE + Math.max(e.getStartLinePointX(), e.getEndLinePointX()));
-			mh = Math.max(mh, BORDER_SIZE + Math.max(e.getStartLinePointY(), e.getEndLinePointY()));
-			break;
-		case GRAPHLINE:
-			mw = Math.max(mw, BORDER_SIZE + Math.max(e.getStartLinePointX(), e.getEndLinePointX()));
-			mh = Math.max(mh, BORDER_SIZE + Math.max(e.getStartLinePointY(), e.getEndLinePointY()));
-			break;
-		default:
-			mw = Math.max(mw, BORDER_SIZE + e.getLeft() + e.getWidth());
-			mh = Math.max(mh, BORDER_SIZE + e.getTop() + e.getHeight());
-			break;
+	public void checkMBoardSize(PathwayObject e) { // TODO was protected
+		final int BORDER_SIZE = 30;
+		double mw = getPathway().getBoardWidth();
+		double mh = getPathway().getBoardHeight();
+		if (e instanceof LineElement) { // TODO
+			mw = Math.max(mw, BORDER_SIZE
+					+ Math.max(((LineElement) e).getStartLinePointX(), ((LineElement) e).getEndLinePointX()));
+			mh = Math.max(mh, BORDER_SIZE
+					+ Math.max(((LineElement) e).getStartLinePointY(), ((LineElement) e).getEndLinePointY()));
+		} else if (e instanceof ShapedElement) { // TODO
+			mw = Math.max(mw, BORDER_SIZE + ((ShapedElement) e).getLeft() + ((ShapedElement) e).getWidth());
+			mh = Math.max(mh, BORDER_SIZE + ((ShapedElement) e).getTop() + ((ShapedElement) e).getHeight());
 		}
-
-		if (Math.abs(mBoardWidth - mw) + Math.abs(mBoardHeight - mh) > 0.01) {
-			mBoardWidth = mw;
-			mBoardHeight = mh;
-			fireObjectModifiedEvent(new PathwayModelEvent(mappInfo, PathwayModelEvent.RESIZED));
+		if (Math.abs(getPathway().getBoardWidth() - mw) + Math.abs(getPathway().getBoardHeight() - mh) > 0.01) {
+			getPathway().setBoardWidth(mw);
+			getPathway().setBoardHeight(mh);
+			fireObjectModifiedEvent(new PathwayModelEvent(getPathway(), PathwayModelEvent.RESIZED));
 		}
-	}
-
-	public double[] getMBoardSize() {
-		return new double[] { mBoardWidth, mBoardHeight };
-	}
-
-	private File sourceFile = null;
-
-	/**
-	 * Gets the xml file containing the Gpml/mapp pathway currently displayed
-	 * 
-	 * @return current xml file
-	 */
-	public File getSourceFile() {
-		return sourceFile;
-	}
-
-	public void setSourceFile(File file) {
-		sourceFile = file;
-	}
-
-	/**
-	 * Contructor for this class, creates a new gpml document
-	 */
-	public PathwayModel() {
-		mappInfo = PathwayObject.createPathwayElement(ObjectType.MAPPINFO);
-		this.add(mappInfo);
-		infoBox = PathwayObject.createPathwayElement(ObjectType.INFOBOX);
-		this.add(infoBox);
-	}
-
-	/*
-	 * Call when making a new mapp.
-	 */
-	public void initMappInfo() {
-		String dateString = new SimpleDateFormat("yyyyMMdd").format(new Date());
-		mappInfo.setVersion(dateString);
-		mappInfo.setTitle("New Pathway");
-	}
-
-	/**
-	 * Writes the JDOM document to the file specified
-	 * 
-	 * @param file     the file to which the JDOM document should be saved
-	 * @param validate if true, validate the dom structure before writing to file.
-	 *                 If there is a validation error, or the xsd is not in the
-	 *                 classpath, an exception will be thrown.
-	 */
-	public void writeToXml(File file, boolean validate) throws ConverterException {
-		GpmlFormat.writeToXml(this, file, validate);
-		setSourceFile(file);
-		clearChangedFlag();
-
-	}
-
-	public void readFromXml(Reader in, boolean validate) throws ConverterException {
-		GpmlFormat.readFromXml(this, in, validate);
-		setSourceFile(null);
-		clearChangedFlag();
-	}
-
-	public void readFromXml(InputStream in, boolean validate) throws ConverterException {
-		GpmlFormat.readFromXml(this, in, validate);
-		setSourceFile(null);
-		clearChangedFlag();
-	}
-
-	public void readFromXml(File file, boolean validate) throws ConverterException {
-		Logger.log.info("Start reading the XML file: " + file);
-		GpmlFormat.readFromXml(this, file, validate);
-		setSourceFile(file);
-		clearChangedFlag();
 	}
 
 	/**
@@ -742,6 +1197,20 @@ public class PathwayModel {
 		}
 	}
 
+	/**
+	 * Transfer statusflag listeners from one pathway to another. This is used
+	 * needed when copies of the pathway are created / returned by UndoManager. The
+	 * status flag listeners are only interested in status flag events of the active
+	 * copy.
+	 */
+	public void transferStatusFlagListeners(PathwayModel dest) {
+		for (Iterator<StatusFlagListener> i = statusFlagListeners.iterator(); i.hasNext();) {
+			StatusFlagListener l = i.next();
+			dest.addStatusFlagListener(l);
+			i.remove();
+		}
+	}
+
 	private List<PathwayModelListener> listeners = new ArrayList<PathwayModelListener>();
 
 	public void addListener(PathwayModelListener v) {
@@ -764,114 +1233,17 @@ public class PathwayModel {
 		}
 	}
 
-	public PathwayModel clone() {
-		PathwayModel result = new PathwayModel();
-		for (PathwayObject pe : dataObjects) {
-			result.add(pe.copy());
-		}
-		result.changed = changed;
-		if (sourceFile != null) {
-			result.sourceFile = new File(sourceFile.getAbsolutePath());
-		}
-		// do not copy status flag listeners
-//		for(StatusFlagListener l : statusFlagListeners) {
-//			result.addStatusFlagListener(l);
-//		}
-		return result;
-	}
-
+	// ================================================================================
+	// Helper Methods
+	// ================================================================================
 	public String summary() {
 		String result = "    " + toString() + "\n    with Objects:";
-		for (PathwayObject pe : dataObjects) {
+		for (PathwayObject pe : getPathwayObjects()) {
 			String code = pe.toString();
 			code = code.substring(code.lastIndexOf('@'), code.length() - 1);
-			result += "\n      " + code + " " + pe.getObjectType().getTag() + " " + pe.getParent();
+			result += "\n      " + code + " " + pe.getClass().getSimpleName() + " " + pe.getPathwayModel();
 		}
 		return result;
 	}
 
-	/**
-	 * Check for any dangling references, and fix them if found This is called just
-	 * before writing out a pathway.
-	 *
-	 * This is a fallback solution for problems elsewhere in the reference handling
-	 * code. Theoretically, if the rest of the code is bug free, this should always
-	 * return 0.
-	 *
-	 * @return number of references fixed. Should be 0 under normal circumstances.
-	 */
-	public int fixReferences() {
-		int result = 0;
-		Set<String> graphIds = new HashSet<String>();
-		for (PathwayObject pe : dataObjects) {
-			String id = pe.getElementId();
-			if (id != null) {
-				graphIds.add(id);
-			}
-			for (PathwayObject.Anchor pp : pe.getAnchors()) {
-				String pid = pp.getElementId();
-				if (pid != null) {
-					graphIds.add(pid);
-				}
-			}
-		}
-		for (PathwayObject pe : dataObjects) {
-			if (pe.getObjectType() == ObjectType.LINE) {
-				String ref = pe.getStartElementRef();
-				if (ref != null && !graphIds.contains(ref)) {
-					pe.setStartElementRef(null);
-					result++;
-				}
-
-				ref = pe.getEndElementRef();
-				if (ref != null && !graphIds.contains(ref)) {
-					pe.setEndElementRef(null);
-					result++;
-				}
-			}
-		}
-		if (result > 0) {
-			Logger.log.warn("Pathway.fixReferences fixed " + result + " reference(s)");
-		}
-		for (String ref : biopaxReferenceToDelete) {
-			getBiopax().removeElement(getBiopax().getElement(ref));
-		}
-		return result;
-	}
-
-	/**
-	 * Transfer statusflag listeners from one pathway to another. This is used
-	 * needed when copies of the pathway are created / returned by UndoManager. The
-	 * status flag listeners are only interested in status flag events of the active
-	 * copy.
-	 */
-	public void transferStatusFlagListeners(PathwayModel dest) {
-		for (Iterator<StatusFlagListener> i = statusFlagListeners.iterator(); i.hasNext();) {
-			StatusFlagListener l = i.next();
-			dest.addStatusFlagListener(l);
-			i.remove();
-		}
-	}
-
-	public void printRefsDebugInfo() {
-		for (PathwayObject elt : dataObjects) {
-			elt.printRefsDebugInfo();
-		}
-	}
-
-	List<OntologyTag> ontologyTags = new ArrayList<OntologyTag>();
-
-	public void addOntologyTag(String id, String term, String ontology) {
-		ontologyTags.add(new OntologyTag(id, term, ontology));
-	}
-
-	public List<OntologyTag> getOntologyTags() {
-		return ontologyTags;
-	}
-
-	/**
-	 * List of Biopax references to be deleted. The deletion is done before to save
-	 * the pathway.
-	 */
-	private List<String> biopaxReferenceToDelete = new ArrayList<String>();
 }

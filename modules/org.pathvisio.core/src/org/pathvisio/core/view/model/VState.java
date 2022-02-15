@@ -19,17 +19,27 @@ package org.pathvisio.core.view.model;
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 
-import org.pathvisio.libgpml.model.State;
-import org.pathvisio.libgpml.model.PathwayObject;
+import org.pathvisio.libgpml.model.DataNode.State;
 
 /**
- * represents the view of a PathwayElement with ObjectType.STATE.
+ * This class represents the view of a {@link State} PathwayElement.
+ * 
+ * @author unknown, finterly
  */
 public class VState extends VShapedElement {
-	public static final String ROTATION_KEY = "org.pathvisio.core.StateRotation";
 
-	public VState(VPathwayModel canvas, PathwayObject o) {
+	public VState(VPathwayModel canvas, State o) {
 		super(canvas, o);
+	}
+
+	/**
+	 * Gets the model representation (PathwayElement) of this class
+	 * 
+	 * @return
+	 */
+	@Override
+	public State getPathwayObject() {
+		return (State) super.getPathwayObject();
 	}
 
 	public void doDraw(Graphics2D g) {
@@ -45,7 +55,7 @@ public class VState extends VShapedElement {
 
 	protected void vMoveBy(double vdx, double vdy) {
 		Point2D mNewPos = new Point2D.Double(mFromV(getVCenterX() + vdx), mFromV(getVCenterY() + vdy));
-		Point2D newRel = ((State) gdata).getParentDataNode().toRelativeCoordinate(mNewPos);
+		Point2D newRel = getPathwayObject().getDataNode().toRelativeCoordinate(mNewPos);
 		double x = newRel.getX();
 		double y = newRel.getY();
 		if (x > 1)
@@ -56,8 +66,8 @@ public class VState extends VShapedElement {
 			y = 1;
 		if (y < -1)
 			y = -1;
-		gdata.setRelX(x);
-		gdata.setRelY(y);
+		getPathwayObject().setRelX(x);
+		getPathwayObject().setRelY(y);
 	}
 
 	@Override

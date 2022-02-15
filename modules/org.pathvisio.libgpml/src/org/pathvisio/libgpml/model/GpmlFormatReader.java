@@ -25,8 +25,11 @@ import org.pathvisio.libgpml.io.ConverterException;
  * @author unknown
  */
 public interface GpmlFormatReader extends GpmlFormatVersion {
-	
-	public PathwayObject mapElement(Element e) throws ConverterException;
 
-	public void readFromRoot(Element root, PathwayModel pwy) throws ConverterException;
+//	public PathwayObject mapElement(Element e) throws ConverterException; TODO 
+
+	//public void readFromRoot(PathwayModel pwy, Element root) throws ConverterException;
+	
+	public PathwayModel readFromRoot(PathwayModel pwy, Element root) throws ConverterException;
+
 }

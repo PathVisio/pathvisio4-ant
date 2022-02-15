@@ -18,42 +18,52 @@
 package org.pathvisio.libgpml.prop;
 
 /**
- * The properties in {@link StaticProperty} define properties of different types,
- * all the possible types are defined here.
+ * The properties in {@link StaticProperty} define properties of different
+ * types, all the possible types are defined here.
+ * 
+ * @author unknown, finterly
  */
-public enum StaticPropertyType implements PropertyType
-{
-	BOOLEAN,
-	DOUBLE,
-	INTEGER,
-	DATASOURCE,
-	LINESTYLE,
-	COLOR,
-	STRING,
-	ORIENTATION,
-	SHAPETYPE,
-	LINETYPE,
-	OUTLINETYPE,
-	GENETYPE,
-	FONT,
-	ANGLE,
-	ORGANISM,
-	DB_ID,
-	DB_SYMBOL,
-	BIOPAXREF,
-	COMMENTS,
-	GROUPSTYLETYPE,
-	ALIGNTYPE,
-	VALIGNTYPE;
+public enum StaticPropertyType implements PropertyType {
+	// basic types
+	BOOLEAN, DOUBLE, INTEGER, STRING, COLOR,
+
+	// pathway
+	ORGANISM, // TODO??
+
+	// xref
+	IDENTIFIER, DATASOURCE, XREF,
+
+	// meta-information
+	COMMENT,
+	ANNOTATIONREF,
+	CITATIONREF,
+	EVIDENCEREF,
+
+	// font props
+	FONTNAME,
+	HALIGNTYPE, 
+	VALIGNTYPE,
+
+	// shape style props
+	SHAPETYPE, 
+	LINESTYLETYPE, //for both lines and shape borders
+	ORIENTATION, ROTATION, // TODO brace???
+	
+	// line style props 
+	CONNECTORTYPE,
+	
+	// types: anchor, annotation, linepoint, datanode, state, group
+	ANCHORSHAPETYPE, ANNOTATIONTYPE, ARROWHEADTYPE, DATANODETYPE, STATETYPE, GROUPTYPE,
+	
+	//bibliography
+	ANNOTATION, CITATION, EVIDENCE;
 
 	private String id;
-
 
 	private StaticPropertyType() {
 		id = "core." + name();
 		PropertyManager.registerPropertyType(this);
 	}
-
 
 	public String getId() {
 		return id;

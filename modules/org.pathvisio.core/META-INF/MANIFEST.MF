@@ -24,7 +24,7 @@ Require-Bundle: org.pathvisio.libgpml;bundle-version="4.0.0",
  derby;bundle-version="10.14.2000000",
  jakarta.xml.bind-api;bundle-version="3.0.1",
  com.sun.activation.jakarta.activation;bundle-version="2.0.1",
- com.sun.xml.bind.jaxb-osgi
+ org.apache.commons.commons-collections4;bundle-version="4.4"
 Import-Package: javax.swing,
  org.osgi.framework;version="1.5.0"
 Bundle-License: http://www.apache.org/licenses/LICENSE-2.0

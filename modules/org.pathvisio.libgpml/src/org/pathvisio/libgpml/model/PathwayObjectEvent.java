@@ -75,7 +75,7 @@ public final class PathwayObjectEvent {
 	/**
 	 * Gets the PathwayElement whose properties have been modified.
 	 */
-	public PathwayObject getModifiedPathwayElement() {
+	public PathwayObject getModifiedPathwayObject() {
 		return pwElement;
 	}
 

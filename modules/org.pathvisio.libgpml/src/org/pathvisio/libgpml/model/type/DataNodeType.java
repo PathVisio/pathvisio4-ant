@@ -17,89 +17,121 @@
 package org.pathvisio.libgpml.model.type;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
+
+import org.pathvisio.libgpml.debug.Logger;
 
 /**
- * Extensible enum
+ * This class contains extensible enum for DataNode type property.
+ * 
+ * @author unknown, finterly
  */
 public class DataNodeType {
-	private static final Map<String, DataNodeType> NAME_MAP = new HashMap<String, DataNodeType>();
-	private static List<DataNodeType> values = new ArrayList<DataNodeType>();
 
-	public static final DataNodeType UNKOWN = new DataNodeType("Unknown");
-	public static final DataNodeType RNA = new DataNodeType("Rna");
+	private static final Map<String, DataNodeType> nameToDataNodeType = new TreeMap<String, DataNodeType>(String.CASE_INSENSITIVE_ORDER);
+
+	// Default
+	public static final DataNodeType UNDEFINED = new DataNodeType("Undefined");
+	
+	// Molecules
+	public static final DataNodeType GENEPRODUCT = new DataNodeType("GeneProduct");
+	public static final DataNodeType DNA = new DataNodeType("DNA");
+	public static final DataNodeType RNA = new DataNodeType("RNA");
 	public static final DataNodeType PROTEIN = new DataNodeType("Protein");
 	public static final DataNodeType COMPLEX = new DataNodeType("Complex");
-	public static final DataNodeType GENEPRODUCT = new DataNodeType("GeneProduct");
 	public static final DataNodeType METABOLITE = new DataNodeType("Metabolite");
+	
+	// Concepts
 	public static final DataNodeType PATHWAY = new DataNodeType("Pathway");
+	public static final DataNodeType DISEASE = new DataNodeType("Disease");
+	public static final DataNodeType PHENOTYPE = new DataNodeType("Phenotype");
+	public static final DataNodeType ALIAS = new DataNodeType("Alias");
+	public static final DataNodeType EVENT = new DataNodeType("Event");
+	public static final DataNodeType CELL = new DataNodeType("Cell"); //TODO 
+	public static final DataNodeType ORGAN = new DataNodeType("Organ"); //TODO 
 
 	private String name;
 
 	/**
-	 * The constructor is private so we have to use the "create" method to add new
-	 * ShapeTypes. In the create method we make sure that the same object can't get
-	 * added twice.
-	 * <p>
-	 * Note that mappName may be null for Shapes that are not supported by GenMAPP.
+	 * The constructor is private. DataNodeType cannot be directly instantiated. Use
+	 * create() method to instantiate DataNodeType.
+	 * 
+	 * @param name the string identifier of this DataNodeType.
+	 * @throws NullPointerException if name is null.
 	 */
 	private DataNodeType(String name) {
-		NAME_MAP.put(name, this);
+		if (name == null) {
+			throw new NullPointerException();
+		}
 		this.name = name;
-		// and add it to the array list.
-		values.add(this);
+		nameToDataNodeType.put(name, this); // adds this name and DataNodeType to map.
 	}
 
 	/**
-	 * Create an object and add it to the list.
+	 * Returns a DataNodeType from a given string identifier name. If the
+	 * DataNodeType doesn't exist yet, it is created to extend the enum. The method
+	 * makes sure that the same object is not added twice.
 	 * 
-	 * For extending the enum.
+	 * @param name the string key.
+	 * @return the DataNodeType for given name. If name does not exist, creates and
+	 *         returns a new DataNodeType.
 	 */
-	public static DataNodeType create(String name) {
-		if (NAME_MAP.containsKey(name)) {
-			return NAME_MAP.get(name);
+	public static DataNodeType register(String name) {
+		if (nameToDataNodeType.containsKey(name)) {
+			return nameToDataNodeType.get(name);
 		} else {
+			Logger.log.trace("Registered datanode type " + name); 
 			return new DataNodeType(name);
 		}
 	}
 
 	/**
-	 * @param value the name of the DataNodeType to be returned
-	 * @return the DataNodeType corresponding to that name.
-	 */
-	public static DataNodeType byName(String value) {
-		return NAME_MAP.get(value);
-	}
-
-	/**
-	 * @return Stable identifier for this DataNodeType.
+	 * Returns the name key for this DataNodeType.
+	 * 
+	 * @return name the key for this DataNodeType.
 	 */
 	public String getName() {
 		return name;
 	}
 
 	/**
-	 * @return the names of all registered DataNode types, in such a way that the
-	 *         index is equal to it's ordinal value.
-	 *         <p>
-	 *         i.e. DataNodeType.fromName(DataNodeType.getNames[n]).getOrdinal() ==
-	 *         n
+	 * Returns the DataNodeType from given string name.
+	 * 
+	 * @param name the string.
+	 * @return the DataNodeType with given string name.
 	 */
-	static public String[] getNames() {
-		String[] result = new String[values.size()];
-
-		for (int i = 0; i < values.size(); ++i) {
-			result[i] = values.get(i).getName();
-		}
-		return result;
+	public static DataNodeType fromName(String name) {
+		return nameToDataNodeType.get(name);
 	}
 
-	static public DataNodeType[] getValues() {
-		return values.toArray(new DataNodeType[0]);
+	/**
+	 * Returns the names of all registered DataNodeTypes as a String array.
+	 * 
+	 * @return names the names of all registered DataNodeTypes in order of
+	 *         insertion.
+	 */
+	static public List<String> getNames() {
+		List<String> names = new ArrayList<>(nameToDataNodeType.keySet());
+		return names;
 	}
 
+	/**
+	 * Returns the data node type values of all DataNodeTypes as a list.
+	 * 
+	 * @return dataNodeTypes the list of all registered DataNodeTypes.
+	 */
+	static public List<DataNodeType> getValues() {
+		List<DataNodeType> dataNodeTypes = new ArrayList<>(nameToDataNodeType.values());
+		return dataNodeTypes;
+	}
+
+	/**
+	 * Returns a string representation of this DataNodeType.
+	 * 
+	 * @return name the identifier of this DataNodeType.
+	 */
 	public String toString() {
 		return name;
 	}

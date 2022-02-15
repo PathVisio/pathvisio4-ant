@@ -17,12 +17,13 @@
 package org.pathvisio.core.view.model;
 
 import java.awt.Color;
-
-import org.pathvisio.libgpml.model.PathwayObject;
+import org.pathvisio.libgpml.model.DataNode;
 
 /**
- * This class implements a geneproduct and provides methods to resize and draw
- * it. //TODO: rename this class to DataNode
+ * This class implements a {@link DataNode} and provides methods to resize and
+ * draw it.
+ * 
+ * @author unknown, finterly
  */
 public class VDataNode extends VShapedElement {
 	public static final Color INITIAL_FILL_COLOR = Color.WHITE;
@@ -30,8 +31,18 @@ public class VDataNode extends VShapedElement {
 	// note: not the same as color!
 	Color fillColor = INITIAL_FILL_COLOR;
 
-	public VDataNode(VPathwayModel canvas, PathwayObject o) {
+	public VDataNode(VPathwayModel canvas, DataNode o) {
 		super(canvas, o);
+	}
+
+	/**
+	 * Gets the model representation (PathwayElement) of this class
+	 * 
+	 * @return
+	 */
+	@Override
+	public DataNode getPathwayObject() {
+		return (DataNode) super.getPathwayObject();
 	}
 
 }
