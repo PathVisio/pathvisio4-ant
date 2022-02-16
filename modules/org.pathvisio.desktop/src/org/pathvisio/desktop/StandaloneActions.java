@@ -179,8 +179,8 @@ public class StandaloneActions implements ApplicationEventListener {
 		}
 
 		public void actionPerformed(ActionEvent e) {
-			if (swingEngine.canDiscardPathway()) {
-				swingEngine.openPathway();
+			if (swingEngine.canDiscardPathwayModel()) {
+				swingEngine.openPathwayModel();
 			}
 		}
 	}
@@ -203,8 +203,8 @@ public class StandaloneActions implements ApplicationEventListener {
 		}
 
 		public void actionPerformed(ActionEvent e) {
-			if (swingEngine.canDiscardPathway()) {
-				swingEngine.newPathway();
+			if (swingEngine.canDiscardPathwayModel()) {
+				swingEngine.newPathwayModel();
 			}
 		}
 	}

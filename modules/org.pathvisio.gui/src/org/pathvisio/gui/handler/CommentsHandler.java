@@ -28,7 +28,8 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
 import org.pathvisio.gui.SwingEngine;
-import org.pathvisio.gui.dialogs.PathwayElementDialog;
+import org.pathvisio.gui.dialogs.PathwayObjectDialog;
+import org.pathvisio.libgpml.model.PathwayElement;
 import org.pathvisio.libgpml.model.PathwayModel;
 import org.pathvisio.libgpml.model.PathwayObject;
 import org.pathvisio.libgpml.prop.PropertyType;
@@ -57,7 +58,7 @@ public class CommentsHandler extends AbstractCellEditor implements ContextSensit
 	//-- TypeHandler methods --//
 
 	public PropertyType getType() {
-		return StaticPropertyType.COMMENTS;
+		return StaticPropertyType.COMMENT;
 	}
 
 	public TableCellRenderer getLabelRenderer() {
@@ -92,7 +93,11 @@ public class CommentsHandler extends AbstractCellEditor implements ContextSensit
 	//-- TableCellEditor methods --//
 
 	public Object getCellEditorValue() {
-		return currentElement.getComments();
+		if (currentElement instanceof PathwayElement) {
+			return ((PathwayElement) currentElement).getComments();
+		} else {
+			return null;
+		}
 	}
 
 
@@ -106,8 +111,8 @@ public class CommentsHandler extends AbstractCellEditor implements ContextSensit
 	public void actionPerformed(ActionEvent e) {
 
 		if(canEdit && BUTTON_COMMAND.equals(e.getActionCommand())) {
-			PathwayElementDialog d = swingEngine.getPopupDialogHandler().getInstance(currentElement, false, null, button);
-			d.selectPathwayElementPanel(PathwayElementDialog.TAB_COMMENTS);
+			PathwayObjectDialog d = swingEngine.getPopupDialogHandler().getInstance(currentElement, false, null, button);
+			d.selectPathwayElementPanel(PathwayObjectDialog.TAB_COMMENTS);
 			d.setVisible(true);
 		}
 		fireEditingCanceled();  // always fire - PathwayElementDialog saves data itself

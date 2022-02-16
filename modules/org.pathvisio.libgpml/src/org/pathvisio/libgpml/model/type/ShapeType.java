@@ -52,6 +52,7 @@ public class ShapeType implements IShape {
 	// ================================================================================
 	private static final Map<String, ShapeType> nameToShapeType = new TreeMap<String, ShapeType>(
 			String.CASE_INSENSITIVE_ORDER);
+	private static final List<ShapeType> VISIBLE_VALUES = new ArrayList<ShapeType>();
 
 	// Basic shapes
 	public static final ShapeType NONE = new ShapeType("None", null);
@@ -134,6 +135,7 @@ public class ShapeType implements IShape {
 		this.shape = shape;
 		this.isResizeable = isResizeable;
 		this.isRotatable = isRotatable;
+		VISIBLE_VALUES.add(this);
 	}
 
 	/**
@@ -224,6 +226,19 @@ public class ShapeType implements IShape {
 	 */
 	public String toString() {
 		return name;
+	}
+
+	static public String[] getVisibleNames() {
+		String[] result = new String[VISIBLE_VALUES.size()];
+
+		for (int i = 0; i < VISIBLE_VALUES.size(); ++i) {
+			result[i] = VISIBLE_VALUES.get(i).getName();
+		}
+		return result;
+	}
+
+	static public ShapeType[] getVisibleValues() {
+		return VISIBLE_VALUES.toArray(new ShapeType[0]);
 	}
 
 }

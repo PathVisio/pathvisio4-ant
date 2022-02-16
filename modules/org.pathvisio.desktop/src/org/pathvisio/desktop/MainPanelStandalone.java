@@ -181,8 +181,8 @@ public class MainPanelStandalone extends MainPanel {
 				menuItem.setToolTipText(file.getAbsolutePath());
 				menuItem.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						if (swingEngine.canDiscardPathway()) {
-							swingEngine.importPathway(file);
+						if (swingEngine.canDiscardPathwayModel()) {
+							swingEngine.importPathwayModel(file);
 						}
 					}
 				});
@@ -290,8 +290,8 @@ public class MainPanelStandalone extends MainPanel {
 									(Class<?>[]) null);
 							filename = (String) getFilenameMethod.invoke(appEvent, (Object[]) null);
 							Logger.log.info("Opening filename: " + filename);
-							if (swingEngine.canDiscardPathway()) {
-								swingEngine.openPathway(new File(filename));
+							if (swingEngine.canDiscardPathwayModel()) {
+								swingEngine.openPathwayModel(new File(filename));
 							}
 						} catch (Exception ex) {
 							Logger.log.error("Error opening " + filename, ex);

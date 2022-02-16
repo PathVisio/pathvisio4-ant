@@ -35,34 +35,43 @@ import javax.swing.JTextArea;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import org.pathvisio.libgpml.model.DataNode;
+import org.pathvisio.libgpml.model.Label;
+import org.pathvisio.libgpml.model.PathwayElement;
 import org.pathvisio.gui.SwingEngine;
 import org.pathvisio.gui.util.FontChooser;
-import org.pathvisio.libgpml.model.PathwayObject;
 
 /**
  * Dialog to modify label specific properties
+ * 
  * @author thomas
  *
  */
-public class LabelDialog extends PathwayElementDialog {
+public class LabelDialog extends PathwayObjectDialog {
 	JTextArea text;
 	JLabel fontPreview;
 
-	protected LabelDialog(SwingEngine swingEngine, PathwayObject e, boolean readonly, Frame frame, Component locationComp) {
+	protected LabelDialog(SwingEngine swingEngine, PathwayElement e, boolean readonly, Frame frame,
+			Component locationComp) {
 		super(swingEngine, e, readonly, frame, "Label properties", locationComp);
 		text.requestFocus();
 	}
 
+	/**
+	 * Get the pathway element for this dialog
+	 */
+	protected Label getInput() {
+		return (Label) super.getInput();
+	}
+
 	protected void refresh() {
 		super.refresh();
-		if(getInput() != null) {
-			PathwayObject input = getInput();
+		if (getInput() != null) {
+			Label input = getInput();
 			text.setText(input.getTextLabel());
 			int style = input.getFontWeight() ? Font.BOLD : Font.PLAIN;
 			style |= input.getFontStyle() ? Font.ITALIC : Font.PLAIN;
-			Font f = new Font(
-					input.getFontName(), style, (int)(input.getFontSize())
-			);
+			Font f = new Font(input.getFontName(), style, (int) (input.getFontSize()));
 			fontPreview.setFont(f);
 			fontPreview.setText(f.getName());
 		} else {
@@ -75,11 +84,9 @@ public class LabelDialog extends PathwayElementDialog {
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridBagLayout());
 
-		//Search panel elements
-		panel.setLayout(new FormLayout(
-			"4dlu, pref, 4dlu, pref, 4dlu, pref, pref:grow, 4dlu",
-			"4dlu, pref, 4dlu, fill:pref:grow, 4dlu, pref, 4dlu"
-		));
+		// Search panel elements
+		panel.setLayout(new FormLayout("4dlu, pref, 4dlu, pref, 4dlu, pref, pref:grow, 4dlu",
+				"4dlu, pref, 4dlu, fill:pref:grow, 4dlu, pref, 4dlu"));
 
 		JLabel label = new JLabel("Text label:");
 		text = new JTextArea();
@@ -89,9 +96,10 @@ public class LabelDialog extends PathwayElementDialog {
 		final JButton font = new JButton("...");
 		font.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Font f = FontChooser.showDialog(null, (Component)e.getSource(), fontPreview.getFont());
-				if(f != null) {
-					if(input != null) {
+				Font f = FontChooser.showDialog(null, (Component) e.getSource(), fontPreview.getFont());
+				if (f != null) {
+					Label input = getInput();
+					if (input != null) {
 						input.setFontName(f.getFamily());
 						input.setFontWeight(f.isBold());
 						input.setFontStyle(f.isItalic());
@@ -114,14 +122,18 @@ public class LabelDialog extends PathwayElementDialog {
 			public void changedUpdate(DocumentEvent e) {
 				saveText();
 			}
+
 			public void insertUpdate(DocumentEvent e) {
 				saveText();
 			}
+
 			public void removeUpdate(DocumentEvent e) {
 				saveText();
 			}
+
 			private void saveText() {
-				if(getInput() != null) getInput().setTextLabel(text.getText());
+				if (getInput() != null)
+					getInput().setTextLabel(text.getText());
 			}
 		});
 		text.setEnabled(!readonly);

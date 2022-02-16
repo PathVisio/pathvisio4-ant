@@ -28,6 +28,7 @@ import org.pathvisio.core.preferences.GlobalPreference;
 import org.pathvisio.core.preferences.Preference;
 import org.pathvisio.core.preferences.PreferenceManager;
 import org.pathvisio.libgpml.debug.Logger;
+import org.pathvisio.libgpml.model.PathwayElement;
 import org.pathvisio.libgpml.model.PathwayObject;
 import org.pathvisio.libgpml.model.type.HAlignType;
 import org.pathvisio.libgpml.model.type.CellularComponentType;
@@ -73,15 +74,15 @@ public class PropertyDisplayManager {
 		registerTypeHandler(new CommentsHandler());
 		registerTypeHandler(new DataSourceHandler());
 		registerTypeHandler(new FontHandler());
-		registerTypeHandler(new ComboHandler(StaticPropertyType.GENETYPE, DataNodeType.getNames(), false));
-		registerTypeHandler(new ComboHandler(StaticPropertyType.GROUPSTYLETYPE, GroupType.getNames(), false));
-		registerTypeHandler(new ComboHandler(StaticPropertyType.LINESTYLE, LineStyleType.getNames(), true));
-		registerTypeHandler(new ComboHandler(StaticPropertyType.LINETYPE, ArrowHeadType.getVisibleNames(), ArrowHeadType.getVisibleValues()));
+		registerTypeHandler(new ComboHandler(StaticPropertyType.DATANODETYPE, DataNodeType.getNames(), false));
+		registerTypeHandler(new ComboHandler(StaticPropertyType.GROUPTYPE, GroupType.getNames(), false));
+		registerTypeHandler(new ComboHandler(StaticPropertyType.LINESTYLETYPE, LineStyleType.getNames(), true));
+		registerTypeHandler(new ComboHandler(StaticPropertyType.ARROWHEADTYPE, ArrowHeadType.getVisibleNames(), ArrowHeadType.getVisibleValues()));
 		registerTypeHandler(new ComboHandler(StaticPropertyType.ORGANISM, Organism.latinNames(), false));
 		registerTypeHandler(new ComboHandler(StaticPropertyType.ORIENTATION, OrientationType.getNames(), true));
 		registerTypeHandler(new ComboHandler(StaticPropertyType.SHAPETYPE, ShapeType.getVisibleNames(), ShapeType.getVisibleValues()));
 		registerTypeHandler(new ComboHandler(StaticPropertyType.VALIGNTYPE, VAlignType.getNames(), VAlignType.values()));
-		registerTypeHandler(new ComboHandler(StaticPropertyType.ALIGNTYPE, HAlignType.getNames(), HAlignType.values()));
+		registerTypeHandler(new ComboHandler(StaticPropertyType.HALIGNTYPE, HAlignType.getNames(), HAlignType.values()));
 		registerTypeHandler(new ComboHandler(CellularComponentType.CELL_COMPONENT_TYPE, CellularComponentType.getNames(), false));
 
 		// register core properties
@@ -109,7 +110,7 @@ public class PropertyDisplayManager {
 	/**
 	 * Gets the visible property keys for the given PathwayElement.
 	 */
-	public static Set<Object> getVisiblePropertyKeys (PathwayObject e) {
+	public static Set<Object> getVisiblePropertyKeys (PathwayElement e) {
 
 		Set<Object> result = new HashSet<Object>();
 		// add static properties

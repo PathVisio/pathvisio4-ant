@@ -34,6 +34,10 @@ import org.pathvisio.gui.DataPaneTextProvider.DataHook;
 import org.pathvisio.libgpml.debug.Logger;
 import org.pathvisio.libgpml.debug.WorkerThreadOnly;
 import org.pathvisio.libgpml.model.PathwayObject;
+import org.pathvisio.libgpml.model.DataNode;
+import org.pathvisio.libgpml.model.DataNode.State;
+import org.pathvisio.libgpml.model.Group;
+import org.pathvisio.libgpml.model.Xrefable;
 import org.pathvisio.libgpml.model.type.ObjectType;
 import org.pathvisio.libgpml.util.Utils;
 
@@ -77,10 +81,16 @@ public class BackpageTextProvider {
 
 		public String getType(PathwayObject e) {
 			ObjectType obj = e.getObjectType();
-			if (obj.equals(ObjectType.LINE)) {
+			if (obj.equals(ObjectType.INTERACTION)) { // TODO
 				return "Interaction";
+			} else if (obj.equals(ObjectType.DATANODE)) {
+				return ((DataNode) e).getType().getName();
+//			} else if (obj.equals(ObjectType.STATE)) {
+//				return ((State) e).getType().getName();
+//			} else if (obj.equals(ObjectType.GROUP)) {
+//				return ((Group) e).getType().getName();
 			} else {
-				return e.getDataNodeType();
+				return null; // TODO
 			}
 		}
 
@@ -90,7 +100,7 @@ public class BackpageTextProvider {
 
 			text += "<H1><font color=\"006699\">" + type + " annotation</font></H1><br>";
 
-			if (e.getXref().getId() == null || "".equals(e.getXref().getId())) {
+			if (((Xrefable) e).getXref().getId() == null || "".equals(((Xrefable) e).getXref().getId())) {
 				text += "<font color='red'>Invalid annotation: missing identifier.</font>";
 				return text;
 			}
@@ -99,15 +109,14 @@ public class BackpageTextProvider {
 				StringBuilder bpInfo = new StringBuilder("<TABLE border = 1>");
 
 				Map<String, Set<String>> attributes = null;
-				if (e.getXref().getDataSource() != null) {
-					attributes = attributeMapper.getAttributes(e.getXref());
+				if (((Xrefable) e).getXref().getDataSource() != null) {
+					attributes = attributeMapper.getAttributes(((Xrefable) e).getXref());
 				} else {
 					attributes = new HashMap<String, Set<String>>();
 				}
 
 				String[][] table = new String[][] { { "Name", Utils.oneOf(attributes.get("Symbol")) },
-						{ "Identifier", e.getXref().getId() },
-						{ "Database", e.getXref().getDataSource().getFullName() },
+						{ "Identifier", ((Xrefable) e).getXref().getId() },
 						{ "Description", Utils.oneOf(attributes.get("Description")) },
 						{ "Synonyms", Utils.oneOf(attributes.get("Synonyms")) },
 						{ "Chromosome", Utils.oneOf(attributes.get("Chromosome")) },
@@ -152,13 +161,12 @@ public class BackpageTextProvider {
 
 		public String getHtml(PathwayObject e) {
 			try {
-				if (e.getXref().getId() == null || "".equals(e.getXref().getId())
-						|| e.getXref().getDataSource() == null) {
+				if (((Xrefable) e).getXref().getId() == null || "".equals(((Xrefable) e).getXref().getId())
+						|| ((Xrefable) e).getXref().getDataSource() == null) {
 					return "";
 				}
-
-				Set<Xref> crfs = gdb.mapID(e.getXref());
-				crfs.add(e.getXref());
+				Set<Xref> crfs = gdb.mapID(((Xrefable) e).getXref());
+				crfs.add(((Xrefable) e).getXref());
 				if (crfs.size() == 0)
 					return "";
 				List<Xref> sortedRefs = new ArrayList<Xref>(crfs);
@@ -193,6 +201,7 @@ public class BackpageTextProvider {
 				return "Exception occured while getting cross-references</br>\n" + ex.getMessage() + "\n";
 			}
 		}
+
 	}
 
 	/**
@@ -216,9 +225,9 @@ public class BackpageTextProvider {
 	public String getBackpageHTML(PathwayObject e) {
 		if (e == null) {
 			return "<p>No pathway element is selected.</p>";
-		} else if (e.getObjectType() != ObjectType.DATANODE && e.getObjectType() != ObjectType.LINE) {
+		} else if (e.getObjectType() != ObjectType.DATANODE && e.getObjectType() != ObjectType.INTERACTION) {
 			return "<p>Backpage is not available for this type of element.<BR>Only DataNodes or Interactions can have a backpage.</p>";
-		} else if (e.getDataSource() == null || e.getXref().getId().equals("")) {
+		} else if (((Xrefable) e).getXref().getDataSource() == null || ((Xrefable) e).getXref().getId().equals("")) {
 			return "<p>There is no annotation for this pathway element defined.</p>";
 		}
 		StringBuilder builder = new StringBuilder(backpagePanelHeader);

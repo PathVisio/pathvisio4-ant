@@ -39,15 +39,17 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
+import org.pathvisio.libgpml.debug.Logger;
+import org.pathvisio.libgpml.model.PathwayElement;
+import org.pathvisio.libgpml.model.PathwayElement.CitationRef;
 import org.pathvisio.core.util.Resources;
 import org.pathvisio.gui.SwingEngine;
 import org.pathvisio.gui.dialogs.PublicationXRefDialog;
-import org.pathvisio.libgpml.biopax.BiopaxElement;
-import org.pathvisio.libgpml.biopax.BiopaxReferenceManager;
-import org.pathvisio.libgpml.biopax.PublicationXref;
-import org.pathvisio.libgpml.debug.Logger;
-import org.pathvisio.libgpml.model.PathwayObject;
 
+/**
+ * 
+ * @author unknown
+ */
 public class LitReferencePanel extends PathwayElementPanel implements ActionListener {
 	private static final String ADD = "New reference";
 	private static final String REMOVE = "Remove";
@@ -55,10 +57,7 @@ public class LitReferencePanel extends PathwayElementPanel implements ActionList
 	private static final URL IMG_EDIT = Resources.getResourceURL("edit.gif");
 	private static final URL IMG_REMOVE = Resources.getResourceURL("cancel.gif");
 
-	BiopaxReferenceManager refMgr;
-	BiopaxElement elmMgr;
-
-	List<PublicationXref> xrefs;
+	List<CitationRef> xrefs;
 
 	JScrollPane refPanel;
 	JButton addBtn;
@@ -68,13 +67,19 @@ public class LitReferencePanel extends PathwayElementPanel implements ActionList
 	public LitReferencePanel(SwingEngine swingEngine) {
 		this.swingEngine = swingEngine;
 		setLayout(new BorderLayout(5, 5));
-		xrefs = new ArrayList<PublicationXref>();
+		xrefs = new ArrayList<CitationRef>();
 		addBtn = new JButton(ADD);
 		addBtn.setActionCommand(ADD);
 		addBtn.addActionListener(this);
 		JPanel addPnl = new JPanel();
 		addPnl.add(addBtn);
 		add(addPnl, BorderLayout.SOUTH);
+	}
+
+	// TODO
+	@Override
+	protected PathwayElement getInput() {
+		return (PathwayElement) super.getInput();
 	}
 
 	boolean readonly = false;
@@ -85,26 +90,28 @@ public class LitReferencePanel extends PathwayElementPanel implements ActionList
 		addBtn.setEnabled(!readonly);
 	}
 
-	public void setInput(PathwayObject e) {
-		if (e != getInput()) {
-			elmMgr = e.getParent().getBiopaxElementManager();
-			refMgr = e.getBiopaxReferenceManager();
-		}
+	public void setInput(PathwayElement e) {
+//		if (e != getInput()) { //TODO 
+//			elmMgr = e.getParent().getBiopaxElementManager();
+//			refMgr = e.getBiopaxReferenceManager();
+//		}
 		super.setInput(e);
 	}
 
 	private class XRefPanel extends JPanel implements HyperlinkListener, ActionListener {
-		PublicationXref xref;
+		CitationRef xref;
 		JPanel btnPanel;
 
-		public XRefPanel(PublicationXref xref) {
+		public XRefPanel(CitationRef xref) {
 			this.xref = xref;
 			setBackground(Color.WHITE);
 			setLayout(new FormLayout("2dlu, fill:[100dlu,min]:grow, 1dlu, pref, 2dlu", "2dlu, pref, 2dlu"));
 			JTextPane txt = new JTextPane();
 			txt.setContentType("text/html");
 			txt.setEditable(false);
-			txt.setText("<html>" + "<B>" + elmMgr.getOrdinal(xref) + ":</B> " + xref.toHTML() + "</html>");
+			// TODO order index???
+			int ordinal = getInput().getPathwayModel().getCitations().indexOf(xref.getCitation());
+			txt.setText("<html>" + "<B>" + ordinal + ":</B> " + xref.toString() + "</html>");
 			txt.addHyperlinkListener(this);
 			CellConstraints cc = new CellConstraints();
 			add(txt, cc.xy(2, 2));
@@ -180,10 +187,11 @@ public class LitReferencePanel extends PathwayElementPanel implements ActionList
 		if (refPanel != null)
 			remove(refPanel);
 
-		xrefs = refMgr.getPublicationXRefs();
+		// TODO
+		xrefs = ((PathwayElement) getInput()).getCitationRefs();
 
 		DefaultFormBuilder b = new DefaultFormBuilder(new FormLayout("fill:pref:grow"));
-		for (PublicationXref xref : xrefs) {
+		for (CitationRef xref : xrefs) {
 			b.append(new XRefPanel(xref));
 			b.nextLine();
 		}
@@ -200,7 +208,7 @@ public class LitReferencePanel extends PathwayElementPanel implements ActionList
 		}
 	}
 
-	private void edit(PublicationXref xref) {
+	private void edit(CitationRef xref) {
 		if (xref != null) {
 			PublicationXRefDialog d = new PublicationXRefDialog(xref, null, this, false);
 			d.setVisible(true);
@@ -208,13 +216,13 @@ public class LitReferencePanel extends PathwayElementPanel implements ActionList
 		refresh();
 	}
 
-	private void remove(PublicationXref xref) {
-		refMgr.removeElementReference(xref);
+	private void remove(CitationRef xref) {
+		((PathwayElement) getInput()).removeCitationRef(xref); // TODO
 		refresh();
 	}
 
 	private void addPressed() {
-		PublicationXref xref = new PublicationXref();
+		CitationRef xref = ((PathwayElement) getInput()).addCitation(null, null); // TODO
 
 		final PublicationXRefDialog d = new PublicationXRefDialog(xref, null, this);
 		if (!SwingUtilities.isEventDispatchThread()) {
@@ -231,7 +239,8 @@ public class LitReferencePanel extends PathwayElementPanel implements ActionList
 			d.setVisible(true);
 		}
 		if (d.getExitCode().equals(PublicationXRefDialog.OK)) {
-			refMgr.addElementReference(xref);
+			//TODO seems weird but ok for now...
+			getInput().addCitation(xref.getCitation());
 			refresh();
 		}
 	}

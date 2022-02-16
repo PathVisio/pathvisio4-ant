@@ -24,22 +24,25 @@ import java.util.Map;
 import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 
+import org.pathvisio.libgpml.model.PathwayModel;
+import org.pathvisio.libgpml.model.PathwayObject;
+import org.pathvisio.libgpml.model.Xrefable;
+import org.pathvisio.libgpml.model.DataNode;
+import org.pathvisio.libgpml.model.PathwayElement;
+import org.pathvisio.libgpml.prop.StaticProperty;
 import org.pathvisio.core.view.model.UndoAction;
 import org.pathvisio.core.view.model.VPathwayModel;
 import org.pathvisio.gui.SwingEngine;
 import org.pathvisio.gui.panels.CommentPanel;
 import org.pathvisio.gui.panels.LitReferencePanel;
 import org.pathvisio.gui.panels.PathwayElementPanel;
-import org.pathvisio.libgpml.model.PathwayModel;
-import org.pathvisio.libgpml.model.PathwayObject;
-import org.pathvisio.libgpml.prop.StaticProperty;
 
 /**
  * Dialog that allows you to display and edit properties of a PathwayElement
+ * 
  * @author thomas
- *
  */
-public class PathwayElementDialog extends OkCancelDialog {
+public class PathwayObjectDialog extends OkCancelDialog {
 
 	public static final String TAB_COMMENTS = "Comments";
 	public static final String TAB_LITERATURE = "Literature";
@@ -48,12 +51,13 @@ public class PathwayElementDialog extends OkCancelDialog {
 	private JTabbedPane dialogPane;
 	private Map<String, PathwayElementPanel> panels;
 	private Map<StaticProperty, Object> state = new HashMap<StaticProperty, Object>();
-	private PathwayModel originalPathway; //Used for undo event
+	private PathwayModel originalPathway; // Used for undo event
 
 	protected boolean readonly;
 	protected SwingEngine swingEngine;
 
-	protected PathwayElementDialog(SwingEngine swingEngine, PathwayObject e, boolean readonly, Frame frame, String title, Component locationComp) {
+	protected PathwayObjectDialog(SwingEngine swingEngine, PathwayObject e, boolean readonly, Frame frame, String title,
+			Component locationComp) {
 		super(frame, title, locationComp, true);
 		this.readonly = readonly;
 		this.swingEngine = swingEngine;
@@ -86,25 +90,25 @@ public class PathwayElementDialog extends OkCancelDialog {
 	}
 
 	/**
-	 * Refresh the GUI components to reflect the current pathway element's properties. This
-	 * method automatically refreshes all registered PathwayElementPanels.
-	 * Subclasses may override this to update their own GUI components that are not added
-	 * as PathwayElementPanel.
+	 * Refresh the GUI components to reflect the current pathway element's
+	 * properties. This method automatically refreshes all registered
+	 * PathwayElementPanels. Subclasses may override this to update their own GUI
+	 * components that are not added as PathwayElementPanel.
 	 */
 	protected void refresh() {
-		for(PathwayElementPanel p : panels.values()) {
+		for (PathwayElementPanel p : panels.values()) {
 			p.setInput(input);
 		}
 	}
 
 	/**
-	 * Store the current state of the pathway element. This is used to cancel
-	 * the modifications made in the dialog.
+	 * Store the current state of the pathway element. This is used to cancel the
+	 * modifications made in the dialog.
 	 */
 	protected void storeState() {
 		PathwayObject e = getInput();
-		originalPathway = (PathwayModel) e.getParent().clone();
-		for(StaticProperty t : e.getStaticPropertyKeys()) {
+		originalPathway = (PathwayModel) e.getPathwayModel().clone();
+		for (StaticProperty t : e.getStaticPropertyKeys()) { 
 			state.put(t, e.getStaticProperty(t));
 		}
 	}
@@ -115,7 +119,7 @@ public class PathwayElementDialog extends OkCancelDialog {
 	 */
 	protected void restoreState() {
 		PathwayObject e = getInput();
-		for(StaticProperty t : state.keySet()) {
+		for (StaticProperty t : state.keySet()) { 
 			e.setStaticProperty(t, state.get(t));
 		}
 	}
@@ -139,7 +143,7 @@ public class PathwayElementDialog extends OkCancelDialog {
 
 	public void removePathwayElementPanel(String tabLabel) {
 		PathwayElementPanel panel = panels.get(tabLabel);
-		if(panel != null) {
+		if (panel != null) {
 			dialogPane.remove(panel);
 			panels.remove(panel);
 		}
@@ -147,54 +151,55 @@ public class PathwayElementDialog extends OkCancelDialog {
 
 	public void selectPathwayElementPanel(String tabLabel) {
 		PathwayElementPanel panel = panels.get(tabLabel);
-		if(panel != null) {
+		if (panel != null) {
 			dialogPane.setSelectedComponent(panel);
 		}
 	}
 
 	/**
 	 * Override in subclass and use
-	 * {@link #addPathwayElementPanel(String, PathwayElementPanel)} to add a PathwayElementPanel, or
-	 * use {@link JTabbedPane#add(Component)}.
+	 * {@link #addPathwayElementPanel(String, PathwayElementPanel)} to add a
+	 * PathwayElementPanel, or use {@link JTabbedPane#add(Component)}.
+	 * 
 	 * @param parent
 	 */
 	protected void addCustomTabs(JTabbedPane parent) {
-		//To be implemented by subclasses
+		// To be implemented by subclasses
 	}
 
 	/**
-	 * Called when the OK button is pressed. Will close the dialog amd register an undo event.
+	 * Called when the OK button is pressed. Will close the dialog and register an
+	 * undo event.
 	 */
 	protected void okPressed() {
 		boolean done = true;
-		if(this instanceof DataNodeDialog || this instanceof LineDialog) {
-			if(!input.getIdentifier().equals("") && input.getDataSource() == null) {
+		if (this instanceof DataNodeDialog || this instanceof LineDialog) {
+			if (!((Xrefable) input).getXref().getId().equals("")
+					&& ((Xrefable) input).getXref().getDataSource() == null) {
 				done = false;
 				JOptionPane.showMessageDialog(this,
 						"You annotated this pathway element with an identifier but no database.\n Please specify a database system.",
-						"Error",
-						JOptionPane.ERROR_MESSAGE);
-			} else if (input.getIdentifier().equals("") && input.getDataSource() != null) {
+						"Error", JOptionPane.ERROR_MESSAGE);
+			} else if (((Xrefable) input).getXref().getId().equals("")
+					&& ((Xrefable) input).getXref().getDataSource() == null) {
 				done = false;
 				JOptionPane.showMessageDialog(this,
 						"You annotated this pathway element with a database but no identifier.\n Please specify an identifier.",
-						"Error",
-						JOptionPane.ERROR_MESSAGE);
+						"Error", JOptionPane.ERROR_MESSAGE);
 			}
 		}
-		if(done) {
+		if (done) {
 			VPathwayModel p = swingEngine.getEngine().getActiveVPathwayModel();
-			p.getUndoManager().newAction(
-					new UndoAction("Modified element properties", originalPathway)
-			);
-			if(p != null) p.redraw();
+			p.getUndoManager().newAction(new UndoAction("Modified element properties", originalPathway));
+			if (p != null)
+				p.redraw();
 			setVisible(false);
 		}
 	}
 
 	/**
-	 * Called when the Cancel button is pressed. Will close the dialog and revert the
-	 * pathway element to it's original state.
+	 * Called when the Cancel button is pressed. Will close the dialog and revert
+	 * the pathway element to it's original state.
 	 */
 	protected void cancelPressed() {
 		restoreState();

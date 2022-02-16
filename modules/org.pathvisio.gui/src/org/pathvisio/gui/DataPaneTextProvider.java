@@ -25,6 +25,7 @@ import org.pathvisio.core.util.Resources;
 import org.pathvisio.libgpml.debug.Logger;
 import org.pathvisio.libgpml.debug.WorkerThreadOnly;
 import org.pathvisio.libgpml.model.PathwayObject;
+import org.pathvisio.libgpml.model.Xrefable;
 import org.pathvisio.libgpml.model.type.ObjectType;
 
 /**
@@ -120,16 +121,16 @@ public class DataPaneTextProvider {
 
 	/**
 	 * generates html for a given PathwayElement. Combines the base header with
-	 * fragments from all BackpageHooks into one html String.
+	 * fragments from all BackpageHooks into one html String. TODO 
 	 */
 	public String getAnnotationHTML(PathwayObject e) {
 		if (e == null) {
 			return "<p>No pathway element is selected.</p>";
-		} else if (e.getObjectType() != ObjectType.DATANODE
-				&& e.getObjectType() != ObjectType.LINE) {
-			return "<p>It is currently not possible to annotate this type of pathway element." +
-					"<BR>Only DataNodes and Interactions can be annotated.</p>";
-		} else if (e.getDataSource() == null || e.getXref().getId().equals("")) {
+		} else if (e.getObjectType() != ObjectType.PATHWAY && e.getObjectType() != ObjectType.DATANODE && e.getObjectType() != ObjectType.STATE
+				&& e.getObjectType() != ObjectType.INTERACTION && e.getObjectType() != ObjectType.GROUP) {
+			return "<p>It is currently not possible to annotate this type of pathway element."
+					+ "<BR>Only Pathways, DataNodes, States, Interactions and Groups can be annotated.</p>";
+		} else if (((Xrefable) e).getXref().getDataSource() == null || ((Xrefable) e).getXref().getId().equals("")) {
 			return "<p>This pathway element has not yet been annotated.</p>";
 		}
 		StringBuilder builder = new StringBuilder(backpagePanelHeader);

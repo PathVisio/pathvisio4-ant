@@ -98,7 +98,7 @@ public class PathwayModelTransferable implements Transferable {
 		Set<String> groupIds = new HashSet<String>();
 
 		boolean infoFound = false;
-		for (PathwayElement e : elements) {
+		for (PathwayObject e : elements) {
 			if (e.getElementId() != null) {
 				ids.add(e.getElementId());
 			}

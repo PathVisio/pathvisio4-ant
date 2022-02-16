@@ -102,7 +102,7 @@ public class AutoSave {
 				"Sorry, it seems PathVisio crashed.\n" + "Recover the auto-saved file?", "Crash recovery",
 				JOptionPane.YES_NO_OPTION);
 		if (result == JOptionPane.YES_OPTION) {
-			swingEngine.openPathway(autoSaveFile);
+			swingEngine.openPathwayModel(autoSaveFile);
 		}
 	}
 }

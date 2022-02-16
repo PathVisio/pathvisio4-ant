@@ -2202,8 +2202,8 @@ public class VPathwayModel implements PathwayModelListener {
 	 * Makes a copy of all PathwayElements in current selection, and puts them in
 	 * the global clipboard.
 	 */
-	public void copyToClipboard() {
-		List<PathwayObject> result = new ArrayList<PathwayObject>();
+	public void copyToClipboard() { //TODO PathwayObject or PathwayElement
+		List<PathwayElement> result = new ArrayList<PathwayElement>();
 		for (VElement g : drawingObjects) {
 			// pathway element or pathway object? TODO
 			if (g.isSelected() && g instanceof VPathwayElement && !(g instanceof SelectionBox)) {
@@ -2224,7 +2224,7 @@ public class VPathwayModel implements PathwayModelListener {
 	}
 
 	/**
-	 * @param elements the list of elements.
+	 * @param elements the list of elements. //TODO PathwayObject or PathwayElement
 	 * @param xShift
 	 * @param yShift
 	 */

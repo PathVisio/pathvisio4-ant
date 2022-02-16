@@ -37,6 +37,7 @@ import org.pathvisio.gui.DataPaneTextProvider;
 import org.pathvisio.libgpml.model.PathwayObject;
 import org.pathvisio.libgpml.model.PathwayObjectEvent;
 import org.pathvisio.libgpml.model.PathwayObjectListener;
+import org.pathvisio.libgpml.model.Xrefable;
 import org.pathvisio.libgpml.prop.StaticProperty;
 
 /**
@@ -54,8 +55,8 @@ import org.pathvisio.libgpml.prop.StaticProperty;
  * It is the responsibility of the instantiator to also call the dispose()
  * method, otherwise the background thread is not killed.
  */
-public class DataPane extends JEditorPane implements ApplicationEventListener,
-		SelectionListener, PathwayObjectListener {
+public class DataPane extends JEditorPane
+		implements ApplicationEventListener, SelectionListener, PathwayObjectListener {
 	private final DataPaneTextProvider dpt;
 	private Engine engine;
 	private ExecutorService executor;
@@ -82,8 +83,7 @@ public class DataPane extends JEditorPane implements ApplicationEventListener,
 		setEditorKit(new HTMLEditorKit() {
 			protected Parser getParser() {
 				try {
-					Class c = Class
-							.forName("javax.swing.text.html.parser.ParserDelegator");
+					Class c = Class.forName("javax.swing.text.html.parser.ParserDelegator");
 					Parser defaultParser = (Parser) c.newInstance();
 					return defaultParser;
 				} catch (Throwable e) {
@@ -116,14 +116,14 @@ public class DataPane extends JEditorPane implements ApplicationEventListener,
 
 	private void doQuery() {
 		setText("Loading");
-		currRef = input.getXref();
+		currRef = ((Xrefable) input).getXref();
 
 		executor.execute(new Runnable() {
 			public void run() {
 				if (input == null)
 					return;
 				final String txt = dpt.getAnnotationHTML(input);
-			
+
 				SwingUtilities.invokeLater(new Runnable() {
 					public void run() {
 						setText(txt);
@@ -177,10 +177,8 @@ public class DataPane extends JEditorPane implements ApplicationEventListener,
 
 	public void gmmlObjectModified(PathwayObjectEvent e) {
 		PathwayObject pe = e.getModifiedPathwayObject();
-		if (input != null
-				&& (e.affectsProperty(StaticProperty.GENEID) || e
-						.affectsProperty(StaticProperty.DATASOURCE))) {
-			Xref nref = new Xref(pe.getIdentifier(), input.getDataSource());
+		if (input != null && (e.affectsProperty(StaticProperty.XREF))) {
+			Xref nref = new Xref(((Xrefable) pe).getXref().getId(), ((Xrefable) input).getXref().getDataSource());
 			if (!nref.equals(currRef)) {
 				doQuery();
 			}

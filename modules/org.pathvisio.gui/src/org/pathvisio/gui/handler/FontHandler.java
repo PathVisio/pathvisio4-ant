@@ -51,7 +51,7 @@ public class FontHandler extends DefaultCellEditor implements TableCellRenderer,
 	//-- TypeHandler methods --//
 
 	public PropertyType getType() {
-		return StaticPropertyType.FONT;
+		return StaticPropertyType.FONTNAME;
 	}
 
 	public TableCellRenderer getLabelRenderer() {

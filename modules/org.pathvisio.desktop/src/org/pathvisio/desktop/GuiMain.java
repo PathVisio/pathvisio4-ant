@@ -93,12 +93,12 @@ public class GuiMain implements GdbEventListener {
 		URL url;
 		// Assume the argument is a file
 		if (f.exists()) {
-			swingEngine.openPathway(f);
+			swingEngine.openPathwayModel(f);
 		} else {
 			// If it doesn't exist, assume it's an url
 			try {
 				url = new URL(pathwayFile);
-				swingEngine.openPathway(url);
+				swingEngine.openPathwayModel(url);
 			} catch (MalformedURLException e) {
 				Logger.log.error("Couldn't open pathway url " + pathwayFile);
 			}
@@ -258,7 +258,7 @@ public class GuiMain implements GdbEventListener {
 				prefs.setInt(GlobalPreference.WIN_X, p.x);
 				prefs.setInt(GlobalPreference.WIN_Y, p.y);
 
-				if (swingEngine.canDiscardPathway()) {
+				if (swingEngine.canDiscardPathwayModel()) {
 					frame.dispose();
 				}
 			}

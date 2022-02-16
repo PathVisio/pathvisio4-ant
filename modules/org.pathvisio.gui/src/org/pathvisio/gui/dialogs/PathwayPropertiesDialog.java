@@ -28,31 +28,43 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
 import org.bridgedb.bio.Organism;
+import org.pathvisio.libgpml.model.DataNode;
+import org.pathvisio.libgpml.model.Pathway;
+import org.pathvisio.libgpml.model.PathwayElement;
 import org.pathvisio.gui.SwingEngine;
 import org.pathvisio.gui.util.PermissiveComboBox;
-import org.pathvisio.libgpml.model.PathwayObject;
 
 /**
- * Dialog to easily edit the properties of a pathway, such as the pathway title, organism, etc.
+ * Dialog to easily edit the properties of a pathway, such as the pathway title,
+ * organism, etc.
+ * 
+ * @author unknown
  */
-public class PathwayPropertiesDialog extends PathwayElementDialog {
+public class PathwayPropertiesDialog extends PathwayObjectDialog {
 	private PermissiveComboBox organismComboBox;
-	private JTextField titleField; 
-	
-	protected PathwayPropertiesDialog(SwingEngine swingEngine, PathwayObject e,
-			boolean readonly, Frame frame, String title, Component locationComp) {
+	private JTextField titleField;
+
+	protected PathwayPropertiesDialog(SwingEngine swingEngine, Pathway e, boolean readonly, Frame frame, String title,
+			Component locationComp) {
 		super(swingEngine, e, readonly, frame, "Pathway properties", locationComp);
 		getRootPane().setDefaultButton(null);
 		setButton.requestFocus();
 	}
 	
+	/**
+	 * Get the pathway element for this dialog
+	 */
+	protected Pathway getInput() {
+		return (Pathway) super.getInput();
+	}
+
 	protected void addCustomTabs(JTabbedPane parent) {
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridBagLayout());
-		
+
 		JPanel fieldPanel = new JPanel();
 		fieldPanel.setBorder(BorderFactory.createTitledBorder(""));
-		
+
 		GridBagConstraints panelConstraints = new GridBagConstraints();
 		panelConstraints.fill = GridBagConstraints.BOTH;
 		panelConstraints.weightx = 1;
@@ -62,12 +74,12 @@ public class PathwayPropertiesDialog extends PathwayElementDialog {
 		fieldPanel.setLayout(new GridBagLayout());
 
 		JLabel titleFieldLabel = new JLabel("Title");
-		JLabel orgComboLabel = new JLabel ("Organism ");
-		
+		JLabel orgComboLabel = new JLabel("Organism ");
+
 		titleField = new JTextField();
-		titleField.setText(swingEngine.getEngine().getActivePathwayModel().getMappInfo().getTitle());
+		titleField.setText(swingEngine.getEngine().getActivePathwayModel().getPathway().getTitle());
 		organismComboBox = new PermissiveComboBox(Organism.latinNamesArray());
-		organismComboBox.setSelectedItem(swingEngine.getEngine().getActivePathwayModel().getMappInfo().getOrganism());
+		organismComboBox.setSelectedItem(swingEngine.getEngine().getActivePathwayModel().getPathway().getOrganism());
 
 		GridBagConstraints c = new GridBagConstraints();
 		c.anchor = GridBagConstraints.FIRST_LINE_START;
@@ -81,17 +93,17 @@ public class PathwayPropertiesDialog extends PathwayElementDialog {
 		c.weightx = 1;
 		fieldPanel.add(titleField, c);
 		fieldPanel.add(organismComboBox, c);
-				
+
 		parent.add("Properties", panel);
 		parent.setSelectedComponent(panel);
 	}
-	
+
 	protected void okPressed() {
 		super.okPressed();
-		swingEngine.getEngine().getActivePathwayModel().getMappInfo().setTitle(titleField.getText());
-		
-		String itemSelectedFromDropDown = (String)organismComboBox.getSelectedItem();
-		if(itemSelectedFromDropDown != null)
-			swingEngine.getEngine().getActivePathwayModel().getMappInfo().setOrganism(itemSelectedFromDropDown);
+		swingEngine.getEngine().getActivePathwayModel().getPathway().setTitle(titleField.getText());
+
+		String itemSelectedFromDropDown = (String) organismComboBox.getSelectedItem();
+		if (itemSelectedFromDropDown != null)
+			swingEngine.getEngine().getActivePathwayModel().getPathway().setOrganism(itemSelectedFromDropDown);
 	}
 }

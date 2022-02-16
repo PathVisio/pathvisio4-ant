@@ -36,7 +36,9 @@ import org.pathvisio.libgpml.model.LineElement;
 public class ArrowHeadType {
 
 	private static Map<String, ArrowHeadType> nameToArrowHeadType = new TreeMap<String, ArrowHeadType>(String.CASE_INSENSITIVE_ORDER);
-
+	private static List<ArrowHeadType> values = new ArrayList<ArrowHeadType>();
+	private static List<ArrowHeadType> visible = new ArrayList<ArrowHeadType>();
+	
 	public static final ArrowHeadType UNDIRECTED = new ArrowHeadType("Undirected"); //previous "Line" 
 	public static final ArrowHeadType DIRECTED = new ArrowHeadType("Directed");
 	public static final ArrowHeadType CONVERSION = new ArrowHeadType("Conversion");
@@ -54,14 +56,27 @@ public class ArrowHeadType {
 	 * Use create() method to instantiate ArrowHeadType.
 	 * 
 	 * @param name the string key of this ArrowHeadType.
+	 * @param hidden the boolean
 	 * @throws NullPointerException if name is null.
 	 */
-	private ArrowHeadType(String name) {
+	private ArrowHeadType(String name, boolean hidden) {
 		if (name == null) {
 			throw new NullPointerException();
 		}
 		this.name = name;
 		nameToArrowHeadType.put(name, this); // adds this name and ArrowHeadType to map.
+		values.add(this);
+		if (!hidden)
+			visible.add(this);
+	}
+	
+	/**
+	 * Private constructor. 
+	 * 
+	 * @param name the string key of this ArrowHeadType.
+	 */
+	private ArrowHeadType(String name) {
+		this(name, false);
 	}
 
 	/**
@@ -121,7 +136,29 @@ public class ArrowHeadType {
 		List<ArrowHeadType> arrowHeadTypes = new ArrayList<>(nameToArrowHeadType.values());
 		return arrowHeadTypes;
 	}
+	
+	/**
+	 * TODO 
+	 * 
+	 * @return
+	 */
+	static public String[] getVisibleNames() {
+		String[] result = new String[visible.size()];
+		for (int i = 0; i < visible.size(); ++i) {
+			result[i] = visible.get(i).getName();
+		}
+		return result;
+	}
 
+	/** 
+	 * TODO 
+	 * 
+	 * @return
+	 */
+	static public ArrowHeadType[] getVisibleValues() {
+		return visible.toArray(new ArrowHeadType[0]);
+	}
+	
 	/**
 	 * Returns a string representation of this ArrowHeadType.
 	 * 

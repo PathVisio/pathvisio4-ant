@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.swing.BorderFactory;
+import javax.swing.ComboBoxModel;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
@@ -44,20 +45,26 @@ import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.IDMapperStack;
 import org.bridgedb.Xref;
+import org.pathvisio.libgpml.model.type.ArrowHeadType;
+import org.pathvisio.libgpml.model.DataNode;
+import org.pathvisio.libgpml.model.Interaction;
+import org.pathvisio.libgpml.model.PathwayElement;
 import org.pathvisio.gui.DataSourceModel;
 import org.pathvisio.gui.SwingEngine;
 import org.pathvisio.gui.completer.CompleterQueryTextField;
 import org.pathvisio.gui.completer.OptionProvider;
 import org.pathvisio.gui.util.PermissiveComboBox;
-import org.pathvisio.libgpml.model.PathwayObject;
-import org.pathvisio.libgpml.model.type.ArrowHeadType;
 
-public class LineDialog extends PathwayElementDialog implements ItemListener {
+/**
+ * 
+ * @author unknown
+ */
+public class LineDialog extends PathwayObjectDialog implements ItemListener {
 
 	/**
 	 * Dialog for editing Reactions/ Interactions. In addition to the standard
-	 * comments and literature tabs, this has a tab for looking up accession
-	 * numbers of reactions/interactions.
+	 * comments and literature tabs, this has a tab for looking up accession numbers
+	 * of reactions/interactions.
 	 */
 	private static final long serialVersionUID = 1L;
 	private CompleterQueryTextField idText;
@@ -66,31 +73,35 @@ public class LineDialog extends PathwayElementDialog implements ItemListener {
 	private PermissiveComboBox typeCombo;
 	private DataSourceModel dsm;
 
-	protected LineDialog(final SwingEngine swingEngine, final PathwayObject e,
-			final boolean readonly, final Frame frame,
+	protected LineDialog(final SwingEngine swingEngine, final Interaction e, final boolean readonly, final Frame frame,
 			final Component locationComp) {
-		super(swingEngine, e, readonly, frame, "Interaction properties",
-				locationComp);
+		super(swingEngine, e, readonly, frame, "Interaction properties", locationComp);
 		getRootPane().setDefaultButton(null);
 		setButton.requestFocus();
 	}
 
+	/**
+	 * Get the pathway element for this dialog
+	 */
+	protected Interaction getInput() {
+		return (Interaction) super.getInput();
+	}
+
 	public final void refresh() {
 		super.refresh();
-		idText.setText(getInput().getIdentifier());
-		dsm.setSelectedItem(input.getDataSource());
+		Interaction input = getInput();
+		idText.setText(input.getXref().getId());
+		dsm.setSelectedItem(input.getXref().getDataSource());
 		String lType = getInput().getEndLineType().toString();
 		typeCombo.setSelectedItem(ArrowHeadType.fromName(lType));
 		dsm.setInteractionFilter(true);
 		pack();
 	}
 
-
 	protected final void addCustomTabs(final JTabbedPane parent) {
 
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridBagLayout());
-
 
 		JPanel fieldPanel = new JPanel();
 
@@ -103,15 +114,11 @@ public class LineDialog extends PathwayElementDialog implements ItemListener {
 		panelConstraints.insets = new Insets(2, 2, 2, 2);
 		panelConstraints.gridy = GridBagConstraints.RELATIVE;
 
-
 		panel.add(fieldPanel, panelConstraints);
-
 
 		GridBagConstraints searchConstraints = new GridBagConstraints();
 		searchConstraints.gridx = GridBagConstraints.RELATIVE;
 		searchConstraints.fill = GridBagConstraints.HORIZONTAL;
-
-
 
 		// Manual entry panel elements
 		fieldPanel.setLayout(new GridBagLayout());
@@ -147,7 +154,8 @@ public class LineDialog extends PathwayElementDialog implements ItemListener {
 		dsm.setPrimaryFilter(true);
 		dsm.setSpeciesFilter(swingEngine.getCurrentOrganism());
 		dbCombo = new PermissiveComboBox(dsm);
-		typeCombo = new PermissiveComboBox(ArrowHeadType.getValues());
+		Object[] arrowHeadTypesArray = ArrowHeadType.getValues().toArray(new Object[0]);
+		typeCombo = new PermissiveComboBox(arrowHeadTypesArray); //TODO 
 
 		GridBagConstraints c = new GridBagConstraints();
 		c.ipadx = c.ipady = 5;
@@ -180,15 +188,16 @@ public class LineDialog extends PathwayElementDialog implements ItemListener {
 			}
 
 			private void setText() {
-				getInput().setIdentifier(idText.getText());
+				// Sets Xref id by creating new Xref
+				getInput().setXref(new Xref(idText.getText(), getInput().getXref().getDataSource()));
 			}
 		});
 
 		dsm.addListDataListener(new ListDataListener() {
 
 			public void contentsChanged(final ListDataEvent arg0) {
-				getInput().setDataSource((DataSource) dsm.getSelectedItem());
-
+				// Sets Xref dataSource by creating new Xref
+				getInput().setXref(new Xref(getInput().getXref().getId(), (DataSource) dsm.getSelectedItem()));
 			}
 
 			public void intervalAdded(final ListDataEvent arg0) {
