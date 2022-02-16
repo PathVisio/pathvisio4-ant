@@ -32,6 +32,7 @@ import java.awt.geom.Rectangle2D;
 import java.text.AttributedString;
 
 import org.pathvisio.libgpml.model.type.LineStyleType;
+import org.pathvisio.libgpml.model.type.ObjectType;
 import org.pathvisio.libgpml.model.Label;
 import org.pathvisio.libgpml.model.PathwayElement;
 import org.pathvisio.libgpml.model.ShapedElement;
@@ -44,6 +45,7 @@ import org.pathvisio.core.preferences.PreferenceManager;
 import org.pathvisio.core.view.Adjustable;
 import org.pathvisio.core.view.model.Handle.Freedom;
 import org.pathvisio.libgpml.util.LinAlg.Point;
+import org.pathvisio.libgpml.util.Utils;
 import org.pathvisio.libgpml.model.shape.IShape;
 import org.pathvisio.libgpml.model.shape.ShapeRegistry;
 
@@ -562,8 +564,10 @@ public abstract class VShapedElement extends VPathwayElement implements VLinkabl
 				if (lines[i].equals(""))
 					continue; // Can't have attributed string with 0 length
 				AttributedString ats = getVAttributedString(lines[i]);
-				if (gdata.getClass() == Label.class) {
-					if (!((Label) gdata).getHref().equals("")) {
+				if (gdata.getObjectType() == ObjectType.LABEL) {
+					// TODO hopefully also accepts nulls
+					String href = ((Label) gdata).getHref();
+					if (href != null && !Utils.stringEquals(href, "")) {
 						ats.addAttribute(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
 					}
 				}

@@ -117,14 +117,16 @@ public class BackpagePane extends JEditorPane
 
 	private void doQuery() {
 		setText("Loading");
-		currRef = ((Xrefable) input).getXref();
-
+		if (input instanceof Xrefable) {
+			currRef = ((Xrefable) input).getXref();
+		}
+		// TODO do the rest if not Xrefable???
 		executor.execute(new Runnable() {
 			public void run() {
-				if (input == null)
+				if (input == null) {
 					return;
+				}
 				final String txt = bpt.getBackpageHTML(input);
-
 				SwingUtilities.invokeLater(new Runnable() {
 					public void run() {
 						setText(txt);
@@ -184,8 +186,8 @@ public class BackpagePane extends JEditorPane
 			if (((Xrefable) pe).getXref() != null) {
 				nref = new Xref(((Xrefable) pe).getXref().getId(), ((Xrefable) input).getXref().getDataSource());
 			}
-			//TODO check??? 
-			if (!XrefUtils.equivalentXrefs(nref,currRef)) {
+			// TODO check???
+			if (!XrefUtils.equivalentXrefs(nref, currRef)) {
 				doQuery();
 			}
 		}

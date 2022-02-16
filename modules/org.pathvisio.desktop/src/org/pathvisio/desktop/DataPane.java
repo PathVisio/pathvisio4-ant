@@ -117,14 +117,16 @@ public class DataPane extends JEditorPane
 
 	private void doQuery() {
 		setText("Loading");
-		currRef = ((Xrefable) input).getXref();
-
+		if (input instanceof Xrefable) {
+			currRef = ((Xrefable) input).getXref();
+		}
+		// TODO do the rest if not Xrefable???
 		executor.execute(new Runnable() {
 			public void run() {
-				if (input == null)
+				if (input == null) {
 					return;
+				}
 				final String txt = dpt.getAnnotationHTML(input);
-
 				SwingUtilities.invokeLater(new Runnable() {
 					public void run() {
 						setText(txt);
@@ -178,14 +180,14 @@ public class DataPane extends JEditorPane
 
 	public void gmmlObjectModified(PathwayObjectEvent e) {
 		PathwayObject pe = e.getModifiedPathwayObject();
-		//Xref weird? TODO 
+		// Xref weird? TODO
 		if (input != null && pe instanceof Xrefable && (e.affectsProperty(StaticProperty.XREF))) {
 			Xref nref = null;
 			if (((Xrefable) pe).getXref() != null) {
 				nref = new Xref(((Xrefable) pe).getXref().getId(), ((Xrefable) input).getXref().getDataSource());
 			}
-			//TODO check??? 
-			if (!XrefUtils.equivalentXrefs(nref,currRef)) {
+			// TODO check???
+			if (!XrefUtils.equivalentXrefs(nref, currRef)) {
 				doQuery();
 			}
 		}
