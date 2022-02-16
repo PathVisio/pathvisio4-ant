@@ -225,8 +225,11 @@ public class BackpageTextProvider {
 	public String getBackpageHTML(PathwayObject e) {
 		if (e == null) {
 			return "<p>No pathway element is selected.</p>";
-		} else if (e.getObjectType() != ObjectType.DATANODE && e.getObjectType() != ObjectType.INTERACTION) {
-			return "<p>Backpage is not available for this type of element.<BR>Only DataNodes or Interactions can have a backpage.</p>";
+		} else if (!(e instanceof Xrefable)) {
+			return "<p>Backpage is not available for this type of element."
+					+ "<BR>Only Pathways, DataNodes, States, Interactions and Groups can be annotated.</p>";
+		} else if (((Xrefable) e).getXref() == null) {
+			return "<p>There is no annotation for this pathway element defined.</p>";
 		} else if (((Xrefable) e).getXref().getDataSource() == null || ((Xrefable) e).getXref().getId().equals("")) {
 			return "<p>There is no annotation for this pathway element defined.</p>";
 		}

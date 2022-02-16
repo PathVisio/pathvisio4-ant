@@ -41,14 +41,13 @@ import org.pathvisio.libgpml.model.type.ObjectType;
  */
 public class DataPaneTextProvider {
 	/**
-	 * Hook into the backpage text provider, use this to generate a fragment of
-	 * text for the backpage
+	 * Hook into the backpage text provider, use this to generate a fragment of text
+	 * for the backpage
 	 */
 	public static interface DataHook {
 		/**
-		 * Return a fragment of html-formatted text. The returned fragment
-		 * should not contain &lt;html> or &lt;body> tags, but it can contain
-		 * most other html tags.
+		 * Return a fragment of html-formatted text. The returned fragment should not
+		 * contain &lt;html> or &lt;body> tags, but it can contain most other html tags.
 		 * <p>
 		 * The function getHtml is normally called from a worker thread.
 		 */
@@ -60,17 +59,14 @@ public class DataPaneTextProvider {
 
 	/**
 	 * A @{link DataHook} that generates a section of the data panel showing:
-	 * currently loaded databases
-	 * currently loaded datasets
-	 * currently loaded visualizations
+	 * currently loaded databases currently loaded datasets currently loaded
+	 * visualizations
 	 * 
 	 */
-	public static class DataAttributes implements DataHook
-	{
+	public static class DataAttributes implements DataHook {
 		private SwingEngine swe;
-		
-		public DataAttributes (SwingEngine swe)
-		{
+
+		public DataAttributes(SwingEngine swe) {
 			this.swe = swe;
 		}
 //		String gdb = swe.getGdbManager().getGeneDb().toString();
@@ -82,7 +78,7 @@ public class DataPaneTextProvider {
 			// TODO Auto-generated method stub
 			return null;
 		}
-		
+
 //		@Override
 //		public String getHtml(SwingEngine swe) {
 //			String text = "";
@@ -100,11 +96,8 @@ public class DataPaneTextProvider {
 //			return text;
 //		}
 
-		
-		}
-		
-		
-	
+	}
+
 	/**
 	 * Register a BackpageHook with this text provider. Backpage fragments are
 	 * generated in the order that the hooks were registered.
@@ -121,15 +114,16 @@ public class DataPaneTextProvider {
 
 	/**
 	 * generates html for a given PathwayElement. Combines the base header with
-	 * fragments from all BackpageHooks into one html String. TODO 
+	 * fragments from all BackpageHooks into one html String. TODO
 	 */
 	public String getAnnotationHTML(PathwayObject e) {
 		if (e == null) {
 			return "<p>No pathway element is selected.</p>";
-		} else if (e.getObjectType() != ObjectType.PATHWAY && e.getObjectType() != ObjectType.DATANODE && e.getObjectType() != ObjectType.STATE
-				&& e.getObjectType() != ObjectType.INTERACTION && e.getObjectType() != ObjectType.GROUP) {
+		} else if (!(e instanceof Xrefable)) {
 			return "<p>It is currently not possible to annotate this type of pathway element."
 					+ "<BR>Only Pathways, DataNodes, States, Interactions and Groups can be annotated.</p>";
+		} else if (((Xrefable) e).getXref() == null) {
+			return "<p>This pathway element has not yet been annotated.</p>";
 		} else if (((Xrefable) e).getXref().getDataSource() == null || ((Xrefable) e).getXref().getId().equals("")) {
 			return "<p>This pathway element has not yet been annotated.</p>";
 		}
@@ -140,15 +134,15 @@ public class DataPaneTextProvider {
 		builder.append("</body></html>");
 		return builder.toString();
 	}
-	
+
 	/**
-	 * generates html for PathVisio Data. Combines the base header with
-	 * fragments from all BackpageHooks into one html String.
+	 * generates html for PathVisio Data. Combines the base header with fragments
+	 * from all BackpageHooks into one html String.
 	 */
 	public static String getDataHTML(SwingEngine swe) {
 		if (swe == null) {
 			return "<p>No pathway element is selected.</p>";
-		} 
+		}
 		StringBuilder builder = new StringBuilder();
 		String gdb = "" + swe.getGdbManager().getGeneDb();
 		String mdb = "" + swe.getGdbManager().getMetaboliteDb();
@@ -166,22 +160,20 @@ public class DataPaneTextProvider {
 	private String backpagePanelHeader;
 
 	/**
-	 * Reads the header of the HTML content displayed in the browser. This
-	 * header is displayed in the file specified in the {@link HEADERFILE} field
+	 * Reads the header of the HTML content displayed in the browser. This header is
+	 * displayed in the file specified in the {@link HEADERFILE} field
 	 */
 	private void initializeHeader() {
 		try {
-			BufferedReader input = new BufferedReader(new InputStreamReader(
-					Resources.getResourceURL(HEADERFILE).openStream()));
+			BufferedReader input = new BufferedReader(
+					new InputStreamReader(Resources.getResourceURL(HEADERFILE).openStream()));
 			String line;
 			backpagePanelHeader = "";
 			while ((line = input.readLine()) != null) {
 				backpagePanelHeader += line.trim();
 			}
 		} catch (Exception e) {
-			Logger.log.error(
-					"Unable to read header file for data browser: "
-							+ e.getMessage(), e);
+			Logger.log.error("Unable to read header file for data browser: " + e.getMessage(), e);
 		}
 	}
 

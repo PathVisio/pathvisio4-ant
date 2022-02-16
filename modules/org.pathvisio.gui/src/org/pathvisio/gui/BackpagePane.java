@@ -38,6 +38,7 @@ import org.pathvisio.libgpml.model.PathwayObjectEvent;
 import org.pathvisio.libgpml.model.PathwayObjectListener;
 import org.pathvisio.libgpml.model.Xrefable;
 import org.pathvisio.libgpml.prop.StaticProperty;
+import org.pathvisio.libgpml.util.XrefUtils;
 
 /**
  * The backpage panel for the Swing version of PathVisio. This pane shows
@@ -177,11 +178,14 @@ public class BackpagePane extends JEditorPane
 
 	public void gmmlObjectModified(PathwayObjectEvent e) {
 		PathwayObject pe = e.getModifiedPathwayObject();
-		if (input != null
-				// TODO static property Xref, separate datasource and ID?
-				&& (e.affectsProperty(StaticProperty.XREF))) {
-			Xref nref = new Xref(((Xrefable) pe).getXref().getId(), ((Xrefable) input).getXref().getDataSource());
-			if (!nref.equals(currRef)) {
+		// TODO static property Xref, separate datasource and ID?
+		if (input != null && pe instanceof Xrefable && (e.affectsProperty(StaticProperty.XREF))) {
+			Xref nref = null; // TODO weird???
+			if (((Xrefable) pe).getXref() != null) {
+				nref = new Xref(((Xrefable) pe).getXref().getId(), ((Xrefable) input).getXref().getDataSource());
+			}
+			//TODO check??? 
+			if (!XrefUtils.equivalentXrefs(nref,currRef)) {
 				doQuery();
 			}
 		}
