@@ -227,7 +227,8 @@ public class VPathwayModel implements PathwayModelListener {
 		}
 
 		redraw();
-		VPathwayModelEventType type = editMode ? VPathwayModelEventType.EDIT_MODE_ON : VPathwayModelEventType.EDIT_MODE_OFF;
+		VPathwayModelEventType type = editMode ? VPathwayModelEventType.EDIT_MODE_ON
+				: VPathwayModelEventType.EDIT_MODE_OFF;
 		fireVPathwayEvent(new VPathwayModelEvent(this, type));
 	}
 
@@ -1200,7 +1201,8 @@ public class VPathwayModel implements PathwayModelListener {
 				lastMouseOver.add(vpe);
 				stateEntered = true;
 				if (vpe instanceof VLabel) {
-					if (!((VLabel) vpe).getPathwayObject().getHref().equals("")) {
+					String href = ((VLabel) vpe).getPathwayObject().getHref();
+					if (href != null && !Utils.stringEquals(href, "")) {
 						lastEnteredElement = vpe;
 					}
 				} else {
@@ -1367,7 +1369,8 @@ public class VPathwayModel implements PathwayModelListener {
 		isDragging = false;
 		dragUndoState = DRAG_UNDO_NOT_RECORDING;
 		if (pressedObject != null) {
-			fireVPathwayEvent(new VPathwayModelEvent(this, pressedObject, e, VPathwayModelEventType.ELEMENT_CLICKED_UP));
+			fireVPathwayEvent(
+					new VPathwayModelEvent(this, pressedObject, e, VPathwayModelEventType.ELEMENT_CLICKED_UP));
 		}
 	}
 
@@ -2202,7 +2205,7 @@ public class VPathwayModel implements PathwayModelListener {
 	 * Makes a copy of all PathwayElements in current selection, and puts them in
 	 * the global clipboard.
 	 */
-	public void copyToClipboard() { //TODO PathwayObject or PathwayElement
+	public void copyToClipboard() { // TODO PathwayObject or PathwayElement
 		List<PathwayElement> result = new ArrayList<PathwayElement>();
 		for (VElement g : drawingObjects) {
 			// pathway element or pathway object? TODO
