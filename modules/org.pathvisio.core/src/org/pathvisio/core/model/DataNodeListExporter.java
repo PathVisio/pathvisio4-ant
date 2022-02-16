@@ -43,12 +43,13 @@ import org.pathvisio.libgpml.model.PathwayModel;
  */
 public class DataNodeListExporter implements PathwayModelExporter {
 	/**
-	 * Use this String as argument in {@link #setResultCode(String)} to indicate
-	 * that the exporter has to keep the original database code as used in the
-	 * pathway
+	 * Use this String as argument in {@link #setResultCode(String)}
+	 * to indicate that the exporter has to keep the original database
+	 * code as used in the pathway
 	 */
 	public static final String DB_ORIGINAL = "original"; // Use the id/code as in database
-	private DataSource resultDs = DataSource.getExistingBySystemCode(DB_ORIGINAL);
+	private DataSource resultDs = DataSource.register(DB_ORIGINAL, DB_ORIGINAL).asDataSource(); // workaround by EgonW
+//	private DataSource resultDs = DataSource.getExistingBySystemCode(DB_ORIGINAL);
 	private String multiRefSep = ", ";
 
 	/**
