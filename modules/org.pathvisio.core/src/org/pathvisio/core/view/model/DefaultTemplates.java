@@ -283,6 +283,8 @@ public abstract class DefaultTemplates {
 			// instantiate a shape (pathway element)
 			Shape e = new Shape();
 			// set graphics
+			e.setCenterX(mx);
+			e.setCenterY(my);
 			setInitialSize(e);
 			setInitialBorderStyle(e);
 			Color color;

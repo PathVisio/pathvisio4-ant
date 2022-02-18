@@ -254,7 +254,6 @@ public abstract class VElement implements Comparable<VElement> {
 	 * @return
 	 */
 	public Rectangle2D calculateVBounds() {
-		System.out.println("Pass here");
 		return getVOutline().getBounds2D();
 	}
 

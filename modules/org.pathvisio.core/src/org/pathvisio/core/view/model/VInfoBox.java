@@ -59,7 +59,6 @@ public class VInfoBox extends VPathwayElement {
 	public VInfoBox(VPathwayModel canvas, Pathway o) {
 		super(canvas, o);
 		canvas.setMappInfo(this);
-		System.out.println("Create infobox???");
 	}
 
 	/**
@@ -86,7 +85,6 @@ public class VInfoBox extends VPathwayElement {
 	 * @param g the {@link Graphics2D}
 	 */
 	public void doDraw(Graphics2D g) {
-		System.out.println("Draw infobox???");
 		Font f = new Font(fontName, Font.PLAIN, getVFontSize());
 		Font fb = new Font(f.getFontName(), Font.BOLD, f.getSize());
 

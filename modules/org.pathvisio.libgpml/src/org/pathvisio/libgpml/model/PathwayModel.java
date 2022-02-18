@@ -113,7 +113,7 @@ public class PathwayModel {
 	 * 
 	 * @return the pathway elements for this pathway model.
 	 */
-	public List<PathwayElement> getPathwayElements() {
+	public List<PathwayElement> getPathwayElements() {	
 		return Stream.of(dataNodes, interactions, graphicalLines, labels, shapes, groups).flatMap(Collection::stream)
 				.collect(Collectors.toList());
 	}

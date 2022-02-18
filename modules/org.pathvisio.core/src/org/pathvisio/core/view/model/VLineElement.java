@@ -234,14 +234,7 @@ public class VLineElement extends VPathwayElement implements VGroupable, Adjusta
 	 * method returns 0
 	 */
 	private double getGap(ArrowHeadType type) {
-
 		double gap = 0;
-		System.out.println(type);
-		System.out.println(this.getMLine().getStartLinePointX());
-		System.out.println(this.getMLine().getStartLinePointY());
-		System.out.println(this.getMLine().getEndLinePointX());
-		System.out.println(this.getMLine().getEndLinePointY());
-
 		if (type == null) {
 			gap = ShapeRegistry.getArrow("Default").getGap();
 		} else if (type.getName().equals("Undirected")) {
@@ -250,7 +243,6 @@ public class VLineElement extends VPathwayElement implements VGroupable, Adjusta
 			gap = ShapeRegistry.getArrow(type.getName()).getGap();
 		}
 		return gap;
-
 	}
 
 	public void doDraw(Graphics2D g) {
@@ -258,17 +250,11 @@ public class VLineElement extends VPathwayElement implements VGroupable, Adjusta
 		g.setColor(c);
 		setLineStyle(g);
 
-		System.out.println("These are called");
-
 		Shape l = getVConnectorAdjusted();
-
-		System.out.println("Print shape: " + l);
 
 		ArrowShape[] heads = getVHeadsAdjusted();
 		ArrowShape hs = heads[0];
 		ArrowShape he = heads[1];
-
-		System.out.println("Print head: " + heads);
 
 		g.draw(l);
 		drawHead(g, he, c);

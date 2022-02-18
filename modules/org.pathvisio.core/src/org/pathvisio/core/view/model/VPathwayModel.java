@@ -2511,9 +2511,13 @@ public class VPathwayModel implements PathwayModelListener {
 	 */
 	public void dispose() {
 		assert (!disposed);
-		for (VElement elt : getDrawingObjects()) {
-			elt.destroy();
+		for (int i = getDrawingObjects().size() - 1; i >= 0; i--) {
+			getDrawingObjects().get(i).destroy();
 		}
+		// TODO to avoid concurrent modification issue? 
+//		for (VElement elt : getDrawingObjects()) {
+//			elt.destroy();
+//		}
 		cleanUp();
 		if (data != null)
 			data.removeListener(this);
