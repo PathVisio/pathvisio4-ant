@@ -65,7 +65,7 @@ public class ShapeType implements IShape {
 	public static final ShapeType OCTAGON = new ShapeType("Octagon", ShapeCatalog.getRegularPolygon(8, 10, 10));
 
 	// Basic line shapes
-	public static final ShapeType EDGE = new ShapeType("Line", new Line2D.Double(0, 0, 10, 10));
+	public static final ShapeType EDGE = new ShapeType("Undirected", new Line2D.Double(0, 0, 10, 10));
 	public static final ShapeType ARC = new ShapeType("Arc", new Arc2D.Double(0, 0, 10, 10, 0, -180, Arc2D.OPEN));
 	public static final ShapeType BRACE = new ShapeType("Brace", ShapeCatalog.getPluggableShape(Internal.BRACE));
 

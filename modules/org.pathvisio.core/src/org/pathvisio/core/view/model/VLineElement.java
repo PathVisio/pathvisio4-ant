@@ -211,7 +211,7 @@ public class VLineElement extends VPathwayElement implements VGroupable, Adjusta
 
 	/**
 	 * Get the connector shape translated to view coordinates allowing for Line
-	 * Ending This allows the line to be drawn only upto the point where the line
+	 * Ending This allows the line to be drawn only up to the point where the line
 	 * ending starts
 	 */
 	public Shape getVConnectorAdjusted() {
@@ -236,9 +236,15 @@ public class VLineElement extends VPathwayElement implements VGroupable, Adjusta
 	private double getGap(ArrowHeadType type) {
 
 		double gap = 0;
+		System.out.println(type);
+		System.out.println(this.getMLine().getStartLinePointX());
+		System.out.println(this.getMLine().getStartLinePointY());
+		System.out.println(this.getMLine().getEndLinePointX());
+		System.out.println(this.getMLine().getEndLinePointY());
+
 		if (type == null) {
 			gap = ShapeRegistry.getArrow("Default").getGap();
-		} else if (type.getName().equals("Line")) {
+		} else if (type.getName().equals("Undirected")) {
 			gap = 0;
 		} else {
 			gap = ShapeRegistry.getArrow(type.getName()).getGap();
@@ -252,11 +258,17 @@ public class VLineElement extends VPathwayElement implements VGroupable, Adjusta
 		g.setColor(c);
 		setLineStyle(g);
 
+		System.out.println("These are called");
+
 		Shape l = getVConnectorAdjusted();
+
+		System.out.println("Print shape: " + l);
 
 		ArrowShape[] heads = getVHeadsAdjusted();
 		ArrowShape hs = heads[0];
 		ArrowShape he = heads[1];
+
+		System.out.println("Print head: " + heads);
 
 		g.draw(l);
 		drawHead(g, he, c);
@@ -330,8 +342,7 @@ public class VLineElement extends VPathwayElement implements VGroupable, Adjusta
 
 		ArrowShape he = getVHead(segments[segments.length - 1].getMStart(), segments[segments.length - 1].getMEnd(),
 				getPathwayObject().getEndLineType());
-		ArrowShape hs = getVHead(segments[0].getMEnd(), segments[0].getMStart(),
-				getPathwayObject().getStartLineType());
+		ArrowShape hs = getVHead(segments[0].getMEnd(), segments[0].getMStart(), getPathwayObject().getStartLineType());
 		return new ArrowShape[] { hs, he };
 	}
 
@@ -475,7 +486,7 @@ public class VLineElement extends VPathwayElement implements VGroupable, Adjusta
 		ArrowShape h;
 		if (type == null) {
 			h = ShapeRegistry.getArrow("Default");
-		} else if (type.getName().equals("Line")) {
+		} else if (type.getName().equals("Undirected")) {
 			h = null;
 		} else {
 			h = ShapeRegistry.getArrow(type.getName());
@@ -759,7 +770,7 @@ public class VLineElement extends VPathwayElement implements VGroupable, Adjusta
 	 */
 	public Segment getSegment(double lc) {
 		Segment[] segments = getConnectorShape().getSegments();
-		double length = 0; //TODO 
+		double length = 0; // TODO
 		for (Segment s : segments) {
 			length += s.getMLength();
 		}

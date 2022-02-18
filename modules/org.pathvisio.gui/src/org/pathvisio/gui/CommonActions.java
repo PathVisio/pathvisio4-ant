@@ -166,10 +166,10 @@ public class CommonActions implements ApplicationEventListener {
 				new Action[] { new NewElementAction(e, new DefaultTemplates.LabelTemplate()) },
 				new Action[] {
 						new NewElementAction(e,
-								new DefaultTemplates.InteractionTemplate("line", LineStyleType.SOLID,
+								new DefaultTemplates.InteractionTemplate("undirected", LineStyleType.SOLID,
 										ArrowHeadType.UNDIRECTED, ArrowHeadType.UNDIRECTED, ConnectorType.STRAIGHT)),
 						new NewElementAction(e,
-								new DefaultTemplates.InteractionTemplate("arrow", LineStyleType.SOLID,
+								new DefaultTemplates.InteractionTemplate("directed", LineStyleType.SOLID,
 										ArrowHeadType.UNDIRECTED, ArrowHeadType.DIRECTED, ConnectorType.STRAIGHT)),
 						new NewElementAction(e,
 								new DefaultTemplates.InteractionTemplate("dashedline", LineStyleType.DASHED,
@@ -186,7 +186,7 @@ public class CommonActions implements ApplicationEventListener {
 				new Action[] { new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.RECTANGLE)) },
 				new Action[] { new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.OVAL)) },
 				new Action[] { new NewElementAction(e,
-						new DefaultTemplates.InteractionTemplate("arrow", LineStyleType.SOLID, ArrowHeadType.UNDIRECTED,
+						new DefaultTemplates.InteractionTemplate("directed", LineStyleType.SOLID, ArrowHeadType.UNDIRECTED,
 								ArrowHeadType.DIRECTED, ConnectorType.STRAIGHT)), },
 				// new Action[] {
 				// new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.ARC))
@@ -195,7 +195,7 @@ public class CommonActions implements ApplicationEventListener {
 				// new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.BRACE))
 				// },
 				new Action[] {
-						new NewElementAction(e, new DefaultTemplates.InteractionTemplate("tbar", LineStyleType.SOLID,
+						new NewElementAction(e, new DefaultTemplates.InteractionTemplate("inhibition", LineStyleType.SOLID,
 								ArrowHeadType.UNDIRECTED, ArrowHeadType.INHIBITION, ConnectorType.STRAIGHT)) },
 //					new Action[] {
 //							new NewElementAction(e, new DefaultTemplates.LineTemplate(
@@ -241,7 +241,7 @@ public class CommonActions implements ApplicationEventListener {
 		// actions for "Basic shapes" section
 		newShapeActions = new Action[] { new NewElementAction(e, new DefaultTemplates.LabelTemplate()),
 				new NewElementAction(e,
-						new DefaultTemplates.GraphicalLineTemplate("line", LineStyleType.SOLID,
+						new DefaultTemplates.GraphicalLineTemplate("undirected", LineStyleType.SOLID,
 								ArrowHeadType.UNDIRECTED, ArrowHeadType.UNDIRECTED, ConnectorType.STRAIGHT)),
 				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.ARC)),
 				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.RECTANGLE)),
@@ -258,11 +258,11 @@ public class CommonActions implements ApplicationEventListener {
 		// actions for "Basic interactions" section
 		newInteractionActions = new Action[] {
 				new NewElementAction(e,
-						new DefaultTemplates.InteractionTemplate("line", LineStyleType.SOLID, ArrowHeadType.UNDIRECTED,
-								ArrowHeadType.UNDIRECTED, ConnectorType.STRAIGHT)),
+						new DefaultTemplates.InteractionTemplate("undirected", LineStyleType.SOLID,
+								ArrowHeadType.UNDIRECTED, ArrowHeadType.UNDIRECTED, ConnectorType.STRAIGHT)),
 				new NewElementAction(e,
-						new DefaultTemplates.InteractionTemplate("arrow", LineStyleType.SOLID, ArrowHeadType.UNDIRECTED,
-								ArrowHeadType.DIRECTED, ConnectorType.STRAIGHT)),
+						new DefaultTemplates.InteractionTemplate("directed", LineStyleType.SOLID,
+								ArrowHeadType.UNDIRECTED, ArrowHeadType.DIRECTED, ConnectorType.STRAIGHT)),
 				new NewElementAction(e,
 						new DefaultTemplates.InteractionTemplate("dashedline", LineStyleType.DASHED,
 								ArrowHeadType.UNDIRECTED, ArrowHeadType.UNDIRECTED, ConnectorType.STRAIGHT)),
@@ -275,7 +275,7 @@ public class CommonActions implements ApplicationEventListener {
 				new NewElementAction(e,
 						new DefaultTemplates.InteractionTemplate("curve", LineStyleType.SOLID, ArrowHeadType.UNDIRECTED,
 								ArrowHeadType.UNDIRECTED, ConnectorType.CURVED)),
-				new NewElementAction(e, new DefaultTemplates.InteractionTemplate("tbar", LineStyleType.SOLID,
+				new NewElementAction(e, new DefaultTemplates.InteractionTemplate("inhibition", LineStyleType.SOLID,
 						ArrowHeadType.UNDIRECTED, ArrowHeadType.INHIBITION, ConnectorType.STRAIGHT)), };
 
 		// actions for "Receptor/ligand interactions" section

@@ -218,9 +218,8 @@ public abstract class DefaultTemplates {
 			if (PreferenceManager.getCurrent().getBoolean(GlobalPreference.DATANODES_ROUNDED)) {
 				e.setShapeType(ShapeType.ROUNDED_RECTANGLE);// TODO what is this for???
 			}
-			// add datanode to pathway model
-			p.addDataNode(e);
-			lastAdded = e;
+			// use addElement TODO
+			addElement(e, p);
 			return new DataNode[] { e };
 		}
 
@@ -252,9 +251,8 @@ public abstract class DefaultTemplates {
 			// default borderColor, borderStyle, borderWidth, fillColor
 			e.setShapeType(ShapeType.NONE);
 			e.setZOrder(Z_ORDER_LABEL);
-			// add label to pathway model
-			p.addLabel(e);
-			lastAdded = e;
+			// use addElement TODO
+			addElement(e, p);
 			return new Label[] { e };
 		}
 
@@ -306,10 +304,8 @@ public abstract class DefaultTemplates {
 //			if (e.getShapeType()==ShapeType.BRACE) {
 //				e.setRotation(0); // brace TODO
 //			}
-			// add shape to pathway model
-			p.addShape(e);
-			lastAdded = e;
-
+			// use addElement TODO
+			addElement(e, p);
 			return new Shape[] { e };
 		}
 
@@ -367,9 +363,8 @@ public abstract class DefaultTemplates {
 			// default lineColor, lineWidth
 			e.setLineStyle(lineStyle);
 			e.setConnectorType(connectorType);
-			p.addInteraction(e);
-			// add interaction to pathway model
-			lastAdded = e;
+			// use addElement TODO
+			addElement(e, p);
 			return new Interaction[] { e };
 		}
 
@@ -413,9 +408,8 @@ public abstract class DefaultTemplates {
 			// default lineColor, lineWidth
 			e.setLineStyle(lineStyle);
 			e.setConnectorType(connectorType);
-			// add graphical line to pathway model
-			p.addGraphicalLine(e);
-			lastAdded = e;
+			// use addElement TODO
+			addElement(e, p);
 			return new GraphicalLine[] { e };
 		}
 
@@ -587,7 +581,7 @@ public abstract class DefaultTemplates {
 			lastLine.setEndLineType(ArrowHeadType.CONVERSION);
 			Anchor anchor = lastLine.addAnchor(0.5, AnchorShapeType.SQUARE);
 
-			InteractionTemplate lnt = new InteractionTemplate("line", LineStyleType.SOLID, ArrowHeadType.UNDIRECTED,
+			InteractionTemplate lnt = new InteractionTemplate("undirected", LineStyleType.SOLID, ArrowHeadType.UNDIRECTED,
 					ArrowHeadType.UNDIRECTED, ConnectorType.STRAIGHT);
 			lastCatLine = lnt.addElements(p, mx, my)[0];
 
@@ -641,7 +635,7 @@ public abstract class DefaultTemplates {
 
 			Anchor anchor = lastLine.addAnchor(0.5, AnchorShapeType.SQUARE);
 
-			InteractionTemplate lnt = new InteractionTemplate("line", LineStyleType.SOLID, ArrowHeadType.UNDIRECTED,
+			InteractionTemplate lnt = new InteractionTemplate("undirected", LineStyleType.SOLID, ArrowHeadType.UNDIRECTED,
 					ArrowHeadType.UNDIRECTED, ConnectorType.STRAIGHT);
 			lastCatLine = lnt.addElements(p, mx, my)[0]; // TODO Cast?
 
@@ -649,7 +643,7 @@ public abstract class DefaultTemplates {
 			lastCatLine.getEndLinePoint().linkTo(anchor, 0, 0);
 			lastCatLine.getEndLinePoint().setArrowHead(ArrowHeadType.CATALYSIS);
 
-			InteractionTemplate rev = new InteractionTemplate("line", LineStyleType.SOLID, ArrowHeadType.UNDIRECTED,
+			InteractionTemplate rev = new InteractionTemplate("undirected", LineStyleType.SOLID, ArrowHeadType.UNDIRECTED,
 					ArrowHeadType.UNDIRECTED, ConnectorType.STRAIGHT);
 			lastReverseLine = rev.addElements(p, mx, my)[0]; // TODO Cast?
 
@@ -659,7 +653,7 @@ public abstract class DefaultTemplates {
 
 			Anchor anchor2 = lastReverseLine.addAnchor(0.5, AnchorShapeType.SQUARE);
 
-			InteractionTemplate lnt2 = new InteractionTemplate("line", LineStyleType.SOLID, ArrowHeadType.UNDIRECTED,
+			InteractionTemplate lnt2 = new InteractionTemplate("undirected", LineStyleType.SOLID, ArrowHeadType.UNDIRECTED,
 					ArrowHeadType.UNDIRECTED, ConnectorType.STRAIGHT);
 			lastCatLine2 = lnt2.addElements(p, mx, my)[0]; // TODO Cast?
 
