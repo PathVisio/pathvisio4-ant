@@ -27,21 +27,20 @@ import org.pathvisio.core.preferences.GlobalPreference;
 import org.pathvisio.core.preferences.PreferenceManager;
 
 /**
- * A single graphical element in the view of a pathway. Handles bounds checking and dirty rectangles.
- * NB: this does not necessarily correspond directly with a org.pathvisio.model.PathwayElement.
+ * A single graphical element in the view of a pathway. Handles bounds checking
+ * and dirty rectangles. NB: this does not necessarily correspond directly with
+ * a org.pathvisio.model.PathwayElement.
  *
- * VPathwayElement includes purely visual helpers that do not have direct correspondence in the model,
- * such as handles and a selection box.
- * TODO naming - better named VElement, because there is no connection to PathwayElement.
+ * VPathwayElement includes purely visual helpers that do not have direct
+ * correspondence in the model, such as handles and a selection box. TODO naming
+ * - better named VElement, because there is no connection to PathwayElement.
  */
-public abstract class VElement implements Comparable<VElement>
-{
+public abstract class VElement implements Comparable<VElement> {
 	protected static final BasicStroke DEFAULT_STROKE = new BasicStroke();
 
 	protected VPathwayModel canvas;
 
-	protected VElement(VPathwayModel canvas)
-	{
+	protected VElement(VPathwayModel canvas) {
 		this.canvas = canvas;
 		canvas.addObject(this);
 	}
@@ -54,9 +53,8 @@ public abstract class VElement implements Comparable<VElement>
 	private boolean isSelected;
 
 	/**
-	 * Will be called by VPathway whenever the zoom factor
-	 * is changed. Default implementation refreshes the cache
-	 * of VBounds and VOutline.
+	 * Will be called by VPathway whenever the zoom factor is changed. Default
+	 * implementation refreshes the cache of VBounds and VOutline.
 	 */
 	void zoomChanged() {
 		resetShapeCache();
@@ -66,44 +64,40 @@ public abstract class VElement implements Comparable<VElement>
 	private Rectangle2D vBoundsCache;
 
 	/**
-	 * Resets cache for VOutline and VBounds so that
-	 * they will be recalculated on the next call to
-	 * getVOutline or getVBounds.
+	 * Resets cache for VOutline and VBounds so that they will be recalculated on
+	 * the next call to getVOutline or getVBounds.
 	 */
 	protected void resetShapeCache() {
 		vOutlineCache = null;
 		vBoundsCache = null;
 	}
 
-	public final void draw(Graphics2D g2d)
-	{
-		//Create a copy to ensure that the state of this Graphics2D will be intact
-		//see: http://java.sun.com/docs/books/tutorial/uiswing/painting/concepts2.html
+	public final void draw(Graphics2D g2d) {
+		// Create a copy to ensure that the state of this Graphics2D will be intact
+		// see: http://java.sun.com/docs/books/tutorial/uiswing/painting/concepts2.html
 
-		Graphics2D g = (Graphics2D)g2d.create();
+		Graphics2D g = (Graphics2D) g2d.create();
 
-		//Prevent element from drawing outside its bounds
+		// Prevent element from drawing outside its bounds
 		g.clip(getVBounds());
 		g.setStroke(DEFAULT_STROKE);
 
-		//Perform the drawing
+		// Perform the drawing
 		doDraw(g);
 
-		//Free resources from the copied Graphics2D
+		// Free resources from the copied Graphics2D
 		g.dispose();
 	}
 
 	protected abstract void doDraw(Graphics2D g2d);
 
 	/**
-	 * mark both the area currently and previously occupied by this object for redraw.
-	 * The redraw will not happen immediately, but will be scheduled in 
-	 * the event dispatch thread.
+	 * mark both the area currently and previously occupied by this object for
+	 * redraw. The redraw will not happen immediately, but will be scheduled in the
+	 * event dispatch thread.
 	 */
-	protected void markDirty()
-	{
-		if (oldrect != null)
-		{
+	protected void markDirty() {
+		if (oldrect != null) {
 			canvas.addDirtyRect(oldrect);
 		}
 		resetShapeCache();
@@ -115,19 +109,16 @@ public abstract class VElement implements Comparable<VElement>
 	/**
 	 * Get the drawing this object belongs to
 	 */
-	public VPathwayModel getDrawing()
-	{
+	public VPathwayModel getDrawing() {
 		return canvas;
 	}
 
 	/**
-	 * Besides resetting isHighlighted, this accomplishes this:
-	 * - marking the area dirty, so the object has a chance to redraw itself in unhighlighted state
+	 * Besides resetting isHighlighted, this accomplishes this: - marking the area
+	 * dirty, so the object has a chance to redraw itself in unhighlighted state
 	 */
-	public void unhighlight()
-	{
-		if(isHighlighted)
-		{
+	public void unhighlight() {
+		if (isHighlighted) {
 			isHighlighted = false;
 			highlightColor = null;
 			markDirty();
@@ -135,25 +126,22 @@ public abstract class VElement implements Comparable<VElement>
 	}
 
 	private Color highlightColor;
-	public Color getHighlightColor()
-	{
+
+	public Color getHighlightColor() {
 		return highlightColor;
 	}
 
 	private boolean isHighlighted;
 
 	/**
-	 Besides setting isHighlighted, this accomplishes this:
-	 - marking the area dirty, so the object has a chance to redraw itself in highlighted state
-
-	 @param c this will highlight in a particular color. See
-	 highlight() without parameter if you just want to highlight with
-	 the default color
+	 * Besides setting isHighlighted, this accomplishes this: - marking the area
+	 * dirty, so the object has a chance to redraw itself in highlighted state
+	 * 
+	 * @param c this will highlight in a particular color. See highlight() without
+	 *          parameter if you just want to highlight with the default color
 	 */
-	public void highlight(Color c)
-	{
-		if(!(isHighlighted && highlightColor == c))
-		{
+	public void highlight(Color c) {
+		if (!(isHighlighted && highlightColor == c)) {
 			isHighlighted = true;
 			highlightColor = c;
 			markDirty();
@@ -161,74 +149,61 @@ public abstract class VElement implements Comparable<VElement>
 	}
 
 	/**
-	   highlight this element with the default highlight color
+	 * highlight this element with the default highlight color
 	 */
-	public void highlight()
-	{
-		highlight (PreferenceManager.getCurrent().getColor(GlobalPreference.COLOR_HIGHLIGHTED));
+	public void highlight() {
+		highlight(PreferenceManager.getCurrent().getColor(GlobalPreference.COLOR_HIGHLIGHTED));
 	}
 
 	/**
 	 * Returns true if this object is highlighted, false otherwise
 	 */
-	public boolean isHighlighted()
-	{
+	public boolean isHighlighted() {
 		return isHighlighted;
 	}
 
 	/**
-	 * Determines whether a Graphics object intersects
-	 * the rectangle specified
+	 * Determines whether a Graphics object intersects the rectangle specified
+	 * 
 	 * @param r - the rectangle to check
 	 * @return True if the object intersects the rectangle, false otherwise
 	 */
-	protected boolean vIntersects(Rectangle2D r)
-	{
+	protected boolean vIntersects(Rectangle2D r) {
 		// first use getVBounds as a rough approximation
-		if (getVBounds().intersects(r))
-		{
+		if (getVBounds().intersects(r)) {
 			// Yes, the vbounds intersects, now try to be more precise
 			return getVOutline().intersects(r);
-		}
-		else
-		{
+		} else {
 			return false;
 		}
 	}
 
 	/**
-	 * Determines whether a Graphics object contains
-	 * the point specified
+	 * Determines whether a Graphics object contains the point specified
+	 * 
 	 * @param point - the point to check
 	 * @return True if the object contains the point, false otherwise
 	 */
-	protected boolean vContains(Point2D point)
-	{
+	protected boolean vContains(Point2D point) {
 		// first use getVBounds as a rough approximation
-		if (getVBounds().contains(point))
-		{
+		if (getVBounds().contains(point)) {
 			// Yes, the vbounds contains, now try to be more precise
 			return getVOutline().contains(point);
-		}
-		else
-		{
+		} else {
 			return false;
 		}
 	}
 
-	public boolean isSelected()
-	{
+	public boolean isSelected() {
 		return isSelected;
 	}
 
 	/**
-	 * Besides resetting isSelected, this accomplishes this:
-	 * - marking the area dirty, so the object has a chance to redraw itself in unselected state
+	 * Besides resetting isSelected, this accomplishes this: - marking the area
+	 * dirty, so the object has a chance to redraw itself in unselected state
 	 */
-	public void deselect()
-	{
-		if (isSelected)
-		{
+	public void deselect() {
+		if (isSelected) {
 			isSelected = false;
 			markDirty();
 			destroyHandles();
@@ -236,88 +211,92 @@ public abstract class VElement implements Comparable<VElement>
 	}
 
 	/**
-	 * Besides setting isSelected, this accomplishes this:
-	 * - marking the area dirty, so the object has a chance to redraw itself in selected state
+	 * Besides setting isSelected, this accomplishes this: - marking the area dirty,
+	 * so the object has a chance to redraw itself in selected state
 	 */
-	public void select()
-	{
-		if (!isSelected)
-		{
+	public void select() {
+		if (!isSelected) {
 			createHandles();
 			isSelected = true;
 			markDirty();
 		}
 	}
 
-	protected void createHandles() {}
-
-	/**
-	 * Moves this object by specified increments
-	 * @param dx - the value of x-increment
-	 * @param dy - the value of y-increment
-	 */
-	protected void vMoveBy(double vdx, double vdy)
-	{
+	protected void createHandles() {
 	}
 
 	/**
-	 * Gets the cached rectangular bounds of this object
-	 * This method is equivalent to {@link #getVOutline()}.getBounds2D()
+	 * Moves this object by specified increments
+	 * 
+	 * @param dx - the value of x-increment
+	 * @param dy - the value of y-increment
+	 */
+	protected void vMoveBy(double vdx, double vdy) {
+	}
+
+	/**
+	 * Gets the cached rectangular bounds of this object This method is equivalent
+	 * to {@link #getVOutline()}.getBounds2D()
+	 * 
 	 * @return
 	 */
-	public final Rectangle2D getVBounds()
-	{
-		if(vBoundsCache == null) {
+	public final Rectangle2D getVBounds() {
+		if (vBoundsCache == null) {
 			vBoundsCache = calculateVBounds();
 		}
 		return vBoundsCache;
 	}
 
 	/**
-	 * Calculates the rectangular bounds of this object
-	 * This method is equivalent to {@link #getVOutline()}.getBounds2D()
+	 * Calculates the rectangular bounds of this object This method is equivalent to
+	 * {@link #getVOutline()}.getBounds2D()
+	 * 
 	 * @return
 	 */
-	public Rectangle2D calculateVBounds()
-	{
+	public Rectangle2D calculateVBounds() {
+		System.out.println("Pass here");
 		return getVOutline().getBounds2D();
 	}
 
 	/**
-	 * Get the cached outline of this element. The outline is used to check
-	 * whether a point is contained in this element or not and includes the stroke
-	 * and takes into account rotation.
-	 * Because it includes the stroke, it is not a direct model to view mapping of
-	 * the model outline!
+	 * Get the cached outline of this element. The outline is used to check whether
+	 * a point is contained in this element or not and includes the stroke and takes
+	 * into account rotation. Because it includes the stroke, it is not a direct
+	 * model to view mapping of the model outline!
+	 * 
 	 * @return the outline of this element
 	 */
 	protected final Shape getVOutline() {
-		if(vOutlineCache == null) {
+		if (vOutlineCache == null) {
 			vOutlineCache = calculateVOutline();
 		}
 		return vOutlineCache;
 	}
 
 	/**
-	 * Calculate the outline of this element. The outline is used to check
-	 * whether a point is contained in this element or not and includes the stroke
-	 * and takes into account rotation.
-	 * Because it includes the stroke, it is not a direct model to view mapping of
-	 * the model outline!
+	 * Calculate the outline of this element. The outline is used to check whether a
+	 * point is contained in this element or not and includes the stroke and takes
+	 * into account rotation. Because it includes the stroke, it is not a direct
+	 * model to view mapping of the model outline!
+	 * 
 	 * @return the outline of this element
 	 */
 	abstract protected Shape calculateVOutline();
 
 	/**
 	 * Scales the object to the given rectangle
+	 * 
 	 * @param r
 	 */
-	protected void setVScaleRectangle(Rectangle2D r) { }
+	protected void setVScaleRectangle(Rectangle2D r) {
+	}
 
 	/**
 	 * Gets the rectangle used to scale the object
 	 */
-	protected Rectangle2D getVScaleRectangle() { return new Rectangle2D.Double(); }
+	protected Rectangle2D getVScaleRectangle() {
+		return new Rectangle2D.Double();
+	}
 
 	/**
 	 * returns the z-order that defines in what order to draw the element.
@@ -327,19 +306,17 @@ public abstract class VElement implements Comparable<VElement>
 	/**
 	 * Orders VPathwayElements
 	 *
-	 * non-Graphics objects always sort above graphics objects
-	 * selected Graphics objects sort above non-selected graphics objects
-	 * finally, non-selected graphics objects are sorted by their z-order.
-	 * The z-order is determined by the type of object by default,
-	 * but can be overridden by the user.
+	 * non-Graphics objects always sort above graphics objects selected Graphics
+	 * objects sort above non-selected graphics objects finally, non-selected
+	 * graphics objects are sorted by their z-order. The z-order is determined by
+	 * the type of object by default, but can be overridden by the user.
 	 *
-	 * The comparison is consistent with "equals", i.e. it doesn't return 0 if
-	 * the objects are different, even if their drawing order is the same.
+	 * The comparison is consistent with "equals", i.e. it doesn't return 0 if the
+	 * objects are different, even if their drawing order is the same.
 	 *
 	 * @param d VPathwayElement that this is compared to.
 	 */
-	public int compareTo(VElement d)
-	{
+	public int compareTo(VElement d) {
 		// same object? easy...
 		if (d == this)
 			return 0;
@@ -350,36 +327,42 @@ public abstract class VElement implements Comparable<VElement>
 		b = d.getZOrder();
 
 		// if sorting order is equal, use hash code
-		if (b == a)
-		{
+		if (b == a) {
 			return hashCode() - d.hashCode();
-		}
-		else
+		} else
 			// not simply "a - b" because of the risk of integer overflows
 			return a < b ? -1 : 1;
 	}
 
 	/**
 	 * helper method to convert view coordinates to model coordinates
-	 * */
-	protected double mFromV(double v) { return canvas.mFromV(v); }
+	 */
+	protected double mFromV(double v) {
+		return canvas.mFromV(v);
+	}
 
 	/**
 	 * helper method to convert view coordinates to model coordinates
-	 * */
-	protected double vFromM(double m) { return canvas.vFromM(m); }
+	 */
+	protected double vFromM(double m) {
+		return canvas.vFromM(m);
+	}
 
 	/**
-	 * called automatically by #destroy(), and also by #deselect()
-	 * This should be overridden if you create any Handles in createHandles()
+	 * called automatically by #destroy(), and also by #deselect() This should be
+	 * overridden if you create any Handles in createHandles()
 	 */
-	protected void destroyHandles() {}
+	protected void destroyHandles() {
+	}
 
 	private boolean removeMe = false;
-	boolean toBeRemoved() { return removeMe; }
+
+	boolean toBeRemoved() {
+		return removeMe;
+	}
 
 	protected void destroy() {
-		//Remove from canvas
+		// Remove from canvas
 		removeMe = true;
 		markDirty();
 		destroyHandles();

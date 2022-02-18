@@ -43,12 +43,6 @@ import org.pathvisio.libgpml.model.Pathway;
  */
 public class VInfoBox extends VPathwayElement {
 
-	/**
-	 * The infobox is always displayed in the top left corner at coordinate (0,0).
-	 */
-	static final double LEFT = 0;
-	static final double TOP = 0;
-
 	static final int V_SPACING = 5;
 	static final int H_SPACING = 10;
 	static final int INITIAL_SIZE = 200;
@@ -65,6 +59,7 @@ public class VInfoBox extends VPathwayElement {
 	public VInfoBox(VPathwayModel canvas, Pathway o) {
 		super(canvas, o);
 		canvas.setMappInfo(this);
+		System.out.println("Create infobox???");
 	}
 
 	/**
@@ -91,6 +86,7 @@ public class VInfoBox extends VPathwayElement {
 	 * @param g the {@link Graphics2D}
 	 */
 	public void doDraw(Graphics2D g) {
+		System.out.println("Draw infobox???");
 		Font f = new Font(fontName, Font.PLAIN, getVFontSize());
 		Font fb = new Font(f.getFontName(), Font.BOLD, f.getSize());
 
@@ -109,8 +105,8 @@ public class VInfoBox extends VPathwayElement {
 //				{"Data Source: ", gdata.getMapInfoDataSource()}
 		};
 		int shift = 0;
-		int vLeft = (int) vFromM(LEFT);
-		int vTop = (int) vFromM(TOP);
+		int vLeft = 0;
+		int vTop = 0;
 
 		int newSizeX = sizeX;
 		int newSizeY = sizeY;
@@ -153,15 +149,13 @@ public class VInfoBox extends VPathwayElement {
 	 * TODO is this used?
 	 */
 	protected Shape getVShape(boolean rotate) {
-		double vLeft = vFromM(LEFT);
-		double vTop = vFromM(TOP);
 		double vW = sizeX;
 		double vH = sizeY;
 		if (vW == 1 && vH == 1) {
 			vW = INITIAL_SIZE;
 			vH = INITIAL_SIZE;
 		}
-		return new Rectangle2D.Double(vLeft, vTop, vW, vH);
+		return new Rectangle2D.Double(0, 0, vW, vH);
 	}
 
 	/**

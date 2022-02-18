@@ -335,10 +335,11 @@ public class VPathwayModel implements PathwayModelListener {
 		Logger.log.trace("Create view structure");
 
 		data = pathwayModel;
+		//TODO Should Pathway be included in PathwayElements...or not really? 
+		fromModelElement(data.getPathway());
 		for (PathwayElement o : data.getPathwayElements()) {
 			fromModelElement(o);
 		}
-
 		// data.fireObjectModifiedEvent(new PathwayEvent(null,
 		// PathwayEvent.MODIFIED_GENERAL));
 		fireVPathwayEvent(new VPathwayModelEvent(this, VPathwayModelEventType.MODEL_LOADED));
@@ -354,25 +355,37 @@ public class VPathwayModel implements PathwayModelListener {
 	 * @param o the model pathway element.
 	 */
 	private VPathwayObject fromModelElement(PathwayObject o) {
-		if (o.getClass() == DataNode.class) {
-			return fromModelDataNode((DataNode) o);
-		} else if (o.getClass() == State.class) {
-			return fromModelState((State) o);
-		} else if (o.getClass() == Interaction.class) {
-			return fromModelLineElement((Interaction) o);
-		} else if (o.getClass() == GraphicalLine.class) {
-			return fromModelLineElement((GraphicalLine) o);
-		} else if (o.getClass() == Label.class) {
-			return fromModelLabel((Label) o);
-		} else if (o.getClass() == Shape.class) {
-			return fromModelShape((Shape) o);
-		} else if (o.getClass() == Group.class) {
-			return fromModelGroup((Group) o);
-		} else if (o.getClass() == Pathway.class) {
-			return fromModelPathway((Pathway) o);
-		} else {
-			return null;
+		VPathwayObject result = null;
+		switch (o.getObjectType()) {
+		case PATHWAY:
+			result = fromModelPathway((Pathway) o);
+			break;
+		case DATANODE:
+			result = fromModelDataNode((DataNode) o);
+			break;
+		case STATE:
+			result = fromModelState((State) o);
+			break;
+		case INTERACTION:
+			result = fromModelLineElement((Interaction) o);
+			break;
+		case GRAPHLINE:
+			result = fromModelLineElement((GraphicalLine) o);
+			break;
+
+		case LABEL:
+			result = fromModelLabel((Label) o);
+			break;
+		case SHAPE:
+			result = fromModelShape((Shape) o);
+			break;
+		case GROUP:
+			result = fromModelGroup((Group) o);
+			break;
+		default:
+			break;
 		}
+		return result;
 	}
 
 	/**
@@ -442,7 +455,9 @@ public class VPathwayModel implements PathwayModelListener {
 	 * @return
 	 */
 	private VPathwayObject fromModelPathway(Pathway o) {
-		return new VInfoBox(this, o);
+		VInfoBox mi = new VInfoBox(this, o);
+		mi.markDirty();
+		return mi;
 	}
 
 	/**

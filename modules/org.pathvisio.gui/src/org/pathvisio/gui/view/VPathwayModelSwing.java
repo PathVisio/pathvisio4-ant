@@ -76,7 +76,7 @@ import org.pathvisio.libgpml.model.PathwayModel;
 import org.pathvisio.libgpml.model.PathwayObject;
 
 /**
- * swing-dependent implementation of VPathway.
+ * Swing-dependent implementation of VPathway.
  */
 public class VPathwayModelSwing extends JPanel implements VPathwayModelWrapper, MouseMotionListener, MouseListener,
 		KeyListener, VPathwayModelListener, VElementMouseListener, MouseWheelListener {
@@ -131,8 +131,10 @@ public class VPathwayModelSwing extends JPanel implements VPathwayModelWrapper, 
 	 * Draw immediately
 	 */
 	protected void paintComponent(Graphics g) {
-		if (child != null)
+		if (child != null) {
+			System.out.println("Called here");
 			child.draw((Graphics2D) g);
+		}
 	}
 
 	/**
