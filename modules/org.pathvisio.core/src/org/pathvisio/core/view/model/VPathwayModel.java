@@ -69,6 +69,7 @@ import org.pathvisio.libgpml.model.LineElement.LinePoint;
 import org.pathvisio.libgpml.model.Pathway;
 import org.pathvisio.libgpml.model.PathwayModelEvent;
 import org.pathvisio.libgpml.model.PathwayModelListener;
+import org.pathvisio.libgpml.model.type.ObjectType;
 import org.pathvisio.core.preferences.GlobalPreference;
 import org.pathvisio.core.preferences.PreferenceManager;
 import org.pathvisio.libgpml.util.Utils;
@@ -739,12 +740,16 @@ public class VPathwayModel implements PathwayModelListener {
 			Drawable pe = g.getPathwayObject();
 			String ref = null;
 			if (pe instanceof Groupable) {
-				ref = ((Groupable) pe).getGroupRef().getElementId();
+				Group gref = ((Groupable) pe).getGroupRef();
+				if (gref != null) {
+					ref = ((Groupable) pe).getGroupRef().getElementId();
+				}
 			}
 			// If not a group
-			if (pe.getClass() != Group.class) {
+			if (pe.getObjectType() != ObjectType.GROUP) {
 				// and not a member of a group, then selection needs to be grouped
 				if (ref == null) {
+					System.out.println("Selection NEEDS TO BE GROUPED");
 					groupSelection = true;
 				}
 				// and is a member of a group, recursively get all parent group references.

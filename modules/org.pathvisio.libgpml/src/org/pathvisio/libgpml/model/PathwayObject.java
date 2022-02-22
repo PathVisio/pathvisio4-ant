@@ -54,7 +54,7 @@ public abstract class PathwayObject {
 	// Accessors
 	// ================================================================================
 	/**
-	 * Returns the object type of the pathway element.
+	 * Returns the object type of the pathway object.
 	 * 
 	 * @return objectType the object type.
 	 */
