@@ -603,11 +603,7 @@ public abstract class ShapedElement extends PathwayElement implements LinkableTo
 	 * @return fillColor the fill color of this shaped pathway element.
 	 */
 	public Color getFillColor() {
-		if (fillColor == null) {
-			return Color.decode("#ffffff"); // white
-		} else {
-			return fillColor;
-		}
+		return fillColor;
 	}
 
 	/**

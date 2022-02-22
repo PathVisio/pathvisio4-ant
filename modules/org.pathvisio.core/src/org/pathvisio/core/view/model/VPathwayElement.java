@@ -34,7 +34,6 @@ import org.pathvisio.libgpml.model.PathwayElement.CitationRef;
 public abstract class VPathwayElement extends VPathwayObject {
 
 	private VCitation vCitation;
-	private VCitation citation;
 
 	/**
 	 * @param canvas

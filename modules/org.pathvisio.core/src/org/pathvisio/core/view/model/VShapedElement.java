@@ -687,7 +687,7 @@ public abstract class VShapedElement extends VPathwayElement implements VLinkabl
 		// first use getVBounds as a rough approximation
 		if (getVBounds().contains(point)) {
 			// if the shape is transparent, only check against the outline
-			if (!ColorUtils.isTransparent(getPathwayObject().getFillColor())) {
+			if (ColorUtils.isTransparent(getPathwayObject().getFillColor())) {
 				return getVOutline().contains(point);
 			} else {
 				// otherwise check against the whole shape

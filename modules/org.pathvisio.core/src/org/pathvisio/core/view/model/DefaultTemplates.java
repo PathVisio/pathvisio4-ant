@@ -54,6 +54,7 @@ import org.pathvisio.core.util.Resources;
 public abstract class DefaultTemplates {
 
 	/* Some default colors */
+	private final static Color COLOR_WHITE = Color.WHITE;
 	private final static Color COLOR_DEFAULT = Color.BLACK;
 	private final static Color COLOR_METABOLITE = Color.BLUE;
 	private final static Color COLOR_PATHWAY = new Color(20, 150, 30);
@@ -282,6 +283,7 @@ public abstract class DefaultTemplates {
 		public Shape[] addElements(PathwayModel p, double mx, double my) {
 			// instantiate a shape (pathway element)
 			Shape e = new Shape();
+			e.setShapeType(shapeType);
 			// set graphics
 			e.setCenterX(mx);
 			e.setCenterY(my);
@@ -298,10 +300,9 @@ public abstract class DefaultTemplates {
 			}
 			// default font-Name/Style/Decoration/StrikeThru/Size, hAlign, vAlign
 			e.setTextColor(color);
-			// default fillColor
+			e.setFillColor(ColorUtils.hexToColor("#00000000")); //transparent
 			e.setBorderColor(color);
 			e.setBorderWidth(borderWidth);
-			e.setShapeType(shapeType);
 			e.setZOrder(Z_ORDER_SHAPE);
 //			if (e.getShapeType()==ShapeType.BRACE) {
 //				e.setRotation(0); // brace TODO
