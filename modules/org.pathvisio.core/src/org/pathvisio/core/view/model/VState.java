@@ -42,11 +42,15 @@ public class VState extends VShapedElement {
 		return (State) super.getPathwayObject();
 	}
 
+	/**
+	 *
+	 */
+	@Override
 	public void doDraw(Graphics2D g) {
 		g.setColor(getBorderColor());
 		setLineStyle(g);
 		drawShape(g);
-
+		
 		g.setFont(getVFont());
 		drawTextLabel(g);
 

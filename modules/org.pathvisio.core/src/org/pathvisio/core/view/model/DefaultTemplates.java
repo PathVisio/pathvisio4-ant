@@ -18,10 +18,8 @@ package org.pathvisio.core.view.model;
 
 import java.awt.Color;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.pathvisio.libgpml.model.type.ConnectorType;
@@ -37,11 +35,9 @@ import org.pathvisio.libgpml.model.DataNode;
 import org.pathvisio.libgpml.model.Shape;
 import org.pathvisio.libgpml.model.shape.IShape;
 import org.pathvisio.libgpml.model.LineElement;
-import org.pathvisio.libgpml.model.LineElement.LinePoint;
 import org.pathvisio.libgpml.model.LineElement.Anchor;
 import org.pathvisio.libgpml.model.Label;
 import org.pathvisio.libgpml.model.PathwayModel;
-import org.pathvisio.libgpml.model.PathwayObject;
 import org.pathvisio.libgpml.model.PathwayElement;
 import org.pathvisio.libgpml.model.type.ShapeType;
 import org.pathvisio.libgpml.model.type.StateType;

@@ -372,7 +372,6 @@ public class VPathwayModel implements PathwayModelListener {
 			System.out.println("Call fromModelElement() GraphicalLine VPathway.java");
 			result = fromModelLineElement((GraphicalLine) o);
 			break;
-
 		case LABEL:
 			result = fromModelLabel((Label) o);
 			break;

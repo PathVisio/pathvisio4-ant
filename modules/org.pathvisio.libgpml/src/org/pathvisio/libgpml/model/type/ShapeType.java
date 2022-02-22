@@ -44,7 +44,6 @@ public class ShapeType implements IShape {
 	// Static variables
 	// ================================================================================
 	private static Shape rectangle = new Rectangle(0, 0, 10, 10);
-	private static Shape roundedRectangle = new RoundRectangle2D.Double(0, 0, 10, 10, 20, 20);
 	private static Shape ellipse = new Ellipse2D.Double(0, 0, 10, 10);
 
 	// ================================================================================
@@ -57,7 +56,11 @@ public class ShapeType implements IShape {
 	// Basic shapes
 	public static final ShapeType NONE = new ShapeType("None", null);
 	public static final ShapeType RECTANGLE = new ShapeType("Rectangle", rectangle);
-	public static final ShapeType ROUNDED_RECTANGLE = new ShapeType("RoundedRectangle", roundedRectangle);
+	public static final ShapeType ROUNDED_RECTANGLE = new ShapeType("RoundedRectangle", null){
+		public Shape getShape(double mw, double mh) {
+			return new RoundRectangle2D.Double(0, 0, mw, mh, 20, 20);
+		}
+	};
 	public static final ShapeType OVAL = new ShapeType("Oval", ellipse);
 	public static final ShapeType TRIANGLE = new ShapeType("Triangle", ShapeCatalog.getRegularPolygon(3, 10, 10));
 	public static final ShapeType PENTAGON = new ShapeType("Pentagon", ShapeCatalog.getRegularPolygon(5, 10, 10));
@@ -86,10 +89,22 @@ public class ShapeType implements IShape {
 	public static final ShapeType CYTOSOL = new ShapeType("CytosolRegion", null);
 
 	// Cellular components with basic shape
-	public static final ShapeType EXTRACELLULAR = new ShapeType("ExtracellularRegion", roundedRectangle); // roundRect
-	public static final ShapeType CELL = new ShapeType("Cell", roundedRectangle); // roundRect
+	public static final ShapeType EXTRACELLULAR = new ShapeType("ExtracellularRegion", null){
+		public Shape getShape(double mw, double mh) { // rounded rectangle 
+			return new RoundRectangle2D.Double(0, 0, mw, mh, 20, 20);
+		}
+	}; 
+	public static final ShapeType CELL = new ShapeType("Cell", null){
+		public Shape getShape(double mw, double mh) { // rounded rectangle 
+			return new RoundRectangle2D.Double(0, 0, mw, mh, 20, 20);
+		}
+	};
 	public static final ShapeType NUCLEUS = new ShapeType("Nucleus", ellipse); // oval
-	public static final ShapeType ORGANELLE = new ShapeType("Organelle", roundedRectangle); // roundRect
+	public static final ShapeType ORGANELLE = new ShapeType("Organelle", null){
+		public Shape getShape(double mw, double mh) { // rounded rectangle 
+			return new RoundRectangle2D.Double(0, 0, mw, mh, 20, 20);
+		}
+	}; 
 	public static final ShapeType VESICLE = new ShapeType("Vesicle", ellipse); // oval
 
 	// Deprecated since GPML2013a? TODO

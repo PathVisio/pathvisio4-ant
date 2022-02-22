@@ -23,7 +23,6 @@ import java.awt.geom.Rectangle2D;
 import java.util.Set;
 
 import org.pathvisio.libgpml.debug.Logger;
-import org.pathvisio.libgpml.model.PathwayObjectEvent;
 import org.pathvisio.libgpml.model.GraphLink.LinkableFrom;
 import org.pathvisio.libgpml.model.GraphLink.LinkableTo;
 import org.pathvisio.libgpml.model.LineElement.LinePoint;

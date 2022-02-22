@@ -20,7 +20,6 @@ import java.io.File;
 import java.io.OutputStream;
 
 import org.jdom2.Document;
-import org.jdom2.Element;
 import org.pathvisio.libgpml.io.ConverterException;
 
 /**

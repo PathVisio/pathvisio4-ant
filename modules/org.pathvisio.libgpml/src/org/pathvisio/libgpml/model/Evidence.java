@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Objects;
 
 import org.bridgedb.Xref;
-import org.pathvisio.libgpml.model.PathwayObjectEvent;
 import org.pathvisio.libgpml.model.PathwayElement.EvidenceRef;
 import org.pathvisio.libgpml.model.type.ObjectType;
 import org.pathvisio.libgpml.prop.StaticProperty;

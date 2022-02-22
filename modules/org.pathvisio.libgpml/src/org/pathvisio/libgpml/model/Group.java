@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bridgedb.Xref;
-import org.pathvisio.libgpml.model.PathwayObjectEvent;
 import org.pathvisio.libgpml.model.DataNode.State;
 import org.pathvisio.libgpml.model.type.GroupType;
 import org.pathvisio.libgpml.model.type.ObjectType;

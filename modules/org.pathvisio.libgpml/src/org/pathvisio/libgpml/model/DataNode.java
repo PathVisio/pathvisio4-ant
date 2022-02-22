@@ -20,9 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bridgedb.Xref;
-import org.pathvisio.libgpml.model.PathwayObjectEvent;
 import org.pathvisio.libgpml.model.type.DataNodeType;
-import org.pathvisio.libgpml.model.type.LineStyleType;
 import org.pathvisio.libgpml.model.type.ObjectType;
 import org.pathvisio.libgpml.model.type.StateType;
 import org.pathvisio.libgpml.prop.StaticProperty;
@@ -630,6 +628,7 @@ public class DataNode extends ShapedElement implements Xrefable {
 		public void setRelX(double v) {
 			if (Math.abs(v) <= 1.0) {
 				relX = v;
+				updateCoordinates(); //TODO 
 				fireObjectModifiedEvent(PathwayObjectEvent.createCoordinatePropertyEvent(this));
 			} else {
 				throw new IllegalArgumentException("relX " + v + " should be between -1.0 and 1.0");
@@ -659,6 +658,7 @@ public class DataNode extends ShapedElement implements Xrefable {
 		public void setRelY(double v) {
 			if (Math.abs(v) <= 1.0) {
 				relY = v;
+				updateCoordinates(); //TODO 
 				fireObjectModifiedEvent(PathwayObjectEvent.createCoordinatePropertyEvent(this));
 			} else {
 				throw new IllegalArgumentException("relY " + v + " should be between -1.0 and 1.0");
@@ -771,8 +771,8 @@ public class DataNode extends ShapedElement implements Xrefable {
 
 		// TODO
 		private void updateCoordinates() {
-			if (getPathwayModel() != null) {
-				DataNode dn = getDataNode();
+			DataNode dn = getDataNode();
+			if (dn != null && getPathwayModel() != null) {
 				double centerx = dn.getCenterX() + (getRelX() * dn.getWidth() / 2);
 				double centery = dn.getCenterY() + (getRelY() * dn.getHeight() / 2);
 				setCenterY(centery);

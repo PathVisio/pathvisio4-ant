@@ -627,7 +627,7 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 						State elt = gp.getPathwayObject().addState("", StateType.UNDEFINED, 1.0, 1.0);
 						DefaultTemplates.setInitialSize(elt);
 						elt.setShapeType(ShapeType.OVAL);
-						engine.getActivePathwayModel().add(elt);
+//						engine.getActivePathwayModel().add(elt); TODO 
 					}
 				}
 			}

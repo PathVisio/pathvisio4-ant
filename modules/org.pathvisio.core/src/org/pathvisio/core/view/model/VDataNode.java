@@ -26,6 +26,7 @@ import org.pathvisio.libgpml.model.DataNode;
  * @author unknown, finterly
  */
 public class VDataNode extends VShapedElement {
+	
 	public static final Color INITIAL_FILL_COLOR = Color.WHITE;
 
 	// note: not the same as color!
