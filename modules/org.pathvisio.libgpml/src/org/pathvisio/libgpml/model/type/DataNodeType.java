@@ -112,9 +112,8 @@ public class DataNodeType {
 	 * @return names the names of all registered DataNodeTypes in order of
 	 *         insertion.
 	 */
-	static public List<String> getNames() {
-		List<String> names = new ArrayList<>(nameToDataNodeType.keySet());
-		return names;
+	static public String[] getNames() {
+		return nameToDataNodeType.keySet().toArray(new String[nameToDataNodeType.size()]);
 	}
 
 	/**
@@ -122,9 +121,8 @@ public class DataNodeType {
 	 * 
 	 * @return dataNodeTypes the list of all registered DataNodeTypes.
 	 */
-	static public List<DataNodeType> getValues() {
-		List<DataNodeType> dataNodeTypes = new ArrayList<>(nameToDataNodeType.values());
-		return dataNodeTypes;
+	static public DataNodeType[] getValues() {
+		return nameToDataNodeType.values().toArray(new DataNodeType[0]);
 	}
 
 	/**

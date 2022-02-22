@@ -524,7 +524,7 @@ public abstract class VShapedElement extends VPathwayElement implements VLinkabl
 	}
 
 	protected void doDraw(Graphics2D g2d) {
-		g2d.setColor(getLineColor());
+		g2d.setColor(getBorderColor()); //TODO extra line? 
 		setLineStyle(g2d);
 		drawShape(g2d);
 
@@ -535,6 +535,32 @@ public abstract class VShapedElement extends VPathwayElement implements VLinkabl
 		drawTextLabel(g2d);
 
 		drawHighlight(g2d);
+	}
+
+	/**
+	 * @param g
+	 */
+	protected void drawShape(Graphics2D g) {
+		ShapedElement gdata = getPathwayObject();
+		Color fillcolor = gdata.getFillColor();
+		if (!hasOutline()) {
+			return; // nothing to draw.
+		}
+		java.awt.Shape shape = getShape(true, false);
+		if (gdata.getShapeType() == ShapeType.BRACE || gdata.getShapeType() == ShapeType.ARC) {
+			// don't fill arcs or braces
+			// TODO: this exception should disappear in the future,
+			// when we've made sure all pathways on wikipathways have
+			// transparent arcs and braces
+		} else {
+			// fill the rest
+			if (!ColorUtils.isTransparent(gdata.getFillColor())) {
+				g.setColor(fillcolor);
+				g.fill(shape);
+			}
+		}
+		g.setColor(gdata.getBorderColor());
+		g.draw(shape);
 	}
 
 	protected void drawTextLabel(Graphics2D g) {
@@ -585,6 +611,7 @@ public abstract class VShapedElement extends VPathwayElement implements VLinkabl
 					xoffset += area.width - margin - tb.getWidth();
 					break;
 				}
+				g.setColor(getTextColor());
 				g.drawString(ats.getIterator(), xoffset, yoffset + (int) (i * tb.getHeight()));
 			}
 
@@ -615,33 +642,6 @@ public abstract class VShapedElement extends VPathwayElement implements VLinkabl
 		String name = getPathwayObject().getFontName();
 		int style = getVFontStyle();
 		return new Font(name, style, 12).deriveFont((float) vFromM(getPathwayObject().getFontSize()));
-	}
-
-	/**
-	 * @param g
-	 */
-	protected void drawShape(Graphics2D g) {
-		ShapedElement gdata = getPathwayObject();
-		Color fillcolor = gdata.getFillColor();
-		if (!hasOutline()) {
-			return; // nothing to draw.
-		}
-		java.awt.Shape shape = getShape(true, false);
-
-		if (gdata.getShapeType() == ShapeType.BRACE || gdata.getShapeType() == ShapeType.ARC) {
-			// don't fill arcs or braces
-			// TODO: this exception should disappear in the future,
-			// when we've made sure all pathways on wikipathways have
-			// transparent arcs and braces
-		} else {
-			// fill the rest
-			if (!ColorUtils.isTransparent(gdata.getFillColor())) {
-				g.setColor(fillcolor);
-				g.fill(shape);
-			}
-		}
-		g.setColor(getLineColor());
-		g.draw(shape);
 	}
 
 	/**
@@ -788,20 +788,35 @@ public abstract class VShapedElement extends VPathwayElement implements VLinkabl
 	}
 
 	/**
-	 * TODO rename to border?
 	 * 
 	 * @return
 	 */
-	protected Color getLineColor() {
-		Color linecolor = getPathwayObject().getBorderColor();
+	protected Color getTextColor() {
+		Color textColor = getPathwayObject().getTextColor();
 		/*
 		 * the selection is not colored red when in edit mode it is possible to see a
 		 * color change immediately
 		 */
 		if (isSelected() && !canvas.isEditMode()) {
-			linecolor = selectColor;
+			textColor = selectColor;
 		}
-		return linecolor;
+		return textColor;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	protected Color getBorderColor() {
+		Color borderColor = getPathwayObject().getBorderColor();
+		/*
+		 * the selection is not colored red when in edit mode it is possible to see a
+		 * color change immediately
+		 */
+		if (isSelected() && !canvas.isEditMode()) {
+			borderColor = selectColor;
+		}
+		return borderColor;
 	}
 
 	/**

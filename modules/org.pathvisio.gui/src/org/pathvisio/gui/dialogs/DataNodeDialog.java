@@ -321,8 +321,7 @@ public class DataNodeDialog extends PathwayObjectDialog {
 		dsm.setPrimaryFilter(true);
 		dsm.setSpeciesFilter(swingEngine.getCurrentOrganism());
 		dbCombo = new PermissiveComboBox(dsm);
-		Object[] dataNodeTypesArray = DataNodeType.getValues().toArray(new Object[0]);
-		typeCombo = new PermissiveComboBox(dataNodeTypesArray); //TODO 
+		typeCombo = new PermissiveComboBox(DataNodeType.getValues());
 
 		GridBagConstraints c = new GridBagConstraints();
 		c.ipadx = c.ipady = 5;

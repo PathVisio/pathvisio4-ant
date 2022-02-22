@@ -65,7 +65,6 @@ import org.pathvisio.libgpml.model.PathwayObject;
 import org.pathvisio.libgpml.model.Shape;
 import org.pathvisio.libgpml.model.ShapedElement;
 import org.pathvisio.libgpml.model.PathwayElement;
-import org.pathvisio.libgpml.model.LineElement.Anchor;
 import org.pathvisio.libgpml.model.LineElement.LinePoint;
 import org.pathvisio.libgpml.model.Pathway;
 import org.pathvisio.libgpml.model.PathwayModelEvent;
@@ -78,7 +77,6 @@ import org.pathvisio.core.view.LayoutType;
 import org.pathvisio.core.view.MouseEvent;
 import org.pathvisio.core.view.VElementMouseEvent;
 import org.pathvisio.core.view.VElementMouseListener;
-import org.pathvisio.core.view.model.Handle.Freedom;
 import org.pathvisio.core.view.model.SelectionBox.SelectionListener;
 import org.pathvisio.core.view.model.VPathwayModelEvent.VPathwayModelEventType;
 import org.pathvisio.core.view.model.ViewActions.KeyMoveAction;
@@ -335,7 +333,7 @@ public class VPathwayModel implements PathwayModelListener {
 		Logger.log.trace("Create view structure");
 
 		data = pathwayModel;
-		//TODO Should Pathway be included in PathwayElements...or not really? 
+		// TODO Should Pathway be included in PathwayElements...or not really?
 		fromModelElement(data.getPathway());
 		for (PathwayElement o : data.getPathwayElements()) {
 			fromModelElement(o);
@@ -367,9 +365,11 @@ public class VPathwayModel implements PathwayModelListener {
 			result = fromModelState((State) o);
 			break;
 		case INTERACTION:
+			System.out.println("Call fromModelElement() Interaction VPathway.java");
 			result = fromModelLineElement((Interaction) o);
 			break;
 		case GRAPHLINE:
+			System.out.println("Call fromModelElement() GraphicalLine VPathway.java");
 			result = fromModelLineElement((GraphicalLine) o);
 			break;
 
@@ -1376,6 +1376,7 @@ public class VPathwayModel implements PathwayModelListener {
 			// if it was a click, give object the initial size.
 			else if (newObject != null && Math.abs(vDragStart.x - e.getX()) <= MIN_DRAG_LENGTH
 					&& Math.abs(vDragStart.y - e.getY()) <= MIN_DRAG_LENGTH) {
+				System.out.println("Call setInitialSize() from mouseUp() VPathwayModel.java");
 				DefaultTemplates.setInitialSize(newObject);
 			}
 			newObject = null;
@@ -2511,21 +2512,23 @@ public class VPathwayModel implements PathwayModelListener {
 	 */
 	public void dispose() {
 		assert (!disposed);
-		for (int i = getDrawingObjects().size() - 1; i >= 0; i--) {
-			getDrawingObjects().get(i).destroy();
-		}
-		// TODO to avoid concurrent modification issue? 
-//		for (VElement elt : getDrawingObjects()) {
-//			elt.destroy();
+//		for (int i = getDrawingObjects().size() - 1; i >= 0; i--) {
+//			getDrawingObjects().get(i).destroy();
 //		}
+		// TODO to avoid concurrent modification issue?
+		for (VElement elt : getDrawingObjects()) {
+			elt.destroy();
+		}
 		cleanUp();
-		if (data != null)
+		if (data != null) {
 			data.removeListener(this);
+		}
 		listeners.clear();
 		selection.getListeners().clear();
 		viewActions = null;
-		if (parent != null)
+		if (parent != null) {
 			parent.dispose();
+		}
 		parent = null; // disconnect from VPathwaySwing
 		undoManager.dispose();
 		undoManager = null;

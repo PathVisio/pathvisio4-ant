@@ -217,8 +217,8 @@ public class VLineElement extends VPathwayElement implements VGroupable, Adjusta
 	public Shape getVConnectorAdjusted() {
 
 		// call to getLineEndingWidth
-		double startGap = getGap(getPathwayObject().getStartLineType());
-		double endGap = getGap(getPathwayObject().getEndLineType());
+		double startGap = getGap(getPathwayObject().getStartArrowHeadType());
+		double endGap = getGap(getPathwayObject().getEndArrowHeadType());
 
 		// From the segments
 		Shape s = getConnectorShape().calculateAdjustedShape(startGap, endGap);
@@ -234,6 +234,7 @@ public class VLineElement extends VPathwayElement implements VGroupable, Adjusta
 	 * method returns 0
 	 */
 	private double getGap(ArrowHeadType type) {
+		System.out.println("getGap() VLine " + type);
 		double gap = 0;
 		if (type == null) {
 			gap = ShapeRegistry.getArrow("Default").getGap();
@@ -250,11 +251,15 @@ public class VLineElement extends VPathwayElement implements VGroupable, Adjusta
 		g.setColor(c);
 		setLineStyle(g);
 
+		System.out.println("Call Line.Java doDraw()");
 		Shape l = getVConnectorAdjusted();
+		System.out.println("Print shape: " + l);
 
 		ArrowShape[] heads = getVHeadsAdjusted();
 		ArrowShape hs = heads[0];
 		ArrowShape he = heads[1];
+		
+		System.out.println("Print head: " + heads);
 
 		g.draw(l);
 		drawHead(g, he, c);
@@ -315,6 +320,7 @@ public class VLineElement extends VPathwayElement implements VGroupable, Adjusta
 	}
 
 	public Shape calculateVOutline() {
+		System.out.println("calculateVOutline() Line.java");
 		return getVShape(true);
 	}
 
@@ -327,8 +333,8 @@ public class VLineElement extends VPathwayElement implements VGroupable, Adjusta
 		Segment[] segments = getConnectorShape().getSegments();
 
 		ArrowShape he = getVHead(segments[segments.length - 1].getMStart(), segments[segments.length - 1].getMEnd(),
-				getPathwayObject().getEndLineType());
-		ArrowShape hs = getVHead(segments[0].getMEnd(), segments[0].getMStart(), getPathwayObject().getStartLineType());
+				getPathwayObject().getEndArrowHeadType());
+		ArrowShape hs = getVHead(segments[0].getMEnd(), segments[0].getMStart(), getPathwayObject().getStartArrowHeadType());
 		return new ArrowShape[] { hs, he };
 	}
 
@@ -342,15 +348,15 @@ public class VLineElement extends VPathwayElement implements VGroupable, Adjusta
 		Segment[] segments = getConnectorShape().getSegments();
 
 		// last segment in the Connector Shape
-		double lineEndingWidth = getGap(getPathwayObject().getEndLineType());
+		double lineEndingWidth = getGap(getPathwayObject().getEndArrowHeadType());
 		Point2D adjustedSegmentEnd = segments[segments.length - 1].calculateNewEndPoint(lineEndingWidth);
 		ArrowShape he = getVHead(segments[segments.length - 1].getMStart(), adjustedSegmentEnd,
-				getPathwayObject().getEndLineType());
+				getPathwayObject().getEndArrowHeadType());
 
 		// first segment in the connector shape
-		double lineStartingWidth = getGap(getPathwayObject().getStartLineType());
+		double lineStartingWidth = getGap(getPathwayObject().getStartArrowHeadType());
 		Point2D adjustedSegmentStart = segments[0].calculateNewStartPoint(lineStartingWidth);
-		ArrowShape hs = getVHead(segments[0].getMEnd(), adjustedSegmentStart, getPathwayObject().getStartLineType());
+		ArrowShape hs = getVHead(segments[0].getMEnd(), adjustedSegmentStart, getPathwayObject().getStartArrowHeadType());
 		return new ArrowShape[] { hs, he };
 	}
 

@@ -178,9 +178,9 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 						+ getClass().getSimpleName() + " " + getElementId());
 			}
 			removeLinePoints(); // remove points before setting new points
-			addLinePoints(points);
+			addLinePoints(points); // adds points to pathway model and to this line 
+			fireObjectModifiedEvent(PathwayObjectEvent.createCoordinatePropertyEvent(this));
 		}
-		fireObjectModifiedEvent(PathwayObjectEvent.createCoordinatePropertyEvent(this));
 	}
 
 	/**
@@ -253,7 +253,6 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 			anchors.add(anchor);
 			// No anchor property, use LINESTYLE as dummy property to force redraw on line
 			fireObjectModifiedEvent(PathwayObjectEvent.createSinglePropertyEvent(this, StaticProperty.LINESTYLE));
-
 		}
 	}
 
@@ -573,11 +572,11 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 	/**
 	 * Returns the arrow head type of the start point.
 	 * 
-	 * @return startLineType the arrow head type.
+	 * @return startArrowHeadType the arrow head type.
 	 */
-	public ArrowHeadType getStartLineType() {
-		ArrowHeadType startLineType = getStartLinePoint().getArrowHead();
-		return startLineType == null ? ArrowHeadType.UNDIRECTED : startLineType;
+	public ArrowHeadType getStartArrowHeadType() {
+		ArrowHeadType startArrowHeadType = getStartLinePoint().getArrowHead();
+		return startArrowHeadType == null ? ArrowHeadType.UNDIRECTED : startArrowHeadType;
 	}
 
 	/**
@@ -585,18 +584,18 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 	 * 
 	 * @param value the arrow head type to set.
 	 */
-	public void setStartLineType(ArrowHeadType value) {
+	public void setStartArrowHeadType(ArrowHeadType value) {
 		getStartLinePoint().setArrowHead(value);
 	}
 
 	/**
 	 * Returns the arrow head type of the end point.
 	 * 
-	 * @return endLineType the arrow head type.
+	 * @return endArrowHeadType the arrow head type.
 	 */
-	public ArrowHeadType getEndLineType() {
-		ArrowHeadType endLineType = getEndLinePoint().getArrowHead();
-		return endLineType == null ? ArrowHeadType.UNDIRECTED : endLineType;
+	public ArrowHeadType getEndArrowHeadType() {
+		ArrowHeadType endArrowHeadType = getEndLinePoint().getArrowHead();
+		return endArrowHeadType == null ? ArrowHeadType.UNDIRECTED : endArrowHeadType;
 	}
 
 	/**
@@ -604,7 +603,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 	 * 
 	 * @param value the arrow head type to set.
 	 */
-	public void setEndLineType(ArrowHeadType value) {
+	public void setEndArrowHeadType(ArrowHeadType value) {
 		getEndLinePoint().setArrowHead(value);
 	}
 
@@ -1412,8 +1411,10 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 		 */
 		public double getX() {
 			if (isRelative()) {
+				System.out.println("Is relative " + getAbsolute().getX());
 				return getAbsolute().getX();
 			} else {
+				System.out.println("Is absolute " + x);
 				return x;
 			}
 		}

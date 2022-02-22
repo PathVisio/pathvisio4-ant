@@ -97,9 +97,8 @@ public class ConnectorType {
 	 * @return names the names of all registered ConnectorTypes in order of
 	 *         insertion.
 	 */
-	static public List<String> getNames() {
-		List<String> names = new ArrayList<>(nameToConnectorType.keySet());
-		return names;
+	static public String[] getNames() {
+		return nameToConnectorType.keySet().toArray(new String[nameToConnectorType.size()]);
 	}
 
 	/**
@@ -107,9 +106,8 @@ public class ConnectorType {
 	 * 
 	 * @return connectorTypes the list of all registered ConnectorTypes.
 	 */
-	static public List<ConnectorType> getValues() {
-		List<ConnectorType> connectorTypes = new ArrayList<>(nameToConnectorType.values());
-		return connectorTypes;
+	static public ConnectorType[] getValues() {
+		return nameToConnectorType.values().toArray(new ConnectorType[0]);
 	}
 
 	/**

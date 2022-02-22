@@ -14,57 +14,27 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  ******************************************************************************/
-package org.pathvisio.libgpml.debug;
+package org.pathvisio.libgpml.util;
 
-import java.util.ConcurrentModificationException;
-import java.util.ListIterator;
 
 import junit.framework.TestCase;
 
-public class TestDebug extends TestCase
-{
-	DebugList<String> l;
+/**
+ * Tests for GroupRectPropertyUtils class, the utility class for finding group bounds. 
+ * 
+ * @author finterly
+ */
+public class TestGroupRectPropertyUtils extends TestCase {
 
-	public void setUp()
-	{
-		l = new DebugList<String>();
-		l.add ("boom");
-		l.add ("roos");
-		l.add ("vis");
-		l.add ("vuur");
-	}
+	public void testGroupRectPropertyCalculation() {
 
-	public void test1()
-	{
-		try
-		{
-			ListIterator<String> i = l.listIterator();
-			while (i.hasNext())
-			{
-				System.out.println (i.next());
-				i.add("Hello");
-				l.remove(3);
-			}
-			fail ("Expected concurrentModificationException");
-		}
-		catch (ConcurrentModificationException ex)
-		{
-			// success!
-		}
-
-		try
-		{
-			for (String s : l)
-			{
-				System.out.println (s);
-				l.add("Bye");
-			}
-			fail ("Expected concurrentModificationException");
-		}
-		catch (ConcurrentModificationException ex)
-		{
-			// success!
-		}
+//		Group group = new Group();
+//				
+//		DataNode dataNode = new DataNode("d1", null, new RectProperty(new Coordinate(1, 1), 1, 1),
+//				new FontProperty(null, "Arial", false, false, false, false, 0, null, null),
+//				new ShapeStyleProperty(Color.decode("#ffffff"), LineStyleType.SOLID, 1.0, Color.decode("#ffffff"),
+//						ShapeType.RECTANGLE),
+//				"d1", DataNodeType.ALIAS);
 
 	}
 }

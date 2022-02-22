@@ -122,9 +122,8 @@ public class ArrowHeadType {
 	 * @return names the names of all registered ArrowHeadTypes in order of
 	 *         insertion.
 	 */
-	static public List<String> getNames() {
-		List<String> names = new ArrayList<>(nameToArrowHeadType.keySet());
-		return names;
+	static public String[] getNames() {
+		return nameToArrowHeadType.keySet().toArray(new String[nameToArrowHeadType.size()]);
 	}
 
 	/**
@@ -132,9 +131,8 @@ public class ArrowHeadType {
 	 * 
 	 * @return arrowHead the list of all registered ArrowHeadTypes.
 	 */
-	static public List<ArrowHeadType> getValues() {
-		List<ArrowHeadType> arrowHeadTypes = new ArrayList<>(nameToArrowHeadType.values());
-		return arrowHeadTypes;
+	static public ArrowHeadType[] getValues() {
+		return nameToArrowHeadType.values().toArray(new ArrowHeadType[0]);
 	}
 	
 	/**

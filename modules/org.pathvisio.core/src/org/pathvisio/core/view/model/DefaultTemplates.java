@@ -100,7 +100,7 @@ public abstract class DefaultTemplates {
 	 * This method is intended to be called right after the object is placed on the
 	 * drawing with a click.
 	 */
-	public static void setInitialSize(PathwayObject o) {
+	public static void setInitialSize(PathwayElement o) {
 		// set size for Shape (depends on shape type)
 		if (o.getClass() == Shape.class) {
 			IShape type = ((Shape) o).getShapeType();
@@ -130,8 +130,12 @@ public abstract class DefaultTemplates {
 			((Label) o).setWidth(LABEL_WIDTH);
 			((Label) o).setHeight(LABEL_HEIGHT);
 		} else if (o instanceof LineElement) {
-			((LineElement) o).getEndLinePoint().setX(((LineElement) o).getStartLinePoint().getX() + LINE_LENGTH);
-			((LineElement) o).getEndLinePoint().setY(((LineElement) o).getStartLinePoint().getX() + LINE_LENGTH);
+			System.out.println("Set Interaction InitialSize()");
+			((LineElement) o).setEndLinePointX(((LineElement) o).getStartLinePointX() + LINE_LENGTH);
+			System.out.println("First half finished");
+			((LineElement) o).setEndLinePointY(((LineElement) o).getStartLinePointY() + LINE_LENGTH);
+			System.out.println("getMStartX " + ((LineElement) o).getStartLinePointX());
+			System.out.println("getMStartY " + ((LineElement) o).getStartLinePointY());
 		} else {
 			// nothing
 		}
@@ -357,16 +361,23 @@ public abstract class DefaultTemplates {
 		public Interaction[] addElements(PathwayModel p, double mx, double my) {
 			// instantiates an interaction
 			Interaction e = new Interaction();
-			List<LinePoint> points = new ArrayList<LinePoint>();
-			points.add(e.new LinePoint(startType, mx, my));
-			points.add(e.new LinePoint(endType, mx, my));
-			e.setLinePoints(points);
+			e.setStartLinePointX(mx);
+			e.setStartLinePointY(my);
+			e.setEndLinePointX(mx);
+			e.setEndLinePointY(my);
+			e.setStartArrowHeadType(startType);
+			e.setEndArrowHeadType(endType);
 			// setInitialSize(e); TODO not needed?
 			// default lineColor, lineWidth
 			e.setLineStyle(lineStyle);
 			e.setConnectorType(connectorType);
 			// use addElement TODO
 			addElement(e, p);
+			System.out.println("LineTemplate DefaultTemplates");
+			System.out.println("StartX " + e.getStartLinePointX());
+			System.out.println("StartX " + e.getStartLinePointY());
+			System.out.println("EndX " + e.getEndLinePointX());
+			System.out.println("EndY " + e.getEndLinePointY());
 			return new Interaction[] { e };
 		}
 
@@ -402,10 +413,12 @@ public abstract class DefaultTemplates {
 		public GraphicalLine[] addElements(PathwayModel p, double mx, double my) {
 			// instantiates a graphical line
 			GraphicalLine e = new GraphicalLine();
-			List<LinePoint> points = new ArrayList<LinePoint>();
-			points.add(e.new LinePoint(startType, mx, my));
-			points.add(e.new LinePoint(endType, mx, my));
-			e.setLinePoints(points);
+			e.setStartLinePointX(mx);
+			e.setStartLinePointY(my);
+			e.setEndLinePointX(mx);
+			e.setEndLinePointY(my);
+			e.setStartArrowHeadType(startType);
+			e.setEndArrowHeadType(endType);
 			// setInitialSize(e); TODO not needed?
 			// default lineColor, lineWidth
 			e.setLineStyle(lineStyle);
@@ -490,7 +503,7 @@ public abstract class DefaultTemplates {
 		@Override
 		public PathwayElement[] addElements(PathwayModel p, double mx, double my) {
 			super.addElements(p, mx, my);
-			lastLine.setEndLineType(ArrowHeadType.INHIBITION);
+			lastLine.setEndArrowHeadType(ArrowHeadType.INHIBITION);
 			return new PathwayElement[] { lastLine, lastStartNode, lastEndNode };
 		}
 
@@ -508,7 +521,7 @@ public abstract class DefaultTemplates {
 		@Override
 		public PathwayElement[] addElements(PathwayModel p, double mx, double my) {
 			super.addElements(p, mx, my);
-			lastLine.setEndLineType(ArrowHeadType.STIMULATION);
+			lastLine.setEndArrowHeadType(ArrowHeadType.STIMULATION);
 			return new PathwayElement[] { lastLine, lastStartNode, lastEndNode };
 		}
 
@@ -580,7 +593,7 @@ public abstract class DefaultTemplates {
 			lastEndNode.setShapeType(ShapeType.ROUNDED_RECTANGLE);
 			lastEndNode.setTextLabel("Product");
 
-			lastLine.setEndLineType(ArrowHeadType.CONVERSION);
+			lastLine.setEndArrowHeadType(ArrowHeadType.CONVERSION);
 			Anchor anchor = lastLine.addAnchor(0.5, AnchorShapeType.SQUARE);
 
 			InteractionTemplate lnt = new InteractionTemplate("undirected", LineStyleType.SOLID, ArrowHeadType.UNDIRECTED,
@@ -589,7 +602,7 @@ public abstract class DefaultTemplates {
 
 			lastCatLine.getStartLinePoint().linkTo(lastCatalyst, 0, 1);
 			lastCatLine.getEndLinePoint().linkTo(anchor, 0, 0);
-			lastCatLine.setEndLineType(ArrowHeadType.CATALYSIS);
+			lastCatLine.setEndArrowHeadType(ArrowHeadType.CATALYSIS);
 
 			return new PathwayElement[] { lastStartNode, lastEndNode, lastLine, lastCatalyst };
 		}

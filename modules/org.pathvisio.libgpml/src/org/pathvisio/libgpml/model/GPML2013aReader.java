@@ -797,7 +797,7 @@ public class GPML2013aReader extends GPML2013aFormatAbstract implements GpmlForm
 			// reads graphics and comment group
 			readShapedElement(state, st, idToPublicationXref);
 			state.setZOrder(dataNode.getZOrder() + 1);
-			state.setTextColor(state.getBorderColor());
+			state.setTextColor(state.getTextColor());
 			// convert comments to Xref and AnnotationRef if applicable
 			convertStateCommentToRefs(state, elementIdSet);
 			// sets optional properties

@@ -22,6 +22,7 @@ import java.util.List;
 import org.bridgedb.Xref;
 import org.pathvisio.libgpml.model.PathwayObjectEvent;
 import org.pathvisio.libgpml.model.type.DataNodeType;
+import org.pathvisio.libgpml.model.type.LineStyleType;
 import org.pathvisio.libgpml.model.type.ObjectType;
 import org.pathvisio.libgpml.model.type.StateType;
 import org.pathvisio.libgpml.prop.StaticProperty;
@@ -439,7 +440,12 @@ public class DataNode extends ShapedElement implements Xrefable {
 		case TEXTLABEL:
 			setTextLabel((String) value);
 		case DATANODETYPE:
-			setType((DataNodeType) value);
+			if (value instanceof DataNodeType) {
+				setType((DataNodeType) value);
+			} else {
+				setType(DataNodeType.fromName((String) value));
+			}
+			break;
 		case XREF:
 			setXref((Xref) value);
 		case ALIASREF:

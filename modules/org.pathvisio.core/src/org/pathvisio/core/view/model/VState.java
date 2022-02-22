@@ -43,7 +43,7 @@ public class VState extends VShapedElement {
 	}
 
 	public void doDraw(Graphics2D g) {
-		g.setColor(getLineColor());
+		g.setColor(getBorderColor());
 		setLineStyle(g);
 		drawShape(g);
 

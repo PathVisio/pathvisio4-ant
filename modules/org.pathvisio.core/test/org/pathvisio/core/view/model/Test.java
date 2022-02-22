@@ -153,6 +153,9 @@ public class Test extends TestCase {
 	 * should be below non-Graphics types
 	 */
 	public void testVpwySort() {
+		System.out.println("ZORDER " + eltDn.getZOrder());
+		System.out.println("ZORDER " + eltSh.getZOrder());
+
 		assertTrue(eltDn.getZOrder() > eltSh.getZOrder());
 		assertTrue(eltSh.getZOrder() > eltLi.getZOrder());
 

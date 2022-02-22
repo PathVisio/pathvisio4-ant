@@ -1005,7 +1005,7 @@ public abstract class ShapedElement extends PathwayElement implements LinkableTo
 			setHeight((Double) value);
 			break;
 		case TEXTCOLOR:
-			setFontName((String) value);
+			setTextColor((Color) value);
 			break;
 		case FONTNAME:
 			setFontName((String) value);
@@ -1032,10 +1032,14 @@ public abstract class ShapedElement extends PathwayElement implements LinkableTo
 			setVAlign((VAlignType) value);
 			break;
 		case BORDERCOLOR:
-			setFillColor((Color) value);
+			setBorderColor((Color) value);
 			break;
 		case BORDERSTYLE:
-			setBorderStyle((LineStyleType) value);
+			if (value instanceof LineStyleType) {
+				setBorderStyle((LineStyleType) value);
+			} else {
+				setBorderStyle(LineStyleType.fromName((String) value));
+			}
 			break;
 		case BORDERWIDTH:
 			setBorderWidth((Double) value);

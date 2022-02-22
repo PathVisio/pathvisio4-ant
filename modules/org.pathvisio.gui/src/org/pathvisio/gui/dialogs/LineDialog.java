@@ -92,7 +92,7 @@ public class LineDialog extends PathwayObjectDialog implements ItemListener {
 		Interaction input = getInput();
 		idText.setText(input.getXref().getId());
 		dsm.setSelectedItem(input.getXref().getDataSource());
-		String lType = getInput().getEndLineType().toString();
+		String lType = getInput().getEndArrowHeadType().toString();
 		typeCombo.setSelectedItem(ArrowHeadType.fromName(lType));
 		dsm.setInteractionFilter(true);
 		pack();
@@ -154,8 +154,7 @@ public class LineDialog extends PathwayObjectDialog implements ItemListener {
 		dsm.setPrimaryFilter(true);
 		dsm.setSpeciesFilter(swingEngine.getCurrentOrganism());
 		dbCombo = new PermissiveComboBox(dsm);
-		Object[] arrowHeadTypesArray = ArrowHeadType.getValues().toArray(new Object[0]);
-		typeCombo = new PermissiveComboBox(arrowHeadTypesArray); //TODO 
+		typeCombo = new PermissiveComboBox(ArrowHeadType.getValues());
 
 		GridBagConstraints c = new GridBagConstraints();
 		c.ipadx = c.ipady = 5;
@@ -210,7 +209,7 @@ public class LineDialog extends PathwayObjectDialog implements ItemListener {
 		typeCombo.addActionListener(new ActionListener() {
 			public void actionPerformed(final ActionEvent e) {
 				ArrowHeadType item = (ArrowHeadType) typeCombo.getSelectedItem();
-				getInput().setEndLineType(item);
+				getInput().setEndArrowHeadType(item);
 				refresh();
 			}
 		});

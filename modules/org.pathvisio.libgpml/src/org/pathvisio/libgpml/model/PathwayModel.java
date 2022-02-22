@@ -798,29 +798,30 @@ public class PathwayModel {
 	 * 
 	 * Fires PathwayEvent.ADDED event <i>after</i> addition of the object
 	 * 
-	 * @param pathwayObject the pathway object to add.
+	 * @param o the pathway object to add.
 	 */
-	protected void addPathwayObject(PathwayObject pathwayObject) {
-		if (pathwayObject == null) {
+	protected void addPathwayObject(PathwayObject o) {
+		if (o == null) {
 			throw new IllegalArgumentException("Cannot add invalid pathway object to pathway model");
 		}
-		String elementId = pathwayObject.getElementId();
+		String elementId = o.getElementId();
 		// if pathway object already has elementId (from reading), it must be unique
 		if (elementId != null && elementIdToPathwayObject.containsKey(elementId)) {
 			throw new IllegalArgumentException("id '" + elementId + "' is not unique");
 		}
 		// set pathway model
-		pathwayObject.setPathwayModelTo(this);
-		if (pathwayObject.getPathwayModel() != this) {
+		o.setPathwayModelTo(this);
+		if (o.getPathwayModel() != this) {
 			throw new IllegalArgumentException("Pathway object does not refer to this pathway model");
 		}
 		// if pathway object does not yet have id, set a unique elementId
 		if (elementId == null) {
-			elementId = pathwayObject.setGeneratedElementId();
+			elementId = o.setGeneratedElementId();
 		}
-		addElementId(elementId, pathwayObject);
-		fireObjectModifiedEvent(new PathwayModelEvent(pathwayObject, PathwayModelEvent.ADDED));
-		checkMBoardSize(pathwayObject);
+		addElementId(elementId, o);
+		fireObjectModifiedEvent(new PathwayModelEvent(o, PathwayModelEvent.ADDED));
+		checkMBoardSize(o);
+		System.out.println("Added to pathway " + o.getObjectType().name());
 	}
 
 	/**
@@ -832,18 +833,18 @@ public class PathwayModel {
 	 * the object. Fires PathwayEvent.DELETED event <i>after</i> removal of the
 	 * object
 	 * 
-	 * @param pathwayObject the pathway object to remove.
+	 * @param o the pathway object to remove.
 	 */
-	protected void removePathwayObject(PathwayObject pathwayObject) {
-		if (pathwayObject == null) {
+	protected void removePathwayObject(PathwayObject o) {
+		if (o == null) {
 			throw new IllegalArgumentException("Cannot remove invalid pathway object");
 		}
-		if (!hasPathwayObject(pathwayObject)) {
+		if (!hasPathwayObject(o)) {
 			throw new IllegalArgumentException("Pathway model does not have this pathway object");
 		}
-		removeElementId(pathwayObject.getElementId());
-		pathwayObject.terminate();
-		fireObjectModifiedEvent(new PathwayModelEvent(pathwayObject, PathwayModelEvent.DELETED));
+		removeElementId(o.getElementId());
+		o.terminate();
+		fireObjectModifiedEvent(new PathwayModelEvent(o, PathwayModelEvent.DELETED));
 	}
 
 	/**

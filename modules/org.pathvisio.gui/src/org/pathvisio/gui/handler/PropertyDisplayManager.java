@@ -76,7 +76,7 @@ public class PropertyDisplayManager {
 		registerTypeHandler(new FontHandler());
 		registerTypeHandler(new ComboHandler(StaticPropertyType.DATANODETYPE, DataNodeType.getNames(), false));
 		registerTypeHandler(new ComboHandler(StaticPropertyType.GROUPTYPE, GroupType.getNames(), false));
-		registerTypeHandler(new ComboHandler(StaticPropertyType.LINESTYLETYPE, LineStyleType.getNames(), true));
+		registerTypeHandler(new ComboHandler(StaticPropertyType.LINESTYLETYPE, LineStyleType.getNames(), false));
 		registerTypeHandler(new ComboHandler(StaticPropertyType.ARROWHEADTYPE, ArrowHeadType.getVisibleNames(), ArrowHeadType.getVisibleValues()));
 		registerTypeHandler(new ComboHandler(StaticPropertyType.ORGANISM, Organism.latinNames(), false));
 		registerTypeHandler(new ComboHandler(StaticPropertyType.ORIENTATION, OrientationType.getNames(), true));

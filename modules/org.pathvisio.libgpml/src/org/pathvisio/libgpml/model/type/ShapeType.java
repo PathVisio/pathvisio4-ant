@@ -204,9 +204,8 @@ public class ShapeType implements IShape {
 	 * @return names the names of all registered ShapeTypes in the order of
 	 *         insertion.
 	 */
-	static public List<String> getNames() {
-		List<String> names = new ArrayList<>(nameToShapeType.keySet());
-		return names;
+	static public String[] getNames() {
+		return nameToShapeType.keySet().toArray(new String[nameToShapeType.size()]);
 	}
 
 	/**
@@ -214,9 +213,8 @@ public class ShapeType implements IShape {
 	 * 
 	 * @return shapeTypes the list of all registered ShapeTypes.
 	 */
-	static public List<ShapeType> getValues() {
-		List<ShapeType> shapeTypes = new ArrayList<>(nameToShapeType.values());
-		return shapeTypes;
+	static public ShapeType[] getValues() {
+		return nameToShapeType.values().toArray(new ShapeType[0]);
 	}
 
 	/**
