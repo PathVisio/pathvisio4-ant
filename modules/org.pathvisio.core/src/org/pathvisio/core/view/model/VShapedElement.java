@@ -563,6 +563,9 @@ public abstract class VShapedElement extends VPathwayElement implements VLinkabl
 		g.draw(shape);
 	}
 
+	/**
+	 * @param g
+	 */
 	protected void drawTextLabel(Graphics2D g) {
 		ShapedElement gdata = getPathwayObject();
 		int margin = (int) vFromM(5);

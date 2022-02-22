@@ -28,6 +28,10 @@ import org.pathvisio.libgpml.model.DataNode.State;
  */
 public class VState extends VShapedElement {
 
+	/**
+	 * @param canvas
+	 * @param o the state pathway element
+	 */
 	public VState(VPathwayModel canvas, State o) {
 		super(canvas, o);
 	}
@@ -50,13 +54,14 @@ public class VState extends VShapedElement {
 		g.setColor(getBorderColor());
 		setLineStyle(g);
 		drawShape(g);
-		
+
 		g.setFont(getVFont());
 		drawTextLabel(g);
 
 		drawHighlight(g);
 	}
 
+	@Override
 	protected void vMoveBy(double vdx, double vdy) {
 		Point2D mNewPos = new Point2D.Double(mFromV(getVCenterX() + vdx), mFromV(getVCenterY() + vdy));
 		Point2D newRel = getPathwayObject().getDataNode().toRelativeCoordinate(mNewPos);

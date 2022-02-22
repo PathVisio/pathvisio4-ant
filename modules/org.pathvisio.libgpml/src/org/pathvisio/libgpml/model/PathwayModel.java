@@ -113,7 +113,7 @@ public class PathwayModel {
 	 * 
 	 * @return the pathway elements for this pathway model.
 	 */
-	public List<PathwayElement> getPathwayElements() {	
+	public List<PathwayElement> getPathwayElements() {
 		return Stream.of(dataNodes, interactions, graphicalLines, labels, shapes, groups).flatMap(Collection::stream)
 				.collect(Collectors.toList());
 	}
@@ -1112,6 +1112,13 @@ public class PathwayModel {
 				for (LinkableFrom refc : getReferringLinkableFroms((LinkableTo) elt)) {
 					refc.refeeChanged();
 				}
+			}
+			if (elt instanceof DataNode) {
+				for (State st : ((DataNode) elt).getStates()) {
+					st.coordinatesChanged();
+				}
+			} else if (elt instanceof State) {
+				((State) elt).coordinatesChanged();
 			}
 			if (elt instanceof Groupable) {
 				Group group = ((Groupable) elt).getGroupRef();

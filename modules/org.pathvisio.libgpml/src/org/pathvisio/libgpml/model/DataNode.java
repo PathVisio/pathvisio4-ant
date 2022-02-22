@@ -517,8 +517,8 @@ public class DataNode extends ShapedElement implements Xrefable {
 			super();
 			this.textLabel = textLabel;
 			this.type = type;
-			this.relX = relX;
-			this.relY = relY;
+			setRelX(relX);
+			setRelY(relY);
 			this.xref = xref;
 		}
 
@@ -627,9 +627,11 @@ public class DataNode extends ShapedElement implements Xrefable {
 		 */
 		public void setRelX(double v) {
 			if (Math.abs(v) <= 1.0) {
-				relX = v;
-				updateCoordinates(); //TODO 
-				fireObjectModifiedEvent(PathwayObjectEvent.createCoordinatePropertyEvent(this));
+				if (relX != v) {
+					relX = v;
+					updateCoordinates(); // TODO
+					fireObjectModifiedEvent(PathwayObjectEvent.createCoordinatePropertyEvent(this));
+				}
 			} else {
 				throw new IllegalArgumentException("relX " + v + " should be between -1.0 and 1.0");
 			}
@@ -657,9 +659,11 @@ public class DataNode extends ShapedElement implements Xrefable {
 		 */
 		public void setRelY(double v) {
 			if (Math.abs(v) <= 1.0) {
-				relY = v;
-				updateCoordinates(); //TODO 
-				fireObjectModifiedEvent(PathwayObjectEvent.createCoordinatePropertyEvent(this));
+				if (relY != v) {
+					relY = v;
+					updateCoordinates(); // TODO
+					fireObjectModifiedEvent(PathwayObjectEvent.createCoordinatePropertyEvent(this));
+				}
 			} else {
 				throw new IllegalArgumentException("relY " + v + " should be between -1.0 and 1.0");
 			}
@@ -778,6 +782,13 @@ public class DataNode extends ShapedElement implements Xrefable {
 				setCenterY(centery);
 				setCenterX(centerx);
 			}
+		}
+		
+		/**
+		 * 
+		 */
+		public void coordinatesChanged() {
+			updateCoordinates();
 		}
 
 		/**
