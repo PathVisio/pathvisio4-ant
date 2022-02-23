@@ -39,6 +39,7 @@ import org.pathvisio.libgpml.io.ConverterException;
 import org.pathvisio.libgpml.model.DataNode.State;
 import org.pathvisio.libgpml.model.GraphLink.LinkableFrom;
 import org.pathvisio.libgpml.model.GraphLink.LinkableTo;
+import org.pathvisio.libgpml.model.type.ObjectType;
 import org.pathvisio.libgpml.util.Utils;
 
 /**
@@ -854,26 +855,45 @@ public class PathwayModel {
 	 * @param o the pathway object to add
 	 */
 	public void add(PathwayObject o) {
-		if (o.getClass() == DataNode.class) {
+		System.out.println("TYPE " + o.getObjectType());
+		assert (o != null);
+		switch (o.getObjectType()) {
+		case PATHWAY:
+			System.out.println("There was an attempt to add PATHWAY to pathway model?");
+			// There can be only one mappInfo object, so if we're trying to add it, remove
+			// the old one. //TODO REPLACE OR JUST SKIP?			
+			break;
+		case DATANODE:
 			addDataNode((DataNode) o);
-		} else if (o.getClass() == Interaction.class) {
+			break;
+		case INTERACTION:
 			addInteraction((Interaction) o);
-		} else if (o.getClass() == GraphicalLine.class) {
+			break;
+		case GRAPHLINE:
 			addGraphicalLine((GraphicalLine) o);
-		} else if (o.getClass() == Label.class) {
+			break;
+		case LABEL:
 			addLabel((Label) o);
-		} else if (o.getClass() == Shape.class) {
+			break;
+		case SHAPE:
 			addShape((Shape) o);
-		} else if (o.getClass() == Group.class) {
+			break;
+		case GROUP:
 			addGroup((Group) o);
-		} else if (o.getClass() == Annotation.class) {
+			break;
+		case ANNOTATION:
 			addAnnotation((Annotation) o);
-		} else if (o.getClass() == Citation.class) {
+			break;
+		case CITATION:
 			addCitation((Citation) o);
-		} else if (o.getClass() == Group.class) {
+			break;
+		case EVIDENCE:
 			addEvidence((Evidence) o);
-		} else {
+			break;
+		default:
 			throw new IllegalArgumentException("Pathway object cannot be directly added to pathway model.");
+//			break; TODO
+		
 		}
 	}
 
@@ -885,26 +905,37 @@ public class PathwayModel {
 	 */
 	public void remove(PathwayObject o) {
 		assert (o.getPathwayModel() == this);
-		if (o.getClass() == DataNode.class) {
+		switch (o.getObjectType()) {
+		case DATANODE:
 			removeDataNode((DataNode) o);
-		} else if (o.getClass() == Interaction.class) {
+			break;
+		case INTERACTION:
 			removeInteraction((Interaction) o);
-		} else if (o.getClass() == GraphicalLine.class) {
+			break;
+		case GRAPHLINE:
 			removeGraphicalLine((GraphicalLine) o);
-		} else if (o.getClass() == Label.class) {
+			break;
+		case LABEL:
 			removeLabel((Label) o);
-		} else if (o.getClass() == Shape.class) {
+			break;
+		case SHAPE:
 			removeShape((Shape) o);
-		} else if (o.getClass() == Group.class) {
+			break;
+		case GROUP:
 			removeGroup((Group) o);
-		} else if (o.getClass() == Annotation.class) {
+			break;
+		case ANNOTATION:
 			removeAnnotation((Annotation) o);
-		} else if (o.getClass() == Citation.class) {
+			break;
+		case CITATION:
 			removeCitation((Citation) o);
-		} else if (o.getClass() == Group.class) {
+			break;
+		case EVIDENCE:
 			removeEvidence((Evidence) o);
-		} else {
+			break;
+		default:
 			throw new IllegalArgumentException("Pathway object cannot be removed from pathway model.");
+//			break;
 		}
 	}
 

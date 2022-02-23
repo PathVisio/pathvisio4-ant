@@ -103,9 +103,12 @@ public class PathwayModelTransferable implements Transferable {
 				ids.add(e.getElementId());
 			}
 			if (e instanceof Groupable) {
-				String groupRefStr = ((Groupable) e).getGroupRef().getElementId();
-				if (groupRefStr != null) {
-					groupIds.add(groupRefStr);
+				Group groupRef = ((Groupable) e).getGroupRef();
+				if (groupRef != null) {
+					String groupRefStr = groupRef.getElementId();
+					if (groupRefStr != null) {
+						groupIds.add(groupRefStr);
+					}
 				}
 			}
 			if (e.getClass() == Pathway.class) {
