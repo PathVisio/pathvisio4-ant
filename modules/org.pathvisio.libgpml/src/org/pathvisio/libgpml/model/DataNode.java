@@ -348,40 +348,6 @@ public class DataNode extends ShapedElement implements Xrefable {
 	}
 
 	// ================================================================================
-	// Inherited Methods
-	// ================================================================================
-
-	/**
-	 * Sets the pathway model for this pathway element. NB: Only set when a pathway
-	 * model adds this pathway element. This method is not used directly.
-	 * 
-	 * NB: This method is not used directly. It is called by
-	 * {@link PathwayModel#addPathwayObject}.
-	 * 
-	 * @param pathwayModel the parent pathway model.
-	 */
-	@Override
-	protected void setPathwayModelTo(PathwayModel pathwayModel) throws IllegalArgumentException, IllegalStateException {
-		super.setPathwayModelTo(pathwayModel);
-		// if data node has states, also add states to pathway model
-		for (State state : states) {
-			pathwayModel.addPathwayObject(state);
-		}
-	}
-
-	/**
-	 * Terminates this data node and removes all links and references.
-	 */
-	@Override
-	protected void terminate() {
-		unsetAliasRef();
-		removeStates();
-		unsetAllLinkableFroms();
-		unsetGroupRef();
-		super.terminate();
-	}
-
-	// ================================================================================
 	// Copy Methods
 	// ================================================================================
 	/**
@@ -437,6 +403,7 @@ public class DataNode extends ShapedElement implements Xrefable {
 		switch (key) {
 		case TEXTLABEL:
 			setTextLabel((String) value);
+			break;
 		case DATANODETYPE:
 			if (value instanceof DataNodeType) {
 				setType((DataNodeType) value);
@@ -446,11 +413,47 @@ public class DataNode extends ShapedElement implements Xrefable {
 			break;
 		case XREF:
 			setXref((Xref) value);
+			break;
 		case ALIASREF:
 			setAliasRef((Group) value);
+			break;
 		default:
 			// do nothing
 		}
+	}
+
+	// ================================================================================
+	// Inherited Methods
+	// ================================================================================
+
+	/**
+	 * Sets the pathway model for this pathway element. NB: Only set when a pathway
+	 * model adds this pathway element. This method is not used directly.
+	 * 
+	 * NB: This method is not used directly. It is called by
+	 * {@link PathwayModel#addPathwayObject}.
+	 * 
+	 * @param pathwayModel the parent pathway model.
+	 */
+	@Override
+	protected void setPathwayModelTo(PathwayModel pathwayModel) throws IllegalArgumentException, IllegalStateException {
+		super.setPathwayModelTo(pathwayModel);
+		// if data node has states, also add states to pathway model
+		for (State state : states) {
+			pathwayModel.addPathwayObject(state);
+		}
+	}
+
+	/**
+	 * Terminates this data node and removes all links and references.
+	 */
+	@Override
+	protected void terminate() {
+		unsetAliasRef();
+		removeStates();
+		unsetAllLinkableFroms();
+		unsetGroupRef();
+		super.terminate();
 	}
 
 	// ================================================================================
@@ -468,34 +471,6 @@ public class DataNode extends ShapedElement implements Xrefable {
 		private double relX;
 		private double relY;
 		private Xref xref; // optional
-
-		/**
-		 * This works so that o.setNotes(x) is the equivalent of o.setProperty("Notes",
-		 * x);
-		 *
-		 * Value may be null in some cases, e.g. graphRef
-		 *
-		 * @param key
-		 * @param value
-		 */
-		@Override
-		public void setStaticProperty(StaticProperty key, Object value) {
-			super.setStaticProperty(key, value);
-			switch (key) {
-			case TEXTLABEL:
-				setTextLabel((String) value);
-			case STATETYPE:
-				setType((StateType) value);
-			case RELX:
-				setRelX((Double) value);
-			case RELY:
-				setRelY((Double) value);
-			case XREF:
-				setXref((Xref) value);
-			default:
-				// do nothing
-			}
-		}
 
 		// ================================================================================
 		// Constructors
@@ -690,10 +665,38 @@ public class DataNode extends ShapedElement implements Xrefable {
 			}
 		}
 
+		// FROM MState
+		// @Override
+		// public void setParent(Pathway v) {
+		// if (parent != v) {
+		// super.setParent(v);
+		// if (parent != null && graphRef != null) {
+		// updateCoordinates();
+		// }
+		// }
+		// }
+
+		// TODO
+		private void updateCoordinates() {
+			DataNode dn = getDataNode();
+			if (dn != null && getPathwayModel() != null) {
+				double centerx = dn.getCenterX() + (getRelX() * dn.getWidth() / 2);
+				double centery = dn.getCenterY() + (getRelY() * dn.getHeight() / 2);
+				setCenterY(centery);
+				setCenterX(centerx);
+			}
+		}
+
+		/**
+		 * 
+		 */
+		public void coordinatesChanged() {
+			updateCoordinates();
+		}
+
 		// ================================================================================
 		// Inherited Methods
 		// ================================================================================
-
 		/**
 		 * Returns the z-order of this pathway element.
 		 * 
@@ -762,35 +765,6 @@ public class DataNode extends ShapedElement implements Xrefable {
 			}
 		}
 
-		// FROM MState
-//		@Override
-//		public void setParent(Pathway v) {
-//			if (parent != v) {
-//				super.setParent(v);
-//				if (parent != null && graphRef != null) {
-//					updateCoordinates();
-//				}
-//			}
-//		}
-
-		// TODO
-		private void updateCoordinates() {
-			DataNode dn = getDataNode();
-			if (dn != null && getPathwayModel() != null) {
-				double centerx = dn.getCenterX() + (getRelX() * dn.getWidth() / 2);
-				double centery = dn.getCenterY() + (getRelY() * dn.getHeight() / 2);
-				setCenterY(centery);
-				setCenterX(centerx);
-			}
-		}
-		
-		/**
-		 * 
-		 */
-		public void coordinatesChanged() {
-			updateCoordinates();
-		}
-
 		/**
 		 * Terminates this state and removes all links and references.
 		 */
@@ -834,6 +808,37 @@ public class DataNode extends ShapedElement implements Xrefable {
 			State result = new State(textLabel, type, relX, relX);
 			result.copyValuesFrom(this);
 			return new CopyElement(result, this);
+		}
+
+		// ================================================================================
+		// Property Methods
+		// ================================================================================
+		/**
+		 * This works so that o.setNotes(x) is the equivalent of o.setProperty("Notes",
+		 * x);
+		 *
+		 * Value may be null in some cases, e.g. graphRef
+		 *
+		 * @param key
+		 * @param value
+		 */
+		@Override
+		public void setStaticProperty(StaticProperty key, Object value) {
+			super.setStaticProperty(key, value);
+			switch (key) {
+			case TEXTLABEL:
+				setTextLabel((String) value);
+			case STATETYPE:
+				setType((StateType) value);
+			case RELX:
+				setRelX((Double) value);
+			case RELY:
+				setRelY((Double) value);
+			case XREF:
+				setXref((Xref) value);
+			default:
+				// do nothing
+			}
 		}
 
 	}

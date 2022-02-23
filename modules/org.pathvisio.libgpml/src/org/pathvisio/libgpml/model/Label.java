@@ -30,28 +30,6 @@ public class Label extends ShapedElement {
 	private String textLabel;
 	private String href; // optional
 
-	/**
-	 * This works so that o.setNotes(x) is the equivalent of o.setProperty("Notes",
-	 * x);
-	 *
-	 * Value may be null in some cases, e.g. graphRef
-	 *
-	 * @param key
-	 * @param value
-	 */
-	@Override
-	public void setStaticProperty(StaticProperty key, Object value) {
-		super.setStaticProperty(key, value);
-		switch (key) {
-		case TEXTLABEL:
-			setTextLabel((String) value);
-		case HREF:
-			setHref((String) value);
-		default:
-			// do nothing
-		}
-	}
-
 	// ================================================================================
 	// Constructors
 	// ================================================================================
@@ -77,7 +55,7 @@ public class Label extends ShapedElement {
 	public ObjectType getObjectType() {
 		return ObjectType.LABEL;
 	}
-	
+
 	/**
 	 * Returns the text of of the label.
 	 * 
@@ -123,6 +101,20 @@ public class Label extends ShapedElement {
 	}
 
 	// ================================================================================
+	// Inherited Methods
+	// ================================================================================
+
+	/**
+	 * Terminates this label and removes all links and references.
+	 */
+	@Override
+	protected void terminate() {
+		unsetAllLinkableFroms();
+		unsetGroupRef();
+		super.terminate();
+	}
+
+	// ================================================================================
 	// Copy Methods
 	// ================================================================================
 	/**
@@ -152,17 +144,30 @@ public class Label extends ShapedElement {
 	}
 
 	// ================================================================================
-	// Inherited Methods
+	// Property Methods
 	// ================================================================================
-
 	/**
-	 * Terminates this label and removes all links and references.
+	 * This works so that o.setNotes(x) is the equivalent of o.setProperty("Notes",
+	 * x);
+	 *
+	 * Value may be null in some cases, e.g. graphRef
+	 *
+	 * @param key
+	 * @param value
 	 */
 	@Override
-	protected void terminate() {
-		unsetAllLinkableFroms();
-		unsetGroupRef();
-		super.terminate();
+	public void setStaticProperty(StaticProperty key, Object value) {
+		super.setStaticProperty(key, value);
+		switch (key) {
+		case TEXTLABEL:
+			setTextLabel((String) value);
+			break;
+		case HREF:
+			setHref((String) value);
+			break;
+		default:
+			// do nothing
+		}
 	}
 
 }

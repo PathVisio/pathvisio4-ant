@@ -129,6 +129,7 @@ public class Interaction extends LineElement implements Xrefable {
 		switch (key) {
 		case XREF:
 			setXref((Xref) value);
+			break;
 		default:
 			// do nothing
 		}

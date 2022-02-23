@@ -39,11 +39,14 @@ import javax.swing.JTextPane;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import org.pathvisio.libgpml.model.PathwayObject;
 import org.pathvisio.libgpml.model.PathwayElement;
 import org.pathvisio.libgpml.model.PathwayElement.Comment;
 import org.pathvisio.core.util.Resources;
 
+/**
+ * 
+ * @author unknown
+ */
 public class CommentPanel extends PathwayElementPanel implements ActionListener {
 
 	protected static final String ADD = "Add comment";

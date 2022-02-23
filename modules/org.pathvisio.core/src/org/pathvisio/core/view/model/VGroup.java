@@ -16,6 +16,7 @@
  ******************************************************************************/
 package org.pathvisio.core.view.model;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Shape;
@@ -212,6 +213,15 @@ public class VGroup extends VShapedElement implements VElementMouseListener {
 		// Draw the group style appearance
 		GroupPainter p = GroupPainterRegistry.getPainter(getPathwayObject().getType().toString());
 		p.drawGroup(g2d, this, flags);
+
+		// return to normal stroke
+		g2d.setStroke(new BasicStroke());
+
+		g2d.setFont(getVFont());
+		drawTextLabel(g2d);
+
+		drawHighlight(g2d);
+		// TODO allow customization?
 	}
 
 	boolean mouseover = false;

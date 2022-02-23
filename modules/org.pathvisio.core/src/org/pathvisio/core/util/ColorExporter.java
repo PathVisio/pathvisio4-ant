@@ -34,7 +34,6 @@ import org.pathvisio.core.model.ImageExporter;
 import org.pathvisio.libgpml.model.PathwayModel;
 import org.pathvisio.libgpml.model.PathwayObject;
 import org.pathvisio.libgpml.model.ShapedElement;
-import org.pathvisio.libgpml.model.PathwayElement;
 import org.pathvisio.libgpml.model.DataNode;
 import org.pathvisio.libgpml.model.Group;
 import org.pathvisio.core.preferences.PreferenceManager;

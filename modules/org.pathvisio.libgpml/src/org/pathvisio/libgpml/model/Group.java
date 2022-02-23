@@ -35,34 +35,10 @@ import org.pathvisio.libgpml.util.Utils;
 public class Group extends ShapedElement implements Xrefable {
 
 	private GroupType type = GroupType.GROUP;
-	private String textLabel; // optional
+	private String textLabel = ""; // optional TODO
 	private Xref xref; // optional
 	/* list of pathway elements which belong to the group. */
 	private List<Groupable> pathwayElements; // should have at least one pathway element
-
-	/**
-	 * This works so that o.setNotes(x) is the equivalent of o.setProperty("Notes",
-	 * x);
-	 *
-	 * Value may be null in some cases, e.g. graphRef
-	 *
-	 * @param key
-	 * @param value
-	 */
-	@Override
-	public void setStaticProperty(StaticProperty key, Object value) {
-		super.setStaticProperty(key, value);
-		switch (key) {
-		case GROUPTYPE:
-			setType((GroupType) value);
-		case TEXTLABEL:
-			setTextLabel((String) value);
-		case XREF:
-			setXref((Xref) value);
-		default:
-			// do nothing
-		}
-	}
 
 	// ================================================================================
 	// Constructors
@@ -497,6 +473,41 @@ public class Group extends ShapedElement implements Xrefable {
 		Group result = new Group(type); // TODO
 		result.copyValuesFrom(this);
 		return new CopyElement(result, this);
+	}
+
+	// ================================================================================
+	// Property Methods
+	// ================================================================================
+	/**
+	 * This works so that o.setNotes(x) is the equivalent of o.setProperty("Notes",
+	 * x);
+	 *
+	 * Value may be null in some cases, e.g. graphRef
+	 *
+	 * @param key
+	 * @param value
+	 */
+	@Override
+	public void setStaticProperty(StaticProperty key, Object value) {
+		super.setStaticProperty(key, value);
+		System.out.println(key);
+		switch (key) {
+		case GROUPTYPE:
+			if (value instanceof GroupType) {
+				setType((GroupType) value);
+			} else {
+				setType(GroupType.fromName((String) value));
+			}
+			break;
+		case TEXTLABEL:
+			setTextLabel((String) value);
+			break;
+		case XREF:
+			setXref((Xref) value);
+			break;
+		default:
+			// do nothing
+		}
 	}
 
 }

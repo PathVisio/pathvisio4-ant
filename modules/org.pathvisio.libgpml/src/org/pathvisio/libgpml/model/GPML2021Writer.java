@@ -43,6 +43,7 @@ import org.pathvisio.libgpml.model.PathwayElement.CitationRef;
 import org.pathvisio.libgpml.model.PathwayElement.Comment;
 import org.pathvisio.libgpml.model.PathwayElement.EvidenceRef;
 import org.pathvisio.libgpml.util.ColorUtils;
+import org.pathvisio.libgpml.util.Utils;
 import org.pathvisio.libgpml.util.XrefUtils;
 
 /**
@@ -680,8 +681,9 @@ public class GPML2021Writer extends GPML2021FormatAbstract implements GpmlFormat
 				Element grp = new Element("Group", root.getNamespace());
 				writeXref(group.getXref(), grp, false);
 				writeShapedElement(group, grp);
-				// write jdom attributes
-				if (group.getTextLabel() != null) {
+				// write jdom attributes TODO textLabel
+				String textLabel = group.getTextLabel();
+				if (textLabel != null && !Utils.stringEquals(textLabel, "")) {
 					grp.setAttribute("textLabel", group.getTextLabel());
 				}
 				grp.setAttribute("type", group.getType().getName());

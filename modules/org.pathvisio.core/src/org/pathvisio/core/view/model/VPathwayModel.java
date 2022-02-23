@@ -731,19 +731,16 @@ public class VPathwayModel implements PathwayModelListener {
 		// groupSelection will be set to true if we are going to add / expand a group,
 		// false if we're going to remove a group.
 		boolean groupSelection = false;
-		Set<String> groupRefList = new HashSet<String>();
+		Set<Group> groupRefList = new HashSet<Group>();
 
 		/**
 		 * Check group status of current selection
 		 */
 		for (VDrawable g : selection) {
 			Drawable pe = g.getPathwayObject();
-			String ref = null;
+			Group ref = null;
 			if (pe instanceof Groupable) {
-				Group gref = ((Groupable) pe).getGroupRef();
-				if (gref != null) {
-					ref = ((Groupable) pe).getGroupRef().getElementId();
-				}
+				ref = ((Groupable) pe).getGroupRef();
 			}
 			// If not a group
 			if (pe.getObjectType() != ObjectType.GROUP) {
@@ -756,8 +753,7 @@ public class VPathwayModel implements PathwayModelListener {
 				else {
 					while (ref != null) {
 						groupRefList.add(ref);
-						Group refGroup = (Group) data.getPathwayObject(ref);
-						ref = refGroup.getGroupRef().getElementId();
+						ref = ref.getGroupRef();
 					}
 				}
 			}
@@ -769,8 +765,7 @@ public class VPathwayModel implements PathwayModelListener {
 		}
 
 		// In all cases, any old groups in selection should be dissolved.
-		for (String id : groupRefList) {
-			Group e = (Group) data.getPathwayObject(id);
+		for (Group e : groupRefList) {
 			if (e != null)
 				data.remove(e);
 		}

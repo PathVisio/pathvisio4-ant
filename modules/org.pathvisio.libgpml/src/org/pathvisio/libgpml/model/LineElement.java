@@ -1230,13 +1230,21 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 			setLineColor((Color) value);
 			break;
 		case LINESTYLE:
-			setLineStyle((LineStyleType) value);
+			if (value instanceof LineStyleType) {
+				setLineStyle((LineStyleType) value);
+			} else {
+				setLineStyle(LineStyleType.fromName((String) value));
+			}
 			break;
 		case LINEWIDTH:
 			setLineWidth((Double) value);
 			break;
-		case CONNECTORTYPE:
-			setConnectorType((ConnectorType) value);
+		case CONNECTORTYPE:			
+			if (value instanceof ConnectorType) {
+				setConnectorType((ConnectorType) value);
+			} else {
+				setConnectorType(ConnectorType.fromName((String) value));
+			}
 			break;
 		case ZORDER:
 			setZOrder((Integer) value);
