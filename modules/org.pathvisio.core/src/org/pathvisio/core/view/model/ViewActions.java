@@ -548,7 +548,7 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 			double mc2 = s.toLineCoordinate(mp2.toPoint2D());
 			double c = mc2 + (mc - mc2) / 2.0; // Add new waypoint on center of last segment
 			Point2D p = s.fromLineCoordinate(c);
-			newPoints.add(i, l.new LinePoint(ArrowHeadType.UNDIRECTED, p.getX(), p.getY()));
+			newPoints.add(i, l.new LinePoint(p.getX(), p.getY()));
 			l.setLinePoints(newPoints);
 		}
 	}

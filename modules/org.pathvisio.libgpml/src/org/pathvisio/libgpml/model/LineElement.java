@@ -48,16 +48,20 @@ import org.pathvisio.libgpml.util.Utils;
  */
 public abstract class LineElement extends PathwayElement implements Groupable, ConnectorRestrictions {
 
+	private ArrowHeadType startArrowHeadType = ArrowHeadType.UNDIRECTED;
+	private ArrowHeadType endArrowHeadType = ArrowHeadType.UNDIRECTED;
 	private Group groupRef; // optional, the parent group to which a pathway element belongs.
 	private List<LinePoint> linePoints; // minimum 2
 	private List<Anchor> anchors;
-
+	
+	
 	// line style properties
 	private Color lineColor = Color.decode("#000000"); // black
 	private LineStyleType lineStyle = LineStyleType.SOLID; // solid, dashed, or double
 	private double lineWidth = 1.0; // 1.0
 	private ConnectorType connectorType = ConnectorType.STRAIGHT; // straight, elbow, curved...
 	private int zOrder; // optional
+	
 
 	// ================================================================================
 	// Constructors
@@ -75,14 +79,63 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 		super();
 		// instantiated points list and set
 		linePoints = new ArrayList<LinePoint>();
-		setLinePoints(new ArrayList<LinePoint>(Arrays.asList(new LinePoint(ArrowHeadType.UNDIRECTED, 0, 0),
-				new LinePoint(ArrowHeadType.UNDIRECTED, 0, 0))));
+		setLinePoints(new ArrayList<LinePoint>(Arrays.asList(new LinePoint(0, 0),
+				new LinePoint(0, 0))));
 		this.anchors = new ArrayList<Anchor>();
 	}
+
 
 	// ================================================================================
 	// Accessors
 	// ================================================================================
+	/**
+	 * Returns the arrowHead property of the start point. Arrowhead specifies the
+	 * glyph at the ends of graphical lines and interactions. Intermediate points
+	 * have arrowhead type UNDIRECTED (the absence of an arrowhead).
+	 * 
+	 * @return startArrowHeadType the arrow head type.
+	 */
+	public ArrowHeadType getStartArrowHeadType() {
+		return startArrowHeadType == null ? ArrowHeadType.UNDIRECTED : startArrowHeadType;
+	}
+
+	/**
+	 * Sets the arrow head type of the start point.
+	 * 
+	 * @param value the arrow head type to set.
+	 */
+	public void setStartArrowHeadType(ArrowHeadType value) {
+		if (startArrowHeadType != value && value != null) {
+			startArrowHeadType = value;
+			fireObjectModifiedEvent(
+					PathwayObjectEvent.createSinglePropertyEvent(LineElement.this, StaticProperty.ARROWHEADTYPE));
+		}
+	}
+
+	/**
+	 * Returns the arrowHead property of the end point. Arrowhead specifies the
+	 * glyph at the ends of graphical lines and interactions. Intermediate points
+	 * have arrowhead type UNDIRECTED (the absence of an arrowhead).
+	 * 
+	 * @return endArrowHeadType the arrow head type.
+	 */
+	public ArrowHeadType getEndArrowHeadType() {
+		return endArrowHeadType == null ? ArrowHeadType.UNDIRECTED : endArrowHeadType;
+	}
+
+	/**
+	 * Sets the arrow head type of the end point.
+	 * 
+	 * @param value the arrow head type to set.
+	 */
+	public void setEndArrowHeadType(ArrowHeadType value) {
+		if (endArrowHeadType != value && value != null) {
+			endArrowHeadType = value;
+			fireObjectModifiedEvent(
+					PathwayObjectEvent.createSinglePropertyEvent(LineElement.this, StaticProperty.ARROWHEADTYPE));
+		}
+	}
+
 	/**
 	 * Returns the parent group of this pathway element. In GPML, groupRef refers to
 	 * the elementId (formerly groupId) of the parent gpml:Group.
@@ -567,44 +620,6 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 	 */
 	public void setEndLinePointY(double v) {
 		getEndLinePoint().setY(v);
-	}
-
-	/**
-	 * Returns the arrow head type of the start point.
-	 * 
-	 * @return startArrowHeadType the arrow head type.
-	 */
-	public ArrowHeadType getStartArrowHeadType() {
-		ArrowHeadType startArrowHeadType = getStartLinePoint().getArrowHead();
-		return startArrowHeadType == null ? ArrowHeadType.UNDIRECTED : startArrowHeadType;
-	}
-
-	/**
-	 * Sets the arrow head type of the start point.
-	 * 
-	 * @param value the arrow head type to set.
-	 */
-	public void setStartArrowHeadType(ArrowHeadType value) {
-		getStartLinePoint().setArrowHead(value);
-	}
-
-	/**
-	 * Returns the arrow head type of the end point.
-	 * 
-	 * @return endArrowHeadType the arrow head type.
-	 */
-	public ArrowHeadType getEndArrowHeadType() {
-		ArrowHeadType endArrowHeadType = getEndLinePoint().getArrowHead();
-		return endArrowHeadType == null ? ArrowHeadType.UNDIRECTED : endArrowHeadType;
-	}
-
-	/**
-	 * Sets the arrow head type of the end point.
-	 * 
-	 * @param value the arrow head type to set.
-	 */
-	public void setEndArrowHeadType(ArrowHeadType value) {
-		getEndLinePoint().setArrowHead(value);
 	}
 
 	/**
@@ -1154,7 +1169,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 		// copy line points
 		List<LinePoint> points = new ArrayList<LinePoint>();
 		for (LinePoint pt : src.linePoints) {
-			LinePoint result = new LinePoint(null, 0, 0);
+			LinePoint result = new LinePoint(0, 0);
 			result.copyValuesFrom(pt);
 			points.add(result);
 		}
@@ -1170,6 +1185,8 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 		lineWidth = src.lineWidth;
 		connectorType = src.connectorType;
 		zOrder = src.zOrder;
+		startArrowHeadType = src.startArrowHeadType;
+		endArrowHeadType = src.endArrowHeadType;
 		fireObjectModifiedEvent(PathwayObjectEvent.createAllPropertiesEvent(this));
 	}
 
@@ -1343,7 +1360,6 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 	 */
 	public class LinePoint extends GenericPoint implements LinkableFrom {
 
-		private ArrowHeadType arrowHead;
 		private double x;
 		private double y;
 		private LinkableTo elementRef; // optional, the pathway element to which the point refers.
@@ -1362,9 +1378,8 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 		 * @param x         the x coordinate position of the point.
 		 * @param y         the y coordinate position of the point.
 		 */
-		public LinePoint(ArrowHeadType arrowHead, double x, double y) {
+		public LinePoint(double x, double y) {
 			super();
-			this.arrowHead = arrowHead;
 			setX(x);
 			setY(y);
 		}
@@ -1380,36 +1395,6 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 		@Override
 		public ObjectType getObjectType() {
 			return ObjectType.LINEPOINT;
-		}
-
-		/**
-		 * Returns the arrowHead property of the point. Arrowhead specifies the glyph at
-		 * the ends of graphical lines and interactions. Intermediate points have
-		 * arrowhead type LINE (the absence of an arrowhead).
-		 * 
-		 * @return arrowhead the arrowhead property of the point.
-		 */
-		public ArrowHeadType getArrowHead() {
-			if (arrowHead == null) {
-				return ArrowHeadType.UNDIRECTED;
-			} else {
-				return arrowHead;
-			}
-		}
-
-		/**
-		 * Sets the arrowHead property of the point. Arrowhead specifies the glyph at
-		 * the ends of graphical lines and interactions. Intermediate points have
-		 * arrowhead type LINE (the absence of an arrowhead).
-		 * 
-		 * @param arrowHead the arrowhead property of the point.
-		 */
-		public void setArrowHead(ArrowHeadType arrowHead) {
-			if (this.arrowHead != arrowHead && arrowHead != null) {
-				this.arrowHead = arrowHead;
-				fireObjectModifiedEvent(
-						PathwayObjectEvent.createSinglePropertyEvent(LineElement.this, StaticProperty.ARROWHEADTYPE));
-			}
 		}
 
 		/**
@@ -1797,7 +1782,6 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 		 * @param src
 		 */
 		public void copyValuesFrom(LinePoint src) {
-			arrowHead = src.arrowHead;
 			x = src.x;
 			y = src.y;
 			relX = src.relX;

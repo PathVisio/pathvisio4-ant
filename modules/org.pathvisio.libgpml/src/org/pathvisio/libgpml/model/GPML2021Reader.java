@@ -654,12 +654,19 @@ public class GPML2021Reader extends GPML2021FormatAbstract implements GpmlFormat
 	protected void readPoints(LineElement lineElement, Element wyps, Map<Element, LinePoint> elementToPoint)
 			throws ConverterException {
 		List<LinePoint> ptList = new ArrayList<LinePoint>();
-		for (Element pt : wyps.getChildren("Point", wyps.getNamespace())) {
+		List<Element> pts = wyps.getChildren("Point", wyps.getNamespace());
+		for (int i = 0; i < pts.size(); i++) {
+			Element pt = pts.get(i);
 			String elementId = pt.getAttributeValue("elementId");
-			ArrowHeadType arrowHead = ArrowHeadType.register(pt.getAttributeValue("arrowHead", ARROWHEAD_DEFAULT));
+			// if start or end point, set arrowhead type for parent line element
+			if (i == 0) {
+				lineElement.setStartArrowHeadType(ArrowHeadType.register(pt.getAttributeValue("arrowHead", ARROWHEAD_DEFAULT)));
+			} else if (i == pts.size() - 1) {
+				lineElement.setEndArrowHeadType(ArrowHeadType.register(pt.getAttributeValue("arrowHead", ARROWHEAD_DEFAULT)));
+			}
 			double x = Double.parseDouble(pt.getAttributeValue("x").trim());
 			double y = Double.parseDouble(pt.getAttributeValue("y").trim());
-			LinePoint point = lineElement.new LinePoint(arrowHead, x, y);
+			LinePoint point = lineElement.new LinePoint(x, y);
 			point.setElementId(elementId);
 			ptList.add(point);
 			// adds info for reading

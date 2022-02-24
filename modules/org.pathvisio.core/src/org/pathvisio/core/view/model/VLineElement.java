@@ -189,8 +189,7 @@ public class VLineElement extends VPathwayElement implements VGroupable, Adjusta
 				points = new ArrayList<LinePoint>();
 				points.add(getPathwayObject().getStartLinePoint());
 				for (int i = 0; i < waypoints.length; i++) {
-					LinePoint p = getPathwayObject().new LinePoint(ArrowHeadType.UNDIRECTED, waypoints[i].getX(),
-							waypoints[i].getY());
+					LinePoint p = getPathwayObject().new LinePoint(waypoints[i].getX(), waypoints[i].getY());
 					points.add(p);
 				}
 				points.add(getPathwayObject().getEndLinePoint());

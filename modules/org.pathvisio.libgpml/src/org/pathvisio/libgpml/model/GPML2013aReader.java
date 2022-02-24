@@ -1054,21 +1054,23 @@ public class GPML2013aReader extends GPML2013aFormatAbstract implements GpmlForm
 	 */
 	protected void readPoints(LineElement lineElement, Element ln, Set<String> elementIdSet,
 			Map<Element, LinePoint> elementToPoint) throws ConverterException {
+		List<LinePoint> ptList = new ArrayList<LinePoint>();
 		String base = ln.getName();
 		Element gfx = ln.getChild("Graphics", ln.getNamespace());
-		List<LinePoint> ptList = new ArrayList<LinePoint>();
-		for (Element pt : gfx.getChildren("Point", gfx.getNamespace())) {
+		List<Element> pts = gfx.getChildren("Point", gfx.getNamespace());
+		for (int i = 0; i < pts.size(); i++) {
+			Element pt = pts.get(i);
 			String elementId = readElementId(base + ".Graphics.Point", pt, elementIdSet);
-			// TODO Annotation sub types?
-			String arrowHeadStr = getAttr(base + ".Graphics.Point", "ArrowHead", pt);
-			ArrowHeadType arrowHead = getInteractionPanelType(arrowHeadStr);
-			if (arrowHead == null) {
-				arrowHead = ArrowHeadType.register(arrowHeadStr);
+			// if start or end point, set arrowhead type for parent line element
+			if (i == 0) {
+				lineElement.setStartArrowHeadType(readArrowHeadType(pt, base));	
+			} else if (i == pts.size() - 1) {
+				lineElement.setEndArrowHeadType(readArrowHeadType(pt, base));	
 			}
 			double x = Double.parseDouble(getAttr(base + ".Graphics.Point", "X", pt).trim());
 			double y = Double.parseDouble(getAttr(base + ".Graphics.Point", "Y", pt).trim());
 			// instantiates and adds point
-			LinePoint point = lineElement.new LinePoint(arrowHead, x, y);
+			LinePoint point = lineElement.new LinePoint(x, y);
 			point.setElementId(elementId);
 			ptList.add(point);
 			// store info for reading
@@ -1078,6 +1080,25 @@ public class GPML2013aReader extends GPML2013aFormatAbstract implements GpmlForm
 		lineElement.setLinePoints(ptList);
 	}
 
+
+	/**
+	 * Returns the arrowHead for give jdom point element. 
+	 * 
+	 * @param pt the jdom point element. 
+	 * @param base the string for either "Interaction" or "GraphicalLine"
+	 * @return the arrowhead for given jdom point element.  
+	 * @throws ConverterException
+	 */
+	protected ArrowHeadType readArrowHeadType(Element pt, String base) throws ConverterException {
+		String arrowHeadStr = getAttr(base + ".Graphics.Point", "ArrowHead", pt);
+		ArrowHeadType arrowHead = getInteractionPanelType(arrowHeadStr);
+		if (arrowHead == null) {
+			arrowHead = ArrowHeadType.register(arrowHeadStr);
+		}
+		return arrowHead;
+	}
+	
+	
 	/**
 	 * Reads anchor {@link Anchor} information for line element from element.
 	 * 

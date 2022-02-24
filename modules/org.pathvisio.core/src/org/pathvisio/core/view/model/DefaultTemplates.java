@@ -557,7 +557,7 @@ public abstract class DefaultTemplates {
 			lastEndNode.setType(DataNodeType.PROTEIN);
 			lastStartNode.setTextLabel("Protein");
 			lastEndNode.setTextLabel("P-Protein");
-			lastLine.getEndLinePoint().setArrowHead(ArrowHeadType.CONVERSION);
+			lastLine.setEndArrowHeadType(ArrowHeadType.CONVERSION);
 			// instantiates and adds a state to data node and pathway model
 			State e = lastEndNode.addState("P", StateType.PROTEIN_MODIFICATION, 1.0, 1.0);
 			// set graphics
@@ -656,7 +656,7 @@ public abstract class DefaultTemplates {
 			lastEndNode.setTextColor(COLOR_METABOLITE);
 			lastEndNode.setShapeType(ShapeType.ROUNDED_RECTANGLE);
 			lastEndNode.setTextLabel("Metabolite 2");
-			lastLine.getEndLinePoint().setArrowHead(ArrowHeadType.CONVERSION);
+			lastLine.setEndArrowHeadType(ArrowHeadType.CONVERSION);
 
 			Anchor anchor = lastLine.addAnchor(0.5, AnchorShapeType.SQUARE);
 
@@ -666,7 +666,7 @@ public abstract class DefaultTemplates {
 
 			lastCatLine.getStartLinePoint().linkTo(lastCatalyst, 0, 1);
 			lastCatLine.getEndLinePoint().linkTo(anchor, 0, 0);
-			lastCatLine.getEndLinePoint().setArrowHead(ArrowHeadType.CATALYSIS);
+			lastCatLine.setEndArrowHeadType(ArrowHeadType.CATALYSIS);
 
 			InteractionTemplate rev = new InteractionTemplate("undirected", LineStyleType.SOLID,
 					ArrowHeadType.UNDIRECTED, ArrowHeadType.UNDIRECTED, ConnectorType.STRAIGHT);
@@ -674,7 +674,7 @@ public abstract class DefaultTemplates {
 
 			lastReverseLine.getStartLinePoint().linkTo(lastEndNode, -1, 0.5);
 			lastReverseLine.getEndLinePoint().linkTo(lastStartNode, 1, 0.5);
-			lastReverseLine.getEndLinePoint().setArrowHead(ArrowHeadType.CONVERSION);
+			lastReverseLine.setEndArrowHeadType(ArrowHeadType.CONVERSION);
 
 			Anchor anchor2 = lastReverseLine.addAnchor(0.5, AnchorShapeType.SQUARE);
 
@@ -684,7 +684,7 @@ public abstract class DefaultTemplates {
 
 			lastCatLine2.getStartLinePoint().linkTo(lastCatalyst2, 0, -1);
 			lastCatLine2.getEndLinePoint().linkTo(anchor2, 0, 0);
-			lastCatLine2.getEndLinePoint().setArrowHead(ArrowHeadType.CATALYSIS);
+			lastCatLine2.setEndArrowHeadType(ArrowHeadType.CATALYSIS);
 			// These elements are selected in PV, so users can move them around.
 			return new PathwayElement[] { lastStartNode, lastEndNode, lastLine, lastCatalyst, lastCatalyst2 };
 		}
