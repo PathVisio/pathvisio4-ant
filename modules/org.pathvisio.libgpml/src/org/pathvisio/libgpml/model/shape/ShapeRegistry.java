@@ -40,15 +40,15 @@ public class ShapeRegistry {
 
 	static {
 		GeneralPath temp = new GeneralPath();
-		temp.moveTo(-50, -50);
-		temp.lineTo(50, -50);
-		temp.lineTo(50, 50);
-		temp.lineTo(-50, 50);
+		temp.moveTo(-10, -10);
+		temp.lineTo(10, -10);
+		temp.lineTo(10, 10);
+		temp.lineTo(-10, 10);
 		temp.closePath();
-		temp.moveTo(-30, -30);
-		temp.lineTo(30, 30);
-		temp.moveTo(-30, 30);
-		temp.lineTo(30, -30);
+		temp.moveTo(-6, -6);
+		temp.lineTo(6, 6);
+		temp.moveTo(-6, 6);
+		temp.lineTo(6, -6);
 		defaultArrow = new ArrowShape(temp, ArrowShape.FillType.OPEN);
 
 		temp = new GeneralPath();

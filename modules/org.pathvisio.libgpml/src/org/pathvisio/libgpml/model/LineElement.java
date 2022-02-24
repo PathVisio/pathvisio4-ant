@@ -176,8 +176,9 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 				throw new IllegalArgumentException("Points array should at least have two elements for "
 						+ getClass().getSimpleName() + " " + getElementId());
 			}
-			removeLinePoints(); // remove points before setting new points
-			addLinePoints(points); // adds points to pathway model and to this line 
+			if (linePoints != null)
+				removeLinePoints(); // remove points before setting new points
+			addLinePoints(points); // adds points to pathway model and to this line
 			fireObjectModifiedEvent(PathwayObjectEvent.createCoordinatePropertyEvent(this));
 		}
 	}
@@ -1239,7 +1240,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 		case LINEWIDTH:
 			setLineWidth((Double) value);
 			break;
-		case CONNECTORTYPE:			
+		case CONNECTORTYPE:
 			if (value instanceof ConnectorType) {
 				setConnectorType((ConnectorType) value);
 			} else {
@@ -1407,7 +1408,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 			if (this.arrowHead != arrowHead && arrowHead != null) {
 				this.arrowHead = arrowHead;
 				fireObjectModifiedEvent(
-						PathwayObjectEvent.createSinglePropertyEvent(this, StaticProperty.ARROWHEADTYPE));
+						PathwayObjectEvent.createSinglePropertyEvent(LineElement.this, StaticProperty.ARROWHEADTYPE));
 			}
 		}
 
@@ -1497,7 +1498,8 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 					}
 				}
 				elementRef = v;
-				fireObjectModifiedEvent(PathwayObjectEvent.createSinglePropertyEvent(this, StaticProperty.ELEMENTREF));
+				fireObjectModifiedEvent(
+						PathwayObjectEvent.createSinglePropertyEvent(LineElement.this, StaticProperty.ELEMENTREF));
 			}
 		}
 
@@ -1528,7 +1530,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 			}
 			if (relX != v) {
 				relX = v;
-				fireObjectModifiedEvent(PathwayObjectEvent.createCoordinatePropertyEvent(this));
+				fireObjectModifiedEvent(PathwayObjectEvent.createCoordinatePropertyEvent(LineElement.this));
 			}
 		}
 
@@ -1558,7 +1560,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 			}
 			if (relY != v) {
 				relY = v;
-				fireObjectModifiedEvent(PathwayObjectEvent.createCoordinatePropertyEvent(this));
+				fireObjectModifiedEvent(PathwayObjectEvent.createCoordinatePropertyEvent(LineElement.this));
 			}
 		}
 
@@ -1661,7 +1663,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 					moveTo(abs.getX(), abs.getY());
 				}
 				setElementRef(null);
-				fireObjectModifiedEvent(PathwayObjectEvent.createCoordinatePropertyEvent(this));
+				fireObjectModifiedEvent(PathwayObjectEvent.createCoordinatePropertyEvent(LineElement.this));
 			}
 		}
 
@@ -1692,9 +1694,10 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 		 * @param deltaY the value to move y coordinate by.
 		 */
 		public void moveBy(double deltaX, double deltaY) {
-			x += deltaX;
-			y += deltaY;
-			fireObjectModifiedEvent(PathwayObjectEvent.createCoordinatePropertyEvent(this));
+			System.out.println("MOVEBY IS CALLED");
+			x = getX() + deltaX; // TODO
+			y = getY() + deltaY; // TODO
+			fireObjectModifiedEvent(PathwayObjectEvent.createCoordinatePropertyEvent(LineElement.this));
 		}
 
 		/**
@@ -1706,7 +1709,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 		public void moveTo(double vx, double vy) {
 			x = vx;
 			y = vy;
-			fireObjectModifiedEvent(PathwayObjectEvent.createCoordinatePropertyEvent(this));
+			fireObjectModifiedEvent(PathwayObjectEvent.createCoordinatePropertyEvent(LineElement.this));
 		}
 
 		/**
@@ -1720,7 +1723,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 			setY(linePoint.getY());
 			setRelX(linePoint.getRelX());
 			setRelY(linePoint.getRelY());
-			fireObjectModifiedEvent(PathwayObjectEvent.createCoordinatePropertyEvent(this));
+			fireObjectModifiedEvent(PathwayObjectEvent.createCoordinatePropertyEvent(LineElement.this));
 		}
 
 		/**
@@ -1728,7 +1731,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 		 */
 		@Override
 		public void refeeChanged() {
-			fireObjectModifiedEvent(PathwayObjectEvent.createCoordinatePropertyEvent(this));
+			fireObjectModifiedEvent(PathwayObjectEvent.createCoordinatePropertyEvent(LineElement.this));
 		}
 
 		// ================================================================================

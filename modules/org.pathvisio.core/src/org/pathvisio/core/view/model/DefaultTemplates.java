@@ -99,7 +99,8 @@ public abstract class DefaultTemplates {
 	 */
 	public static void setInitialSize(PathwayElement o) {
 		// set size for Shape (depends on shape type)
-		if (o.getClass() == Shape.class) {
+		switch (o.getObjectType()) {
+		case SHAPE:
 			IShape type = ((Shape) o).getShapeType();
 			if (type.equals(ShapeType.BRACE)) {
 				((Shape) o).setWidth(BRACE_WIDTH);
@@ -116,25 +117,37 @@ public abstract class DefaultTemplates {
 				((Shape) o).setWidth(SHAPE_SIZE);
 				((Shape) o).setHeight(SHAPE_SIZE);
 			}
-		} else if (o.getClass() == DataNode.class) {
+			break;
+		case DATANODE:
 			((DataNode) o).setWidth(DATANODE_WIDTH);
 			((DataNode) o).setHeight(DATANODE_HEIGHT);
-		} else if (o.getClass() == State.class) {
+			break;
+		case STATE:
 			((State) o).setWidth(STATE_SIZE);
 			((State) o).setHeight(STATE_SIZE);
-
-		} else if (o.getClass() == Label.class) {
+			break;
+		case LABEL:
 			((Label) o).setWidth(LABEL_WIDTH);
 			((Label) o).setHeight(LABEL_HEIGHT);
-		} else if (o instanceof LineElement) {
+			break;
+		case INTERACTION:
 			System.out.println("Set Interaction InitialSize()");
-			((LineElement) o).setEndLinePointX(((LineElement) o).getStartLinePointX() + LINE_LENGTH);
+			((Interaction) o).setEndLinePointX(((Interaction) o).getStartLinePointX() + LINE_LENGTH);
 			System.out.println("First half finished");
-			((LineElement) o).setEndLinePointY(((LineElement) o).getStartLinePointY() + LINE_LENGTH);
-			System.out.println("getMStartX " + ((LineElement) o).getStartLinePointX());
-			System.out.println("getMStartY " + ((LineElement) o).getStartLinePointY());
-		} else {
-			// nothing
+			((Interaction) o).setEndLinePointY(((Interaction) o).getStartLinePointY() + LINE_LENGTH);
+			System.out.println("getMStartX " + ((Interaction) o).getStartLinePointX());
+			System.out.println("getMStartY " + ((Interaction) o).getStartLinePointY());
+			break;
+		case GRAPHLINE:
+			System.out.println("Set Interaction InitialSize()");
+			((GraphicalLine) o).setEndLinePointX(((GraphicalLine) o).getStartLinePointX() + LINE_LENGTH);
+			System.out.println("First half finished");
+			((GraphicalLine) o).setEndLinePointY(((GraphicalLine) o).getStartLinePointY() + LINE_LENGTH);
+			System.out.println("getMStartX " + ((GraphicalLine) o).getStartLinePointX());
+			System.out.println("getMStartY " + ((GraphicalLine) o).getStartLinePointY());
+			break;
+		default:
+			break;
 		}
 	}
 
@@ -300,7 +313,7 @@ public abstract class DefaultTemplates {
 			}
 			// default font-Name/Style/Decoration/StrikeThru/Size, hAlign, vAlign
 			e.setTextColor(color);
-			e.setFillColor(ColorUtils.hexToColor("#00000000")); //transparent
+			e.setFillColor(ColorUtils.hexToColor("#00000000")); // transparent
 			e.setBorderColor(color);
 			e.setBorderWidth(borderWidth);
 			e.setZOrder(Z_ORDER_SHAPE);
@@ -593,8 +606,8 @@ public abstract class DefaultTemplates {
 			lastLine.setEndArrowHeadType(ArrowHeadType.CONVERSION);
 			Anchor anchor = lastLine.addAnchor(0.5, AnchorShapeType.SQUARE);
 
-			InteractionTemplate lnt = new InteractionTemplate("undirected", LineStyleType.SOLID, ArrowHeadType.UNDIRECTED,
-					ArrowHeadType.UNDIRECTED, ConnectorType.STRAIGHT);
+			InteractionTemplate lnt = new InteractionTemplate("undirected", LineStyleType.SOLID,
+					ArrowHeadType.UNDIRECTED, ArrowHeadType.UNDIRECTED, ConnectorType.STRAIGHT);
 			lastCatLine = lnt.addElements(p, mx, my)[0];
 
 			lastCatLine.getStartLinePoint().linkTo(lastCatalyst, 0, 1);
@@ -647,16 +660,16 @@ public abstract class DefaultTemplates {
 
 			Anchor anchor = lastLine.addAnchor(0.5, AnchorShapeType.SQUARE);
 
-			InteractionTemplate lnt = new InteractionTemplate("undirected", LineStyleType.SOLID, ArrowHeadType.UNDIRECTED,
-					ArrowHeadType.UNDIRECTED, ConnectorType.STRAIGHT);
+			InteractionTemplate lnt = new InteractionTemplate("undirected", LineStyleType.SOLID,
+					ArrowHeadType.UNDIRECTED, ArrowHeadType.UNDIRECTED, ConnectorType.STRAIGHT);
 			lastCatLine = lnt.addElements(p, mx, my)[0]; // TODO Cast?
 
 			lastCatLine.getStartLinePoint().linkTo(lastCatalyst, 0, 1);
 			lastCatLine.getEndLinePoint().linkTo(anchor, 0, 0);
 			lastCatLine.getEndLinePoint().setArrowHead(ArrowHeadType.CATALYSIS);
 
-			InteractionTemplate rev = new InteractionTemplate("undirected", LineStyleType.SOLID, ArrowHeadType.UNDIRECTED,
-					ArrowHeadType.UNDIRECTED, ConnectorType.STRAIGHT);
+			InteractionTemplate rev = new InteractionTemplate("undirected", LineStyleType.SOLID,
+					ArrowHeadType.UNDIRECTED, ArrowHeadType.UNDIRECTED, ConnectorType.STRAIGHT);
 			lastReverseLine = rev.addElements(p, mx, my)[0]; // TODO Cast?
 
 			lastReverseLine.getStartLinePoint().linkTo(lastEndNode, -1, 0.5);
@@ -665,8 +678,8 @@ public abstract class DefaultTemplates {
 
 			Anchor anchor2 = lastReverseLine.addAnchor(0.5, AnchorShapeType.SQUARE);
 
-			InteractionTemplate lnt2 = new InteractionTemplate("undirected", LineStyleType.SOLID, ArrowHeadType.UNDIRECTED,
-					ArrowHeadType.UNDIRECTED, ConnectorType.STRAIGHT);
+			InteractionTemplate lnt2 = new InteractionTemplate("undirected", LineStyleType.SOLID,
+					ArrowHeadType.UNDIRECTED, ArrowHeadType.UNDIRECTED, ConnectorType.STRAIGHT);
 			lastCatLine2 = lnt2.addElements(p, mx, my)[0]; // TODO Cast?
 
 			lastCatLine2.getStartLinePoint().linkTo(lastCatalyst2, 0, -1);

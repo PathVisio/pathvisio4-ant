@@ -19,12 +19,12 @@ package org.pathvisio.libgpml.model;
 import java.util.EventListener;
 
 /**
- * Implement this if you want to be notified of changes to properties of a PathwayElement.
+ * Implement this if you want to be notified of changes to properties of a
+ * PathwayElement.
  *
- * For example, this is used by DatanodeDialog or by PropertyTableModel
- * to keep up to date with changes in the selected PathwayElement.
+ * For example, this is used by DatanodeDialog or by PropertyTableModel to keep
+ * up to date with changes in the selected PathwayElement.
  */
-public interface PathwayObjectListener extends EventListener
-{
+public interface PathwayObjectListener extends EventListener {
 	public void gmmlObjectModified(PathwayObjectEvent e);
 }

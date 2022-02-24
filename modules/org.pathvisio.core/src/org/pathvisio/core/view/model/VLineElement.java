@@ -258,7 +258,7 @@ public class VLineElement extends VPathwayElement implements VGroupable, Adjusta
 		ArrowShape[] heads = getVHeadsAdjusted();
 		ArrowShape hs = heads[0];
 		ArrowShape he = heads[1];
-		
+
 		System.out.println("Print head: " + heads);
 
 		g.draw(l);
@@ -334,7 +334,8 @@ public class VLineElement extends VPathwayElement implements VGroupable, Adjusta
 
 		ArrowShape he = getVHead(segments[segments.length - 1].getMStart(), segments[segments.length - 1].getMEnd(),
 				getPathwayObject().getEndArrowHeadType());
-		ArrowShape hs = getVHead(segments[0].getMEnd(), segments[0].getMStart(), getPathwayObject().getStartArrowHeadType());
+		ArrowShape hs = getVHead(segments[0].getMEnd(), segments[0].getMStart(),
+				getPathwayObject().getStartArrowHeadType());
 		return new ArrowShape[] { hs, he };
 	}
 
@@ -356,7 +357,8 @@ public class VLineElement extends VPathwayElement implements VGroupable, Adjusta
 		// first segment in the connector shape
 		double lineStartingWidth = getGap(getPathwayObject().getStartArrowHeadType());
 		Point2D adjustedSegmentStart = segments[0].calculateNewStartPoint(lineStartingWidth);
-		ArrowShape hs = getVHead(segments[0].getMEnd(), adjustedSegmentStart, getPathwayObject().getStartArrowHeadType());
+		ArrowShape hs = getVHead(segments[0].getMEnd(), adjustedSegmentStart,
+				getPathwayObject().getStartArrowHeadType());
 		return new ArrowShape[] { hs, he };
 	}
 
@@ -650,7 +652,13 @@ public class VLineElement extends VPathwayElement implements VGroupable, Adjusta
 		markDirty();
 	}
 
+	/**
+	 *
+	 */
+	@Override
 	public void gmmlObjectModified(PathwayObjectEvent e) {
+		System.out.println("GMMLOBJECTMODIFIED CALLED VLINEELEMENT!");
+
 		getConnectorShape().recalculateShape(getMLine());
 
 		WayPoint[] wps = getConnectorShape().getWayPoints();
@@ -773,6 +781,7 @@ public class VLineElement extends VPathwayElement implements VGroupable, Adjusta
 				return s;
 			}
 		}
+
 		return segments[segments.length];
 	}
 

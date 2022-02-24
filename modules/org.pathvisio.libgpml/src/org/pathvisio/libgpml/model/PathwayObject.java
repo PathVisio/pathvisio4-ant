@@ -186,8 +186,10 @@ public abstract class PathwayObject {
 	 * @param v
 	 */
 	public void addListener(PathwayObjectListener v) {
-		if (!listeners.contains(v))
+		if (!listeners.contains(v)) {
 			listeners.add(v);
+		}
+		System.out.println(this.getObjectType() + " LISTENER ADDED! " + listeners);
 	}
 
 	/**
@@ -195,6 +197,7 @@ public abstract class PathwayObject {
 	 */
 	public void removeListener(PathwayObjectListener v) {
 		listeners.remove(v);
+		System.out.println("LISTENER REMOVED! " + listeners);
 	}
 
 	/**
@@ -205,8 +208,11 @@ public abstract class PathwayObject {
 			noFire -= 1;
 			return;
 		}
-		if (pathwayModel != null)
+		if (pathwayModel != null) {
 			pathwayModel.childModified(e);
+		}
+		System.out.println("FIRE CALLED PATHWAYELEMENT.JAVA!");
+		System.out.println("LISTENER!" + listeners);
 		for (PathwayObjectListener g : listeners) {
 			g.gmmlObjectModified(e);
 		}

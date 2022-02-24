@@ -355,15 +355,18 @@ public class Pathway extends PathwayElement implements Xrefable {
 
 	private Set<PathwayObjectListener> listeners = new HashSet<PathwayObjectListener>();
 
+	@Override
 	public void addListener(PathwayObjectListener v) {
 		if (!listeners.contains(v))
 			listeners.add(v);
 	}
 
+	@Override
 	public void removeListener(PathwayObjectListener v) {
 		listeners.remove(v);
 	}
 
+	@Override
 	public void fireObjectModifiedEvent(PathwayObjectEvent e) {
 		if (noFire > 0) {
 			noFire -= 1;
