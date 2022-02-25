@@ -131,9 +131,7 @@ public class VPathwayModelSwing extends JPanel implements VPathwayModelWrapper, 
 	 * Draw immediately
 	 */
 	protected void paintComponent(Graphics g) {
-		System.out.println("paint Component " + child);
 		if (child != null) {
-			System.out.println("paintComponent from VPathwaySwing.java");
 			child.draw((Graphics2D) g);
 		}
 	}

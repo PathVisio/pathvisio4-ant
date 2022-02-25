@@ -130,21 +130,10 @@ public abstract class DefaultTemplates {
 			((Label) o).setWidth(LABEL_WIDTH);
 			((Label) o).setHeight(LABEL_HEIGHT);
 			break;
-		case INTERACTION:
-			System.out.println("Set Interaction InitialSize()");
-			((Interaction) o).setEndLinePointX(((Interaction) o).getStartLinePointX() + LINE_LENGTH);
-			System.out.println("First half finished");
-			((Interaction) o).setEndLinePointY(((Interaction) o).getStartLinePointY() + LINE_LENGTH);
-			System.out.println("getMStartX " + ((Interaction) o).getStartLinePointX());
-			System.out.println("getMStartY " + ((Interaction) o).getStartLinePointY());
-			break;
+		case INTERACTION: // In the case of Interaction or Graphical Line
 		case GRAPHLINE:
-			System.out.println("Set Interaction InitialSize()");
-			((GraphicalLine) o).setEndLinePointX(((GraphicalLine) o).getStartLinePointX() + LINE_LENGTH);
-			System.out.println("First half finished");
-			((GraphicalLine) o).setEndLinePointY(((GraphicalLine) o).getStartLinePointY() + LINE_LENGTH);
-			System.out.println("getMStartX " + ((GraphicalLine) o).getStartLinePointX());
-			System.out.println("getMStartY " + ((GraphicalLine) o).getStartLinePointY());
+			((LineElement) o).setEndLinePointX(((LineElement) o).getStartLinePointX() + LINE_LENGTH);
+			((LineElement) o).setEndLinePointY(((LineElement) o).getStartLinePointY() + LINE_LENGTH);
 			break;
 		default:
 			break;
@@ -383,11 +372,6 @@ public abstract class DefaultTemplates {
 			e.setConnectorType(connectorType);
 			// use addElement TODO
 			addElement(e, p);
-			System.out.println("LineTemplate DefaultTemplates");
-			System.out.println("StartX " + e.getStartLinePointX());
-			System.out.println("StartX " + e.getStartLinePointY());
-			System.out.println("EndX " + e.getEndLinePointX());
-			System.out.println("EndY " + e.getEndLinePointY());
 			return new Interaction[] { e };
 		}
 

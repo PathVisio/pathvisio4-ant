@@ -196,7 +196,6 @@ public abstract class PathwayObject {
 		if (!listeners.contains(v)) {
 			listeners.add(v);
 		}
-		System.out.println(this.getObjectType() + " LISTENER ADDED! " + listeners);
 	}
 
 	/**
@@ -204,7 +203,6 @@ public abstract class PathwayObject {
 	 */
 	public void removeListener(PathwayObjectListener v) {
 		listeners.remove(v);
-		System.out.println("LISTENER REMOVED! " + listeners);
 	}
 
 	/**

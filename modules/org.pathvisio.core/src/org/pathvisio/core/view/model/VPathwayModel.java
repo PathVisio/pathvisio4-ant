@@ -366,11 +366,9 @@ public class VPathwayModel implements PathwayModelListener {
 			result = fromModelState((State) o);
 			break;
 		case INTERACTION:
-			System.out.println("Call fromModelElement() Interaction VPathway.java");
 			result = fromModelLineElement((Interaction) o);
 			break;
 		case GRAPHLINE:
-			System.out.println("Call fromModelElement() GraphicalLine VPathway.java");
 			result = fromModelLineElement((GraphicalLine) o);
 			break;
 		case LABEL:
@@ -746,7 +744,6 @@ public class VPathwayModel implements PathwayModelListener {
 			if (pe.getObjectType() != ObjectType.GROUP) {
 				// and not a member of a group, then selection needs to be grouped
 				if (ref == null) {
-					System.out.println("Selection NEEDS TO BE GROUPED");
 					groupSelection = true;
 				}
 				// and is a member of a group, recursively get all parent group references.
@@ -1375,7 +1372,6 @@ public class VPathwayModel implements PathwayModelListener {
 			// if it was a click, give object the initial size.
 			else if (newObject != null && Math.abs(vDragStart.x - e.getX()) <= MIN_DRAG_LENGTH
 					&& Math.abs(vDragStart.y - e.getY()) <= MIN_DRAG_LENGTH) {
-				System.out.println("Call setInitialSize() from mouseUp() VPathwayModel.java");
 				DefaultTemplates.setInitialSize(newObject);
 			}
 			newObject = null;

@@ -1404,10 +1404,8 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 		 */
 		public double getX() {
 			if (isRelative()) {
-				System.out.println("Is relative " + getAbsolute().getX());
 				return getAbsolute().getX();
 			} else {
-				System.out.println("Is absolute " + x);
 				return x;
 			}
 		}
@@ -1679,7 +1677,6 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 		 * @param deltaY the value to move y coordinate by.
 		 */
 		public void moveBy(double deltaX, double deltaY) {
-			System.out.println("MOVEBY IS CALLED");
 			x = getX() + deltaX; // TODO
 			y = getY() + deltaY; // TODO
 			LineElement.this.fireObjectModifiedEvent(PathwayObjectEvent.createCoordinatePropertyEvent(LineElement.this));

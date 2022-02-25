@@ -233,7 +233,6 @@ public class VLineElement extends VPathwayElement implements VGroupable, Adjusta
 	 * method returns 0
 	 */
 	private double getGap(ArrowHeadType type) {
-		System.out.println("getGap() VLine " + type);
 		double gap = 0;
 		if (type == null) {
 			gap = ShapeRegistry.getArrow("Default").getGap();
@@ -250,15 +249,11 @@ public class VLineElement extends VPathwayElement implements VGroupable, Adjusta
 		g.setColor(c);
 		setLineStyle(g);
 
-		System.out.println("Call Line.Java doDraw()");
 		Shape l = getVConnectorAdjusted();
-		System.out.println("Print shape: " + l);
 
 		ArrowShape[] heads = getVHeadsAdjusted();
 		ArrowShape hs = heads[0];
 		ArrowShape he = heads[1];
-
-		System.out.println("Print head: " + heads);
 
 		g.draw(l);
 		drawHead(g, he, c);
@@ -319,7 +314,6 @@ public class VLineElement extends VPathwayElement implements VGroupable, Adjusta
 	}
 
 	public Shape calculateVOutline() {
-		System.out.println("calculateVOutline() Line.java");
 		return getVShape(true);
 	}
 
@@ -656,8 +650,6 @@ public class VLineElement extends VPathwayElement implements VGroupable, Adjusta
 	 */
 	@Override
 	public void gmmlObjectModified(PathwayObjectEvent e) {
-		System.out.println("GMMLOBJECTMODIFIED CALLED VLINEELEMENT!");
-
 		getConnectorShape().recalculateShape(getMLine());
 
 		WayPoint[] wps = getConnectorShape().getWayPoints();

@@ -145,7 +145,6 @@ public class VAnchor extends VElement implements VLinkableTo, Adjustable {
 
 	private Shape getShape() {
 		AnchorShape shape = getAnchorShape();
-		System.out.println("Call VAnchor getShape() " + shape);
 		return shape != null ? shape.getShape() : handle.getVOutline();
 	}
 

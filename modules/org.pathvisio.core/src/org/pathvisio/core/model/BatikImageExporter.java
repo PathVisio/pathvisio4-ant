@@ -86,7 +86,6 @@ public class BatikImageExporter extends ImageExporter {
 			return;
 		} else if	(getType().equals(TYPE_PNG)) {
 			t = new PNGTranscoder();
-			System.out.println("hi");
 		} else if	(getType().equals(TYPE_TIFF)) {
 			t = new TIFFTranscoder();
 		} else if	(getType().equals(TYPE_PDF)) {

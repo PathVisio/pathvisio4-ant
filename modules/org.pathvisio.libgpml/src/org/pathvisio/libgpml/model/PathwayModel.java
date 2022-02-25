@@ -822,7 +822,6 @@ public class PathwayModel {
 		addElementId(elementId, o);
 		fireObjectModifiedEvent(new PathwayModelEvent(o, PathwayModelEvent.ADDED));
 		checkMBoardSize(o);
-		System.out.println("Added to pathway " + o.getObjectType().name());
 	}
 
 	/**
@@ -855,7 +854,6 @@ public class PathwayModel {
 	 * @param o the pathway object to add
 	 */
 	public void add(PathwayObject o) {
-		System.out.println("TYPE " + o.getObjectType());
 		assert (o != null);
 		switch (o.getObjectType()) {
 		case PATHWAY:
