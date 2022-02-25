@@ -183,6 +183,13 @@ public abstract class PathwayObject {
 	private Set<PathwayObjectListener> listeners = new HashSet<PathwayObjectListener>();
 
 	/**
+	 * @return listeners for this pathway object.
+	 */
+	public Set<PathwayObjectListener> getListeners() {
+		return listeners;
+	}
+
+	/**
 	 * @param v
 	 */
 	public void addListener(PathwayObjectListener v) {
@@ -211,8 +218,6 @@ public abstract class PathwayObject {
 		if (pathwayModel != null) {
 			pathwayModel.childModified(e);
 		}
-		System.out.println("FIRE CALLED PATHWAYELEMENT.JAVA!");
-		System.out.println("LISTENER!" + listeners);
 		for (PathwayObjectListener g : listeners) {
 			g.gmmlObjectModified(e);
 		}
