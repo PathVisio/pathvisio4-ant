@@ -30,15 +30,14 @@ import org.pathvisio.core.preferences.PreferenceManager;
 import org.pathvisio.libgpml.debug.Logger;
 import org.pathvisio.libgpml.model.PathwayElement;
 import org.pathvisio.libgpml.model.PathwayObject;
+import org.pathvisio.libgpml.model.shape.ShapeType;
 import org.pathvisio.libgpml.model.type.HAlignType;
-import org.pathvisio.libgpml.model.type.CellularComponentType;
 import org.pathvisio.libgpml.model.type.DataNodeType;
 import org.pathvisio.libgpml.model.type.GroupType;
 import org.pathvisio.libgpml.model.type.LineStyleType;
 import org.pathvisio.libgpml.model.type.ObjectType;
 import org.pathvisio.libgpml.model.type.ArrowHeadType;
 import org.pathvisio.libgpml.model.type.OrientationType;
-import org.pathvisio.libgpml.model.type.ShapeType;
 import org.pathvisio.libgpml.model.type.VAlignType;
 import org.pathvisio.libgpml.prop.Property;
 import org.pathvisio.libgpml.prop.PropertyType;
@@ -83,20 +82,20 @@ public class PropertyDisplayManager {
 		registerTypeHandler(new ComboHandler(StaticPropertyType.SHAPETYPE, ShapeType.getVisibleNames(), ShapeType.getVisibleValues()));
 		registerTypeHandler(new ComboHandler(StaticPropertyType.VALIGNTYPE, VAlignType.getNames(), VAlignType.values()));
 		registerTypeHandler(new ComboHandler(StaticPropertyType.HALIGNTYPE, HAlignType.getNames(), HAlignType.values()));
-		registerTypeHandler(new ComboHandler(CellularComponentType.CELL_COMPONENT_TYPE, CellularComponentType.getNames(), false));
+//		TODO registerTypeHandler(new ComboHandler(CellularComponentType.CELL_COMPONENT_TYPE, CellularComponentType.getNames(), false));
 
 		// register core properties
 		for (StaticProperty p : StaticProperty.values()) {
 			registerProperty(p);
 		}
 
-		//Register specific dynamic property
+		//Register specific dynamic property TODO
 		//TODO: refactor as Static Property with next GPML update
-		registerProperty(CellularComponentType.CELL_COMPONENT_PROPERTY);
-		setPropertyScope(
-				CellularComponentType.CELL_COMPONENT_PROPERTY, 
-				EnumSet.of(ObjectType.SHAPE)
-		);
+//		registerProperty(CellularComponentType.CELL_COMPONENT_PROPERTY);
+//		setPropertyScope(
+//				CellularComponentType.CELL_COMPONENT_PROPERTY, 
+//				EnumSet.of(ObjectType.SHAPE)
+//		);
 	}
 
 

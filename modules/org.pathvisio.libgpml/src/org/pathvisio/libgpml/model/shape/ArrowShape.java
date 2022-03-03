@@ -38,6 +38,8 @@ import java.awt.Shape;
 	    | /              ##/             /
 	    |/               #/             /
  * </pre>
+ * 
+ * @author unknown
  */
 public class ArrowShape {
 	/**

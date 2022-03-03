@@ -20,61 +20,99 @@ import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 
-public class AbstractShape implements IShape
-{
+/**
+ * Class for shapes.
+ * 
+ * @author unknown
+ */
+public class AbstractShape implements IShape {
+
 	private String name;
-	private String mappName;
 	private boolean isResizeable;
 	private boolean isRotatable;
 	private Shape sh;
-	
-	public AbstractShape (Shape sh, String name, String mappName, boolean isResizeable, boolean isRotatable)
-	{
+
+	// ================================================================================
+	// Constructors
+	// ================================================================================
+	/**
+	 * Instantiates.
+	 * 
+	 * @param sh           the Shape.
+	 * @param name         the String name.
+	 * @param isResizeable if true shape is resizeable.
+	 * @param isRotatable  if true shape is rotatable.
+	 */
+	public AbstractShape(Shape sh, String name, boolean isResizeable, boolean isRotatable) {
 		this.name = name;
 		this.sh = sh;
-		this.mappName = mappName;
 		this.isRotatable = isRotatable;
 		this.isResizeable = isResizeable;
 		ShapeRegistry.registerShape(this);
 	}
 
-	public AbstractShape (Shape sh, String name)
-	{
-		this (sh, name, name, true, true);
+	/**
+	 * @param sh
+	 * @param name
+	 */
+	public AbstractShape(Shape sh, String name) {
+		this(sh, name, true, true);
 	}
 
-	public String getMappName()
-	{
-		return mappName;
-	}
+	// ================================================================================
+	// Accessors
+	// ================================================================================
 
-	public String getName()
-	{
+	/**
+	 * Returns String name of this shape.
+	 * 
+	 * @return name
+	 */
+	@Override
+	public String getName() {
 		return name;
 	}
 
-	public Shape getShape(double mw, double mh)
-	{
+	/**
+	 *
+	 */
+	@Override
+	public Shape getShape(double mw, double mh) {
 		// now scale the path so it has proper w and h.
 		Rectangle r = sh.getBounds();
 		AffineTransform at = new AffineTransform();
-		at.translate ( - r.x,  - r.y);
-		at.scale (mw / r.width, mh / r.height);
-		return at.createTransformedShape (sh);
+		at.translate(-r.x, -r.y);
+		at.scale(mw / r.width, mh / r.height);
+		return at.createTransformedShape(sh);
 	}
 
-	public boolean isResizeable()
-	{
+	/**
+	 * Returns boolean for whether shape is resizeable.
+	 * 
+	 * @return isResizeable if true shape is resizeable.
+	 */
+	@Override
+	public boolean isResizeable() {
 		return isResizeable;
 	}
 
-	public boolean isRotatable()
-	{
+	/**
+	 * Returns boolean for whether shape is rotatable.
+	 * 
+	 * @return isRotatable if true shape is rotatable.
+	 */
+	@Override
+	public boolean isRotatable() {
 		return isRotatable;
 	}
-	
-	public String toString()
-	{
+
+	/**
+	 * Returns String name of this shape.
+	 * 
+	 * @return name
+	 */
+	@Override
+	public String toString() {
 		return name;
 	}
 

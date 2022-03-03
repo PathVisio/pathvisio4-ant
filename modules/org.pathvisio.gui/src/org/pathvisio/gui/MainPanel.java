@@ -209,6 +209,9 @@ public class MainPanel extends JPanel implements VPathwayModelListener, Applicat
 
 		objectsPane.addButtons(actions.newCellularComponentActions, "Cellular compartments", numItemsPerRow);
 
+		//TODO
+		objectsPane.addButtons(actions.newMiscShapeActions, "Miscellaneous shapes", numItemsPerRow);
+
 		objectsPane.addButtons(actions.newTemplateActions, "Templates", numItemsPerRow);
 
 		propertyTable = new JTable(model) {
@@ -354,6 +357,7 @@ public class MainPanel extends JPanel implements VPathwayModelListener, Applicat
 		itemsDropDown = shapeButton;
 		shapeButton.addButtons("Basic shapes", actions.newShapeActions);
 		shapeButton.addButtons("Cellular components", actions.newCellularComponentActions);
+		//TODO 
 		addToToolbar(shapeButton, TB_GROUP_SHOW_IF_EDITMODE);
 		tb.addSeparator(new Dimension(2, 0));
 

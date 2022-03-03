@@ -40,11 +40,11 @@ import org.pathvisio.libgpml.model.type.ArrowHeadType;
 import org.pathvisio.libgpml.model.PathwayModel;
 import org.pathvisio.libgpml.model.PathwayModel.StatusFlagEvent;
 import org.pathvisio.libgpml.model.PathwayModel.StatusFlagListener;
+import org.pathvisio.libgpml.model.shape.ShapeType;
 import org.pathvisio.libgpml.model.PathwayObject;
 import org.pathvisio.libgpml.model.Label;
 import org.pathvisio.libgpml.model.PathwayElement;
 import org.pathvisio.libgpml.model.PathwayElement.CitationRef;
-import org.pathvisio.libgpml.model.type.ShapeType;
 import org.pathvisio.core.util.Resources;
 import org.pathvisio.core.view.LayoutType;
 import org.pathvisio.core.view.model.DefaultTemplates;
@@ -128,6 +128,8 @@ public class CommonActions implements ApplicationEventListener {
 
 	public final Action[] newCellularComponentActions;
 
+	public final Action[] newMiscShapeActions; // TODO
+
 	public final Action[] newInteractionActions;
 
 	public final Action[] newRLInteractionActions;
@@ -186,16 +188,16 @@ public class CommonActions implements ApplicationEventListener {
 				new Action[] { new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.RECTANGLE)) },
 				new Action[] { new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.OVAL)) },
 				new Action[] { new NewElementAction(e,
-						new DefaultTemplates.InteractionTemplate("directed", LineStyleType.SOLID, ArrowHeadType.UNDIRECTED,
-								ArrowHeadType.DIRECTED, ConnectorType.STRAIGHT)), },
+						new DefaultTemplates.InteractionTemplate("directed", LineStyleType.SOLID,
+								ArrowHeadType.UNDIRECTED, ArrowHeadType.DIRECTED, ConnectorType.STRAIGHT)), },
 				// new Action[] {
 				// new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.ARC))
 				// },
 				// new Action[] {
 				// new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.BRACE))
 				// },
-				new Action[] {
-						new NewElementAction(e, new DefaultTemplates.InteractionTemplate("inhibition", LineStyleType.SOLID,
+				new Action[] { new NewElementAction(e,
+						new DefaultTemplates.InteractionTemplate("inhibition", LineStyleType.SOLID,
 								ArrowHeadType.UNDIRECTED, ArrowHeadType.INHIBITION, ConnectorType.STRAIGHT)) },
 //					new Action[] {
 //							new NewElementAction(e, new DefaultTemplates.LineTemplate(
@@ -320,6 +322,14 @@ public class CommonActions implements ApplicationEventListener {
 				// DefaultTemplates.CellularComponentTemplate(ShapeType.ROUNDED_RECTANGLE,
 				// CellularComponentType.MEMBRANE))
 		};
+
+		// actions for "Miscellaneous Shapes" section
+		newMiscShapeActions = new Action[] {
+				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.CORONAVIRUS)),
+				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.DNA)),
+				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.ENDOPLASMIC_RETICULUM)),
+				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.GOLGI_APPARATUS)),
+				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.MITOCHONDRIA)), };
 
 		// actions for "Molecular Interaction Map Interactions" section
 		newMIMInteractionActions = new Action[] {

@@ -37,7 +37,6 @@ import org.pathvisio.libgpml.model.Label;
 import org.pathvisio.libgpml.model.PathwayElement;
 import org.pathvisio.libgpml.model.ShapedElement;
 import org.pathvisio.libgpml.model.PathwayObjectEvent;
-import org.pathvisio.libgpml.model.type.ShapeType;
 import org.pathvisio.libgpml.util.ColorUtils;
 import org.pathvisio.libgpml.util.LinAlg;
 import org.pathvisio.core.preferences.GlobalPreference;
@@ -48,6 +47,7 @@ import org.pathvisio.libgpml.util.LinAlg.Point;
 import org.pathvisio.libgpml.util.Utils;
 import org.pathvisio.libgpml.model.shape.IShape;
 import org.pathvisio.libgpml.model.shape.ShapeRegistry;
+import org.pathvisio.libgpml.model.shape.ShapeType;
 
 /**
  * This class represents the view of {@link ShapedElement} pathway elements:

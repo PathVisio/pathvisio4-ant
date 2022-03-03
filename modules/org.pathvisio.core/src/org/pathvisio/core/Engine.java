@@ -531,8 +531,9 @@ public class Engine {
 	 */
 	public void dispose() {
 		assert (!disposed);
-		if (vPathwayModel != null)
+		if (vPathwayModel != null) {
 			disposeVPathwayModel();
+		}
 		applicationEventListeners.clear();
 		disposed = true;
 	}
@@ -570,7 +571,7 @@ public class Engine {
 	 * pathway.
 	 * 
 	 * @param pathwayModel pathway model to export
-	 * @param file    file to write to.
+	 * @param file         file to write to.
 	 * @returns a list of warnings that occurred during export, or an empty list if
 	 *          there were none.
 	 */
@@ -594,7 +595,7 @@ public class Engine {
 	 * pathway.
 	 * 
 	 * @param pathwayModel pathway model to export
-	 * @param file    file to write to.
+	 * @param file         file to write to.
 	 * @returns a list of warnings that occurred during export, or an empty list if
 	 *          there were none.
 	 */

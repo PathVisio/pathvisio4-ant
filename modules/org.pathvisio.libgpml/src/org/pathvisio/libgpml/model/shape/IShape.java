@@ -22,7 +22,7 @@ package org.pathvisio.libgpml.model.shape;
  * @author unknown
  */
 public interface IShape {
-	
+
 	public String getName();
 
 	public boolean isResizeable();

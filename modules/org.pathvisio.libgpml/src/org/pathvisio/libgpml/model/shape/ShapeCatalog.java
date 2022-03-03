@@ -16,6 +16,7 @@
  ******************************************************************************/
 package org.pathvisio.libgpml.model.shape;
 
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.GeneralPath;
 
@@ -56,6 +57,7 @@ public class ShapeCatalog {
 
 		// Basic line shapes
 		BRACE,
+
 		// Cellular components
 		MITOCHONDRIA, SARCOPLASMIC_RETICULUM, ENDOPLASMIC_RETICULUM, GOLGI_APPARATUS,
 
@@ -72,6 +74,9 @@ public class ShapeCatalog {
 	static public java.awt.Shape getPluggableShape(Internal st) {
 		GeneralPath path = new GeneralPath();
 		switch (st) {
+		// ========================================
+		// Basic line shapes
+		// ========================================
 		case BRACE:
 			path.moveTo(0, 4);
 			path.quadTo(0, 2, 3, 2);
@@ -79,6 +84,9 @@ public class ShapeCatalog {
 			path.quadTo(6, 2, 9, 2);
 			path.quadTo(12, 2, 12, 4);
 			break;
+		// ========================================
+		// Cellular components (irregular shape)
+		// ========================================
 		case MITOCHONDRIA:
 			path.moveTo(72.81f, 85.70f);
 			path.curveTo(97.59f, 83.01f, 94.55f, 147.38f, 119.28f, 144.29f);
@@ -166,6 +174,9 @@ public class ShapeCatalog {
 			path.lineTo(83.40f, 133.15f);
 			path.closePath();
 			break;
+		// ========================================
+		// Special shapes
+		// ========================================
 		case CORONAVIRUS:
 			path.append(new Ellipse2D.Double(90, 90, 150, 150), false);
 			double origin = 165;
@@ -185,15 +196,26 @@ public class ShapeCatalog {
 			}
 			break;
 		case DNA:
-			// TODO
+			
+			break;
 		case CELL_ICON:
 			// TODO
+			path.append(new Ellipse2D.Double(90, 90, 150, 150), false);
+			break;
 		default:
 			break;
 		}
 		return path;
 	}
 
+	/**
+	 * Returns regular polygon shape given number of sides, width, and height.
+	 * 
+	 * @param sides the number of sides of polygon.
+	 * @param w     the width.
+	 * @param h     the height.
+	 * @return
+	 */
 	public static java.awt.Shape getRegularPolygon(int sides, double w, double h) {
 		GeneralPath path = new GeneralPath();
 		for (int i = 0; i < sides; ++i) {

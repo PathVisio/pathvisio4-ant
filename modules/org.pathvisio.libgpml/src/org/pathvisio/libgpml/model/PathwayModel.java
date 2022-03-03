@@ -859,7 +859,7 @@ public class PathwayModel {
 		case PATHWAY:
 			System.out.println("There was an attempt to add PATHWAY to pathway model?");
 			// There can be only one mappInfo object, so if we're trying to add it, remove
-			// the old one. //TODO REPLACE OR JUST SKIP?			
+			// the old one. //TODO REPLACE OR JUST SKIP?
 			break;
 		case DATANODE:
 			addDataNode((DataNode) o);
@@ -891,7 +891,7 @@ public class PathwayModel {
 		default:
 			throw new IllegalArgumentException("Pathway object cannot be directly added to pathway model.");
 //			break; TODO
-		
+
 		}
 	}
 

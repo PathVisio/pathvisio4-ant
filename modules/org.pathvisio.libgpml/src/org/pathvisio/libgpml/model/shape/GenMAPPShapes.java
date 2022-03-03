@@ -277,52 +277,6 @@ public class GenMAPPShapes
 		return path;
 	}
 	
-	/**
-	 * Internal,
-	 * For shape types composed of multiple basic shapes.
-	 * 
-	 * NOTE: These are all being deprecated. They should be 
-	 * automatically converted to semantic-free shapes.
-	 */
-	static public java.awt.Shape getCombinedShape (Internal st)
-	{
-		Area area = new Area();
-		
-		switch (st)
-		{
-		case CELL:
-			RoundRectangle2D.Double c1 = new RoundRectangle2D.Double(0,0,600,600,100, 100);
-			RoundRectangle2D.Double c2 = new RoundRectangle2D.Double(11,11,578,578,100, 100);
-			area.add(new Area(c1));
-			area.exclusiveOr(new Area(c2));
-			break;
-		case NUCLEUS:
-			Ellipse2D.Double n1 = new Ellipse2D.Double (0, 0, 300, 200);
-			Ellipse2D.Double n2 = new Ellipse2D.Double (8, 8, 284, 184);
-			area.add(new Area(n1));
-			area.exclusiveOr(new Area(n2));
-			break;
-//		case MITOCHONDRIA:
-//			RoundRectangle2D.Double m1 = new RoundRectangle2D.Double (0, 0, 200, 100, 40, 60);
-//			Ellipse2D.Double m2 = new Ellipse2D.Double (4, 4, 192, 92);
-//			area.add(new Area(m1));
-//			area.exclusiveOr(new Area(m2));
-//			break;
-		case ORGANELLE:
-			RoundRectangle2D.Double g1 = new RoundRectangle2D.Double(0,0,200,100,40, 60);
-			RoundRectangle2D.Double g2 = new RoundRectangle2D.Double(8,8,184,84,40, 60);
-			area.add(new Area(g1));
-			area.exclusiveOr(new Area(g2));
-			break;
-		case VESICLE:
-			Ellipse2D.Double v1 = new Ellipse2D.Double (0, 0, 100, 100);
-			area.add(new Area(v1));
-			break;
-			
-		
-		}
-		return area;
-	}
 	
 	public static java.awt.Shape getRegularPolygon (int sides, double w, double h)
 	{

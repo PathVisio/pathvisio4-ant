@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  ******************************************************************************/
-package org.pathvisio.libgpml.model.type;
+package org.pathvisio.libgpml.model.shape;
 
 import java.awt.Rectangle;
 import java.awt.Shape;
@@ -29,8 +29,6 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.pathvisio.libgpml.debug.Logger;
-import org.pathvisio.libgpml.model.shape.IShape;
-import org.pathvisio.libgpml.model.shape.ShapeCatalog;
 import org.pathvisio.libgpml.model.shape.ShapeCatalog.Internal;
 
 /**
@@ -53,10 +51,12 @@ public class ShapeType implements IShape {
 			String.CASE_INSENSITIVE_ORDER);
 	private static final List<ShapeType> VISIBLE_VALUES = new ArrayList<ShapeType>();
 
+	// ========================================
 	// Basic shapes
+	// ========================================
 	public static final ShapeType NONE = new ShapeType("None", null);
 	public static final ShapeType RECTANGLE = new ShapeType("Rectangle", rectangle);
-	public static final ShapeType ROUNDED_RECTANGLE = new ShapeType("RoundedRectangle", null){
+	public static final ShapeType ROUNDED_RECTANGLE = new ShapeType("RoundedRectangle", null) {
 		public Shape getShape(double mw, double mh) {
 			return new RoundRectangle2D.Double(0, 0, mw, mh, 20, 20);
 		}
@@ -67,12 +67,16 @@ public class ShapeType implements IShape {
 	public static final ShapeType HEXAGON = new ShapeType("Hexagon", ShapeCatalog.getRegularPolygon(6, 10, 10));
 	public static final ShapeType OCTAGON = new ShapeType("Octagon", ShapeCatalog.getRegularPolygon(8, 10, 10));
 
+	// ========================================
 	// Basic line shapes
+	// ========================================
 	public static final ShapeType EDGE = new ShapeType("Undirected", new Line2D.Double(0, 0, 10, 10));
 	public static final ShapeType ARC = new ShapeType("Arc", new Arc2D.Double(0, 0, 10, 10, 0, -180, Arc2D.OPEN));
 	public static final ShapeType BRACE = new ShapeType("Brace", ShapeCatalog.getPluggableShape(Internal.BRACE));
 
-	// Cellular components with special shape
+	// ========================================
+	// Cellular components (irregular shape)
+	// ========================================
 	public static final ShapeType MITOCHONDRIA = new ShapeType("Mitochondria",
 			ShapeCatalog.getPluggableShape(Internal.MITOCHONDRIA));
 	public static final ShapeType SARCOPLASMIC_RETICULUM = new ShapeType("SarcoplasmicReticulum",
@@ -82,30 +86,44 @@ public class ShapeType implements IShape {
 	public static final ShapeType GOLGI_APPARATUS = new ShapeType("GolgiApparatus",
 			ShapeCatalog.getPluggableShape(Internal.ENDOPLASMIC_RETICULUM));
 
-	// Cellular components (rarely used)
-	public static final ShapeType NUCLEOLUS = new ShapeType("Nucleolus", null);
-	public static final ShapeType VACUOLE = new ShapeType("Vacuole", null);
-	public static final ShapeType LYSOSOME = new ShapeType("Lysosome", null);
-	public static final ShapeType CYTOSOL = new ShapeType("CytosolRegion", null);
-
-	// Cellular components with basic shape
-	public static final ShapeType EXTRACELLULAR = new ShapeType("ExtracellularRegion", null){
-		public Shape getShape(double mw, double mh) { // rounded rectangle 
+	// ========================================
+	// Cellular components (basic shape)
+	// ========================================
+	public static final ShapeType EXTRACELLULAR = new ShapeType("ExtracellularRegion", null) {
+		public Shape getShape(double mw, double mh) { // rounded rectangle
 			return new RoundRectangle2D.Double(0, 0, mw, mh, 20, 20);
 		}
-	}; 
-	public static final ShapeType CELL = new ShapeType("Cell", null){
-		public Shape getShape(double mw, double mh) { // rounded rectangle 
+	};
+	public static final ShapeType CELL = new ShapeType("Cell", null) {
+		public Shape getShape(double mw, double mh) { // rounded rectangle
 			return new RoundRectangle2D.Double(0, 0, mw, mh, 20, 20);
 		}
 	};
 	public static final ShapeType NUCLEUS = new ShapeType("Nucleus", ellipse); // oval
-	public static final ShapeType ORGANELLE = new ShapeType("Organelle", null){
-		public Shape getShape(double mw, double mh) { // rounded rectangle 
+	public static final ShapeType ORGANELLE = new ShapeType("Organelle", null) {
+		public Shape getShape(double mw, double mh) { // rounded rectangle
 			return new RoundRectangle2D.Double(0, 0, mw, mh, 20, 20);
 		}
-	}; 
+	};
 	public static final ShapeType VESICLE = new ShapeType("Vesicle", ellipse); // oval
+
+	// ========================================
+	// Special shapes
+	// ========================================
+	public static final ShapeType CORONAVIRUS = new ShapeType("Coronavirus",
+			ShapeCatalog.getPluggableShape(Internal.CORONAVIRUS));
+	public static final ShapeType DNA = new ShapeType("DNA", ShapeCatalog.getPluggableShape(Internal.DNA)); //
+	public static final ShapeType CELL_ICON = new ShapeType("CellIcon",
+			ShapeCatalog.getPluggableShape(Internal.CELL_ICON)); //
+
+	// ========================================
+	// Rarely used/Deprecated TODO
+	// ========================================
+	// Cellular components (rarely used) TODO
+	public static final ShapeType NUCLEOLUS = new ShapeType("Nucleolus", null);
+	public static final ShapeType VACUOLE = new ShapeType("Vacuole", null);
+	public static final ShapeType LYSOSOME = new ShapeType("Lysosome", null);
+	public static final ShapeType CYTOSOL = new ShapeType("CytosolRegion", null);
 
 	// Deprecated since GPML2013a? TODO
 	public static final ShapeType MEMBRANE = new ShapeType("Membrane", null); // roundRect
@@ -116,41 +134,48 @@ public class ShapeType implements IShape {
 	public static final ShapeType ORGANC = new ShapeType("OrganC", null); // oval
 	public static final ShapeType PROTEINB = new ShapeType("ProteinB", null); // hexagon
 
-	// Special shapes
-	public static final ShapeType CORONAVIRUS = new ShapeType("Coronavirus",
-			ShapeCatalog.getPluggableShape(Internal.CORONAVIRUS));
-	public static final ShapeType DNA = new ShapeType("DNA", ShapeCatalog.getPluggableShape(Internal.DNA)); //
-	public static final ShapeType CELL_ICON = new ShapeType("CellIcon",
-			ShapeCatalog.getPluggableShape(Internal.CELL_ICON)); //
-
+	// ================================================================================
+	// Properties
+	// ================================================================================
 	private final String name;
 	private final Shape shape;
 	private final boolean isResizeable;
 	private final boolean isRotatable;
 
+	// ================================================================================
+	// Constructors
+	// ================================================================================
 	/**
 	 * The constructor is private. ShapeType cannot be directly instantiated. Use
 	 * create() method to instantiate ShapeType.
 	 * 
-	 * @param name the string key of this ShapeType. // isResizeable if true object
-	 *             is resizeable.
+	 * @param name         the string key of this ShapeType.
+	 * @param shape        the shape.
+	 * @param isResizeable if true object is resizeable.
+	 * @param isRotatable  if true object is rotatable.
+	 * 
 	 * @throws NullPointerException if name is null.
 	 */
-	private ShapeType(String name, Shape shape) {
-		this(name, shape, true, true);
-	}
-
-	// TODO documentation
 	private ShapeType(String name, Shape shape, boolean isResizeable, boolean isRotatable) {
 		if (name == null) {
 			throw new NullPointerException();
 		}
 		this.name = name;
-		nameToShapeType.put(name, this); // adds this name and ShapeType to map.
 		this.shape = shape;
 		this.isResizeable = isResizeable;
 		this.isRotatable = isRotatable;
+		nameToShapeType.put(name, this); // adds this name and ShapeType to map.
 		VISIBLE_VALUES.add(this);
+	}
+
+	/**
+	 * The constructor is private. ShapeType is resizeable and rotatable by default.
+	 * 
+	 * @param name  the string key of this ShapeType.
+	 * @param shape the shape.
+	 */
+	private ShapeType(String name, Shape shape) {
+		this(name, shape, true, true);
 	}
 
 	/**
@@ -172,6 +197,9 @@ public class ShapeType implements IShape {
 		}
 	}
 
+	// ================================================================================
+	// Accessors
+	// ================================================================================
 	/**
 	 * Returns the name key for this ShapeType.
 	 * 
@@ -182,23 +210,35 @@ public class ShapeType implements IShape {
 	}
 
 	/**
-	 * @param mw
-	 * @param mh
+	 * Returns the shape resized given width and height.
+	 * 
+	 * @param w the width.
+	 * @param h the height.
 	 * @return the shape resized.
 	 */
-	public Shape getShape(double mw, double mh) {
+	public Shape getShape(double w, double h) {
 		// now scale the path so it has proper w and h.
 		Rectangle r = shape.getBounds();
 		AffineTransform at = new AffineTransform();
 		at.translate(-r.x, -r.y);
-		at.scale(mw / r.width, mh / r.height);
+		at.scale(w / r.width, h / r.height);
 		return at.createTransformedShape(shape);
 	}
 
+	/**
+	 * Returns boolean for whether shape is resizeable.
+	 * 
+	 * @return isResizeable if true shape is resizeable.
+	 */
 	public boolean isResizeable() {
 		return isResizeable;
 	}
 
+	/**
+	 * Returns boolean for whether shape is rotatable.
+	 * 
+	 * @return isRotatable if true shape is rotatable.
+	 */
 	public boolean isRotatable() {
 		return isRotatable;
 	}
@@ -233,14 +273,10 @@ public class ShapeType implements IShape {
 	}
 
 	/**
-	 * Returns a string representation of this ShapeType.
+	 * Returns the names of visible registered ShapeTypes as a list.
 	 * 
-	 * @return name the identifier of this ShapeType.
+	 * @return result the names of registered ShapeTypes.
 	 */
-	public String toString() {
-		return name;
-	}
-
 	static public String[] getVisibleNames() {
 		String[] result = new String[VISIBLE_VALUES.size()];
 
@@ -250,8 +286,22 @@ public class ShapeType implements IShape {
 		return result;
 	}
 
+	/**
+	 * Returns the data node type values of visible ShapeTypes as a list.
+	 * 
+	 * @return shapeTypes the list of registered ShapeTypes.
+	 */
 	static public ShapeType[] getVisibleValues() {
 		return VISIBLE_VALUES.toArray(new ShapeType[0]);
+	}
+
+	/**
+	 * Returns a string representation of this ShapeType.
+	 * 
+	 * @return name the identifier of this ShapeType.
+	 */
+	public String toString() {
+		return name;
 	}
 
 }
