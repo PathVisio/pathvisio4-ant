@@ -408,15 +408,38 @@ public class ShapeCatalog {
 			path.closePath();
 			// nucleolus
 			path.append(new Ellipse2D.Double(65, 55, 10, 10), false);
+			path.append(new Ellipse2D.Double(65, 55, 10, 10), false); // for fill color
 			// nucleus
-			path.append(new Ellipse2D.Double(37, 30, 50, 45), false);
+//			path.append(new Ellipse2D.Double(37, 30, 50, 45), false); 
+//			path.append(new Ellipse2D.Double(34.5, 27.5, 55, 50), false); // for fill color
 			path.append(new Ellipse2D.Double(34.5, 27.5, 55, 50), false);
-			// mitochondria
+			// mitochondria (simplified version) 
+			GeneralPath mito = new GeneralPath();
+			mito.moveTo(2.65,2.49);
+			mito.curveTo(3.56,2.41,3.45,4.3,4.36,4.21);
+			mito.curveTo(6.08,4.21,6.04,1.16,7.49,1.14);
+			mito.curveTo(8.94,1.12,8.93,4.09,10.54,4.11);
+			mito.curveTo(11.91,4.12,11.7,1.11,13.07,1.19);
+			mito.curveTo(14.57,1.27,14.4,4.48,15.89,4.68);
+			mito.curveTo(16.88,4.81,16.81,2.74,17.81,2.83);
+			mito.curveTo(19.49,3.41,19.44,5.24,18.43,6.48);
+			mito.curveTo(18.05,6.96,17.52,7.35,16.89,7.56);
+			mito.curveTo(16.24,7.63,14.93,6.58,14.28,6.64);
+			mito.curveTo(13.11,6.75,13.05,9.07,11.87,9.02);
+			mito.curveTo(10.78,8.97,10.79,7.09,9.51,6.96);
+			mito.curveTo(8.33,6.84,8.39,9.11,7.21,8.95);
+			mito.curveTo(5.9,8.78,6.11,6.13,4.8,6);
+			mito.curveTo(4.02,5.92,4.25,7.52,3.46,7.54);
+			mito.curveTo(0.53,6.91,0.17,3.33,2.65,2.49);
+			mito.closePath();
+			mito.append(new Ellipse2D.Double(0, 0, 20, 10), false);
+			mito.append(new Ellipse2D.Double(0, 0, 20, 10), false);// for fill color
+			mito.append(new Ellipse2D.Double(0, 0, 20, 10), false);// for fill color
 			AffineTransform at = new AffineTransform();
 			at.translate(100, 30);
-			at.scale(0.05, 0.05);
+			at.scale(1.5, 1.5);
 			at.rotate(40, 50);
-			Shape mitochondria = at.createTransformedShape(getPluggableShape(Internal.MITOCHONDRIA));
+			Shape mitochondria = at.createTransformedShape(mito);
 			path.append(mitochondria, false);
 			// endoplasmic reticulum
 			AffineTransform at2 = new AffineTransform();
@@ -430,6 +453,7 @@ public class ShapeCatalog {
 			path.append(new Ellipse2D.Double(20, 80, 5, 5), false);
 			path.append(new Ellipse2D.Double(25, 65, 5, 5), false);
 			path.append(new Ellipse2D.Double(30, 80, 5, 5), false);
+
 			break;
 		default:
 			break;

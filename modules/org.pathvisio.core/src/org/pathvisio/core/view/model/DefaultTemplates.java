@@ -363,7 +363,11 @@ public abstract class DefaultTemplates {
 				e.setTextColor(COLOR_DEFAULT);
 				e.setBorderColor(COLOR_DEFAULT);
 				e.setFillColor(Color.lightGray);
-			} else {
+			} else if (type == ShapeType.CELL_ICON) {
+				e.setTextColor(COLOR_DEFAULT);
+				e.setBorderColor(Color.darkGray);
+				e.setFillColor(Color.lightGray);
+			}else {
 				e.setTextColor(COLOR_DEFAULT);
 				e.setBorderColor(COLOR_DEFAULT);
 				e.setFillColor(ColorUtils.hexToColor("#00000000"));
