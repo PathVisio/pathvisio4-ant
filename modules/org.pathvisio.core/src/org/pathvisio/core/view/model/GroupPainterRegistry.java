@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.pathvisio.libgpml.model.type.GroupType;
+import org.pathvisio.libgpml.util.ColorUtils;
 
 /**
  * Keeps track of all GroupPainters.
@@ -66,6 +67,10 @@ public class GroupPainterRegistry {
 	}
 
 	private static final int TRANSLUCENCY_LEVEL = (int) (255 * .10);
+	private static final int TRANSLUCENCY_LEVEL_HOVER = (int) (255 * .05);
+	private static final Color GROUP_GRAY = new Color(180, 180, 100);
+	private static final Color PATHWAY_GREEN = Color.GREEN;
+	private static final Color TRANSPARENT_BLUE = new Color(0, 0, 255);
 
 	/**
 	 * Painter for {@link GroupType#TRANSPARENT}. Group appears as transparent
@@ -85,7 +90,7 @@ public class GroupPainterRegistry {
 			if (mouseover || anchors || selected) {
 				int sw = 1;
 				// fill
-				g.setColor(new Color(0, 0, 255, (int) (255 * .05)));
+				g.setColor(ColorUtils.makeTransparent(TRANSPARENT_BLUE, TRANSLUCENCY_LEVEL_HOVER));
 				g.fillRect((int) rect.getX(), (int) rect.getY(), (int) rect.getWidth(), (int) rect.getHeight());
 				// border
 				g.setColor(Color.GRAY);
@@ -147,7 +152,7 @@ public class GroupPainterRegistry {
 			outline.closePath();
 
 			// fill
-			g.setColor(new Color(180, 180, 100, TRANSLUCENCY_LEVEL));
+			g.setColor(ColorUtils.makeTransparent(GROUP_GRAY, TRANSLUCENCY_LEVEL));
 			g.fill(outline);
 			// border
 			g.setColor(Color.GRAY);
@@ -157,7 +162,7 @@ public class GroupPainterRegistry {
 			// Group highlight, on mouseover, linkanchors display and selection
 			if (mouseover || anchors || selected) {
 				// fill
-				g.setColor(new Color(255, 0, 0, (int) (255 * .05)));
+				g.setColor(ColorUtils.makeTransparent(GROUP_GRAY, TRANSLUCENCY_LEVEL_HOVER));
 				g.fill(outline);
 
 				// border
@@ -189,7 +194,7 @@ public class GroupPainterRegistry {
 			Rectangle2D tb = g.getFontMetrics().getStringBounds(label, g);
 
 			// different alpha when selected and mouse over
-			int alpha = (mouseover || anchors || selected) ? TRANSLUCENCY_LEVEL : (int) (255 * .05);
+			int alpha = (mouseover || anchors || selected) ? TRANSLUCENCY_LEVEL : TRANSLUCENCY_LEVEL_HOVER;
 
 			if (tb.getWidth() <= rect.getWidth()) {
 				int yoffset = (int) rect.getY();
@@ -200,10 +205,9 @@ public class GroupPainterRegistry {
 			}
 
 			int sw = 1;
-			Color c = Color.GREEN;
 
 			// fill
-			g.setColor(new Color(c.getRed(), c.getGreen(), c.getBlue(), alpha));
+			g.setColor(ColorUtils.makeTransparent(PATHWAY_GREEN, alpha));
 			g.fillRect((int) rect.getX(), (int) rect.getY(), (int) rect.getWidth(), (int) rect.getHeight());
 			// border
 			g.setColor(Color.GRAY);
@@ -230,7 +234,7 @@ public class GroupPainterRegistry {
 			int sw = 1;
 			Rectangle2D rect = group.getVBounds();
 			// fill
-			g.setColor(new Color(180, 180, 100, TRANSLUCENCY_LEVEL));
+			g.setColor(ColorUtils.makeTransparent(GROUP_GRAY,TRANSLUCENCY_LEVEL));
 			g.fillRect((int) rect.getX(), (int) rect.getY(), (int) rect.getWidth(), (int) rect.getHeight());
 			// border
 			g.setColor(Color.GRAY);
@@ -241,7 +245,7 @@ public class GroupPainterRegistry {
 			// Group highlight, on mouseover, linkanchors display and selection
 			if (mouseover || anchors || selected) {
 				// fill
-				g.setColor(new Color(255, 0, 0, (int) (255 * .05)));
+				g.setColor(ColorUtils.makeTransparent(GROUP_GRAY, TRANSLUCENCY_LEVEL_HOVER));
 				g.fillRect((int) rect.getX(), (int) rect.getY(), (int) rect.getWidth(), (int) rect.getHeight());
 				// border
 				g.setColor(Color.GRAY);

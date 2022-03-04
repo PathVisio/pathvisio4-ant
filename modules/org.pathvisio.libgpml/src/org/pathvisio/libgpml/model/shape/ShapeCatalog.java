@@ -408,10 +408,10 @@ public class ShapeCatalog {
 			path.closePath();
 			// nucleolus
 			path.append(new Ellipse2D.Double(65, 55, 10, 10), false);
-			path.append(new Ellipse2D.Double(65, 55, 10, 10), false); // for fill color
+//			path.append(new Ellipse2D.Double(65, 55, 10, 10), false); // for fill color
 			// nucleus
-//			path.append(new Ellipse2D.Double(37, 30, 50, 45), false); 
-//			path.append(new Ellipse2D.Double(34.5, 27.5, 55, 50), false); // for fill color
+			path.append(new Ellipse2D.Double(37, 30, 50, 45), false); 
+			path.append(new Ellipse2D.Double(34.5, 27.5, 55, 50), false); // for fill color
 			path.append(new Ellipse2D.Double(34.5, 27.5, 55, 50), false);
 			// mitochondria (simplified version) 
 			GeneralPath mito = new GeneralPath();

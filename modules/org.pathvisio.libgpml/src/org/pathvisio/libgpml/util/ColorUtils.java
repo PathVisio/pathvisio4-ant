@@ -142,6 +142,17 @@ public class ColorUtils {
 		return color == null || color.getAlpha() == 0;
 	}
 
+	/**
+	 * Returns a new transparent color for given color with given alpha.
+	 * 
+	 * @param color the source color.
+	 * @param alpha the integer alpha value.
+	 * @return new color created from given color and alpha.
+	 */
+	public static Color makeTransparent(Color color, int alpha) {
+		return new Color(color.getRed(), color.getGreen(), color.getBlue(), alpha);
+	}
+
 //	/**
 //	 * Sets the alpha component of fillColor to 0 if true, sets the alpha component
 //	 * of fillColor to 255 if false.
