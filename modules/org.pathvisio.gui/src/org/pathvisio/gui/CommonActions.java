@@ -327,9 +327,10 @@ public class CommonActions implements ApplicationEventListener {
 		newMiscShapeActions = new Action[] {
 				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.CORONAVIRUS)),
 				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.DNA)),
-				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.ENDOPLASMIC_RETICULUM)),
-				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.GOLGI_APPARATUS)),
-				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.MITOCHONDRIA)), };
+				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.RNA)),
+				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.DNA2)),
+				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.RNA2)),
+				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.CELL_ICON)), };
 
 		// actions for "Molecular Interaction Map Interactions" section
 		newMIMInteractionActions = new Action[] {

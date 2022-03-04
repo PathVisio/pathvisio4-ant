@@ -72,15 +72,19 @@ public abstract class DefaultTemplates {
 	/* Initial sizes */
 	private static final double DATANODE_WIDTH = 90; // NB: "DATANODE" used to be named "GENEPRODUCT"
 	private static final double DATANODE_HEIGHT = 25;
+	private static final double STATE_SIZE = 15;
 	private static final double LABEL_WIDTH = 90;
 	private static final double LABEL_HEIGHT = 25;
 	private static final double LINE_LENGTH = 30;
-	private static final double STATE_SIZE = 15;
-	private static final double SHAPE_SIZE = 30;
-	private static final double CELLCOMP_LENGTH_1 = 100;
-	private static final double CELLCOMP_LENGTH_2 = 200;
+
+	/* Initial Shape sizes */
 	private static final double BRACE_HEIGHT = 15;
 	private static final double BRACE_WIDTH = 60;
+	private static final double SHAPE_SIZE_30 = 30;
+	private static final double SHAPE_SIZE_50 = 50;
+	private static final double SHAPE_SIZE_100 = 100;
+	private static final double SHAPE_SIZE_150 = 150;
+	private static final double SHAPE_SIZE_200 = 200;
 
 	/* Default Z-order values */
 	public static final int Z_ORDER_GROUP = 0x1000;
@@ -98,26 +102,7 @@ public abstract class DefaultTemplates {
 	 * drawing with a click.
 	 */
 	public static void setInitialSize(PathwayElement o) {
-		// set size for Shape (depends on shape type)
 		switch (o.getObjectType()) {
-		case SHAPE:
-			IShape type = ((Shape) o).getShapeType();
-			if (type.equals(ShapeType.BRACE)) {
-				((Shape) o).setWidth(BRACE_WIDTH);
-				((Shape) o).setHeight(BRACE_HEIGHT);
-			} else if (type.equals(ShapeType.MITOCHONDRIA) || type.equals(ShapeType.CELL)
-					|| type.equals(ShapeType.NUCLEUS) || type.equals(ShapeType.ORGANELLE)) {
-				((Shape) o).setWidth(CELLCOMP_LENGTH_2);
-				((Shape) o).setHeight(CELLCOMP_LENGTH_1);
-			} else if (type.equals(ShapeType.SARCOPLASMIC_RETICULUM) || type.equals(ShapeType.ENDOPLASMIC_RETICULUM)
-					|| type.equals(ShapeType.GOLGI_APPARATUS)) {
-				((Shape) o).setWidth(CELLCOMP_LENGTH_1);
-				((Shape) o).setHeight(CELLCOMP_LENGTH_2);
-			} else {
-				((Shape) o).setWidth(SHAPE_SIZE);
-				((Shape) o).setHeight(SHAPE_SIZE);
-			}
-			break;
 		case DATANODE:
 			((DataNode) o).setWidth(DATANODE_WIDTH);
 			((DataNode) o).setHeight(DATANODE_HEIGHT);
@@ -130,7 +115,35 @@ public abstract class DefaultTemplates {
 			((Label) o).setWidth(LABEL_WIDTH);
 			((Label) o).setHeight(LABEL_HEIGHT);
 			break;
-		case INTERACTION: // In the case of Interaction or Graphical Line
+		case SHAPE:
+			IShape type = ((Shape) o).getShapeType();
+			if (type == ShapeType.BRACE) {
+				((Shape) o).setWidth(BRACE_WIDTH);
+				((Shape) o).setHeight(BRACE_HEIGHT);
+			} else if (type == ShapeType.MITOCHONDRIA || type == ShapeType.CELL || type == ShapeType.NUCLEUS
+					|| type == ShapeType.ORGANELLE) {
+				((Shape) o).setWidth(SHAPE_SIZE_200);
+				((Shape) o).setHeight(SHAPE_SIZE_100);
+			} else if (type == ShapeType.SARCOPLASMIC_RETICULUM || type == ShapeType.ENDOPLASMIC_RETICULUM
+					|| type == ShapeType.GOLGI_APPARATUS) {
+				((Shape) o).setWidth(SHAPE_SIZE_100);
+				((Shape) o).setHeight(SHAPE_SIZE_200);
+			} else if (type == ShapeType.CORONAVIRUS) {
+				((Shape) o).setWidth(SHAPE_SIZE_50);
+				((Shape) o).setHeight(SHAPE_SIZE_50);
+			} else if (type == ShapeType.CELL_ICON) {
+				((Shape) o).setWidth(SHAPE_SIZE_150);
+				((Shape) o).setHeight(SHAPE_SIZE_100);
+			} else if (type == ShapeType.DNA || type == ShapeType.RNA || type == ShapeType.DNA2
+					|| type == ShapeType.RNA2) {
+				((Shape) o).setWidth(SHAPE_SIZE_30);
+				((Shape) o).setHeight(SHAPE_SIZE_100);
+			} else {
+				((Shape) o).setWidth(SHAPE_SIZE_30);
+				((Shape) o).setHeight(SHAPE_SIZE_30);
+			}
+			break;
+		case INTERACTION: // if Interaction OR Graphical Line
 		case GRAPHLINE:
 			((LineElement) o).setEndLinePointX(((LineElement) o).getStartLinePointX() + LINE_LENGTH);
 			((LineElement) o).setEndLinePointY(((LineElement) o).getStartLinePointY() + LINE_LENGTH);
@@ -199,18 +212,17 @@ public abstract class DefaultTemplates {
 			Color color = COLOR_DEFAULT;
 			ShapeType shapeType = ShapeType.RECTANGLE;
 			boolean fontWeight = false;
-			if (type.equals(DataNodeType.METABOLITE)) {
+			if (type == DataNodeType.METABOLITE) {
 				color = COLOR_METABOLITE;
 				shapeType = ShapeType.RECTANGLE; // TODO
-			} else if (type.equals(DataNodeType.PATHWAY)) {
+			} else if (type == DataNodeType.PATHWAY) {
 				color = COLOR_PATHWAY;
 				shapeType = ShapeType.ROUNDED_RECTANGLE;//
 				fontWeight = true;
 			}
 			e.setCenterX(mx);
 			e.setCenterY(my);
-			e.setWidth(DATANODE_WIDTH);
-			e.setHeight(DATANODE_HEIGHT);
+			setInitialSize(e);
 			// default font-Name/Style/Decoration/StrikeThru/Size, hAlign, vAlign
 			e.setTextColor(color);
 			e.setFontWeight(fontWeight);
@@ -247,8 +259,7 @@ public abstract class DefaultTemplates {
 			// set graphics
 			e.setCenterX(mx);
 			e.setCenterY(my);
-			e.setWidth(LABEL_WIDTH);
-			e.setHeight(LABEL_HEIGHT);
+			setInitialSize(e);
 			// default font-Name/Style/Decoration/StrikeThru/Size, hAlign, vAlign
 			e.setTextColor(COLOR_LABEL);
 			// default borderColor, borderStyle, borderWidth, fillColor
@@ -291,25 +302,9 @@ public abstract class DefaultTemplates {
 			e.setCenterY(my);
 			setInitialSize(e);
 			setInitialBorderStyle(e);
-			Color color;
-			double borderWidth;
-			if (CELL_COMPONENT_SET.contains(shapeType)) {
-				color = Color.lightGray;
-				borderWidth = 3;
-			} else {
-				color = COLOR_DEFAULT;
-				borderWidth = LINEWIDTH;
-			}
-			// default font-Name/Style/Decoration/StrikeThru/Size, hAlign, vAlign
-			e.setTextColor(color);
-			e.setFillColor(ColorUtils.hexToColor("#00000000")); // transparent
-			e.setBorderColor(color);
-			e.setBorderWidth(borderWidth);
+			setInitialBorderWidth(e);
+			setInitialColors(e);
 			e.setZOrder(Z_ORDER_SHAPE);
-//			if (e.getShapeType()==ShapeType.BRACE) {
-//				e.setRotation(0); // brace TODO
-//			}
-			// use addElement TODO
 			addElement(e, p);
 			return new Shape[] { e };
 		}
@@ -323,16 +318,55 @@ public abstract class DefaultTemplates {
 			return shapeType.toString();
 		}
 
-		public void setInitialBorderStyle(Shape shape) {
-			IShape type = shape.getShapeType();
-			// set borderStyle depending on shape type
-			if (type.equals(ShapeType.CELL) || type.equals(ShapeType.NUCLEUS) || type.equals(ShapeType.ORGANELLE)) {
-				shape.setBorderStyle(LineStyleType.DOUBLE);
-			} else if (type.equals(ShapeType.CYTOSOL) || type.equals(ShapeType.EXTRACELLULAR)
-					|| type.equals(ShapeType.MEMBRANE)) {
-				shape.setBorderStyle(LineStyleType.DASHED); // TODO membrane/cytosol never implemented?
+		/**
+		 * @param shape
+		 */
+		public void setInitialBorderStyle(Shape e) {
+			IShape type = e.getShapeType();
+			if (type == ShapeType.CELL || type == ShapeType.NUCLEUS || type == ShapeType.ORGANELLE) {
+				e.setBorderStyle(LineStyleType.DOUBLE);
+			} else if (type == ShapeType.CYTOSOL || type == ShapeType.EXTRACELLULAR || type == ShapeType.MEMBRANE) {
+				e.setBorderStyle(LineStyleType.DASHED); // TODO membrane/cytosol never implemented?
 			} else {
-				shape.setBorderStyle(LINESTYLETYPE);
+				e.setBorderStyle(LINESTYLETYPE);
+			}
+		}
+
+		/**
+		 * @param shape
+		 */
+		public void setInitialBorderWidth(Shape e) {
+			IShape type = e.getShapeType();
+			if (CELL_COMPONENT_SET.contains(type)) {
+				e.setBorderWidth(3);
+			} else {
+				e.setBorderWidth(LINEWIDTH);
+			}
+		}
+
+		/**
+		 * Sets text, border, and fill color.
+		 * 
+		 * @param shape
+		 */
+		public void setInitialColors(Shape e) {
+			IShape type = e.getShapeType();
+			if (CELL_COMPONENT_SET.contains(type)) {
+				e.setTextColor(Color.lightGray);
+				e.setBorderColor(Color.lightGray);
+				e.setFillColor(ColorUtils.hexToColor("#00000000"));
+			} else if (type == ShapeType.DNA || type == ShapeType.RNA) {
+				e.setTextColor(COLOR_DEFAULT);
+				e.setBorderColor(Color.lightGray);
+				e.setFillColor(Color.lightGray);
+			} else if (type == ShapeType.DNA2 || type == ShapeType.RNA2) {
+				e.setTextColor(COLOR_DEFAULT);
+				e.setBorderColor(COLOR_DEFAULT);
+				e.setFillColor(Color.lightGray);
+			} else {
+				e.setTextColor(COLOR_DEFAULT);
+				e.setBorderColor(COLOR_DEFAULT);
+				e.setFillColor(ColorUtils.hexToColor("#00000000"));
 			}
 		}
 

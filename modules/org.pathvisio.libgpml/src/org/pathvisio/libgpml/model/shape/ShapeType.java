@@ -113,6 +113,9 @@ public class ShapeType implements IShape {
 	public static final ShapeType CORONAVIRUS = new ShapeType("Coronavirus",
 			ShapeCatalog.getPluggableShape(Internal.CORONAVIRUS));
 	public static final ShapeType DNA = new ShapeType("DNA", ShapeCatalog.getPluggableShape(Internal.DNA)); //
+	public static final ShapeType RNA = new ShapeType("RNA", ShapeCatalog.getPluggableShape(Internal.RNA)); //
+	public static final ShapeType DNA2 = new ShapeType("DNA2", ShapeCatalog.getPluggableShape(Internal.DNA2)); //
+	public static final ShapeType RNA2 = new ShapeType("RNA2", ShapeCatalog.getPluggableShape(Internal.RNA2)); //
 	public static final ShapeType CELL_ICON = new ShapeType("CellIcon",
 			ShapeCatalog.getPluggableShape(Internal.CELL_ICON)); //
 
