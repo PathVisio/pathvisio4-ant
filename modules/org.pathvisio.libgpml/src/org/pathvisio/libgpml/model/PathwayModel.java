@@ -72,6 +72,7 @@ public class PathwayModel {
 	// ================================================================================
 	// Constructors
 	// ================================================================================
+
 	/**
 	 * Initializes a pathway model object with default {@link Pathway}.
 	 */
@@ -96,15 +97,24 @@ public class PathwayModel {
 	// Accessors
 	// ================================================================================
 	/**
-	 * Returns the pathway object containing metadata, e.g. title, organism...
-	 * 
-	 * NB: Pathway cannot be set. There is no setPathway() method. Modify pathway
-	 * information with its accessors (e.g. setTitle(), setOrganism(),..).
+	 * Returns the pathway object containing metadata, e.g. title, organism.
 	 * 
 	 * @return pathway the pathway meta information.
 	 */
 	public Pathway getPathway() {
 		return pathway;
+	}
+
+	/**
+	 * Replaces the pathway object containing metadata, e.g. title, organism...
+	 * 
+	 * NB: Pathway cannot be set and must be replaced. There can only be one pathway
+	 * per pathway model.
+	 * 
+	 * @return pathway the new pathway for this pathway model.
+	 */
+	public void replacePathway(Pathway pathway) {
+		this.pathway = pathway;
 	}
 
 	// TODO
@@ -994,11 +1004,13 @@ public class PathwayModel {
 	// Clone Methods
 	// ================================================================================
 	public PathwayModel clone() {
-		PathwayModel result = new PathwayModel(); // TODO
-		for (DataNode o : getDataNodes()) {
+		PathwayModel result = new PathwayModel();
+		System.out.println("BEFORE CLONE " + getPathwayObjects());
+		// TODO!!!
+		result.replacePathway((Pathway) pathway.copy().getNewElement());
+		for (PathwayElement o : getPathwayElements()) {
 			result.add(o.copy().getNewElement()); // TODO
 		}
-		// TODO ...
 		result.changed = changed;
 		if (sourceFile != null) {
 			result.sourceFile = new File(sourceFile.getAbsolutePath());
@@ -1007,6 +1019,7 @@ public class PathwayModel {
 //		for(StatusFlagListener l : statusFlagListeners) {
 //			result.addStatusFlagListener(l);
 //		}
+		System.out.println("CLONE " + result.getPathwayObjects());
 		return result;
 	}
 

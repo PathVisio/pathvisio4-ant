@@ -194,7 +194,7 @@ public class ShapeCatalog {
 				double endY = origin + (Math.sin(rads) * 135);
 				path.moveTo(startX, startY);
 				path.lineTo(endX, endY);
-			}	
+			}
 			break;
 		case DNA:
 			path.moveTo(218.55, 25.04);
@@ -273,167 +273,115 @@ public class ShapeCatalog {
 			path.closePath();
 			break;
 		case RNA:
-			path.moveTo(148.27,705.27);
-			path.curveTo(169.91,720.92,240.56,774.71,255.93,787.02);
-			path.lineTo(205.15,787.02);
-			path.lineTo(205.15,819.15);
-			path.lineTo(286.56,819.15);
-			path.curveTo(304.23,843.65,308.3,854.34,320.13,881.5);
-			path.lineTo(205.15,881.5);
-			path.lineTo(205.15,913.63);
-			path.lineTo(329.05,913.63);
-			path.curveTo(334.92,928.87,334.65,933.26,334.05,942.44);
-			path.curveTo(334.05,942.94,334.05,943.34,333.95,943.74);
-			path.curveTo(346.59,944,354.51,943.34,372,943.34);
-			path.curveTo(372,828.61,269.98,748.16,218.55,707.81);
-			path.lineTo(186,684.21);
-			path.curveTo(154.55,663.34,131.18,648.02,111.6,630.19);
-			path.lineTo(177.18,630.19);
-			path.lineTo(177.18,598.06);
-			path.lineTo(79.05,598.06);
-			path.curveTo(70.28,582.89,53.21,560.6,46.5,535.71);
-			path.lineTo(177.18,535.71);
-			path.lineTo(177.18,503.58);
-			path.lineTo(38.13,503.58);
-			path.curveTo(34.57,478.2,33.84,461.62,37.2,441.23);
-			path.lineTo(177.18,441.23);
-			path.lineTo(177.18,409.1);
-			path.lineTo(43.71,409.1);
-			path.curveTo(52.36,389.2,58.04,368.06,79.05,346.74);
-			path.lineTo(177.18,346.74);
-			path.lineTo(177.18,314.62);
-			path.lineTo(102.3,314.62);
-			path.curveTo(128.8,287.9,163.55,264.42,204.31,234.31);
-			path.curveTo(260.71,194.51,371.1,116.07,372,2.33);
-			path.lineTo(372,0);
-			path.curveTo(372,0,347.17,0.13,334.05,0.73);
-			path.curveTo(334.05,0.73,333.56,13.83,328.29,31.18);
-			path.lineTo(205.15,31.18);
-			path.lineTo(205.15,63.3);
-			path.lineTo(315,63.3);
-			path.curveTo(308.79,87.99,295.73,105.52,280.28,125.66);
-			path.lineTo(205.15,125.66);
-			path.lineTo(205.15,157.78);
-			path.lineTo(248.14,157.78);
-			path.curveTo(241.47,163.04,184.7,206.84,160.39,223.85);
-			path.curveTo(107.81,263.34,0,357.15,0,471.89);
-			path.curveTo(0,586.62,100.17,664.67,148.27,705.27);
-			path.closePath();
-			break; 
-			
-		case DNA2:		
-			path.moveTo(186.23,25.01);
-			path.curveTo(234.14,20.84,371.55,12.3,372.45,0.25);
-			path.lineTo(372.45,0);
-			path.curveTo(372.45,0,14.04,0.1,0,0);
-			path.curveTo(0,12.15,133.78,20.25,186.23,25.01);
-			path.curveTo(110.24,30.12,0,37.86,0,50.02);
-			path.curveTo(0,62.19,138.07,70.73,186.23,75.03);
-			path.curveTo(129.5,80.03,0,87.84,0,100);
-			path.lineTo(372.45,100);
-			path.curveTo(372.45,87.84,237.72,79.31,186.23,75.03);
-			path.curveTo(236.41,70.98,371.96,61.11,372.45,50.02);
-			path.curveTo(373,37.86,261.4,29.18,186.23,25.01);
-			path.closePath();
-			path.moveTo(15, 5);
-			path.lineTo(360, 5);
-			path.moveTo(78, 15);
-			path.lineTo(300, 15);		
-			path.moveTo(68, 35);
-			path.lineTo(310, 35);
-			path.moveTo(7, 45);
-			path.lineTo(365, 45);
-			path.moveTo(15, 55);
-			path.lineTo(355, 55);
-			path.moveTo(80, 65);
-			path.lineTo(300, 65);
-			path.moveTo(75, 85);
-			path.lineTo(300, 85);
-			path.moveTo(18, 95);
-			path.lineTo(355, 95);
-			path.closePath();
-			break;
-		case RNA2:
-			path.moveTo(186,25.01);
-			path.curveTo(233.85,20.84,371.1,12.3,372,0.25);
-			path.lineTo(372,0);
-			path.curveTo(372,0,200.02,0.1,186,0);
-			path.lineTo(186,25.01);
-			path.curveTo(110.1,30.12,0,37.86,0,50.02);
-			path.curveTo(0,62.19,137.9,70.73,186,75.03);
-			path.curveTo(186,80.45,186,100,186,100);
-			path.lineTo(372,100);
-			path.curveTo(372,87.84,237.43,79.31,186,75.03);
-			path.closePath();
-			path.moveTo(200, 5);
-			path.lineTo(360, 5);
-			path.moveTo(200, 15);
-			path.lineTo(300, 15);		
-			path.moveTo(68, 35);
-			path.lineTo(180, 35);
-			path.moveTo(7, 45);
-			path.lineTo(180, 45);
-			path.moveTo(15, 55);
-			path.lineTo(180, 55);
-			path.moveTo(80, 65);
-			path.lineTo(180, 65);
-			path.moveTo(200, 85);
-			path.lineTo(300, 85);
-			path.moveTo(200, 95);
-			path.lineTo(355, 95);
+			path.moveTo(148.27, 705.27);
+			path.curveTo(169.91, 720.92, 240.56, 774.71, 255.93, 787.02);
+			path.lineTo(205.15, 787.02);
+			path.lineTo(205.15, 819.15);
+			path.lineTo(286.56, 819.15);
+			path.curveTo(304.23, 843.65, 308.3, 854.34, 320.13, 881.5);
+			path.lineTo(205.15, 881.5);
+			path.lineTo(205.15, 913.63);
+			path.lineTo(329.05, 913.63);
+			path.curveTo(334.92, 928.87, 334.65, 933.26, 334.05, 942.44);
+			path.curveTo(334.05, 942.94, 334.05, 943.34, 333.95, 943.74);
+			path.curveTo(346.59, 944, 354.51, 943.34, 372, 943.34);
+			path.curveTo(372, 828.61, 269.98, 748.16, 218.55, 707.81);
+			path.lineTo(186, 684.21);
+			path.curveTo(154.55, 663.34, 131.18, 648.02, 111.6, 630.19);
+			path.lineTo(177.18, 630.19);
+			path.lineTo(177.18, 598.06);
+			path.lineTo(79.05, 598.06);
+			path.curveTo(70.28, 582.89, 53.21, 560.6, 46.5, 535.71);
+			path.lineTo(177.18, 535.71);
+			path.lineTo(177.18, 503.58);
+			path.lineTo(38.13, 503.58);
+			path.curveTo(34.57, 478.2, 33.84, 461.62, 37.2, 441.23);
+			path.lineTo(177.18, 441.23);
+			path.lineTo(177.18, 409.1);
+			path.lineTo(43.71, 409.1);
+			path.curveTo(52.36, 389.2, 58.04, 368.06, 79.05, 346.74);
+			path.lineTo(177.18, 346.74);
+			path.lineTo(177.18, 314.62);
+			path.lineTo(102.3, 314.62);
+			path.curveTo(128.8, 287.9, 163.55, 264.42, 204.31, 234.31);
+			path.curveTo(260.71, 194.51, 371.1, 116.07, 372, 2.33);
+			path.lineTo(372, 0);
+			path.curveTo(372, 0, 347.17, 0.13, 334.05, 0.73);
+			path.curveTo(334.05, 0.73, 333.56, 13.83, 328.29, 31.18);
+			path.lineTo(205.15, 31.18);
+			path.lineTo(205.15, 63.3);
+			path.lineTo(315, 63.3);
+			path.curveTo(308.79, 87.99, 295.73, 105.52, 280.28, 125.66);
+			path.lineTo(205.15, 125.66);
+			path.lineTo(205.15, 157.78);
+			path.lineTo(248.14, 157.78);
+			path.curveTo(241.47, 163.04, 184.7, 206.84, 160.39, 223.85);
+			path.curveTo(107.81, 263.34, 0, 357.15, 0, 471.89);
+			path.curveTo(0, 586.62, 100.17, 664.67, 148.27, 705.27);
 			path.closePath();
 			break;
 		case CELL_ICON:
-			// cell membrane (inner)
-			path.moveTo(4, 53);
-			path.curveTo(7, 68, 2, 94, 23, 99);
-			path.curveTo(30, 100, 42, 96, 56, 94);
-			path.curveTo(84, 92, 118, 88, 129, 79);
-			path.curveTo(145, 66, 129, 32, 123, 21);
-			path.curveTo(117, 11, 109, 12, 98, 9);
-			path.curveTo(88, 5, 76, 1, 61, 1);
-			path.curveTo(46, 0, 21, 5, 12, 14);
-			path.curveTo(2, 23, 0, 38, 4, 53);
+			// cell membrane 
+			path.moveTo(0.87, 42.66);
+			path.curveTo(0, 58.6, 1.29, 79.48, 14.32, 88.6);
+			path.curveTo(22.71, 94.47, 34.73, 87.46, 44.9, 86.47);
+			path.curveTo(67.63, 84.26, 97.85, 95.25, 112.88, 77.96);
+			path.curveTo(125.2, 63.79, 124.12, 36.12, 112.34, 21.5);
+			path.curveTo(102.41, 9.17, 81.8, 13.21, 66.16, 11.2);
+			path.curveTo(49.15, 9, 29.21, 0, 14.77, 9.29);
+			path.curveTo(4.67, 15.78, 1.54, 30.62, 0.87, 42.66);
 			path.closePath();
-			// cell membrane (outer)
-			path.moveTo(4, 53);
-			path.curveTo(7, 68, 2, 94, 23, 100);
-			path.curveTo(30, 103, 42, 100, 56, 98);
-			path.curveTo(84, 95, 118, 99, 135, 80);
-			path.curveTo(145, 66, 135, 32, 125, 21);
-			path.curveTo(117, 11, 109, 12, 98, 9);
-			path.curveTo(88, 5, 76, 1, 61, 1);
-			path.curveTo(46, 0, 21, 5, 12, 14);
-			path.curveTo(2, 23, 0, 38, 4, 53);
-			path.closePath();
+			path.moveTo(112.37, 21.48); // for "3D" 
+			path.curveTo(124.15, 36.1, 125.22, 63.78, 112.91, 77.94);
+			path.curveTo(97.87, 95.24, 67.65, 84.24, 44.92, 86.45);
+			path.curveTo(34.75, 87.44, 22.73, 94.45, 14.34, 88.58);
+			path.curveTo(23.57, 96.12, 38, 91.78, 49.88, 91.44);
+			path.curveTo(72.58, 90.81, 103.16, 100, 117.37, 82.18);
+			path.curveTo(130, 66.35, 125.64, 36.78, 112.37, 21.48);
+			path.closePath();	
+//			path.moveTo(4.12,53);
+//			path.curveTo(7.21,68,2.06,94,23.7,99);
+//			path.curveTo(30.92,100,42.17,90.85,56.6,88.85);
+//			path.curveTo(85.46,86.85,118.12,92.36,133.23,72.56);
+//			path.curveTo(144.03,58.43,131.79,29.93,126.77,21);
+//			path.curveTo(120.59,11,112.34,12,101,9);
+//			path.curveTo(90.7,5,78.33,1,62.87,1);
+//			path.curveTo(47.41,0,21.64,5,12.37,14);
+//			path.curveTo(2.06,23,0,38,4.12,53);
+//			path.closePath();	
+//			path.moveTo(126.77,21);
+//			path.curveTo(131.79,29.93,144.03,58.43,133.23,72.56);
+//			path.curveTo(118.12,92.36,85.46,86.85,56.6,88.85);
+//			path.curveTo(42.17,90.85,30.92,100,23.7,99);
+//			path.curveTo(30.92,100,43.29,96,57.72,94);
+//			path.curveTo(86.96,95.19,122.53,93.05,133.51,81.06);
+//			path.curveTo(150,68.06,132.95,32,126.77,21);
+//			path.closePath();	
 			// nucleolus
 			path.append(new Ellipse2D.Double(65, 55, 10, 10), false);
-//			path.append(new Ellipse2D.Double(65, 55, 10, 10), false); // for fill color
 			// nucleus
-			path.append(new Ellipse2D.Double(37, 30, 50, 45), false); 
-			path.append(new Ellipse2D.Double(34.5, 27.5, 55, 50), false); // for fill color
 			path.append(new Ellipse2D.Double(34.5, 27.5, 55, 50), false);
-			// mitochondria (simplified version) 
+			path.append(new Ellipse2D.Double(34.5, 27.5, 55, 50), false);// for fill color
+			// mitochondria (simplified version)
 			GeneralPath mito = new GeneralPath();
-			mito.moveTo(2.65,2.49);
-			mito.curveTo(3.56,2.41,3.45,4.3,4.36,4.21);
-			mito.curveTo(6.08,4.21,6.04,1.16,7.49,1.14);
-			mito.curveTo(8.94,1.12,8.93,4.09,10.54,4.11);
-			mito.curveTo(11.91,4.12,11.7,1.11,13.07,1.19);
-			mito.curveTo(14.57,1.27,14.4,4.48,15.89,4.68);
-			mito.curveTo(16.88,4.81,16.81,2.74,17.81,2.83);
-			mito.curveTo(19.49,3.41,19.44,5.24,18.43,6.48);
-			mito.curveTo(18.05,6.96,17.52,7.35,16.89,7.56);
-			mito.curveTo(16.24,7.63,14.93,6.58,14.28,6.64);
-			mito.curveTo(13.11,6.75,13.05,9.07,11.87,9.02);
-			mito.curveTo(10.78,8.97,10.79,7.09,9.51,6.96);
-			mito.curveTo(8.33,6.84,8.39,9.11,7.21,8.95);
-			mito.curveTo(5.9,8.78,6.11,6.13,4.8,6);
-			mito.curveTo(4.02,5.92,4.25,7.52,3.46,7.54);
-			mito.curveTo(0.53,6.91,0.17,3.33,2.65,2.49);
+			mito.moveTo(2.6, 2.5);
+			mito.curveTo(3.56, 2.41, 3.45, 4.3, 4.36, 4.21);
+			mito.curveTo(6, 4.21, 6.04, 1.16, 7.5, 1.14);
+			mito.curveTo(9, 1.12, 9, 4, 10.5, 4);
+			mito.curveTo(11.91, 4.12, 11.7, 1.11, 13.07, 1.19);
+			mito.curveTo(14.57, 1.27, 14.4, 4.48, 15.89, 4.68);
+			mito.curveTo(16.88, 4.81, 16.81, 2.74, 17.81, 2.83);
+			mito.curveTo(19.49, 3.41, 19.44, 5.24, 18.43, 6.48);
+			mito.curveTo(18.05, 6.96, 17.52, 7.35, 16.89, 7.56);
+			mito.curveTo(16.24, 7.63, 14.93, 6.58, 14.28, 6.64);
+			mito.curveTo(13.11, 6.75, 13.05, 9.07, 11.87, 9.02);
+			mito.curveTo(10.78, 8.97, 10.79, 7.09, 9.51, 6.96);
+			mito.curveTo(8.33, 6.84, 8.39, 9.11, 7.21, 8.95);
+			mito.curveTo(5.9, 8.78, 6.11, 6.13, 4.8, 6);
+			mito.curveTo(4.02, 5.92, 4.25, 7.52, 3.46, 7.54);
+			mito.curveTo(0.53, 6.91, 0.17, 3.33, 2.65, 2.49);
 			mito.closePath();
 			mito.append(new Ellipse2D.Double(0, 0, 20, 10), false);
-			mito.append(new Ellipse2D.Double(0, 0, 20, 10), false);// for fill color
 			mito.append(new Ellipse2D.Double(0, 0, 20, 10), false);// for fill color
 			AffineTransform at = new AffineTransform();
 			at.translate(100, 30);
@@ -450,10 +398,10 @@ public class ShapeCatalog {
 			path.moveTo(34.5, 27.5);
 			path.append(endoplasmicReticulum, false);
 			// small miscellaneous organelles
-			path.append(new Ellipse2D.Double(20, 80, 5, 5), false);
-			path.append(new Ellipse2D.Double(25, 65, 5, 5), false);
-			path.append(new Ellipse2D.Double(30, 80, 5, 5), false);
-
+			path.append(new Ellipse2D.Double(20, 65, 5, 5), false);
+			path.append(new Ellipse2D.Double(20, 65, 5, 5), false);// for fill color
+			path.append(new Ellipse2D.Double(25, 75, 5, 5), false);
+			path.append(new Ellipse2D.Double(25, 75, 5, 5), false);// for fill color
 			break;
 		default:
 			break;

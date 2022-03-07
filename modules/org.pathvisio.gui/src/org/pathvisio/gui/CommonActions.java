@@ -118,7 +118,9 @@ public class CommonActions implements ApplicationEventListener {
 
 	public final Action[][] newElementActions;
 
-	public final Action[] newDatanodeActions;
+	public final Action[] newMoleculeDatanodeActions;
+
+	public final Action[] newConceptDatanodeActions;
 
 	public final Action[] newAnnotationActions;
 
@@ -220,13 +222,24 @@ public class CommonActions implements ApplicationEventListener {
 
 		};
 
-		// actions for "Data nodes" section
-		newDatanodeActions = new Action[] {
+		// actions for Molecule "Data nodes" section
+		newMoleculeDatanodeActions = new Action[] {
 				new NewElementAction(e, new DefaultTemplates.DataNodeTemplate(DataNodeType.GENEPRODUCT)),
-				new NewElementAction(e, new DefaultTemplates.DataNodeTemplate(DataNodeType.METABOLITE)),
-				new NewElementAction(e, new DefaultTemplates.DataNodeTemplate(DataNodeType.PATHWAY)),
-				new NewElementAction(e, new DefaultTemplates.DataNodeTemplate(DataNodeType.PROTEIN)),
+				new NewElementAction(e, new DefaultTemplates.DataNodeTemplate(DataNodeType.DNA)),
 				new NewElementAction(e, new DefaultTemplates.DataNodeTemplate(DataNodeType.RNA)),
+				new NewElementAction(e, new DefaultTemplates.DataNodeTemplate(DataNodeType.PROTEIN)),
+				new NewElementAction(e, new DefaultTemplates.DataNodeTemplate(DataNodeType.METABOLITE)),
+				new NewElementAction(e, new DefaultTemplates.DataNodeTemplate(DataNodeType.COMPLEX)), };
+
+		// actions for Concept "Data nodes" section
+		newConceptDatanodeActions = new Action[] {
+				new NewElementAction(e, new DefaultTemplates.DataNodeTemplate(DataNodeType.PATHWAY)),
+				new NewElementAction(e, new DefaultTemplates.DataNodeTemplate(DataNodeType.DISEASE)),
+				new NewElementAction(e, new DefaultTemplates.DataNodeTemplate(DataNodeType.PHENOTYPE)),
+				new NewElementAction(e, new DefaultTemplates.DataNodeTemplate(DataNodeType.ALIAS)),
+				new NewElementAction(e, new DefaultTemplates.DataNodeTemplate(DataNodeType.EVENT)),
+				new NewElementAction(e, new DefaultTemplates.DataNodeTemplate(DataNodeType.CELL)),
+				new NewElementAction(e, new DefaultTemplates.DataNodeTemplate(DataNodeType.ORGAN)),
 				new NewElementAction(e, new DefaultTemplates.DataNodeTemplate(DataNodeType.UNDEFINED)), };
 
 		// actions for "Annotations" section
@@ -328,8 +341,6 @@ public class CommonActions implements ApplicationEventListener {
 				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.CORONAVIRUS)),
 				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.DNA)),
 				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.RNA)),
-				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.DNA2)),
-				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.RNA2)),
 				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.CELL_ICON)), };
 
 		// actions for "Molecular Interaction Map Interactions" section

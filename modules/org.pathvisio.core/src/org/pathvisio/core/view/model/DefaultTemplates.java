@@ -83,6 +83,7 @@ public abstract class DefaultTemplates {
 	private static final double SHAPE_SIZE_30 = 30;
 	private static final double SHAPE_SIZE_50 = 50;
 	private static final double SHAPE_SIZE_100 = 100;
+	private static final double SHAPE_SIZE_120 = 120;
 	private static final double SHAPE_SIZE_150 = 150;
 	private static final double SHAPE_SIZE_200 = 200;
 
@@ -133,9 +134,8 @@ public abstract class DefaultTemplates {
 				((Shape) o).setHeight(SHAPE_SIZE_50);
 			} else if (type == ShapeType.CELL_ICON) {
 				((Shape) o).setWidth(SHAPE_SIZE_150);
-				((Shape) o).setHeight(SHAPE_SIZE_100);
-			} else if (type == ShapeType.DNA || type == ShapeType.RNA || type == ShapeType.DNA2
-					|| type == ShapeType.RNA2) {
+				((Shape) o).setHeight(SHAPE_SIZE_120);
+			} else if (type == ShapeType.DNA || type == ShapeType.RNA) {
 				((Shape) o).setWidth(SHAPE_SIZE_30);
 				((Shape) o).setHeight(SHAPE_SIZE_100);
 			} else {
@@ -357,16 +357,12 @@ public abstract class DefaultTemplates {
 				e.setFillColor(ColorUtils.hexToColor("#00000000"));
 			} else if (type == ShapeType.DNA || type == ShapeType.RNA) {
 				e.setTextColor(COLOR_DEFAULT);
-				e.setBorderColor(Color.lightGray);
-				e.setFillColor(Color.lightGray);
-			} else if (type == ShapeType.DNA2 || type == ShapeType.RNA2) {
-				e.setTextColor(COLOR_DEFAULT);
-				e.setBorderColor(COLOR_DEFAULT);
-				e.setFillColor(Color.lightGray);
+				e.setBorderColor(Color.darkGray);
+				e.setFillColor(ColorUtils.hexToColor("#00000000"));
 			} else if (type == ShapeType.CELL_ICON) {
 				e.setTextColor(COLOR_DEFAULT);
 				e.setBorderColor(Color.darkGray);
-				e.setFillColor(Color.lightGray);
+				e.setFillColor(ColorUtils.hexToColor("#00000000"));
 			}else {
 				e.setTextColor(COLOR_DEFAULT);
 				e.setBorderColor(COLOR_DEFAULT);

@@ -462,6 +462,8 @@ public class VPathwayModel implements PathwayModelListener {
 	 * Used by undo manager.
 	 */
 	public void replacePathway(PathwayModel originalState) {
+
+		System.out.println(originalState.getPathwayObjects());		
 		boolean changed = data.hasChanged();
 
 		clearSelection();
@@ -1322,7 +1324,6 @@ public class VPathwayModel implements PathwayModelListener {
 			// setFocus();
 			vDragStart = new Point(e.getX(), e.getY());
 			temporaryCopy = (PathwayModel) data.clone();
-
 			if (editMode) {
 				if (newTemplate != null) {
 					newObject(e.getLocation());
