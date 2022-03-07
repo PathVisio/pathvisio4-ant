@@ -299,8 +299,9 @@ public class DataNode extends ShapedElement implements Xrefable {
 			if (type != DataNodeType.ALIAS) {
 				throw new IllegalArgumentException("DataNode type must be Alias before setting aliasRef");
 			}
+			unsetAliasRef();
+			v.getPathwayModel().linkAlias(v, this);
 			aliasRef = v;
-			v.getPathwayModel().addAlias(v, this);
 			fireObjectModifiedEvent(PathwayObjectEvent.createSinglePropertyEvent(this, StaticProperty.ALIASREF));
 		}
 	}
@@ -317,8 +318,9 @@ public class DataNode extends ShapedElement implements Xrefable {
 	 * calls {@link #terminate}.
 	 * </ol>
 	 */
-	private void unsetAliasRef() {
+	protected void unsetAliasRef() {
 		if (getAliasRef() != null) {
+			pathwayModel.unlinkAlias(aliasRef, this);	
 			aliasRef = null;
 			fireObjectModifiedEvent(PathwayObjectEvent.createSinglePropertyEvent(this, StaticProperty.ALIASREF));
 		}
@@ -426,7 +428,7 @@ public class DataNode extends ShapedElement implements Xrefable {
 	 */
 	@Override
 	protected void terminate() {
-		unsetAliasRef();
+		unsetAliasRef(); // unsets aliasRef
 		removeStates();
 		unsetAllLinkableFroms();
 		unsetGroupRef();

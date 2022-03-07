@@ -314,7 +314,7 @@ public class PathwayModel {
 	 * @param aliasRef the group which has datanode aliases.
 	 * @return the datanode aliases for the group aliasRef.
 	 */
-	public Set<DataNode> getAlias(Group aliasRef) {
+	public Set<DataNode> getLinkedAliases(Group aliasRef) {
 		return aliasRefToAliases.get(aliasRef);
 	}
 
@@ -335,7 +335,7 @@ public class PathwayModel {
 	 * @param alias    the alias datanode.
 	 * @return true if pathway model has alias and aliasRef.
 	 */
-	protected boolean hasAlias(Group aliasRef, DataNode alias) {
+	protected boolean hasLinkedAlias(Group aliasRef, DataNode alias) {
 		return aliasRefToAliases.get(aliasRef).contains(alias);
 	}
 
@@ -343,15 +343,16 @@ public class PathwayModel {
 	 * Adds mapping of aliasRef to data node alias in the aliasRefToAliases hash
 	 * map.
 	 * 
-	 * NB: This method is not used directly. It is called by
-	 * {@link DataNode#setAliasRef} when the data node alias is terminated
-	 * {@link DataNode#terminate} or deleted by {@link #removeDataNode}.
-	 * 
+	 * NB: This method is not used directly.
+	 * <ol>
+	 * <li>It is called from {@link DataNode#setAliasRef}.
+	 * </ol>
+	 *
 	 * @param aliasRef the group for which a dataNode alias refers.
 	 * @param alias    the datanode which has an aliasRef.
 	 * @throws IllegalArgumentException if elementRef or dataNode are null.
 	 */
-	protected void addAlias(Group aliasRef, DataNode alias) {
+	protected void linkAlias(Group aliasRef, DataNode alias) {
 		if (aliasRef == null || alias == null)
 			throw new IllegalArgumentException("AliasRef and alias must be valid.");
 		Set<DataNode> aliases = aliasRefToAliases.get(aliasRef);
@@ -363,31 +364,26 @@ public class PathwayModel {
 	}
 
 	/**
-	 * Removes the given aliasRef and alias from aliasRefToAliases of this pathway
-	 * model.
+	 * Removes the link between given aliasRef and alias, and removes mapping from
+	 * aliasRefToAliases of this pathway model.
 	 * 
 	 * <p>
 	 * NB: This method is not used directly.
 	 * <ol>
-	 * <li>It is called when the data node alias is deleted by
-	 * {@link #removeDataNode}.
-	 * <li>Or when the aliasRef is deleted {@link #removeAliasRef} and thus all
-	 * alias must be deleted.
+	 * <li>It is called from {@link DataNode#unsetAliasRef}.
 	 * </ol>
 	 * 
 	 * @param aliasRef the group for which a dataNode alias refers.
 	 * @param alias    the datanode which has an aliasRef.
 	 */
-	protected void removeAlias(Group aliasRef, DataNode alias) {
-		if (alias == null || aliasRef == null)
+	protected void unlinkAlias(Group aliasRef, DataNode alias) {
+		if (alias == null || aliasRef == null) {
 			throw new IllegalArgumentException("AliasRef and alias must be valid.");
+		}
 		assert (alias.getAliasRef() == aliasRef);
-		assert (hasAlias(aliasRef, alias));
+		assert (hasLinkedAlias(aliasRef, alias));
 		Set<DataNode> aliases = aliasRefToAliases.get(aliasRef);
 		aliases.remove(alias);
-		if (dataNodes.contains(alias)) {
-			removeDataNode(alias);
-		}
 		// removes aliasRef if it has no aliases
 		if (aliases.isEmpty())
 			removeAliasRef(aliasRef);
@@ -402,10 +398,8 @@ public class PathwayModel {
 	protected void removeAliasRef(Group aliasRef) {
 		assert (hasAliasRef(aliasRef));
 		Set<DataNode> aliases = aliasRefToAliases.get(aliasRef);
-		if (!aliases.isEmpty()) {
-			for (DataNode alias : aliases) {
-				removeAlias(aliasRef, alias);
-			}
+		for (DataNode alias : aliases) {
+			alias.unsetAliasRef();
 		}
 		aliasRefToAliases.remove(aliasRef);
 	}
@@ -441,12 +435,6 @@ public class PathwayModel {
 	 */
 	public void removeDataNode(DataNode dataNode) {
 		dataNodes.remove(dataNode);
-		Group aliasRef = dataNode.getAliasRef();
-		if (aliasRef != null) {
-			if (hasAlias(aliasRef, dataNode)) {
-				removeAlias(aliasRef, dataNode);
-			}
-		}
 		removePathwayObject(dataNode);
 	}
 
@@ -604,9 +592,6 @@ public class PathwayModel {
 	 */
 	public void removeGroup(Group group) {
 		groups.remove(group);
-		if (hasAliasRef(group)) {
-			removeAliasRef(group);
-		}
 		removePathwayObject(group);
 	}
 

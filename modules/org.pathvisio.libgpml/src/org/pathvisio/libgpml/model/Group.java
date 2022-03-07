@@ -240,7 +240,7 @@ public class Group extends ShapedElement implements Xrefable {
 	public DataNode addAlias(String textLabel) {
 		if (pathwayModel != null) {
 			DataNode alias = new DataNode(textLabel, DataNodeType.ALIAS, null, this);
-			pathwayModel.addPathwayObject(alias); //TODO 
+			pathwayModel.addDataNode(alias); // TODO
 			return alias;
 		}
 		System.out.println("Cannot create an alias for group without valid pathway model.");
@@ -257,6 +257,7 @@ public class Group extends ShapedElement implements Xrefable {
 	 */
 	@Override
 	protected void terminate() {
+		pathwayModel.removeAliasRef(this); // removes this group aliasRef from pathway model
 		unsetAllLinkableFroms(); // unlink before removing pathway element
 		unsetGroupRef();
 		removePathwayElements();

@@ -40,8 +40,10 @@ public class TestAlias {
 		assertEquals(d.getGroupRef(), g);
 		assertTrue(g.hasPathwayElement(d));
 		assertFalse(g.hasPathwayElement(alias));
-		assertTrue(p.getAlias(g).contains(alias));
+		assertTrue(p.hasLinkedAlias(g, alias));
 		assertTrue(p.hasAliasRef(g));
+		
+		System.out.println(p.getPathwayObjects());
 	}
 
 	/**
@@ -51,7 +53,7 @@ public class TestAlias {
 	public void testRemoveAlias() {
 		p.removeDataNode(alias);
 		assertNull(alias.getAliasRef());
-		assertNull(p.getAlias(g));
+		assertNull(p.getLinkedAliases(g));
 		assertFalse(p.hasAliasRef(g));
 	}
 
@@ -62,7 +64,7 @@ public class TestAlias {
 	public void testRemoveGroup() {
 		p.removeGroup(g);
 		assertNull(alias.getAliasRef());
-		assertNull(p.getAlias(g));
+		assertNull(p.getLinkedAliases(g));
 		assertFalse(p.hasAliasRef(g));
 	}
 
