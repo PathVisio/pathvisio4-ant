@@ -215,7 +215,7 @@ public class Annotation extends PathwayObject {
 			annotationRef.terminate();
 			// if citationResf empty, remove this annotation from pathway model
 			if (annotationRefs.isEmpty()) {
-				getPathwayModel().removeAnnotation(this);
+				pathwayModel.removeAnnotation(this);
 				fireObjectModifiedEvent(PathwayObjectEvent.createSinglePropertyEvent(this, StaticProperty.ANNOTATION));
 			}
 		}

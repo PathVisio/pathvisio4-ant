@@ -133,7 +133,7 @@ public abstract class ShapedElement extends PathwayElement implements LinkableTo
 	public void setGroupRefTo(Group v) {
 		if (v == null)
 			throw new IllegalArgumentException("Invalid group.");
-		if (v.getPathwayModel() != getPathwayModel()) {
+		if (v.getPathwayModel() != pathwayModel) {
 			throw new IllegalArgumentException(
 					getClass().getSimpleName() + " cannot be added to a group of a different pathway model.");
 		}
@@ -712,7 +712,7 @@ public abstract class ShapedElement extends PathwayElement implements LinkableTo
 	 */
 	@Override
 	public Set<LinkableFrom> getLinkableFroms() {
-		return GraphLink.getReferences(this, getPathwayModel());
+		return GraphLink.getReferences(this, pathwayModel);
 	}
 
 	/**

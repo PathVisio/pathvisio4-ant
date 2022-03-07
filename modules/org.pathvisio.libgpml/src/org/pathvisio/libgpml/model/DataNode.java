@@ -19,6 +19,8 @@ package org.pathvisio.libgpml.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import org.bridgedb.Xref;
 import org.pathvisio.libgpml.model.type.DataNodeType;
 import org.pathvisio.libgpml.model.type.ObjectType;
@@ -44,58 +46,29 @@ public class DataNode extends ShapedElement implements Xrefable {
 	// ================================================================================
 
 	/**
-	 * Instantiates a DataNode (type != "Alias) given all possible parameters.
+	 * Instantiates a DataNode given all possible parameters. A DataNode of type
+	 * Alias can have an aliasRef which refers to a {@link Group} and/or have a
+	 * textLabel which points to a group somewhere.
 	 * 
-	 * @param textLabel the text of this datanode.
+	 * @param textLabel the text or link of this datanode.
 	 * @param type      the type of datanode, e.g. complex.
-	 * @param xref      the data node Xref.
-	 */
-	public DataNode(String textLabel, DataNodeType type, Xref xref) {
-		super();
-		this.textLabel = textLabel;
-		setType(type);
-		this.states = new ArrayList<State>();
-		this.xref = xref;
-	}
-
-	/**
-	 * Instantiates a DataNode (type != "Alias) given all required parameters.
-	 */
-	public DataNode(String textLabel, DataNodeType type) {
-		this(textLabel, type, null);
-	}
-
-	/**
-	 * Instantiates an Alias Data Node pathway element given all possible
-	 * parameters. An alias data node acts as an alias for a {@link Group}. In GPML,
-	 * the datanode has aliasRef which refers to the elementId of the group
-	 * aliasRef.
-	 * 
-	 * NB: This method is not used directly. Aliases are created by a group
-	 * {@link Group#createAlias(String)}.
-	 * 
-	 * @param textLabel the text of this datanode.
 	 * @param xref      the data node Xref.
 	 * @param aliasRef  the group this data node alias refers to.
 	 */
-	protected DataNode(String textLabel, Xref xref, Group aliasRef) {
+	public DataNode(String textLabel, DataNodeType type, Xref xref, Group aliasRef) {
 		super();
 		this.textLabel = textLabel;
-		this.type = DataNodeType.ALIAS;
+		setType(type);
 		this.states = new ArrayList<State>();
 		this.xref = xref;
 		setAliasRef(aliasRef);
 	}
 
 	/**
-	 * Instantiates an Alias Data Node pathway element given all possible parameters
-	 * except xref.
-	 * 
-	 * NB: This method is not used directly. Aliases are created by a group
-	 * {@link Group#createAlias(String)}.
+	 * Instantiates a DataNode given all required parameters.
 	 */
-	protected DataNode(String textLabel, Group aliasRef) {
-		this(textLabel, null, aliasRef);
+	public DataNode(String textLabel, DataNodeType type) {
+		this(textLabel, type, null, null);
 	}
 
 	// ================================================================================
@@ -117,6 +90,7 @@ public class DataNode extends ShapedElement implements Xrefable {
 	 * @return textLabel the text of this datanode.
 	 * 
 	 */
+	@Override
 	public String getTextLabel() {
 		return textLabel;
 	}
@@ -126,6 +100,7 @@ public class DataNode extends ShapedElement implements Xrefable {
 	 * 
 	 * @param v the text to set.
 	 */
+	@Override
 	public void setTextLabel(String v) {
 		String value = (v == null) ? "" : v;
 		if (!Utils.stringEquals(textLabel, value)) {
@@ -151,11 +126,11 @@ public class DataNode extends ShapedElement implements Xrefable {
 	 * @param v the type to set for this datanode.
 	 */
 	public void setType(DataNodeType v) {
-		if (type == DataNodeType.ALIAS) {
-			throw new IllegalArgumentException("DataNodeType cannot be changed for an alias data node");
-		}
-		if (v == DataNodeType.ALIAS) {
-			throw new IllegalArgumentException("DataNodeType Alias is reserved for alias data nodes.");
+		if (type == DataNodeType.ALIAS && aliasRef != null) {
+			// TODO
+			unsetAliasRef();
+			JOptionPane.showInputDialog(null, "Warning: aliasRef connection lost", "Warning",
+					JOptionPane.WARNING_MESSAGE);
 		}
 		if (type != v && v != null) {
 			type = v;
@@ -168,6 +143,7 @@ public class DataNode extends ShapedElement implements Xrefable {
 	 * 
 	 * @return xref the xref of this datanode.
 	 */
+	@Override
 	public Xref getXref() {
 		return xref;
 	}
@@ -177,6 +153,7 @@ public class DataNode extends ShapedElement implements Xrefable {
 	 * 
 	 * @param v the xref to set for this datanode.
 	 */
+	@Override
 	public void setXref(Xref v) {
 		if (v != null) {
 			xref = v;
@@ -220,8 +197,8 @@ public class DataNode extends ShapedElement implements Xrefable {
 		}
 		if (!hasState(state)) {
 			// add state to same pathway model as data node if applicable
-			if (getPathwayModel() != null) {
-				getPathwayModel().addPathwayObject(state);
+			if (pathwayModel != null) {
+				pathwayModel.addPathwayObject(state);
 			}
 			states.add(state);
 			// No state property, use BORDERSTYLE as dummy property to force redraw
@@ -272,8 +249,8 @@ public class DataNode extends ShapedElement implements Xrefable {
 	 * @param state the state to be removed.
 	 */
 	public void removeState(State state) {
-		if (getPathwayModel() != null)
-			getPathwayModel().removePathwayObject(state);
+		if (pathwayModel != null)
+			pathwayModel.removePathwayObject(state);
 		states.remove(state);
 		// No state property, use BORDERSTYLE as dummy property to force redraw
 		fireObjectModifiedEvent(PathwayObjectEvent.createSinglePropertyEvent(this, StaticProperty.BORDERSTYLE));
@@ -284,8 +261,8 @@ public class DataNode extends ShapedElement implements Xrefable {
 	 */
 	private void removeStates() {
 		for (int i = states.size() - 1; i >= 0; i--) {
-			if (getPathwayModel() != null)
-				getPathwayModel().removePathwayObject(states.get(i));
+			if (pathwayModel != null)
+				pathwayModel.removePathwayObject(states.get(i));
 		}
 		states.clear();
 	}
@@ -317,7 +294,7 @@ public class DataNode extends ShapedElement implements Xrefable {
 	 * 
 	 * @param v the group to which this data node refers.
 	 */
-	private void setAliasRef(Group v) {
+	public void setAliasRef(Group v) {
 		if (v != null) {
 			if (type != DataNodeType.ALIAS) {
 				throw new IllegalArgumentException("DataNode type must be Alias before setting aliasRef");
@@ -679,7 +656,7 @@ public class DataNode extends ShapedElement implements Xrefable {
 		// TODO
 		private void updateCoordinates() {
 			DataNode dn = getDataNode();
-			if (dn != null && getPathwayModel() != null) {
+			if (dn != null && pathwayModel != null) {
 				double centerx = dn.getCenterX() + (getRelX() * dn.getWidth() / 2);
 				double centery = dn.getCenterY() + (getRelY() * dn.getHeight() / 2);
 				setCenterY(centery);

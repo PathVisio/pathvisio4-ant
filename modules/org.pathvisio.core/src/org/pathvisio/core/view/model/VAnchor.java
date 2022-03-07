@@ -148,8 +148,12 @@ public class VAnchor extends VElement implements VLinkableTo, Adjustable {
 		return shape != null ? shape.getShape() : handle.getVOutline();
 	}
 
+	/**
+	 *
+	 */
 	protected void doDraw(Graphics2D g) {
-		if (getAnchor().getShapeType().equals(AnchorShapeType.NONE) && getAnchor().getElementId() != null) {
+		// for shapeType NONE, anchor is not drawn if something is attached to it
+		if (getAnchor().getShapeType().equals(AnchorShapeType.NONE) && !getAnchor().getLinkableFroms().isEmpty()) {
 			return;
 		}
 		Color c;

@@ -169,7 +169,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 	public void setGroupRefTo(Group v) {
 		if (v == null)
 			throw new IllegalArgumentException("Invalid group.");
-		if (v.getPathwayModel() != getPathwayModel()) {
+		if (v.getPathwayModel() != pathwayModel) {
 			throw new IllegalArgumentException(
 					getClass().getSimpleName() + " cannot be added to a group of a different pathway model.");
 		}
@@ -301,8 +301,8 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 		if (anchor != null && !hasAnchor(anchor)) {
 			assert (anchor.getLineElement() == this);
 			// add anchor to same pathway model as line if applicable
-			if (getPathwayModel() != null)
-				getPathwayModel().addPathwayObject(anchor);
+			if (pathwayModel != null)
+				pathwayModel.addPathwayObject(anchor);
 			anchors.add(anchor);
 			// No anchor property, use LINESTYLE as dummy property to force redraw on line
 			fireObjectModifiedEvent(PathwayObjectEvent.createSinglePropertyEvent(this, StaticProperty.LINESTYLE));
@@ -349,8 +349,8 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 	 */
 	public void removeAnchor(Anchor anchor) {
 		assert (anchor != null && hasAnchor(anchor));
-		if (getPathwayModel() != null)
-			getPathwayModel().removePathwayObject(anchor);
+		if (pathwayModel != null)
+			pathwayModel.removePathwayObject(anchor);
 		anchors.remove(anchor);
 		// No anchor property, use LINESTYLE as dummy property to force redraw on line
 		fireObjectModifiedEvent(PathwayObjectEvent.createSinglePropertyEvent(this, StaticProperty.LINESTYLE));
@@ -361,8 +361,8 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 	 */
 	private void removeAnchors() {
 		for (int i = anchors.size() - 1; i >= 0; i--) {
-			if (getPathwayModel() != null)
-				getPathwayModel().removePathwayObject(anchors.get(i));
+			if (pathwayModel != null)
+				pathwayModel.removePathwayObject(anchors.get(i));
 		}
 		anchors.clear();
 	}
@@ -1472,12 +1472,12 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 		 */
 		private void setElementRef(LinkableTo v) {
 			if (elementRef != v) {
-				if (getPathwayModel() != null) {
+				if (pathwayModel != null) {
 					if (elementRef != null) {
-						getPathwayModel().removeElementRef(elementRef, this);
+						pathwayModel.removeElementRef(elementRef, this);
 					}
 					if (v != null) {
-						getPathwayModel().addElementRef(v, this);
+						pathwayModel.addElementRef(v, this);
 					}
 				}
 				elementRef = v;
@@ -1641,7 +1641,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 		@Override
 		public void unlink() {
 			if (elementRef != null) {
-				if (getPathwayModel() != null) {
+				if (pathwayModel != null) {
 					Point2D abs = getAbsolute();
 					moveTo(abs.getX(), abs.getY());
 				}
@@ -1921,7 +1921,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 		 */
 		@Override
 		public Set<LinkableFrom> getLinkableFroms() {
-			return GraphLink.getReferences(this, getPathwayModel());
+			return GraphLink.getReferences(this, pathwayModel);
 		}
 
 		/**

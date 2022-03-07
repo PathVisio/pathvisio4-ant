@@ -812,7 +812,7 @@ public class PathwayModel {
 		}
 		// set pathway model
 		o.setPathwayModelTo(this);
-		if (o.getPathwayModel() != this) {
+		if (o.pathwayModel != this) {
 			throw new IllegalArgumentException("Pathway object does not refer to this pathway model");
 		}
 		// if pathway object does not yet have id, set a unique elementId
@@ -902,7 +902,7 @@ public class PathwayModel {
 	 * @param o the pathway object to remove
 	 */
 	public void remove(PathwayObject o) {
-		assert (o.getPathwayModel() == this);
+		assert (o.pathwayModel == this);
 		switch (o.getObjectType()) {
 		case DATANODE:
 			removeDataNode((DataNode) o);
@@ -1278,7 +1278,7 @@ public class PathwayModel {
 		for (PathwayObject pe : getPathwayObjects()) {
 			String code = pe.toString();
 			code = code.substring(code.lastIndexOf('@'), code.length() - 1);
-			result += "\n      " + code + " " + pe.getClass().getSimpleName() + " " + pe.getPathwayModel();
+			result += "\n      " + code + " " + pe.getClass().getSimpleName() + " " + pe.pathwayModel;
 		}
 		return result;
 	}

@@ -35,8 +35,7 @@ public class TestAlias {
 		p.addGroup(g);
 		p.addDataNode(d);
 		g.addPathwayElement(d);
-		alias = g.createAlias("textLabel");
-		p.addDataNode(alias);
+		alias = g.addAlias("textLabel");
 
 		assertEquals(d.getGroupRef(), g);
 		assertTrue(g.hasPathwayElement(d));

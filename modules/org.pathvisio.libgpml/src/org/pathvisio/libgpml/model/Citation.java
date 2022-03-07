@@ -245,7 +245,7 @@ public class Citation extends PathwayObject {
 			citationRef.terminate();
 			// if citationResf empty, remove this citation from pathway model
 			if (citationRefs.isEmpty()) {
-				getPathwayModel().removeCitation(this);
+				pathwayModel.removeCitation(this);
 			}
 		}
 	}

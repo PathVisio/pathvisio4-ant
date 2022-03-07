@@ -186,7 +186,7 @@ public class Evidence extends PathwayObject {
 			evidenceRef.terminate();
 			// if citationResf empty, remove this evidence from pathway model
 			if (evidenceRefs.isEmpty()) {
-				getPathwayModel().removeEvidence(this);
+				pathwayModel.removeEvidence(this);
 			}
 		}
 	}

@@ -22,6 +22,7 @@ import java.util.List;
 
 import org.bridgedb.Xref;
 import org.pathvisio.libgpml.model.DataNode.State;
+import org.pathvisio.libgpml.model.type.DataNodeType;
 import org.pathvisio.libgpml.model.type.GroupType;
 import org.pathvisio.libgpml.model.type.ObjectType;
 import org.pathvisio.libgpml.prop.StaticProperty;
@@ -109,7 +110,7 @@ public class Group extends ShapedElement implements Xrefable {
 		if (pathwayElement == null) {
 			throw new IllegalArgumentException("Cannot add invalid pathway element to group " + getElementId());
 		}
-		if (getPathwayModel() != pathwayElement.getPathwayModel()) {
+		if (pathwayModel != pathwayElement.getPathwayModel()) {
 			throw new IllegalArgumentException("Group can only add pathway elements of the same pathway model");
 		}
 		// do not add if pathway element is a state
@@ -234,11 +235,12 @@ public class Group extends ShapedElement implements Xrefable {
 	// ================================================================================
 
 	/**
-	 * Creates and returns an Alias data node for this group. TODO
+	 * Creates and returns an Alias data node for this group.
 	 */
-	public DataNode createAlias(String textLabel) {
+	public DataNode addAlias(String textLabel) {
 		if (pathwayModel != null) {
-			DataNode alias = new DataNode(textLabel, this);
+			DataNode alias = new DataNode(textLabel, DataNodeType.ALIAS, null, this);
+			pathwayModel.addPathwayObject(alias); //TODO 
 			return alias;
 		}
 		System.out.println("Cannot create an alias for group without valid pathway model.");
