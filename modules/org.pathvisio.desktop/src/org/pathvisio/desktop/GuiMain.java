@@ -68,8 +68,8 @@ import org.pathvisio.libgpml.model.GpmlFormat;
  *
  */
 public class GuiMain implements GdbEventListener {
-	GuiMain() {
 
+	GuiMain() {
 	}
 
 	private MainPanelStandalone mainPanel;
@@ -373,7 +373,6 @@ public class GuiMain implements GdbEventListener {
 
 	private void initExporters(Engine engine, GdbManager gdbManager) {
 		engine.addPathwayModelExporter(new GpmlFormat());
-
 		engine.addPathwayModelExporter(new RasterImageExporter(ImageExporter.TYPE_PNG));
 		engine.addPathwayModelExporter(new BatikImageExporter(ImageExporter.TYPE_SVG));
 		engine.addPathwayModelExporter(new BatikImageExporter(ImageExporter.TYPE_TIFF));

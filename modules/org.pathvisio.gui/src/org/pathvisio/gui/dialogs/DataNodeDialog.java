@@ -106,8 +106,11 @@ public class DataNodeDialog extends PathwayObjectDialog {
 		super.refresh();
 		DataNode input = getInput();
 		symText.setText(input.getTextLabel());
-		idText.setText(input.getXref().getId());
-		dsm.setSelectedItem(input.getXref().getDataSource());
+		Xref xref = input.getXref();
+		String id = XrefUtils.getIdentifier(xref);
+		DataSource ds = XrefUtils.getDataSource(xref);
+		idText.setText(id);
+		dsm.setSelectedItem(ds);
 		String dnType = input.getType().getName();
 		typeCombo.setSelectedItem(DataNodeType.fromName(dnType));
 		String[] dsType = null; // null is default: no filtering
@@ -374,15 +377,16 @@ public class DataNodeDialog extends PathwayObjectDialog {
 
 			private void setText() {
 				// Sets Xref id by creating new Xref
-				getInput().setXref(new Xref(idText.getText(), getInput().getXref().getDataSource()));
+				DataSource ds = XrefUtils.getDataSource(getInput().getXref());// TODO
+				getInput().setXref(new Xref(idText.getText(), ds));
 			}
 		});
 
 		dsm.addListDataListener(new ListDataListener() {
 
 			public void contentsChanged(ListDataEvent arg0) {
-				// Sets Xref dataSource by creating new Xref
-				getInput().setXref(new Xref(getInput().getXref().getId(), (DataSource) dsm.getSelectedItem()));
+				String id = XrefUtils.getIdentifier(getInput().getXref());// TODO
+				getInput().setXref(new Xref(id, (DataSource) dsm.getSelectedItem()));
 			}
 
 			public void intervalAdded(ListDataEvent arg0) {

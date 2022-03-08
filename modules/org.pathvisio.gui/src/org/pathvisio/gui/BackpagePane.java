@@ -24,6 +24,7 @@ import javax.swing.JEditorPane;
 import javax.swing.SwingUtilities;
 import javax.swing.text.html.HTMLEditorKit;
 
+import org.bridgedb.DataSource;
 import org.bridgedb.Xref;
 import org.pathvisio.core.ApplicationEvent;
 import org.pathvisio.core.Engine;
@@ -182,10 +183,9 @@ public class BackpagePane extends JEditorPane
 		PathwayObject pe = e.getModifiedPathwayObject();
 		// TODO static property Xref, separate datasource and ID?
 		if (input != null && pe instanceof Xrefable && (e.affectsProperty(StaticProperty.XREF))) {
-			Xref nref = null; // TODO weird???
-			if (((Xrefable) pe).getXref() != null) {
-				nref = new Xref(((Xrefable) pe).getXref().getId(), ((Xrefable) input).getXref().getDataSource());
-			}
+			String id = XrefUtils.getIdentifier(((Xrefable) pe).getXref());
+			DataSource ds = XrefUtils.getDataSource(((Xrefable) pe).getXref()); //TODO 
+			Xref nref = new Xref(id, ds);
 			// TODO check???
 			if (!XrefUtils.equivalentXrefs(nref, currRef)) {
 				doQuery();

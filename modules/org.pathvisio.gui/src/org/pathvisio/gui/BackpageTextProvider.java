@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.bridgedb.AttributeMapper;
+import org.bridgedb.DataSource;
 import org.bridgedb.IDMapper;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.Xref;
@@ -40,6 +41,7 @@ import org.pathvisio.libgpml.model.Group;
 import org.pathvisio.libgpml.model.Xrefable;
 import org.pathvisio.libgpml.model.type.ObjectType;
 import org.pathvisio.libgpml.util.Utils;
+import org.pathvisio.libgpml.util.XrefUtils;
 
 /**
  * BackpageTextProvider knows how to generate a html "backpage" for a given
@@ -99,8 +101,9 @@ public class BackpageTextProvider {
 			String type = getType(e);
 
 			text += "<H1><font color=\"006699\">" + type + " annotation</font></H1><br>";
-
-			if (((Xrefable) e).getXref().getId() == null || "".equals(((Xrefable) e).getXref().getId())) {
+			Xref xref = ((Xrefable) e).getXref();
+			String identifier = XrefUtils.getIdentifier(xref);
+			if (identifier == null || "".equals(identifier)) {
 				text += "<font color='red'>Invalid annotation: missing identifier.</font>";
 				return text;
 			}
@@ -116,8 +119,7 @@ public class BackpageTextProvider {
 				}
 
 				String[][] table = new String[][] { { "Name", Utils.oneOf(attributes.get("Symbol")) },
-						{ "Identifier", ((Xrefable) e).getXref().getId() },
-						{ "Description", Utils.oneOf(attributes.get("Description")) },
+						{ "Identifier", identifier }, { "Description", Utils.oneOf(attributes.get("Description")) },
 						{ "Synonyms", Utils.oneOf(attributes.get("Synonyms")) },
 						{ "Chromosome", Utils.oneOf(attributes.get("Chromosome")) },
 						{ "Molecular Formula", Utils.oneOf(attributes.get("BrutoFormula")) },
@@ -161,12 +163,14 @@ public class BackpageTextProvider {
 
 		public String getHtml(PathwayObject e) {
 			try {
-				if (((Xrefable) e).getXref().getId() == null || "".equals(((Xrefable) e).getXref().getId())
-						|| ((Xrefable) e).getXref().getDataSource() == null) {
+				Xref xref = ((Xrefable) e).getXref();
+				String identifier = XrefUtils.getIdentifier(xref);
+				DataSource dataSource = XrefUtils.getDataSource(xref);
+				if (identifier == null || "".equals(identifier) || dataSource == null) {
 					return "";
 				}
-				Set<Xref> crfs = gdb.mapID(((Xrefable) e).getXref());
-				crfs.add(((Xrefable) e).getXref());
+				Set<Xref> crfs = gdb.mapID(xref);
+				crfs.add(xref);
 				if (crfs.size() == 0)
 					return "";
 				List<Xref> sortedRefs = new ArrayList<Xref>(crfs);
@@ -230,7 +234,8 @@ public class BackpageTextProvider {
 					+ "<BR>Only Pathways, DataNodes, States, Interactions and Groups can be annotated.</p>";
 		} else if (((Xrefable) e).getXref() == null) {
 			return "<p>There is no annotation for this pathway element defined.</p>";
-		} else if (((Xrefable) e).getXref().getDataSource() == null || ((Xrefable) e).getXref().getId().equals("")) {
+		} else if (XrefUtils.getDataSource(((Xrefable) e).getXref()) == null
+				|| XrefUtils.getIdentifier(((Xrefable) e).getXref()).equals("")) {
 			return "<p>There is no annotation for this pathway element defined.</p>";
 		}
 		StringBuilder builder = new StringBuilder(backpagePanelHeader);

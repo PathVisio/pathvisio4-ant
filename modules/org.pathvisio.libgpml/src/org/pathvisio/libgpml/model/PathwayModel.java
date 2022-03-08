@@ -1005,8 +1005,7 @@ public class PathwayModel {
 	// ================================================================================
 	public PathwayModel clone() {
 		PathwayModel result = new PathwayModel();
-		System.out.println("BEFORE CLONE " + getPathwayObjects());
-		// TODO!!!
+		// TODO!
 		result.replacePathway((Pathway) pathway.copy().getNewElement());
 		for (PathwayElement o : getPathwayElements()) {
 			result.add(o.copy().getNewElement()); // TODO
@@ -1019,7 +1018,6 @@ public class PathwayModel {
 //		for(StatusFlagListener l : statusFlagListeners) {
 //			result.addStatusFlagListener(l);
 //		}
-		System.out.println("CLONE " + result.getPathwayObjects());
 		return result;
 	}
 

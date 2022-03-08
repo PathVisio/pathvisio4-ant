@@ -22,42 +22,44 @@ import javax.swing.LookAndFeel;
 import javax.swing.table.AbstractTableModel;
 
 /**
-//Source: http://www.java2s.com/Code/Java/Swing-JFC/RowNumberTableHeader.htm
+ * //Source: http://www.java2s.com/Code/Java/Swing-JFC/RowNumberTableHeader.htm
  */
-public class RowNumberHeader extends JTable
-{
+public class RowNumberHeader extends JTable {
 
-	  protected JTable mainTable;
+	protected JTable mainTable;
+
 	public RowNumberHeader(JTable table) {
-	  super();
-	  mainTable = table;
-	  setModel(new RowNumberTableModel());
-	  setPreferredScrollableViewportSize(getMinimumSize());
-	  setRowSelectionAllowed(false);
-	  JComponent renderer = (JComponent) getDefaultRenderer(Object.class);
-	  LookAndFeel.installColorsAndFont(renderer, "TableHeader.background",
-	      "TableHeader.foreground", "TableHeader.font");
-	  LookAndFeel.installBorder(this, "TableHeader.cellBorder");
+		super();
+		mainTable = table;
+		setModel(new RowNumberTableModel());
+		setPreferredScrollableViewportSize(getMinimumSize());
+		setRowSelectionAllowed(false);
+		JComponent renderer = (JComponent) getDefaultRenderer(Object.class);
+		LookAndFeel.installColorsAndFont(renderer, "TableHeader.background", "TableHeader.foreground",
+				"TableHeader.font");
+		LookAndFeel.installBorder(this, "TableHeader.cellBorder");
 	}
 
 	public int getRowHeight(int row) {
-	  return mainTable.getRowHeight();
+		return mainTable.getRowHeight();
 	}
 
-	/** Simple Table model: just one column, cell values are numbers starting from 1 */
+	/**
+	 * Simple Table model: just one column, cell values are numbers starting from 1
+	 */
 	private class RowNumberTableModel extends AbstractTableModel {
 
-	  public int getRowCount() {
-	    return mainTable.getModel().getRowCount();
-	  }
+		public int getRowCount() {
+			return mainTable.getModel().getRowCount();
+		}
 
-	  public int getColumnCount() {
-	    return 1;
-	  }
+		public int getColumnCount() {
+			return 1;
+		}
 
-	  public Object getValueAt(int row, int column) {
-	    return new Integer(row + 1);
-	  }
+		public Object getValueAt(int row, int column) {
+			return new Integer(row + 1);
+		}
 
 	}
 }

@@ -30,6 +30,9 @@ import org.pathvisio.libgpml.model.Xrefable;
 import org.pathvisio.libgpml.model.DataNode;
 import org.pathvisio.libgpml.model.PathwayElement;
 import org.pathvisio.libgpml.prop.StaticProperty;
+import org.pathvisio.libgpml.util.XrefUtils;
+import org.bridgedb.DataSource;
+import org.bridgedb.Xref;
 import org.pathvisio.core.view.model.UndoAction;
 import org.pathvisio.core.view.model.VPathwayModel;
 import org.pathvisio.gui.SwingEngine;
@@ -108,7 +111,7 @@ public class PathwayObjectDialog extends OkCancelDialog {
 	protected void storeState() {
 		PathwayObject e = getInput();
 		originalPathway = (PathwayModel) e.getPathwayModel().clone();
-		for (StaticProperty t : e.getStaticPropertyKeys()) { 
+		for (StaticProperty t : e.getStaticPropertyKeys()) {
 			state.put(t, e.getStaticProperty(t));
 		}
 	}
@@ -119,7 +122,7 @@ public class PathwayObjectDialog extends OkCancelDialog {
 	 */
 	protected void restoreState() {
 		PathwayObject e = getInput();
-		for (StaticProperty t : state.keySet()) { 
+		for (StaticProperty t : state.keySet()) {
 			e.setStaticProperty(t, state.get(t));
 		}
 	}
@@ -174,21 +177,24 @@ public class PathwayObjectDialog extends OkCancelDialog {
 	protected void okPressed() {
 		boolean done = true;
 		if (this instanceof DataNodeDialog || this instanceof LineDialog) {
-			if (!((Xrefable) input).getXref().getId().equals("")
-					&& ((Xrefable) input).getXref().getDataSource() == null) {
+			Xref xref = ((Xrefable) input).getXref();
+			String id = XrefUtils.getIdentifier(xref);
+			DataSource ds = XrefUtils.getDataSource(xref);
+			if (!id.equals("") && ds == null) {
 				done = false;
 				JOptionPane.showMessageDialog(this,
 						"You annotated this pathway element with an identifier but no database.\n Please specify a database system.",
 						"Error", JOptionPane.ERROR_MESSAGE);
-			} else if (((Xrefable) input).getXref().getId().equals("")
-					&& ((Xrefable) input).getXref().getDataSource() == null) {
+			} else if (id.equals("") && ds == null) {
 				done = false;
 				JOptionPane.showMessageDialog(this,
 						"You annotated this pathway element with a database but no identifier.\n Please specify an identifier.",
 						"Error", JOptionPane.ERROR_MESSAGE);
 			}
 		}
-		if (done) {
+		if (done)
+
+		{
 			VPathwayModel p = swingEngine.getEngine().getActiveVPathwayModel();
 			p.getUndoManager().newAction(new UndoAction("Modified element properties", originalPathway));
 			if (p != null)

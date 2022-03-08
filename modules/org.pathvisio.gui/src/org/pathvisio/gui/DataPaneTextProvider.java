@@ -27,6 +27,7 @@ import org.pathvisio.libgpml.debug.WorkerThreadOnly;
 import org.pathvisio.libgpml.model.PathwayObject;
 import org.pathvisio.libgpml.model.Xrefable;
 import org.pathvisio.libgpml.model.type.ObjectType;
+import org.pathvisio.libgpml.util.XrefUtils;
 
 /**
  * BackpageTextProvider knows how to generate a html "backpage" for a given
@@ -124,7 +125,8 @@ public class DataPaneTextProvider {
 					+ "<BR>Only Pathways, DataNodes, States, Interactions and Groups can be annotated.</p>";
 		} else if (((Xrefable) e).getXref() == null) {
 			return "<p>This pathway element has not yet been annotated.</p>";
-		} else if (((Xrefable) e).getXref().getDataSource() == null || ((Xrefable) e).getXref().getId().equals("")) {
+		} else if (XrefUtils.getDataSource(((Xrefable) e).getXref()) == null
+				|| XrefUtils.getIdentifier(((Xrefable) e).getXref()).equals("")) {
 			return "<p>This pathway element has not yet been annotated.</p>";
 		}
 		StringBuilder builder = new StringBuilder(backpagePanelHeader);

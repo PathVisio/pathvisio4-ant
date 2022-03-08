@@ -225,11 +225,11 @@ public class CommonActions implements ApplicationEventListener {
 		// actions for Molecule "Data nodes" section
 		newMoleculeDatanodeActions = new Action[] {
 				new NewElementAction(e, new DefaultTemplates.DataNodeTemplate(DataNodeType.GENEPRODUCT)),
-				new NewElementAction(e, new DefaultTemplates.DataNodeTemplate(DataNodeType.DNA)),
-				new NewElementAction(e, new DefaultTemplates.DataNodeTemplate(DataNodeType.RNA)),
-				new NewElementAction(e, new DefaultTemplates.DataNodeTemplate(DataNodeType.PROTEIN)),
 				new NewElementAction(e, new DefaultTemplates.DataNodeTemplate(DataNodeType.METABOLITE)),
-				new NewElementAction(e, new DefaultTemplates.DataNodeTemplate(DataNodeType.COMPLEX)), };
+				new NewElementAction(e, new DefaultTemplates.DataNodeTemplate(DataNodeType.PROTEIN)),
+				new NewElementAction(e, new DefaultTemplates.DataNodeTemplate(DataNodeType.COMPLEX)),
+				new NewElementAction(e, new DefaultTemplates.DataNodeTemplate(DataNodeType.DNA)),
+				new NewElementAction(e, new DefaultTemplates.DataNodeTemplate(DataNodeType.RNA)), };
 
 		// actions for Concept "Data nodes" section
 		newConceptDatanodeActions = new Action[] {

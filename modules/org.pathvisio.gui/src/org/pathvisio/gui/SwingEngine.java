@@ -340,7 +340,6 @@ public class SwingEngine implements ApplicationEventListener, PathwayModel.Statu
 			final ProgressKeeper pk = new ProgressKeeper();
 			final ProgressDialog d = new ProgressDialog(JOptionPane.getFrameForComponent(getApplicationPanel()), "", pk,
 					false, true);
-
 			// create a clone so we can safely act on it in a worker thread.
 			final PathwayModel clone = engine.getActivePathwayModel().clone();
 

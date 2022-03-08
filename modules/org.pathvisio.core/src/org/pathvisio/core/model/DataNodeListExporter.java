@@ -34,6 +34,7 @@ import org.pathvisio.libgpml.io.PathwayModelExporter;
 import org.pathvisio.libgpml.io.ConverterException;
 import org.pathvisio.libgpml.model.DataNode;
 import org.pathvisio.libgpml.model.PathwayModel;
+import org.pathvisio.libgpml.util.XrefUtils;
 
 /**
  * Exporter that writes a pathway as a list of DataNodes, using their database
@@ -138,7 +139,7 @@ public class DataNodeListExporter implements PathwayModelExporter {
 		printHeaders(out);
 		for (DataNode elm : pathwayModel.getDataNodes()) { // TODO datanodes instead of elm
 			String line = "";
-			String id = elm.getXref().getId();
+			String id = XrefUtils.getIdentifier(elm.getXref()); //TODO 
 			DataSource ds = ((DataNode) elm).getXref().getDataSource();
 			if (!checkString(id) || ds == null) {
 				continue; // Skip empty id/codes

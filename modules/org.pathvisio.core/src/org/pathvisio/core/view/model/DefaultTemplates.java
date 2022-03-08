@@ -54,20 +54,11 @@ import org.pathvisio.core.util.Resources;
 public abstract class DefaultTemplates {
 
 	/* Some default colors */
-	private final static Color COLOR_WHITE = Color.WHITE;
 	private final static Color COLOR_DEFAULT = Color.BLACK;
 	private final static Color COLOR_METABOLITE = Color.BLUE;
 	private final static Color COLOR_PATHWAY = new Color(20, 150, 30);
 	private final static Color COLOR_LABEL = Color.DARK_GRAY;
 	private final static Color COLOR_TRANSPARENT = ColorUtils.hexToColor("#00000000");
-
-	/* Some default graphics */
-	private static final int FONTSIZE = 12;
-	private static final HAlignType HALIGN = HAlignType.CENTER;
-	private static final VAlignType VALIGN = VAlignType.MIDDLE;
-	private static final LineStyleType LINESTYLETYPE = LineStyleType.SOLID;
-	private static final double LINEWIDTH = 1;
-	private static final double ROTATION = 0;
 
 	/* Initial sizes */
 	private static final double DATANODE_WIDTH = 90; // NB: "DATANODE" used to be named "GENEPRODUCT"
@@ -328,7 +319,7 @@ public abstract class DefaultTemplates {
 			} else if (type == ShapeType.CYTOSOL || type == ShapeType.EXTRACELLULAR || type == ShapeType.MEMBRANE) {
 				e.setBorderStyle(LineStyleType.DASHED); // TODO membrane/cytosol never implemented?
 			} else {
-				e.setBorderStyle(LINESTYLETYPE);
+				e.setBorderStyle(LineStyleType.SOLID);
 			}
 		}
 
@@ -340,7 +331,7 @@ public abstract class DefaultTemplates {
 			if (CELL_COMPONENT_SET.contains(type)) {
 				e.setBorderWidth(3);
 			} else {
-				e.setBorderWidth(LINEWIDTH);
+				e.setBorderWidth(1);
 			}
 		}
 
@@ -351,22 +342,19 @@ public abstract class DefaultTemplates {
 		 */
 		public void setInitialColors(Shape e) {
 			IShape type = e.getShapeType();
+			e.setFillColor(COLOR_TRANSPARENT);
 			if (CELL_COMPONENT_SET.contains(type)) {
 				e.setTextColor(Color.lightGray);
 				e.setBorderColor(Color.lightGray);
-				e.setFillColor(ColorUtils.hexToColor("#00000000"));
 			} else if (type == ShapeType.DNA || type == ShapeType.RNA) {
 				e.setTextColor(COLOR_DEFAULT);
 				e.setBorderColor(Color.darkGray);
-				e.setFillColor(ColorUtils.hexToColor("#00000000"));
 			} else if (type == ShapeType.CELL_ICON) {
 				e.setTextColor(COLOR_DEFAULT);
 				e.setBorderColor(Color.darkGray);
-				e.setFillColor(ColorUtils.hexToColor("#00000000"));
 			}else {
 				e.setTextColor(COLOR_DEFAULT);
 				e.setBorderColor(COLOR_DEFAULT);
-				e.setFillColor(ColorUtils.hexToColor("#00000000"));
 			}
 		}
 
