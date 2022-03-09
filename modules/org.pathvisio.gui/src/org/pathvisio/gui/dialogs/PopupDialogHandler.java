@@ -25,11 +25,8 @@ import org.pathvisio.libgpml.model.DataNode;
 import org.pathvisio.libgpml.model.DataNode.State;
 import org.pathvisio.libgpml.model.Group;
 import org.pathvisio.libgpml.model.Interaction;
-import org.pathvisio.libgpml.model.Label;
 import org.pathvisio.libgpml.model.Pathway;
 import org.pathvisio.libgpml.model.PathwayElement;
-import org.pathvisio.libgpml.model.PathwayObject;
-import org.pathvisio.libgpml.model.Shape;
 import org.pathvisio.libgpml.model.ShapedElement;
 import org.pathvisio.gui.SwingEngine;
 

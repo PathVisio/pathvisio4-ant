@@ -481,6 +481,28 @@ public class Group extends ShapedElement implements Xrefable {
 	// ================================================================================
 	// Property Methods
 	// ================================================================================
+	
+	@Override
+	public Object getStaticProperty(StaticProperty key) { // TODO
+		Object result = super.getStaticProperty(key);
+		if (result == null) {
+			switch (key) {
+			case GROUPTYPE:
+				result = getType();
+				break;
+			case TEXTLABEL:
+				result = getTextLabel();
+				break;
+			case XREF:
+				result = getXref();
+				break;
+			default:
+				// do nothing
+			}
+		}
+		return result;
+	}
+	
 	/**
 	 * This works so that o.setNotes(x) is the equivalent of o.setProperty("Notes",
 	 * x);

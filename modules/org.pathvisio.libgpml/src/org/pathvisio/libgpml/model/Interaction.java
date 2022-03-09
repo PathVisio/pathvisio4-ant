@@ -62,6 +62,7 @@ public class Interaction extends LineElement implements Xrefable {
 	public ObjectType getObjectType() {
 		return ObjectType.INTERACTION;
 	}
+
 	/**
 	 * Returns the Xref for this interaction.
 	 * 
@@ -114,6 +115,21 @@ public class Interaction extends LineElement implements Xrefable {
 	// ================================================================================
 	// Property Methods
 	// ================================================================================
+	@Override
+	public Object getStaticProperty(StaticProperty key) { // TODO
+		Object result = super.getStaticProperty(key);
+		if (result == null) {
+			switch (key) {
+			case XREF:
+				result = getXref();
+				break;
+			default:
+				// do nothing
+			}
+		}
+		return result;
+	}
+
 	/**
 	 * This works so that o.setNotes(x) is the equivalent of o.setProperty("Notes",
 	 * x);

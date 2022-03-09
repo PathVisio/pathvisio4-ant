@@ -146,6 +146,25 @@ public class Label extends ShapedElement {
 	// ================================================================================
 	// Property Methods
 	// ================================================================================
+	
+	@Override
+	public Object getStaticProperty(StaticProperty key) { // TODO
+		Object result = super.getStaticProperty(key);
+		if (result == null) {
+			switch (key) {
+			case TEXTLABEL:
+				result = getTextLabel();
+				break;
+			case HREF:
+				result = getHref();
+				break;
+			default:
+				// do nothing
+			}
+		}
+		return result;
+	}
+	
 	/**
 	 * This works so that o.setNotes(x) is the equivalent of o.setProperty("Notes",
 	 * x);

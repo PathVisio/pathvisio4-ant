@@ -320,7 +320,7 @@ public class DataNode extends ShapedElement implements Xrefable {
 	 */
 	protected void unsetAliasRef() {
 		if (getAliasRef() != null) {
-			pathwayModel.unlinkAlias(aliasRef, this);	
+			pathwayModel.unlinkAlias(aliasRef, this);
 			aliasRef = null;
 			fireObjectModifiedEvent(PathwayObjectEvent.createSinglePropertyEvent(this, StaticProperty.ALIASREF));
 		}
@@ -367,6 +367,31 @@ public class DataNode extends ShapedElement implements Xrefable {
 	// ================================================================================
 	// Property Methods
 	// ================================================================================
+
+	@Override
+	public Object getStaticProperty(StaticProperty key) { // TODO
+		Object result = super.getStaticProperty(key);
+		if (result == null) {
+			switch (key) {
+			case TEXTLABEL:
+				result = getTextLabel();// TODO
+				break;
+			case DATANODETYPE:
+				result = getType();
+				break;
+			case XREF:
+				result = getXref();
+				break;
+			case ALIASREF:
+				result = getAliasRef();
+				break;
+			default:
+				// do nothing
+			}
+		}
+		return result;
+	}
+
 	/**
 	 * This works so that o.setNotes(x) is the equivalent of o.setProperty("Notes",
 	 * x);
@@ -792,6 +817,34 @@ public class DataNode extends ShapedElement implements Xrefable {
 		// ================================================================================
 		// Property Methods
 		// ================================================================================
+
+		@Override
+		public Object getStaticProperty(StaticProperty key) { // TODO
+			Object result = super.getStaticProperty(key);
+			if (result == null) {
+				switch (key) {
+				case TEXTLABEL:
+					result = getTextLabel();// TODO
+					break;
+				case STATETYPE:
+					result = getType();
+					break;
+				case RELX:
+					result = getRelX();
+					break;
+				case RELY:
+					result = getRelY();
+					break;
+				case XREF:
+					result = getXref();
+					break;
+				default:
+					// do nothing
+				}
+			}
+			return result;
+		}
+
 		/**
 		 * This works so that o.setNotes(x) is the equivalent of o.setProperty("Notes",
 		 * x);
@@ -807,14 +860,23 @@ public class DataNode extends ShapedElement implements Xrefable {
 			switch (key) {
 			case TEXTLABEL:
 				setTextLabel((String) value);
+				break;
 			case STATETYPE:
-				setType((StateType) value);
+				if (value instanceof StateType) {
+					setType((StateType) value);
+				} else {
+					setType(StateType.fromName((String) value));
+				}
+				break;
 			case RELX:
 				setRelX((Double) value);
+				break;
 			case RELY:
 				setRelY((Double) value);
+				break;
 			case XREF:
 				setXref((Xref) value);
+				break;
 			default:
 				// do nothing
 			}

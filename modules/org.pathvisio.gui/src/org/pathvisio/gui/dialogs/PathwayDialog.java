@@ -28,9 +28,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
 import org.bridgedb.bio.Organism;
-import org.pathvisio.libgpml.model.DataNode;
 import org.pathvisio.libgpml.model.Pathway;
-import org.pathvisio.libgpml.model.PathwayElement;
 import org.pathvisio.gui.SwingEngine;
 import org.pathvisio.gui.util.PermissiveComboBox;
 

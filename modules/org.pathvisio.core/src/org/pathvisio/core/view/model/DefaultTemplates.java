@@ -276,9 +276,14 @@ public abstract class DefaultTemplates {
 	public static class ShapeTemplate extends SingleElementTemplate {
 		ShapeType shapeType;
 
+		// cellular component shapes
 		Set<ShapeType> CELL_COMPONENT_SET = new HashSet<>(Arrays.asList(ShapeType.CELL, ShapeType.NUCLEUS,
 				ShapeType.ENDOPLASMIC_RETICULUM, ShapeType.GOLGI_APPARATUS, ShapeType.MITOCHONDRIA,
 				ShapeType.SARCOPLASMIC_RETICULUM, ShapeType.ORGANELLE, ShapeType.VESICLE));
+		
+		// miscellaneous shapes
+		Set<ShapeType> MISC_SHAPE_SET = new HashSet<>(Arrays.asList(ShapeType.CORONAVIRUS, ShapeType.DNA,
+				ShapeType.RNA, ShapeType.CELL_ICON));
 
 		public ShapeTemplate(ShapeType shapeType) {
 			this.shapeType = shapeType;
@@ -346,13 +351,10 @@ public abstract class DefaultTemplates {
 			if (CELL_COMPONENT_SET.contains(type)) {
 				e.setTextColor(Color.lightGray);
 				e.setBorderColor(Color.lightGray);
-			} else if (type == ShapeType.DNA || type == ShapeType.RNA) {
-				e.setTextColor(COLOR_DEFAULT);
+			} else if (MISC_SHAPE_SET.contains(type)) {
+				e.setTextColor(Color.darkGray);
 				e.setBorderColor(Color.darkGray);
-			} else if (type == ShapeType.CELL_ICON) {
-				e.setTextColor(COLOR_DEFAULT);
-				e.setBorderColor(Color.darkGray);
-			}else {
+			} else {
 				e.setTextColor(COLOR_DEFAULT);
 				e.setBorderColor(COLOR_DEFAULT);
 			}

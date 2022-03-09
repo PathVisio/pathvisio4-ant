@@ -127,7 +127,7 @@ public class NumberHandler extends DefaultCellEditor implements TableCellRendere
 	//-- TableCellRenderer methods --//
 
 	/**
-	 * Overriden to format value.
+	 * Overridden to format value.
 	 */
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 			int row, int column) {
