@@ -25,9 +25,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 
 import org.pathvisio.libgpml.model.PathwayModel;
-import org.pathvisio.libgpml.model.PathwayObject;
 import org.pathvisio.libgpml.model.Xrefable;
-import org.pathvisio.libgpml.model.DataNode;
 import org.pathvisio.libgpml.model.PathwayElement;
 import org.pathvisio.libgpml.prop.StaticProperty;
 import org.pathvisio.libgpml.util.XrefUtils;
@@ -45,12 +43,12 @@ import org.pathvisio.gui.panels.PathwayElementPanel;
  * 
  * @author thomas
  */
-public class PathwayObjectDialog extends OkCancelDialog {
+public class PathwayElementDialog extends OkCancelDialog {
 
 	public static final String TAB_COMMENTS = "Comments";
 	public static final String TAB_LITERATURE = "Literature";
 
-	PathwayObject input;
+	PathwayElement input;
 	private JTabbedPane dialogPane;
 	private Map<String, PathwayElementPanel> panels;
 	private Map<StaticProperty, Object> state = new HashMap<StaticProperty, Object>();
@@ -59,8 +57,8 @@ public class PathwayObjectDialog extends OkCancelDialog {
 	protected boolean readonly;
 	protected SwingEngine swingEngine;
 
-	protected PathwayObjectDialog(SwingEngine swingEngine, PathwayObject e, boolean readonly, Frame frame, String title,
-			Component locationComp) {
+	protected PathwayElementDialog(SwingEngine swingEngine, PathwayElement e, boolean readonly, Frame frame,
+			String title, Component locationComp) {
 		super(frame, title, locationComp, true);
 		this.readonly = readonly;
 		this.swingEngine = swingEngine;
@@ -79,14 +77,14 @@ public class PathwayObjectDialog extends OkCancelDialog {
 	/**
 	 * Get the pathway element for this dialog
 	 */
-	protected PathwayObject getInput() {
+	protected PathwayElement getInput() {
 		return input;
 	}
 
 	/**
 	 * Set the pathway element for this dialog
 	 */
-	public void setInput(PathwayObject e) {
+	public void setInput(PathwayElement e) {
 		input = e;
 		storeState();
 		refresh();
@@ -109,7 +107,7 @@ public class PathwayObjectDialog extends OkCancelDialog {
 	 * modifications made in the dialog.
 	 */
 	protected void storeState() {
-		PathwayObject e = getInput();
+		PathwayElement e = getInput();
 		originalPathway = (PathwayModel) e.getPathwayModel().clone();
 		for (StaticProperty t : e.getStaticPropertyKeys()) {
 			state.put(t, e.getStaticProperty(t));
@@ -121,7 +119,7 @@ public class PathwayObjectDialog extends OkCancelDialog {
 	 * cancel button is pressed.
 	 */
 	protected void restoreState() {
-		PathwayObject e = getInput();
+		PathwayElement e = getInput();
 		for (StaticProperty t : state.keySet()) {
 			e.setStaticProperty(t, state.get(t));
 		}
@@ -176,7 +174,8 @@ public class PathwayObjectDialog extends OkCancelDialog {
 	 */
 	protected void okPressed() {
 		boolean done = true;
-		if (this instanceof DataNodeDialog || this instanceof LineDialog) {
+		if (this instanceof DataNodeDialog || this instanceof StateDialog || this instanceof InteractionDialog
+				|| this instanceof GroupDialog) {
 			Xref xref = ((Xrefable) input).getXref();
 			String id = XrefUtils.getIdentifier(xref);
 			DataSource ds = XrefUtils.getDataSource(xref);
@@ -185,7 +184,7 @@ public class PathwayObjectDialog extends OkCancelDialog {
 				JOptionPane.showMessageDialog(this,
 						"You annotated this pathway element with an identifier but no database.\n Please specify a database system.",
 						"Error", JOptionPane.ERROR_MESSAGE);
-			} else if (id.equals("") && ds == null) {
+			} else if (id.equals("") && ds != null) {
 				done = false;
 				JOptionPane.showMessageDialog(this,
 						"You annotated this pathway element with a database but no identifier.\n Please specify an identifier.",

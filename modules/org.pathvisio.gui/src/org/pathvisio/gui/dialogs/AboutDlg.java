@@ -38,6 +38,8 @@ import com.jgoodies.forms.layout.FormLayout;
 /**
  * Creates and displays the About dialog, showing some general information about
  * the application.
+ * 
+ * @author unknown
  */
 public class AboutDlg {
 	private static final URL IMG_ABOUT_LOGO = Resources.getResourceURL("new-logo-small.png");

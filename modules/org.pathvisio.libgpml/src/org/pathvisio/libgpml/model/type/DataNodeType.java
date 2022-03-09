@@ -30,11 +30,12 @@ import org.pathvisio.libgpml.debug.Logger;
  */
 public class DataNodeType {
 
-	private static final Map<String, DataNodeType> nameToDataNodeType = new TreeMap<String, DataNodeType>(String.CASE_INSENSITIVE_ORDER);
+	private static final Map<String, DataNodeType> nameToDataNodeType = new TreeMap<String, DataNodeType>(
+			String.CASE_INSENSITIVE_ORDER);
 
 	// Default
 	public static final DataNodeType UNDEFINED = new DataNodeType("Undefined");
-	
+
 	// Molecules
 	public static final DataNodeType GENEPRODUCT = new DataNodeType("GeneProduct");
 	public static final DataNodeType METABOLITE = new DataNodeType("Metabolite");
@@ -49,8 +50,8 @@ public class DataNodeType {
 	public static final DataNodeType PHENOTYPE = new DataNodeType("Phenotype");
 	public static final DataNodeType ALIAS = new DataNodeType("Alias");
 	public static final DataNodeType EVENT = new DataNodeType("Event");
-	public static final DataNodeType CELL = new DataNodeType("Cell"); //TODO 
-	public static final DataNodeType ORGAN = new DataNodeType("Organ"); //TODO 
+	public static final DataNodeType CELL = new DataNodeType("Cell"); // TODO
+	public static final DataNodeType ORGAN = new DataNodeType("Organ"); // TODO
 
 	private String name;
 
@@ -82,7 +83,7 @@ public class DataNodeType {
 		if (nameToDataNodeType.containsKey(name)) {
 			return nameToDataNodeType.get(name);
 		} else {
-			Logger.log.trace("Registered datanode type " + name); 
+			Logger.log.trace("Registered datanode type " + name);
 			return new DataNodeType(name);
 		}
 	}
@@ -126,7 +127,8 @@ public class DataNodeType {
 	}
 
 	/**
-	 * Returns a string representation of this DataNodeType.
+	 * Returns a string representation of this DataNodeType. Adds space between
+	 * lower and upper case letters to make more human readable.
 	 * 
 	 * @return name the identifier of this DataNodeType.
 	 */

@@ -24,7 +24,11 @@ import java.util.EventListener;
  *
  * For example, this is used by DatanodeDialog or by PropertyTableModel to keep
  * up to date with changes in the selected PathwayElement.
+ * 
+ * @author unknown
  */
 public interface PathwayObjectListener extends EventListener {
+
 	public void gmmlObjectModified(PathwayObjectEvent e);
+
 }

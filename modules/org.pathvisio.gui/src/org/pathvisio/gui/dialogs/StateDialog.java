@@ -32,9 +32,9 @@ import java.util.List;
 import java.util.Set;
 
 import javax.swing.BorderFactory;
-import javax.swing.ComboBoxModel;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -45,12 +45,12 @@ import org.bridgedb.DataSource;
 import org.bridgedb.IDMapperException;
 import org.bridgedb.IDMapperStack;
 import org.bridgedb.Xref;
-import org.pathvisio.libgpml.model.type.ArrowHeadType;
-import org.pathvisio.libgpml.model.DataNode;
-import org.pathvisio.libgpml.model.Interaction;
-import org.pathvisio.libgpml.model.PathwayElement;
+import org.pathvisio.libgpml.model.type.StateType;
+import org.pathvisio.libgpml.util.XrefUtils;
+import org.pathvisio.libgpml.model.DataNode.State;
 import org.pathvisio.gui.DataSourceModel;
 import org.pathvisio.gui.SwingEngine;
+import org.pathvisio.gui.completer.CompleterQueryTextArea;
 import org.pathvisio.gui.completer.CompleterQueryTextField;
 import org.pathvisio.gui.completer.OptionProvider;
 import org.pathvisio.gui.util.PermissiveComboBox;
@@ -59,52 +59,71 @@ import org.pathvisio.gui.util.PermissiveComboBox;
  * 
  * @author unknown
  */
-public class LineDialog extends PathwayObjectDialog implements ItemListener {
+public class StateDialog extends PathwayElementDialog implements ItemListener {
 
 	/**
 	 * Dialog for editing Reactions/ Interactions. In addition to the standard
 	 * comments and literature tabs, this has a tab for looking up accession numbers
 	 * of reactions/interactions.
 	 */
-	private static final long serialVersionUID = 1L;
-	private CompleterQueryTextField idText;
-
+	private static final long serialVersionUID = 1L; // TODO?
+	private CompleterQueryTextArea symText; // for text label
+	private CompleterQueryTextField idText;// for xref identifier
+	private DataSourceModel dsm;// for xref dataSource
 	private PermissiveComboBox dbCombo;
 	private PermissiveComboBox typeCombo;
-	private DataSourceModel dsm;
 
-	protected LineDialog(final SwingEngine swingEngine, final Interaction e, final boolean readonly, final Frame frame,
+	/**
+	 * Instantiates a state dialog.
+	 * 
+	 * @param swingEngine
+	 * @param e
+	 * @param readonly
+	 * @param frame
+	 * @param locationComp
+	 */
+	protected StateDialog(final SwingEngine swingEngine, final State e, final boolean readonly, final Frame frame,
 			final Component locationComp) {
-		super(swingEngine, e, readonly, frame, "Interaction properties", locationComp);
+		super(swingEngine, e, readonly, frame, "State properties", locationComp);
 		getRootPane().setDefaultButton(null);
 		setButton.requestFocus();
 	}
 
 	/**
-	 * Get the pathway element for this dialog
+	 * Returns the pathway element for this dialog.
 	 */
-	protected Interaction getInput() {
-		return (Interaction) super.getInput();
+	protected State getInput() {
+		return (State) super.getInput();
 	}
 
+	/**
+	 * Refresh.
+	 */
 	public final void refresh() {
 		super.refresh();
-		Interaction input = getInput();
-		idText.setText(input.getXref().getId());
-		dsm.setSelectedItem(input.getXref().getDataSource());
-		String lType = getInput().getEndArrowHeadType().toString();
-		typeCombo.setSelectedItem(ArrowHeadType.fromName(lType));
-		dsm.setInteractionFilter(true);
+		// sets text label
+		symText.setText(getInput().getTextLabel());
+		// sets xref
+		Xref xref = getInput().getXref();
+		String id = XrefUtils.getIdentifier(xref);
+		DataSource ds = XrefUtils.getDataSource(xref);
+		idText.setText(id);
+		dsm.setSelectedItem(ds);
+		// sets type
+		String type = getInput().getType().toString();
+		typeCombo.setSelectedItem(StateType.fromName(type));
+//		dsm.setInteractionFilter(true); TODO 
 		pack();
 	}
 
+	/**
+	 * Adds custom tabs to this dialog.
+	 */
 	protected final void addCustomTabs(final JTabbedPane parent) {
-
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridBagLayout());
 
 		JPanel fieldPanel = new JPanel();
-
 		fieldPanel.setBorder(BorderFactory.createTitledBorder("Manual entry"));
 		GridBagConstraints panelConstraints = new GridBagConstraints();
 		panelConstraints.fill = GridBagConstraints.BOTH;
@@ -123,10 +142,30 @@ public class LineDialog extends PathwayObjectDialog implements ItemListener {
 		// Manual entry panel elements
 		fieldPanel.setLayout(new GridBagLayout());
 
-		JLabel typeLabel = new JLabel("Biological Type");
+		JLabel textLabel = new JLabel("Text label");
+		JLabel typeLabel = new JLabel("State type");
 		JLabel idLabel = new JLabel("Identifier");
 		JLabel dbLabel = new JLabel("Database");
+		// text label
+		symText = new CompleterQueryTextArea(new OptionProvider() {
+			public List<String> provideOptions(String text) {
+				if (text == null)
+					return Collections.emptyList();
 
+				IDMapperStack gdb = swingEngine.getGdbManager().getCurrentGdb();
+				List<String> symbols = new ArrayList<String>();
+				try {
+					if (gdb.getMappers().size() > 0) {
+						symbols.addAll(gdb.freeAttributeSearch(text, "Symbol", 10).values());
+					}
+				} catch (IDMapperException ignore) {
+				}
+				return symbols;
+			}
+		}, true);
+		symText.setColumns(20);
+		symText.setRows(2);
+		// xref identifier
 		idText = new CompleterQueryTextField(new OptionProvider() {
 			public List<String> provideOptions(final String text) {
 				if (text == null) {
@@ -149,12 +188,12 @@ public class LineDialog extends PathwayObjectDialog implements ItemListener {
 		}, true);
 
 		idText.setCorrectCase(false);
-
+		// xref datasource
 		dsm = new DataSourceModel();
 		dsm.setPrimaryFilter(true);
 		dsm.setSpeciesFilter(swingEngine.getCurrentOrganism());
 		dbCombo = new PermissiveComboBox(dsm);
-		typeCombo = new PermissiveComboBox(ArrowHeadType.getValues());
+		typeCombo = new PermissiveComboBox(StateType.getValues());
 
 		GridBagConstraints c = new GridBagConstraints();
 		c.ipadx = c.ipady = 5;
@@ -162,6 +201,7 @@ public class LineDialog extends PathwayObjectDialog implements ItemListener {
 		c.weightx = 0;
 		c.gridx = 0;
 		c.gridy = GridBagConstraints.RELATIVE;
+		fieldPanel.add(textLabel, c);
 		fieldPanel.add(typeLabel, c);
 		fieldPanel.add(idLabel, c);
 		fieldPanel.add(dbLabel, c);
@@ -169,10 +209,30 @@ public class LineDialog extends PathwayObjectDialog implements ItemListener {
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.weightx = 1;
 
+		fieldPanel.add(new JScrollPane(symText), c);
 		fieldPanel.add(typeCombo, c);
 		fieldPanel.add(idText, c);
 		fieldPanel.add(dbCombo, c);
 
+		// text label add listener
+		symText.getDocument().addDocumentListener(new DocumentListener() {
+			public void changedUpdate(DocumentEvent e) {
+				setText();
+			}
+
+			public void insertUpdate(DocumentEvent e) {
+				setText();
+			}
+
+			public void removeUpdate(DocumentEvent e) {
+				setText();
+			}
+
+			private void setText() {
+				getInput().setTextLabel(symText.getText());
+			}
+		});
+		// xref identifier add listener
 		idText.getDocument().addDocumentListener(new DocumentListener() {
 			public void changedUpdate(final DocumentEvent e) {
 				setText();
@@ -187,16 +247,19 @@ public class LineDialog extends PathwayObjectDialog implements ItemListener {
 			}
 
 			private void setText() {
-				// Sets Xref id by creating new Xref
-				getInput().setXref(new Xref(idText.getText(), getInput().getXref().getDataSource()));
+				// sets xref id
+				DataSource ds = XrefUtils.getDataSource(getInput().getXref());// TODO
+				getInput().setXref(new Xref(idText.getText(), ds));
 			}
 		});
 
+		// xref datasource add listener
 		dsm.addListDataListener(new ListDataListener() {
 
 			public void contentsChanged(final ListDataEvent arg0) {
-				// Sets Xref dataSource by creating new Xref
-				getInput().setXref(new Xref(getInput().getXref().getId(), (DataSource) dsm.getSelectedItem()));
+				// sets xref dataSource
+				String id = XrefUtils.getIdentifier(getInput().getXref());// TODO
+				getInput().setXref(new Xref(id, (DataSource) dsm.getSelectedItem()));
 			}
 
 			public void intervalAdded(final ListDataEvent arg0) {
@@ -205,15 +268,16 @@ public class LineDialog extends PathwayObjectDialog implements ItemListener {
 			public void intervalRemoved(final ListDataEvent arg0) {
 			}
 		});
-
+		// type add listener
 		typeCombo.addActionListener(new ActionListener() {
 			public void actionPerformed(final ActionEvent e) {
-				ArrowHeadType item = (ArrowHeadType) typeCombo.getSelectedItem();
-				getInput().setEndArrowHeadType(item);
+				StateType item = (StateType) typeCombo.getSelectedItem();
+				getInput().setType(item);
 				refresh();
 			}
 		});
-
+		
+		symText.setEnabled(!readonly);
 		idText.setEnabled(!readonly);
 		dbCombo.setEnabled(!readonly);
 		typeCombo.setEnabled(!readonly);

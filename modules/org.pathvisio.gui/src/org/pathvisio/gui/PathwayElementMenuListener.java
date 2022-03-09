@@ -50,7 +50,7 @@ import org.pathvisio.core.view.model.ViewActions.PositionPasteAction;
 import org.pathvisio.gui.CommonActions.AddLiteratureAction;
 import org.pathvisio.gui.CommonActions.EditLiteratureAction;
 import org.pathvisio.gui.CommonActions.PropertiesAction;
-import org.pathvisio.gui.dialogs.PathwayObjectDialog;
+import org.pathvisio.gui.dialogs.PathwayElementDialog;
 import org.pathvisio.gui.view.VPathwayModelSwing;
 import org.pathvisio.libgpml.model.type.AnchorShapeType;
 import org.pathvisio.libgpml.model.type.ConnectorType;
@@ -256,13 +256,13 @@ public class PathwayElementMenuListener implements VPathwayModelListener {
 	}
 
 	public void vPathwayModelEvent(VPathwayModelEvent e) {
-		switch (e.getType()) {
+		switch (e.getType()) { //TODO 
 		case ELEMENT_CLICKED_DOWN:
 			if (e.getAffectedElement() instanceof VCitation) {
 				VCitation c = (VCitation) e.getAffectedElement();
-				PathwayObjectDialog d = swingEngine.getPopupDialogHandler()
+				PathwayElementDialog d = swingEngine.getPopupDialogHandler()
 						.getInstance(c.getParent().getPathwayObject(), false, null, null);
-				d.selectPathwayElementPanel(PathwayObjectDialog.TAB_LITERATURE);
+				d.selectPathwayElementPanel(PathwayElementDialog.TAB_LITERATURE);
 				d.setVisible(true);
 				break;
 			}

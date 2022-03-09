@@ -56,6 +56,7 @@ import org.pathvisio.core.view.model.Handle;
 import org.pathvisio.core.view.model.SelectionBox;
 import org.pathvisio.core.view.model.VElement;
 import org.pathvisio.core.view.model.VLabel;
+import org.pathvisio.core.view.model.VPathwayElement;
 import org.pathvisio.core.view.model.VPathwayModel;
 import org.pathvisio.core.view.model.VPathwayModelEvent;
 import org.pathvisio.core.view.model.VPathwayModelListener;
@@ -66,6 +67,7 @@ import org.pathvisio.gui.CommonActions.ZoomAction;
 import org.pathvisio.gui.dnd.PathwayImportHandler;
 import org.pathvisio.gui.handler.PathwayTableModel;
 import org.pathvisio.libgpml.debug.Logger;
+import org.pathvisio.libgpml.model.PathwayElement;
 import org.pathvisio.libgpml.model.PathwayObject;
 import org.pathvisio.libgpml.util.Utils;
 
@@ -472,8 +474,8 @@ public class MainPanel extends JPanel implements VPathwayModelListener, Applicat
 			if (pwe instanceof Handle) {
 				pwe = ((Handle) pwe).getParent();
 			}
-			if (pwe instanceof VPathwayObject && !(pwe instanceof SelectionBox)) {
-				PathwayObject p = ((VPathwayObject) pwe).getPathwayObject();
+			if (pwe instanceof VPathwayElement && !(pwe instanceof SelectionBox)) {
+				PathwayElement p = ((VPathwayElement) pwe).getPathwayObject(); //TODO 
 				if (p != null) {
 					swingEngine.getPopupDialogHandler().getInstance(p, !vp.isEditMode(), null, this).setVisible(true);
 				}

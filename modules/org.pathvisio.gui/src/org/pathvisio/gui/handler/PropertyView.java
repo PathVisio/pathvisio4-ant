@@ -27,6 +27,7 @@ import javax.swing.table.TableCellRenderer;
 
 import org.pathvisio.core.view.model.VPathwayModel;
 import org.pathvisio.gui.SwingEngine;
+import org.pathvisio.libgpml.model.PathwayElement;
 import org.pathvisio.libgpml.model.PathwayObject;
 import org.pathvisio.libgpml.prop.Property;
 
@@ -36,7 +37,7 @@ import org.pathvisio.libgpml.prop.Property;
  */
 public class PropertyView implements Comparable<PropertyView> {
 	private VPathwayModel vPathway;
-	Collection<PathwayObject> elements;
+	Collection<PathwayElement> elements;
 	private Object value;
 	private Object type;
 	private int counter = 0;
@@ -56,13 +57,13 @@ public class PropertyView implements Comparable<PropertyView> {
 			throw new IllegalArgumentException();
 		}
 		vPathway = aVPathway;
-		elements = new HashSet<PathwayObject>();
+		elements = new HashSet<PathwayElement>();
 	}
 
 	/**
 	 * Add a PathwayElement to the set of elements that are viewed / edited together
 	 */
-	public void addElement(PathwayObject e) {
+	public void addElement(PathwayElement e) {
 		elements.add(e);
 		refreshValue();
 	}
@@ -70,7 +71,7 @@ public class PropertyView implements Comparable<PropertyView> {
 	/**
 	 * Remove a PathwayElement to the set of elements that are viewed / edited together
 	 */
-	public void removeElement(PathwayObject e) {
+	public void removeElement(PathwayElement e) {
 		elements.remove(e);
 		refreshValue();
 	}

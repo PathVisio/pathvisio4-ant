@@ -28,7 +28,7 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
 import org.pathvisio.gui.SwingEngine;
-import org.pathvisio.gui.dialogs.PathwayObjectDialog;
+import org.pathvisio.gui.dialogs.PathwayElementDialog;
 import org.pathvisio.libgpml.model.PathwayElement;
 import org.pathvisio.libgpml.model.PathwayModel;
 import org.pathvisio.libgpml.model.PathwayObject;
@@ -38,15 +38,15 @@ import org.pathvisio.libgpml.prop.StaticPropertyType;
 /**
  * This class knows how to edit comments.
  */
-public class CommentsHandler extends AbstractCellEditor implements ContextSensitiveEditor, TableCellEditor, TypeHandler, ActionListener {
+public class CommentsHandler extends AbstractCellEditor
+		implements ContextSensitiveEditor, TableCellEditor, TypeHandler, ActionListener {
 	private static final String BUTTON_LABEL = "View/edit comments";
 	private static final String BUTTON_COMMAND = "editComments";
 	private JButton button;
 
 	private boolean canEdit;
 	private SwingEngine swingEngine;
-	private PathwayObject currentElement;
-
+	private PathwayElement currentElement;
 
 	public CommentsHandler() {
 		button = new JButton(BUTTON_LABEL);
@@ -54,8 +54,7 @@ public class CommentsHandler extends AbstractCellEditor implements ContextSensit
 		button.addActionListener(this);
 	}
 
-
-	//-- TypeHandler methods --//
+	// -- TypeHandler methods --//
 
 	public PropertyType getType() {
 		return StaticPropertyType.COMMENT;
@@ -73,24 +72,21 @@ public class CommentsHandler extends AbstractCellEditor implements ContextSensit
 		return this;
 	}
 
+	// -- ContextSensitiveEditor methods --//
 
-	//-- ContextSensitiveEditor methods --//
-
-	public void updateEditor(SwingEngine aSwingEngine, Collection<PathwayObject> elements,
-			PathwayModel pathway, PropertyView propHandler)
-	{
+	public void updateEditor(SwingEngine aSwingEngine, Collection<PathwayElement> elements, PathwayModel pathway,
+			PropertyView propHandler) {
 		// can only edit comments for a single item at a time
 		canEdit = propHandler.elements.size() == 1;
 		swingEngine = aSwingEngine;
 		if (canEdit) {
-			currentElement = propHandler.elements.iterator().next();
+			currentElement = propHandler.elements.iterator().next(); // TODO
 		} else {
 			currentElement = null;
 		}
 	}
 
-
-	//-- TableCellEditor methods --//
+	// -- TableCellEditor methods --//
 
 	public Object getCellEditorValue() {
 		if (currentElement instanceof PathwayElement) {
@@ -100,22 +96,21 @@ public class CommentsHandler extends AbstractCellEditor implements ContextSensit
 		}
 	}
 
-
 	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
 		return button;
 	}
 
-
-	//-- ActionListener methods --//
+	// -- ActionListener methods --//
 
 	public void actionPerformed(ActionEvent e) {
 
-		if(canEdit && BUTTON_COMMAND.equals(e.getActionCommand())) {
-			PathwayObjectDialog d = swingEngine.getPopupDialogHandler().getInstance(currentElement, false, null, button);
-			d.selectPathwayElementPanel(PathwayObjectDialog.TAB_COMMENTS);
+		if (canEdit && BUTTON_COMMAND.equals(e.getActionCommand())) {
+			PathwayElementDialog d = swingEngine.getPopupDialogHandler().getInstance(currentElement, false, null,
+					button);
+			d.selectPathwayElementPanel(PathwayElementDialog.TAB_COMMENTS);
 			d.setVisible(true);
 		}
-		fireEditingCanceled();  // always fire - PathwayElementDialog saves data itself
+		fireEditingCanceled(); // always fire - PathwayElementDialog saves data itself
 	}
 
 }

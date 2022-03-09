@@ -34,7 +34,6 @@ import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
 import javax.swing.BorderFactory;
-import javax.swing.ComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -55,12 +54,9 @@ import org.bridgedb.IDMapperStack;
 import org.bridgedb.Xref;
 import org.pathvisio.core.data.XrefWithSymbol;
 import org.pathvisio.libgpml.debug.Logger;
-import org.pathvisio.libgpml.model.type.ArrowHeadType;
 import org.pathvisio.libgpml.model.type.DataNodeType;
 import org.pathvisio.libgpml.util.XrefUtils;
 import org.pathvisio.libgpml.model.DataNode;
-import org.pathvisio.libgpml.model.PathwayElement;
-import org.pathvisio.libgpml.model.PathwayObject;
 import org.pathvisio.core.util.ProgressKeeper;
 import org.pathvisio.gui.DataSourceModel;
 import org.pathvisio.gui.ProgressDialog;
@@ -78,8 +74,24 @@ import org.pathvisio.gui.util.PermissiveComboBox;
  * 
  * @author unknown
  */
-public class DataNodeDialog extends PathwayObjectDialog {
+public class DataNodeDialog extends PathwayElementDialog {
 
+	CompleterQueryTextArea symText;// for text label
+	private CompleterQueryTextField idText; // for xref identifier TODO private?
+	private DataSourceModel dsm; // for xref dataSource
+	private PermissiveComboBox dbCombo;
+	private PermissiveComboBox typeCombo;
+	private DataNodeDialog curDlg;
+
+	/**
+	 * Instantiates a datanode dialog.
+	 * 
+	 * @param swingEngine
+	 * @param e
+	 * @param readonly
+	 * @param frame
+	 * @param locationComp
+	 */
 	protected DataNodeDialog(SwingEngine swingEngine, DataNode e, boolean readonly, Frame frame,
 			Component locationComp) {
 		super(swingEngine, e, readonly, frame, "DataNode properties", locationComp);
@@ -89,29 +101,27 @@ public class DataNodeDialog extends PathwayObjectDialog {
 	}
 
 	/**
-	 * Get the pathway element for this dialog
+	 * Returns the pathway element for this dialog.
 	 */
 	protected DataNode getInput() {
 		return (DataNode) super.getInput();
 	}
 
-	CompleterQueryTextArea symText;
-	CompleterQueryTextField idText;
-	private PermissiveComboBox dbCombo;
-	private PermissiveComboBox typeCombo;
-	private DataSourceModel dsm;
-	private DataNodeDialog curDlg;
-
+	/**
+	 * Refresh.
+	 */
 	public void refresh() {
 		super.refresh();
-		DataNode input = getInput();
-		symText.setText(input.getTextLabel());
-		Xref xref = input.getXref();
+		// sets text label
+		symText.setText(getInput().getTextLabel());
+		// sets xref
+		Xref xref = getInput().getXref();
 		String id = XrefUtils.getIdentifier(xref);
 		DataSource ds = XrefUtils.getDataSource(xref);
 		idText.setText(id);
 		dsm.setSelectedItem(ds);
-		String dnType = input.getType().getName();
+		// sets type
+		String dnType = getInput().getType().getName();
 		typeCombo.setSelectedItem(DataNodeType.fromName(dnType));
 		String[] dsType = null; // null is default: no filtering
 		if (DataSourceHandler.DSTYPE_BY_DNTYPE.containsKey(dnType))
@@ -120,26 +130,11 @@ public class DataNodeDialog extends PathwayObjectDialog {
 		pack();
 	}
 
-	private void applyAutoFill(XrefWithSymbol ref) {
-		String sym = ref.getSymbol();
-		if (sym == null || sym.equals(""))
-			sym = ref.getId();
-		symText.setText(sym);
-		idText.setText(ref.getId());
-		String type = ref.getDataSource().getType();
-		if ("metabolite".equals(type))
-			typeCombo.setSelectedItem(DataNodeType.METABOLITE);
-		else if ("gene".equals(type))
-			typeCombo.setSelectedItem(DataNodeType.GENEPRODUCT);
-		else if ("protein".equals(type))
-			typeCombo.setSelectedItem(DataNodeType.PROTEIN);
-		else if ("pathway".equals(type))
-			typeCombo.setSelectedItem(DataNodeType.PATHWAY);
-		dsm.setSelectedItem(ref.getDataSource());
-	}
-
 	/**
-	 * Search for symbols or ids in the synonym databases that match the given text
+	 * Searches for symbols or ids in the synonym databases that match the given
+	 * text
+	 * 
+	 * @param aText the given text.
 	 */
 	private void search(String aText) {
 		if (aText == null || "".equals(aText.trim())) {
@@ -221,10 +216,37 @@ public class DataNodeDialog extends PathwayObjectDialog {
 		dialog.setVisible(true);
 	}
 
+	/**
+	 * Auto fills fields, used by {@link search}.
+	 * 
+	 * @param ref
+	 */
+	private void applyAutoFill(XrefWithSymbol ref) {
+		String sym = ref.getSymbol();
+		if (sym == null || sym.equals(""))
+			sym = ref.getId();
+		symText.setText(sym);
+		idText.setText(ref.getId());
+		String type = ref.getDataSource().getType();
+		if ("metabolite".equals(type))
+			typeCombo.setSelectedItem(DataNodeType.METABOLITE);
+		else if ("gene".equals(type))
+			typeCombo.setSelectedItem(DataNodeType.GENEPRODUCT);
+		else if ("protein".equals(type))
+			typeCombo.setSelectedItem(DataNodeType.PROTEIN);
+		else if ("pathway".equals(type))
+			typeCombo.setSelectedItem(DataNodeType.PATHWAY);
+		dsm.setSelectedItem(ref.getDataSource());
+	}
+
+	/**
+	 * Adds custom tabs to this dialog.
+	 */
 	protected void addCustomTabs(JTabbedPane parent) {
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridBagLayout());
 
+		// Search panel and Manual entry (field) panel
 		JPanel searchPanel = new JPanel();
 		JPanel fieldPanel = new JPanel();
 		searchPanel.setBorder(BorderFactory.createTitledBorder("Search"));
@@ -242,7 +264,6 @@ public class DataNodeDialog extends PathwayObjectDialog {
 
 		// Search panel elements
 		searchPanel.setLayout(new GridBagLayout());
-
 		final JTextField searchText = new JTextField();
 		final JButton searchButton = new JButton("Search");
 
@@ -278,7 +299,9 @@ public class DataNodeDialog extends PathwayObjectDialog {
 		JLabel symLabel = new JLabel("Text label");
 		JLabel idLabel = new JLabel("Identifier");
 		JLabel dbLabel = new JLabel("Database");
-		JLabel typeLabel = new JLabel("Biological Type");
+		JLabel typeLabel = new JLabel("Biological type");
+
+		// text label
 		symText = new CompleterQueryTextArea(new OptionProvider() {
 			public List<String> provideOptions(String text) {
 				if (text == null)
@@ -297,6 +320,7 @@ public class DataNodeDialog extends PathwayObjectDialog {
 		}, true);
 		symText.setColumns(20);
 		symText.setRows(2);
+		// xref identifier
 		idText = new CompleterQueryTextField(new OptionProvider() {
 			public List<String> provideOptions(String text) {
 				if (text == null)
@@ -319,7 +343,7 @@ public class DataNodeDialog extends PathwayObjectDialog {
 		}, true);
 		symText.setCorrectCase(false);
 		idText.setCorrectCase(false);
-
+		// xref datasource
 		dsm = new DataSourceModel();
 		dsm.setPrimaryFilter(true);
 		dsm.setSpeciesFilter(swingEngine.getCurrentOrganism());
@@ -343,7 +367,7 @@ public class DataNodeDialog extends PathwayObjectDialog {
 		fieldPanel.add(typeCombo, c);
 		fieldPanel.add(idText, c);
 		fieldPanel.add(dbCombo, c);
-
+		// text label add listener
 		symText.getDocument().addDocumentListener(new DocumentListener() {
 			public void changedUpdate(DocumentEvent e) {
 				setText();
@@ -361,7 +385,7 @@ public class DataNodeDialog extends PathwayObjectDialog {
 				getInput().setTextLabel(symText.getText());
 			}
 		});
-
+		// xref identifier add listener
 		idText.getDocument().addDocumentListener(new DocumentListener() {
 			public void changedUpdate(DocumentEvent e) {
 				setText();
@@ -376,15 +400,17 @@ public class DataNodeDialog extends PathwayObjectDialog {
 			}
 
 			private void setText() {
-				// Sets Xref id by creating new Xref
+				// sets xref identifier
 				DataSource ds = XrefUtils.getDataSource(getInput().getXref());// TODO
 				getInput().setXref(new Xref(idText.getText(), ds));
 			}
 		});
 
+		// xref datasource add listener
 		dsm.addListDataListener(new ListDataListener() {
 
 			public void contentsChanged(ListDataEvent arg0) {
+				// sets xref datasource
 				String id = XrefUtils.getIdentifier(getInput().getXref());// TODO
 				getInput().setXref(new Xref(id, (DataSource) dsm.getSelectedItem()));
 			}
@@ -395,7 +421,7 @@ public class DataNodeDialog extends PathwayObjectDialog {
 			public void intervalRemoved(ListDataEvent arg0) {
 			}
 		});
-
+		// type add listener
 		typeCombo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				DataNodeType item = (DataNodeType) typeCombo.getSelectedItem();

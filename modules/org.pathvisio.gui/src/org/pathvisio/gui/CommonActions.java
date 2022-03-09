@@ -58,7 +58,7 @@ import org.pathvisio.core.view.model.VPathwayModel;
 import org.pathvisio.core.view.model.VPathwayObject;
 import org.pathvisio.core.view.model.ViewActions;
 import org.pathvisio.gui.dialogs.AboutDlg;
-import org.pathvisio.gui.dialogs.PathwayObjectDialog;
+import org.pathvisio.gui.dialogs.PathwayElementDialog;
 import org.pathvisio.gui.dialogs.PublicationXRefDialog;
 
 /**
@@ -688,9 +688,9 @@ public class CommonActions implements ApplicationEventListener {
 		}
 
 		public void actionPerformed(ActionEvent e) {
-			if (element instanceof VPathwayObject) {
-				PathwayObject p = ((VPathwayObject) element).getPathwayObject();
-				PathwayObjectDialog pd = swingEngine.getPopupDialogHandler().getInstance(p,
+			if (element instanceof VPathwayElement) {
+				PathwayElement p = ((VPathwayElement) element).getPathwayObject();
+				PathwayElementDialog pd = swingEngine.getPopupDialogHandler().getInstance(p,
 						!element.getDrawing().isEditMode(), null, parent);
 				if (pd != null) {
 					pd.selectPathwayElementPanel(getSelectedPanel());
@@ -784,7 +784,7 @@ public class CommonActions implements ApplicationEventListener {
 		}
 
 		protected String getSelectedPanel() {
-			return PathwayObjectDialog.TAB_LITERATURE;
+			return PathwayElementDialog.TAB_LITERATURE;
 		}
 	}
 
@@ -798,7 +798,7 @@ public class CommonActions implements ApplicationEventListener {
 		}
 
 		protected String getSelectedPanel() {
-			return PathwayObjectDialog.TAB_COMMENTS;
+			return PathwayElementDialog.TAB_COMMENTS;
 		}
 	}
 

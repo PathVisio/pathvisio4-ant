@@ -40,6 +40,7 @@ import org.bridgedb.bio.Organism;
 import org.pathvisio.gui.SwingEngine;
 import org.pathvisio.gui.util.PermissiveComboBox;
 import org.pathvisio.libgpml.model.DataNode;
+import org.pathvisio.libgpml.model.PathwayElement;
 import org.pathvisio.libgpml.model.PathwayModel;
 import org.pathvisio.libgpml.model.PathwayObject;
 import org.pathvisio.libgpml.model.type.DataNodeType;
@@ -97,7 +98,7 @@ public class DataSourceHandler extends DefaultCellEditor
 		DSTYPE_BY_DNTYPE.put(DataNodeType.RNA.getName(), new String[] { "gene", "protein" });
 	}
 
-	public void updateEditor(SwingEngine swingEngine, Collection<PathwayObject> elements, PathwayModel pathway,
+	public void updateEditor(SwingEngine swingEngine, Collection<PathwayElement> elements, PathwayModel pathway,
 			PropertyView propHandler) {
 		boolean first = true;
 		String dnType = null;

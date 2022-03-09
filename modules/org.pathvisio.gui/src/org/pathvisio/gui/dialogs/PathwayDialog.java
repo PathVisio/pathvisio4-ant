@@ -40,19 +40,19 @@ import org.pathvisio.gui.util.PermissiveComboBox;
  * 
  * @author unknown
  */
-public class PathwayPropertiesDialog extends PathwayObjectDialog {
+public class PathwayDialog extends PathwayElementDialog {
 	private PermissiveComboBox organismComboBox;
 	private JTextField titleField;
 
-	protected PathwayPropertiesDialog(SwingEngine swingEngine, Pathway e, boolean readonly, Frame frame, String title,
+	protected PathwayDialog(SwingEngine swingEngine, Pathway e, boolean readonly, Frame frame, String title,
 			Component locationComp) {
 		super(swingEngine, e, readonly, frame, "Pathway properties", locationComp);
 		getRootPane().setDefaultButton(null);
 		setButton.requestFocus();
 	}
-	
+
 	/**
-	 * Get the pathway element for this dialog
+	 * Returns the pathway element for this dialog.
 	 */
 	protected Pathway getInput() {
 		return (Pathway) super.getInput();

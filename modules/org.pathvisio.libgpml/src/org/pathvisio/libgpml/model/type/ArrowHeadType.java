@@ -158,11 +158,12 @@ public class ArrowHeadType {
 	}
 	
 	/**
-	 * Returns a string representation of this ArrowHeadType.
+	 * Returns a string representation of this ArrowHeadType. Adds space between
+	 * lower and upper case letters to make more human readable.
 	 * 
 	 * @return name the identifier of this ArrowHeadType.
 	 */
 	public String toString() {
-		return name;
+		return name.replaceAll("(\\p{Ll})(\\p{Lu})", "$1 $2");
 	}
 }

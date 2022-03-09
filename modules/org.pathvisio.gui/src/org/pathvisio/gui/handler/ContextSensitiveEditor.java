@@ -19,6 +19,7 @@ package org.pathvisio.gui.handler;
 import java.util.Collection;
 
 import org.pathvisio.gui.SwingEngine;
+import org.pathvisio.libgpml.model.PathwayElement;
 import org.pathvisio.libgpml.model.PathwayModel;
 import org.pathvisio.libgpml.model.PathwayObject;
 
@@ -41,5 +42,5 @@ public interface ContextSensitiveEditor {
 	 * @param pathway the current pathway
 	 * @param propHandler the PropertyHandler containing the elements whose properties are being edited
 	 */
-	void updateEditor(SwingEngine swingEngine, Collection<PathwayObject> elements, PathwayModel pathway, PropertyView propHandler);
+	void updateEditor(SwingEngine swingEngine, Collection<PathwayElement> elements, PathwayModel pathway, PropertyView propHandler);
 }

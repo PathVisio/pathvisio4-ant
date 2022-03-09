@@ -65,7 +65,7 @@ public class VCitation extends VElement implements VElementMouseListener {
 	/**
 	 * @return
 	 */
-	public VPathwayObject getParent() {
+	public VPathwayElement getParent() {
 		return parent;
 	}
 

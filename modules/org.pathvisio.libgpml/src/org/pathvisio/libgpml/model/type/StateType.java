@@ -117,11 +117,13 @@ public class StateType {
 	}
 
 	/**
-	 * Returns a string representation of this StateType.
+	 * Returns a string representation of this StateType. Adds space between lower
+	 * and upper case letters to make more human readable.
 	 * 
 	 * @return name the identifier of this StateType.
 	 */
 	public String toString() {
+//		return name.replaceAll("(\\p{Ll})(\\p{Lu})", "$1 $2"); //TODO 
 		return name;
 	}
 }

@@ -22,12 +22,15 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.pathvisio.libgpml.model.DataNode;
+import org.pathvisio.libgpml.model.DataNode.State;
+import org.pathvisio.libgpml.model.Group;
 import org.pathvisio.libgpml.model.Interaction;
 import org.pathvisio.libgpml.model.Label;
 import org.pathvisio.libgpml.model.Pathway;
 import org.pathvisio.libgpml.model.PathwayElement;
 import org.pathvisio.libgpml.model.PathwayObject;
 import org.pathvisio.libgpml.model.Shape;
+import org.pathvisio.libgpml.model.ShapedElement;
 import org.pathvisio.gui.SwingEngine;
 
 /**
@@ -57,18 +60,25 @@ public class PopupDialogHandler {
 		 * @param e   the element which will be edited
 		 * @param dlg A partially constructed dialog, which may be modified by the hook.
 		 */
-		void popupDialogHook(PathwayObject e, PathwayObjectDialog dlg);
+		void popupDialogHook(PathwayElement e, PathwayElementDialog dlg);
 	}
 
 	private Set<PopupDialogHook> hooks = new HashSet<PopupDialogHook>();
 
 	/**
-	 * register a new hook.
+	 * Registers a new hook.
+	 * 
+	 * @param hook the hook.
 	 */
 	public void addHook(PopupDialogHook hook) {
 		hooks.add(hook);
 	}
 
+	/**
+	 * Removes the given hook.
+	 * 
+	 * @param hook the hook.
+	 */
 	public void removeHook(PopupDialogHook hook) {
 		hooks.remove(hook);
 	}
@@ -82,22 +92,31 @@ public class PopupDialogHandler {
 	 *         type attribute of the given PathwayElement, e.g. type DATANODE
 	 *         returns a DataNodeDialog
 	 */
-	public PathwayObjectDialog getInstance(PathwayObject e, boolean readonly, Frame frame, Component locationComp) {
+	public PathwayElementDialog getInstance(PathwayElement e, boolean readonly, Frame frame, Component locationComp) {
 		// TODO pathway element or pathway object?
-		PathwayObjectDialog result = null;
-
-		if (e.getClass() == Label.class) {
-			// nothing? TODO
-		} else if (e.getClass() == Shape.class) {
-			result = new LabelDialog(swingEngine, (PathwayElement) e, readonly, frame, locationComp);
-		} else if (e.getClass() == DataNode.class) {
+		PathwayElementDialog result = null;
+		switch (e.getObjectType()) {
+		case PATHWAY:
+			result = new PathwayDialog(swingEngine, (Pathway) e, readonly, frame, "Properties", locationComp);
+			break;
+		case DATANODE:
 			result = new DataNodeDialog(swingEngine, (DataNode) e, readonly, frame, locationComp);
-		} else if (e.getClass() == Pathway.class) {
-			result = new PathwayPropertiesDialog(swingEngine, (Pathway) e, readonly, frame, "Properties", locationComp);
-		} else if (e.getClass() == Interaction.class) {
-			result = new LineDialog(swingEngine, (Interaction) e, readonly, frame, locationComp);
-		} else {
-			result = new PathwayObjectDialog(swingEngine, e, readonly, frame, "Element properties", locationComp);
+			break;
+		case STATE:
+			result = new StateDialog(swingEngine, (State) e, readonly, frame, locationComp);
+			break;
+		case INTERACTION:
+			result = new InteractionDialog(swingEngine, (Interaction) e, readonly, frame, locationComp);
+			break;
+		case LABEL: // for both Label and Shape, instantiate new LabelDialog 
+		case SHAPE:
+			result = new LabelDialog(swingEngine, (ShapedElement) e, readonly, frame, locationComp);
+			break;
+		case GROUP:
+			result = new GroupDialog(swingEngine, (Group) e, readonly, frame, locationComp);
+			break;
+		default:
+			result = new PathwayElementDialog(swingEngine, e, readonly, frame, "Element properties", locationComp);
 		}
 		for (PopupDialogHook hook : hooks) {
 			hook.popupDialogHook(e, result);

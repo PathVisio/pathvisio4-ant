@@ -35,9 +35,7 @@ import javax.swing.JTextArea;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import org.pathvisio.libgpml.model.DataNode;
-import org.pathvisio.libgpml.model.Label;
-import org.pathvisio.libgpml.model.PathwayElement;
+import org.pathvisio.libgpml.model.ShapedElement;
 import org.pathvisio.gui.SwingEngine;
 import org.pathvisio.gui.util.FontChooser;
 
@@ -47,27 +45,28 @@ import org.pathvisio.gui.util.FontChooser;
  * @author thomas
  *
  */
-public class LabelDialog extends PathwayObjectDialog {
+public class LabelDialog extends PathwayElementDialog {
+
 	JTextArea text;
 	JLabel fontPreview;
 
-	protected LabelDialog(SwingEngine swingEngine, PathwayElement e, boolean readonly, Frame frame,
+	protected LabelDialog(SwingEngine swingEngine, ShapedElement e, boolean readonly, Frame frame,
 			Component locationComp) {
-		super(swingEngine, e, readonly, frame, "Label properties", locationComp);
+		super(swingEngine, e, readonly, frame, e.getClass().getSimpleName() + " properties", locationComp);
 		text.requestFocus();
 	}
 
 	/**
 	 * Get the pathway element for this dialog
 	 */
-	protected Label getInput() {
-		return (Label) super.getInput();
+	protected ShapedElement getInput() {
+		return (ShapedElement) super.getInput();
 	}
 
 	protected void refresh() {
 		super.refresh();
 		if (getInput() != null) {
-			Label input = getInput();
+			ShapedElement input = getInput();
 			text.setText(input.getTextLabel());
 			int style = input.getFontWeight() ? Font.BOLD : Font.PLAIN;
 			style |= input.getFontStyle() ? Font.ITALIC : Font.PLAIN;
@@ -98,7 +97,7 @@ public class LabelDialog extends PathwayObjectDialog {
 			public void actionPerformed(ActionEvent e) {
 				Font f = FontChooser.showDialog(null, (Component) e.getSource(), fontPreview.getFont());
 				if (f != null) {
-					Label input = getInput();
+					ShapedElement input = getInput();
 					if (input != null) {
 						input.setFontName(f.getFamily());
 						input.setFontWeight(f.isBold());
@@ -138,7 +137,7 @@ public class LabelDialog extends PathwayObjectDialog {
 		});
 		text.setEnabled(!readonly);
 
-		parent.add("Label text", panel);
+		parent.add("Text label", panel);
 		parent.setSelectedComponent(panel);
 	}
 }

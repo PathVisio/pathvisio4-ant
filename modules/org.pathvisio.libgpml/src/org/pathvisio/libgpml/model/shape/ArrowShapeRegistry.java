@@ -34,8 +34,18 @@ class ArrowShapeRegistry {
 
 	// Register ArrowHead shapes
 	static void registerShapes() {
-		ShapeRegistry.registerArrow("Directed", getArrowHead(), ArrowShape.FillType.CLOSED);
+		
+		// Interaction panel, NB: "Undirected" (no arrow head) TODO 
+		ShapeRegistry.registerArrow("Directed", getArrowHead(), ArrowShape.FillType.CLOSED); 
+		ShapeRegistry.registerArrow("Conversion", getArrowHead(), ArrowShape.FillType.CLOSED);
 		ShapeRegistry.registerArrow("Inhibition", getTBar(), ArrowShape.FillType.OPEN, TBARWIDTH + TBAR_GAP);
+		ShapeRegistry.registerArrow("Catalysis", getArrowHead(), ArrowShape.FillType.CLOSED);
+		ShapeRegistry.registerArrow("Stimulation", getArrowHead(), ArrowShape.FillType.OPEN);
+		ShapeRegistry.registerArrow("Binding", getArrowHead(), ArrowShape.FillType.WIRE);
+		ShapeRegistry.registerArrow("Translocation", getArrowHead(), ArrowShape.FillType.CLOSED);
+		ShapeRegistry.registerArrow("Transcription-translation", getArrowHead(), ArrowShape.FillType.CLOSED);
+
+		// Other 
 		ShapeRegistry.registerArrow("LigandRound", getLRound(), ArrowShape.FillType.CLOSED);
 		ShapeRegistry.registerArrow("ReceptorRound", getRRound(), ArrowShape.FillType.WIRE);
 		ShapeRegistry.registerArrow("Receptor", getReceptor(), ArrowShape.FillType.WIRE);
