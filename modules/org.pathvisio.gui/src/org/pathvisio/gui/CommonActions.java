@@ -40,6 +40,8 @@ import org.pathvisio.libgpml.model.type.ArrowHeadType;
 import org.pathvisio.libgpml.model.PathwayModel;
 import org.pathvisio.libgpml.model.PathwayModel.StatusFlagEvent;
 import org.pathvisio.libgpml.model.PathwayModel.StatusFlagListener;
+import org.pathvisio.libgpml.model.shape.ArrowShape;
+import org.pathvisio.libgpml.model.shape.ShapeRegistry;
 import org.pathvisio.libgpml.model.shape.ShapeType;
 import org.pathvisio.libgpml.model.PathwayObject;
 import org.pathvisio.libgpml.model.Label;
@@ -133,6 +135,8 @@ public class CommonActions implements ApplicationEventListener {
 	public final Action[] newMiscShapeActions; // TODO
 
 	public final Action[] newInteractionActions;
+	
+	public final Action[] newInteractionPanelActions;
 
 	public final Action[] newRLInteractionActions;
 
@@ -222,7 +226,9 @@ public class CommonActions implements ApplicationEventListener {
 
 		};
 
-		// actions for Molecule "Data nodes" section
+		// ================================================================================
+		// Molecule DataNode
+		// ================================================================================
 		newMoleculeDatanodeActions = new Action[] {
 				new NewElementAction(e, new DefaultTemplates.DataNodeTemplate(DataNodeType.GENEPRODUCT)),
 				new NewElementAction(e, new DefaultTemplates.DataNodeTemplate(DataNodeType.METABOLITE)),
@@ -231,7 +237,9 @@ public class CommonActions implements ApplicationEventListener {
 				new NewElementAction(e, new DefaultTemplates.DataNodeTemplate(DataNodeType.DNA)),
 				new NewElementAction(e, new DefaultTemplates.DataNodeTemplate(DataNodeType.RNA)), };
 
-		// actions for Concept "Data nodes" section
+		// ================================================================================
+		// Concept DataNode
+		// ================================================================================
 		newConceptDatanodeActions = new Action[] {
 				new NewElementAction(e, new DefaultTemplates.DataNodeTemplate(DataNodeType.PATHWAY)),
 				new NewElementAction(e, new DefaultTemplates.DataNodeTemplate(DataNodeType.DISEASE)),
@@ -242,10 +250,14 @@ public class CommonActions implements ApplicationEventListener {
 				new NewElementAction(e, new DefaultTemplates.DataNodeTemplate(DataNodeType.ORGAN)),
 				new NewElementAction(e, new DefaultTemplates.DataNodeTemplate(DataNodeType.UNDEFINED)), };
 
+		// ================================================================================
 		// actions for "Annotations" section
+		// ================================================================================
 		newAnnotationActions = new Action[] { new NewElementAction(e, new DefaultTemplates.LabelTemplate()), };
 
+		// ================================================================================
 		// actions for "Template" section (adds button to GUI)
+		// ================================================================================
 		newTemplateActions = new Action[] {
 				new NewElementAction(e, new DefaultTemplates.InhibitionInteractionTemplate()),
 				new NewElementAction(e, new DefaultTemplates.StimulationInteractionTemplate()),
@@ -253,7 +265,9 @@ public class CommonActions implements ApplicationEventListener {
 				new NewElementAction(e, new DefaultTemplates.PhosphorylationTemplate()),
 				new NewElementAction(e, new DefaultTemplates.ReversibleReactionTemplate()), };
 
-		// actions for "Basic shapes" section
+		// ================================================================================
+		// Basic Shapes
+		// ================================================================================
 		newShapeActions = new Action[] { new NewElementAction(e, new DefaultTemplates.LabelTemplate()),
 				new NewElementAction(e,
 						new DefaultTemplates.GraphicalLineTemplate("undirected", LineStyleType.SOLID,
@@ -270,7 +284,9 @@ public class CommonActions implements ApplicationEventListener {
 //				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(MIMShapes.MIM_DEGRADATION_SHAPE)), 
 		};
 
-		// actions for "Basic interactions" section
+		// ================================================================================
+		// Basic Interactions
+		// ================================================================================
 		newInteractionActions = new Action[] {
 				new NewElementAction(e,
 						new DefaultTemplates.InteractionTemplate("undirected", LineStyleType.SOLID,
@@ -308,7 +324,42 @@ public class CommonActions implements ApplicationEventListener {
 //						ArrowHeadType.UNDIRECTED, ArrowHeadType.RECEPTOR_SQUARE, ConnectorType.STRAIGHT)),
 		};
 
-		// actions for "Cellular Compartment" section
+		// ================================================================================
+		// Interaction Panel
+		// ================================================================================
+		newInteractionPanelActions = new Action[] {
+				new NewElementAction(e,
+						new DefaultTemplates.InteractionTemplate("Undirected", LineStyleType.SOLID,
+								ArrowHeadType.UNDIRECTED, ArrowHeadType.UNDIRECTED, ConnectorType.STRAIGHT)),
+				new NewElementAction(e,
+						new DefaultTemplates.InteractionTemplate("Directed", LineStyleType.SOLID,
+								ArrowHeadType.UNDIRECTED, ArrowHeadType.DIRECTED, ConnectorType.STRAIGHT)),
+				new NewElementAction(e,
+						new DefaultTemplates.InteractionTemplate("Conversion", LineStyleType.SOLID,
+								ArrowHeadType.UNDIRECTED, ArrowHeadType.CONVERSION, ConnectorType.STRAIGHT)),
+				new NewElementAction(e,
+						new DefaultTemplates.InteractionTemplate("Inhibition", LineStyleType.SOLID,
+								ArrowHeadType.UNDIRECTED, ArrowHeadType.INHIBITION, ConnectorType.STRAIGHT)),
+				new NewElementAction(e,
+						new DefaultTemplates.InteractionTemplate("Catalysis", LineStyleType.SOLID,
+								ArrowHeadType.UNDIRECTED, ArrowHeadType.CATALYSIS, ConnectorType.STRAIGHT)),
+				new NewElementAction(e,
+						new DefaultTemplates.InteractionTemplate("Stimulation", LineStyleType.SOLID,
+								ArrowHeadType.UNDIRECTED, ArrowHeadType.STIMULATION, ConnectorType.STRAIGHT)),
+				new NewElementAction(e,
+						new DefaultTemplates.InteractionTemplate("Binding", LineStyleType.SOLID,
+								ArrowHeadType.UNDIRECTED, ArrowHeadType.BINDING, ConnectorType.STRAIGHT)),
+				new NewElementAction(e,
+						new DefaultTemplates.InteractionTemplate("Translocation", LineStyleType.DASHED,
+								ArrowHeadType.UNDIRECTED, ArrowHeadType.TRANSLOCATION, ConnectorType.STRAIGHT)),
+				new NewElementAction(e,
+						new DefaultTemplates.InteractionTemplate("Transcription-translation", LineStyleType.SOLID,
+								ArrowHeadType.UNDIRECTED, ArrowHeadType.TRANSCRIPTION_TRANSLATION,
+								ConnectorType.STRAIGHT)), };
+
+		// ================================================================================
+		// Cellular Compartment
+		// ================================================================================
 		newCellularComponentActions = new Action[] {
 				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.CELL)),
 				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.NUCLEUS)),
@@ -336,7 +387,9 @@ public class CommonActions implements ApplicationEventListener {
 				// CellularComponentType.MEMBRANE))
 		};
 
-		// actions for "Miscellaneous Shapes" section
+		// ================================================================================
+		// Miscellaneous Shapes
+		// ================================================================================
 		newMiscShapeActions = new Action[] {
 				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.CORONAVIRUS)),
 				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.DNA)),

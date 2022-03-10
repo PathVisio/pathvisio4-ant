@@ -203,6 +203,7 @@ public class MainPanel extends JPanel implements VPathwayModelListener, Applicat
 		objectsPane.addButtons(actions.newMoleculeDatanodeActions, "Molecules", numItemsPerRow);
 		objectsPane.addButtons(actions.newConceptDatanodeActions, "Concepts", numItemsPerRow);
 		objectsPane.addButtons(actions.newInteractionActions, "Basic interactions", numItemsPerRow);
+		objectsPane.addButtons(actions.newInteractionPanelActions, "Interaction panel", numItemsPerRow);
 		// objectsPane.addButtons(actions.newRLInteractionActions, "Receptor/ligand",
 		// numItemsPerRow);
 		objectsPane.addButtons(actions.newMIMInteractionActions, "MIM interactions", numItemsPerRow);

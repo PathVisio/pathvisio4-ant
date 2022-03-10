@@ -37,7 +37,9 @@ import org.pathvisio.libgpml.model.type.GroupType;
 import org.pathvisio.libgpml.model.type.LineStyleType;
 import org.pathvisio.libgpml.model.type.ObjectType;
 import org.pathvisio.libgpml.model.type.ArrowHeadType;
+import org.pathvisio.libgpml.model.type.ConnectorType;
 import org.pathvisio.libgpml.model.type.OrientationType;
+import org.pathvisio.libgpml.model.type.StateType;
 import org.pathvisio.libgpml.model.type.VAlignType;
 import org.pathvisio.libgpml.prop.Property;
 import org.pathvisio.libgpml.prop.PropertyType;
@@ -45,8 +47,9 @@ import org.pathvisio.libgpml.prop.StaticProperty;
 import org.pathvisio.libgpml.prop.StaticPropertyType;
 
 /**
- * This class manages how properties should be displayed.  It keeps track of TypeHandlers, which properties should be
- * visible, and the order in which properties should be displayed.
+ * This class manages how properties should be displayed. It keeps track of
+ * TypeHandlers, which properties should be visible, and the order in which
+ * properties should be displayed.
  * <p>
  * The main entry point for plugins are {@link #registerProperty(Property)} and
  * {@link #registerTypeHandler(TypeHandler)}.
@@ -63,7 +66,7 @@ public class PropertyDisplayManager {
 
 	static {
 		PreferenceManager.init();
-		
+
 		// register core property types
 		registerTypeHandler(new BooleanHandler());
 		registerTypeHandler(NumberHandler.buildHandler(StaticPropertyType.DOUBLE, Double.class));
@@ -74,23 +77,28 @@ public class PropertyDisplayManager {
 		registerTypeHandler(new DataSourceHandler());
 		registerTypeHandler(new FontHandler());
 		registerTypeHandler(new ComboHandler(StaticPropertyType.DATANODETYPE, DataNodeType.getNames(), false));
+		registerTypeHandler(new ComboHandler(StaticPropertyType.STATETYPE, StateType.getNames(), false));
 		registerTypeHandler(new ComboHandler(StaticPropertyType.GROUPTYPE, GroupType.getNames(), false));
 		registerTypeHandler(new ComboHandler(StaticPropertyType.LINESTYLETYPE, LineStyleType.getNames(), false));
-		registerTypeHandler(new ComboHandler(StaticPropertyType.ARROWHEADTYPE, ArrowHeadType.getVisibleNames(), ArrowHeadType.getVisibleValues()));
+		registerTypeHandler(new ComboHandler(StaticPropertyType.CONNECTORTYPE, ConnectorType.getNames(), false));
+//		registerTypeHandler(new ComboHandler(StaticPropertyType.ARROWHEADTYPE, ArrowHeadType.getVisibleNames(),
+//				ArrowHeadType.getVisibleValues()));
 		registerTypeHandler(new ComboHandler(StaticPropertyType.ORGANISM, Organism.latinNames(), false));
 		registerTypeHandler(new ComboHandler(StaticPropertyType.ORIENTATION, OrientationType.getNames(), true));
-		registerTypeHandler(new ComboHandler(StaticPropertyType.SHAPETYPE, ShapeType.getVisibleNames(), ShapeType.getVisibleValues()));
-		registerTypeHandler(new ComboHandler(StaticPropertyType.VALIGNTYPE, VAlignType.getNames(), VAlignType.values()));
-		registerTypeHandler(new ComboHandler(StaticPropertyType.HALIGNTYPE, HAlignType.getNames(), HAlignType.values()));
-//		TODO registerTypeHandler(new ComboHandler(CellularComponentType.CELL_COMPONENT_TYPE, CellularComponentType.getNames(), false));
+		registerTypeHandler(new ComboHandler(StaticPropertyType.SHAPETYPE, ShapeType.getVisibleNames(),
+				ShapeType.getVisibleValues()));
+		registerTypeHandler(
+				new ComboHandler(StaticPropertyType.VALIGNTYPE, VAlignType.getNames(), VAlignType.values()));
+		registerTypeHandler(
+				new ComboHandler(StaticPropertyType.HALIGNTYPE, HAlignType.getNames(), HAlignType.values()));
 
 		// register core properties
 		for (StaticProperty p : StaticProperty.values()) {
 			registerProperty(p);
 		}
 
-		//Register specific dynamic property TODO
-		//TODO: refactor as Static Property with next GPML update
+		// Register specific dynamic property TODO
+		// TODO: refactor as Static Property with next GPML update
 //		registerProperty(CellularComponentType.CELL_COMPONENT_PROPERTY);
 //		setPropertyScope(
 //				CellularComponentType.CELL_COMPONENT_PROPERTY, 
@@ -98,18 +106,19 @@ public class PropertyDisplayManager {
 //		);
 	}
 
-
 	/**
 	 * Private constructor - not meant to be instantiated.
 	 */
 	private PropertyDisplayManager() {
 	}
 
-
 	/**
-	 * Gets the visible property keys for the given PathwayElement.
+	 * Returns the visible property keys for the given PathwayElement.
+	 * 
+	 * @param e the given pathway element.
+	 * @return set of property keys.
 	 */
-	public static Set<Object> getVisiblePropertyKeys (PathwayElement e) {
+	public static Set<Object> getVisiblePropertyKeys(PathwayElement e) {
 
 		Set<Object> result = new HashSet<Object>();
 		// add static properties
@@ -123,17 +132,17 @@ public class PropertyDisplayManager {
 			Property p = getDynamicProperty(key);
 			if (p == null || isVisible(p)) {
 				// is visible if it's not associated with a property
-				// or is associated with a property whose visibility preference is set 
+				// or is associated with a property whose visibility preference is set
 				result.add(key);
 			}
 		}
 		// add managed dynamic properties
-		for(Property p : getManagedDynamicProperties(e)) {
-			if(isVisible(p)) result.add(p.getId());
+		for (Property p : getManagedDynamicProperties(e)) {
+			if (isVisible(p))
+				result.add(p.getId());
 		}
 		return result;
 	}
-
 
 	/**
 	 * Gets the TypeHandler for the given PropertyType.
@@ -147,7 +156,8 @@ public class PropertyDisplayManager {
 	/**
 	 * Registers a TypeHandler.
 	 *
-	 * @return true if no other TypeHandler has been registered for the given PropertyType, false otherwise
+	 * @return true if no other TypeHandler has been registered for the given
+	 *         PropertyType, false otherwise
 	 */
 	public static boolean registerTypeHandler(TypeHandler handler) {
 
@@ -159,14 +169,14 @@ public class PropertyDisplayManager {
 		return !exists;
 	}
 
-
 	/**
-	 * Register a property here.
+	 * Registers a property here.
 	 * <p>
-	 * Dynamic properties will automatically be managed by the display manager, which means that the property
-	 * will be editable from the property panel (for all object types by default, see
-	 * {@link #setPropertyScope(Property, EnumSet)} to customize this behavior).  Note that the property is not saved to
-	 * GPML unless the property is modified.
+	 * Dynamic properties will automatically be managed by the display manager,
+	 * which means that the property will be editable from the property panel (for
+	 * all object types by default, see {@link #setPropertyScope(Property, EnumSet)}
+	 * to customize this behavior). Note that the property is not saved to GPML
+	 * unless the property is modified.
 	 */
 	public static void registerProperty(Property prop) {
 		registerProperty(prop, true);
@@ -175,13 +185,16 @@ public class PropertyDisplayManager {
 	/**
 	 * Register a property here.
 	 * <p>
-	 * Dynamic properties will only be managed by the display manager if <code>manage</code> is set to true.  When the
-	 * display manager manages a property, it means that the property will be editable from the property panel (for
-	 * all object types by default, see {@link #setPropertyScope(Property, EnumSet)} to customize this behavior).
+	 * Dynamic properties will only be managed by the display manager if
+	 * <code>manage</code> is set to true. When the display manager manages a
+	 * property, it means that the property will be editable from the property panel
+	 * (for all object types by default, see
+	 * {@link #setPropertyScope(Property, EnumSet)} to customize this behavior).
 	 * Note that the property is not saved to GPML unless the property is modified.
 	 *
-	 * @param prop the Property being registered
-	 * @param manage true if the display manager should manage this property, false if not
+	 * @param prop   the Property being registered
+	 * @param manage true if the display manager should manage this property, false
+	 *               if not
 	 */
 	public static void registerProperty(Property prop, boolean manage) {
 
@@ -194,13 +207,12 @@ public class PropertyDisplayManager {
 		loadPreference(prop);
 	}
 
-
 	/**
-	 * Get all managed dynamic properties that fall within the scope of the
-	 * given pathway element.
+	 * Get all managed dynamic properties that fall within the scope of the given
+	 * pathway element.
 	 *
-	 * @see #setPropertyScope(Property, EnumSet) for info on how to configure the property
-	 *      scope.
+	 * @see #setPropertyScope(Property, EnumSet) for info on how to configure the
+	 *      property scope.
 	 */
 	private static Collection<Property> getManagedDynamicProperties(PathwayObject e) {
 		Set<Property> props = new HashSet<Property>();
@@ -215,28 +227,25 @@ public class PropertyDisplayManager {
 	}
 
 	/**
-	 * Set the scope of a dynamic property (on which object types it applies).
-	 * The property panel will only display the property editor for the given
-	 * object types.
+	 * Set the scope of a dynamic property (on which object types it applies). The
+	 * property panel will only display the property editor for the given object
+	 * types.
 	 *
-	 * @param prop
-	 *            The property this scope applies to.
-	 * @param types
-	 *            The object types that define the scope of this property. If
-	 *            null is supplied as value, the property will be displayed on
-	 *            all object types (default behavior).
+	 * @param prop  The property this scope applies to.
+	 * @param types The object types that define the scope of this property. If null
+	 *              is supplied as value, the property will be displayed on all
+	 *              object types (default behavior).
 	 */
 	public static void setPropertyScope(Property prop, EnumSet<ObjectType> types) {
 		PROPERTY_SCOPE.put(prop, types);
 	}
 
 	/**
-	 * Get the scope of a property (defines on which object types it should
-	 * apply).
+	 * Get the scope of a property (defines on which object types it should apply).
 	 *
-	 * @return The set of object types that this property applies to or null if
-	 *         the property has no specific scope (and should apply to all
-	 *         object types).
+	 * @return The set of object types that this property applies to or null if the
+	 *         property has no specific scope (and should apply to all object
+	 *         types).
 	 */
 	public static EnumSet<ObjectType> getPropertyScope(Property prop) {
 		return PROPERTY_SCOPE.get(prop);
@@ -247,7 +256,8 @@ public class PropertyDisplayManager {
 	}
 
 	/**
-	 * Gets the order of the given Property.  If not is found, {@link Integer#MAX_VALUE} is returned.
+	 * Gets the order of the given Property. If not is found,
+	 * {@link Integer#MAX_VALUE} is returned.
 	 */
 	public static int getPropertyOrder(Property prop) {
 		return loadPreference(prop).getOrder();
@@ -260,9 +270,8 @@ public class PropertyDisplayManager {
 		loadPreference(prop).setOrder(order);
 	}
 
-
 	/**
-	 * Gets whether the given Property should be visible.  Default is visible.
+	 * Gets whether the given Property should be visible. Default is visible.
 	 */
 	public static boolean isVisible(Property prop) {
 		return loadPreference(prop).isVisible();
@@ -274,7 +283,6 @@ public class PropertyDisplayManager {
 	public static void setVisible(Property prop, boolean isVisible) {
 		loadPreference(prop).setVisible(isVisible);
 	}
-
 
 	/**
 	 * Gets whether visibility and order of properties is stored as a preference.
@@ -298,8 +306,6 @@ public class PropertyDisplayManager {
 
 	}
 
-
-
 	private static PropPreference loadPreference(Property prop) {
 
 		PropPreference pref = PROPERTY_PREFERENCES.get(prop);
@@ -313,9 +319,9 @@ public class PropertyDisplayManager {
 		return pref;
 	}
 
-
 	/**
-	 * Preference for property display information.  Knows how to handle StaticProperty property.
+	 * Preference for property display information. Knows how to handle
+	 * StaticProperty property.
 	 */
 	public static class PropPreference implements Preference {
 		private static final Integer DEFAULT_ORDER = Integer.MAX_VALUE - 100;
@@ -323,24 +329,21 @@ public class PropertyDisplayManager {
 		private Integer order = DEFAULT_ORDER;
 		private boolean isVisible = true;
 
-
 		public PropPreference(Property aProp) {
 			prop = aProp;
 			if (prop instanceof StaticProperty) {
-				StaticProperty sp = (StaticProperty)prop;
+				StaticProperty sp = (StaticProperty) prop;
 				order = sp.getOrder();
-				if (sp.isHidden() ||
-						(sp.isAdvanced() && !PreferenceManager.getCurrent().getBoolean(GlobalPreference.SHOW_ADVANCED_PROPERTIES))) {
+				if (sp.isHidden() || (sp.isAdvanced()
+						&& !PreferenceManager.getCurrent().getBoolean(GlobalPreference.SHOW_ADVANCED_PROPERTIES))) {
 					isVisible = false;
 				}
 			}
 		}
 
-
 		public void store() {
 			PreferenceManager.getCurrent().set(this, buildPrefString());
 		}
-
 
 		public void parsePrefString(String value) {
 			if (value != null) {
@@ -354,7 +357,6 @@ public class PropertyDisplayManager {
 			return order.toString() + ":" + isVisible;
 		}
 
-
 		public Integer getOrder() {
 			return order;
 		}
@@ -365,7 +367,6 @@ public class PropertyDisplayManager {
 				PreferenceManager.getCurrent().set(this, buildPrefString());
 			}
 		}
-
 
 		public boolean isVisible() {
 			return isVisible;
@@ -378,7 +379,6 @@ public class PropertyDisplayManager {
 			}
 		}
 
-
 		public String name() {
 			return "propertyDisplayManager." + prop.getId();
 		}
@@ -386,7 +386,7 @@ public class PropertyDisplayManager {
 		public String getDefault() {
 			Integer defaultOrder = DEFAULT_ORDER;
 			if (prop instanceof StaticProperty) {
-				defaultOrder = ((StaticProperty)prop).getOrder();
+				defaultOrder = ((StaticProperty) prop).getOrder();
 			}
 			return defaultOrder + ":" + Boolean.TRUE;
 		}

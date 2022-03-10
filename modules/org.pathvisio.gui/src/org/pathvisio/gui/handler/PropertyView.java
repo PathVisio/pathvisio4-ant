@@ -32,11 +32,11 @@ import org.pathvisio.libgpml.model.PathwayObject;
 import org.pathvisio.libgpml.prop.Property;
 
 /**
- * PropertyView ties together functionality to view / edit a property
- * on one or more PathwayElements at the same time.
+ * PropertyView ties together functionality to view / edit a property on one or
+ * more PathwayElements at the same time.
  */
 public class PropertyView implements Comparable<PropertyView> {
-	private VPathwayModel vPathway;
+	private VPathwayModel vPathwayModel;
 	Collection<PathwayElement> elements;
 	private Object value;
 	private Object type;
@@ -45,18 +45,18 @@ public class PropertyView implements Comparable<PropertyView> {
 	private TableCellRenderer propertyLabelRenderer = new PropertyLabelRenderer();
 
 	/**
-	 * @param aType is either String for a dynamic property,
-	 * or StaticProperty for a static property;
-	 * @param aVPathway is used to register undo actions when setting a value
-	 * to this property. May be null, in which case no undo actions are registered.
+	 * @param aType     is either String for a dynamic property, or StaticProperty
+	 *                  for a static property;
+	 * @param aVPathway is used to register undo actions when setting a value to
+	 *                  this property. May be null, in which case no undo actions
+	 *                  are registered.
 	 */
 	public PropertyView(VPathwayModel aVPathway, Object aType) {
 		type = aType;
-		if (!(type instanceof String || type instanceof Property))
-		{
+		if (!(type instanceof String || type instanceof Property)) {
 			throw new IllegalArgumentException();
 		}
-		vPathway = aVPathway;
+		vPathwayModel = aVPathway;
 		elements = new HashSet<PathwayElement>();
 	}
 
@@ -69,7 +69,8 @@ public class PropertyView implements Comparable<PropertyView> {
 	}
 
 	/**
-	 * Remove a PathwayElement to the set of elements that are viewed / edited together
+	 * Remove a PathwayElement to the set of elements that are viewed / edited
+	 * together
 	 */
 	public void removeElement(PathwayElement e) {
 		elements.remove(e);
@@ -77,53 +78,51 @@ public class PropertyView implements Comparable<PropertyView> {
 	}
 
 	/**
-	 * Refresh the viewer / editor value by checking all PathwayElements
-	 * This notifies the PropertyView that one of the PathwayElements has changed
-	 * or that the PathwayElement list has been changed, and a new value should be cached.
+	 * Refresh the viewer / editor value by checking all PathwayElements This
+	 * notifies the PropertyView that one of the PathwayElements has changed or that
+	 * the PathwayElement list has been changed, and a new value should be cached.
 	 */
-	
+
 	public void refreshValue() {
-		if(elements.size() == 1) {
+		if (elements.size() == 1) {
 			value = elements.iterator().next().getPropertyEx(type);
-		}
-		else {
+		} else {
 			List<Object> SelectionValues = new ArrayList<Object>();
-			for(PathwayObject e : elements) {
+			for (PathwayObject e : elements) {
 				Object o = e.getPropertyEx(type);
-				if(o != null){
+				if (o != null) {
 					SelectionValues.add(o);
 					value = o;
 					different = false;
 				}
 			}
-			if(!SelectionValues.isEmpty()) {
-				while(SelectionValues.size()-2 >= counter) {
-					if(!SelectionValues.get(counter).equals(SelectionValues.get(counter+1))) {
+			if (!SelectionValues.isEmpty()) {
+				while (SelectionValues.size() - 2 >= counter) {
+					if (!SelectionValues.get(counter).equals(SelectionValues.get(counter + 1))) {
 						different = true;
 					}
-					counter ++;
+					counter++;
 				}
-				counter = 0;		
+				counter = 0;
 			}
 		}
 	}
-	
+
 	/**
 	 * Number of PathwayElement's being edited / viewed
 	 */
-	public int elementCount() { return elements.size(); }
+	public int elementCount() {
+		return elements.size();
+	}
 
 	/**
 	 * Get a name for the property being edited.
 	 */
-	public String getName()
-	{
+	public String getName() {
 		if (type instanceof Property) {
-			return ((Property)type).getName();
-		}
-		else
-		{
-			Property prop = PropertyDisplayManager.getDynamicProperty((String)type);
+			return ((Property) type).getName();
+		} else {
+			Property prop = PropertyDisplayManager.getDynamicProperty((String) type);
 			if (prop != null) {
 				return prop.getName();
 			}
@@ -134,14 +133,11 @@ public class PropertyView implements Comparable<PropertyView> {
 	/**
 	 * Get a description for the property being edited.
 	 */
-	public String getDescription()
-	{
+	public String getDescription() {
 		if (type instanceof Property) {
-			return ((Property)type).getDescription();
-		}
-		else
-		{
-			Property prop = PropertyDisplayManager.getDynamicProperty((String)type);
+			return ((Property) type).getDescription();
+		} else {
+			Property prop = PropertyDisplayManager.getDynamicProperty((String) type);
 			if (prop != null) {
 				return prop.getDescription();
 			}
@@ -150,16 +146,14 @@ public class PropertyView implements Comparable<PropertyView> {
 	}
 
 	/**
-	 * Set a value for the property being edited.
-	 * This will update all PathwayElements that are being edited at once.
+	 * Set a value for the property being edited. This will update all
+	 * PathwayElements that are being edited at once.
 	 */
 	public void setValue(Object value) {
 		this.value = value;
-		if(value != null) {
-			if (vPathway != null)
-			{
-				vPathway.getUndoManager().newAction (
-					"Change " + type + " property");
+		if (value != null) {
+			if (vPathwayModel != null) {
+				vPathwayModel.getUndoManager().newAction("Change " + type + " property");
 			}
 			for (PathwayObject pe : elements.toArray(new PathwayObject[0])) {
 				pe.setPropertyEx(type, value);
@@ -168,17 +162,17 @@ public class PropertyView implements Comparable<PropertyView> {
 	}
 
 	/**
-	 * The value of the property being viewed / edited.
-	 * This value is cached, call refreshValue() to update the cache.
+	 * The value of the property being viewed / edited. This value is cached, call
+	 * refreshValue() to update the cache.
 	 */
 	public Object getValue() {
 		return value;
 	}
 
 	/**
-	 * The type of the property being edited. This is a String
-	 * if the property is dynamic, or a Property if the property
-	 * is static. (See PathwayElement for an explanation of static / dynamic)
+	 * The type of the property being edited. This is a String if the property is
+	 * dynamic, or a Property if the property is static. (See PathwayElement for an
+	 * explanation of static / dynamic)
 	 */
 	public Object getType() {
 		return type;
@@ -186,9 +180,9 @@ public class PropertyView implements Comparable<PropertyView> {
 
 	private TypeHandler getTypeHandler() {
 		if (type instanceof Property) {
-			return PropertyDisplayManager.getTypeHandler(((Property)type).getType());
+			return PropertyDisplayManager.getTypeHandler(((Property) type).getType());
 		} else {
-			Property prop = PropertyDisplayManager.getDynamicProperty((String)type);
+			Property prop = PropertyDisplayManager.getDynamicProperty((String) type);
 			if (prop != null) {
 				return PropertyDisplayManager.getTypeHandler(prop.getType());
 			}
@@ -199,8 +193,9 @@ public class PropertyView implements Comparable<PropertyView> {
 	/**
 	 * Returns true if the PathwayElement's being edited differ for this Property.
 	 */
-	public boolean hasDifferentValues() { return different; }
-
+	public boolean hasDifferentValues() {
+		return different;
+	}
 
 	/**
 	 * Returns a TableCellRenderer suitable for rendering this property's label.
@@ -212,20 +207,18 @@ public class PropertyView implements Comparable<PropertyView> {
 		if (handler != null) {
 			renderer = handler.getLabelRenderer();
 		}
-		if (renderer == null &&
-				(type instanceof Property || PropertyDisplayManager.getDynamicProperty((String)type) != null)) {
+		if (renderer == null
+				&& (type instanceof Property || PropertyDisplayManager.getDynamicProperty((String) type) != null)) {
 			return propertyLabelRenderer;
 		}
 		return renderer;
 	}
 
-
 	/**
 	 * Returns a TableCellRenderer suitable for rendering this property's value.
 	 */
-	public TableCellRenderer getCellRenderer()
-	{
-		if(hasDifferentValues()) {
+	public TableCellRenderer getCellRenderer() {
+		if (hasDifferentValues()) {
 			return differentRenderer;
 		}
 		TypeHandler handler = getTypeHandler();
@@ -238,20 +231,21 @@ public class PropertyView implements Comparable<PropertyView> {
 	/**
 	 * Returns a TableCellEditor suitable for editing this property's value.
 	 *
-	 * @param swingEngine: the comments editor requires a connection to swingEngine, so you need to pass it here.
+	 * @param swingEngine: the comments editor requires a connection to swingEngine,
+	 *                     so you need to pass it here.
 	 */
 	public TableCellEditor getCellEditor(SwingEngine swingEngine) {
 
 		TypeHandler handler = getTypeHandler();
 		if (handler != null) {
 			if (handler instanceof ContextSensitiveEditor) {
-				((ContextSensitiveEditor)handler).updateEditor(swingEngine, elements, vPathway.getPathwayModel(), this);
+				((ContextSensitiveEditor) handler).updateEditor(swingEngine, elements, vPathwayModel.getPathwayModel(),
+						this);
 			}
 			return handler.getValueEditor();
 		}
 		return null;
 	}
-
 
 	private static DefaultTableCellRenderer differentRenderer = new DefaultTableCellRenderer() {
 
@@ -261,11 +255,9 @@ public class PropertyView implements Comparable<PropertyView> {
 		}
 	};
 
-
-	public int compareTo(PropertyView arg0)
-	{
-		if (arg0 == null) throw new NullPointerException();
-
+	public int compareTo(PropertyView arg0) {
+		if (arg0 == null)
+			throw new NullPointerException();
 
 		Object aType = type;
 		int aOrder = -1;
@@ -273,29 +265,29 @@ public class PropertyView implements Comparable<PropertyView> {
 		int bOrder = -1;
 
 		if (aType instanceof String) {
-			if (PropertyDisplayManager.getDynamicProperty((String)aType) != null) {
-				aType = PropertyDisplayManager.getDynamicProperty((String)aType);
-				aOrder = PropertyDisplayManager.getPropertyOrder((Property)aType);
+			if (PropertyDisplayManager.getDynamicProperty((String) aType) != null) {
+				aType = PropertyDisplayManager.getDynamicProperty((String) aType);
+				aOrder = PropertyDisplayManager.getPropertyOrder((Property) aType);
 			}
 		} else {
-			aOrder = PropertyDisplayManager.getPropertyOrder((Property)aType);
+			aOrder = PropertyDisplayManager.getPropertyOrder((Property) aType);
 		}
 		if (bType instanceof String) {
-			if (PropertyDisplayManager.getDynamicProperty((String)bType) != null) {
-				bType = PropertyDisplayManager.getDynamicProperty((String)bType);
-				bOrder = PropertyDisplayManager.getPropertyOrder((Property)bType);
+			if (PropertyDisplayManager.getDynamicProperty((String) bType) != null) {
+				bType = PropertyDisplayManager.getDynamicProperty((String) bType);
+				bOrder = PropertyDisplayManager.getPropertyOrder((Property) bType);
 			}
 		} else {
-			bOrder = PropertyDisplayManager.getPropertyOrder((Property)bType);
+			bOrder = PropertyDisplayManager.getPropertyOrder((Property) bType);
 		}
 
 		if (aOrder < 0 && bOrder < 0) {
-			return ((String)aType).compareTo((String)bType);
+			return ((String) aType).compareTo((String) bType);
 		}
 		int rez = aOrder - bOrder;
 		if (rez == 0) {
 			// same order, sort by alpha
-			rez = ((Property)aType).getName().compareTo(((Property)bType).getName());
+			rez = ((Property) aType).getName().compareTo(((Property) bType).getName());
 		}
 		return rez;
 	}

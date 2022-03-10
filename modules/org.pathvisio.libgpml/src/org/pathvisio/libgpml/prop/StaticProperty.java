@@ -60,20 +60,22 @@ public enum StaticProperty implements Property {
 	// Pathway Element
 	// ========================================
 	COMMENT("comment", "Comment", StaticPropertyType.COMMENT, 140),
-	ANNOTATION("Annotation", "Annotation", StaticPropertyType.ANNOTATION, 141, false, true, false),
-	CITATION("Citation", "Citation", StaticPropertyType.CITATION, 142, false, true, false),
-	EVIDENCE("Evidence", "Evidence", StaticPropertyType.EVIDENCE, 143, false, true, false),
+	ANNOTATION("annotation", "Annotation", StaticPropertyType.ANNOTATION, 141, false, true, false),
+	CITATION("citation", "Citation", StaticPropertyType.CITATION, 142, false, true, false),
+	EVIDENCE("evidence", "Evidence", StaticPropertyType.EVIDENCE, 143, false, true, false),
 
 	// types
 	ANNOTATIONTYPE("annotationType", "Annotation Type", StaticPropertyType.ANNOTATIONTYPE, 150),
 
-	// Xrefable (pathway, author, datanode, state, interaction, group)
+	// ========================================
+	// Xrefable 
+	// ========================================
 	XREF("xref", "Xref", StaticPropertyType.XREF, 160),
 
 	// ========================================
 	// Groupable
 	// ========================================
-	GROUPREF("GroupRef", "GroupRef", StaticPropertyType.STRING, 170, false, true, false),
+	GROUPREF("groupRef", "GroupRef", StaticPropertyType.STRING, 170, false, true, false),
 	ZORDER("zOrder", "Z-Order", StaticPropertyType.INTEGER, 171, false, true, false),
 
 	// ========================================
@@ -130,14 +132,14 @@ public enum StaticProperty implements Property {
 	// LineElement
 	// ========================================
 	// common properties
-	STARTX("StartX", "Start X", StaticPropertyType.DOUBLE, 270, true, false, false),
-	STARTY("StartY", "Start Y", StaticPropertyType.DOUBLE, 271, true, false, false),
-	ENDX("EndX", "End X", StaticPropertyType.DOUBLE, 272, true, false, false),
-	ENDY("EndY", "End Y", StaticPropertyType.DOUBLE, 273, true, false, false),
-	STARTARROWHEADTYPE("StartArrowHeadType", "Start Arrow ", StaticPropertyType.ARROWHEADTYPE, 274),
-	ENDARROWHEADTYPE("EndArrowHeadType", "End Arrow", StaticPropertyType.ARROWHEADTYPE, 275),
-	STARTELEMENTREF("StartElementRef", "StartElementRef", StaticPropertyType.LINKABLETO, 276, false, true, false),
-	ENDELEMENTREF("EndElementRef", "EndElementRef", StaticPropertyType.LINKABLETO, 277, false, true, false),
+	STARTX("startX", "Start X", StaticPropertyType.DOUBLE, 270, true, false, false),
+	STARTY("startY", "Start Y", StaticPropertyType.DOUBLE, 271, true, false, false),
+	ENDX("endX", "End X", StaticPropertyType.DOUBLE, 272, true, false, false),
+	ENDY("endY", "End Y", StaticPropertyType.DOUBLE, 273, true, false, false),
+	STARTARROWHEADTYPE("startArrowHeadType", "Start Arrow ", StaticPropertyType.ARROWHEADTYPE, 274),
+	ENDARROWHEADTYPE("endArrowHeadType", "End Arrow", StaticPropertyType.ARROWHEADTYPE, 275),
+	STARTELEMENTREF("startElementRef", "StartElementRef", StaticPropertyType.LINKABLETO, 276, false, true, false),
+	ENDELEMENTREF("endElementRef", "EndElementRef", StaticPropertyType.LINKABLETO, 277, false, true, false),
 //	ELEMENTREF("elementRef", "Element Reference", StaticPropertyType.LINKABLETO, 172, false, true, false),
 
 	// types

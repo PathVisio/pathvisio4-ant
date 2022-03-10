@@ -228,15 +228,54 @@ public class DataNodeDialog extends PathwayElementDialog {
 		symText.setText(sym);
 		idText.setText(ref.getId());
 		String type = ref.getDataSource().getType();
-		if ("metabolite".equals(type))
-			typeCombo.setSelectedItem(DataNodeType.METABOLITE);
-		else if ("gene".equals(type))
+		switch (type) {
+		// default
+		case "undefined":
+			typeCombo.setSelectedItem(DataNodeType.UNDEFINED);
+			break;
+		// molecule
+		case "gene":
 			typeCombo.setSelectedItem(DataNodeType.GENEPRODUCT);
-		else if ("protein".equals(type))
+			break;
+		case "metabolite":
+			typeCombo.setSelectedItem(DataNodeType.METABOLITE);
+			break;
+		case "protein":
 			typeCombo.setSelectedItem(DataNodeType.PROTEIN);
-		else if ("pathway".equals(type))
+			break;
+		case "dna":
+			typeCombo.setSelectedItem(DataNodeType.DNA);
+			break;
+		case "rna":
+			typeCombo.setSelectedItem(DataNodeType.RNA);
+			break;
+		// concept
+		case "pathway":
 			typeCombo.setSelectedItem(DataNodeType.PATHWAY);
+			break;
+		case "disease":
+			typeCombo.setSelectedItem(DataNodeType.DISEASE);
+			break;
+		case "phenotype":
+			typeCombo.setSelectedItem(DataNodeType.PHENOTYPE);
+			break;
+		case "alias":
+			typeCombo.setSelectedItem(DataNodeType.ALIAS);
+			break;
+		case "event":
+			typeCombo.setSelectedItem(DataNodeType.EVENT);
+			break;
+		default:
+			// do nothing
+		}
+//		else if ("gene".equals(type))
+//			typeCombo.setSelectedItem(DataNodeType.CELL); TODO 
+//		else if ("gene".equals(type))
+//			typeCombo.setSelectedItem(DataNodeType.ORGAN);
+//		else if ("gene".equals(type))
+//			typeCombo.setSelectedItem(DataNodeType.GENEPRODUCT);
 		dsm.setSelectedItem(ref.getDataSource());
+
 	}
 
 	/**

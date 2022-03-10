@@ -22,7 +22,8 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
 /**
- * The default label renderer for a Property, which will display a tooltip if that information is available.
+ * The default label renderer for a Property, which will display a tooltip if
+ * that information is available.
  *
  * @author Mark Woon
  */
@@ -31,11 +32,11 @@ public class PropertyLabelRenderer extends DefaultTableCellRenderer {
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 			int rowIndex, int vColIndex) {
 
-		PropertyView pv = ((PathwayTableModel)table.getModel()).getPropertyAt(rowIndex);
+		PropertyView pv = ((PathwayTableModel) table.getModel()).getPropertyAt(rowIndex);
 		String tooltip = pv.getDescription();
 		if (tooltip != null) {
 			setToolTipText(tooltip);
 		}
-		return super.getTableCellRendererComponent(table, pv.getName(), isSelected, hasFocus,  rowIndex, vColIndex);
+		return super.getTableCellRendererComponent(table, pv.getName(), isSelected, hasFocus, rowIndex, vColIndex);
 	}
 }

@@ -377,7 +377,6 @@ public class DataNode extends ShapedElement implements Xrefable {
 				result = getTextLabel();// TODO
 				break;
 			case DATANODETYPE:
-				System.out.println(getType().toString());
 				result = getType();
 				break;
 			case XREF:

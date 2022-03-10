@@ -24,6 +24,9 @@ import javax.swing.JTabbedPane;
 
 import org.pathvisio.libgpml.model.PathwayObject;
 
+/**
+ * @author unknown
+ */
 public abstract class PathwayElementPanel extends JPanel {
 	private PathwayObject input;
 	JTabbedPane dialogPane;
@@ -45,10 +48,10 @@ public abstract class PathwayElementPanel extends JPanel {
 	public abstract void refresh();
 
 	public final void setChildrenEnabled(JComponent c, boolean enabled) {
-		for(Component child : c.getComponents()) {
+		for (Component child : c.getComponents()) {
 			child.setEnabled(enabled);
-			if(child instanceof JComponent) {
-				setChildrenEnabled((JComponent)child, enabled);
+			if (child instanceof JComponent) {
+				setChildrenEnabled((JComponent) child, enabled);
 			}
 		}
 	}

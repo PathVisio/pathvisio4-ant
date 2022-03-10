@@ -34,18 +34,18 @@ class ArrowShapeRegistry {
 
 	// Register ArrowHead shapes
 	static void registerShapes() {
-		
-		// Interaction panel, NB: "Undirected" (no arrow head) TODO 
-		ShapeRegistry.registerArrow("Directed", getArrowHead(), ArrowShape.FillType.CLOSED); 
+
+		// Interaction panel, NB: "Undirected" (no arrow head) TODO
+		ShapeRegistry.registerArrow("Directed", getArrowHead(), ArrowShape.FillType.CLOSED);
 		ShapeRegistry.registerArrow("Conversion", getArrowHead(), ArrowShape.FillType.CLOSED);
 		ShapeRegistry.registerArrow("Inhibition", getTBar(), ArrowShape.FillType.OPEN, TBARWIDTH + TBAR_GAP);
-		ShapeRegistry.registerArrow("Catalysis", getArrowHead(), ArrowShape.FillType.CLOSED);
+		ShapeRegistry.registerArrow("Catalysis", getCatalysis(), ArrowShape.FillType.OPEN);
 		ShapeRegistry.registerArrow("Stimulation", getArrowHead(), ArrowShape.FillType.OPEN);
-		ShapeRegistry.registerArrow("Binding", getArrowHead(), ArrowShape.FillType.WIRE);
+		ShapeRegistry.registerArrow("Binding", getBinding(), ArrowShape.FillType.WIRE);
 		ShapeRegistry.registerArrow("Translocation", getArrowHead(), ArrowShape.FillType.CLOSED);
-		ShapeRegistry.registerArrow("Transcription-translation", getArrowHead(), ArrowShape.FillType.CLOSED);
+		ShapeRegistry.registerArrow("TranscriptionTranslation", getTranscriptionTranslation(), ArrowShape.FillType.OPEN);
 
-		// Other 
+		// Other
 		ShapeRegistry.registerArrow("LigandRound", getLRound(), ArrowShape.FillType.CLOSED);
 		ShapeRegistry.registerArrow("ReceptorRound", getRRound(), ArrowShape.FillType.WIRE);
 		ShapeRegistry.registerArrow("Receptor", getReceptor(), ArrowShape.FillType.WIRE);
@@ -67,6 +67,12 @@ class ArrowShapeRegistry {
 	private static final int LIGANDHEIGHT = 11;
 	private static final int RECEPWIDTH = LIGANDWIDTH + 2;
 	private static final int RECEPHEIGHT = LIGANDHEIGHT + 2;
+	// catalysis
+	static final int CATALYSIS_DIAM = 8;
+	static final int CATALYSIS_GAP = CATALYSIS_DIAM / 4;
+	static final int CATALYSIS_GAP_HEIGHT = 6;
+	// transcription translation
+	private static final int TAIL = ARROWWIDTH / 2;
 
 	/**
 	 * @return
@@ -75,6 +81,41 @@ class ArrowShapeRegistry {
 		int[] xpoints = new int[] { 0, -ARROWWIDTH, -ARROWWIDTH };
 		int[] ypoints = new int[] { 0, -ARROWHEIGHT, ARROWHEIGHT };
 		return new Polygon(xpoints, ypoints, 3);
+	}
+
+	/**
+	 * @return
+	 */
+	static private java.awt.Shape getCatalysis() {
+		return new Ellipse2D.Double(0, -CATALYSIS_DIAM / 2, CATALYSIS_DIAM, CATALYSIS_DIAM);
+	}
+
+	/**
+	 * @return
+	 */
+	static private java.awt.Shape getBinding() {
+		GeneralPath path = new GeneralPath();
+		path.moveTo(0, 0);
+		path.lineTo(-ARROWWIDTH, -ARROWHEIGHT);
+		path.lineTo(-ARROWWIDTH / 2, 0);
+		path.lineTo(-ARROWWIDTH, ARROWHEIGHT);
+		path.closePath();
+		return path;
+	}
+
+	/**
+	 * @return
+	 */
+	static private java.awt.Shape getTranscriptionTranslation() {
+		GeneralPath path = new GeneralPath();
+		path.moveTo(-TAIL, 0);
+		path.lineTo(-TAIL, ARROWHEIGHT * 2);
+		path.lineTo(TAIL, ARROWHEIGHT * 2);
+		path.lineTo(TAIL, ARROWHEIGHT * 3);
+		path.lineTo(TAIL + ARROWWIDTH, ARROWHEIGHT * 2);
+		path.lineTo(TAIL, ARROWHEIGHT);
+		path.lineTo(TAIL, ARROWHEIGHT * 2);
+		return path;
 	}
 
 	/**
