@@ -51,6 +51,7 @@ public enum StaticPropertyType implements PropertyType {
 	
 	// line style props 
 	CONNECTORTYPE,
+	LINKABLETO,
 	
 	// types: anchor, annotation, linepoint, datanode, state, group
 	ANCHORSHAPETYPE, ANNOTATIONTYPE, ARROWHEADTYPE, DATANODETYPE, STATETYPE, GROUPTYPE,
