@@ -81,8 +81,7 @@ public class PropertyDisplayManager {
 		registerTypeHandler(new ComboHandler(StaticPropertyType.GROUPTYPE, GroupType.getNames(), false));
 		registerTypeHandler(new ComboHandler(StaticPropertyType.LINESTYLETYPE, LineStyleType.getNames(), false));
 		registerTypeHandler(new ComboHandler(StaticPropertyType.CONNECTORTYPE, ConnectorType.getNames(), false));
-//		registerTypeHandler(new ComboHandler(StaticPropertyType.ARROWHEADTYPE, ArrowHeadType.getVisibleNames(),
-//				ArrowHeadType.getVisibleValues()));
+//		registerTypeHandler(new ComboHandler(StaticPropertyType.ARROWHEADTYPE, ArrowHeadType.getNames(), false));
 		registerTypeHandler(new ComboHandler(StaticPropertyType.ORGANISM, Organism.latinNames(), false));
 		registerTypeHandler(new ComboHandler(StaticPropertyType.ORIENTATION, OrientationType.getNames(), true));
 		registerTypeHandler(new ComboHandler(StaticPropertyType.SHAPETYPE, ShapeType.getVisibleNames(),
@@ -123,6 +122,8 @@ public class PropertyDisplayManager {
 		Set<Object> result = new HashSet<Object>();
 		// add static properties
 		for (Property p : e.getStaticPropertyKeys()) {
+			System.out.println(p.toString());
+
 			if (isVisible(p)) {
 				result.add(p);
 			}

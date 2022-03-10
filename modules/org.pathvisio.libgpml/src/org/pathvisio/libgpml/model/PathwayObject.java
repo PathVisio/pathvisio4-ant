@@ -244,9 +244,7 @@ public abstract class PathwayObject {
 	// ================================================================================
 	// Property Methods
 	// ================================================================================
-	/**
-	 * 
-	 */
+	
 	private static final Map<ObjectType, Set<StaticProperty>> ALLOWED_PROPS;
 
 	static {
@@ -269,7 +267,9 @@ public abstract class PathwayObject {
 		propsShapedElement.addAll(propsPathwayElement);
 
 		Set<StaticProperty> propsLineElement = EnumSet.of(StaticProperty.GROUPREF, StaticProperty.LINECOLOR,
-				StaticProperty.LINESTYLE, StaticProperty.LINEWIDTH, StaticProperty.CONNECTORTYPE,
+				StaticProperty.LINESTYLE, StaticProperty.LINEWIDTH, StaticProperty.CONNECTORTYPE, StaticProperty.STARTX,
+				StaticProperty.STARTY, StaticProperty.ENDX, StaticProperty.ENDY, StaticProperty.STARTARROWHEADTYPE,
+				StaticProperty.ENDARROWHEADTYPE, StaticProperty.STARTELEMENTREF, StaticProperty.ENDELEMENTREF,
 				StaticProperty.ZORDER);
 		propsLineElement.addAll(propsPathwayElement);
 
