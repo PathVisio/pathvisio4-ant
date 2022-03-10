@@ -18,7 +18,9 @@ package org.pathvisio.libgpml.model;
 
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
+import java.util.Set;
 
 import org.bridgedb.Xref;
 import org.pathvisio.libgpml.model.DataNode.State;
@@ -481,7 +483,23 @@ public class Group extends ShapedElement implements Xrefable {
 	// ================================================================================
 	// Property Methods
 	// ================================================================================
-	
+	/**
+	 * Returns all static properties for this pathway object.
+	 * 
+	 * @return result the set of static property for this pathway object.
+	 */
+	@Override
+	public Set<StaticProperty> getStaticPropertyKeys() {
+		Set<StaticProperty> result = super.getStaticPropertyKeys();
+		Set<StaticProperty> propsGroup = EnumSet.of(StaticProperty.GROUPTYPE, StaticProperty.XREF,
+				StaticProperty.TEXTLABEL);
+		result.addAll(propsGroup);
+		return result;
+	}
+
+	/**
+	 *
+	 */
 	@Override
 	public Object getStaticProperty(StaticProperty key) { // TODO
 		Object result = super.getStaticProperty(key);
@@ -502,7 +520,7 @@ public class Group extends ShapedElement implements Xrefable {
 		}
 		return result;
 	}
-	
+
 	/**
 	 * This works so that o.setNotes(x) is the equivalent of o.setProperty("Notes",
 	 * x);

@@ -17,7 +17,9 @@
 package org.pathvisio.libgpml.model;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.JOptionPane;
 
@@ -367,7 +369,23 @@ public class DataNode extends ShapedElement implements Xrefable {
 	// ================================================================================
 	// Property Methods
 	// ================================================================================
-
+	/**
+	 * Returns all static properties for this pathway object.
+	 * 
+	 * @return result the set of static property for this pathway object.
+	 */
+	@Override
+	public Set<StaticProperty> getStaticPropertyKeys() {
+		Set<StaticProperty> result = super.getStaticPropertyKeys();
+		Set<StaticProperty> propsDataNode = EnumSet.of(StaticProperty.TEXTLABEL, StaticProperty.DATANODETYPE,
+				StaticProperty.XREF, StaticProperty.ALIASREF);
+		result.addAll(propsDataNode);
+		return result;
+	}
+	
+	/**
+	 *
+	 */
 	@Override
 	public Object getStaticProperty(StaticProperty key) { // TODO
 		Object result = super.getStaticProperty(key);
@@ -817,7 +835,20 @@ public class DataNode extends ShapedElement implements Xrefable {
 		// ================================================================================
 		// Property Methods
 		// ================================================================================
-
+		/**
+		 * Returns all static properties for this pathway object.
+		 * 
+		 * @return result the set of static property for this pathway object.
+		 */
+		@Override
+		public Set<StaticProperty> getStaticPropertyKeys() {
+			Set<StaticProperty> result = super.getStaticPropertyKeys();
+			Set<StaticProperty> propsState = EnumSet.of(StaticProperty.TEXTLABEL, StaticProperty.STATETYPE,
+					StaticProperty.RELX, StaticProperty.RELY, StaticProperty.XREF);
+			result.addAll(propsState);
+			return result;
+		}
+		
 		@Override
 		public Object getStaticProperty(StaticProperty key) { // TODO
 			Object result = super.getStaticProperty(key);

@@ -16,6 +16,9 @@
  ******************************************************************************/
 package org.pathvisio.libgpml.model;
 
+import java.util.EnumSet;
+import java.util.Set;
+
 import org.pathvisio.libgpml.model.type.ObjectType;
 import org.pathvisio.libgpml.prop.StaticProperty;
 import org.pathvisio.libgpml.util.Utils;
@@ -146,7 +149,22 @@ public class Label extends ShapedElement {
 	// ================================================================================
 	// Property Methods
 	// ================================================================================
-	
+	/**
+	 * Returns all static properties for this pathway object.
+	 * 
+	 * @return result the set of static property for this pathway object.
+	 */
+	@Override
+	public Set<StaticProperty> getStaticPropertyKeys() {
+		Set<StaticProperty> result = super.getStaticPropertyKeys();
+		Set<StaticProperty> propsLabel = EnumSet.of(StaticProperty.TEXTLABEL, StaticProperty.HREF);
+		result.addAll(propsLabel);
+		return result;
+	}
+
+	/**
+	 *
+	 */
 	@Override
 	public Object getStaticProperty(StaticProperty key) { // TODO
 		Object result = super.getStaticProperty(key);
@@ -164,7 +182,7 @@ public class Label extends ShapedElement {
 		}
 		return result;
 	}
-	
+
 	/**
 	 * This works so that o.setNotes(x) is the equivalent of o.setProperty("Notes",
 	 * x);

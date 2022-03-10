@@ -20,6 +20,7 @@ import java.awt.Color;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.util.EnumSet;
 import java.util.Set;
 
 import org.pathvisio.libgpml.debug.Logger;
@@ -894,6 +895,25 @@ public abstract class ShapedElement extends PathwayElement implements LinkableTo
 	// Property Methods
 	// ================================================================================
 	/**
+	 * Returns all static properties for this pathway object.
+	 * 
+	 * @return result the set of static property for this pathway object.
+	 */
+	@Override
+	public Set<StaticProperty> getStaticPropertyKeys() {
+		Set<StaticProperty> result = super.getStaticPropertyKeys();
+		Set<StaticProperty> propsShapedElement = EnumSet.of(StaticProperty.GROUPREF, StaticProperty.CENTERX,
+				StaticProperty.CENTERY, StaticProperty.WIDTH, StaticProperty.HEIGHT, StaticProperty.TEXTCOLOR,
+				StaticProperty.FONTNAME, StaticProperty.FONTWEIGHT, StaticProperty.FONTSTYLE,
+				StaticProperty.FONTDECORATION, StaticProperty.FONTSTRIKETHRU, StaticProperty.FONTSIZE,
+				StaticProperty.HALIGN, StaticProperty.VALIGN, StaticProperty.BORDERCOLOR, StaticProperty.BORDERSTYLE,
+				StaticProperty.BORDERWIDTH, StaticProperty.FILLCOLOR, StaticProperty.SHAPETYPE, StaticProperty.ZORDER,
+				StaticProperty.ROTATION);
+		result.addAll(propsShapedElement);
+		return result;
+	}
+
+	/**
 	 *
 	 */
 	@Override
@@ -947,7 +967,7 @@ public abstract class ShapedElement extends PathwayElement implements LinkableTo
 				result = getBorderColor();
 				break;
 			case BORDERSTYLE:
-				result = getBorderStyle().getName(); //TODO 
+				result = getBorderStyle().getName(); // TODO
 				break;
 			case BORDERWIDTH:
 				result = getBorderWidth();

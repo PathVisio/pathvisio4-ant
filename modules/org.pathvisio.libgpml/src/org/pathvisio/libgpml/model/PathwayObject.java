@@ -244,87 +244,10 @@ public abstract class PathwayObject {
 	// ================================================================================
 	// Property Methods
 	// ================================================================================
-	
-	private static final Map<ObjectType, Set<StaticProperty>> ALLOWED_PROPS;
-
-	static {
-		ALLOWED_PROPS = new EnumMap<ObjectType, Set<StaticProperty>>(ObjectType.class);
-
-		// common properties
-		Set<StaticProperty> propsPathwayObject = EnumSet.of(StaticProperty.ELEMENTID);
-
-		Set<StaticProperty> propsPathwayElement = EnumSet.of(StaticProperty.COMMENT, StaticProperty.ANNOTATION,
-				StaticProperty.CITATION, StaticProperty.EVIDENCE); // TODO dynamic property
-		propsPathwayElement.addAll(propsPathwayObject);
-
-		Set<StaticProperty> propsShapedElement = EnumSet.of(StaticProperty.GROUPREF, StaticProperty.CENTERX,
-				StaticProperty.CENTERY, StaticProperty.WIDTH, StaticProperty.HEIGHT, StaticProperty.TEXTCOLOR,
-				StaticProperty.FONTNAME, StaticProperty.FONTWEIGHT, StaticProperty.FONTSTYLE,
-				StaticProperty.FONTDECORATION, StaticProperty.FONTSTRIKETHRU, StaticProperty.FONTSIZE,
-				StaticProperty.HALIGN, StaticProperty.VALIGN, StaticProperty.BORDERCOLOR, StaticProperty.BORDERSTYLE,
-				StaticProperty.BORDERWIDTH, StaticProperty.FILLCOLOR, StaticProperty.SHAPETYPE, StaticProperty.ZORDER,
-				StaticProperty.ROTATION);
-		propsShapedElement.addAll(propsPathwayElement);
-
-		Set<StaticProperty> propsLineElement = EnumSet.of(StaticProperty.GROUPREF, StaticProperty.LINECOLOR,
-				StaticProperty.LINESTYLE, StaticProperty.LINEWIDTH, StaticProperty.CONNECTORTYPE, StaticProperty.STARTX,
-				StaticProperty.STARTY, StaticProperty.ENDX, StaticProperty.ENDY, StaticProperty.STARTARROWHEADTYPE,
-				StaticProperty.ENDARROWHEADTYPE, StaticProperty.STARTELEMENTREF, StaticProperty.ENDELEMENTREF,
-				StaticProperty.ZORDER);
-		propsLineElement.addAll(propsPathwayElement);
-
-		// TODO
-		Set<StaticProperty> propsAuthor = EnumSet.of(StaticProperty.AUTHOR, StaticProperty.NAME,
-				StaticProperty.USERNAME, StaticProperty.ORDER);
-
-		// pathway
-		Set<StaticProperty> propsPathway = EnumSet.of(StaticProperty.TITLE, StaticProperty.ORGANISM,
-				StaticProperty.SOURCE, StaticProperty.VERSION, StaticProperty.LICENSE, StaticProperty.BOARDWIDTH,
-				StaticProperty.BOARDHEIGHT, StaticProperty.BACKGROUNDCOLOR);
-		propsPathway.addAll(propsAuthor); // TODO
-		propsPathway.addAll(propsPathwayElement);
-		ALLOWED_PROPS.put(ObjectType.PATHWAY, propsPathway);
-
-		// datanode
-		Set<StaticProperty> propsDataNode = EnumSet.of(StaticProperty.TEXTLABEL, StaticProperty.DATANODETYPE,
-				StaticProperty.XREF, StaticProperty.ALIASREF);
-		propsDataNode.addAll(propsShapedElement);
-		ALLOWED_PROPS.put(ObjectType.DATANODE, propsDataNode);
-
-		// state
-		Set<StaticProperty> propsState = EnumSet.of(StaticProperty.TEXTLABEL, StaticProperty.STATETYPE,
-				StaticProperty.RELX, StaticProperty.RELY, StaticProperty.XREF);
-		propsState.addAll(propsShapedElement);
-		ALLOWED_PROPS.put(ObjectType.STATE, propsState);
-
-		// interaction
-		Set<StaticProperty> propsInteraction = EnumSet.of(StaticProperty.XREF);
-		propsInteraction.addAll(propsLineElement);
-		ALLOWED_PROPS.put(ObjectType.INTERACTION, propsInteraction);
-
-		// graphical line
-		ALLOWED_PROPS.put(ObjectType.GRAPHLINE, propsLineElement);
-
-		// label
-		Set<StaticProperty> propsLabel = EnumSet.of(StaticProperty.TEXTLABEL, StaticProperty.HREF);
-		propsLabel.addAll(propsShapedElement);
-		ALLOWED_PROPS.put(ObjectType.LABEL, propsLabel);
-
-		// shape
-		Set<StaticProperty> propsShape = EnumSet.of(StaticProperty.TEXTLABEL);
-		propsShape.addAll(propsShapedElement);
-		ALLOWED_PROPS.put(ObjectType.SHAPE, propsShape);
-
-		// group
-		Set<StaticProperty> propsGroup = EnumSet.of(StaticProperty.GROUPTYPE, StaticProperty.XREF,
-				StaticProperty.TEXTLABEL);
-		propsGroup.addAll(propsShapedElement);
-		ALLOWED_PROPS.put(ObjectType.GROUP, propsGroup);
-	};
 
 	/**
 	 * Returns keys of available static properties and dynamic properties as an
-	 * object list
+	 * object list.
 	 */
 	public Set<Object> getPropertyKeys() {
 		Set<Object> keys = new HashSet<Object>();
@@ -333,10 +256,14 @@ public abstract class PathwayObject {
 	}
 
 	/**
-	 * get all attributes that are stored as static members.
+	 * Returns all static properties for this pathway object.
+	 * 
+	 * @return result the set of static property for this pathway object. 
 	 */
 	public Set<StaticProperty> getStaticPropertyKeys() {
-		return ALLOWED_PROPS.get(getObjectType());
+		Set<StaticProperty> result = EnumSet.noneOf(StaticProperty.class); // TODO use Tree?
+		result.add(StaticProperty.ELEMENTID);
+		return result;
 	}
 
 	public Object getPropertyEx(Object key) {

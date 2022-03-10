@@ -16,6 +16,9 @@
  ******************************************************************************/
 package org.pathvisio.libgpml.model;
 
+import java.util.EnumSet;
+import java.util.Set;
+
 import org.bridgedb.Xref;
 import org.pathvisio.libgpml.model.type.ObjectType;
 import org.pathvisio.libgpml.prop.StaticProperty;
@@ -115,6 +118,21 @@ public class Interaction extends LineElement implements Xrefable {
 	// ================================================================================
 	// Property Methods
 	// ================================================================================
+	/**
+	 * Returns all static properties for this pathway object.
+	 * 
+	 * @return result the set of static property for this pathway object.
+	 */
+	@Override
+	public Set<StaticProperty> getStaticPropertyKeys() {
+		Set<StaticProperty> result = super.getStaticPropertyKeys();
+		result.add(StaticProperty.XREF);
+		return result;
+	}
+	
+	/**
+	 *
+	 */
 	@Override
 	public Object getStaticProperty(StaticProperty key) { // TODO
 		Object result = super.getStaticProperty(key);

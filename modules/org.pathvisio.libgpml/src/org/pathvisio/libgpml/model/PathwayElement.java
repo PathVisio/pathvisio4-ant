@@ -17,6 +17,7 @@
 package org.pathvisio.libgpml.model;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -565,6 +566,19 @@ public abstract class PathwayElement extends PathwayObject implements Annotatabl
 		keys.addAll(getStaticPropertyKeys());
 		keys.addAll(getDynamicPropertyKeys());
 		return keys;
+	}
+
+	/**
+	 * Returns all static properties for this pathway object.
+	 * 
+	 * @return result the set of static property for this pathway object.
+	 */
+	public Set<StaticProperty> getStaticPropertyKeys() {
+		Set<StaticProperty> result = super.getStaticPropertyKeys();
+		Set<StaticProperty> propsPathwayElement = EnumSet.of(StaticProperty.COMMENT, StaticProperty.ANNOTATION, StaticProperty.CITATION,
+				StaticProperty.EVIDENCE); // TODO dynamic property
+		result.addAll(propsPathwayElement);
+		return result;
 	}
 
 	@Override

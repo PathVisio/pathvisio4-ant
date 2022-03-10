@@ -21,6 +21,7 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 
@@ -1197,6 +1198,23 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 	// ================================================================================
 	// Property Methods
 	// ================================================================================
+	/**
+	 * Returns all static properties for this pathway object.
+	 * 
+	 * @return result the set of static property for this pathway object.
+	 */
+	@Override
+	public Set<StaticProperty> getStaticPropertyKeys() {
+		Set<StaticProperty> result = super.getStaticPropertyKeys();
+		Set<StaticProperty> propsLineElement = EnumSet.of(StaticProperty.GROUPREF, StaticProperty.LINECOLOR,
+				StaticProperty.LINESTYLE, StaticProperty.LINEWIDTH, StaticProperty.CONNECTORTYPE, StaticProperty.STARTX,
+				StaticProperty.STARTY, StaticProperty.ENDX, StaticProperty.ENDY, StaticProperty.STARTARROWHEADTYPE,
+				StaticProperty.ENDARROWHEADTYPE, StaticProperty.STARTELEMENTREF, StaticProperty.ENDELEMENTREF,
+				StaticProperty.ZORDER);
+		result.addAll(propsLineElement);
+		return result;
+	}
+
 	/**
 	 *
 	 */
