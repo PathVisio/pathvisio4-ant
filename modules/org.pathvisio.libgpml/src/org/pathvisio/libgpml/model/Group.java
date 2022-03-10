@@ -488,7 +488,7 @@ public class Group extends ShapedElement implements Xrefable {
 		if (result == null) {
 			switch (key) {
 			case GROUPTYPE:
-				result = getType();
+				result = getType().getName();
 				break;
 			case TEXTLABEL:
 				result = getTextLabel();

@@ -1212,13 +1212,13 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 				result = getLineColor();
 				break;
 			case LINESTYLE:
-				result = getLineStyle();
+				result = getLineStyle().getName();//TODO
 				break;
 			case LINEWIDTH:
 				result = getLineWidth();
 				break;
 			case CONNECTORTYPE:
-				result = getConnectorType();
+				result = getConnectorType().getName(); //TODO
 				break;
 			case STARTX:
 				result = getStartLinePointX();
@@ -1233,10 +1233,10 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 				result = getEndLinePointY();
 				break;
 			case STARTARROWHEADTYPE:
-				result = getStartArrowHeadType();
+				result = getStartArrowHeadType().getName(); //TODO 
 				break;
 			case ENDARROWHEADTYPE:
-				result = getEndArrowHeadType();
+				result = getEndArrowHeadType().getName();//TODO 
 				break;
 			case STARTELEMENTREF:
 				result = getStartElementRef();

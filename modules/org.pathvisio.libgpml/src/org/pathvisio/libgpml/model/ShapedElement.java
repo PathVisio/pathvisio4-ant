@@ -947,7 +947,7 @@ public abstract class ShapedElement extends PathwayElement implements LinkableTo
 				result = getBorderColor();
 				break;
 			case BORDERSTYLE:
-				result = getBorderStyle();
+				result = getBorderStyle().getName(); //TODO 
 				break;
 			case BORDERWIDTH:
 				result = getBorderWidth();

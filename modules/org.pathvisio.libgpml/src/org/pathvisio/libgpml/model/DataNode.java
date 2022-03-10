@@ -374,10 +374,10 @@ public class DataNode extends ShapedElement implements Xrefable {
 		if (result == null) {
 			switch (key) {
 			case TEXTLABEL:
-				result = getTextLabel();// TODO
+				result = getTextLabel();
 				break;
 			case DATANODETYPE:
-				result = getType();
+				result = getType().getName(); // TODO
 				break;
 			case XREF:
 				result = getXref();
@@ -824,10 +824,10 @@ public class DataNode extends ShapedElement implements Xrefable {
 			if (result == null) {
 				switch (key) {
 				case TEXTLABEL:
-					result = getTextLabel();// TODO
+					result = getTextLabel();
 					break;
 				case STATETYPE:
-					result = getType();
+					result = getType().getName();// TODO
 					break;
 				case RELX:
 					result = getRelX();
