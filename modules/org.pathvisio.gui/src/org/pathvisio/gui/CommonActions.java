@@ -166,7 +166,7 @@ public class CommonActions implements ApplicationEventListener {
 		};
 
 		// ================================================================================
-		// New Element Actions
+		// New Element (Action Bar)
 		// ================================================================================
 		newElementActions = new Action[][] {
 				new Action[] {

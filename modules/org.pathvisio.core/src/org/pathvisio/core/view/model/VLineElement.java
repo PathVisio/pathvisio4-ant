@@ -229,7 +229,7 @@ public class VLineElement extends VPathwayElement implements VGroupable, Adjusta
 	}
 
 	/**
-	 * returns the gap that goes with the specified LineType If no line ending, the
+	 * returns the gap that goes with the specified ArrowHeadType If no line ending, the
 	 * method returns 0
 	 */
 	private double getGap(ArrowHeadType type) {

@@ -1220,9 +1220,6 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 			case CONNECTORTYPE:
 				result = getConnectorType();
 				break;
-			case ZORDER:
-				result = getZOrder();
-				break;
 			case STARTX:
 				result = getStartLinePointX();
 				break;
@@ -1246,6 +1243,9 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 				break;
 			case ENDELEMENTREF:
 				result = getEndElementRef();
+				break;
+			case ZORDER:
+				result = getZOrder();
 				break;
 			default:
 				// do nothing
@@ -1290,9 +1290,6 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 				setConnectorType(ConnectorType.fromName((String) value));
 			}
 			break;
-		case ZORDER:
-			setZOrder((Integer) value);
-			break;
 		case STARTX:
 			setStartLinePointX((Double) value);
 			break;
@@ -1324,6 +1321,9 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 			break;
 		case ENDELEMENTREF:
 			setEndElementRef((LinkableTo) value);
+			break;
+		case ZORDER:
+			setZOrder((Integer) value);
 			break;
 		default:
 			// do nothing

@@ -164,7 +164,7 @@ public class PathwayElementMenuListener implements VPathwayModelListener {
 				menu.add(vActions.removeWaypoint);
 			}
 
-			JMenu typeMenu = new JMenu("Line type");
+			JMenu typeMenu = new JMenu("Arrow head type");
 
 			ButtonGroup buttons = new ButtonGroup();
 

@@ -212,7 +212,6 @@ public class MainPanel extends JPanel implements VPathwayModelListener, Applicat
 
 		objectsPane.addButtons(actions.newCellularComponentActions, "Cellular compartments", numItemsPerRow);
 
-		//TODO
 		objectsPane.addButtons(actions.newMiscShapeActions, "Miscellaneous shapes", numItemsPerRow);
 
 		objectsPane.addButtons(actions.newTemplateActions, "Templates", numItemsPerRow);
@@ -351,6 +350,7 @@ public class MainPanel extends JPanel implements VPathwayModelListener, Applicat
 		datanodeButton.setToolTipText("Select a data node to draw");
 		datanodeButton.addButtons("Molecules", actions.newMoleculeDatanodeActions);
 		datanodeButton.addButtons("Concepts", actions.newConceptDatanodeActions);
+		datanodeButton.addButtons("Miscellaneous", actions.newMiscShapeActions);
 //		datanodeButton.addButtons("Annotations", actions.newAnnotationActions);
 		addToToolbar(datanodeButton, TB_GROUP_SHOW_IF_EDITMODE);
 		tb.addSeparator(new Dimension(2, 0));
@@ -361,7 +361,8 @@ public class MainPanel extends JPanel implements VPathwayModelListener, Applicat
 		itemsDropDown = shapeButton;
 		shapeButton.addButtons("Basic shapes", actions.newShapeActions);
 		shapeButton.addButtons("Cellular components", actions.newCellularComponentActions);
-		//TODO 
+		shapeButton.addButtons("Miscellaneous shapes", actions.newMiscShapeActions);
+		// TODO
 		addToToolbar(shapeButton, TB_GROUP_SHOW_IF_EDITMODE);
 		tb.addSeparator(new Dimension(2, 0));
 
@@ -475,7 +476,7 @@ public class MainPanel extends JPanel implements VPathwayModelListener, Applicat
 				pwe = ((Handle) pwe).getParent();
 			}
 			if (pwe instanceof VPathwayElement && !(pwe instanceof SelectionBox)) {
-				PathwayElement p = ((VPathwayElement) pwe).getPathwayObject(); //TODO 
+				PathwayElement p = ((VPathwayElement) pwe).getPathwayObject(); // TODO
 				if (p != null) {
 					swingEngine.getPopupDialogHandler().getInstance(p, !vp.isEditMode(), null, this).setVisible(true);
 				}
