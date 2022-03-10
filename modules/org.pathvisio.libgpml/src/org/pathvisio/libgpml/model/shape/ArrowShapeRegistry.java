@@ -43,7 +43,8 @@ class ArrowShapeRegistry {
 		ShapeRegistry.registerArrow("Stimulation", getArrowHead(), ArrowShape.FillType.OPEN);
 		ShapeRegistry.registerArrow("Binding", getBinding(), ArrowShape.FillType.WIRE);
 		ShapeRegistry.registerArrow("Translocation", getArrowHead(), ArrowShape.FillType.CLOSED);
-		ShapeRegistry.registerArrow("TranscriptionTranslation", getTranscriptionTranslation(), ArrowShape.FillType.OPEN);
+		ShapeRegistry.registerArrow("TranscriptionTranslation", getTranscriptionTranslation(),
+				ArrowShape.FillType.OPEN);
 
 		// Other
 		ShapeRegistry.registerArrow("LigandRound", getLRound(), ArrowShape.FillType.CLOSED);

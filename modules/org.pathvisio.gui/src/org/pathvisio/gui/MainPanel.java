@@ -206,7 +206,6 @@ public class MainPanel extends JPanel implements VPathwayModelListener, Applicat
 		objectsPane.addButtons(actions.newInteractionPanelActions, "Interaction panel", numItemsPerRow);
 		// objectsPane.addButtons(actions.newRLInteractionActions, "Receptor/ligand",
 		// numItemsPerRow);
-		objectsPane.addButtons(actions.newMIMInteractionActions, "MIM interactions", numItemsPerRow);
 		// objectsPane.addButtons(actions.newAnnotationActions, "Annotations",
 		// numItemsPerRow);
 		objectsPane.addButtons(actions.newShapeActions, "Graphical elements", numItemsPerRow);
@@ -370,7 +369,7 @@ public class MainPanel extends JPanel implements VPathwayModelListener, Applicat
 		GraphicsChoiceButton lineButton = new GraphicsChoiceButton();
 		lineButton.setToolTipText("Select an interaction to draw");
 		lineButton.addButtons("Basic interactions", actions.newInteractionActions);
-		lineButton.addButtons("MIM interactions", actions.newMIMInteractionActions);
+		lineButton.addButtons("Interaction panel", actions.newInteractionPanelActions);
 		addToToolbar(lineButton, TB_GROUP_SHOW_IF_EDITMODE);
 		tb.addSeparator(new Dimension(2, 0));
 

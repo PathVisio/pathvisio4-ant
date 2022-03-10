@@ -135,12 +135,10 @@ public class CommonActions implements ApplicationEventListener {
 	public final Action[] newMiscShapeActions; // TODO
 
 	public final Action[] newInteractionActions;
-	
+
 	public final Action[] newInteractionPanelActions;
 
 	public final Action[] newRLInteractionActions;
-
-	public final Action[] newMIMInteractionActions;
 
 	private final SwingEngine swingEngine;
 
@@ -166,6 +164,10 @@ public class CommonActions implements ApplicationEventListener {
 //					new LayoutAction(e, LayoutType.STACK_TOP),
 //					new LayoutAction(e, LayoutType.STACK_BOTTOM)
 		};
+
+		// ================================================================================
+		// New Element Actions
+		// ================================================================================
 		newElementActions = new Action[][] {
 				new Action[] {
 						new NewElementAction(e, new DefaultTemplates.DataNodeTemplate(DataNodeType.GENEPRODUCT)) },
@@ -395,53 +397,10 @@ public class CommonActions implements ApplicationEventListener {
 				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.DNA)),
 				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.RNA)),
 				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.CELL_ICON)), };
-
-		// actions for "Molecular Interaction Map Interactions" section
-		newMIMInteractionActions = new Action[] {
-//				new NewElementAction(e,
-//						new DefaultTemplates.InteractionTemplate("Necessary stimulation", LineStyleType.SOLID,
-//								ArrowHeadType.UNDIRECTED, MIMShapes.MIM_NECESSARY_STIMULATION, ConnectorType.STRAIGHT)),
-//				new NewElementAction(e,
-//						new DefaultTemplates.InteractionTemplate("Binding", LineStyleType.SOLID,
-//								ArrowHeadType.UNDIRECTED, MIMShapes.MIM_BINDING, ConnectorType.STRAIGHT)),
-//				new NewElementAction(e,
-//						new DefaultTemplates.InteractionTemplate("Conversion", LineStyleType.SOLID,
-//								ArrowHeadType.UNDIRECTED, MIMShapes.MIM_CONVERSION, ConnectorType.STRAIGHT)),
-//				new NewElementAction(e,
-//						new DefaultTemplates.InteractionTemplate("Stimulation", LineStyleType.SOLID,
-//								ArrowHeadType.UNDIRECTED, MIMShapes.MIM_STIMULATION, ConnectorType.STRAIGHT)),
-//				new NewElementAction(e,
-//						new DefaultTemplates.InteractionTemplate("Modification", LineStyleType.SOLID,
-//								ArrowHeadType.UNDIRECTED, MIMShapes.MIM_MODIFICATION, ConnectorType.STRAIGHT)),
-//				new NewElementAction(e,
-//						new DefaultTemplates.InteractionTemplate("Catalysis", LineStyleType.SOLID,
-//								ArrowHeadType.UNDIRECTED, MIMShapes.MIM_CATALYSIS, ConnectorType.STRAIGHT)),
-//				new NewElementAction(e,
-//						new DefaultTemplates.InteractionTemplate("Inhibition", LineStyleType.SOLID,
-//								ArrowHeadType.UNDIRECTED, MIMShapes.MIM_INHIBITION, ConnectorType.STRAIGHT)),
-//				new NewElementAction(e,
-//						new DefaultTemplates.InteractionTemplate("Cleavage", LineStyleType.SOLID,
-//								ArrowHeadType.UNDIRECTED, MIMShapes.MIM_CLEAVAGE, ConnectorType.STRAIGHT)),
-//				/*
-//				 * new NewElementAction(e, new DefaultTemplates.LineTemplate( "Covalent bond",
-//				 * LineStyle.SOLID, LineType.LINE, MIMShapes.MIM_COVALENT_BOND,
-//				 * ConnectorType.STRAIGHT) ), new NewElementAction(e, new
-//				 * DefaultTemplates.LineTemplate( "Branching left", LineStyle.SOLID,
-//				 * LineType.LINE, MIMShapes.MIM_BRANCHING_LEFT, ConnectorType.STRAIGHT) ), new
-//				 * NewElementAction(e, new DefaultTemplates.LineTemplate( "Branching right",
-//				 * LineStyle.SOLID, LineType.LINE, MIMShapes.MIM_BRANCHING_RIGHT,
-//				 * ConnectorType.STRAIGHT) ),
-//				 */ new NewElementAction(e,
-//						new DefaultTemplates.InteractionTemplate("Transcription-translation", LineStyleType.SOLID,
-//								ArrowHeadType.UNDIRECTED, MIMShapes.MIM_TRANSLATION, ConnectorType.STRAIGHT)),
-//				/*
-//				 * new NewElementAction(e, new DefaultTemplates.LineTemplate( "Gap",
-//				 * LineStyle.SOLID, LineType.LINE, MIMShapes.MIM_GAP, ConnectorType.STRAIGHT) ),
-//				 */ new NewElementAction(e,
-//						new DefaultTemplates.InteractionTemplate("Translocation", LineStyleType.SOLID,
-//								ArrowHeadType.UNDIRECTED, MIMShapes.MIM_TRANSLOCATION, ConnectorType.STRAIGHT)), 
-		};
-
+		
+		// ================================================================================
+		// Actions
+		// ================================================================================
 		saveAction = new SaveAction(se, true, false);
 		saveAsAction = new SaveAction(se, true, true);
 		standaloneSaveAction = new SaveAction(se, false, false);
@@ -456,6 +415,7 @@ public class CommonActions implements ApplicationEventListener {
 		aboutAction = new AboutAction(se);
 
 		exitAction = new ExitAction(se);
+
 	}
 
 	/**
