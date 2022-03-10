@@ -132,12 +132,12 @@ public enum StaticProperty implements Property {
 	// LineElement
 	// ========================================
 	// common properties
-	STARTX("startX", "Start X", StaticPropertyType.DOUBLE, 270, true, false, false),
-	STARTY("startY", "Start Y", StaticPropertyType.DOUBLE, 271, true, false, false),
-	ENDX("endX", "End X", StaticPropertyType.DOUBLE, 272, true, false, false),
-	ENDY("endY", "End Y", StaticPropertyType.DOUBLE, 273, true, false, false),
-	STARTARROWHEADTYPE("startArrowHeadType", "Start Arrow ", StaticPropertyType.ARROWHEADTYPE, 274),
-	ENDARROWHEADTYPE("endArrowHeadType", "End Arrow", StaticPropertyType.ARROWHEADTYPE, 275),
+	STARTARROWHEADTYPE("startArrowHeadType", "Start Arrow ", StaticPropertyType.ARROWHEADTYPE, 270),
+	ENDARROWHEADTYPE("endArrowHeadType", "End Arrow", StaticPropertyType.ARROWHEADTYPE, 271),
+	STARTX("startX", "Start X", StaticPropertyType.DOUBLE, 272, true, false, false),
+	STARTY("startY", "Start Y", StaticPropertyType.DOUBLE, 273, true, false, false),
+	ENDX("endX", "End X", StaticPropertyType.DOUBLE, 274, true, false, false),
+	ENDY("endY", "End Y", StaticPropertyType.DOUBLE, 275, true, false, false),
 	STARTELEMENTREF("startElementRef", "StartElementRef", StaticPropertyType.LINKABLETO, 276, false, true, false),
 	ENDELEMENTREF("endElementRef", "EndElementRef", StaticPropertyType.LINKABLETO, 277, false, true, false),
 //	ELEMENTREF("elementRef", "Element Reference", StaticPropertyType.LINKABLETO, 172, false, true, false),

@@ -76,16 +76,16 @@ public class PropertyDisplayManager {
 		registerTypeHandler(new CommentsHandler());
 		registerTypeHandler(new DataSourceHandler());
 		registerTypeHandler(new FontHandler());
+		registerTypeHandler(new ComboHandler(StaticPropertyType.ORGANISM, Organism.latinNames(), false));
 		registerTypeHandler(new ComboHandler(StaticPropertyType.DATANODETYPE, DataNodeType.getNames(), false));
 		registerTypeHandler(new ComboHandler(StaticPropertyType.STATETYPE, StateType.getNames(), false));
 		registerTypeHandler(new ComboHandler(StaticPropertyType.GROUPTYPE, GroupType.getNames(), false));
+		registerTypeHandler(new ComboHandler(StaticPropertyType.ARROWHEADTYPE, ArrowHeadType.getNames(), false));
 		registerTypeHandler(new ComboHandler(StaticPropertyType.LINESTYLETYPE, LineStyleType.getNames(), false));
 		registerTypeHandler(new ComboHandler(StaticPropertyType.CONNECTORTYPE, ConnectorType.getNames(), false));
-//		registerTypeHandler(new ComboHandler(StaticPropertyType.ARROWHEADTYPE, ArrowHeadType.getNames(), false));
-		registerTypeHandler(new ComboHandler(StaticPropertyType.ORGANISM, Organism.latinNames(), false));
-		registerTypeHandler(new ComboHandler(StaticPropertyType.ORIENTATION, OrientationType.getNames(), true));
 		registerTypeHandler(new ComboHandler(StaticPropertyType.SHAPETYPE, ShapeType.getVisibleNames(),
 				ShapeType.getVisibleValues()));
+		registerTypeHandler(new ComboHandler(StaticPropertyType.ORIENTATION, OrientationType.getNames(), true));
 		registerTypeHandler(
 				new ComboHandler(StaticPropertyType.VALIGNTYPE, VAlignType.getNames(), VAlignType.values()));
 		registerTypeHandler(
