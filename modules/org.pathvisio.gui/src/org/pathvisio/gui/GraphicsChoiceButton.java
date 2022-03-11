@@ -70,7 +70,7 @@ public class GraphicsChoiceButton extends DropDownButton {
 	 */
 	public void addButtons(Action[] aa) {
 		JPanel pane = new JPanel();
-		pane.setBackground(Color.white);
+		pane.setBackground(Color.WHITE);
 		pane.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridheight = 1;

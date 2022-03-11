@@ -130,7 +130,7 @@ public class PluginManagerDialog extends JDialog {
 			rowLayout = rowLayout + "15dlu";
 			FormLayout layout = new FormLayout("4dlu, pref, 4dlu, 150dlu, 4dlu", rowLayout);
 			PanelBuilder builder = new PanelBuilder(layout);
-			builder.setBackground(Color.white);
+			builder.setBackground(Color.WHITE);
 			if(plugins.size() > 0) {
 				builder.addLabel("Problems occured:", cc.xy(2, 2));
 				builder.addSeparator("", cc.xyw(2, 3, 3));
@@ -140,7 +140,7 @@ public class PluginManagerDialog extends JDialog {
 				builder.add(new JLabel("    " + b), cc.xy(2, count));
 				JTextArea ta = new JTextArea(b.getBundle().getStatus().getMessage());
 				ta.setForeground(Color.red);
-				ta.setBackground(Color.white);
+				ta.setBackground(Color.WHITE);
 				ta.setLineWrap(true);
 				ta.setEditable(false);
 				builder.add(ta, cc.xy(4, count));
@@ -169,7 +169,7 @@ public class PluginManagerDialog extends JDialog {
 		FormLayout layout = new FormLayout("5dlu, fill:pref:grow, 5dlu","5dlu,pref,15dlu,pref,10dlu,pref,10dlu,pref,10dlu,pref,10dlu,pref,10dlu,pref,10dlu");
 		PanelBuilder builder = new PanelBuilder(layout);
 		CellConstraints cc = new CellConstraints();
-		builder.setBackground(Color.white);
+		builder.setBackground(Color.WHITE);
 		
 		builder.addLabel(p.getBundle().getName(), cc.xy(2, 2));
 		builder.addSeparator("", cc.xyw(2, 3, 1));

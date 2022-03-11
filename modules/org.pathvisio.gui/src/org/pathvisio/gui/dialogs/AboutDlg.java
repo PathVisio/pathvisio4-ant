@@ -51,12 +51,12 @@ public class AboutDlg {
 	 */
 	public void createAndShowGUI() {
 		final JFrame aboutDlg = new JFrame();
-		aboutDlg.setBackground(Color.white);
+		aboutDlg.setBackground(Color.WHITE);
 		FormLayout layout = new FormLayout(" 4dlu, left:230dlu:grow, 4dlu",
 				"4dlu, pref, 4dlu, 240dlu:grow, 4dlu, pref, 4dlu");
 
 		JEditorPane label = new JEditorPane();
-		label.setBackground(Color.white);
+		label.setBackground(Color.WHITE);
 		label.setContentType("text/html");
 		label.setEditable(false);
 		label.setText(swingEngine.getEngine().getApplicationName() + "<br><br><hr><br>"
@@ -77,7 +77,7 @@ public class AboutDlg {
 		CellConstraints cc = new CellConstraints();
 
 		JPanel dialogBox = new JPanel();
-		dialogBox.setBackground(Color.white);
+		dialogBox.setBackground(Color.WHITE);
 		dialogBox.setLayout(layout);
 		dialogBox.add(iconLbl, cc.xy(2, 2));
 		dialogBox.add(label, cc.xy(2, 4));

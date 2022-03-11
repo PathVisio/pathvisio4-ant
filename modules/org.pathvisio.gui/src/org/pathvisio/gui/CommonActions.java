@@ -111,6 +111,8 @@ public class CommonActions implements ApplicationEventListener {
 	public final Action copyAction;
 	public final Action pasteAction;
 
+//	public final Action colorBackgroundAction; //TODO 
+
 	public final ViewActions.UndoAction undoAction;
 	
 	public final Action exitAction;
@@ -174,6 +176,7 @@ public class CommonActions implements ApplicationEventListener {
 						new NewElementAction(e, new DefaultTemplates.DataNodeTemplate(DataNodeType.GENEPRODUCT)) },
 				new Action[] {
 						new NewElementAction(e, new DefaultTemplates.DataNodeTemplate(DataNodeType.METABOLITE)) },
+						//TODO 
 				new Action[] { new NewElementAction(e, new DefaultTemplates.LabelTemplate()) },
 				new Action[] {
 						new NewElementAction(e,

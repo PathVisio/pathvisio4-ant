@@ -234,7 +234,7 @@ public class DropDownButton extends JButton implements ActionListener {
 
 		public void paintIcon(Component c, Graphics g, int x, int y) {
 			super.paintIcon(c, g, x, y);
-			g.setColor(Color.white);
+			g.setColor(Color.WHITE);
 			g.drawLine(x + 3, y + 2, x + 4, y + 1);
 			g.drawLine(x + 3, y + 3, x + 5, y + 1);
 		}

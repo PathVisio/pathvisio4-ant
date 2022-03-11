@@ -47,7 +47,7 @@ public class StatusPanel extends JPanel {
 	
 	public StatusPanel(PluginManager manager) {
 		this.manager = manager;
-		this.setBackground(Color.white);
+		this.setBackground(Color.WHITE);
 		this.setLayout(new BorderLayout());
 		
 		if(manager.getStatus().equals(PluginManagerStatus.CONNECTION_COMPLETED_FAILURE)) {
@@ -67,7 +67,7 @@ public class StatusPanel extends JPanel {
 	private JPanel getConnectionSuccessPanel() {
 		FormLayout layout = new FormLayout("5dlu,pref,5dlu,pref,fill:pref:grow","10dlu,pref,5dlu,pref,15dlu");
 		PanelBuilder builder = new PanelBuilder(layout);
-		builder.setBackground(Color.white);
+		builder.setBackground(Color.WHITE);
 		CellConstraints cc = new CellConstraints();
 		
 		builder.addLabel(manager.getStatusMessage(), cc.xy(2, 2));
@@ -87,7 +87,7 @@ public class StatusPanel extends JPanel {
 
 		FormLayout layout = new FormLayout("5dlu,pref,5dlu,pref,5dlu",row);
 		PanelBuilder builder = new PanelBuilder(layout);
-		builder.setBackground(Color.white);
+		builder.setBackground(Color.WHITE);
 		CellConstraints cc = new CellConstraints();
 
 		builder.addLabel("Repository name", cc.xy(2, 2));
@@ -101,7 +101,7 @@ public class StatusPanel extends JPanel {
 			builder.add(name, cc.xy(2, currRow));
 			
 			JEditorPane link = new JEditorPane();
-			link.setBackground(Color.white);
+			link.setBackground(Color.WHITE);
 			link.setEditable(false);
 			link.setContentType("text/html");
 			link.setText("<html><a href=\"" + repo.getUrl() + "\">" + repo.getUrl() + "</a></html>");
@@ -115,7 +115,7 @@ public class StatusPanel extends JPanel {
 	private JPanel getConnectionErrorPanel() {
 		FormLayout layout = new FormLayout("5dlu,pref,5dlu,pref,fill:pref:grow","10dlu,pref,5dlu,pref,15dlu");
 		PanelBuilder builder = new PanelBuilder(layout);
-		builder.setBackground(Color.white);
+		builder.setBackground(Color.WHITE);
 		CellConstraints cc = new CellConstraints();
 		
 		builder.addLabel(manager.getStatusMessage(), cc.xy(2, 2));
@@ -128,7 +128,7 @@ public class StatusPanel extends JPanel {
 	private JPanel progressPanel() {
 		FormLayout layout = new FormLayout("5dlu,pref,5dlu,pref,fill:pref:grow","10dlu,pref,5dlu,pref,15dlu");
 		PanelBuilder builder = new PanelBuilder(layout);
-		builder.setBackground(Color.white);
+		builder.setBackground(Color.WHITE);
 		CellConstraints cc = new CellConstraints();
 		
 		builder.addLabel(manager.getStatusMessage(), cc.xy(2, 2));

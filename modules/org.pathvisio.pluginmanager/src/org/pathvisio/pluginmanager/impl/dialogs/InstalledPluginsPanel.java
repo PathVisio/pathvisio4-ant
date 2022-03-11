@@ -72,12 +72,12 @@ public class InstalledPluginsPanel extends JPanel  {
 	public InstalledPluginsPanel(PluginManager manager) {
 		super();
 		this.manager = manager;
-		this.setBackground(Color.white);
+		this.setBackground(Color.WHITE);
 		
 		this.setLayout(new BorderLayout());
 		pluginPanel = new JPanel();
 		pluginPanel.setLayout(new GridLayout(1, 2));
-		pluginPanel.setBackground(Color.white);
+		pluginPanel.setBackground(Color.WHITE);
 		
 		List<BundleVersion> plugins = getInstalledBundles();
 		countPlugins = plugins.size();
@@ -87,16 +87,16 @@ public class InstalledPluginsPanel extends JPanel  {
 		
 		pluginPanel.add(new JScrollPane(getPluginsTable(plugins)));
 		pluginInfo = new JPanel();
-		pluginInfo.setBackground(Color.white);
+		pluginInfo.setBackground(Color.WHITE);
 		pluginPanel.add(pluginInfo);
 		this.add(pluginPanel, BorderLayout.CENTER);
 }
 	
 	private JTable getPluginsTable(List<BundleVersion> plugins) {
 		installed = new JTable(new PluginTableModel(plugins));
-		installed.setBackground(Color.white);
-		installed.setSelectionForeground(Color.white);
-		installed.setSelectionBackground(Color.white);
+		installed.setBackground(Color.WHITE);
+		installed.setSelectionForeground(Color.WHITE);
+		installed.setSelectionBackground(Color.WHITE);
 		installed.setDefaultRenderer(BundleVersion.class, new PluginCell(true, manager));
 		installed.setDefaultEditor(BundleVersion.class, new PluginCell(true, manager));
 		installed.setRowHeight(70);
@@ -127,7 +127,7 @@ public class InstalledPluginsPanel extends JPanel  {
 		FormLayout layout = new FormLayout("5dlu, fill:pref:grow, 5dlu","5dlu,pref,15dlu,pref,10dlu,pref,10dlu,pref,10dlu,pref,10dlu,pref,10dlu,pref,10dlu");
 		PanelBuilder builder = new PanelBuilder(layout);
 		CellConstraints cc = new CellConstraints();
-		builder.setBackground(Color.white);
+		builder.setBackground(Color.WHITE);
 		
 		builder.addLabel(p.getBundle().getName(), cc.xy(2, 2));
 		builder.addSeparator("", cc.xyw(2, 3, 1));
@@ -179,7 +179,7 @@ public class InstalledPluginsPanel extends JPanel  {
 	private JPanel getNorthPanel() {
 		FormLayout layout = new FormLayout("5dlu,pref,5dlu,pref,fill:pref:grow","10dlu,pref,5dlu,pref,15dlu");
 		PanelBuilder builder = new PanelBuilder(layout);
-		builder.setBackground(Color.white);
+		builder.setBackground(Color.WHITE);
 		CellConstraints cc = new CellConstraints();
 		
 		builder.addLabel("Browse by tag", cc.xy(2, 2));
@@ -246,7 +246,7 @@ public class InstalledPluginsPanel extends JPanel  {
 		countPlugins = plugins.size();
 		pluginPanel.add(new JScrollPane(getPluginsTable(plugins)));
 		pluginInfo = new JPanel();
-		pluginInfo.setBackground(Color.white);
+		pluginInfo.setBackground(Color.WHITE);
 		pluginPanel.add(pluginInfo);
 		pluginPanel.revalidate();
 		pluginPanel.repaint();

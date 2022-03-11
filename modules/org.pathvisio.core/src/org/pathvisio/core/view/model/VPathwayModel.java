@@ -529,7 +529,7 @@ public class VPathwayModel implements PathwayModelListener {
 			}
 
 			// erase the background
-			g2d.setColor(java.awt.Color.WHITE);
+			g2d.setColor(data.getPathway().getBackgroundColor());
 			g2d.fillRect(area.x, area.y, area.width, area.height);
 
 			g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
