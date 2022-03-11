@@ -128,13 +128,17 @@ public class DataNode extends ShapedElement implements Xrefable {
 	 * @param v the type to set for this datanode.
 	 */
 	public void setType(DataNodeType v) {
-		if (type == DataNodeType.ALIAS && aliasRef != null) {
-			// TODO
-			unsetAliasRef();
-			JOptionPane.showInputDialog(null, "Warning: aliasRef connection lost", "Warning",
-					JOptionPane.WARNING_MESSAGE);
-		}
 		if (type != v && v != null) {
+			if (type == DataNodeType.ALIAS && aliasRef != null) {
+				// TODO
+				unsetAliasRef();
+				int n = JOptionPane.showConfirmDialog(null, "Warning: aliasRef connection will be lost", "Warning",
+						JOptionPane.OK_CANCEL_OPTION);
+				if (n == JOptionPane.CANCEL_OPTION) {
+					return; // do not set new data node type
+				}
+			}
+			// set new data node type
 			type = v;
 			fireObjectModifiedEvent(PathwayObjectEvent.createSinglePropertyEvent(this, StaticProperty.DATANODETYPE));
 		}
@@ -382,7 +386,7 @@ public class DataNode extends ShapedElement implements Xrefable {
 		result.addAll(propsDataNode);
 		return result;
 	}
-	
+
 	/**
 	 *
 	 */
@@ -848,7 +852,7 @@ public class DataNode extends ShapedElement implements Xrefable {
 			result.addAll(propsState);
 			return result;
 		}
-		
+
 		@Override
 		public Object getStaticProperty(StaticProperty key) { // TODO
 			Object result = super.getStaticProperty(key);

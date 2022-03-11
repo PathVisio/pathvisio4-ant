@@ -38,6 +38,7 @@ import javax.swing.KeyStroke;
 import org.pathvisio.core.ApplicationEvent;
 import org.pathvisio.core.preferences.GlobalPreference;
 import org.pathvisio.core.preferences.PreferenceManager;
+import org.pathvisio.core.view.model.ViewActions;
 import org.pathvisio.gui.BackpageTextProvider.BackpageAttributes;
 import org.pathvisio.libgpml.debug.Logger;
 import org.pathvisio.gui.DataPaneTextProvider;
@@ -115,12 +116,21 @@ public class MainPanelStandalone extends MainPanel {
 		helpMenu.add(actions.aboutAction);
 		helpMenu.add(standaloneActions.helpAction);
 
+		JMenu toolMenu = new JMenu("Tools"); // TODO
+		JMenu curationMenu = new JMenu("Curation"); // TODO
+		addToMenu(actions.undoAction, curationMenu);
+		toolMenu.add(curationMenu);
+
+		helpMenu.add(actions.aboutAction);
+		helpMenu.add(standaloneActions.helpAction);
+
 		mb.add(fileMenu);
 		mb.add(editMenu);
 		mb.add(dataMenu);
 		mb.add(viewMenu);
 		mb.add(pluginsMenu);// new
 		mb.add(helpMenu);
+		mb.add(toolMenu);
 	}
 
 	private final PvDesktop desktop;

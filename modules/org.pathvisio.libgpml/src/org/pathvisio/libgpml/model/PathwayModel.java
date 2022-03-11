@@ -406,12 +406,13 @@ public class PathwayModel {
 	 * @param aliasRef the aliasRef key.
 	 */
 	protected void removeAliasRef(Group aliasRef) {
-		assert (hasAliasRef(aliasRef));
-		Set<DataNode> aliases = aliasRefToAliases.get(aliasRef);
-		for (DataNode alias : aliases) {
-			alias.unsetAliasRef();
+		if (hasAliasRef(aliasRef)) {
+			Set<DataNode> aliases = aliasRefToAliases.get(aliasRef);
+			for (DataNode alias : aliases) {
+				alias.unsetAliasRef();
+			}
+			aliasRefToAliases.remove(aliasRef);
 		}
-		aliasRefToAliases.remove(aliasRef);
 	}
 
 	// ================================================================================

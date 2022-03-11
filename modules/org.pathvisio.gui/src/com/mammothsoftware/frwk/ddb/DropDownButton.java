@@ -39,11 +39,9 @@ import javax.swing.border.CompoundBorder;
 /**
  * A Drop Down Button.
  *
- * @author m. bangham
- * Copyright 2005 Mammoth Software LLC
+ * @author m. bangham Copyright 2005 Mammoth Software LLC
  */
-public class DropDownButton extends JButton implements ActionListener 
-{
+public class DropDownButton extends JButton implements ActionListener {
 	private JPopupMenu popup = new JPopupMenu();
 	private JToolBar tb = new ToolBar();
 	private JButton mainButton;
@@ -98,9 +96,10 @@ public class DropDownButton extends JButton implements ActionListener
 	}
 
 	private void initRolloverListener() {
-		MouseListener l = new MouseAdapter(){
+		MouseListener l = new MouseAdapter() {
 			Border mainBorder = null;
 			Border arrowBorder = null;
+
 			public void mouseEntered(MouseEvent e) {
 				mainBorder = mainButton.getBorder();
 				arrowBorder = mainButton.getBorder();
@@ -109,6 +108,7 @@ public class DropDownButton extends JButton implements ActionListener
 				mainButton.getModel().setRollover(true);
 				arrowButton.getModel().setRollover(true);
 			}
+
 			public void mouseExited(MouseEvent e) {
 				mainButton.setBorder(mainBorder);
 				arrowButton.setBorder(arrowBorder);
@@ -123,45 +123,45 @@ public class DropDownButton extends JButton implements ActionListener
 	private void init() {
 		initRolloverListener();
 
-      Icon disDownArrow = new DisabledDownArrow();
-      arrowButton.setDisabledIcon(disDownArrow);
-      arrowButton.setMaximumSize(new Dimension(11,100));
-      mainButton.addActionListener(this);
-      arrowButton.addActionListener(this);
+		Icon disDownArrow = new DisabledDownArrow();
+		arrowButton.setDisabledIcon(disDownArrow);
+		arrowButton.setMaximumSize(new Dimension(11, 100));
+		mainButton.addActionListener(this);
+		arrowButton.addActionListener(this);
 
-      setMargin(new Insets(0, 0, 0, 0));
+		setMargin(new Insets(0, 0, 0, 0));
 
+		// Windows draws border around buttons, but not toolbar buttons
+		// Using a toolbar keeps the look consistent.
+		tb.setBorder(null);
+		tb.setMargin(new Insets(0, 0, 0, 0));
+		tb.setFloatable(false);
+		tb.add(mainButton);
+		tb.add(arrowButton);
+		add(tb);
 
-      // Windows draws border around buttons, but not toolbar buttons
-      // Using a toolbar keeps the look consistent.
-      tb.setBorder(null);
-      tb.setMargin(new Insets(0, 0, 0, 0));
-      tb.setFloatable(false);
-      tb.add(mainButton);
-      tb.add(arrowButton);
-      add(tb);
-
-      setFixedSize(mainButton, arrowButton);
+		setFixedSize(mainButton, arrowButton);
 
 	}
+
 	/*
 	 * Forces the width of this button to be the sum of the widths of the main
-	 * button and the arrow button. The height is the max of the main button or
-	 * the arrow button.
+	 * button and the arrow button. The height is the max of the main button or the
+	 * arrow button.
 	 */
 	private void setFixedSize(JButton mainButton, JButton arrowButton) {
-      int width = (int)(mainButton.getPreferredSize().getWidth() +
-      					arrowButton.getPreferredSize().getWidth());
-      int height = (int)Math.max(mainButton.getPreferredSize().getHeight(),
-      					arrowButton.getPreferredSize().getHeight());
+		int width = (int) (mainButton.getPreferredSize().getWidth() + arrowButton.getPreferredSize().getWidth());
+		int height = (int) Math.max(mainButton.getPreferredSize().getHeight(),
+				arrowButton.getPreferredSize().getHeight());
 
-      setMaximumSize(new Dimension(width, height));
-      setMinimumSize(new Dimension(width, height));
-      setPreferredSize(new Dimension(width, height));
+		setMaximumSize(new Dimension(width, height));
+		setMinimumSize(new Dimension(width, height));
+		setPreferredSize(new Dimension(width, height));
 	}
 
 	/**
 	 * Removes a component from the popup
+	 * 
 	 * @param component
 	 */
 	public void removeComponent(Component component) {
@@ -170,6 +170,7 @@ public class DropDownButton extends JButton implements ActionListener
 
 	/**
 	 * Adds a component to the popup
+	 * 
 	 * @param component
 	 * @return
 	 */
@@ -178,96 +179,90 @@ public class DropDownButton extends JButton implements ActionListener
 	}
 
 	/**
-	 * If true, the direct action will be executed
-	 * when the left button is clicked.
-	 * If false, both the left and the right part of the button
-	 * work the same way 
+	 * If true, the direct action will be executed when the left button is clicked.
+	 * If false, both the left and the right part of the button work the same way
+	 * 
 	 * @param value set toggle behaviour
 	 */
-	public void setDirectActionEnabled(boolean value) 
-	{
+	public void setDirectActionEnabled(boolean value) {
 		this.directActionEnabled = value;
 	}
 
-	public void actionPerformed(ActionEvent ae)
-	{
+	public void actionPerformed(ActionEvent ae) {
 		// if the directAction behaviour is enabled, and a directAction is set, and
 		// the source of the event is the left part,
-		if (directActionEnabled && directAction != null && ae.getSource() == mainButton)
-		{
+		if (directActionEnabled && directAction != null && ae.getSource() == mainButton) {
 			ae.setSource(this);
 			directAction.actionPerformed(ae);
-		}
-		else
-		{
+		} else {
 			// otherwise just show the drop-down.
 			JPopupMenu popup = getPopupMenu();
 			popup.show(this, 0, this.getHeight());
 		}
 	}
-   
-   public JPopupMenu getPopupMenu() { return popup; }
 
-   private static class DownArrow implements Icon {
+	public JPopupMenu getPopupMenu() {
+		return popup;
+	}
 
-      Color arrowColor = Color.black;
+	private static class DownArrow implements Icon {
 
-      public void paintIcon(Component c, Graphics g, int x, int y) {
-          g.setColor(arrowColor);
-          g.drawLine(x, y, x+4, y);
-          g.drawLine(x+1, y+1, x+3, y+1);
-          g.drawLine(x+2, y+2, x+2, y+2);
-      }
+		Color arrowColor = Color.black;
 
-      public int getIconWidth() {
-          return 6;
-      }
+		public void paintIcon(Component c, Graphics g, int x, int y) {
+			g.setColor(arrowColor);
+			g.drawLine(x, y, x + 4, y);
+			g.drawLine(x + 1, y + 1, x + 3, y + 1);
+			g.drawLine(x + 2, y + 2, x + 2, y + 2);
+		}
 
-      public int getIconHeight() {
-          return 4;
-      }
+		public int getIconWidth() {
+			return 6;
+		}
 
-  }
+		public int getIconHeight() {
+			return 4;
+		}
 
-   private static class DisabledDownArrow extends DownArrow {
+	}
 
-      public DisabledDownArrow() {
-          arrowColor = new Color(140, 140, 140);
-      }
+	private static class DisabledDownArrow extends DownArrow {
 
-      public void paintIcon(Component c, Graphics g, int x, int y) {
-          super.paintIcon(c, g, x, y);
-          g.setColor(Color.white);
-          g.drawLine(x+3, y+2, x+4, y+1);
-          g.drawLine(x+3, y+3, x+5, y+1);
-      }
-  }
+		public DisabledDownArrow() {
+			arrowColor = new Color(140, 140, 140);
+		}
 
-   private static class ToolBar extends JToolBar
-   {
-	   public void updateUI()
-	   {
-		   super.updateUI();
-		   setBorder(null);
-	   }
-   }
+		public void paintIcon(Component c, Graphics g, int x, int y) {
+			super.paintIcon(c, g, x, y);
+			g.setColor(Color.white);
+			g.drawLine(x + 3, y + 2, x + 4, y + 1);
+			g.drawLine(x + 3, y + 3, x + 5, y + 1);
+		}
+	}
 
-   /**
-    * Set the Action that will be executed when the main part of the dropdown button is clicked.
-    * This value is only used if set
-    * @param defaultAction A menuitem, action or other actionListener that will get invoked
-    */
-   public void setDirectAction(ActionListener defaultAction)
-   {
-	   directAction = defaultAction;
+	private static class ToolBar extends JToolBar {
+		public void updateUI() {
+			super.updateUI();
+			setBorder(null);
+		}
+	}
 
-   }
+	/**
+	 * Set the Action that will be executed when the main part of the dropdown
+	 * button is clicked. This value is only used if set
+	 * 
+	 * @param defaultAction A menuitem, action or other actionListener that will get
+	 *                      invoked
+	 */
+	public void setDirectAction(ActionListener defaultAction) {
+		directAction = defaultAction;
 
-   @Override
-   /** sets the icon for the left part only */
-   public void setIcon(Icon icon)
-   {
-	   mainButton.setIcon(icon);
-   }
+	}
+
+	@Override
+	/** sets the icon for the left part only */
+	public void setIcon(Icon icon) {
+		mainButton.setIcon(icon);
+	}
 
 }

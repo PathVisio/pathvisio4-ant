@@ -35,6 +35,7 @@ import org.pathvisio.core.view.model.Handle;
 import org.pathvisio.core.view.model.VAnchor;
 import org.pathvisio.core.view.model.VCitation;
 import org.pathvisio.core.view.model.VDataNode;
+import org.pathvisio.core.view.model.VDrawable;
 import org.pathvisio.core.view.model.VElement;
 import org.pathvisio.core.view.model.VGroup;
 import org.pathvisio.core.view.model.VInfoBox;
@@ -138,13 +139,24 @@ public class PathwayElementMenuListener implements VPathwayModelListener {
 			GroupType s = ((VGroup) e).getPathwayObject().getType();
 			if (s == GroupType.GROUP) {
 				menu.add(vActions.toggleGroup);
+				menu.add(vActions.addAlias); // TODO
 			} else {
 				menu.add(vActions.toggleComplex);
+				menu.add(vActions.addAlias); // TODO
 			}
 			menu.addSeparator();
 		} else if (vp.getSelectedGraphics().size() > 1) {
 			menu.add(vActions.toggleGroup);
 			menu.add(vActions.toggleComplex);
+			boolean includesGroup = false;
+			for (VDrawable p : vp.getSelectedGraphics()) {
+				if (p instanceof VGroup) {
+					includesGroup = true;
+				}
+			}
+			if (includesGroup) {
+				menu.add(vActions.addAlias); // TODO
+			}
 		}
 
 		if (e instanceof VDataNode) {
@@ -256,7 +268,7 @@ public class PathwayElementMenuListener implements VPathwayModelListener {
 	}
 
 	public void vPathwayModelEvent(VPathwayModelEvent e) {
-		switch (e.getType()) { //TODO 
+		switch (e.getType()) { // TODO
 		case ELEMENT_CLICKED_DOWN:
 			if (e.getAffectedElement() instanceof VCitation) {
 				VCitation c = (VCitation) e.getAffectedElement();

@@ -390,10 +390,11 @@ public abstract class DefaultTemplates {
 			e.setEndLinePointY(my);
 			e.setStartArrowHeadType(startType);
 			e.setEndArrowHeadType(endType);
-			// setInitialSize(e); TODO not needed?
+			setInitialSize(e); 
 			// default lineColor, lineWidth
 			e.setLineStyle(lineStyle);
 			e.setConnectorType(connectorType);
+			e.setZOrder(Z_ORDER_LINE);
 			// use addElement TODO
 			addElement(e, p);
 			return new Interaction[] { e };
@@ -437,10 +438,11 @@ public abstract class DefaultTemplates {
 			e.setEndLinePointY(my);
 			e.setStartArrowHeadType(startType);
 			e.setEndArrowHeadType(endType);
-			// setInitialSize(e); TODO not needed?
+			setInitialSize(e);
 			// default lineColor, lineWidth
 			e.setLineStyle(lineStyle);
 			e.setConnectorType(connectorType);
+			e.setZOrder(Z_ORDER_LINE);
 			// use addElement TODO
 			addElement(e, p);
 			return new GraphicalLine[] { e };

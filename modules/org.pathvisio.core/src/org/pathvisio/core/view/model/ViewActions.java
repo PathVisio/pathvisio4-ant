@@ -33,6 +33,7 @@ import java.util.Set;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 
 import org.pathvisio.core.ApplicationEvent;
@@ -43,11 +44,14 @@ import org.pathvisio.libgpml.model.connector.FreeConnectorShape;
 import org.pathvisio.libgpml.model.shape.ShapeType;
 import org.pathvisio.libgpml.model.type.AnchorShapeType;
 import org.pathvisio.libgpml.model.type.ArrowHeadType;
+import org.pathvisio.libgpml.model.type.DataNodeType;
 import org.pathvisio.libgpml.model.type.GroupType;
 import org.pathvisio.libgpml.model.LineElement;
+import org.pathvisio.libgpml.model.DataNode;
 import org.pathvisio.libgpml.model.DataNode.State;
 import org.pathvisio.libgpml.model.GraphLink.LinkableTo;
 import org.pathvisio.libgpml.model.GraphicalLine;
+import org.pathvisio.libgpml.model.Group;
 import org.pathvisio.libgpml.model.Interaction;
 import org.pathvisio.libgpml.model.Label;
 import org.pathvisio.libgpml.model.PathwayElement;
@@ -77,7 +81,7 @@ import org.pathvisio.core.view.model.SelectionBox.SelectionListener;
  * An instance of this class belonging to a {@link VPathwayModel} can be
  * obtained using {@link VPathwayModel#getViewActions()}.
  *
- * @author thomas
+ * @author thomas, finterly
  */
 public class ViewActions implements VPathwayModelListener, SelectionListener {
 	private static final URL IMG_COPY = Resources.getResourceURL("copy.gif");
@@ -114,6 +118,7 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 	public final SelectAllAction selectAll;
 	public final GroupAction toggleGroup;
 	public final ComplexAction toggleComplex;
+	public final AddAlias addAlias;
 	public final DeleteAction delete1;
 	public final DeleteAction delete2;
 	public final CopyAction copy;
@@ -150,6 +155,7 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 		selectAll = new SelectAllAction();
 		toggleGroup = new GroupAction();
 		toggleComplex = new ComplexAction();
+		addAlias = new AddAlias();
 		delete1 = new DeleteAction(java.awt.event.KeyEvent.VK_DELETE);
 		delete2 = new DeleteAction(java.awt.event.KeyEvent.VK_BACK_SPACE);
 		copy = new CopyAction(engine);
@@ -715,6 +721,7 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 		/**
 		 *
 		 */
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (!isEnabled())
 				return; // Don't perform action if not enabled
@@ -727,6 +734,7 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 		/**
 		 *
 		 */
+		@Override
 		public void selectionEvent(SelectionEvent e) {
 			switch (e.type) {
 			case SelectionEvent.OBJECT_ADDED:
@@ -757,6 +765,86 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 				putValue(SHORT_DESCRIPTION, ungroupTt);
 			}
 		}
+	}
+
+	/**
+	 * @author unknown
+	 *
+	 */
+	private class AddAlias extends AbstractAction {
+
+		private final static int POSITION_OFFSET = 65;
+
+		AddAlias() {
+			super("Add Alias...");
+		}
+
+		/**
+		 *
+		 */
+		public void actionPerformed(ActionEvent arg0) {
+			List<VDrawable> selection = vPathwayModel.getSelectedGraphics();
+			if (selection.size() > 0) {
+				vPathwayModel.getUndoManager().newAction("Add Alias");
+				for (VDrawable g : selection) {
+					if (g instanceof VGroup) {
+						Group gp = (Group) g.getPathwayObject();
+						// default alias
+						DataNode elt = gp.addAlias("Alias");
+						DefaultTemplates.setInitialSize(elt);
+						elt.setCenterX(gp.getCenterX() + (gp.getWidth() / 2) + POSITION_OFFSET);
+						elt.setCenterY(gp.getCenterY());
+						elt.setShapeType(ShapeType.OVAL);
+						elt.setZOrder(vPathwayModel.getMaxZOrder() + 1);
+					}
+				}
+			}
+		}
+
+	}
+
+	/**
+	 * @author unknown
+	 *
+	 */
+	private class AddAliasRef extends AbstractAction {
+
+		private Group group = null;
+
+		AddAliasRef() {
+			super("Reference Group...");
+		}
+
+		/**
+		 *
+		 */
+		public void actionPerformed(ActionEvent arg0) {
+			List<VDrawable> selection = vPathwayModel.getSelectedGraphics();
+			if (selection.size() > 0) {
+				vPathwayModel.getUndoManager().newAction("Add AliasRef");
+				for (VDrawable d : selection) {
+					if (d instanceof VDataNode) {
+						DataNode dn = (DataNode) d.getPathwayObject();
+						if (dn.getType() != DataNodeType.ALIAS) {
+							JOptionPane.showMessageDialog(null, "Please set data node type to Alias first", "Info",
+									JOptionPane.OK_OPTION);
+							return; // do not set new data node type
+						} else {
+							dn.setAliasRef(group);
+						}
+					}
+				}
+			}
+		}
+
+		public void setGroup(PathwayElement group) {
+			this.group = (Group) group;
+		}
+
+		private void resetPosition() {
+			group = null;
+		}
+
 	}
 
 	private class DeleteAction extends AbstractAction {

@@ -39,12 +39,13 @@ class ArrowShapeRegistry {
 		ShapeRegistry.registerArrow("Directed", getArrowHead(), ArrowShape.FillType.CLOSED);
 		ShapeRegistry.registerArrow("Conversion", getArrowHead(), ArrowShape.FillType.CLOSED);
 		ShapeRegistry.registerArrow("Inhibition", getTBar(), ArrowShape.FillType.OPEN, TBARWIDTH + TBAR_GAP);
-		ShapeRegistry.registerArrow("Catalysis", getCatalysis(), ArrowShape.FillType.OPEN);
+		ShapeRegistry.registerArrow("Catalysis", getCatalysis(), ArrowShape.FillType.OPEN,
+				CATALYSIS_DIAM + CATALYSIS_GAP);
 		ShapeRegistry.registerArrow("Stimulation", getArrowHead(), ArrowShape.FillType.OPEN);
-		ShapeRegistry.registerArrow("Binding", getBinding(), ArrowShape.FillType.WIRE);
+		ShapeRegistry.registerArrow("Binding", getBinding(), ArrowShape.FillType.CLOSED);
 		ShapeRegistry.registerArrow("Translocation", getArrowHead(), ArrowShape.FillType.CLOSED);
-		ShapeRegistry.registerArrow("TranscriptionTranslation", getTranscriptionTranslation(),
-				ArrowShape.FillType.OPEN);
+		ShapeRegistry.registerArrow("TranscriptionTranslation", getTranscriptionTranslation(), ArrowShape.FillType.WIRE,
+				ARROWWIDTH + ARROWHEIGHT);
 
 		// Other
 		ShapeRegistry.registerArrow("LigandRound", getLRound(), ArrowShape.FillType.CLOSED);
@@ -76,7 +77,9 @@ class ArrowShapeRegistry {
 	private static final int TAIL = ARROWWIDTH / 2;
 
 	/**
-	 * @return
+	 * Returns standard arrowhead shape.
+	 * 
+	 * @return the arrowhead shape.
 	 */
 	private static Shape getArrowHead() {
 		int[] xpoints = new int[] { 0, -ARROWWIDTH, -ARROWWIDTH };
@@ -85,14 +88,18 @@ class ArrowShapeRegistry {
 	}
 
 	/**
-	 * @return
+	 * Returns catalysis arrowhead shape.
+	 * 
+	 * @return the catalysis arrowhead shape.
 	 */
 	static private java.awt.Shape getCatalysis() {
 		return new Ellipse2D.Double(0, -CATALYSIS_DIAM / 2, CATALYSIS_DIAM, CATALYSIS_DIAM);
 	}
 
 	/**
-	 * @return
+	 * Returns binding arrowhead shape.
+	 * 
+	 * @return the binding arrowhead shape.
 	 */
 	static private java.awt.Shape getBinding() {
 		GeneralPath path = new GeneralPath();
@@ -105,7 +112,9 @@ class ArrowShapeRegistry {
 	}
 
 	/**
-	 * @return
+	 * Returns transcription-translation arrowhead shape.
+	 * 
+	 * @return the transcription-translation arrowhead shape.
 	 */
 	static private java.awt.Shape getTranscriptionTranslation() {
 		GeneralPath path = new GeneralPath();
@@ -120,7 +129,9 @@ class ArrowShapeRegistry {
 	}
 
 	/**
-	 * @return
+	 * Returns inhibition (Tbar) arrowhead shape.
+	 * 
+	 * @return the inhibition (Tbar) arrowhead shape.
 	 */
 	private static Shape getTBar() {
 		return new Rectangle2D.Double(0, -TBARHEIGHT / 2, TBARWIDTH, TBARHEIGHT);

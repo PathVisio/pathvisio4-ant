@@ -112,6 +112,7 @@ public class CommonActions implements ApplicationEventListener {
 	public final Action pasteAction;
 
 	public final ViewActions.UndoAction undoAction;
+	
 	public final Action exitAction;
 
 	public final Action[] zoomActions;
@@ -397,7 +398,7 @@ public class CommonActions implements ApplicationEventListener {
 				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.DNA)),
 				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.RNA)),
 				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.CELL_ICON)), };
-		
+
 		// ================================================================================
 		// Actions
 		// ================================================================================
@@ -409,7 +410,7 @@ public class CommonActions implements ApplicationEventListener {
 		undoAction = new ViewActions.UndoAction(se.getEngine());
 		copyAction = new ViewActions.CopyAction(se.getEngine());
 		pasteAction = new ViewActions.PasteAction(se.getEngine());
-
+		
 		exportAction = new ExportAction(se);
 		importAction = new ImportAction(se);
 		aboutAction = new AboutAction(se);

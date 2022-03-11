@@ -61,6 +61,7 @@ import org.pathvisio.core.view.model.VPathwayModel;
 import org.pathvisio.core.view.model.VPathwayModelEvent;
 import org.pathvisio.core.view.model.VPathwayModelListener;
 import org.pathvisio.core.view.model.VPathwayObject;
+import org.pathvisio.core.view.model.ViewActions;
 import org.pathvisio.gui.BackpageTextProvider.BackpageAttributes;
 import org.pathvisio.gui.BackpageTextProvider.BackpageXrefs;
 import org.pathvisio.gui.CommonActions.ZoomAction;
