@@ -69,6 +69,7 @@ import org.pathvisio.gui.handler.PathwayTableModel;
 import org.pathvisio.libgpml.debug.Logger;
 import org.pathvisio.libgpml.model.PathwayElement;
 import org.pathvisio.libgpml.model.PathwayObject;
+import org.pathvisio.libgpml.util.ColorUtils;
 import org.pathvisio.libgpml.util.Utils;
 
 import com.mammothsoftware.frwk.ddb.DropDownButton;
@@ -196,7 +197,7 @@ public class MainPanel extends JPanel implements VPathwayModelListener, Applicat
 		pathwayScrollPane = new JScrollPane();
 		// set background color when no VPathway is loaded, override l&f because it is
 		// usually white.
-		pathwayScrollPane.getViewport().setBackground(Color.LIGHT_GRAY);
+		pathwayScrollPane.getViewport().setBackground(Color.decode("#f0f0f0")); // UI Design
 
 		objectsPane = new ObjectsPane(swingEngine);
 		int numItemsPerRow = 10;

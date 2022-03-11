@@ -122,8 +122,6 @@ public class PropertyDisplayManager {
 		Set<Object> result = new HashSet<Object>();
 		// add static properties
 		for (Property p : e.getStaticPropertyKeys()) {
-			System.out.println(p.toString());
-
 			if (isVisible(p)) {
 				result.add(p);
 			}

@@ -56,7 +56,7 @@ public abstract class ShapedElement extends PathwayElement implements LinkableTo
 	private boolean fontStyle = false; // italic or normal
 	private boolean fontDecoration = false; // underline or normal
 	private boolean fontStrikethru = false;// strikethru or normal
-	private int fontSize = 12; // 12, only integer full size values
+	private double fontSize = 12; // allows 0.5 sizes
 	private HAlignType hAlign = HAlignType.CENTER; // horizontal alignment of text
 	private VAlignType vAlign = VAlignType.MIDDLE; // vertical alignment of text
 	// shape style properties
@@ -444,17 +444,18 @@ public abstract class ShapedElement extends PathwayElement implements LinkableTo
 	}
 
 	/**
-	 * Sets point value for the size of the font.
+	 * Sets point value for the size of the font. Rounds any decimals to the nearest
+	 * 0.5. 
 	 * 
 	 * @param v the value for the size of the font.
 	 * @throws IllegalArgumentException if fontSize is a negative value.
 	 */
-	public void setFontSize(int v) {
+	public void setFontSize(double v) {
 		if (v < 0) {
 			throw new IllegalArgumentException("Tried to set font size < 0: " + v);
 		}
 		if (fontSize != v) {
-			fontSize = v;
+			fontSize = Math.round(v * 2) / 2.0; // round to nearest 0.5
 			fireObjectModifiedEvent(PathwayObjectEvent.createSinglePropertyEvent(this, StaticProperty.FONTSIZE));
 		}
 	}
@@ -1038,7 +1039,7 @@ public abstract class ShapedElement extends PathwayElement implements LinkableTo
 			setFontStrikethru((Boolean) value);
 			break;
 		case FONTSIZE:
-			setFontSize((Integer) value);
+			setFontSize((Double) value);
 			break;
 		case HALIGN:
 			setHAlign((HAlignType) value);

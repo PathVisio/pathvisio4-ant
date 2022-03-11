@@ -132,10 +132,10 @@ public class GraphicsChoiceButton extends DropDownButton {
 	 */
 	public void addLabel(String s) {
 		JLabel title = new JLabel(s);
-		title.setForeground(new Color(50, 21, 110));
+		title.setForeground(new Color(50, 21, 110));// UI design
 		title.setFont(new Font("sansserif", Font.BOLD, 12));
 		JPanel titlePanel = new JPanel();
-		titlePanel.setBackground(new Color(221, 231, 238));
+		titlePanel.setBackground(new Color(221, 231, 238)); // UI design
 		titlePanel.add(title);
 		addComponent(titlePanel);
 	}
