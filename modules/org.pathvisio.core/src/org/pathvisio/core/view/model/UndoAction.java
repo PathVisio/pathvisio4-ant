@@ -25,7 +25,7 @@ import org.pathvisio.libgpml.model.PathwayModel;
  * TODO: remember selection state as well.
  */
 public class UndoAction {
-	
+
 	public UndoAction(String aMessage, PathwayModel current) {
 		message = aMessage;
 		originalState = current;
@@ -55,11 +55,11 @@ public class UndoAction {
 	}
 
 	public void undo() {
-		/*
-		 * UndoManager um = Engine.getCurrent().getActiveVPathway().getUndoManager();
-		 * Engine.getCurrent().createVPathway (originalState);
-		 * Engine.getCurrent().getActiveVPathway().setUndoManager(um);
-		 */
+		// TODO
+//		UndoManager um = Engine.getCurrent().getActiveVPathway().getUndoManager();
+//		Engine.getCurrent().createVPathway(originalState);
+//		Engine.getCurrent().getActiveVPathway().setUndoManager(um);
+
 		if (undoMgr != null) {
 			undoMgr.getEngine().replacePathwayModel(originalState);
 		}

@@ -33,12 +33,15 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.commons.collections4.BidiMap;
+import org.apache.commons.collections4.bidimap.DualHashBidiMap;
 import org.bridgedb.Xref;
 import org.pathvisio.libgpml.debug.Logger;
 import org.pathvisio.libgpml.io.ConverterException;
 import org.pathvisio.libgpml.model.DataNode.State;
 import org.pathvisio.libgpml.model.GraphLink.LinkableFrom;
 import org.pathvisio.libgpml.model.GraphLink.LinkableTo;
+import org.pathvisio.libgpml.model.LineElement.Anchor;
 import org.pathvisio.libgpml.model.type.ObjectType;
 import org.pathvisio.libgpml.util.Utils;
 
@@ -885,6 +888,7 @@ public class PathwayModel {
 			addEvidence((Evidence) o);
 			break;
 		default:
+			System.out.println(o);
 			throw new IllegalArgumentException("Pathway object cannot be directly added to pathway model.");
 //			break; TODO
 
@@ -1004,13 +1008,66 @@ public class PathwayModel {
 	// ================================================================================
 	// Clone Methods
 	// ================================================================================
+	/**
+	 * TODO Clones all?
+	 */
 	public PathwayModel clone() {
 		PathwayModel result = new PathwayModel();
 		// TODO!
 		result.replacePathway((Pathway) pathway.copy().getNewElement());
-		for (PathwayElement o : getPathwayElements()) {
-			result.add(o.copy().getNewElement()); // TODO
+		BidiMap<PathwayObject, PathwayObject> newToSource = new DualHashBidiMap<PathwayObject, PathwayObject>();
+		for (PathwayElement e : getPathwayElements()) {
+			CopyElement copyElement = e.copy();
+			PathwayObject newElement = copyElement.getNewElement();
+			PathwayObject srcElement = copyElement.getSourceElement();
+			result.add(newElement);
+			// store information
+			newToSource.put(newElement, srcElement);
+			// specially store anchor information
+			if (newElement instanceof LineElement) {
+				Iterator<Anchor> it1 = ((LineElement) newElement).getAnchors().iterator();
+				Iterator<Anchor> it2 = ((LineElement) srcElement).getAnchors().iterator();
+				while (it1.hasNext() && it2.hasNext()) {
+					Anchor na = it1.next();
+					Anchor sa = it2.next();
+					if (na != null && sa != null) {
+						newToSource.put(na, sa);
+					}
+				}
+			}
 		}
+		// link LineElement LinePoint elementRefs
+		for (LineElement l : result.getLineElements()) {
+			LineElement src = (LineElement) newToSource.get(l);
+			// set start elementRef
+			LinkableTo srcStartElementRef = src.getStartElementRef();
+			if (srcStartElementRef != null) {
+				LinkableTo newStartElementRef = (LinkableTo) newToSource.getKey(srcStartElementRef);
+				if (newStartElementRef != null) {
+					l.setStartElementRef(newStartElementRef);
+				}
+			}
+			// set end elementRef
+			LinkableTo srcEndElementRef = src.getEndElementRef();
+			if (srcEndElementRef != null) {
+				LinkableTo newEndElementRef = (LinkableTo) newToSource.getKey(srcEndElementRef);
+				if (newEndElementRef != null) {
+					l.setEndElementRef(newEndElementRef);
+				}
+			}
+		}
+		// add group members in new Group
+		for (Group g : result.getGroups()) {
+			Group src = (Group) newToSource.get(g);
+			for (Groupable srcMember : src.getPathwayElements()) {
+				Groupable newMember = (Groupable) newToSource.getKey(srcMember);
+				if (newMember != null) {
+					g.addPathwayElement(newMember);
+				}
+			}
+
+		}
+
 		result.changed = changed;
 		if (sourceFile != null) {
 			result.sourceFile = new File(sourceFile.getAbsolutePath());

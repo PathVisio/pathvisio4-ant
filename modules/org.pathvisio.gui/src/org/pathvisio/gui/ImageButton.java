@@ -16,11 +16,14 @@
  ******************************************************************************/
 package org.pathvisio.gui;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Insets;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 
 import javax.swing.Action;
 import javax.swing.JButton;
@@ -32,11 +35,28 @@ import javax.swing.JButton;
  */
 public class ImageButton extends JButton {
 
+//	Color oldFColor, oldBColor;
+//
+//	private FocusListener focusListener = new FocusListener() {
+//
+//		@Override
+//		public void focusGained(FocusEvent e) {
+//			setBackground(Color.YELLOW);
+//			setForeground(Color.BLUE);
+//		}
+//
+//		@Override
+//		public void focusLost(FocusEvent e) {
+//			setBackground(oldBColor);
+//			setForeground(oldFColor);
+//		}
+//	};
+
 	public ImageButton(Action a) {
 		super();
 		this.setRolloverEnabled(true);
 		initRolloverListener();
-		Dimension dim = new Dimension(25, 25);
+		Dimension dim = new Dimension(25, 25); // UI Design
 		this.setAction(a);
 		this.setSize(dim);
 		this.setPreferredSize(dim);
@@ -45,6 +65,12 @@ public class ImageButton extends JButton {
 		this.setText(null);
 		this.setMargin(new Insets(0, 0, 0, 0));
 		this.setContentAreaFilled(false);
+
+		// UI Design
+//		oldFColor = getForeground();
+//		oldBColor = getBackground();
+//		setFocusPainted(false);
+//		addFocusListener(focusListener);
 	}
 
 	protected void initRolloverListener() {

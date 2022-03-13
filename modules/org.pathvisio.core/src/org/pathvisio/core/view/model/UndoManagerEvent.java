@@ -14,12 +14,17 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  ******************************************************************************/
-package org.pathvisio.core.view;
+package org.pathvisio.core.view.model;
 
-import java.util.EventListener;
+/** signals that an action was added or removed from the undo stack. */
+public class UndoManagerEvent {
+	public UndoManagerEvent(String msg) {
+		undoMessage = msg;
+	}
 
-/** implement this if you wish to respond to changes in the Undo stack */
-public interface UndoManagerListener extends EventListener
-{
-	public void undoManagerEvent (UndoManagerEvent e);
+	public String getMessage() {
+		return undoMessage;
+	}
+
+	private String undoMessage;
 }

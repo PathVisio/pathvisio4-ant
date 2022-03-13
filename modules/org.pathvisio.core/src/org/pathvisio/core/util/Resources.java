@@ -37,5 +37,17 @@ public class Resources {
 			Logger.log.error("Couldn't load resource '" + name + "'");
 		return url;
 	}
+	
+	/**
+	 * Get the {@link URL} for the PathVisio logo. 
+	 * 
+	 * @return the URL pointing to the PathVisio logo. 
+	 */
+	public static URL getLogo() {
+		URL url = Resources.class.getClassLoader().getResource("bigcateye.gif");
+		if (url == null)
+			Logger.log.error("Couldn't find PathVisio logo in resources");
+		return url;
+	}
 
 }

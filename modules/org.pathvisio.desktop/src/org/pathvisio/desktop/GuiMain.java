@@ -211,9 +211,8 @@ public class GuiMain implements GdbEventListener {
 		// dispose on close, otherwise windowClosed event is not called.
 		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
-		URL url = Resources.getResourceURL("bigcateye.gif");
-		frame.setIconImage(Toolkit.getDefaultToolkit().createImage(url));
-
+		frame.setIconImage(Toolkit.getDefaultToolkit().createImage(Resources.getLogo()));
+		
 		frame.add(mainPanel, BorderLayout.CENTER);
 
 		JPanel statusBar = new JPanel();

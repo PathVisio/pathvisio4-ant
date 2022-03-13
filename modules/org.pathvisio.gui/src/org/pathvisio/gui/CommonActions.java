@@ -108,13 +108,11 @@ public class CommonActions implements ApplicationEventListener {
 	public final Action importAction;
 	public final Action exportAction;
 
+	public final ViewActions.UndoAction undoAction;
 	public final Action copyAction;
 	public final Action pasteAction;
+//	public final Action colorBackgroundAction; TODO 
 
-//	public final Action colorBackgroundAction; //TODO 
-
-	public final ViewActions.UndoAction undoAction;
-	
 	public final Action exitAction;
 
 	public final Action[] zoomActions;
@@ -123,25 +121,18 @@ public class CommonActions implements ApplicationEventListener {
 
 	public final Action[][] newElementActions;
 
+	// Objects Side Panel
 	public final Action[] newMoleculeDatanodeActions;
-
 	public final Action[] newConceptDatanodeActions;
-
-	public final Action[] newAnnotationActions;
+	public final Action[] newInteractionActions;
+	public final Action[] newInteractionPanelActions;
+	public final Action[] newRLInteractionActions; // TODO
+	public final Action[] newLabelActions;
+	public final Action[] newShapeActions;
+	public final Action[] newCellularComponentActions;
+	public final Action[] newMiscShapeActions;
 
 	public final Action[] newTemplateActions;
-
-	public final Action[] newShapeActions;
-
-	public final Action[] newCellularComponentActions;
-
-	public final Action[] newMiscShapeActions; // TODO
-
-	public final Action[] newInteractionActions;
-
-	public final Action[] newInteractionPanelActions;
-
-	public final Action[] newRLInteractionActions;
 
 	private final SwingEngine swingEngine;
 
@@ -149,10 +140,36 @@ public class CommonActions implements ApplicationEventListener {
 		swingEngine = se;
 		Engine e = se.getEngine();
 		e.addApplicationEventListener(this);
+
+		// ================================================================================
+		// Actions (Top Action Bar)
+		// ================================================================================
+		saveAction = new SaveAction(se, true, false);
+		saveAsAction = new SaveAction(se, true, true);
+		standaloneSaveAction = new SaveAction(se, false, false);
+		standaloneSaveAsAction = new SaveAction(se, false, true);
+
+		undoAction = new ViewActions.UndoAction(se.getEngine());
+		copyAction = new ViewActions.CopyAction(se.getEngine());
+		pasteAction = new ViewActions.PasteAction(se.getEngine());
+//		colorBackgroundAction = new ViewActions.PasteAction(se.getEngine());
+
+		exportAction = new ExportAction(se);
+		importAction = new ImportAction(se);
+		aboutAction = new AboutAction(se);
+
+		exitAction = new ExitAction(se);
+
+		// ================================================================================
+		// Zoom (Top Action Bar)
+		// ================================================================================
 		zoomActions = new Action[] { new ZoomToFitAction(e), new ZoomAction(e, 10), new ZoomAction(e, 25),
 				new ZoomAction(e, 50), new ZoomAction(e, 75), new ZoomAction(e, 100), new ZoomAction(e, 150),
 				new ZoomAction(e, 200), new ZoomAction(e, 400) };
 
+		// ================================================================================
+		// Layout (Top Action Bar)
+		// ================================================================================
 		layoutActions = new Action[] { new LayoutAction(e, LayoutType.ALIGN_CENTERX),
 				new LayoutAction(e, LayoutType.ALIGN_CENTERY),
 //					new LayoutAction(e, LayoutType.ALIGN_LEFT),
@@ -169,14 +186,14 @@ public class CommonActions implements ApplicationEventListener {
 		};
 
 		// ================================================================================
-		// New Element (Action Bar)
+		// New Element (Top Action Bar)
 		// ================================================================================
 		newElementActions = new Action[][] {
 				new Action[] {
 						new NewElementAction(e, new DefaultTemplates.DataNodeTemplate(DataNodeType.GENEPRODUCT)) },
 				new Action[] {
 						new NewElementAction(e, new DefaultTemplates.DataNodeTemplate(DataNodeType.METABOLITE)) },
-						//TODO 
+				// TODO
 				new Action[] { new NewElementAction(e, new DefaultTemplates.LabelTemplate()) },
 				new Action[] {
 						new NewElementAction(e,
@@ -233,7 +250,7 @@ public class CommonActions implements ApplicationEventListener {
 		};
 
 		// ================================================================================
-		// Molecule DataNode
+		// Molecule DataNode (Objects Side Panel)
 		// ================================================================================
 		newMoleculeDatanodeActions = new Action[] {
 				new NewElementAction(e, new DefaultTemplates.DataNodeTemplate(DataNodeType.GENEPRODUCT)),
@@ -244,7 +261,7 @@ public class CommonActions implements ApplicationEventListener {
 				new NewElementAction(e, new DefaultTemplates.DataNodeTemplate(DataNodeType.RNA)), };
 
 		// ================================================================================
-		// Concept DataNode
+		// Concept DataNode (Objects Side Panel)
 		// ================================================================================
 		newConceptDatanodeActions = new Action[] {
 				new NewElementAction(e, new DefaultTemplates.DataNodeTemplate(DataNodeType.PATHWAY)),
@@ -257,22 +274,12 @@ public class CommonActions implements ApplicationEventListener {
 				new NewElementAction(e, new DefaultTemplates.DataNodeTemplate(DataNodeType.UNDEFINED)), };
 
 		// ================================================================================
-		// actions for "Annotations" section
+		// Label (Objects Side Panel)
 		// ================================================================================
-		newAnnotationActions = new Action[] { new NewElementAction(e, new DefaultTemplates.LabelTemplate()), };
+		newLabelActions = new Action[] { new NewElementAction(e, new DefaultTemplates.LabelTemplate()), };
 
 		// ================================================================================
-		// actions for "Template" section (adds button to GUI)
-		// ================================================================================
-		newTemplateActions = new Action[] {
-				new NewElementAction(e, new DefaultTemplates.InhibitionInteractionTemplate()),
-				new NewElementAction(e, new DefaultTemplates.StimulationInteractionTemplate()),
-				new NewElementAction(e, new DefaultTemplates.ReactionTemplate()),
-				new NewElementAction(e, new DefaultTemplates.PhosphorylationTemplate()),
-				new NewElementAction(e, new DefaultTemplates.ReversibleReactionTemplate()), };
-
-		// ================================================================================
-		// Basic Shapes
+		// Basic Shapes (Objects Side Panel)
 		// ================================================================================
 		newShapeActions = new Action[] { new NewElementAction(e, new DefaultTemplates.LabelTemplate()),
 				new NewElementAction(e,
@@ -291,7 +298,7 @@ public class CommonActions implements ApplicationEventListener {
 		};
 
 		// ================================================================================
-		// Basic Interactions
+		// Basic Interactions (Objects Side Panel)
 		// ================================================================================
 		newInteractionActions = new Action[] {
 				new NewElementAction(e,
@@ -331,7 +338,7 @@ public class CommonActions implements ApplicationEventListener {
 		};
 
 		// ================================================================================
-		// Interaction Panel
+		// Interaction Panel (Objects Side Panel)
 		// ================================================================================
 		newInteractionPanelActions = new Action[] {
 				new NewElementAction(e,
@@ -364,7 +371,7 @@ public class CommonActions implements ApplicationEventListener {
 								ConnectorType.STRAIGHT)), };
 
 		// ================================================================================
-		// Cellular Compartment
+		// Cellular Compartment (Objects Side Panel)
 		// ================================================================================
 		newCellularComponentActions = new Action[] {
 				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.CELL)),
@@ -394,7 +401,7 @@ public class CommonActions implements ApplicationEventListener {
 		};
 
 		// ================================================================================
-		// Miscellaneous Shapes
+		// Miscellaneous Shapes (Objects Side Panel)
 		// ================================================================================
 		newMiscShapeActions = new Action[] {
 				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.CORONAVIRUS)),
@@ -403,23 +410,14 @@ public class CommonActions implements ApplicationEventListener {
 				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.CELL_ICON)), };
 
 		// ================================================================================
-		// Actions
+		// DataNode Interaction Template (Objects Side Panel)
 		// ================================================================================
-		saveAction = new SaveAction(se, true, false);
-		saveAsAction = new SaveAction(se, true, true);
-		standaloneSaveAction = new SaveAction(se, false, false);
-		standaloneSaveAsAction = new SaveAction(se, false, true);
-
-		undoAction = new ViewActions.UndoAction(se.getEngine());
-		copyAction = new ViewActions.CopyAction(se.getEngine());
-		pasteAction = new ViewActions.PasteAction(se.getEngine());
-		
-		exportAction = new ExportAction(se);
-		importAction = new ImportAction(se);
-		aboutAction = new AboutAction(se);
-
-		exitAction = new ExitAction(se);
-
+		newTemplateActions = new Action[] {
+				new NewElementAction(e, new DefaultTemplates.InhibitionInteractionTemplate()),
+				new NewElementAction(e, new DefaultTemplates.StimulationInteractionTemplate()),
+				new NewElementAction(e, new DefaultTemplates.ReactionTemplate()),
+				new NewElementAction(e, new DefaultTemplates.PhosphorylationTemplate()),
+				new NewElementAction(e, new DefaultTemplates.ReversibleReactionTemplate()), };
 	}
 
 	/**
@@ -603,10 +601,8 @@ public class CommonActions implements ApplicationEventListener {
 		}
 	}
 
-	/** Create a new pathway element or elements based on a {@link Template} */
-	public static class NewElementAction extends AbstractAction // implements VPathwayListener
-	{
-
+	/** Create a new pathway element or elements based on a {@link Template} */ // implements VPathwayListener
+	public static class NewElementAction extends AbstractAction {
 		Template template;
 
 		Engine engine;

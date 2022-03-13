@@ -17,6 +17,7 @@
 package org.pathvisio.gui.dialogs;
 
 import java.awt.Color;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.URL;
@@ -27,6 +28,7 @@ import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 import org.pathvisio.core.Globals;
 import org.pathvisio.core.util.Resources;
@@ -51,6 +53,7 @@ public class AboutDlg {
 	 */
 	public void createAndShowGUI() {
 		final JFrame aboutDlg = new JFrame();
+		aboutDlg.setIconImage(Toolkit.getDefaultToolkit().createImage(Resources.getLogo()));
 		aboutDlg.setBackground(Color.WHITE);
 		FormLayout layout = new FormLayout(" 4dlu, left:230dlu:grow, 4dlu",
 				"4dlu, pref, 4dlu, 240dlu:grow, 4dlu, pref, 4dlu");
@@ -61,9 +64,9 @@ public class AboutDlg {
 		label.setEditable(false);
 		label.setText(swingEngine.getEngine().getApplicationName() + "<br><br><hr><br>"
 				+ "<html><b>Core developers</b><br>"
-				+ "Martina Kutmon, Nuno Nunes, Alexander Pico, Egon Willighagen, Denise Slenter, Kristina Hanspers<br><br><hr><br>"
+				+ "Martina Kutmon, Finterly Hu, Nuno Nunes, Alexander Pico, Egon Willighagen, Denise Slenter, Kristina Hanspers<br><br><hr><br>"
 				+ "<b>Former developers</b><br>"
-				+ "Andra Waagmeester, Anwesha Bohler, Jonathan Melius, Martijn van Iersel, Thomas Kelder"
+				+ "Andra Waagmeester, Anwesha Bohler, Jonathan Melius, Martijn van Iersel, Thomas Kelder<br>"
 				+ "<b>Contributors</b><br>" + "Adem Bilicna, Augustin Luna, Bing Lui, "
 				+ "Christ Leemans, Eric Creussen, Erik Pelgrin, " + "Esterh Neuteboom, Ferry Jagers, Hakim Achterberg, "
 				+ "Harm Nijveen, Irene Kaashoek, Justin Elser, "

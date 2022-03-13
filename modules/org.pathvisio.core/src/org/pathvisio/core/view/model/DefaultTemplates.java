@@ -113,7 +113,7 @@ public abstract class DefaultTemplates {
 				((Shape) o).setWidth(BRACE_WIDTH);
 				((Shape) o).setHeight(BRACE_HEIGHT);
 			} else if (type == ShapeType.MITOCHONDRIA || type == ShapeType.CELL || type == ShapeType.NUCLEUS
-					|| type == ShapeType.ORGANELLE) {
+					|| type == ShapeType.ORGANELLE || type == ShapeType.EXTRACELLULAR) {
 				((Shape) o).setWidth(SHAPE_SIZE_200);
 				((Shape) o).setHeight(SHAPE_SIZE_100);
 			} else if (type == ShapeType.SARCOPLASMIC_RETICULUM || type == ShapeType.ENDOPLASMIC_RETICULUM
@@ -175,7 +175,8 @@ public abstract class DefaultTemplates {
 		}
 
 		public URL getIconLocation() {
-			return Resources.getResourceURL("new" + getName().toLowerCase() + ".gif");
+			return Resources.getResourceURL(
+					getClass().getSimpleName().toLowerCase() + "/new" + getName().toLowerCase() + ".gif"); // TODO
 		}
 
 		public void postInsert(PathwayElement[] newElements) {
@@ -237,6 +238,7 @@ public abstract class DefaultTemplates {
 		public String getName() {
 			return type.toString();
 		}
+
 	}
 
 	/**
@@ -279,11 +281,11 @@ public abstract class DefaultTemplates {
 		// cellular component shapes
 		Set<ShapeType> CELL_COMPONENT_SET = new HashSet<>(Arrays.asList(ShapeType.CELL, ShapeType.NUCLEUS,
 				ShapeType.ENDOPLASMIC_RETICULUM, ShapeType.GOLGI_APPARATUS, ShapeType.MITOCHONDRIA,
-				ShapeType.SARCOPLASMIC_RETICULUM, ShapeType.ORGANELLE, ShapeType.VESICLE));
-		
+				ShapeType.SARCOPLASMIC_RETICULUM, ShapeType.ORGANELLE, ShapeType.VESICLE, ShapeType.EXTRACELLULAR));
+
 		// miscellaneous shapes
-		Set<ShapeType> MISC_SHAPE_SET = new HashSet<>(Arrays.asList(ShapeType.CORONAVIRUS, ShapeType.DNA,
-				ShapeType.RNA, ShapeType.CELL_ICON));
+		Set<ShapeType> MISC_SHAPE_SET = new HashSet<>(
+				Arrays.asList(ShapeType.CORONAVIRUS, ShapeType.DNA, ShapeType.RNA, ShapeType.CELL_ICON));
 
 		public ShapeTemplate(ShapeType shapeType) {
 			this.shapeType = shapeType;
@@ -390,7 +392,7 @@ public abstract class DefaultTemplates {
 			e.setEndLinePointY(my);
 			e.setStartArrowHeadType(startType);
 			e.setEndArrowHeadType(endType);
-			setInitialSize(e); 
+			setInitialSize(e);
 			// default lineColor, lineWidth
 			e.setLineStyle(lineStyle);
 			e.setConnectorType(connectorType);
@@ -508,7 +510,7 @@ public abstract class DefaultTemplates {
 		}
 
 		public URL getIconLocation() {
-			return Resources.getResourceURL("new" + getName().toLowerCase() + ".gif");
+			return Resources.getResourceURL("multitemplate/new" + getName().toLowerCase() + ".gif"); // TODO
 		}
 
 		public void postInsert(PathwayElement[] newElements) {

@@ -20,8 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.pathvisio.core.Engine;
-import org.pathvisio.core.view.UndoManagerEvent;
-import org.pathvisio.core.view.UndoManagerListener;
 import org.pathvisio.libgpml.model.PathwayModel;
 
 /** Manages a stack of undo actions */

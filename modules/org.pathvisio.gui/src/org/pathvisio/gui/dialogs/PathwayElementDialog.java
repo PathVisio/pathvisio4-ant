@@ -18,6 +18,7 @@ package org.pathvisio.gui.dialogs;
 
 import java.awt.Component;
 import java.awt.Frame;
+import java.awt.Toolkit;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,6 +32,7 @@ import org.pathvisio.libgpml.prop.StaticProperty;
 import org.pathvisio.libgpml.util.XrefUtils;
 import org.bridgedb.DataSource;
 import org.bridgedb.Xref;
+import org.pathvisio.core.util.Resources;
 import org.pathvisio.core.view.model.UndoAction;
 import org.pathvisio.core.view.model.VPathwayModel;
 import org.pathvisio.gui.SwingEngine;

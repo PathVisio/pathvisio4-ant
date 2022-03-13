@@ -8,7 +8,9 @@ import org.pathvisio.libgpml.model.PathwayElement.EvidenceRef;
 
 /**
  * This class stores information for copying {@link PathwayElement}.
- * CopyElements can be pasted later.
+ * 
+ * {@link PathwayElement#copy} returns a {@link CopyElement} which stores the
+ * newly created newElement and a reference to the original sourceElement.
  * 
  * @author finterly
  */

@@ -40,7 +40,7 @@ import org.pathvisio.libgpml.util.Utils;
  * 
  * @author unknown, AP20070508, finterly
  */
-public abstract class PathwayElement extends PathwayObject implements Annotatable, Citable, Evidenceable {
+public abstract class PathwayElement extends PathwayObject implements Cloneable, Annotatable, Citable, Evidenceable {
 
 	private List<Comment> comments;
 	/**
@@ -575,8 +575,8 @@ public abstract class PathwayElement extends PathwayObject implements Annotatabl
 	 */
 	public Set<StaticProperty> getStaticPropertyKeys() {
 		Set<StaticProperty> result = super.getStaticPropertyKeys();
-		Set<StaticProperty> propsPathwayElement = EnumSet.of(StaticProperty.COMMENT, StaticProperty.ANNOTATION, StaticProperty.CITATION,
-				StaticProperty.EVIDENCE); // TODO dynamic property
+		Set<StaticProperty> propsPathwayElement = EnumSet.of(StaticProperty.COMMENT, StaticProperty.ANNOTATION,
+				StaticProperty.CITATION, StaticProperty.EVIDENCE); // TODO dynamic property
 		result.addAll(propsPathwayElement);
 		return result;
 	}

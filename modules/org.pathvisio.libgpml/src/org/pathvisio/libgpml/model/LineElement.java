@@ -1163,14 +1163,19 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 	public void copyValuesFrom(LineElement src) { // TODO
 		super.copyValuesFrom(src);
 		groupRef = src.groupRef;
-		// copy line points
+		// copy line points //TODO 
 		List<LinePoint> points = new ArrayList<LinePoint>();
 		for (LinePoint pt : src.linePoints) {
-			LinePoint result = new LinePoint(0, 0);
-			result.copyValuesFrom(pt);
-			points.add(result);
+			points.add(new LinePoint(pt.getX(),pt.getY()));
 		}
 		setLinePoints(points);
+//		List<LinePoint> points = new ArrayList<LinePoint>();
+//		for (LinePoint pt : src.linePoints) {
+//			LinePoint result = new LinePoint(0, 0);
+//			result.copyValuesFrom(pt);
+//			points.add(result);
+//		}
+//		setLinePoints(points);
 		// copy anchors
 		anchors = new ArrayList<Anchor>();
 		for (Anchor a : src.anchors) {
@@ -1378,8 +1383,8 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 		 */
 		public Object clone() throws CloneNotSupportedException {
 			GenericPoint p = (GenericPoint) super.clone(); // TODO????
-			if (getElementId() != null)
-				p.setElementId(getElementId()); // TODO????
+//			if (getElementId() != null)
+//				p.setElementId(getElementId()); // TODO????
 			return p;
 		}
 
@@ -1459,6 +1464,13 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 			setX(x);
 			setY(y);
 		}
+
+		// TODO
+//		protected LinePoint(LinePoint p) {
+//			this(p.getX(), p.getY());
+//			if (p.elementRef != null)
+//				linkTo(p.elementRef);
+//		}
 
 		// ================================================================================
 		// Accessors
@@ -1846,8 +1858,9 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 		@Override
 		public Object clone() throws CloneNotSupportedException {
 			LinePoint p = (LinePoint) super.clone();
-			if (elementRef != null)
-				p.elementRef = elementRef;
+//			if (elementRef != null)
+//				// p.elementRef = elementRef; TODO
+//				linkTo(elementRef);
 			return p;
 		}
 

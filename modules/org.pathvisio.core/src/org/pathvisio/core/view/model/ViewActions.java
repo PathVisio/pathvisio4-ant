@@ -61,8 +61,6 @@ import org.pathvisio.libgpml.model.LineElement.LinePoint;
 import org.pathvisio.libgpml.model.type.StateType;
 import org.pathvisio.core.util.Resources;
 import org.pathvisio.libgpml.util.Utils;
-import org.pathvisio.core.view.UndoManagerEvent;
-import org.pathvisio.core.view.UndoManagerListener;
 import org.pathvisio.core.view.model.SelectionBox.SelectionEvent;
 import org.pathvisio.core.view.model.SelectionBox.SelectionListener;
 
@@ -126,6 +124,7 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 	public final PositionPasteAction positionPaste;
 	public final KeyMoveAction keyMove;
 	public final UndoAction undo;
+//	public final ColorBackgroundAction colorBackground; //TODO 
 	public final AddAnchorAction addAnchor;
 	public final WaypointAction addWaypoint;
 	public final WaypointAction removeWaypoint;
@@ -723,11 +722,16 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 		 */
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if (!isEnabled())
+			if (!isEnabled()) {
 				return; // Don't perform action if not enabled
+			}
 			VGroup g = vPathwayModel.toggleGroup(vPathwayModel.getSelectedGraphics());
 			if (g != null) {
 				g.getPathwayObject().setType(groupStyle);
+				//TODO !!!!
+				if (vPathwayModel != null) {
+					vPathwayModel.getUndoManager().newAction("Change group");
+				}
 			}
 		}
 
