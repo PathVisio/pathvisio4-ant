@@ -298,7 +298,7 @@ public class Annotation extends PathwayObject {
 	 *
 	 * No events will be sent to the parent of the original.
 	 */
-	public Annotation copy() {
+	public Annotation copyRef() {
 		Annotation result = new Annotation(value, type, xref, urlLink);
 		result.copyValuesFrom(this);
 		return result;

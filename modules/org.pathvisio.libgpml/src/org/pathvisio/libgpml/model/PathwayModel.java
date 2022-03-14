@@ -319,6 +319,17 @@ public class PathwayModel {
 	// ================================================================================
 	// AliasRefToAliases Map Methods
 	// ================================================================================
+
+	/**
+	 * Returns the set of Group aliasRef keys for this pathway model. A Group
+	 * aliasRef can have or more DataNode aliases.
+	 * 
+	 * @return the group aliasRef keys for this pathway model
+	 */
+	public Set<Group> getAliasRefs() {
+		return aliasRefToAliases.keySet();
+	}
+
 	/**
 	 * Returns the set of DataNode aliases for a Group aliasRef. When a DataNode has
 	 * type="alias" it may be an alias for a Group pathway element. To get aliasRef
@@ -1018,9 +1029,11 @@ public class PathwayModel {
 		BidiMap<PathwayObject, PathwayObject> newToSource = new DualHashBidiMap<PathwayObject, PathwayObject>();
 		for (PathwayElement e : getPathwayElements()) {
 			CopyElement copyElement = e.copy();
-			PathwayObject newElement = copyElement.getNewElement();
-			PathwayObject srcElement = copyElement.getSourceElement();
+			PathwayElement newElement = copyElement.getNewElement();
+			PathwayElement srcElement = copyElement.getSourceElement();
 			result.add(newElement);
+			// load references
+			copyElement.loadReferences();
 			// store information
 			newToSource.put(newElement, srcElement);
 			// specially store anchor information
@@ -1065,9 +1078,17 @@ public class PathwayModel {
 					g.addPathwayElement(newMember);
 				}
 			}
-
 		}
-
+		// set aliasRef if any 
+		for (Group g : getAliasRefs()) {
+			for (DataNode d: getLinkedAliases(g)) {
+				DataNode newAlias = (DataNode) newToSource.getKey(d);
+				Group newAliasRef = (Group) newToSource.getKey(g);
+				if (newAlias != null && newAliasRef != null) {
+					newAlias.setAliasRef(newAliasRef);
+				}
+			}
+		}
 		result.changed = changed;
 		if (sourceFile != null) {
 			result.sourceFile = new File(sourceFile.getAbsolutePath());

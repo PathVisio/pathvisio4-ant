@@ -324,7 +324,7 @@ public class Citation extends PathwayObject {
 	 *
 	 * No events will be sent to the parent of the original.
 	 */
-	public Citation copy() {
+	public Citation copyRef() {
 		Citation result = new Citation(xref, urlLink);
 		result.copyValuesFrom(this);
 		return result;

@@ -339,8 +339,11 @@ public class DataNode extends ShapedElement implements Xrefable {
 	 * Note: doesn't change parent, only fields
 	 *
 	 * Used by UndoAction.
+	 * 
+	 * NB: AliasRef value is not copied. References to other PathwayObjects are
+	 * stored in {@link CopyElement} by {@link #copy}.
 	 *
-	 * @param src
+	 * @param src the source pathway element.
 	 */
 	public void copyValuesFrom(DataNode src) {
 		super.copyValuesFrom(src);
@@ -353,7 +356,7 @@ public class DataNode extends ShapedElement implements Xrefable {
 			addState(result);
 		}
 		xref = src.xref;
-		aliasRef = src.aliasRef;
+//		aliasRef = src.aliasRef; TODO not this yet
 		fireObjectModifiedEvent(PathwayObjectEvent.createAllPropertiesEvent(this));
 	}
 

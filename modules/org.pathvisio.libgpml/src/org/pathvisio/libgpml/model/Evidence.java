@@ -262,7 +262,7 @@ public class Evidence extends PathwayObject {
 	 *
 	 * No events will be sent to the parent of the original.
 	 */
-	public Evidence copy() {
+	public Evidence copyRef() {
 		Evidence result = new Evidence(value, xref, urlLink); 
 		result.copyValuesFrom(this);
 		return result;
