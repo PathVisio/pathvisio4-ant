@@ -28,6 +28,7 @@ import java.util.Set;
 import org.pathvisio.libgpml.debug.Logger;
 import org.pathvisio.libgpml.model.GraphLink.LinkableFrom;
 import org.pathvisio.libgpml.model.GraphLink.LinkableTo;
+import org.pathvisio.libgpml.model.LineElement.LinePoint;
 import org.pathvisio.libgpml.model.connector.ConnectorRestrictions;
 import org.pathvisio.libgpml.model.connector.ConnectorShape;
 import org.pathvisio.libgpml.model.connector.ConnectorShapeFactory;
@@ -1163,10 +1164,10 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 	public void copyValuesFrom(LineElement src) { // TODO
 		super.copyValuesFrom(src);
 		groupRef = src.groupRef;
-		// copy line points //TODO 
+		// copy line points //TODO
 		List<LinePoint> points = new ArrayList<LinePoint>();
 		for (LinePoint pt : src.linePoints) {
-			points.add(new LinePoint(pt.getX(),pt.getY()));
+			points.add(new LinePoint(pt.getX(), pt.getY()));
 		}
 		setLinePoints(points);
 //		List<LinePoint> points = new ArrayList<LinePoint>();
@@ -2027,7 +2028,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 		 */
 		public void unsetAllLinkableFroms() {
 			for (LinkableFrom linePoint : getLinkableFroms()) {
-				pathwayModel.removeElementRef(this, linePoint);
+				((LinePoint) linePoint).unlink();
 			}
 		}
 

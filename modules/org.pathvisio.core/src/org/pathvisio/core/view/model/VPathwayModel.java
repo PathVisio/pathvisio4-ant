@@ -42,8 +42,11 @@ import javax.swing.Action;
 import javax.swing.KeyStroke;
 import javax.swing.Timer;
 
+import org.apache.commons.collections4.BidiMap;
+import org.apache.commons.collections4.bidimap.DualHashBidiMap;
 import org.pathvisio.core.Engine;
 import org.pathvisio.libgpml.debug.Logger;
+import org.pathvisio.libgpml.model.type.DataNodeType;
 import org.pathvisio.libgpml.model.type.GroupType;
 import org.pathvisio.libgpml.model.Annotation;
 import org.pathvisio.libgpml.model.Citation;
@@ -65,6 +68,7 @@ import org.pathvisio.libgpml.model.PathwayObject;
 import org.pathvisio.libgpml.model.Shape;
 import org.pathvisio.libgpml.model.ShapedElement;
 import org.pathvisio.libgpml.model.PathwayElement;
+import org.pathvisio.libgpml.model.LineElement.Anchor;
 import org.pathvisio.libgpml.model.LineElement.LinePoint;
 import org.pathvisio.libgpml.model.Pathway;
 import org.pathvisio.libgpml.model.PathwayModelEvent;
@@ -463,7 +467,7 @@ public class VPathwayModel implements PathwayModelListener {
 	 */
 	public void replacePathway(PathwayModel originalState) {
 
-		System.out.println(originalState.getPathwayObjects());		
+		System.out.println(originalState.getPathwayObjects());
 		boolean changed = data.hasChanged();
 
 		clearSelection();
@@ -941,6 +945,7 @@ public class VPathwayModel implements PathwayModelListener {
 				if (toRemove instanceof VPathwayObject) {
 					// Remove the model object
 					data.remove(((VPathwayObject) toRemove).getPathwayObject());
+					System.out.println(toRemove);
 				}
 			}
 			cleanUp();
@@ -2218,11 +2223,11 @@ public class VPathwayModel implements PathwayModelListener {
 	 * the global clipboard.
 	 */
 	public void copyToClipboard() { // TODO PathwayObject or PathwayElement
-		List<PathwayElement> result = new ArrayList<PathwayElement>();
+		List<CopyElement> result = new ArrayList<CopyElement>();
 		for (VElement g : drawingObjects) {
 			// pathway element or pathway object? TODO
 			if (g.isSelected() && g instanceof VPathwayElement && !(g instanceof SelectionBox)) {
-				result.add(((VPathwayElement) g).getPathwayObject().copy().getNewElement());
+				result.add(((VPathwayElement) g).getPathwayObject().copy());
 			}
 		}
 		if (result.size() > 0) {
@@ -2234,7 +2239,7 @@ public class VPathwayModel implements PathwayModelListener {
 	/**
 	 * @param elements the list of elements.
 	 */
-	public void paste(List<PathwayElement> elements) {
+	public void paste(List<CopyElement> elements) {
 		paste(elements, 0, 0);
 	}
 
@@ -2243,53 +2248,137 @@ public class VPathwayModel implements PathwayModelListener {
 	 * @param xShift
 	 * @param yShift
 	 */
-	public void paste(List<PathwayElement> elements, double xShift, double yShift) {
+	public void paste(List<CopyElement> elements, double xShift, double yShift) {
 		undoManager.newAction("Paste");
 		clearSelection();
 
-		List<Annotation> annotations = new ArrayList<Annotation>();
-		List<Citation> citations = new ArrayList<Citation>();
-		List<Evidence> evidences = new ArrayList<Evidence>();
+//		List<Annotation> annotations = new ArrayList<Annotation>();
+//		List<Citation> citations = new ArrayList<Citation>();
+//		List<Evidence> evidences = new ArrayList<Evidence>();
+
+		BidiMap<PathwayObject, PathwayObject> newerToSource = new DualHashBidiMap<>();
 
 		// Copy pathway objects of given list
-		for (PathwayElement o : elements) {
+		for (CopyElement copyElement : elements) {
+			PathwayElement newElement = copyElement.getNewElement();
+			PathwayElement srcElement = copyElement.getSourceElement();
 			// if pathway, skip because it should be unique
-			if (o.getClass() == Pathway.class) {
+			if (newElement.getClass() == Pathway.class) {
 				continue;
 			}
 			lastAdded = null;
-
 			// shift location of pathway element for pasting? TODO
-			if (o instanceof LineElement) {
-				for (LinePoint mp : ((LineElement) o).getLinePoints()) {
+			if (newElement instanceof LineElement) {
+				for (LinePoint mp : ((LineElement) newElement).getLinePoints()) {
 					mp.setX(mp.getX() + xShift);
 					mp.setY(mp.getY() + yShift);
 				}
-			} else if (o instanceof ShapedElement) {
-				((ShapedElement) o).setLeft(((ShapedElement) o).getLeft() + xShift);
-				((ShapedElement) o).setTop(((ShapedElement) o).getTop() + yShift);
+			} else if (newElement instanceof ShapedElement) {
+				((ShapedElement) newElement).setLeft(((ShapedElement) newElement).getLeft() + xShift);
+				((ShapedElement) newElement).setTop(((ShapedElement) newElement).getTop() + yShift);
 			}
 
-			// make another copy to preserve clipboard contents for next paste
-			CopyElement c = o.copy();
-			PathwayElement p = c.getNewElement();
+			// prepare for paste
+			CopyElement copyOfCopyElement = newElement.copy();
+			PathwayElement newerElement = copyOfCopyElement.getNewElement();
+			// paste
+			data.add(newerElement); // causes lastAdded to be set
+			// load references
+			copyOfCopyElement.loadReferences();
+			// store information
+			newerToSource.put(newerElement, srcElement);
+			if (newerElement instanceof LineElement) {
+				Iterator<Anchor> it1 = ((LineElement) newerElement).getAnchors().iterator();
+				Iterator<Anchor> it2 = ((LineElement) srcElement).getAnchors().iterator();
+				while (it1.hasNext() && it2.hasNext()) {
+					Anchor na = it1.next();
+					Anchor sa = it2.next();
+					if (na != null && sa != null) {
+						newerToSource.put(na, sa);
+					}
+				}
+			}
 
-			data.add(p); // causes lastAdded to be set
-			c.loadReferences(); // load annotations/citations/evidences/ref
 			lastAdded.select();
 			if (!(lastAdded instanceof VGroup)) { // avoids "double selecting" grouped objects
 				selection.addToSelection(lastAdded);
 			}
-			// TODO handle LinePoints? Links?
-			// TODO handle Groups???
+		}
+
+		for (PathwayObject newerElement : newerToSource.keySet()) {
+			PathwayObject srcElement = newerToSource.get(newerElement);
+			// link LineElement LinePoint elementRefs
+			if (newerElement instanceof LineElement && srcElement instanceof LineElement) {
+				// set start elementRef
+				LinkableTo srcStartElementRef = ((LineElement) srcElement).getStartElementRef();
+				if (srcStartElementRef != null) {
+					LinkableTo newerStartElementRef = (LinkableTo) newerToSource.getKey(srcStartElementRef);
+					if (newerStartElementRef != null) {
+						((LineElement) newerElement).setStartElementRef(newerStartElementRef);
+					}
+				}
+				// set end elementRef
+				LinkableTo srcEndElementRef = ((LineElement) srcElement).getEndElementRef();
+				if (srcEndElementRef != null) {
+					LinkableTo newerEndElementRef = (LinkableTo) newerToSource.getKey(srcEndElementRef);
+					if (newerEndElementRef != null) {
+						((LineElement) newerElement).setEndElementRef(newerEndElementRef);
+					}
+				}
+				// refresh connector shapes
+				((LineElement) newerElement).getConnectorShape().recalculateShape(((LineElement) newerElement));
+			}
+
+			// add group members in new Group
+			else if (newerElement.getObjectType() == ObjectType.GROUP
+					&& srcElement.getObjectType() == ObjectType.GROUP) {
+				System.out.println("group!");
+				for (Groupable srcMember : ((Group) srcElement).getPathwayElements()) {
+					Groupable newerMember = (Groupable) newerToSource.getKey(srcMember);
+					if (newerMember != null) {
+						((Group) newerElement).addPathwayElement(newerMember);
+					}
+				}
+			}
+
+			/*
+			 * If Alias DataNode:
+			 * 
+			 * write warning if the Group aliasRef refers to is not present in the new
+			 * pathway. TODO...depends on if pasting to same pathway or not and if group is
+			 * also included...
+			 */
+			// set aliasRef if any
+			if (newerElement.getObjectType() == ObjectType.DATANODE
+					&& srcElement.getObjectType() == ObjectType.DATANODE) {
+				if (((DataNode) newerElement).getType() == DataNodeType.ALIAS
+						&& ((DataNode) srcElement).getType() == DataNodeType.ALIAS) {
+					Group srcAliasRef = ((DataNode) srcElement).getAliasRef();
+					if (srcAliasRef != null) {
+						Group newerAliasRef = (Group) newerToSource.getKey(srcAliasRef);
+						// if group aliasRef was also copied
+						if (newerAliasRef != null) {
+							((DataNode) newerElement).setAliasRef(newerAliasRef);
+						}
+						// if group already present in pathway
+						else if (data.hasPathwayObject(srcAliasRef)) {
+							((DataNode) newerElement).setAliasRef(srcAliasRef);
+						}
+						// aliasRef for newer element is lost
+						else {
+							System.out.println("aliasRef connection for this datanode was lost");
+						}
+					}
+				}
+			}
 		}
 
 		// Refresh connector shapes
-		for (PathwayObject o : elements) {
-			if (o instanceof LineElement) {
-				((LineElement) o).getConnectorShape().recalculateShape(((LineElement) o));
-			}
-		}
+//		for (PathwayObject o : elements) {
+//			if (o instanceof LineElement) {
+//				((LineElement) o).getConnectorShape().recalculateShape(((LineElement) o));
+//			}
+//		}
 		moveGraphicsTop(getSelectedGraphics());
 		redraw();
 	}

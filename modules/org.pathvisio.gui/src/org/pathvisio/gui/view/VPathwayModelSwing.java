@@ -71,6 +71,7 @@ import org.pathvisio.core.view.model.VPathwayModelWrapper;
 import org.pathvisio.core.view.model.VShapedElement;
 import org.pathvisio.gui.MainPanel;
 import org.pathvisio.gui.dnd.PathwayImportHandler;
+import org.pathvisio.libgpml.model.CopyElement;
 import org.pathvisio.libgpml.model.PathwayElement;
 import org.pathvisio.libgpml.model.PathwayModel;
 import org.pathvisio.libgpml.model.PathwayObject;
@@ -268,7 +269,7 @@ public class VPathwayModelSwing extends JPanel implements VPathwayModelWrapper, 
 
 	List<PathwayElement> lastCopied; // PathwayObject or Element
 
-	public void copyToClipboard(PathwayModel source, List<PathwayElement> copyElements) {
+	public void copyToClipboard(PathwayModel source, List<CopyElement> copyElements) {
 		Clipboard clip = Toolkit.getDefaultToolkit().getSystemClipboard();
 		clip.setContents(new PathwayModelTransferable(source, copyElements),
 				(PathwayImportHandler) getTransferHandler());

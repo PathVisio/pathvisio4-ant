@@ -308,8 +308,11 @@ public class PathwayModel {
 	 * @param linePoint  the linePoint with given elementRef.
 	 */
 	protected void removeElementRef(LinkableTo elementRef, LinkableFrom linePoint) {
-		if (!elementRefToLinePoints.containsKey(elementRef))
+		System.out.println(elementRefToLinePoints.keySet());
+		if (!elementRefToLinePoints.containsKey(elementRef)) {
+			System.out.println("missing " + elementRef);
 			throw new IllegalArgumentException();
+		}
 		elementRefToLinePoints.get(elementRef).remove(linePoint); // TODO
 		if (elementRefToLinePoints.get(elementRef).size() == 0) {
 			elementRefToLinePoints.remove(elementRef);
@@ -843,6 +846,8 @@ public class PathwayModel {
 	 * the object. Fires PathwayEvent.DELETED event <i>after</i> removal of the
 	 * object
 	 * 
+	 *  //TODO remove pathwayElement instead...
+	 * 
 	 * @param o the pathway object to remove.
 	 */
 	protected void removePathwayObject(PathwayObject o) {
@@ -1026,7 +1031,7 @@ public class PathwayModel {
 		PathwayModel result = new PathwayModel();
 		// TODO!
 		result.replacePathway((Pathway) pathway.copy().getNewElement());
-		BidiMap<PathwayObject, PathwayObject> newToSource = new DualHashBidiMap<PathwayObject, PathwayObject>();
+		BidiMap<PathwayObject, PathwayObject> newToSource = new DualHashBidiMap<>();
 		for (PathwayElement e : getPathwayElements()) {
 			CopyElement copyElement = e.copy();
 			PathwayElement newElement = copyElement.getNewElement();
@@ -1079,9 +1084,9 @@ public class PathwayModel {
 				}
 			}
 		}
-		// set aliasRef if any 
+		// set aliasRef if any
 		for (Group g : getAliasRefs()) {
-			for (DataNode d: getLinkedAliases(g)) {
+			for (DataNode d : getLinkedAliases(g)) {
 				DataNode newAlias = (DataNode) newToSource.getKey(d);
 				Group newAliasRef = (Group) newToSource.getKey(g);
 				if (newAlias != null && newAliasRef != null) {

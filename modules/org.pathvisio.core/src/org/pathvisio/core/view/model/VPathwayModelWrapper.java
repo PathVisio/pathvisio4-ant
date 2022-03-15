@@ -23,6 +23,7 @@ import java.util.List;
 import javax.swing.Action;
 import javax.swing.KeyStroke;
 
+import org.pathvisio.libgpml.model.CopyElement;
 import org.pathvisio.libgpml.model.PathwayElement;
 import org.pathvisio.libgpml.model.PathwayModel;
 import org.pathvisio.libgpml.model.PathwayObject;
@@ -45,7 +46,7 @@ public abstract interface VPathwayModelWrapper {
 
 	public void registerKeyboardAction(KeyStroke k, Action a);
 
-	public void copyToClipboard(PathwayModel source, List<PathwayElement> copyElements); // TODO PathwayObject or
+	public void copyToClipboard(PathwayModel source, List<CopyElement> copyElements); // TODO PathwayObject or
 																							// PathwayElement
 
 	public void pasteFromClipboard();
