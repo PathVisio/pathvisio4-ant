@@ -2332,7 +2332,6 @@ public class VPathwayModel implements PathwayModelListener {
 			// add group members in new Group
 			else if (newerElement.getObjectType() == ObjectType.GROUP
 					&& srcElement.getObjectType() == ObjectType.GROUP) {
-				System.out.println("group!");
 				for (Groupable srcMember : ((Group) srcElement).getPathwayElements()) {
 					Groupable newerMember = (Groupable) newerToSource.getKey(srcMember);
 					if (newerMember != null) {

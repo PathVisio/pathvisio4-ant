@@ -286,14 +286,16 @@ public class CommonActions implements ApplicationEventListener {
 						new DefaultTemplates.GraphicalLineTemplate("undirected", LineStyleType.SOLID,
 								ArrowHeadType.UNDIRECTED, ArrowHeadType.UNDIRECTED, ConnectorType.STRAIGHT)),
 				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.ARC)),
-				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.RECTANGLE)),
-				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.OVAL)),
-				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.ROUNDED_RECTANGLE)),
-				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.TRIANGLE)),
-				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.PENTAGON)),
-				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.HEXAGON)),
 				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.EDGE)),
 				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.BRACE)),
+				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.OVAL)),
+				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.TRIANGLE)),
+				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.RECTANGLE)),
+				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.ROUNDED_RECTANGLE)),
+				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.PENTAGON)),
+				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.HEXAGON)),
+				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.OCTAGON)),
+			
 //				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(MIMShapes.MIM_DEGRADATION_SHAPE)), 
 		};
 

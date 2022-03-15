@@ -26,6 +26,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -51,6 +52,7 @@ import org.pathvisio.libgpml.model.LineElement;
 import org.pathvisio.libgpml.model.LineElement.Anchor;
 import org.pathvisio.libgpml.model.LineElement.LinePoint;
 import org.pathvisio.libgpml.model.type.DataNodeType;
+import org.pathvisio.libgpml.model.type.ObjectType;
 
 /**
  * This class helps transfer Pathways or bits of pathway over the clipboard.
@@ -69,14 +71,14 @@ public class PathwayModelTransferable implements Transferable {
 	/** @deprecated use GPML_DATA_FLAVOR instead */
 	public static final DataFlavor gpmlDataFlavor = GPML_DATA_FLAVOR;
 
-	List<PathwayElement> elements;
+	List<CopyElement> elements;
 	PathwayModel pathway;
 
-	public PathwayModelTransferable(List<PathwayElement> elements) {
+	public PathwayModelTransferable(List<CopyElement> elements) {
 		this(null, elements);
 	}
 
-	public PathwayModelTransferable(PathwayModel source, List<PathwayElement> elements) {
+	public PathwayModelTransferable(PathwayModel source, List<CopyElement> elements) {
 		this.elements = elements;
 		if (source == null) {
 			source = new PathwayModel();
@@ -94,30 +96,11 @@ public class PathwayModelTransferable implements Transferable {
 
 		PathwayModel pnew = new PathwayModel();
 
-		Set<String> ids = new HashSet<String>();
-		Set<String> groupIds = new HashSet<String>();
-
 		boolean infoFound = false;
-		for (PathwayObject e : elements) {
-			if (e.getElementId() != null) {
-				ids.add(e.getElementId());
-			}
-			if (e instanceof Groupable) {
-				Group groupRef = ((Groupable) e).getGroupRef();
-				if (groupRef != null) {
-					String groupRefStr = groupRef.getElementId();
-					if (groupRefStr != null) {
-						groupIds.add(groupRefStr);
-					}
-				}
-			}
+		for (CopyElement c : elements) {
+			PathwayObject e = c.getNewElement();
 			if (e.getClass() == Pathway.class) {
 				infoFound = true;
-			}
-			if (e instanceof LineElement) {
-				for (Anchor ma : ((LineElement) e).getAnchors()) {
-					ids.add(ma.getElementId());
-				}
 			}
 		}
 
@@ -130,73 +113,95 @@ public class PathwayModelTransferable implements Transferable {
 //			dummyParent.addCitation(newCitation);
 //		}
 
-		BidiMap<PathwayElement, PathwayElement> copyMap = new DualHashBidiMap<>();
+		BidiMap<PathwayObject, PathwayObject> newerToSource = new DualHashBidiMap<>();
 
-		for (PathwayElement e : elements) {
+		for (CopyElement copyElement : elements) {
+			PathwayElement newElement = copyElement.getNewElement();
+			PathwayElement srcElement = copyElement.getSourceElement();
+			CopyElement copyOfCopyElement = newElement.copy();
+			PathwayElement newerElement = copyOfCopyElement.getNewElement();
+
 			// Check for valid graphRef (with respect to other copied elements)
-			CopyElement c = e.copy();
-			PathwayElement enew = c.getNewElement();
-			copyMap.put(enew, e);
-			// do not add group yet
-			if (e.getClass() == Group.class) {
-				continue;
+//			// do not add group yet
+//			if (e.getClass() == Group.class) {
+//				continue;
+//			}
+			pnew.add(newerElement);
+			// load references
+			copyOfCopyElement.loadReferences();
+			// store information
+			newerToSource.put(newerElement, srcElement);
+			if (newerElement instanceof LineElement) {
+				Iterator<Anchor> it1 = ((LineElement) newerElement).getAnchors().iterator();
+				Iterator<Anchor> it2 = ((LineElement) srcElement).getAnchors().iterator();
+				while (it1.hasNext() && it2.hasNext()) {
+					Anchor na = it1.next();
+					Anchor sa = it2.next();
+					if (na != null && sa != null) {
+						newerToSource.put(na, sa);
+					}
+				}
 			}
-			pnew.add(enew);
-			c.loadReferences(); // load annotations/citations/evidences/ref
 		}
 
-		/*
-		 * Below we handle proper linking of LinePoints, adding of Groups the new
-		 * pathway, and Alias DataNode.
-		 */
-		for (PathwayElement enew : copyMap.keySet()) {
-			PathwayElement esrc = copyMap.get(enew);
-			/*
-			 * If both LineElement and the LinkableTo elementRef are copied. Link
-			 * corresponding LinePoint(s) to LinkableTo(s) in the new pathway.
-			 */
-			if (enew instanceof LineElement && esrc instanceof LineElement) {
-				// link Start elementRef if applicable
-				LinkableTo srcRef = ((LineElement) esrc).getStartElementRef();
-				if (srcRef != null) {
-					LinkableTo newRef = (LinkableTo) copyMap.getKey(srcRef);
-					if (newRef != null) {
-						((LineElement) enew).getStartLinePoint().linkTo(newRef);
+		for (PathwayObject newerElement : newerToSource.keySet()) {
+			PathwayObject srcElement = newerToSource.get(newerElement);
+			// link LineElement LinePoint elementRefs
+			if (newerElement instanceof LineElement && srcElement instanceof LineElement) {
+				// set start elementRef
+				LinkableTo srcStartElementRef = ((LineElement) srcElement).getStartElementRef();
+				if (srcStartElementRef != null) {
+					LinkableTo newerStartElementRef = (LinkableTo) newerToSource.getKey(srcStartElementRef);
+					if (newerStartElementRef != null) {
+						((LineElement) newerElement).setStartElementRef(newerStartElementRef);
 					}
 				}
-				// link End elementRef if applicable
-				srcRef = ((LineElement) esrc).getEndElementRef();
-				if (srcRef != null) {
-					LinkableTo newRef = (LinkableTo) copyMap.getKey(srcRef);
-					if (newRef != null) {
-						((LineElement) enew).getEndLinePoint().linkTo(newRef);
+				// set end elementRef
+				LinkableTo srcEndElementRef = ((LineElement) srcElement).getEndElementRef();
+				if (srcEndElementRef != null) {
+					LinkableTo newerEndElementRef = (LinkableTo) newerToSource.getKey(srcEndElementRef);
+					if (newerEndElementRef != null) {
+						((LineElement) newerElement).setEndElementRef(newerEndElementRef);
 					}
 				}
 			}
-
-			/*
-			 * If all pathway element members of a group were also copied, we may add a
-			 * Group(s) to the new pathway by setting groupRef.
-			 */
-			if (enew.getClass() == Group.class && esrc.getClass() == Group.class) {
-				List<Groupable> newMembers = new ArrayList<Groupable>();
-				boolean complete = true;
-				while (complete) {
-					for (Groupable srcMember : ((Group) esrc).getPathwayElements()) {
-						if (!copyMap.containsValue((PathwayElement) srcMember)) {
-							complete = false;
-							System.out.println(
-									"Group not copied, not all members of the group were selected to be copied.");
-						} else {
-							newMembers.add((Groupable) copyMap.getKey(srcMember));
-						}
+			
+			// add group members in new Group
+			else if (newerElement.getObjectType() == ObjectType.GROUP
+					&& srcElement.getObjectType() == ObjectType.GROUP) {
+				System.out.println("group!");
+				for (Groupable srcMember : ((Group) srcElement).getPathwayElements()) {
+					Groupable newerMember = (Groupable) newerToSource.getKey(srcMember);
+					if (newerMember != null) {
+						((Group) newerElement).addPathwayElement(newerMember);
 					}
-				}
-				if (complete) {
-					pnew.addGroup((Group) enew);
-					((Group) enew).addPathwayElements(newMembers);
-				}
+				}			
 			}
+			
+//			// add group members in new Group
+//			else if (newerElement.getObjectType() == ObjectType.GROUP
+//					&& srcElement.getObjectType() == ObjectType.GROUP) {
+//				System.out.println("group!");
+//				List<Groupable> newerMembers = new ArrayList<Groupable>();
+//				boolean complete = true;
+//				for (Groupable srcMember : ((Group) srcElement).getPathwayElements()) {
+//					if (!newerToSource.containsValue((PathwayElement) srcMember)) {
+//						complete = false;
+//						System.out
+//								.println("Group not copied, not all members of the group were selected to be copied.");
+//					} else {
+//						System.out.println("group2!");
+//						newerMembers.add((Groupable) newerToSource.getKey(srcMember));
+//					}
+//				}
+//				if (complete) {
+//					System.out.println("complete!"); 
+//					((Group) newerElement).addPathwayElements(newerMembers);
+//					System.out.println(((Group) newerElement).getPathwayElements());
+//				}
+//			}
+			
+			
 			/*
 			 * If Alias DataNode:
 			 * 
@@ -204,10 +209,28 @@ public class PathwayModelTransferable implements Transferable {
 			 * pathway. TODO...depends on if pasting to same pathway or not and if group is
 			 * also included...
 			 */
-			if (enew.getClass() == DataNode.class && ((DataNode) enew).getType() == DataNodeType.ALIAS) {
-				if (pnew.hasPathwayObject(((DataNode) enew).getAliasRef())) {
+			// set aliasRef if any
+			if (newerElement.getObjectType() == ObjectType.DATANODE
+					&& srcElement.getObjectType() == ObjectType.DATANODE) {
+				if (((DataNode) newerElement).getType() == DataNodeType.ALIAS
+						&& ((DataNode) srcElement).getType() == DataNodeType.ALIAS) {
+					Group srcAliasRef = ((DataNode) srcElement).getAliasRef();
+					if (srcAliasRef != null) {
+						Group newerAliasRef = (Group) newerToSource.getKey(srcAliasRef);
+						// if group aliasRef was also copied
+						if (newerAliasRef != null) {
+							((DataNode) newerElement).setAliasRef(newerAliasRef);
+						}
+						// if group already present in pathway
+						else if (pnew.hasPathwayObject(srcAliasRef)) {
+							((DataNode) newerElement).setAliasRef(srcAliasRef);
+						}
+						// aliasRef for newer element is lost
+						else {
+							System.out.println("aliasRef connection for this datanode was lost");
+						}
+					}
 				}
-				// TODO
 			}
 		}
 

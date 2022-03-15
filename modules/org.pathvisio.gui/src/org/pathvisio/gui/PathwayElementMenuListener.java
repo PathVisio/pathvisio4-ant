@@ -135,6 +135,7 @@ public class PathwayElementMenuListener implements VPathwayModelListener {
 		menu.addSeparator();
 
 		// Only show group/ungroup when multiple objects or a group are selected
+		// Only show add alias if a group is selected
 		if ((e instanceof VGroup)) {
 			GroupType s = ((VGroup) e).getPathwayObject().getType();
 			if (s == GroupType.GROUP) {
@@ -148,8 +149,8 @@ public class PathwayElementMenuListener implements VPathwayModelListener {
 		} else if (vp.getSelectedGraphics().size() > 1) {
 			menu.add(vActions.toggleGroup);
 			menu.add(vActions.toggleComplex);
-			boolean includesGroup = false;
-			for (VDrawable p : vp.getSelectedGraphics()) {
+			boolean includesGroup = false;		
+			for (VDrawable p : vp.getSelectedGraphics()) { //TODO 
 				if (p instanceof VGroup) {
 					includesGroup = true;
 				}
