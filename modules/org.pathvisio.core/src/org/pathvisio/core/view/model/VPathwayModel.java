@@ -467,7 +467,6 @@ public class VPathwayModel implements PathwayModelListener {
 	 */
 	public void replacePathway(PathwayModel originalState) {
 
-		System.out.println(originalState.getPathwayObjects());
 		boolean changed = data.hasChanged();
 
 		clearSelection();
@@ -945,7 +944,6 @@ public class VPathwayModel implements PathwayModelListener {
 				if (toRemove instanceof VPathwayObject) {
 					// Remove the model object
 					data.remove(((VPathwayObject) toRemove).getPathwayObject());
-					System.out.println(toRemove);
 				}
 			}
 			cleanUp();

@@ -169,7 +169,6 @@ public class PathwayModelTransferable implements Transferable {
 			// add group members in new Group
 			else if (newerElement.getObjectType() == ObjectType.GROUP
 					&& srcElement.getObjectType() == ObjectType.GROUP) {
-				System.out.println("group!");
 				for (Groupable srcMember : ((Group) srcElement).getPathwayElements()) {
 					Groupable newerMember = (Groupable) newerToSource.getKey(srcMember);
 					if (newerMember != null) {
@@ -181,7 +180,6 @@ public class PathwayModelTransferable implements Transferable {
 //			// add group members in new Group
 //			else if (newerElement.getObjectType() == ObjectType.GROUP
 //					&& srcElement.getObjectType() == ObjectType.GROUP) {
-//				System.out.println("group!");
 //				List<Groupable> newerMembers = new ArrayList<Groupable>();
 //				boolean complete = true;
 //				for (Groupable srcMember : ((Group) srcElement).getPathwayElements()) {

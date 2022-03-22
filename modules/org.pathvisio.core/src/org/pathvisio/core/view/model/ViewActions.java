@@ -20,7 +20,6 @@ import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
 import java.awt.geom.Point2D;
 import java.net.URL;
 import java.util.ArrayList;
@@ -43,7 +42,6 @@ import org.pathvisio.libgpml.model.connector.ConnectorShape;
 import org.pathvisio.libgpml.model.connector.FreeConnectorShape;
 import org.pathvisio.libgpml.model.shape.ShapeType;
 import org.pathvisio.libgpml.model.type.AnchorShapeType;
-import org.pathvisio.libgpml.model.type.ArrowHeadType;
 import org.pathvisio.libgpml.model.type.DataNodeType;
 import org.pathvisio.libgpml.model.type.GroupType;
 import org.pathvisio.libgpml.model.LineElement;
@@ -124,7 +122,6 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 	public final PositionPasteAction positionPaste;
 	public final KeyMoveAction keyMove;
 	public final UndoAction undo;
-//	public final ColorBackgroundAction colorBackground; //TODO 
 	public final AddAnchorAction addAnchor;
 	public final WaypointAction addWaypoint;
 	public final WaypointAction removeWaypoint;
@@ -334,7 +331,9 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 		}
 	}
 
-	/** "Paste" command in the menu / toolbar, pastes from clipboard */
+	/**
+	 * "Paste" command in the menu / toolbar, pastes from clipboard.
+	 */
 	public static class PasteAction extends AbstractAction {
 		Engine engine;
 
@@ -357,7 +356,9 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 		}
 	}
 
-	/** "Paste" command from the right click menu, pastes from clipboard */
+	/**
+	 * "Paste" command from the right click menu, pastes from clipboard.
+	 */
 	public static class PositionPasteAction extends AbstractAction {
 		private static final long serialVersionUID = 1L;
 		Engine engine;
@@ -393,8 +394,8 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 	}
 
 	/**
-	 * "Nudge" action, move selected element(s) a bit in the direction of the cursor
-	 * key pressed.
+	 * "Nudge" action, moves selected element(s) a bit in the direction of the
+	 * cursor key pressed.
 	 */
 	public static class KeyMoveAction extends AbstractAction {
 		Engine engine;
@@ -728,7 +729,7 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 			VGroup g = vPathwayModel.toggleGroup(vPathwayModel.getSelectedGraphics());
 			if (g != null) {
 				g.getPathwayObject().setType(groupStyle);
-				//TODO !!!!
+				// TODO !!!!
 				if (vPathwayModel != null) {
 					vPathwayModel.getUndoManager().newAction("Change group");
 				}

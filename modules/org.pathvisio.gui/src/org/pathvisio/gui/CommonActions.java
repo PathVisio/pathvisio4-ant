@@ -16,6 +16,8 @@
  ******************************************************************************/
 package org.pathvisio.gui;
 
+import java.awt.Color;
+import javax.swing.JColorChooser;
 import java.awt.Component;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -62,6 +64,7 @@ import org.pathvisio.core.view.model.ViewActions;
 import org.pathvisio.gui.dialogs.AboutDlg;
 import org.pathvisio.gui.dialogs.PathwayElementDialog;
 import org.pathvisio.gui.dialogs.PublicationXRefDialog;
+import org.pathvisio.gui.handler.ColorHandler;
 
 /**
  * A collection of {@link Action}s that may be used throughout the program (e.g.
@@ -89,6 +92,7 @@ public class CommonActions implements ApplicationEventListener {
 			va.registerToGroup(copyAction, ViewActions.GROUP_ENABLE_WHEN_SELECTION);
 			va.registerToGroup(pasteAction, ViewActions.GROUP_ENABLE_VPATHWAY_LOADED);
 			va.registerToGroup(pasteAction, ViewActions.GROUP_ENABLE_EDITMODE);
+			va.registerToGroup(colorBackgroundAction, ViewActions.GROUP_ENABLE_VPATHWAY_LOADED); // TODO
 			va.registerToGroup(zoomActions, ViewActions.GROUP_ENABLE_VPATHWAY_LOADED);
 			va.registerToGroup(layoutActions, ViewActions.GROUP_ENABLE_EDITMODE);
 			va.registerToGroup(layoutActions, ViewActions.GROUP_ENABLE_WHEN_SELECTION);
@@ -111,7 +115,7 @@ public class CommonActions implements ApplicationEventListener {
 	public final ViewActions.UndoAction undoAction;
 	public final Action copyAction;
 	public final Action pasteAction;
-//	public final Action colorBackgroundAction; TODO 
+	public final ColorBackgroundAction colorBackgroundAction; // TODO
 
 	public final Action exitAction;
 
@@ -152,8 +156,7 @@ public class CommonActions implements ApplicationEventListener {
 		undoAction = new ViewActions.UndoAction(se.getEngine());
 		copyAction = new ViewActions.CopyAction(se.getEngine());
 		pasteAction = new ViewActions.PasteAction(se.getEngine());
-//		colorBackgroundAction = new ViewActions.PasteAction(se.getEngine());
-
+		colorBackgroundAction = new ColorBackgroundAction(se.getEngine());
 		exportAction = new ExportAction(se);
 		importAction = new ImportAction(se);
 		aboutAction = new AboutAction(se);
@@ -295,7 +298,7 @@ public class CommonActions implements ApplicationEventListener {
 				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.PENTAGON)),
 				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.HEXAGON)),
 				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.OCTAGON)),
-			
+
 //				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(MIMShapes.MIM_DEGRADATION_SHAPE)), 
 		};
 
@@ -420,6 +423,34 @@ public class CommonActions implements ApplicationEventListener {
 				new NewElementAction(e, new DefaultTemplates.ReactionTemplate()),
 				new NewElementAction(e, new DefaultTemplates.PhosphorylationTemplate()),
 				new NewElementAction(e, new DefaultTemplates.ReversibleReactionTemplate()), };
+	}
+
+	/**
+	 * "ColorBackground" action, sets background color of pathway to selected color.
+	 */
+	public static class ColorBackgroundAction extends AbstractAction {
+		Engine engine;
+
+		public ColorBackgroundAction(Engine engine) {
+			super();
+			this.engine = engine;
+			putValue(NAME, "Background");
+			putValue(SHORT_DESCRIPTION, "Choose a background color");
+			// engine.addApplicationEventListener(this);
+			// setEnabled(false);
+		}
+
+		public void actionPerformed(ActionEvent e) {
+			PathwayModel p = engine.getActivePathwayModel();
+			if (p != null) {
+				Color initColor = p.getPathway().getBackgroundColor();
+				Color newColor = JColorChooser.showDialog(null, "Choose a background color", initColor);
+				if (newColor != null) {
+					p.getPathway().setBackgroundColor(newColor);
+					engine.getActiveVPathwayModel().redraw();
+				}
+			}
+		}
 	}
 
 	/**

@@ -38,6 +38,9 @@ public enum StaticPropertyType implements PropertyType {
 
 	// ShapedElement
 	DATANODETYPE, STATETYPE, GROUPTYPE,
+	
+	// DataNode
+	GROUP,
 
 	// line style properties
 
