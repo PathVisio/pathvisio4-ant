@@ -40,34 +40,46 @@ import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
 import org.pathvisio.libgpml.debug.Logger;
+import org.pathvisio.libgpml.model.Citation;
 import org.pathvisio.libgpml.model.PathwayElement;
 import org.pathvisio.libgpml.model.PathwayElement.CitationRef;
+import org.pathvisio.libgpml.model.Referenceable.Citable;
+import org.pathvisio.libgpml.util.Utils;
+import org.pathvisio.libgpml.util.XrefUtils;
+import org.bridgedb.Xref;
 import org.pathvisio.core.util.Resources;
 import org.pathvisio.gui.SwingEngine;
-import org.pathvisio.gui.dialogs.PublicationXRefDialog;
+import org.pathvisio.gui.dialogs.CitationRefDialog;
 
 /**
  * 
  * @author unknown
  */
-public class LitReferencePanel extends PathwayElementPanel implements ActionListener {
+public class CitationRefPanel extends ReferenceablePanel implements ActionListener {
+	
 	private static final String ADD = "New reference";
 	private static final String REMOVE = "Remove";
 	private static final String EDIT = "Edit";
 	private static final URL IMG_EDIT = Resources.getResourceURL("edit.gif");
 	private static final URL IMG_REMOVE = Resources.getResourceURL("cancel.gif");
 
-	List<CitationRef> xrefs;
+	List<CitationRef> citationRefs;
 
 	JScrollPane refPanel;
 	JButton addBtn;
 
 	final private SwingEngine swingEngine;
+	boolean readOnly = false;
 
-	public LitReferencePanel(SwingEngine swingEngine) {
+	/**
+	 * Instantiates citationRef panel
+	 * 
+	 * @param swingEngine
+	 */
+	public CitationRefPanel(SwingEngine swingEngine) {
 		this.swingEngine = swingEngine;
 		setLayout(new BorderLayout(5, 5));
-		xrefs = new ArrayList<CitationRef>();
+		citationRefs = new ArrayList<CitationRef>();
 		addBtn = new JButton(ADD);
 		addBtn.setActionCommand(ADD);
 		addBtn.addActionListener(this);
@@ -76,42 +88,84 @@ public class LitReferencePanel extends PathwayElementPanel implements ActionList
 		add(addPnl, BorderLayout.SOUTH);
 	}
 
-	// TODO
+	/**
+	 * Sets read only,
+	 */
 	@Override
-	protected PathwayElement getInput() {
-		return (PathwayElement) super.getInput();
+	public void setReadOnly(boolean readOnly) {
+		super.setReadOnly(readOnly);
+		this.readOnly = readOnly;
+		addBtn.setEnabled(!readOnly);
 	}
 
-	boolean readonly = false;
-
-	public void setReadOnly(boolean readonly) {
-		super.setReadOnly(readonly);
-		this.readonly = readonly;
-		addBtn.setEnabled(!readonly);
+	/**
+	 * Returns the current pathway element.
+	 */
+	@Override
+	protected Citable getInput() {
+		return (Citable) super.getInput();
 	}
 
-	public void setInput(PathwayElement e) {
-//		if (e != getInput()) { //TODO 
-//			elmMgr = e.getParent().getBiopaxElementManager();
-//			refMgr = e.getBiopaxReferenceManager();
-//		}
-		super.setInput(e);
+	/**
+	 * Refresh.
+	 */
+	public void refresh() {
+		if (refPanel != null)
+			remove(refPanel);
+
+		// TODO
+		citationRefs = getInput().getCitationRefs();
+
+		DefaultFormBuilder b = new DefaultFormBuilder(new FormLayout("fill:pref:grow"));
+		for (CitationRef citationRef : citationRefs) {
+			b.append(new LitRefPanel(citationRef));
+			b.nextLine();
+		}
+		JPanel p = b.getPanel();
+		p.setBackground(Color.WHITE);
+		refPanel = new JScrollPane(p);
+		add(refPanel, BorderLayout.CENTER);
+		validate();
 	}
 
-	private class XRefPanel extends JPanel implements HyperlinkListener, ActionListener {
-		CitationRef xref;
+//	/**
+//	 * Sets the current pathway element.
+//	 * 
+//	 * @param e
+//	 */
+//	public void setInput(PathwayElement e) {
+////		if (e != getInput()) { //TODO 
+////			elmMgr = e.getParent().getBiopaxElementManager();
+////			refMgr = e.getBiopaxReferenceManager();
+////		}
+//		super.setInput(e);
+//	}
+
+	/**
+	 * Panel which displays CitationRef
+	 * 
+	 * @author unknown
+	 */
+	private class LitRefPanel extends JPanel implements HyperlinkListener, ActionListener {
+		CitationRef citationRef;
 		JPanel btnPanel;
 
-		public XRefPanel(CitationRef xref) {
-			this.xref = xref;
+		/**
+		 * Instantiates panel
+		 * 
+		 * @param citationRef
+		 */
+		public LitRefPanel(CitationRef citationRef) {
+			this.citationRef = citationRef;
 			setBackground(Color.WHITE);
 			setLayout(new FormLayout("2dlu, fill:[100dlu,min]:grow, 1dlu, pref, 2dlu", "2dlu, pref, 2dlu"));
 			JTextPane txt = new JTextPane();
 			txt.setContentType("text/html");
 			txt.setEditable(false);
-			// TODO order index???
-			int ordinal = getInput().getPathwayModel().getCitations().indexOf(xref.getCitation());
-			txt.setText("<html>" + "<B>" + ordinal + ":</B> " + xref.toString() + "</html>");
+			Citation citation = citationRef.getCitation();
+			// index starts from 1
+			int ordinal = getInput().getPathwayModel().getCitations().indexOf(citation) + 1;
+			txt.setText("<html>" + "<B>" + ordinal + ":</B> " + xrefToString(citation.getXref()) + "</html>");
 			txt.addHyperlinkListener(this);
 			CellConstraints cc = new CellConstraints();
 			add(txt, cc.xy(2, 2));
@@ -153,7 +207,7 @@ public class LitReferencePanel extends PathwayElementPanel implements ActionList
 
 			MouseAdapter maHide = new MouseAdapter() {
 				public void mouseEntered(MouseEvent e) {
-					if (!readonly)
+					if (!readOnly)
 						btnPanel.setVisible(true);
 				}
 
@@ -176,55 +230,70 @@ public class LitReferencePanel extends PathwayElementPanel implements ActionList
 		public void actionPerformed(ActionEvent e) {
 			String action = e.getActionCommand();
 			if (EDIT.equals(action)) {
-				edit(xref);
+				edit(citationRef);
 			} else if (REMOVE.equals(action)) {
-				LitReferencePanel.this.remove(xref);
+				CitationRefPanel.this.remove(citationRef);
 			}
 		}
-	}
 
-	public void refresh() {
-		if (refPanel != null)
-			remove(refPanel);
+		static final String PUBMED_URL = "http://www.ncbi.nlm.nih.gov/pubmed/";
 
-		// TODO
-		xrefs = ((PathwayElement) getInput()).getCitationRefs();
-
-		DefaultFormBuilder b = new DefaultFormBuilder(new FormLayout("fill:pref:grow"));
-		for (CitationRef xref : xrefs) {
-			b.append(new XRefPanel(xref));
-			b.nextLine();
+		// TODO need a solution for more...
+		public String xrefToString(Xref xref) {
+			StringBuilder builder = new StringBuilder();
+			String pmid = XrefUtils.getIdentifier(xref);
+			String ds = XrefUtils.getDataSource(xref).getFullName();
+			if (!Utils.isEmpty(pmid)) {
+				builder.append("<A href='" + xref.getKnownUrl()).append("'>").append(ds).append(" ").append(pmid)
+						.append("</A>.");
+			}
+			System.out.println(xref.getKnownUrl());
+			System.out.println(ds);
+			System.out.println(builder.toString());
+			return builder.toString();
 		}
-		JPanel p = b.getPanel();
-		p.setBackground(Color.WHITE);
-		refPanel = new JScrollPane(p);
-		add(refPanel, BorderLayout.CENTER);
-		validate();
+
 	}
 
+	/**
+	 * Action for when ADD "New reference" button is pressed.
+	 */
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand().equals(ADD)) {
 			addPressed();
 		}
 	}
 
-	private void edit(CitationRef xref) {
-		if (xref != null) {
-			PublicationXRefDialog d = new PublicationXRefDialog(xref, null, this, false);
+	/**
+	 * When "Edit" button is pressed. A CitationDialog is opened for given
+	 * citationRef.
+	 * 
+	 * @param xref
+	 */
+	private void edit(CitationRef citationRef) {
+		if (citationRef != null) {
+			CitationRefDialog d = new CitationRefDialog(getInput(), citationRef, null, this, false);
 			d.setVisible(true);
 		}
 		refresh();
 	}
 
-	private void remove(CitationRef xref) {
-		((PathwayElement) getInput()).removeCitationRef(xref); // TODO
+	/**
+	 * When "Remove" button is pressed. The given citationRef is removed.
+	 * 
+	 * @param citationRef
+	 */
+	private void remove(CitationRef citationRef) {
+		((PathwayElement) getInput()).removeCitationRef(citationRef); // TODO
 		refresh();
 	}
 
+	/**
+	 * When ADD "New reference" button is pressed. A CitationDialog is opened.
+	 */
 	private void addPressed() {
-		CitationRef xref = ((PathwayElement) getInput()).addCitation(null, null); // TODO
-
-		final PublicationXRefDialog d = new PublicationXRefDialog(xref, null, this);
+		CitationRef citationRef = null; // new citationRef
+		final CitationRefDialog d = new CitationRefDialog(getInput(), citationRef, null, this);
 		if (!SwingUtilities.isEventDispatchThread()) {
 			try {
 				SwingUtilities.invokeAndWait(new Runnable() {
@@ -238,10 +307,12 @@ public class LitReferencePanel extends PathwayElementPanel implements ActionList
 		} else {
 			d.setVisible(true);
 		}
-		if (d.getExitCode().equals(PublicationXRefDialog.OK)) {
-			//TODO seems weird but ok for now...
-			getInput().addCitation(xref.getCitation());
+		if (d.getExitCode().equals(CitationRefDialog.OK)) {
+			// TODO seems weird but ok for now...
+//			getInput().addCitation(citationRef.getCitation());
 			refresh();
+		} else {
+
 		}
 	}
 }

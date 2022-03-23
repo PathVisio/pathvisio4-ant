@@ -50,7 +50,9 @@ import org.pathvisio.core.data.PubMedQuery;
 import org.pathvisio.core.data.PubMedResult;
 import org.pathvisio.core.util.ProgressKeeper;
 import org.pathvisio.gui.ProgressDialog;
+import org.pathvisio.libgpml.model.PathwayElement;
 import org.pathvisio.libgpml.model.PathwayElement.CitationRef;
+import org.pathvisio.libgpml.model.Referenceable.Citable;
 import org.pathvisio.libgpml.util.XrefUtils;
 import org.xml.sax.SAXException;
 
@@ -60,60 +62,100 @@ import org.xml.sax.SAXException;
  * 
  * @author unknown
  */
-public class PublicationXRefDialog extends OkCancelDialog {
+public class CitationRefDialog extends OkCancelDialog {
 
 	final static String ADD = "Add";
 	final static String REMOVE = "Remove";
-	final static String XREF_IDENTIFIER = "Identifier";
-	final static String XREF_DATASOURCE = "DataSource";
 	final static String QUERY = "Query PubMed";
 
-	CitationRef input;
+	final static String XREF_IDENTIFIER = "Identifier";
+	final static String XREF_DATASOURCE = "DataSource";
+
+	Citable citable;
+	CitationRef citationRef;
 	JTextField xrefIdentifier;
 	JTextField xrefDataSource;
 
-	public PublicationXRefDialog(CitationRef xref, Frame frame, Component locationComp, boolean cancellable) {
+	/**
+	 * Instantiates a citation dialog.
+	 * 
+	 * @param citationRef
+	 * @param frame
+	 * @param locationComp
+	 * @param cancellable
+	 */
+	public CitationRefDialog(Citable citable, CitationRef citationRef, Frame frame, Component locationComp, boolean cancellable) {
 		super(frame, "Literature reference properties", locationComp, true, cancellable);
-		input = xref;
-
+		this.citable = citable; 
+		this.citationRef = citationRef;
 		setDialogComponent(createDialogPane());
 		refresh();
 
 		setSize(400, 300);
 	}
 
-	public PublicationXRefDialog(CitationRef xref, Frame frame, Component locationComp) {
-		this(xref, frame, locationComp, true);
+	/**
+	 * Instantiates a citation dialog with boolean cancellable true.
+	 */
+	public CitationRefDialog(Citable citable, CitationRef citationRef, Frame frame, Component locationComp) {
+		this(citable, citationRef, frame, locationComp, true);
 	}
 
+	/**
+	 * Sets text in text field.
+	 * 
+	 * @param text
+	 * @param field
+	 */
 	private void setText(String text, JTextComponent field) {
 		if (text != null && text.length() > 0)
 			field.setText(text);
 	}
 
-	// TODO
+	/**
+	 * Refresh.
+	 */
 	protected void refresh() {
-		setText(input.getCitation().getXref().getId(), xrefIdentifier);
-		setText(input.getCitation().getXref().getDataSource().getCompactIdentifierPrefix(), xrefDataSource);
+		if (citationRef != null) {
+			String id = XrefUtils.getIdentifier(citationRef.getCitation().getXref());
+			setText(id, xrefIdentifier);
+			DataSource ds = XrefUtils.getDataSource(citationRef.getCitation().getXref());
+			setText(ds.getCompactIdentifierPrefix(), xrefDataSource);
+		}
 	}
 
+	/**
+	 * When "Ok" button is pressed. The citationRef is created or updated.
+	 */
 	protected void okPressed() {
-		// TODO is this correct????
-		String oldIdentifier = input.getCitation().getXref().getId();
-		DataSource oldDataSource = input.getCitation().getXref().getDataSource();
+		// old information
+		String oldIdentifier = null;
+		DataSource oldDataSource = null;
+		if (citationRef != null) {
+			oldIdentifier = citationRef.getCitation().getXref().getId();
+			oldDataSource = citationRef.getCitation().getXref().getDataSource();
+		}
+		// new information
 		String newIdentifier = xrefIdentifier.getText().trim();
 		String newDataSourceStr = xrefDataSource.getText();
 		DataSource newDataSource = XrefUtils.getXrefDataSource(newDataSourceStr);
+		// if changed
 		if (oldIdentifier != newIdentifier || oldDataSource != newDataSource) {
 			Xref xref = new Xref(newIdentifier, newDataSource);
 			if (xref != null) {
-				input.getCitable().removeCitationRef(input);
-				input.getCitable().addCitation(xref, null);
+				// if citationRef exists, removed first 
+				if (citationRef != null) {
+					citable.removeCitationRef(citationRef);
+				}
+				citable.addCitation(xref, null); // TODO urlLink empty
 			}
 		}
 		super.okPressed();
 	}
 
+	/**
+	 * When "Query" button is pressed.
+	 */
 	protected void queryPressed() {
 		final PubMedQuery pmq = new PubMedQuery(xrefIdentifier.getText().trim());
 		final ProgressKeeper pk = new ProgressKeeper();
@@ -129,16 +171,18 @@ public class PublicationXRefDialog extends OkCancelDialog {
 		};
 
 		sw.execute();
-
 		d.setVisible(true);
 
 		PubMedResult pmr = pmq.getResult();
 		if (pmr != null) {
 			xrefIdentifier.setText(pmr.getId()); // write the trimmed pmid to the dialog
-			xrefDataSource.setText(pmr.getTitle());
+			xrefDataSource.setText("PubMed");
 		}
 	}
 
+	/**
+	 * Action for when "Query" button is pressed.
+	 */
 	public void actionPerformed(ActionEvent e) {
 		if (QUERY.equals(e.getActionCommand())) {
 			queryPressed();
@@ -146,7 +190,11 @@ public class PublicationXRefDialog extends OkCancelDialog {
 		super.actionPerformed(e);
 	}
 
-	//TODO removed author stuff 
+	/**
+	 * Creates Dialog pane. // TODO removed author stuff
+	 * 
+	 * @return
+	 */
 	protected Component createDialogPane() {
 		JPanel contents = new JPanel();
 		contents.setLayout(new GridBagLayout());
@@ -177,9 +225,8 @@ public class PublicationXRefDialog extends OkCancelDialog {
 				sep.addAttribute(StyleConstants.ColorConstants.Foreground, Color.RED);
 				sep.addAttribute(StyleConstants.CharacterConstants.Bold, Boolean.TRUE);
 			}
-			
-		});
 
+		});
 
 		JButton query = new JButton(QUERY);
 		query.addActionListener(this);

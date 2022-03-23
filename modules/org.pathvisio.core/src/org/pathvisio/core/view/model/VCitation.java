@@ -169,7 +169,7 @@ public class VCitation extends VElement implements VElementMouseListener {
 			// TODO use for now the index of citation
 			CitationRef citationRef = citationRefs.get(i);
 			Citation citation = citationRef.getCitation();
-			int n = canvas.getPathwayModel().getCitations().indexOf(citation);
+			int n = canvas.getPathwayModel().getCitations().indexOf(citation) + 1;// index starts from 1
 			if (n != lastOrdinal + 1) { // End sequence
 				if (sequence > 2) {
 					xrefStr = xrefStr.substring(0, xrefStr.length() - 2);
