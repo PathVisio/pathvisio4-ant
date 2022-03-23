@@ -55,7 +55,7 @@ import org.pathvisio.gui.dialogs.CitationRefDialog;
  * 
  * @author unknown
  */
-public class CitationRefPanel extends ReferenceablePanel implements ActionListener {
+public class CitationRefPanel extends PathwayElementPanel implements ActionListener {
 	
 	private static final String ADD = "New reference";
 	private static final String REMOVE = "Remove";
@@ -102,8 +102,8 @@ public class CitationRefPanel extends ReferenceablePanel implements ActionListen
 	 * Returns the current pathway element.
 	 */
 	@Override
-	protected Citable getInput() {
-		return (Citable) super.getInput();
+	protected PathwayElement getInput() {
+		return (PathwayElement) super.getInput();
 	}
 
 	/**

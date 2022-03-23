@@ -36,8 +36,8 @@ import org.pathvisio.core.util.Resources;
 import org.pathvisio.core.view.model.UndoAction;
 import org.pathvisio.core.view.model.VPathwayModel;
 import org.pathvisio.gui.SwingEngine;
+import org.pathvisio.gui.panels.CitationRefPanel;
 import org.pathvisio.gui.panels.CommentPanel;
-import org.pathvisio.gui.panels.LitReferencePanel;
 import org.pathvisio.gui.panels.PathwayElementPanel;
 
 /**
@@ -129,7 +129,7 @@ public class PathwayElementDialog extends OkCancelDialog {
 
 	private void createTabs() {
 		addPathwayElementPanel(TAB_COMMENTS, new CommentPanel());
-		addPathwayElementPanel(TAB_LITERATURE, new LitReferencePanel(swingEngine));
+		addPathwayElementPanel(TAB_LITERATURE, new CitationRefPanel(swingEngine));
 		addCustomTabs(dialogPane);
 	}
 
