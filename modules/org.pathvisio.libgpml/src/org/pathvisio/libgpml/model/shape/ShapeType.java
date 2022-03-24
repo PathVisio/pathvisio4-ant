@@ -218,6 +218,9 @@ public class ShapeType implements IShape {
 	 * @return the shape resized.
 	 */
 	public Shape getShape(double w, double h) {
+		if (shape == null) {
+			return ShapeRegistry.DEFAULT_SHAPE.getShape(w, h);
+		}
 		// now scale the path so it has proper w and h.
 		Rectangle r = shape.getBounds();
 		AffineTransform at = new AffineTransform();
