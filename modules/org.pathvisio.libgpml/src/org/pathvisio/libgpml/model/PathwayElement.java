@@ -31,6 +31,7 @@ import org.pathvisio.libgpml.model.Referenceable.Evidenceable;
 import org.pathvisio.libgpml.model.type.AnnotationType;
 import org.pathvisio.libgpml.prop.StaticProperty;
 import org.pathvisio.libgpml.util.Utils;
+import org.pathvisio.libgpml.util.XrefUtils;
 
 /**
  * Abstract class of pathway elements which are part of a pathway, have an
@@ -1144,6 +1145,9 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 			}
 		}
 
+		// ================================================================================
+		// Other Methods
+		// ================================================================================
 		/**
 		 * Terminates this annotationRef. The annotation and annotatable, if any, are
 		 * unset from this annotationRef.
@@ -1154,6 +1158,32 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 			unsetAnnotation();
 			unsetAnnotatable();
 		}
+
+		/**
+		 * TODO
+		 */
+		@Override
+		public String toString() {
+			String result = "";
+			String ordinal = "<B>a" + (getPathwayModel().getAnnotations().indexOf(annotation) + 1) + ":</B> ";
+			System.out.println(getPathwayModel().getAnnotations());
+			// value and type required
+			String value = "value=" + annotation.getValue();
+			String type = "type=" + annotation.getType().getName();
+			result = ordinal + value + ", " + type;
+			// xref optional 
+			String xref = annotation.getXref().getKnownUrl();
+			if (xref != null && !Utils.stringEquals(xref, "")) {
+				result += xref;
+			}
+			// urlLink optional 
+			String urlLink = annotation.getUrlLink();
+			if (urlLink != null && !Utils.stringEquals(urlLink, "") && !Utils.stringEquals(urlLink, xref)) {
+				result += ", " + urlLink;
+			}
+			return "<html>" + result + "</html>";
+		}
+
 	}
 
 	// ================================================================================
@@ -1418,6 +1448,9 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 			}
 		}
 
+		// ================================================================================
+		// Other Methods
+		// ================================================================================
 		/**
 		 * Terminates this citationRef. The citation and citable, if any, are unset from
 		 * this citationRef. Links to all annotationRefs are removed from this
@@ -1428,6 +1461,27 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 			unsetCitation();
 			unsetCitable();
 		}
+
+		/**
+		 * TODO
+		 */
+		@Override
+		public String toString() {
+			String result = "";
+			String ordinal = "<B>c" + (getPathwayModel().getCitations().indexOf(citation) + 1) + ":</B> ";
+			String xref = citation.getXref().getKnownUrl();
+			String urlLink = citation.getUrlLink();
+			result += ordinal;
+			// either xref or urlLink required
+			if (xref != null && !Utils.stringEquals(xref, "")) {
+				result += xref;
+			}
+			if (urlLink != null && !Utils.stringEquals(urlLink, "") && !Utils.stringEquals(urlLink, xref)) {
+				result += ", " + urlLink;
+			}
+			return "<html>" + result + "</html>";
+		}
+
 	}
 
 	// ================================================================================
@@ -1574,6 +1628,9 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 			}
 		}
 
+		// ================================================================================
+		// Other Methods
+		// ================================================================================
 		/**
 		 * Terminates this evidenceRef. The evidence and evidenceable, if any, are unset
 		 * from this evidenceRef. Links to all evidenceRefs are removed from this
@@ -1582,6 +1639,29 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 		protected void terminate() {
 			unsetEvidence();
 			unsetEvidenceable();
+		}
+
+		/**
+		 * TODO
+		 */
+		@Override
+		public String toString() {
+			String result = "";
+			String ordinal = "<B>c" + (getPathwayModel().getCitations().indexOf(evidence) + 1) + ":</B> ";
+			// required xref
+			String xref = evidence.getXref().getKnownUrl();
+			result += ordinal + xref;
+			// optional urlLink
+			String urlLink = evidence.getUrlLink();
+			if (urlLink != null && !Utils.stringEquals(urlLink, "") && !Utils.stringEquals(urlLink, xref)) {
+				result += ", " + urlLink;
+			}
+			// optional value
+			String value = evidence.getValue();
+			if (value != null && !Utils.stringEquals(value, "")) {
+				result += ", value=" + value;
+			}
+			return "<html>" + result + "</html>";
 		}
 	}
 

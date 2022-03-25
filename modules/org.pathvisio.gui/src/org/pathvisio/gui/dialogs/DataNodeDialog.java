@@ -474,7 +474,7 @@ public class DataNodeDialog extends PathwayElementDialog {
 		dbCombo.setEnabled(!readonly);
 		typeCombo.setEnabled(!readonly);
 
-		parent.add("Annotation", panel);
+		parent.add("Xref", panel); //TODO 
 		parent.setSelectedComponent(panel);
 	}
 }
