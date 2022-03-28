@@ -37,7 +37,7 @@ import org.pathvisio.core.view.model.UndoAction;
 import org.pathvisio.core.view.model.VPathwayModel;
 import org.pathvisio.gui.SwingEngine;
 import org.pathvisio.gui.panels.AnnotationRefTreePanel;
-import org.pathvisio.gui.panels.CitationRefPanel;
+import org.pathvisio.gui.panels.LitReferencePanel;
 import org.pathvisio.gui.panels.CitationRefTreePanel;
 import org.pathvisio.gui.panels.CommentPanel;
 import org.pathvisio.gui.panels.EvidenceRefTreePanel;

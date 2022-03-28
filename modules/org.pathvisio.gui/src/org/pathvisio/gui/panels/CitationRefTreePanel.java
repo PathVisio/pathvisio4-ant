@@ -22,6 +22,7 @@ import com.jgoodies.forms.layout.FormLayout;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -30,6 +31,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -39,7 +41,11 @@ import javax.swing.JTree;
 import javax.swing.SwingUtilities;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreePath;
+import javax.swing.tree.TreeSelectionModel;
 
 import org.pathvisio.libgpml.debug.Logger;
 import org.pathvisio.libgpml.model.Citation;
@@ -69,7 +75,9 @@ public class CitationRefTreePanel extends RefTreePanel implements ActionListener
 
 	List<CitationRef> citationRefs;
 
-	JScrollPane refPanel;
+	JScrollPane treePnl;
+	JPanel infoPnl;
+	JPanel addPnl;
 	JButton addBtn;
 
 	final private SwingEngine swingEngine;
@@ -84,10 +92,13 @@ public class CitationRefTreePanel extends RefTreePanel implements ActionListener
 		this.swingEngine = swingEngine;
 		setLayout(new BorderLayout(5, 5));
 		citationRefs = new ArrayList<CitationRef>();
+		infoPnl = new JPanel();
+		infoPnl.setBorder(BorderFactory.createTitledBorder("Information"));
+		add(infoPnl, BorderLayout.CENTER);
 		addBtn = new JButton(ADD);
 		addBtn.setActionCommand(ADD);
 		addBtn.addActionListener(this);
-		JPanel addPnl = new JPanel();
+		addPnl = new JPanel();
 		addPnl.add(addBtn);
 		add(addPnl, BorderLayout.SOUTH);
 	}
@@ -114,19 +125,37 @@ public class CitationRefTreePanel extends RefTreePanel implements ActionListener
 	 * Refresh.
 	 */
 	public void refresh() {
-		if (refPanel != null)
-			remove(refPanel);
-		// CitationRef tree
+		if (treePnl != null) {
+			remove(treePnl);
+		}
+		// tree
 		citationRefs = getInput().getCitationRefs();
 		DefaultMutableTreeNode root = new DefaultMutableTreeNode("Citations (nested Annotations and Evidences)");
 		addCitationRefNodes(root, citationRefs);
 		JTree tree = new JTree(root);
 //		tree.setRootVisible(false); // sets root folder invisible
 		tree.setEditable(true); // TODO
-		JScrollPane jsp = new JScrollPane(tree);
-		add(jsp, BorderLayout.CENTER);
+		treePnl = new JScrollPane(tree);
+		add(treePnl, BorderLayout.NORTH);
 		setBackground(Color.WHITE);
 		validate();
+
+		tree.addTreeSelectionListener(new TreeSelectionListener() {
+			public void valueChanged(TreeSelectionEvent e) {
+				DefaultMutableTreeNode node = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
+				// if nothing is selected
+				if (node == null) {
+					return;
+				}
+				// retrieve the node that was selected 
+				Object nodeInfo = node.getUserObject();
+				// react to the node selection
+				infoPnl = new ViewRefPanel((CitationRef) nodeInfo);
+				infoPnl.setBorder(BorderFactory.createTitledBorder("Information"));
+				add(infoPnl, BorderLayout.CENTER);
+			}
+		});
+
 	}
 
 //	/**
@@ -142,119 +171,117 @@ public class CitationRefTreePanel extends RefTreePanel implements ActionListener
 //		super.setInput(e);
 //	}
 
-//	/**
-//	 * Panel which displays CitationRef
-//	 * 
-//	 * @author unknown
-//	 */
-//	private class LitRefPanel extends JPanel implements HyperlinkListener, ActionListener {
-//		CitationRef citationRef;
-//		JPanel btnPanel;
-//
-//		/**
-//		 * Instantiates panel
-//		 * 
-//		 * @param citationRef
-//		 */
-//		public LitRefPanel(CitationRef citationRef) {
-//			this.citationRef = citationRef;
-//			setBackground(Color.WHITE);
-//			setLayout(new FormLayout("2dlu, fill:[100dlu,min]:grow, 1dlu, pref, 2dlu", "2dlu, pref, 2dlu"));
-//			JTextPane txt = new JTextPane();
-//			txt.setContentType("text/html");
-//			txt.setEditable(false);
-//			Citation citation = citationRef.getCitation();
-//			// index starts from 1
-//			int ordinal = getInput().getPathwayModel().getCitations().indexOf(citation) + 1;
-//			txt.setText("<html>" + "<B>" + ordinal + ":</B> " + xrefToString(citation.getXref()) + "</html>");
-//			txt.addHyperlinkListener(this);
-//			CellConstraints cc = new CellConstraints();
-//			add(txt, cc.xy(2, 2));
-//
-//			btnPanel = new JPanel(new FormLayout("pref", "pref, pref"));
-//			JButton btnEdit = new JButton();
-//			btnEdit.setActionCommand(EDIT);
-//			btnEdit.addActionListener(this);
-//			btnEdit.setIcon(new ImageIcon(IMG_EDIT));
-//			btnEdit.setBackground(Color.WHITE);
-//			btnEdit.setBorder(null);
-//			btnEdit.setToolTipText("Edit literature reference");
-//
-//			JButton btnRemove = new JButton();
-//			btnRemove.setActionCommand(REMOVE);
-//			btnRemove.addActionListener(this);
-//			btnRemove.setIcon(new ImageIcon(IMG_REMOVE));
-//			btnRemove.setBackground(Color.WHITE);
-//			btnRemove.setBorder(null);
-//			btnRemove.setToolTipText("Remove literature reference");
-//
-//			MouseAdapter maHighlight = new MouseAdapter() {
-//				public void mouseEntered(MouseEvent e) {
-//					e.getComponent().setBackground(new Color(200, 200, 255));
-//				}
-//
-//				public void mouseExited(MouseEvent e) {
-//					e.getComponent().setBackground(Color.WHITE);
-//				}
-//			};
-//			btnEdit.addMouseListener(maHighlight);
-//			btnRemove.addMouseListener(maHighlight);
-//
-//			btnPanel.add(btnEdit, cc.xy(1, 1));
-//			btnPanel.add(btnRemove, cc.xy(1, 2));
-//
-//			add(btnPanel, cc.xy(4, 2));
-//			btnPanel.setVisible(false);
-//
-//			MouseAdapter maHide = new MouseAdapter() {
-//				public void mouseEntered(MouseEvent e) {
-//					if (!readOnly)
-//						btnPanel.setVisible(true);
-//				}
-//
-//				public void mouseExited(MouseEvent e) {
-//					if (!contains(e.getPoint())) {
-//						btnPanel.setVisible(false);
-//					}
-//				}
-//			};
-//			addMouseListener(maHide);
-//			txt.addMouseListener(maHide);
-//		}
-//
-//		public void hyperlinkUpdate(HyperlinkEvent e) {
-//			if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
-//				swingEngine.openUrl(e.getURL());
-//			}
-//		}
-//
-//		public void actionPerformed(ActionEvent e) {
-//			String action = e.getActionCommand();
-//			if (EDIT.equals(action)) {
-//				edit(citationRef);
-//			} else if (REMOVE.equals(action)) {
-//				CitationRefTreePanel.this.remove(citationRef);
-//			}
-//		}
-//
-//		static final String PUBMED_URL = "http://www.ncbi.nlm.nih.gov/pubmed/";
-//
-//		// TODO need a solution for more...
-//		public String xrefToString(Xref xref) {
-//			StringBuilder builder = new StringBuilder();
-//			String pmid = XrefUtils.getIdentifier(xref);
-//			String ds = XrefUtils.getDataSource(xref).getFullName();
-//			if (!Utils.isEmpty(pmid)) {
-//				builder.append("<A href='" + xref.getKnownUrl()).append("'>").append(ds).append(" ").append(pmid)
-//						.append("</A>.");
-//			}
-//			System.out.println(xref.getKnownUrl());
-//			System.out.println(ds);
-//			System.out.println(builder.toString());
-//			return builder.toString();
-//		}
-//
-//	}
+	/**
+	 * Panel which displays CitationRef
+	 * 
+	 * @author unknown
+	 */
+	private class ViewRefPanel extends JPanel implements HyperlinkListener, ActionListener {
+		CitationRef citationRef;
+		JPanel btnPanel;
+
+		/**
+		 * Instantiates panel
+		 * 
+		 * @param citationRef
+		 */
+		public ViewRefPanel(CitationRef citationRef) {
+			this.citationRef = citationRef;
+			setBackground(new Color(255,255,255,0));
+			setLayout(new FormLayout("2dlu, fill:[100dlu,min]:grow, 1dlu, pref, 2dlu", "2dlu, pref, 2dlu"));
+			JTextPane txt = new JTextPane();
+			txt.setContentType("text/html");
+			txt.setEditable(false);
+			Citation citation = citationRef.getCitation();
+			// index starts from 1
+			int ordinal = getInput().getPathwayModel().getCitations().indexOf(citation) + 1;
+			txt.setText("<html>" + "<B>" + ordinal + ":</B> " + xrefToString(citation.getXref()) + "</html>");
+			txt.addHyperlinkListener(this);
+			CellConstraints cc = new CellConstraints();
+			add(txt, cc.xy(2, 2));
+
+			btnPanel = new JPanel(new FormLayout("pref", "pref, pref"));
+			JButton btnEdit = new JButton();
+			btnEdit.setActionCommand(EDIT);
+			btnEdit.addActionListener(this);
+			btnEdit.setIcon(new ImageIcon(IMG_EDIT));
+			btnEdit.setBackground(new Color(255,255,255,0));
+			btnEdit.setBorder(null);
+			btnEdit.setToolTipText("Edit literature reference");
+
+			JButton btnRemove = new JButton();
+			btnRemove.setActionCommand(REMOVE);
+			btnRemove.addActionListener(this);
+			btnRemove.setIcon(new ImageIcon(IMG_REMOVE));
+			btnRemove.setBackground(Color.WHITE);
+			btnRemove.setBorder(null);
+			btnRemove.setToolTipText("Remove literature reference");
+
+			MouseAdapter maHighlight = new MouseAdapter() {
+				public void mouseEntered(MouseEvent e) {
+					e.getComponent().setBackground(new Color(200, 200, 255));
+				}
+
+				public void mouseExited(MouseEvent e) {
+					e.getComponent().setBackground(Color.WHITE);
+				}
+			};
+			btnEdit.addMouseListener(maHighlight);
+			btnRemove.addMouseListener(maHighlight);
+
+			btnPanel.add(btnEdit, cc.xy(1, 1));
+			btnPanel.add(btnRemove, cc.xy(1, 2));
+
+			add(btnPanel, cc.xy(4, 2));
+			btnPanel.setVisible(false);
+
+			MouseAdapter maHide = new MouseAdapter() {
+				public void mouseEntered(MouseEvent e) {
+					if (!readOnly)
+						btnPanel.setVisible(true);
+				}
+
+				public void mouseExited(MouseEvent e) {
+					if (!contains(e.getPoint())) {
+						btnPanel.setVisible(false);
+					}
+				}
+			};
+			addMouseListener(maHide);
+			txt.addMouseListener(maHide);
+		}
+
+		public void hyperlinkUpdate(HyperlinkEvent e) {
+			if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
+				swingEngine.openUrl(e.getURL());
+			}
+		}
+
+		public void actionPerformed(ActionEvent e) {
+			String action = e.getActionCommand();
+			if (EDIT.equals(action)) {
+				edit(citationRef);
+			} else if (REMOVE.equals(action)) {
+				CitationRefTreePanel.this.remove(citationRef);
+			}
+		}
+
+		static final String PUBMED_URL = "http://www.ncbi.nlm.nih.gov/pubmed/";
+
+		public String xrefToString(Xref xref) {
+			StringBuilder builder = new StringBuilder();
+			String pmid = XrefUtils.getIdentifier(xref);
+			String ds = XrefUtils.getDataSource(xref).getFullName();
+			if (!Utils.isEmpty(pmid)) {
+				builder.append("<A href='" + xref.getKnownUrl()).append("'>").append(ds).append(" ").append(pmid)
+						.append("</A>.");
+			}
+			System.out.println(xref.getKnownUrl());
+			System.out.println(ds);
+			System.out.println(builder.toString());
+			return builder.toString();
+		}
+	}
 
 	/**
 	 * Action for when ADD "New reference" button is pressed.

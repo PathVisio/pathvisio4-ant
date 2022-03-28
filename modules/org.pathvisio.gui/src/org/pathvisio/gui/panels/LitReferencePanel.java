@@ -55,7 +55,7 @@ import org.pathvisio.gui.dialogs.CitationRefDialog;
  * 
  * @author unknown
  */
-public class CitationRefPanel extends PathwayElementPanel implements ActionListener {
+public class LitReferencePanel extends PathwayElementPanel implements ActionListener {
 	
 	private static final String ADD = "New reference";
 	private static final String REMOVE = "Remove";
@@ -76,7 +76,7 @@ public class CitationRefPanel extends PathwayElementPanel implements ActionListe
 	 * 
 	 * @param swingEngine
 	 */
-	public CitationRefPanel(SwingEngine swingEngine) {
+	public LitReferencePanel(SwingEngine swingEngine) {
 		this.swingEngine = swingEngine;
 		setLayout(new BorderLayout(5, 5));
 		citationRefs = new ArrayList<CitationRef>();
@@ -232,7 +232,7 @@ public class CitationRefPanel extends PathwayElementPanel implements ActionListe
 			if (EDIT.equals(action)) {
 				edit(citationRef);
 			} else if (REMOVE.equals(action)) {
-				CitationRefPanel.this.remove(citationRef);
+				LitReferencePanel.this.remove(citationRef);
 			}
 		}
 

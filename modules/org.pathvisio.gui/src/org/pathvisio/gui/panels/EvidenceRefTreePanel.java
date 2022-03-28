@@ -114,17 +114,18 @@ public class EvidenceRefTreePanel extends RefTreePanel implements ActionListener
 	 * Refresh.
 	 */
 	public void refresh() {
-		if (refPanel != null)
+		if (refPanel != null) {
 			remove(refPanel);
-		// EvidenceRef tree
+		}
+		// tree
 		evidenceRefs = getInput().getEvidenceRefs();
 		DefaultMutableTreeNode root = new DefaultMutableTreeNode("Evidences");
 		addEvidenceRefNodes(root, evidenceRefs);
 		JTree tree = new JTree(root);
 //		tree.setRootVisible(false); // sets root folder invisible
 		tree.setEditable(true); // TODO
-		JScrollPane jsp = new JScrollPane(tree);
-		add(jsp, BorderLayout.CENTER);
+		refPanel = new JScrollPane(tree);
+		add(refPanel, BorderLayout.CENTER);
 		setBackground(Color.WHITE);
 		validate();
 	}

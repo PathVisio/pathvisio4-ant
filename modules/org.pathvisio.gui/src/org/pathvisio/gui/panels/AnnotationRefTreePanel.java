@@ -114,17 +114,18 @@ public class AnnotationRefTreePanel extends RefTreePanel implements ActionListen
 	 * Refresh.
 	 */
 	public void refresh() {
-		if (refPanel != null)
+		if (refPanel != null) {
 			remove(refPanel);
-		// AnnotationRef tree
+		}
+		// tree
 		annotationRefs = getInput().getAnnotationRefs();
 		DefaultMutableTreeNode root = new DefaultMutableTreeNode("Annotations (nested Citations)");
 		addAnnotationRefNodes(root, annotationRefs);
 		JTree tree = new JTree(root);
 //		tree.setRootVisible(false); // sets root folder invisible
 		tree.setEditable(true); // TODO
-		JScrollPane jsp = new JScrollPane(tree);
-		add(jsp, BorderLayout.CENTER);
+		refPanel = new JScrollPane(tree);
+		add(refPanel, BorderLayout.CENTER);
 		setBackground(Color.WHITE);
 		validate();
 	}

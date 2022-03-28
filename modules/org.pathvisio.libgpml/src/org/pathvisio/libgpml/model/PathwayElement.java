@@ -1166,7 +1166,6 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 		public String toString() {
 			String result = "";
 			String ordinal = "<B>a" + (getPathwayModel().getAnnotations().indexOf(annotation) + 1) + ":</B> ";
-			System.out.println(getPathwayModel().getAnnotations());
 			// value and type required
 			String value = "value=" + annotation.getValue();
 			String type = "type=" + annotation.getType().getName();

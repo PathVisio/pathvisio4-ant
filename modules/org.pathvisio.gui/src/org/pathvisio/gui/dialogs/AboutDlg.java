@@ -17,7 +17,6 @@
 package org.pathvisio.gui.dialogs;
 
 import java.awt.Color;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.URL;
@@ -28,7 +27,6 @@ import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 
 import org.pathvisio.core.Globals;
 import org.pathvisio.core.util.Resources;
@@ -43,6 +41,10 @@ import com.jgoodies.forms.layout.FormLayout;
  * 
  * @author unknown
  */
+/**
+ * Creates and displays the About dialog, showing some general information about
+ * the application.
+ */
 public class AboutDlg {
 	private static final URL IMG_ABOUT_LOGO = Resources.getResourceURL("new-logo-small.png");
 
@@ -53,7 +55,6 @@ public class AboutDlg {
 	 */
 	public void createAndShowGUI() {
 		final JFrame aboutDlg = new JFrame();
-		aboutDlg.setIconImage(Toolkit.getDefaultToolkit().createImage(Resources.getLogo()));
 		aboutDlg.setBackground(Color.WHITE);
 		FormLayout layout = new FormLayout(" 4dlu, left:230dlu:grow, 4dlu",
 				"4dlu, pref, 4dlu, 240dlu:grow, 4dlu, pref, 4dlu");
@@ -64,14 +65,12 @@ public class AboutDlg {
 		label.setEditable(false);
 		label.setText(swingEngine.getEngine().getApplicationName() + "<br><br><hr><br>"
 				+ "<html><b>Core developers</b><br>"
-				+ "Martina Kutmon, Finterly Hu, Nuno Nunes, Alexander Pico, Egon Willighagen, Denise Slenter, Kristina Hanspers<br><br><hr><br>"
-				+ "<b>Former developers</b><br>"
-				+ "Andra Waagmeester, Anwesha Bohler, Jonathan Melius, Martijn van Iersel, Thomas Kelder<br>"
-				+ "<b>Contributors</b><br>" + "Adem Bilicna, Augustin Luna, Bing Lui, "
-				+ "Christ Leemans, Eric Creussen, Erik Pelgrin, " + "Esterh Neuteboom, Ferry Jagers, Hakim Achterberg, "
-				+ "Harm Nijveen, Irene Kaashoek, Justin Elser, "
-				+ "Kumar Chanden, Lars Willighagen, Margot Sunshine, Mark Woon, "
-				+ "Margiet Palm, Pim Moeskops, Praveen Kumar, " + "Rene Besseling, Rianne Fijten, Sjoerd Crijns, "
+				+ "Martina Kutmon, Anwesha Bohler, Jonathan Melius, Nuno Nunes, Thomas Kelder, "
+				+ "Martijn van Iersel, Kristina Hanspers, Alex Pico<br><br><hr><br>" + "<b>Contributors</b><br>"
+				+ "Adem Bilicna, Augustin Luna, Bing Lui, " + "Christ Leemans, Eric Creussen, Erik Pelgrin, "
+				+ "Esterh Neuteboom, Ferry Jagers, Hakim Achterberg, " + "Harm Nijveen, Irene Kaashoek, Justin Elser, "
+				+ "Kumar Chanden, Margot Sunshine, Mark Woon, " + "Margiet Palm, Pim Moeskops, Praveen Kumar, "
+				+ "Rene Besseling, Rianne Fijten, Sjoerd Crijns, "
 				+ "Sravanthi Sinha, Stefan van Helden<br><br><hr><br>" + "<b>Visit our website</b><br>"
 				+ "<a href=\"http://www.pathvisio.org\">http://www.pathvisio.org</a>" + "</html>");
 		label.addHyperlinkListener(swingEngine);
