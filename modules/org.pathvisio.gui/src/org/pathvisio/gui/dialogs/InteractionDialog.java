@@ -250,7 +250,7 @@ public class InteractionDialog extends PathwayElementDialog implements ItemListe
 		startTypeCombo.setEnabled(!readonly);
 		endTypeCombo.setEnabled(!readonly);
 
-		parent.add("Xref", panel); //TODO 
+		parent.add("Properties", panel); //TODO 
 		parent.setSelectedComponent(panel);
 	}
 

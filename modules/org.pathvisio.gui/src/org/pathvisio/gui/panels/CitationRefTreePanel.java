@@ -187,8 +187,7 @@ public class CitationRefTreePanel extends RefTreePanel implements ActionListener
 		 */
 		public ViewRefPanel(CitationRef citationRef) {
 			this.citationRef = citationRef;
-			setBackground(new Color(255,255,255,0));
-			setLayout(new FormLayout("2dlu, fill:[100dlu,min]:grow, 1dlu, pref, 2dlu", "2dlu, pref, 2dlu"));
+//			setBackground(new Color(255,255,255,0));
 			JTextPane txt = new JTextPane();
 			txt.setContentType("text/html");
 			txt.setEditable(false);
@@ -199,13 +198,19 @@ public class CitationRefTreePanel extends RefTreePanel implements ActionListener
 			txt.addHyperlinkListener(this);
 			CellConstraints cc = new CellConstraints();
 			add(txt, cc.xy(2, 2));
-
-			btnPanel = new JPanel(new FormLayout("pref", "pref, pref"));
+			
+			addBtn = new JButton(ADD);
+			addBtn.setActionCommand(ADD);
+			addBtn.addActionListener(this);
+			addPnl = new JPanel();
+			addPnl.add(addBtn);
+			
+			btnPanel = new JPanel();
 			JButton btnEdit = new JButton();
 			btnEdit.setActionCommand(EDIT);
 			btnEdit.addActionListener(this);
 			btnEdit.setIcon(new ImageIcon(IMG_EDIT));
-			btnEdit.setBackground(new Color(255,255,255,0));
+//			btnEdit.setBackground(new Color(255,255,255,0));
 			btnEdit.setBorder(null);
 			btnEdit.setToolTipText("Edit literature reference");
 

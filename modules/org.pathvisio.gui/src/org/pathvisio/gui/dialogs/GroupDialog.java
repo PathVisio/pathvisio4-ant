@@ -281,7 +281,7 @@ public class GroupDialog extends PathwayElementDialog implements ItemListener {
 		dbCombo.setEnabled(!readonly);
 		typeCombo.setEnabled(!readonly);
 
-		parent.add("Xref", panel); //TODO 
+		parent.add("Properties", panel); //TODO 
 		parent.setSelectedComponent(panel);
 	}
 

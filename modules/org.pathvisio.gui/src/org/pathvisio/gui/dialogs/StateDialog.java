@@ -282,7 +282,7 @@ public class StateDialog extends PathwayElementDialog implements ItemListener {
 		dbCombo.setEnabled(!readonly);
 		typeCombo.setEnabled(!readonly);
 
-		parent.add("Xref", panel);
+		parent.add("Properties", panel);
 		parent.setSelectedComponent(panel);
 	}
 
