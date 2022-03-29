@@ -90,8 +90,6 @@ public class CitationRefDialog extends OkCancelDialog {
 		this.citationRef = citationRef;
 		setDialogComponent(createDialogPane());
 		refresh();
-
-		setSize(400, 300);
 	}
 
 	/**

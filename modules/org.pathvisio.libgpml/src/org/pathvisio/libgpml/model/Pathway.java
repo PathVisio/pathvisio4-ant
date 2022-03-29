@@ -473,13 +473,15 @@ public class Pathway extends PathwayElement implements Xrefable {
 	@Override
 	public Object getStaticProperty(StaticProperty key) {
 		Object result = super.getStaticProperty(key);
+		System.out.println(key);
+		System.out.println(result);
 		if (result == null) {
 			switch (key) {
 			case TITLE:
 				result = getTitle();
 				break;
 			case ORGANISM:
-				result = getOrganism(); // TODO name???
+				result = getOrganism();
 				break;
 			case SOURCE:
 				result = getSource();
@@ -502,7 +504,9 @@ public class Pathway extends PathwayElement implements Xrefable {
 			case BACKGROUNDCOLOR:
 				result = getBackgroundColor();
 				break;
-			// TODO AUTHOR!!!!
+			case AUTHOR:
+				// do nothing TODO 
+				break;
 			default:
 				// do nothing
 			}
@@ -522,7 +526,7 @@ public class Pathway extends PathwayElement implements Xrefable {
 	@Override
 	public void setStaticProperty(StaticProperty key, Object value) {
 		super.setStaticProperty(key, value);
-		switch (key) {
+		switch (key) { //TODO 
 		case TITLE:
 			setTitle((String) value);
 			break;
@@ -542,15 +546,17 @@ public class Pathway extends PathwayElement implements Xrefable {
 			setXref((Xref) value);
 			break;
 		case BOARDWIDTH:
-			setBoardWidth((Double) value);
+			// ignore, board width is calculated automatically
 			break;
 		case BOARDHEIGHT:
-			setBoardHeight((Double) value);
+			// ignore, board height is calculated automatically
 			break;
 		case BACKGROUNDCOLOR:
 			setBackgroundColor((Color) value);
 			break;
-		// TODO AUTHOR!!!!
+		case AUTHOR:
+			// do nothing TODO 
+			break;
 		default:
 			// do nothing
 		}
@@ -685,7 +691,7 @@ public class Pathway extends PathwayElement implements Xrefable {
 			if (v != null) {
 				xref = v;
 				fireObjectModifiedEvent(
-						PathwayObjectEvent.createSinglePropertyEvent(Pathway.this, StaticProperty.XREF));
+						PathwayObjectEvent.createSinglePropertyEvent(Pathway.this, StaticProperty.AUTHOR));
 			}
 		}
 

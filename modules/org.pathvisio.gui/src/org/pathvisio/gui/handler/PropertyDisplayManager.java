@@ -74,6 +74,7 @@ public class PropertyDisplayManager {
 		registerTypeHandler(new AngleHandler());
 		registerTypeHandler(new ColorHandler());
 		registerTypeHandler(new CommentsHandler());
+		registerTypeHandler(new XrefHandler());
 		registerTypeHandler(new DataSourceHandler());
 		registerTypeHandler(new FontHandler());
 		registerTypeHandler(new ComboHandler(StaticPropertyType.ORGANISM, Organism.latinNames(), false));

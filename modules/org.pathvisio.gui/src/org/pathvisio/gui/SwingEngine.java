@@ -251,7 +251,7 @@ public class SwingEngine implements ApplicationEventListener, PathwayModel.Statu
 	public void newPathwayModel() {
 		engine.setWrapper(createWrapper());
 		engine.newPathwayModel();
-		NewPathwayDialog dlg = new NewPathwayDialog(this, "Pathway attributes");
+		NewPathwayDialog dlg = new NewPathwayDialog(this, "Pathway properties");
 		dlg.setVisible(true);
 	}
 

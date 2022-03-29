@@ -124,8 +124,9 @@ public class DataNodeDialog extends PathwayElementDialog {
 		String dnType = getInput().getType().getName();
 		typeCombo.setSelectedItem(DataNodeType.fromName(dnType));
 		String[] dsType = null; // null is default: no filtering
-		if (DataSourceHandler.DSTYPE_BY_DNTYPE.containsKey(dnType))
+		if (DataSourceHandler.DSTYPE_BY_DNTYPE.containsKey(dnType)) {
 			dsType = DataSourceHandler.DSTYPE_BY_DNTYPE.get(dnType);
+		}
 		dsm.setTypeFilter(dsType);
 		pack();
 	}
@@ -474,7 +475,7 @@ public class DataNodeDialog extends PathwayElementDialog {
 		dbCombo.setEnabled(!readonly);
 		typeCombo.setEnabled(!readonly);
 
-		parent.add("Properties", panel); //TODO 
+		parent.add(TAB_PROPERTIES, panel); // TODO
 		parent.setSelectedComponent(panel);
 	}
 }

@@ -52,6 +52,7 @@ public class PathwayElementDialog extends OkCancelDialog {
 
 	public static final String TAB_COMMENTS = "Comments";
 	public static final String TAB_LITERATURE = "Literature";
+	public static final String TAB_PROPERTIES= "Properties";
 
 	PathwayElement input;
 	private JTabbedPane dialogPane;
@@ -71,7 +72,7 @@ public class PathwayElementDialog extends OkCancelDialog {
 		panels = new HashMap<String, PathwayElementPanel>();
 		createTabs();
 		setInput(e);
-		setSize(450, 300);
+		setSize(320, 300);
 	}
 
 	protected Component createDialogPane() {

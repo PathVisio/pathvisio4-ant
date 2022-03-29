@@ -928,7 +928,7 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 
 		public OrderTopAction(Engine engine) {
 			this.engine = engine;
-			putValue(NAME, "Bring to front");
+			putValue(NAME, "Bring to Front");
 			putValue(SHORT_DESCRIPTION, "Bring the element in front of all other elements");
 			putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_CLOSE_BRACKET,
 					InputEvent.SHIFT_DOWN_MASK | Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));

@@ -41,7 +41,7 @@ public enum StaticProperty implements Property {
 	LICENSE("license", "License", StaticPropertyType.STRING, 105),
 
 	// author
-	AUTHOR("author", "Author", StaticPropertyType.STRING, 110),
+	AUTHOR("author", "Author", StaticPropertyType.AUTHOR, 110),
 	NAME("name", "Author name", StaticPropertyType.STRING, 111), // TODO
 	USERNAME("username", "Author Username", StaticPropertyType.STRING, 112), // TODO
 	ORDER("order", "Author Order", StaticPropertyType.INTEGER, 113), // TODO
@@ -70,7 +70,7 @@ public enum StaticProperty implements Property {
 	// ========================================
 	// Xrefable 
 	// ========================================
-	XREF("xref", "Xref", StaticPropertyType.XREF, 160),
+	XREF("xref", "Database:Id", StaticPropertyType.XREF, 160),
 
 	// ========================================
 	// Groupable
