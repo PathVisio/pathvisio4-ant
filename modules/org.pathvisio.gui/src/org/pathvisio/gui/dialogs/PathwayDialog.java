@@ -17,14 +17,18 @@
 package org.pathvisio.gui.dialogs;
 
 import java.awt.Component;
+import java.awt.Font;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import org.bridgedb.bio.Organism;
@@ -39,8 +43,11 @@ import org.pathvisio.gui.util.PermissiveComboBox;
  * @author unknown
  */
 public class PathwayDialog extends PathwayElementDialog {
-	private PermissiveComboBox organismComboBox;
+	
 	private JTextField titleField;
+	private PermissiveComboBox organismComboBox;
+	private JTextArea descriptionArea;
+
 
 	protected PathwayDialog(SwingEngine swingEngine, Pathway e, boolean readonly, Frame frame, String title,
 			Component locationComp) {
@@ -73,11 +80,14 @@ public class PathwayDialog extends PathwayElementDialog {
 
 		JLabel titleFieldLabel = new JLabel("Title");
 		JLabel orgComboLabel = new JLabel("Organism ");
+		JLabel descriptionLabel = new JLabel("Description ");
 
 		titleField = new JTextField();
 		titleField.setText(swingEngine.getEngine().getActivePathwayModel().getPathway().getTitle());
 		organismComboBox = new PermissiveComboBox(Organism.latinNamesArray());
 		organismComboBox.setSelectedItem(swingEngine.getEngine().getActivePathwayModel().getPathway().getOrganism());
+		descriptionArea = new JTextArea(swingEngine.getEngine().getActivePathwayModel().getPathway().getDescription());
+		descriptionArea.setFont(new Font("Tahoma", Font.PLAIN, 10)); // UI Design
 
 		GridBagConstraints c = new GridBagConstraints();
 		c.anchor = GridBagConstraints.FIRST_LINE_START;
@@ -86,13 +96,20 @@ public class PathwayDialog extends PathwayElementDialog {
 		c.gridy = GridBagConstraints.RELATIVE;
 		fieldPanel.add(titleFieldLabel, c);
 		fieldPanel.add(orgComboLabel, c);
+		c.insets = new Insets(15, 0, 0, 0); // top padding
+		fieldPanel.add(descriptionLabel, c);
+
+		c.insets = new Insets(0, 0, 0, 0);
 		c.gridx = 1;
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.weightx = 1;
 		fieldPanel.add(titleField, c);
 		fieldPanel.add(organismComboBox, c);
-
-		parent.add("Properties", panel);
+		c.ipady = 40; // taller text area for description
+		c.insets = new Insets(15, 0, 0, 0); // top padding
+		fieldPanel.add(new JScrollPane(descriptionArea), c);
+		
+		parent.add(TAB_PROPERTIES, panel);
 		parent.setSelectedComponent(panel);
 	}
 

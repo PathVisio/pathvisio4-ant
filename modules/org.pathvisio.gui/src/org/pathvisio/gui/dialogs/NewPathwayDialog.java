@@ -16,14 +16,18 @@
  ******************************************************************************/
 package org.pathvisio.gui.dialogs;
 
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Insets;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
@@ -38,9 +42,10 @@ import org.pathvisio.gui.util.PermissiveComboBox;
  */
 public class NewPathwayDialog extends OkCancelDialog {
 
-	private PermissiveComboBox organismComboBox;
-	private JTextField actionField;
 	private JTextField titleField;
+	private PermissiveComboBox organismComboBox;
+	private JTextArea descriptionArea;
+
 	private SwingEngine swingEngine;
 
 	public NewPathwayDialog(SwingEngine swingEngine, String title) {
@@ -51,7 +56,7 @@ public class NewPathwayDialog extends OkCancelDialog {
 		panel.setLayout(new GridLayout(0, 1));
 		addContent(panel);
 		setDialogComponent(panel);
-		setSize(300, 150);
+		setSize(300, 210);
 	}
 
 	protected void addContent(JPanel panel) {
@@ -66,31 +71,35 @@ public class NewPathwayDialog extends OkCancelDialog {
 
 		fieldPanel.setLayout(new GridBagLayout());
 
-		JLabel actionFieldLabel = new JLabel("");
 		JLabel titleFieldLabel = new JLabel("Title");
-		JLabel orgComboLabel = new JLabel("Organism ");
+		JLabel orgComboLabel = new JLabel("Organism");
+		JLabel descriptionLabel = new JLabel("Description ");
 
-		// actionField = new JTextField();
-		JLabel actionField = new JLabel("Please add a descriptive Title below:");
 		titleField = new JTextField();
 		organismComboBox = new PermissiveComboBox(Organism.latinNamesArray());
 		organismComboBox.setSelectedItem("Homo sapiens");
+		descriptionArea = new JTextArea();
+		descriptionArea.setFont(new Font("Tahoma", Font.PLAIN, 10)); // UI Design
 
 		GridBagConstraints c = new GridBagConstraints();
 		c.anchor = GridBagConstraints.FIRST_LINE_START;
 		c.weightx = 0;
 		c.gridx = 0;
 		c.gridy = GridBagConstraints.RELATIVE;
-		fieldPanel.add(actionFieldLabel, c);
 		fieldPanel.add(titleFieldLabel, c);
 		fieldPanel.add(orgComboLabel, c);
+		c.insets = new Insets(15, 0, 0, 0); // top padding
 
+		c.insets = new Insets(0, 0, 0, 0);
 		c.gridx = 1;
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.weightx = 1;
-		fieldPanel.add(actionField, c);
 		fieldPanel.add(titleField, c);
 		fieldPanel.add(organismComboBox, c);
+		c.ipady = 40; // taller text area for description
+		c.insets = new Insets(15, 0, 0, 0); // top padding
+		fieldPanel.add(new JScrollPane(descriptionArea), c);
+
 	}
 
 	protected void okPressed() {
