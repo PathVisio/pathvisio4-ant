@@ -351,9 +351,8 @@ public class DataNode extends ShapedElement implements Xrefable {
 		type = src.type;
 		states = new ArrayList<State>();
 		for (State s : src.states) {
-			State result = new State(null, null, 0, 0);
+			State result = addState(null, null, 0, 0);
 			result.copyValuesFrom(s);
-			addState(result);
 		}
 		xref = src.xref;
 //		aliasRef = src.aliasRef; TODO not this yet

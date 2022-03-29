@@ -227,8 +227,9 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 				throw new IllegalArgumentException("Points array should at least have two elements for "
 						+ getClass().getSimpleName() + " " + getElementId());
 			}
-			if (linePoints != null)
+			if (linePoints != null) {
 				removeLinePoints(); // remove points before setting new points
+			}
 			addLinePoints(points); // adds points to pathway model and to this line
 			fireObjectModifiedEvent(PathwayObjectEvent.createCoordinatePropertyEvent(this));
 		}
@@ -236,7 +237,8 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 
 	/**
 	 * Adds all given points to the linePoints list. Adds each point to the pathway
-	 * model {@link PathwayModel#addPathwayObject} if applicable.
+	 * model {@link PathwayModel#addPathwayObject} if applicable. This method is
+	 * called only by {@link #setLinePoints}.
 	 * 
 	 * @param points the points.
 	 */
@@ -1164,25 +1166,16 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 	public void copyValuesFrom(LineElement src) { // TODO
 		super.copyValuesFrom(src);
 		groupRef = src.groupRef;
-		// copy line points //TODO
+		// copy line points
 		List<LinePoint> points = new ArrayList<LinePoint>();
 		for (LinePoint pt : src.linePoints) {
 			points.add(new LinePoint(pt.getX(), pt.getY()));
 		}
 		setLinePoints(points);
-//		List<LinePoint> points = new ArrayList<LinePoint>();
-//		for (LinePoint pt : src.linePoints) {
-//			LinePoint result = new LinePoint(0, 0);
-//			result.copyValuesFrom(pt);
-//			points.add(result);
-//		}
-//		setLinePoints(points);
 		// copy anchors
 		anchors = new ArrayList<Anchor>();
 		for (Anchor a : src.anchors) {
-			Anchor result = new Anchor(0, null);
-			result.copyValuesFrom(a);
-			addAnchor(result);
+			addAnchor(new Anchor(a.getPosition(), a.getShapeType()));
 		}
 		lineColor = src.lineColor;
 		lineWidth = src.lineWidth;
@@ -1363,7 +1356,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 	 * 
 	 * @author unknown, finterly
 	 */
-	public abstract class GenericPoint extends PathwayObject implements Drawable, Cloneable { // TODO
+	public abstract class GenericPoint extends PathwayObject implements Drawable { // TODO
 
 		// ================================================================================
 		// Constructors
@@ -1373,20 +1366,6 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 		 */
 		public GenericPoint() {
 			super();
-		}
-
-		// ================================================================================
-		// Clone Methods
-		// ================================================================================
-
-		/**
-		 * TODO
-		 */
-		public Object clone() throws CloneNotSupportedException {
-			GenericPoint p = (GenericPoint) super.clone(); // TODO????
-//			if (getElementId() != null)
-//				p.setElementId(getElementId()); // TODO????
-			return p;
 		}
 
 		// ================================================================================
@@ -1849,40 +1828,6 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 			super.terminate();
 		}
 
-		// ================================================================================
-		// Clone Methods
-		// ================================================================================
-
-		/**
-		 * TODO
-		 */
-		@Override
-		public Object clone() throws CloneNotSupportedException {
-			LinePoint p = (LinePoint) super.clone();
-//			if (elementRef != null)
-//				// p.elementRef = elementRef; TODO
-//				linkTo(elementRef);
-			return p;
-		}
-
-		/**
-		 * Note: doesn't change parent, only fields
-		 *
-		 * Used by UndoAction.
-		 * 
-		 * NB: ElementRef is not copied, but can be set later given the LinkableTo is
-		 * also copied. //TODO
-		 *
-		 * @param src
-		 */
-		public void copyValuesFrom(LinePoint src) {
-			x = src.x;
-			y = src.y;
-			relX = src.relX;
-			relY = src.relY;
-			fireObjectModifiedEvent(PathwayObjectEvent.createAllPropertiesEvent(this));
-		}
-
 	}
 
 // ================================================================================
@@ -2061,22 +2006,6 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 		protected void terminate() {
 			unsetAllLinkableFroms();
 			super.terminate();
-		}
-
-		// ================================================================================
-		// Clone Methods
-		// ================================================================================
-		/**
-		 * Note: doesn't change parent, only fields
-		 *
-		 * Used by UndoAction.
-		 *
-		 * @param src
-		 */
-		public void copyValuesFrom(Anchor src) {
-			position = src.position;
-			shapeType = src.shapeType;
-			fireObjectModifiedEvent(PathwayObjectEvent.createAllPropertiesEvent(this));
 		}
 
 	}
