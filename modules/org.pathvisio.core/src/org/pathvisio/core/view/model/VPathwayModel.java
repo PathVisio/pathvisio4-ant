@@ -2265,8 +2265,9 @@ public class VPathwayModel implements PathwayModelListener {
 				continue;
 			}
 			lastAdded = null;
-			// shift location of pathway element for pasting? TODO
+			// shift location of pathway element for pasting 
 			if (newElement instanceof LineElement) {
+				// if line element, shift position of its points
 				for (LinePoint mp : ((LineElement) newElement).getLinePoints()) {
 					mp.setX(mp.getX() + xShift);
 					mp.setY(mp.getY() + yShift);
@@ -2274,8 +2275,14 @@ public class VPathwayModel implements PathwayModelListener {
 			} else if (newElement instanceof ShapedElement) {
 				((ShapedElement) newElement).setLeft(((ShapedElement) newElement).getLeft() + xShift);
 				((ShapedElement) newElement).setTop(((ShapedElement) newElement).getTop() + yShift);
+				// if datanode, also shift position of its states
+				if (newElement.getObjectType() == ObjectType.DATANODE) {
+					for (State state : ((DataNode) newElement).getStates()) {
+						state.setLeft(state.getLeft() + xShift);
+						state.setTop(state.getTop() + xShift);
+					}
+				}
 			}
-
 			// prepare for paste
 			CopyElement copyOfCopyElement = newElement.copy();
 			PathwayElement newerElement = copyOfCopyElement.getNewElement();
