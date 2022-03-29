@@ -17,6 +17,7 @@
 package org.pathvisio.gui.dialogs;
 
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Toolkit;
 import java.util.HashMap;
@@ -52,7 +53,7 @@ public class PathwayElementDialog extends OkCancelDialog {
 
 	public static final String TAB_COMMENTS = "Comments";
 	public static final String TAB_LITERATURE = "Literature";
-	public static final String TAB_PROPERTIES= "Properties";
+	public static final String TAB_PROPERTIES = "Properties";
 
 	PathwayElement input;
 	private JTabbedPane dialogPane;
@@ -72,7 +73,9 @@ public class PathwayElementDialog extends OkCancelDialog {
 		panels = new HashMap<String, PathwayElementPanel>();
 		createTabs();
 		setInput(e);
-		setSize(320, 300);
+		setSize(320, 300);// UI Design
+		setLocationRelativeTo(swingEngine.getFrame());
+		setVisible(true);
 	}
 
 	protected Component createDialogPane() {
@@ -134,9 +137,9 @@ public class PathwayElementDialog extends OkCancelDialog {
 	private void createTabs() {
 		addPathwayElementPanel(TAB_COMMENTS, new CommentPanel());
 //		addPathwayElementPanel(TAB_LITERATURE, new CitationRefPanel(swingEngine)); //TODO 
-		addPathwayElementPanel("Annotations", new AnnotationRefTreePanel(swingEngine)); //TODO 
-		addPathwayElementPanel("Citations", new CitationRefTreePanel(swingEngine)); //TODO 
-		addPathwayElementPanel("Evidences", new EvidenceRefTreePanel(swingEngine)); //TODO 
+		addPathwayElementPanel("Annotations", new AnnotationRefTreePanel(swingEngine)); // TODO
+		addPathwayElementPanel("Citations", new CitationRefTreePanel(swingEngine)); // TODO
+		addPathwayElementPanel("Evidences", new EvidenceRefTreePanel(swingEngine)); // TODO
 		addCustomTabs(dialogPane);
 	}
 

@@ -17,6 +17,7 @@
 package org.pathvisio.gui.dialogs;
 
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -85,6 +86,7 @@ public class InteractionDialog extends PathwayElementDialog implements ItemListe
 		super(swingEngine, e, readonly, frame, "Interaction properties", locationComp);
 		getRootPane().setDefaultButton(null);
 		setButton.requestFocus();
+		setPreferredSize(new Dimension(320, 300)); // UI Design
 	}
 
 	/**
@@ -250,7 +252,7 @@ public class InteractionDialog extends PathwayElementDialog implements ItemListe
 		startTypeCombo.setEnabled(!readonly);
 		endTypeCombo.setEnabled(!readonly);
 
-		parent.add(TAB_PROPERTIES, panel); //TODO 
+		parent.add(TAB_PROPERTIES, panel); // TODO
 		parent.setSelectedComponent(panel);
 	}
 

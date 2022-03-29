@@ -17,6 +17,7 @@
 package org.pathvisio.gui.dialogs;
 
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -87,6 +88,7 @@ public class GroupDialog extends PathwayElementDialog implements ItemListener {
 		super(swingEngine, e, readonly, frame, "Group properties", locationComp);
 		getRootPane().setDefaultButton(null);
 		setButton.requestFocus();
+		setPreferredSize(new Dimension(320, 300)); // UI Design
 	}
 
 	/**
