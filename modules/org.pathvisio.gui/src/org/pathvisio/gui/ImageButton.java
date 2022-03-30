@@ -18,15 +18,23 @@ package org.pathvisio.gui;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Insets;
+import java.awt.Rectangle;
+import java.awt.Shape;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.geom.AffineTransform;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
 import javax.swing.Action;
 import javax.swing.JButton;
+
+import org.pathvisio.libgpml.model.shape.ShapeCatalog;
+import org.pathvisio.libgpml.model.shape.ShapeCatalog.Internal;
 
 /**
  * this is the buttons on the drop-down panel
@@ -56,7 +64,7 @@ public class ImageButton extends JButton {
 		super();
 		this.setRolloverEnabled(true);
 		initRolloverListener();
-		Dimension dim = new Dimension(25, 25); // UI Design
+		Dimension dim = new Dimension(33, 33); // UI Design
 		this.setAction(a);
 		this.setSize(dim);
 		this.setPreferredSize(dim);
@@ -73,6 +81,9 @@ public class ImageButton extends JButton {
 //		addFocusListener(focusListener);
 	}
 
+	/**
+	 * 
+	 */
 	protected void initRolloverListener() {
 		MouseListener l = new MouseAdapter() {
 			public void mouseEntered(MouseEvent e) {

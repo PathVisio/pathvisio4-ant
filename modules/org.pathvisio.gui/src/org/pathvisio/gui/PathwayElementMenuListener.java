@@ -134,29 +134,32 @@ public class PathwayElementMenuListener implements VPathwayModelListener {
 		menu.add(a);
 		menu.addSeparator();
 
-		// Only show group/ungroup when multiple objects or a group are selected
-		// Only show add alias if a group is selected
+		// TODO
+		JMenu groupMenu = new JMenu("Create Group");
+		groupMenu.add(vActions.toggleGroup); // Group (default)
+		groupMenu.add(vActions.toggleComplex); // Complex
+		groupMenu.add(vActions.togglePathway); // Pathway
+		groupMenu.add(vActions.toggleAnalog); // Analog
+		groupMenu.add(vActions.toggleParalog); // Paralog
+		groupMenu.add(vActions.toggleTransparent); // Transparent
+		
+		// Show group/ungroup when multiple objects or a group are selected
 		if ((e instanceof VGroup)) {
-			GroupType s = ((VGroup) e).getPathwayObject().getType();
-			if (s == GroupType.GROUP) {
-				menu.add(vActions.toggleGroup);
-				menu.add(vActions.addAlias); // TODO
-			} else {
-				menu.add(vActions.toggleComplex);
-				menu.add(vActions.addAlias); // TODO
-			}
+			menu.add(vActions.toggleGroup);
+			menu.add(vActions.addAlias); // show "add alias" if a group is selected
 			menu.addSeparator();
 		} else if (vp.getSelectedGraphics().size() > 1) {
-			menu.add(vActions.toggleGroup);
-			menu.add(vActions.toggleComplex);
-			boolean includesGroup = false;		
-			for (VDrawable p : vp.getSelectedGraphics()) { //TODO 
+			boolean includesGroup = false;
+			for (VDrawable p : vp.getSelectedGraphics()) { // TODO
 				if (p instanceof VGroup) {
 					includesGroup = true;
 				}
 			}
 			if (includesGroup) {
-				menu.add(vActions.addAlias); // TODO
+				menu.add(vActions.toggleGroup);
+				menu.add(vActions.addAlias); // show "add alias" if a group is selected
+			} else {
+				menu.add(groupMenu);
 			}
 		}
 

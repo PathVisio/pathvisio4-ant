@@ -88,11 +88,11 @@ public class GraphicsChoiceButton extends DropDownButton {
 
 			// clicking a button should cause the popupmenu disappear, any better way to do
 			// it?
-			final ImageButton button = new ImageButton(a);
+			final ImageTxtButton button = new ImageTxtButton(a); //TODO 
 			button.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					button.setContentAreaFilled(false);
-					popup.setVisible(false);
+					popup.setVisible(false);			    
 					Icon icon = (Icon) a.getValue(Action.SMALL_ICON);
 					if (icon != null) {
 						setIcon(icon);

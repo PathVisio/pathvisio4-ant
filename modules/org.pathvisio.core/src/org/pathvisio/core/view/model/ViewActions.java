@@ -112,8 +112,14 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 	public final SelectObjectAction selectShapes;
 	public final SelectObjectAction selectLabels;
 	public final SelectAllAction selectAll;
-	public final GroupAction toggleGroup;
-	public final ComplexAction toggleComplex;
+
+	public final GroupAction toggleGroup; // TODO
+	public final GroupAction toggleComplex;
+	public final GroupAction togglePathway;
+	public final GroupAction toggleAnalog;
+	public final GroupAction toggleParalog;
+	public final GroupAction toggleTransparent;
+
 	public final AddAlias addAlias;
 	public final DeleteAction delete1;
 	public final DeleteAction delete2;
@@ -149,8 +155,14 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 		selectShapes = new SelectObjectAction("Shapes", Shape.class);
 		selectLabels = new SelectObjectAction("Labels", Label.class);
 		selectAll = new SelectAllAction();
-		toggleGroup = new GroupAction();
-		toggleComplex = new ComplexAction();
+
+		toggleGroup = new GroupAction(GroupType.GROUP); 
+		toggleComplex = new GroupAction(GroupType.COMPLEX);
+		togglePathway= new GroupAction(GroupType.PATHWAY); 
+		toggleAnalog= new GroupAction(GroupType.ANALOG); 
+		toggleParalog= new GroupAction(GroupType.PARALOG); 
+		toggleTransparent= new GroupAction(GroupType.TRANSPARENT); 
+		
 		addAlias = new AddAlias();
 		delete1 = new DeleteAction(java.awt.event.KeyEvent.VK_DELETE);
 		delete2 = new DeleteAction(java.awt.event.KeyEvent.VK_BACK_SPACE);
@@ -668,21 +680,9 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 	 * @author unknown
 	 *
 	 */
-	private class ComplexAction extends GroupActionBase {
-		public ComplexAction() {
-			super("Create complex", "Break complex", "Create a complex from selected elements",
-					"Break selected complex", GroupType.COMPLEX, KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P,
-							Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-		}
-	}
-
-	/**
-	 * @author unknown
-	 *
-	 */
 	private class GroupAction extends GroupActionBase {
-		public GroupAction() {
-			super("Group", "Ungroup", "Group selected elements", "Ungroup selected group", GroupType.GROUP, KeyStroke
+		public GroupAction(GroupType type) {
+			super(type.getName(), "Break group", "Group selected elements", "Ungroup selected group", type, KeyStroke
 					.getKeyStroke(java.awt.event.KeyEvent.VK_G, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 		}
 	}
@@ -719,7 +719,7 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 		}
 
 		/**
-		 *
+		 * Action creates Group and sets type. 
 		 */
 		@Override
 		public void actionPerformed(ActionEvent e) {
