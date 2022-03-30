@@ -74,8 +74,7 @@ public class PathwayElementDialog extends OkCancelDialog {
 		createTabs();
 		setInput(e);
 		setSize(320, 300);// UI Design
-		setLocationRelativeTo(swingEngine.getFrame());
-		setVisible(true);
+
 	}
 
 	protected Component createDialogPane() {
