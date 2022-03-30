@@ -160,6 +160,16 @@ public class ImageTxtButton extends JButton {
 		}
 	}
 
+	/**
+	 * Returns given shape at the given position with the given dimensions.
+	 * 
+	 * @param shape  the shape to reformat.
+	 * @param xshift the horizontal shift.
+	 * @param yshift the vertical shirt.
+	 * @param w      the desired width.
+	 * @param h      the desired height.
+	 * @return
+	 */
 	private Shape formatShape(Shape shape, double xshift, double yshift, double w, double h) {
 		Rectangle r = shape.getBounds();
 		AffineTransform at = new AffineTransform();

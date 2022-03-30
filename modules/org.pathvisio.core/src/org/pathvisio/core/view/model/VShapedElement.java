@@ -230,7 +230,7 @@ public abstract class VShapedElement extends VPathwayElement implements VLinkabl
 	}
 
 	/**
-	 *
+	 * TODO 
 	 */
 	public void adjustToHandle(Handle h, double vnewx, double vnewy) {
 		ShapedElement gdata = getPathwayObject();
@@ -306,21 +306,21 @@ public abstract class VShapedElement extends VPathwayElement implements VLinkabl
 		}
 		;
 
-		double neww = gdata.getWidth() + idw;
-		double newh = gdata.getHeight() + idh;
+		double newW = gdata.getWidth() + idw;
+		double newH = gdata.getHeight() + idh;
 
 		// In case object had negative width, switch handles
-		if (neww < 0) {
+		if (newW < 0) {
 			setHorizontalOppositeHandle(h);
-			neww = -neww;
+			newW = -newW;
 		}
-		if (newh < 0) {
+		if (newH < 0) {
 			setVerticalOppositeHandle(h);
-			newh = -newh;
+			newH = -newH;
 		}
 
-		gdata.setWidth(neww);
-		gdata.setHeight(newh);
+		gdata.setWidth(newW);
+		gdata.setHeight(newH);
 		Point vcr = LinAlg.rotate(new Point(idx, idy), -gdata.getRotation());
 		gdata.setCenterX(gdata.getCenterX() + vcr.x);
 		gdata.setCenterY(gdata.getCenterY() + vcr.y);
