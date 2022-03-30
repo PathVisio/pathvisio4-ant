@@ -47,8 +47,8 @@ public abstract class ShapedElement extends PathwayElement implements LinkableTo
 	// rect properties
 	private double centerX;
 	private double centerY;
-	private double width = 1.0;
-	private double height = 1.0;
+	private double width;
+	private double height;
 	// font properties
 	private Color textColor = Color.decode("#000000"); // black
 	private String fontName = "Arial"; // Arial
@@ -771,6 +771,7 @@ public abstract class ShapedElement extends PathwayElement implements LinkableTo
 	 * Returns the left x coordinate of the bounding box around (start, end) this
 	 * shaped pathway element.
 	 */
+	@Override
 	public double getLeft() {
 		return centerX - width / 2;
 	}
@@ -781,6 +782,7 @@ public abstract class ShapedElement extends PathwayElement implements LinkableTo
 	 * 
 	 * @param v the left coordinate.
 	 */
+	@Override
 	public void setLeft(double v) {
 		centerX = v + width / 2;
 		fireObjectModifiedEvent(PathwayObjectEvent.createCoordinatePropertyEvent(this));
@@ -790,6 +792,7 @@ public abstract class ShapedElement extends PathwayElement implements LinkableTo
 	 * Returns the top y coordinate of the bounding box around (start, end) this
 	 * shaped pathway element.
 	 */
+	@Override
 	public double getTop() {
 		return centerY - height / 2;
 	}
@@ -800,6 +803,7 @@ public abstract class ShapedElement extends PathwayElement implements LinkableTo
 	 * 
 	 * @param v the y top coordinate.
 	 */
+	@Override
 	public void setTop(double v) {
 		centerY = v + height / 2;
 		fireObjectModifiedEvent(PathwayObjectEvent.createCoordinatePropertyEvent(this));

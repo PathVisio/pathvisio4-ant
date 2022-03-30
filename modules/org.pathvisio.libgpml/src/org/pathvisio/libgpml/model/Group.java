@@ -16,6 +16,7 @@
  ******************************************************************************/
 package org.pathvisio.libgpml.model;
 
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -118,11 +119,35 @@ public class Group extends ShapedElement implements Xrefable {
 		// do not add if pathway element is a state
 		if (pathwayElement.getClass() != State.class) {
 			// set groupRef for pathway element if necessary
-			if (pathwayElement.getGroupRef() == null || pathwayElement.getGroupRef() != this)
+			if (pathwayElement.getGroupRef() == null || pathwayElement.getGroupRef() != this) {
 				pathwayElement.setGroupRefTo(this);
+			}
 			// add pathway element to this group
-			if (pathwayElement.getGroupRef() == this && !hasPathwayElement(pathwayElement))
+			if (pathwayElement.getGroupRef() == this && !hasPathwayElement(pathwayElement)) {
 				pathwayElements.add(pathwayElement);
+				updateDimensions();
+			}
+		}
+	}
+
+	/**
+	 * Updates group centerX, centerY, width, and height. Called when pathway
+	 * element members are added.
+	 */
+	public void updateDimensions() {
+		// if it is the first pathway element being added, the dimensions are still 0
+		if (getWidth() == 0 || getHeight() == 0) {
+			Rectangle2D r = getMinRotatedBounds();
+			setCenterX(r.getCenterX());
+			setCenterY(r.getCenterY());
+			setWidth(r.getWidth());
+			setHeight(r.getHeight());
+		} else {
+			Rectangle2D r = getRotatedBounds();
+			setCenterX(r.getCenterX());
+			setCenterY(r.getCenterY());
+			setWidth(r.getWidth());
+			setHeight(r.getHeight());
 		}
 	}
 
@@ -291,107 +316,7 @@ public class Group extends ShapedElement implements Xrefable {
 	}
 
 	/**
-	 * Center x of the group bounds
-	 */
-	@Override
-	public double getCenterX() {
-		return getRotatedBounds().getCenterX();
-	}
-
-	/**
-	 * Center y of the group bounds
-	 */
-	@Override
-	public double getCenterY() {
-		return getRotatedBounds().getCenterY();
-	}
-
-	/**
-	 * Width of the group bounds
-	 */
-	@Override
-	public double getWidth() {
-		return getRotatedBounds().getWidth();
-	}
-
-	/**
-	 * Height of the group bounds
-	 */
-	@Override
-	public double getHeight() {
-		return getRotatedBounds().getHeight();
-	}
-
-	/**
-	 * Left of the group bounds
-	 */
-	@Override
-	public double getLeft() {
-		return getRotatedBounds().getX();
-	}
-
-	/**
-	 * Top of the group bounds
-	 */
-	@Override
-	public double getTop() {
-		return getRotatedBounds().getY();
-	}
-
-	@Override
-	public void setCenterX(double v) {
-		double d = v - getRotatedBounds().getCenterX();
-		for (Groupable e : pathwayElements) {
-			e.setCenterX(e.getCenterX() + d); // TODO PROBLEM!
-		}
-	}
-
-	@Override
-	public void setCenterY(double v) {
-		double d = v - getRotatedBounds().getCenterY();
-		for (Groupable e : pathwayElements) {
-			e.setCenterY(e.getCenterY() + d); // TODO PROBLEM!
-		}
-	}
-
-	@Override
-	public void setWidth(double v) {
-		double d = v - getRotatedBounds().getWidth();
-		for (Groupable e : pathwayElements) {
-			if (e instanceof ShapedElement) {
-				((ShapedElement) e).setWidth(e.getWidth() + d); //// TODO PROBLEM!
-			}
-		}
-	}
-
-	@Override
-	public void setHeight(double v) {
-		double d = v - getRotatedBounds().getHeight();
-		for (Groupable e : pathwayElements) {
-			if (e instanceof ShapedElement) {
-				((ShapedElement) e).setHeight(e.getHeight() + d);
-			} //// TODO PROBLEM!
-		}
-	}
-
-	@Override
-	public void setLeft(double v) {
-		double d = v - getRotatedBounds().getX();
-		for (Groupable e : pathwayElements) {
-			e.setLeft(e.getLeft() + d); //// TODO PROBLEM!
-		}
-	}
-
-	@Override
-	public void setTop(double v) {
-		double d = v - getRotatedBounds().getY();
-		for (Groupable e : pathwayElements) {
-			e.setTop(e.getTop() + d); //// TODO PROBLEM!
-		}
-	}
-
-	/**
-	 * Iterates over all group elements to find the total rectangular bounds, taking
+	 * Iterates over all group elements to find the TOTAL rectangular bounds, taking
 	 * into account rotation of the nested elements
 	 * 
 	 * @return the rectangular bounds for this group with rotation taken into
@@ -399,6 +324,36 @@ public class Group extends ShapedElement implements Xrefable {
 	 */
 	@Override
 	public Rectangle2D getRotatedBounds() {
+		Rectangle2D bounds = getBounds();
+		AffineTransform t = new AffineTransform();
+		t.rotate(getRotation(), getCenterX(), getCenterY());
+		bounds = t.createTransformedShape(bounds).getBounds2D();
+		Rectangle2D minbounds = getMinRotatedBounds();
+		bounds.add(minbounds); // add bounds
+		return new Rectangle2D.Double(bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight());
+	}
+
+	/**
+	 * Iterates over all group elements to find the TOTAL rectangular bounds.
+	 * 
+	 * @return the rectangular bounds for this group.
+	 */
+	@Override
+	public Rectangle2D getBounds() {
+		Rectangle2D bounds = new Rectangle2D.Double(getLeft(), getTop(), getWidth(), getHeight());
+		Rectangle2D minbounds = getMinRotatedBounds();
+		bounds.add(minbounds); // add bounds
+		return new Rectangle2D.Double(bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight());
+	}
+
+	/**
+	 * Iterates over all group elements to find the MINIMAL total rectangular
+	 * bounds, taking into account rotation of the nested elements
+	 * 
+	 * @return the rectangular bounds for this group with rotation taken into
+	 *         account.
+	 */
+	public Rectangle2D getMinRotatedBounds() {
 		Rectangle2D bounds = null;
 		for (Groupable e : pathwayElements) {
 			if (e == this) {
@@ -420,14 +375,13 @@ public class Group extends ShapedElement implements Xrefable {
 	}
 
 	/**
-	 * Iterates over all group elements to find the total rectangular bounds. Note:
-	 * doesn't include rotation of the nested elements. If you want to include
-	 * rotation, use {@link #getRotatedBounds()} instead.
+	 * Iterates over all group elements to find the MINIMAL total rectangular
+	 * bounds. Note: doesn't include rotation of the nested elements. If you want to
+	 * include rotation, use {@link #getRotatedBounds()} instead.
 	 * 
 	 * @return the rectangular bounds for this group.
 	 */
-	@Override
-	public Rectangle2D getBounds() {
+	public Rectangle2D getMinBounds() {
 		Rectangle2D bounds = null;
 		for (Groupable e : pathwayElements) {
 			if (e == this) {
@@ -533,7 +487,6 @@ public class Group extends ShapedElement implements Xrefable {
 	@Override
 	public void setStaticProperty(StaticProperty key, Object value) {
 		super.setStaticProperty(key, value);
-		System.out.println(key);
 		switch (key) {
 		case GROUPTYPE:
 			if (value instanceof GroupType) {

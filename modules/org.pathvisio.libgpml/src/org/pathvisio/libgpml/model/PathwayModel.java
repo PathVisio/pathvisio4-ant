@@ -308,9 +308,7 @@ public class PathwayModel {
 	 * @param linePoint  the linePoint with given elementRef.
 	 */
 	protected void removeElementRef(LinkableTo elementRef, LinkableFrom linePoint) {
-		System.out.println(elementRefToLinePoints.keySet());
 		if (!elementRefToLinePoints.containsKey(elementRef)) {
-			System.out.println("missing " + elementRef);
 			throw new IllegalArgumentException();
 		}
 		elementRefToLinePoints.get(elementRef).remove(linePoint); // TODO

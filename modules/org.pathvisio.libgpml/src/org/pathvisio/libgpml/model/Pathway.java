@@ -473,8 +473,6 @@ public class Pathway extends PathwayElement implements Xrefable {
 	@Override
 	public Object getStaticProperty(StaticProperty key) {
 		Object result = super.getStaticProperty(key);
-		System.out.println(key);
-		System.out.println(result);
 		if (result == null) {
 			switch (key) {
 			case TITLE:

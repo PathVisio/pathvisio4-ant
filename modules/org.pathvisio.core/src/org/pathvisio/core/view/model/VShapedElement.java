@@ -34,7 +34,7 @@ import java.text.AttributedString;
 import org.pathvisio.libgpml.model.type.LineStyleType;
 import org.pathvisio.libgpml.model.type.ObjectType;
 import org.pathvisio.libgpml.model.Label;
-import org.pathvisio.libgpml.model.PathwayElement;
+import org.pathvisio.libgpml.model.Group;
 import org.pathvisio.libgpml.model.ShapedElement;
 import org.pathvisio.libgpml.model.PathwayObjectEvent;
 import org.pathvisio.libgpml.util.ColorUtils;
@@ -230,7 +230,7 @@ public abstract class VShapedElement extends VPathwayElement implements VLinkabl
 	}
 
 	/**
-	 * TODO 
+	 * TODO
 	 */
 	public void adjustToHandle(Handle h, double vnewx, double vnewy) {
 		ShapedElement gdata = getPathwayObject();
@@ -324,6 +324,10 @@ public abstract class VShapedElement extends VPathwayElement implements VLinkabl
 		Point vcr = LinAlg.rotate(new Point(idx, idy), -gdata.getRotation());
 		gdata.setCenterX(gdata.getCenterX() + vcr.x);
 		gdata.setCenterY(gdata.getCenterY() + vcr.y);
+		// Group dimensions must be greater than its contents
+		if (gdata.getObjectType() == ObjectType.GROUP) {
+			((Group) gdata).updateDimensions(); // validates/corrects
+		}
 
 	}
 
@@ -524,7 +528,7 @@ public abstract class VShapedElement extends VPathwayElement implements VLinkabl
 	}
 
 	protected void doDraw(Graphics2D g2d) {
-		g2d.setColor(getBorderColor()); //TODO extra line? 
+		g2d.setColor(getBorderColor()); // TODO extra line?
 		setLineStyle(g2d);
 		drawShape(g2d);
 
@@ -805,7 +809,7 @@ public abstract class VShapedElement extends VPathwayElement implements VLinkabl
 		}
 		return textColor;
 	}
-	
+
 	/**
 	 * 
 	 * @return
