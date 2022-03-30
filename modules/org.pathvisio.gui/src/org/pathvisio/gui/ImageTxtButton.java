@@ -19,9 +19,11 @@ package org.pathvisio.gui;
 import java.awt.Color;
 import java.awt.Shape;
 import java.awt.Graphics;
+import java.awt.BasicStroke;
 import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.RoundRectangle2D;
+import java.awt.geom.Ellipse2D;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Insets;
@@ -34,8 +36,11 @@ import javax.swing.JButton;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusAdapter;
 
+import org.pathvisio.core.view.model.DefaultTemplates;
+import org.pathvisio.gui.CommonActions.NewElementAction;
 import org.pathvisio.libgpml.model.shape.ShapeCatalog;
 import org.pathvisio.libgpml.model.shape.ShapeCatalog.Internal;
+import org.pathvisio.libgpml.model.type.DataNodeType;
 import org.pathvisio.libgpml.util.ColorUtils;
 
 /**
@@ -126,12 +131,33 @@ public class ImageTxtButton extends JButton {
 	private void drawColoredShape(Graphics2D g2, String txt) {
 		Shape sh = null;
 		switch (this.getAction().toString()) {
+		case "Metabolite":
+			Color blue = Color.BLUE;
+			this.setForeground(blue);
+			g2.setPaint(blue);
+			g2.draw(new Rectangle(4, 6, 24, 20));
+			break;
 		case "Label":
 			break;
 		case "Pathway":
 			Color green = ColorUtils.hexToColor("14961e");
 			this.setForeground(green);
 			g2.setPaint(green);
+			g2.draw(new RoundRectangle2D.Double(4, 6, 24, 20, 8, 8));
+			break;
+		case "Disease": // Concepts
+		case "Phenotype":
+		case "Event":
+		case "Cell":
+		case "Organ":
+			g2.draw(new RoundRectangle2D.Double(4, 6, 24, 20, 8, 8));
+			break;
+		case "Alias":
+			g2.draw(new Ellipse2D.Double(4, 6, 24, 20));
+			break;
+		case "Undefined":
+			g2.setStroke(
+					new BasicStroke(1, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 10, new float[] { 4, 4 }, 0));
 			g2.draw(new RoundRectangle2D.Double(4, 6, 24, 20, 8, 8));
 			break;
 		case "Hexagon":

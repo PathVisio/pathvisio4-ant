@@ -90,7 +90,7 @@ public class PathVisioMain {
         
         /* following property is necessary for Felix: to prevent complaints 
          * about missing requirements ee=JSE2-1.2 on the javax.xml bundle. */
-        {"org.osgi.framework.executionenvironment", "ee-1.6=JavaSE-1.6,J2SE-1.5,J2SE-1.4,J2SE-1.3,J2SE-1.2,JRE-1.1,JRE-1.0,OSGi/Minimum-1.2,OSGi/Minimum-1.1,OSGi/Minimum-1.0" } 
+        {"org.osgi.framework.executionenvironment", "ee-1.11=JavaSE-1.11, JavaSE-1.6,J2SE-1.5,J2SE-1.4,J2SE-1.3,J2SE-1.2,JRE-1.1,JRE-1.0,OSGi/Minimum-1.2,OSGi/Minimum-1.1,OSGi/Minimum-1.0" } 
 
     };
 	

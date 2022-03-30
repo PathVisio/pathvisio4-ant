@@ -11,7 +11,7 @@
 		</shortcut>
 	</information>
 	<resources>
-		 <j2se version="1.6+" java-vm-args="-Xmx512M -Dfile.encoding=UTF-8"/>
+		 <j2se version="1.11+" java-vm-args="-Xmx512M -Dfile.encoding=UTF-8"/>
 		 <jar href="http://www.pathvisio.org/data/releases/current/webstart/pathvisio.jar"/>
 	</resources>
 	<application-desc main-class="org.pathvisio.launcher.PathVisioMain">
