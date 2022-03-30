@@ -31,9 +31,10 @@ import java.awt.event.MouseListener;
 import java.awt.Graphics2D;
 import javax.swing.Action;
 import javax.swing.JButton;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusAdapter;
 
 import org.pathvisio.libgpml.model.shape.ShapeCatalog;
-import org.pathvisio.libgpml.model.shape.ShapeType;
 import org.pathvisio.libgpml.model.shape.ShapeCatalog.Internal;
 import org.pathvisio.libgpml.util.ColorUtils;
 
@@ -61,10 +62,11 @@ public class ImageTxtButton extends JButton {
 	}
 
 	/**
-	 * 
+	 * Initiates rollover listener.
 	 */
 	protected void initRolloverListener() {
 		MouseListener l = new MouseAdapter() {
+
 			public void mouseEntered(MouseEvent e) {
 				setContentAreaFilled(true);
 				getModel().setRollover(true);
@@ -73,6 +75,7 @@ public class ImageTxtButton extends JButton {
 			public void mouseExited(MouseEvent e) {
 				setContentAreaFilled(false);
 			}
+
 		};
 		addMouseListener(l);
 	}
@@ -82,11 +85,11 @@ public class ImageTxtButton extends JButton {
 	 */
 	@Override
 	protected void paintComponent(Graphics g) {
+		super.paintComponent(g);
 		Graphics2D g2 = (Graphics2D) g.create();
 		drawColoredShape(g2, getText());
 		g2.setColor(new Color(255, 255, 255, 0));
 		g2.dispose();
-		super.paintComponent(g);
 	}
 
 	/**
@@ -104,6 +107,8 @@ public class ImageTxtButton extends JButton {
 		} else if (txt.equals("Coronavirus")) {
 			txt = null;
 		} else if (txt.equals("CellIcon")) {
+			txt = null;
+		} else if (txt.equals("DNA")) {
 			txt = null;
 		} else if (txt.length() > 5) {
 			txt = txt.substring(0, 4);
@@ -144,6 +149,10 @@ public class ImageTxtButton extends JButton {
 		case "CellIcon":
 			sh = ShapeCatalog.getPluggableShape(Internal.CELL_ICON);
 			g2.draw(formatShape(sh, 4, 4, 24, 24));
+			break;
+		case "DNA":
+			sh = ShapeCatalog.getPluggableShape(Internal.DNA);
+			g2.draw(formatShape(sh, 12, 4, 8, 24));
 			break;
 		default:
 			g2.draw(new Rectangle(4, 6, 24, 20));
