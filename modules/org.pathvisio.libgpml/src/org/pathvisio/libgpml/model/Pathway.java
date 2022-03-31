@@ -460,10 +460,10 @@ public class Pathway extends PathwayElement implements Xrefable {
 		Set<StaticProperty> propsPathway = EnumSet.of(StaticProperty.TITLE, StaticProperty.ORGANISM,
 				StaticProperty.SOURCE, StaticProperty.VERSION, StaticProperty.LICENSE, StaticProperty.XREF,
 				StaticProperty.BOARDWIDTH, StaticProperty.BOARDHEIGHT, StaticProperty.BACKGROUNDCOLOR);
-		Set<StaticProperty> propsAuthor = EnumSet.of(StaticProperty.AUTHOR, StaticProperty.NAME,
-				StaticProperty.USERNAME, StaticProperty.ORDER); //TODO AUTHORS?
+//		Set<StaticProperty> propsAuthor = EnumSet.of(StaticProperty.AUTHOR, StaticProperty.NAME,
+//				StaticProperty.USERNAME, StaticProperty.ORDER); //TODO AUTHORS?
 		result.addAll(propsPathway);
-		result.addAll(propsAuthor);
+//		result.addAll(propsAuthor);
 		return result;
 	}
 

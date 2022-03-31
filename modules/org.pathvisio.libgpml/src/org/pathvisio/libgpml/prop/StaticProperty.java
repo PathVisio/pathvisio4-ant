@@ -49,7 +49,7 @@ public enum StaticProperty implements Property {
 	// pathway graphics
 	BOARDWIDTH("boardWidth", "Board Width", StaticPropertyType.DOUBLE, 120, true, true, false),
 	BOARDHEIGHT("boardHeight", "Board Height", StaticPropertyType.DOUBLE, 121, true, true, false),
-	BACKGROUNDCOLOR("backgroundColor", "Background Color", StaticPropertyType.COLOR, 122, true, true, false),
+	BACKGROUNDCOLOR("backgroundColor", "Background Color", StaticPropertyType.COLOR, 122),
 
 	// ========================================
 	// Pathway Object

@@ -71,6 +71,7 @@ public class VInfoBox extends VPathwayElement {
 		return (Pathway) super.getPathwayObject();
 	}
 
+	@Override 
 	protected VCitation createCitation() {
 		return new VCitation(canvas, this, new Point2D.Double(1, 0));
 	}
@@ -84,6 +85,7 @@ public class VInfoBox extends VPathwayElement {
 	 * 
 	 * @param g the {@link Graphics2D}
 	 */
+	@Override 
 	public void doDraw(Graphics2D g) {
 		Font f = new Font(fontName, Font.PLAIN, getVFontSize());
 		Font fb = new Font(f.getFontName(), Font.BOLD, f.getSize());
@@ -92,15 +94,9 @@ public class VInfoBox extends VPathwayElement {
 			g.setColor(selectColor);
 		}
 
-		// Draw Name, Organism, Data-Source, Version, Author, Maintained-by, Email,
-		// Availability and last modified
+		// draw name and organism
 		String[][] text = new String[][] { { "Title: ", getPathwayObject().getTitle() },
 				{ "Organism: ", getPathwayObject().getOrganism() },
-//				{"Source: ", gdata.getSource()}, //TODO 
-//				{"Version: ", gdata.getVersion()},
-//				{"License: ", gdata.getLicense()},
-//				{"Last modified: ", gdata.getLastModified()},
-//				{"Data Source: ", gdata.getMapInfoDataSource()}
 		};
 		int shift = 0;
 		int vLeft = 0;
@@ -146,6 +142,7 @@ public class VInfoBox extends VPathwayElement {
 	/**
 	 * TODO is this used?
 	 */
+	@Override 
 	protected Shape getVShape(boolean rotate) {
 		double vW = sizeX;
 		double vH = sizeY;
@@ -160,6 +157,7 @@ public class VInfoBox extends VPathwayElement {
 	 * Do nothing. Infobox is always displayed in the top left corner at coordinate
 	 * (0,0) and cannot be moved.
 	 */
+	@Override 
 	protected void vMoveBy(double vdx, double vdy) {
 		// do nothing, can't move infobox
 	}
@@ -167,6 +165,7 @@ public class VInfoBox extends VPathwayElement {
 	/**
 	 * Do nothing. Infobox cannot be resized.
 	 */
+	@Override 
 	protected void setVScaleRectangle(Rectangle2D r) {
 		// do nothing, can't resize infobox
 	}
