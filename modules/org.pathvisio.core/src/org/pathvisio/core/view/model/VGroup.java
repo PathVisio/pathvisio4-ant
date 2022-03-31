@@ -186,12 +186,12 @@ public class VGroup extends VShapedElement implements VElementMouseListener {
 	}
 
 	/**
-	 *
+	 * Moves group and its group members. 
 	 */
 	@Override
 	protected void vMoveBy(double dx, double dy) {
 		canvas.moveMultipleElements(getGroupGraphics(), dx, dy);
-
+		super.vMoveBy(dx, dy);
 		// update group outline
 		markDirty();
 	}
