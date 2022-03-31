@@ -36,12 +36,12 @@ import javax.swing.JButton;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusAdapter;
 
+import org.pathvisio.core.util.ColorPalette;
 import org.pathvisio.core.view.model.DefaultTemplates;
 import org.pathvisio.gui.CommonActions.NewElementAction;
 import org.pathvisio.libgpml.model.shape.ShapeCatalog;
 import org.pathvisio.libgpml.model.shape.ShapeCatalog.Internal;
 import org.pathvisio.libgpml.model.type.DataNodeType;
-import org.pathvisio.libgpml.util.ColorPalette;
 import org.pathvisio.libgpml.util.ColorUtils;
 
 /**

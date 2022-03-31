@@ -25,8 +25,8 @@ import java.awt.geom.Rectangle2D;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.pathvisio.core.util.ColorPalette;
 import org.pathvisio.libgpml.model.type.GroupType;
-import org.pathvisio.libgpml.util.ColorPalette;
 import org.pathvisio.libgpml.util.ColorUtils;
 
 /**

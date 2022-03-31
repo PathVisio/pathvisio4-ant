@@ -42,11 +42,12 @@ import org.pathvisio.libgpml.model.PathwayModel;
 import org.pathvisio.libgpml.model.PathwayElement;
 import org.pathvisio.libgpml.model.type.StateType;
 import org.pathvisio.libgpml.model.type.VAlignType;
-import org.pathvisio.libgpml.util.ColorPalette;
 import org.pathvisio.libgpml.util.ColorUtils;
 import org.pathvisio.core.preferences.GlobalPreference;
 import org.pathvisio.core.preferences.PreferenceManager;
+import org.pathvisio.core.util.ColorPalette;
 import org.pathvisio.core.util.Resources;
+import org.pathvisio.core.util.Theme;
 
 /**
  * Contains a set of templates, patterns of PathwayElements that can be added to
@@ -54,12 +55,16 @@ import org.pathvisio.core.util.Resources;
  */
 public abstract class DefaultTemplates {
 
+	private final static Theme theme = new Theme("Wikipathways");
+	
 	/* Some default colors */
 	private final static Color COLOR_DEFAULT = ColorPalette.WP_BLACK;
 	private final static Color COLOR_METABOLITE = ColorPalette.WP_BLUE;
 	private final static Color COLOR_PATHWAY = ColorPalette.WP_GREEN;
-	private final static Color COLOR_LABEL = Color.DARK_GRAY;
-	private final static Color COLOR_TRANSPARENT = ColorUtils.hexToColor("#00000000");
+	private final static Color COLOR_LABEL = ColorPalette.WP_BLACK;
+	private final static Color COLOR_TRANSPARENT = ColorPalette.TRANSPARENT;
+	private final static Color COLOR_SHAPE_GREY = ColorPalette.WP_CUSTOM_PV_MGREY;
+	private final static Color COLOR_SHAPE_DGREY = ColorPalette.WP_DGREY;
 
 	/* Initial sizes */
 	private static final double DATANODE_WIDTH = 90; // NB: "DATANODE" used to be named "GENEPRODUCT"
@@ -320,12 +325,12 @@ public abstract class DefaultTemplates {
 		ShapeType shapeType;
 
 		// cellular component shapes
-		Set<ShapeType> CELL_COMPONENT_SET = new HashSet<>(Arrays.asList(ShapeType.CELL, ShapeType.NUCLEUS,
+		static final Set<ShapeType> CELL_COMPONENT_SET = new HashSet<>(Arrays.asList(ShapeType.CELL, ShapeType.NUCLEUS,
 				ShapeType.ENDOPLASMIC_RETICULUM, ShapeType.GOLGI_APPARATUS, ShapeType.MITOCHONDRIA,
 				ShapeType.SARCOPLASMIC_RETICULUM, ShapeType.ORGANELLE, ShapeType.VESICLE, ShapeType.EXTRACELLULAR));
 
 		// miscellaneous shapes
-		Set<ShapeType> MISC_SHAPE_SET = new HashSet<>(
+		static final Set<ShapeType> MISC_SHAPE_SET = new HashSet<>(
 				Arrays.asList(ShapeType.CORONAVIRUS, ShapeType.DNA, ShapeType.RNA, ShapeType.CELL_ICON));
 
 		public ShapeTemplate(ShapeType shapeType) {
@@ -392,11 +397,11 @@ public abstract class DefaultTemplates {
 			IShape type = e.getShapeType();
 			e.setFillColor(COLOR_TRANSPARENT);
 			if (CELL_COMPONENT_SET.contains(type)) {
-				e.setTextColor(Color.lightGray);
-				e.setBorderColor(Color.lightGray);
+				e.setTextColor(COLOR_SHAPE_GREY);
+				e.setBorderColor(COLOR_SHAPE_GREY);
 			} else if (MISC_SHAPE_SET.contains(type)) {
-				e.setTextColor(Color.darkGray);
-				e.setBorderColor(Color.darkGray);
+				e.setTextColor(COLOR_SHAPE_GREY);
+				e.setBorderColor(COLOR_SHAPE_DGREY);
 			} else {
 				e.setTextColor(COLOR_DEFAULT);
 				e.setBorderColor(COLOR_DEFAULT);

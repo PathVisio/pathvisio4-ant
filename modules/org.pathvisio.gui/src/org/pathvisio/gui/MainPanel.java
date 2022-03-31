@@ -389,6 +389,9 @@ public class MainPanel extends JPanel implements VPathwayModelListener, Applicat
 		// colorBackground ... TODO
 		addToToolbar(actions.colorBackgroundAction);
 
+		// colorTheme ... TODO
+		addToToolbar(actions.colorThemeAction);
+
 	}
 
 	protected void addToolBarActions(final SwingEngine swingEngine, JToolBar tb) {

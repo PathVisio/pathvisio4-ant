@@ -14,14 +14,10 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  ******************************************************************************/
-package org.pathvisio.libgpml.util;
+package org.pathvisio.core.util;
 
 import java.awt.Color;
-import java.util.Collections;
-import java.util.Map;
-import java.util.TreeMap;
-
-import org.pathvisio.libgpml.debug.Logger;
+import org.pathvisio.libgpml.util.ColorUtils;
 
 /**
  * This utils class contains pathway model colors for Color Palette (s).
@@ -43,4 +39,9 @@ public abstract class ColorPalette {
 	public static final Color WP_DPURPLE = Color.decode("#620492");
 	public static final Color WP_ORANGE = Color.decode("#FF8120");
 	public static final Color WP_DORANGE = Color.decode("#D16919");
+	// medium grey custom for pathvisio (WP_GREY is too light for some drawings)
+	public static final Color WP_CUSTOM_PV_MGREY = ColorUtils.hexToColor("#d5dcdd");
+
+	public static final Color TRANSPARENT = ColorUtils.hexToColor("#00000000");
+
 }

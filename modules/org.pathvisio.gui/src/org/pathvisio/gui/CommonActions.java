@@ -50,6 +50,7 @@ import org.pathvisio.libgpml.model.Label;
 import org.pathvisio.libgpml.model.PathwayElement;
 import org.pathvisio.libgpml.model.PathwayElement.CitationRef;
 import org.pathvisio.core.util.Resources;
+import org.pathvisio.core.util.Theme;
 import org.pathvisio.core.view.LayoutType;
 import org.pathvisio.core.view.model.DefaultTemplates;
 import org.pathvisio.core.view.model.Handle;
@@ -93,6 +94,7 @@ public class CommonActions implements ApplicationEventListener {
 			va.registerToGroup(pasteAction, ViewActions.GROUP_ENABLE_VPATHWAY_LOADED);
 			va.registerToGroup(pasteAction, ViewActions.GROUP_ENABLE_EDITMODE);
 			va.registerToGroup(colorBackgroundAction, ViewActions.GROUP_ENABLE_VPATHWAY_LOADED); // TODO
+			va.registerToGroup(colorThemeAction, ViewActions.GROUP_ENABLE_VPATHWAY_LOADED); // TODO
 			va.registerToGroup(zoomActions, ViewActions.GROUP_ENABLE_VPATHWAY_LOADED);
 			va.registerToGroup(layoutActions, ViewActions.GROUP_ENABLE_EDITMODE);
 			va.registerToGroup(layoutActions, ViewActions.GROUP_ENABLE_WHEN_SELECTION);
@@ -116,6 +118,7 @@ public class CommonActions implements ApplicationEventListener {
 	public final Action copyAction;
 	public final Action pasteAction;
 	public final ColorBackgroundAction colorBackgroundAction; // TODO
+	public final ColorThemeAction colorThemeAction; // TODO
 
 	public final Action exitAction;
 
@@ -157,6 +160,7 @@ public class CommonActions implements ApplicationEventListener {
 		copyAction = new ViewActions.CopyAction(se.getEngine());
 		pasteAction = new ViewActions.PasteAction(se.getEngine());
 		colorBackgroundAction = new ColorBackgroundAction(se.getEngine());
+		colorThemeAction = new ColorThemeAction(se.getEngine()); //TODO
 		exportAction = new ExportAction(se);
 		importAction = new ImportAction(se);
 		aboutAction = new AboutAction(se);
@@ -448,6 +452,31 @@ public class CommonActions implements ApplicationEventListener {
 					p.getPathway().setBackgroundColor(newColor);
 					engine.getActiveVPathwayModel().redraw();
 				}
+			}
+		}
+	}
+
+	/**
+	 * TODO
+	 */
+	public static class ColorThemeAction extends AbstractAction {
+		Engine engine;
+
+		public ColorThemeAction(Engine engine) {
+			super();
+			this.engine = engine;
+			putValue(NAME, "Theme");
+			putValue(SHORT_DESCRIPTION, "Set Wikipathways theme");
+			// engine.addApplicationEventListener(this);
+			// setEnabled(false);
+		}
+
+		public void actionPerformed(ActionEvent e) {
+			PathwayModel p = engine.getActivePathwayModel();
+			if (p != null) {
+				Theme wp = new Theme("Wikipathways");
+				wp.colorPathwayModel(p);
+				engine.getActiveVPathwayModel().redraw();
 			}
 		}
 	}
