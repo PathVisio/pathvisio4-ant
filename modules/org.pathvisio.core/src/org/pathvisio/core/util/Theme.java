@@ -106,24 +106,24 @@ public class Theme {
 		if (type == DataNodeType.PATHWAY) {
 			e.setTextColor(colorPathway);
 			e.setBorderColor(colorPathway);
-		} else if (type == DataNodeType.PATHWAY) {
+		} else if (type == DataNodeType.METABOLITE) {
 			e.setTextColor(colorMetabolite);
 			e.setBorderColor(colorMetabolite);
 		} else {
 			e.setTextColor(colorDefault);
-			e.setBorderColor(colorMetabolite);
+			e.setBorderColor(colorDefault);
 		}
 	}
 
 	// ================================================================================
 	// Color Shapes
 	// ================================================================================
-	static final Set<ShapeType> CELL_COMPONENT_SET = new HashSet<>(Arrays.asList(ShapeType.CELL, ShapeType.NUCLEUS,
+	public static final Set<ShapeType> CELL_COMPONENT_SET = new HashSet<>(Arrays.asList(ShapeType.CELL, ShapeType.NUCLEUS,
 			ShapeType.ENDOPLASMIC_RETICULUM, ShapeType.GOLGI_APPARATUS, ShapeType.MITOCHONDRIA,
 			ShapeType.SARCOPLASMIC_RETICULUM, ShapeType.ORGANELLE, ShapeType.VESICLE, ShapeType.EXTRACELLULAR));
 
 	// miscellaneous shapes
-	static final Set<ShapeType> MISC_SHAPE_SET = new HashSet<>(
+	public static final Set<ShapeType> MISC_SHAPE_SET = new HashSet<>(
 			Arrays.asList(ShapeType.CORONAVIRUS, ShapeType.DNA, ShapeType.RNA, ShapeType.CELL_ICON));
 
 	/**

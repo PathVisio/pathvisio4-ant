@@ -24,7 +24,6 @@ import java.util.Set;
 
 import org.pathvisio.libgpml.model.type.ConnectorType;
 import org.pathvisio.libgpml.model.type.DataNodeType;
-import org.pathvisio.libgpml.model.type.HAlignType;
 import org.pathvisio.libgpml.model.type.LineStyleType;
 import org.pathvisio.libgpml.model.type.AnchorShapeType;
 import org.pathvisio.libgpml.model.type.ArrowHeadType;
@@ -41,8 +40,6 @@ import org.pathvisio.libgpml.model.Label;
 import org.pathvisio.libgpml.model.PathwayModel;
 import org.pathvisio.libgpml.model.PathwayElement;
 import org.pathvisio.libgpml.model.type.StateType;
-import org.pathvisio.libgpml.model.type.VAlignType;
-import org.pathvisio.libgpml.util.ColorUtils;
 import org.pathvisio.core.preferences.GlobalPreference;
 import org.pathvisio.core.preferences.PreferenceManager;
 import org.pathvisio.core.util.ColorPalette;
@@ -55,7 +52,7 @@ import org.pathvisio.core.util.Theme;
  */
 public abstract class DefaultTemplates {
 
-	private final static Theme theme = new Theme("Wikipathways");
+	private final static Theme theme = new Theme("Wikipathways"); //default theme TODO 
 	
 	/* Some default colors */
 	private final static Color COLOR_DEFAULT = ColorPalette.WP_BLACK;
@@ -270,7 +267,7 @@ public abstract class DefaultTemplates {
 			if (type == DataNodeType.PATHWAY) {
 				e.setTextColor(COLOR_PATHWAY);
 				e.setBorderColor(COLOR_PATHWAY);
-			} else if (type == DataNodeType.PATHWAY) {
+			} else if (type == DataNodeType.METABOLITE) {
 				e.setTextColor(COLOR_METABOLITE);
 				e.setBorderColor(COLOR_METABOLITE);
 			} else {
