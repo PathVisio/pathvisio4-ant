@@ -42,6 +42,7 @@ import org.pathvisio.libgpml.model.PathwayModel;
 import org.pathvisio.libgpml.model.PathwayElement;
 import org.pathvisio.libgpml.model.type.StateType;
 import org.pathvisio.libgpml.model.type.VAlignType;
+import org.pathvisio.libgpml.util.ColorPalette;
 import org.pathvisio.libgpml.util.ColorUtils;
 import org.pathvisio.core.preferences.GlobalPreference;
 import org.pathvisio.core.preferences.PreferenceManager;
@@ -54,9 +55,9 @@ import org.pathvisio.core.util.Resources;
 public abstract class DefaultTemplates {
 
 	/* Some default colors */
-	private final static Color COLOR_DEFAULT = Color.BLACK;
-	private final static Color COLOR_METABOLITE = Color.BLUE;
-	private final static Color COLOR_PATHWAY = new Color(20, 150, 30);
+	private final static Color COLOR_DEFAULT = ColorPalette.WP_BLACK;
+	private final static Color COLOR_METABOLITE = ColorPalette.WP_BLUE;
+	private final static Color COLOR_PATHWAY = ColorPalette.WP_GREEN;
 	private final static Color COLOR_LABEL = Color.DARK_GRAY;
 	private final static Color COLOR_TRANSPARENT = ColorUtils.hexToColor("#00000000");
 
@@ -87,6 +88,9 @@ public abstract class DefaultTemplates {
 	public static final int Z_ORDER_LINE = 0x3000;
 	public static final int Z_ORDER_DEFAULT = 0x0000; // default order of uninteresting elements.
 
+	// ================================================================================
+	// Common Methods
+	// ================================================================================
 	/**
 	 * This sets the object to a suitable default size.
 	 *
@@ -144,6 +148,9 @@ public abstract class DefaultTemplates {
 		}
 	}
 
+	// ================================================================================
+	// SingleElementTemplate
+	// ================================================================================
 	/**
 	 * Abstract base for templates that only add a single PathwayElement to a
 	 * Pathway
@@ -183,6 +190,9 @@ public abstract class DefaultTemplates {
 		}
 	}
 
+	// ================================================================================
+	// DataNodeTemplate
+	// ================================================================================
 	/**
 	 * Template for adding a DataNode to a Pathway. Pass a DataNodeType upon
 	 * creation.
@@ -194,33 +204,18 @@ public abstract class DefaultTemplates {
 			this.type = type;
 		}
 
-		/**
-		 * 
-		 */
 		public DataNode[] addElements(PathwayModel p, double mx, double my) {
 			// instantiate data node
 			DataNode e = new DataNode(type.toString(), type);
 			// set graphics
-			Color color = COLOR_DEFAULT;
-			ShapeType shapeType = ShapeType.RECTANGLE;
-			boolean fontWeight = false;
-			if (type == DataNodeType.METABOLITE) {
-				color = COLOR_METABOLITE;
-				shapeType = ShapeType.RECTANGLE; // TODO
-			} else if (type == DataNodeType.PATHWAY) {
-				color = COLOR_PATHWAY;
-				shapeType = ShapeType.ROUNDED_RECTANGLE;//
-				fontWeight = true;
+			setInitialColors(e);
+			setInitialShapeBorder(e);
+			if (type == DataNodeType.PATHWAY) { // TODO 
+				e.setFontWeight(true);
 			}
 			e.setCenterX(mx);
 			e.setCenterY(my);
 			setInitialSize(e);
-			// default font-Name/Style/Decoration/StrikeThru/Size, hAlign, vAlign
-			e.setTextColor(color);
-			e.setFontWeight(fontWeight);
-			// default borderStyle, borderWidth, fillColor, rotation
-			e.setBorderColor(color);
-			e.setShapeType(shapeType);
 			e.setZOrder(Z_ORDER_DATANODE);
 			if (PreferenceManager.getCurrent().getBoolean(GlobalPreference.DATANODES_ROUNDED)) {
 				e.setShapeType(ShapeType.ROUNDED_RECTANGLE);// TODO what is this for???
@@ -239,8 +234,51 @@ public abstract class DefaultTemplates {
 			return type.toString();
 		}
 
+		/**
+		 * Sets shape and border.
+		 * 
+		 * @param e the data node.
+		 */
+		public void setInitialShapeBorder(DataNode e) {
+			DataNodeType type = e.getType();
+			// concept datanodes
+			if (type == DataNodeType.PATHWAY || type == DataNodeType.DISEASE || type == DataNodeType.PHENOTYPE
+					|| type == DataNodeType.EVENT || type == DataNodeType.CELL || type == DataNodeType.ORGAN) {
+				e.setShapeType(ShapeType.ROUNDED_RECTANGLE);
+			} else if (type == DataNodeType.ALIAS) {
+				e.setShapeType(ShapeType.OVAL);
+			} else if (type == DataNodeType.UNDEFINED) {
+				e.setShapeType(ShapeType.ROUNDED_RECTANGLE);
+				e.setBorderStyle(LineStyleType.DASHED);
+			} else { // molecule datanodes
+				e.setShapeType(ShapeType.RECTANGLE);
+			}
+		}
+
+		/**
+		 * Sets text, border, and fill color.
+		 * 
+		 * @param e the data node.
+		 */
+		public void setInitialColors(DataNode e) {
+			DataNodeType type = e.getType();
+			if (type == DataNodeType.PATHWAY) {
+				e.setTextColor(COLOR_PATHWAY);
+				e.setBorderColor(COLOR_PATHWAY);
+			} else if (type == DataNodeType.PATHWAY) {
+				e.setTextColor(COLOR_METABOLITE);
+				e.setBorderColor(COLOR_METABOLITE);
+			} else {
+				e.setTextColor(COLOR_DEFAULT);
+				e.setBorderColor(COLOR_DEFAULT);
+			}
+		}
+
 	}
 
+	// ================================================================================
+	// LabelTemplate
+	// ================================================================================
 	/**
 	 * Template for adding a Label to a Pathway
 	 */
@@ -272,6 +310,9 @@ public abstract class DefaultTemplates {
 		}
 	}
 
+	// ================================================================================
+	// ShapeTemplate
+	// ================================================================================
 	/**
 	 * Template for adding a Shape to a Pathway. Pass a ShapeType upon creation.
 	 */
@@ -321,7 +362,7 @@ public abstract class DefaultTemplates {
 		 */
 		public void setInitialBorderStyle(Shape e) {
 			IShape type = e.getShapeType();
-			if (type == ShapeType.CELL || type == ShapeType.NUCLEUS || type == ShapeType.ORGANELLE) {
+			if (shapeType == ShapeType.CELL || type == ShapeType.NUCLEUS || type == ShapeType.ORGANELLE) {
 				e.setBorderStyle(LineStyleType.DOUBLE);
 			} else if (type == ShapeType.CYTOSOL || type == ShapeType.EXTRACELLULAR || type == ShapeType.MEMBRANE) {
 				e.setBorderStyle(LineStyleType.DASHED); // TODO membrane/cytosol never implemented?
@@ -364,6 +405,9 @@ public abstract class DefaultTemplates {
 
 	}
 
+	// ================================================================================
+	// InteractionTemplate
+	// ================================================================================
 	/**
 	 * Template for adding a single line denoting an interaction to a Pathway.
 	 */
@@ -412,6 +456,9 @@ public abstract class DefaultTemplates {
 		}
 	}
 
+	// ================================================================================
+	// GraphicalLineTemplate
+	// ================================================================================
 	/**
 	 * Template for adding a Graphical line to a Pathway.
 	 */
@@ -460,6 +507,9 @@ public abstract class DefaultTemplates {
 		}
 	}
 
+	// ================================================================================
+	// DataNodeInteractionTemplate
+	// ================================================================================
 	/**
 	 * Template for an interaction, two datanodes with a connecting line.
 	 */
@@ -517,6 +567,9 @@ public abstract class DefaultTemplates {
 		}
 	}
 
+	// ================================================================================
+	// InhibitionInteractionTemplate
+	// ================================================================================
 	/**
 	 * Template for an inhibition interaction, two datanodes with a MIM_INHIBITION
 	 * line.
@@ -535,6 +588,9 @@ public abstract class DefaultTemplates {
 		}
 	}
 
+	// ================================================================================
+	// StimulationInteractionTemplate
+	// ================================================================================
 	/**
 	 * Template for a stimulation interaction, two datanodes with a MIM_STIMULATION
 	 * line.
@@ -553,6 +609,9 @@ public abstract class DefaultTemplates {
 		}
 	}
 
+	// ================================================================================
+	// PhosphorylationTemplate
+	// ================================================================================
 	/**
 	 * Template for a phosphorylation interaction, two Protein Datanodes with a
 	 * MIM_MODIFICATION line.
@@ -587,6 +646,9 @@ public abstract class DefaultTemplates {
 		}
 	}
 
+	// ================================================================================
+	// ReactionTemplate
+	// ================================================================================
 	/**
 	 * Template for a reaction, two Metabolites with a connecting arrow, and a
 	 * GeneProduct (enzyme) pointing to an anchor on that arrow.
@@ -634,6 +696,9 @@ public abstract class DefaultTemplates {
 		}
 	}
 
+	// ================================================================================
+	// ReversibleReactionTemplate
+	// ================================================================================
 	/**
 	 * Template for a reaction, two Metabolites with a connecting arrow, and a
 	 * GeneProduct (enzyme) pointing to an anchor on that arrow.

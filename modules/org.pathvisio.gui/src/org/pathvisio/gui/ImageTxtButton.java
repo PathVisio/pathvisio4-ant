@@ -41,6 +41,7 @@ import org.pathvisio.gui.CommonActions.NewElementAction;
 import org.pathvisio.libgpml.model.shape.ShapeCatalog;
 import org.pathvisio.libgpml.model.shape.ShapeCatalog.Internal;
 import org.pathvisio.libgpml.model.type.DataNodeType;
+import org.pathvisio.libgpml.util.ColorPalette;
 import org.pathvisio.libgpml.util.ColorUtils;
 
 /**
@@ -132,17 +133,15 @@ public class ImageTxtButton extends JButton {
 		Shape sh = null;
 		switch (this.getAction().toString()) {
 		case "Metabolite":
-			Color blue = Color.BLUE;
-			this.setForeground(blue);
-			g2.setPaint(blue);
+			this.setForeground(ColorPalette.WP_BLUE);
+			g2.setPaint(ColorPalette.WP_BLUE);
 			g2.draw(new Rectangle(4, 6, 24, 20));
 			break;
 		case "Label":
 			break;
 		case "Pathway":
-			Color green = ColorUtils.hexToColor("14961e");
-			this.setForeground(green);
-			g2.setPaint(green);
+			this.setForeground(ColorPalette.WP_GREEN);
+			g2.setPaint(ColorPalette.WP_GREEN);
 			g2.draw(new RoundRectangle2D.Double(4, 6, 24, 20, 8, 8));
 			break;
 		case "Disease": // Concepts

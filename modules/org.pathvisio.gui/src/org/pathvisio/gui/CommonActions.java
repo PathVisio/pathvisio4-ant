@@ -367,7 +367,7 @@ public class CommonActions implements ApplicationEventListener {
 						new DefaultTemplates.InteractionTemplate("Binding", LineStyleType.SOLID,
 								ArrowHeadType.UNDIRECTED, ArrowHeadType.BINDING, ConnectorType.STRAIGHT)),
 				new NewElementAction(e,
-						new DefaultTemplates.InteractionTemplate("Translocation", LineStyleType.DASHED,
+						new DefaultTemplates.InteractionTemplate("Translocation", LineStyleType.SOLID,
 								ArrowHeadType.UNDIRECTED, ArrowHeadType.TRANSLOCATION, ConnectorType.STRAIGHT)),
 				new NewElementAction(e,
 						new DefaultTemplates.InteractionTemplate("Transcription-translation", LineStyleType.SOLID,
