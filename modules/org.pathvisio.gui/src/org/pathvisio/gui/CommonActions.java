@@ -18,6 +18,8 @@ package org.pathvisio.gui;
 
 import java.awt.Color;
 import javax.swing.JColorChooser;
+import javax.swing.JDialog;
+
 import java.awt.Component;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -433,6 +435,7 @@ public class CommonActions implements ApplicationEventListener {
 	 */
 	public static class ColorBackgroundAction extends AbstractAction {
 		Engine engine;
+		private JColorChooser colorChooser;
 
 		public ColorBackgroundAction(Engine engine) {
 			super();
@@ -445,9 +448,12 @@ public class CommonActions implements ApplicationEventListener {
 
 		public void actionPerformed(ActionEvent e) {
 			PathwayModel p = engine.getActivePathwayModel();
+			if(colorChooser == null) {
+				colorChooser = new JColorChooser();
+			}
 			if (p != null) {
 				Color initColor = p.getPathway().getBackgroundColor();
-				Color newColor = JColorChooser.showDialog(null, "Choose a background color", initColor);
+				Color newColor = JColorChooser.showDialog(colorChooser, "Choose a background color", initColor);
 				if (newColor != null) {
 					p.getPathway().setBackgroundColor(newColor);
 					engine.getActiveVPathwayModel().redraw();

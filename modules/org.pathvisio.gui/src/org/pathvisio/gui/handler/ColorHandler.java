@@ -32,16 +32,18 @@ import javax.swing.table.TableCellRenderer;
 
 import org.pathvisio.libgpml.prop.PropertyType;
 import org.pathvisio.libgpml.prop.StaticPropertyType;
+import org.pathvisio.core.util.WPColorChooserPanel;
 
 /**
- * This class knows how to handle colors.  It renders and edits color values.
- * The color takes up the entire cell to standardize behavior across Look-and-Feels (due to a problem with Vista, see
+ * This class knows how to handle colors. It renders and edits color values. The
+ * color takes up the entire cell to standardize behavior across Look-and-Feels
+ * (due to a problem with Vista, see
  * http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4880747 for details).
  *
  * @author Mark Woon
  */
-public class ColorHandler extends AbstractCellEditor implements TableCellRenderer, TableCellEditor, TypeHandler,
-		ActionListener {
+public class ColorHandler extends AbstractCellEditor
+		implements TableCellRenderer, TableCellEditor, TypeHandler, ActionListener {
 	private static final String EDIT_COMMAND = "edit";
 	private JLabel renderer;
 	private JButton editButton;
@@ -55,13 +57,13 @@ public class ColorHandler extends AbstractCellEditor implements TableCellRendere
 		editButton.setActionCommand(EDIT_COMMAND);
 		editButton.addActionListener(this);
 		editButton.setBorderPainted(false);
-		// see http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4880747 for why setContentAreaFilled(false) is necessary
+		// see http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4880747 for why
+		// setContentAreaFilled(false) is necessary
 		editButton.setContentAreaFilled(false);
 		editButton.setOpaque(true);
 	}
 
-
-	//-- TypeHandler methods --//
+	// -- TypeHandler methods --//
 
 	public PropertyType getType() {
 		return StaticPropertyType.COLOR;
@@ -79,22 +81,20 @@ public class ColorHandler extends AbstractCellEditor implements TableCellRendere
 		return this;
 	}
 
-
-	//-- TableCellRenderer methods --//
+	// -- TableCellRenderer methods --//
 
 	public Component getTableCellRendererComponent(JTable table, Object color, boolean isSelected, boolean hasFocus,
 			int row, int column) {
 
-		Color newColor = color != null ? (Color)color : Color.WHITE;
+		Color newColor = color != null ? (Color) color : Color.WHITE;
 		renderer.setBackground(newColor);
 
-		renderer.setToolTipText("RGB value: " + newColor.getRed() + ", " + newColor.getGreen() + ", " +
-				newColor.getBlue());
+		renderer.setToolTipText(
+				"RGB value: " + newColor.getRed() + ", " + newColor.getGreen() + ", " + newColor.getBlue());
 		return renderer;
 	}
 
-
-	//-- TableCellEditor methods --//
+	// -- TableCellEditor methods --//
 
 	public Object getCellEditorValue() {
 		return currentColor;
@@ -102,13 +102,12 @@ public class ColorHandler extends AbstractCellEditor implements TableCellRendere
 
 	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
 
-		currentColor = (Color)value;
+		currentColor = (Color) value;
 		editButton.setBackground(currentColor);
 		return editButton;
 	}
 
-
-	//-- ActionListener methods --//
+	// -- ActionListener methods --//
 
 	public void actionPerformed(ActionEvent e) {
 
@@ -117,6 +116,8 @@ public class ColorHandler extends AbstractCellEditor implements TableCellRendere
 
 			if(colorChooser == null) {
 				colorChooser = new JColorChooser();
+				WPColorChooserPanel wpColorChooser = new WPColorChooserPanel();
+				colorChooser.addChooserPanel(wpColorChooser);
 			}
 			
 			// new color is selected when user clicks ok

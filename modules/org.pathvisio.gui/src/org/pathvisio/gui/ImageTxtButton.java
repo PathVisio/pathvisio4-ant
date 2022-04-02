@@ -33,7 +33,6 @@ import java.awt.event.MouseListener;
 import java.awt.Graphics2D;
 import javax.swing.Action;
 import javax.swing.JButton;
-import java.awt.event.FocusEvent;
 import java.awt.event.FocusAdapter;
 
 import org.pathvisio.core.util.ColorPalette;
@@ -50,12 +49,15 @@ import org.pathvisio.libgpml.util.ColorUtils;
  * @author bing
  */
 public class ImageTxtButton extends JButton {
+	
+	Graphics2D buttonImage;
 
 	public ImageTxtButton(Action a) {
 		super();
 		this.setRolloverEnabled(true);
 		initRolloverListener();
 		Dimension dim = new Dimension(33, 33); // UI Design
+		this.buttonImage = null;
 		this.setAction(a);
 		this.setSize(dim);
 		this.setPreferredSize(dim);
@@ -92,7 +94,6 @@ public class ImageTxtButton extends JButton {
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		Graphics2D g2 = (Graphics2D) g.create();
 		drawColoredShape(g2, getText());
 		g2.setColor(new Color(255, 255, 255, 0));
 		g2.dispose();
@@ -129,7 +130,7 @@ public class ImageTxtButton extends JButton {
 	 * @param g2  the graphics to paint.
 	 * @param txt the text.
 	 */
-	private void drawColoredShape(Graphics2D g2, String txt) {
+	private void getColoredShape(Graphics2D g2, String txt) {
 		Shape sh = null;
 		switch (this.getAction().toString()) {
 		case "Metabolite":
