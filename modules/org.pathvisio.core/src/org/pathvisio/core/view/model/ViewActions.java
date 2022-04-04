@@ -611,7 +611,7 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 		public void actionPerformed(ActionEvent e) {
 			List<VDrawable> selection = vPathwayModel.getSelectedGraphics();
 			if (selection.size() > 0) {
-				vPathwayModel.getUndoManager().newAction("Add anchor");
+				vPathwayModel.getUndoManager().newAction("Add Anchor");
 				for (VDrawable g : selection) {
 					if (g instanceof VLineElement) {
 						VLineElement l = (VLineElement) g;
@@ -669,7 +669,7 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 				}
 			}
 			if (toRemove.size() > 0) {
-				vPathwayModel.getUndoManager().newAction("Remove state(s)");
+				vPathwayModel.getUndoManager().newAction("Remove State(s)");
 				vPathwayModel.removeDrawingObjects(toRemove, true);
 			}
 
@@ -731,7 +731,7 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 				g.getPathwayObject().setType(groupStyle);
 				// TODO !!!!
 				if (vPathwayModel != null) {
-					vPathwayModel.getUndoManager().newAction("Change group");
+					vPathwayModel.getUndoManager().newAction("Change Group");
 				}
 			}
 		}
@@ -871,7 +871,7 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 				toRemove.add(o);
 			}
 			if (toRemove.size() > 0) {
-				vPathwayModel.getUndoManager().newAction("Delete element(s)");
+				vPathwayModel.getUndoManager().newAction("Delete Element(s)");
 				vPathwayModel.removeDrawingObjects(toRemove, true);
 			}
 		}

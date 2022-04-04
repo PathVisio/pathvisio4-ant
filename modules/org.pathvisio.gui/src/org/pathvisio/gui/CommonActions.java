@@ -455,6 +455,7 @@ public class CommonActions implements ApplicationEventListener {
 				Color initColor = p.getPathway().getBackgroundColor();
 				Color newColor = JColorChooser.showDialog(colorChooser, "Choose a background color", initColor);
 				if (newColor != null) {
+					engine.getActiveVPathwayModel().getUndoManager().newAction("Color Background"); //TODO 
 					p.getPathway().setBackgroundColor(newColor);
 					engine.getActiveVPathwayModel().redraw();
 				}
@@ -480,6 +481,7 @@ public class CommonActions implements ApplicationEventListener {
 		public void actionPerformed(ActionEvent e) {
 			PathwayModel p = engine.getActivePathwayModel();
 			if (p != null) {
+				engine.getActiveVPathwayModel().getUndoManager().newAction("Color Theme"); //TODO 
 				Theme wp = new Theme("Wikipathways");
 				wp.colorPathwayModel(p);
 				engine.getActiveVPathwayModel().redraw();
