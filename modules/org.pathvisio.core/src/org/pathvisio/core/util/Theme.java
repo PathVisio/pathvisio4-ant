@@ -33,9 +33,9 @@ import org.pathvisio.libgpml.util.ColorUtils;
 /**
  * Color Theme class. For coloring of pathway model objects.
  * 
- * NB: Sets colors to given Theme. Preserves all other graphics attributes. 
+ * NB: Sets colors to given Theme. Preserves all other graphics attributes.
  * 
- * TODO How to set group color.... 
+ * TODO How to set group color....
  * 
  * @author finterly
  */
@@ -45,15 +45,18 @@ public class Theme {
 	// Available Themes
 	// ================================================================================
 	public static final String WIKIPATHWAY_COLOR_THEME = "Wikipathways";
+	public static final String OTHER = "Other";
 
 	// ================================================================================
 	// Color-able Fields
 	// ================================================================================
+	private Color colorBackground;
 	private Color colorDefault;
 	private Color colorMetabolite;
 	private Color colorPathway;
+	private Color colorDataNodeFill;
 	private Color colorLabel;
-	private Color colorTransparent;
+	private Color colorShapeFill;
 	private Color colorShapeGrey;
 	private Color colorShapeDarkGrey;
 
@@ -62,11 +65,23 @@ public class Theme {
 	// ================================================================================
 	public Theme(String theme) {
 		if (theme == WIKIPATHWAY_COLOR_THEME) {
+			colorBackground = ColorPalette.WP_WHITE;
 			colorDefault = ColorPalette.WP_BLACK;
 			colorMetabolite = ColorPalette.WP_BLUE;
 			colorPathway = ColorPalette.WP_GREEN;
+			colorDataNodeFill = ColorPalette.WP_WHITE;
 			colorLabel = ColorPalette.WP_BLACK;
-			colorTransparent = ColorPalette.TRANSPARENT;
+			colorShapeFill = ColorPalette.TRANSPARENT;
+			colorShapeGrey = ColorPalette.WP_CUSTOM_PV_MGREY;
+			colorShapeDarkGrey = ColorPalette.WP_DGREY;
+		} else if (theme == OTHER) {
+			colorBackground = ColorPalette.WP_WHITE;
+			colorDefault = ColorPalette.WP_BLACK;
+			colorMetabolite = ColorPalette.WP_BLUE;
+			colorPathway = ColorPalette.WP_GREEN;
+			colorDataNodeFill = ColorPalette.WP_WHITE;
+			colorLabel = ColorPalette.WP_BLACK;
+			colorShapeFill = ColorPalette.TRANSPARENT;
 			colorShapeGrey = ColorPalette.WP_CUSTOM_PV_MGREY;
 			colorShapeDarkGrey = ColorPalette.WP_DGREY;
 		}
@@ -80,6 +95,7 @@ public class Theme {
 	 * @param theme
 	 */
 	public void colorPathwayModel(PathwayModel p) {
+		p.getPathway().setBackgroundColor(colorBackground);
 		for (DataNode d : p.getDataNodes()) {
 			setInitialColors(d);
 		}
@@ -103,6 +119,7 @@ public class Theme {
 	 */
 	public void setInitialColors(DataNode e) {
 		DataNodeType type = e.getType();
+		e.setFillColor(colorDataNodeFill);
 		if (type == DataNodeType.PATHWAY) {
 			e.setTextColor(colorPathway);
 			e.setBorderColor(colorPathway);
@@ -118,8 +135,8 @@ public class Theme {
 	// ================================================================================
 	// Color Shapes
 	// ================================================================================
-	public static final Set<ShapeType> CELL_COMPONENT_SET = new HashSet<>(Arrays.asList(ShapeType.CELL, ShapeType.NUCLEUS,
-			ShapeType.ENDOPLASMIC_RETICULUM, ShapeType.GOLGI_APPARATUS, ShapeType.MITOCHONDRIA,
+	public static final Set<ShapeType> CELL_COMPONENT_SET = new HashSet<>(Arrays.asList(ShapeType.CELL,
+			ShapeType.NUCLEUS, ShapeType.ENDOPLASMIC_RETICULUM, ShapeType.GOLGI_APPARATUS, ShapeType.MITOCHONDRIA,
 			ShapeType.SARCOPLASMIC_RETICULUM, ShapeType.ORGANELLE, ShapeType.VESICLE, ShapeType.EXTRACELLULAR));
 
 	// miscellaneous shapes
@@ -133,7 +150,7 @@ public class Theme {
 	 */
 	public void setInitialColors(Shape e) {
 		IShape type = e.getShapeType();
-		e.setFillColor(colorTransparent);
+		e.setFillColor(colorShapeFill);
 		if (CELL_COMPONENT_SET.contains(type)) {
 			e.setTextColor(colorShapeGrey);
 			e.setBorderColor(colorShapeGrey);

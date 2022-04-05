@@ -38,6 +38,8 @@ import org.pathvisio.libgpml.prop.StaticPropertyType;
 
 /**
  * This class knows how to edit comments.
+ * 
+ * @author finterly
  */
 public class XrefHandler extends AbstractCellEditor
 		implements ContextSensitiveEditor, TableCellEditor, TypeHandler, ActionListener {

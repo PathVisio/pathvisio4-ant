@@ -90,7 +90,7 @@ public enum StaticProperty implements Property {
 	GROUPTYPE("groupType", "Group Type", StaticPropertyType.GROUPTYPE, 192),
 
 	// datanode
-	ALIASREF("aliasRef", "Alias Reference", StaticPropertyType.GROUP, 200, false, false, false), //TODO 
+	ALIASREF("aliasRef", "Linked to Group", StaticPropertyType.GROUP, 200, false, false, false), //TODO 
 
 	// state
 	RELX("relX", "Relative X", StaticPropertyType.DOUBLE, 210, true, false, false),

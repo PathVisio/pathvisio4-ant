@@ -64,25 +64,31 @@ public class ColorHandler extends AbstractCellEditor
 	}
 
 	// -- TypeHandler methods --//
-
+	@Override
 	public PropertyType getType() {
 		return StaticPropertyType.COLOR;
 	}
+
+	@Override
 
 	public TableCellRenderer getLabelRenderer() {
 		return null;
 	}
 
+	@Override
+
 	public TableCellRenderer getValueRenderer() {
 		return this;
 	}
 
+	@Override
 	public TableCellEditor getValueEditor() {
 		return this;
 	}
 
 	// -- TableCellRenderer methods --//
 
+	@Override
 	public Component getTableCellRendererComponent(JTable table, Object color, boolean isSelected, boolean hasFocus,
 			int row, int column) {
 
@@ -96,10 +102,12 @@ public class ColorHandler extends AbstractCellEditor
 
 	// -- TableCellEditor methods --//
 
+	@Override
 	public Object getCellEditorValue() {
 		return currentColor;
 	}
 
+	@Override
 	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
 
 		currentColor = (Color) value;
@@ -109,17 +117,18 @@ public class ColorHandler extends AbstractCellEditor
 
 	// -- ActionListener methods --//
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 
 		if (EDIT_COMMAND.equals(e.getActionCommand())) {
 			editButton.setBackground(currentColor);
 
-			if(colorChooser == null) {
+			if (colorChooser == null) {
 				colorChooser = new JColorChooser();
 				WPColorChooserPanel wpColorChooser = new WPColorChooserPanel();
 				colorChooser.addChooserPanel(wpColorChooser);
 			}
-			
+
 			// new color is selected when user clicks ok
 			ActionListener alOk = new ActionListener() {
 				@Override
@@ -133,15 +142,16 @@ public class ColorHandler extends AbstractCellEditor
 			// nothing happens when the user clicks cancel
 			ActionListener alCancel = new ActionListener() {
 				@Override
-				public void actionPerformed(ActionEvent e) {}
+				public void actionPerformed(ActionEvent e) {
+				}
 			};
-			
+
 			JDialog dlg = JColorChooser.createDialog(editButton, "Choose a color", true, colorChooser, alOk, alCancel);
 			colorChooser.setColor(currentColor);
 			dlg.pack();
 			dlg.setVisible(true);
 
-			fireEditingStopped();  // make the renderer reappear
+			fireEditingStopped(); // make the renderer reappear
 		}
 	}
 }

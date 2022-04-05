@@ -44,7 +44,7 @@ public class Resources {
 	 * @return the URL pointing to the PathVisio logo. 
 	 */
 	public static URL getLogo() {
-		URL url = Resources.class.getClassLoader().getResource("bigcateye.gif");
+		URL url = Resources.class.getClassLoader().getResource("bigcateye.gif"); //logotemp1.png
 		if (url == null)
 			Logger.log.error("Couldn't find PathVisio logo in resources");
 		return url;

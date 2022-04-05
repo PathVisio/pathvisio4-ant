@@ -65,10 +65,11 @@ public class ObjectsPane extends JPanel {
 
 			final JButton button;
 
-			if (label.equals("Molecules") || label.equals("Concepts") || a.toString().equals("Label")
-					|| a.toString().equals("Hexagon") || a.toString().equals("Octagon")
-					|| a.toString().equals("Coronavirus") || a.toString().equals("CellIcon")
-					|| a.toString().equals("DNA")) {
+			if (label.equals("Molecules") || label.equals("Concepts") || a.toString().equals("Label")) {
+				// // a.toString().equals("Hexagon") ||a.toString().equals("Octagon")
+				// ||a.toString().equals("CellIcon"
+				// || a.toString().equals("Coronavirus")
+				//|| a.toString().equals("DNAIcon")
 				button = new ImageTxtButton(a);
 			} else {
 				button = new ImageButton(a);
