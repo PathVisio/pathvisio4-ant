@@ -166,6 +166,10 @@ public abstract class VShapedElement extends VPathwayElement implements VLinkabl
 		gdata.setTop(mFromV(r.getY()));
 	}
 
+	/**
+	 * Moves view object. If the moved pathway element belongs to a group, also
+	 * update the parent groups dimensions.
+	 */
 	protected void vMoveBy(double vdx, double vdy) {
 		// both setM operations fire the exact same objectModifiedEvent, one should be
 		// enough
@@ -318,17 +322,18 @@ public abstract class VShapedElement extends VPathwayElement implements VLinkabl
 			setVerticalOppositeHandle(h);
 			newH = -newH;
 		}
-
 		gdata.setWidth(newW);
 		gdata.setHeight(newH);
 		Point vcr = LinAlg.rotate(new Point(idx, idy), -gdata.getRotation());
 		gdata.setCenterX(gdata.getCenterX() + vcr.x);
 		gdata.setCenterY(gdata.getCenterY() + vcr.y);
-		// Group dimensions must be greater than its contents
-		if (gdata.getObjectType() == ObjectType.GROUP) {
-			((Group) gdata).updateDimensions(); // validates/corrects
-		}
-
+//		if (gdata.getObjectType() == ObjectType.GROUP) { TODO 
+//			((Group) gdata).updateDimensions(); // if group, update dimensions
+//		}
+//		Group parentGroup = gdata.getGroupRef(); // if member of group, update parent group dimensions
+//		if (parentGroup != null) {
+//			parentGroup.updateDimensions();
+//		}
 	}
 
 	/**

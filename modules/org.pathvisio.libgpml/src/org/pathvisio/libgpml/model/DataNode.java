@@ -294,7 +294,8 @@ public class DataNode extends ShapedElement implements Xrefable {
 	 * <p>
 	 * NB:
 	 * <ol>
-	 * <li>This method calls {@link PathwayModel#addAlias}.
+	 * <li>This method calls {@link #unsetAliasRef} to remove any existing links.
+	 * <li>This method calls {@link PathwayModel#linkAlias} to add information to pathway model.
 	 * <li>DataNode type must be "Alias".
 	 * </ol>
 	 * 
@@ -316,15 +317,13 @@ public class DataNode extends ShapedElement implements Xrefable {
 	 * Unsets the aliasRef, if any, from this data node. Also removes references in
 	 * pathway model.
 	 * <p>
-	 * NB:
 	 * <ol>
-	 * <li>This method does not call {@link PathwayModel#removeAlias}.
-	 * <li>This method is not used directly. It is called by when the data node
-	 * alias is deleted by {@link PathwayModel#removePathwayObject} which in turn
-	 * calls {@link #terminate}.
+	 * <li>This method calls {@link #unsetAliasRef} to remove any existing links.
+	 * <li>This method calls {@link PathwayModel#unlinkAlias} to remove information in the pathway model.
+	 * <li>This method is also called when this data node alias is {@link #terminate}.
 	 * </ol>
 	 */
-	protected void unsetAliasRef() {
+	public void unsetAliasRef() {
 		if (getAliasRef() != null) {
 			pathwayModel.unlinkAlias(aliasRef, this);
 			aliasRef = null;

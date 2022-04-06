@@ -33,12 +33,15 @@ import java.awt.event.MouseListener;
 import java.awt.Graphics2D;
 import javax.swing.Action;
 import javax.swing.JButton;
+import javax.swing.UIManager;
+
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusAdapter;
 
 import org.pathvisio.core.util.ColorPalette;
 import org.pathvisio.core.view.model.DefaultTemplates;
 import org.pathvisio.gui.CommonActions.NewElementAction;
+import org.pathvisio.gui.ImageButtonShapes.ButtonList;
 import org.pathvisio.libgpml.model.shape.ShapeCatalog;
 import org.pathvisio.libgpml.model.shape.ShapeCatalog.Internal;
 import org.pathvisio.libgpml.model.type.DataNodeType;
@@ -51,20 +54,26 @@ import org.pathvisio.libgpml.util.ColorUtils;
  */
 public class ImageTxtButton extends JButton {
 
+	Shape imageShape;
+	Color imageColor;
+
 	public ImageTxtButton(Action a) {
 		super();
+		this.setAction(a);
 		this.setRolloverEnabled(true);
 		initRolloverListener();
-		Dimension dim = new Dimension(33, 33); // UI Design
-		this.setAction(a);
+		this.imageShape = getImageShape(); // set shape
+		this.imageColor = getImageColor(); // set color
+		this.setTextString(getText()); // set text
+		// UI Design
+		Dimension dim = new Dimension(33, 33);
 		this.setSize(dim);
 		this.setPreferredSize(dim);
 		this.setMinimumSize(dim);
 		this.setMaximumSize(dim);
 		this.setMargin(new Insets(0, 0, 0, 0));
 		this.setContentAreaFilled(false);
-		this.setTextString(getText()); // set text
-		this.setFont(new Font("Tahoma", Font.PLAIN, 9));
+		this.setFont(new Font("Tahoma", Font.PLAIN, 9)); // UI Design
 	}
 
 	/**
@@ -91,11 +100,23 @@ public class ImageTxtButton extends JButton {
 	 */
 	@Override
 	protected void paintComponent(Graphics g) {
+		long startTime = System.nanoTime();
+//		System.out.println(this.getAction().toString());
 		super.paintComponent(g);
 		Graphics2D g2 = (Graphics2D) g.create();
-		drawColoredShape(g2, getText());
+		if (this.getAction().toString() == "Undefined") {
+			g2.setStroke(
+					new BasicStroke(1, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 10, new float[] { 4, 4 }, 0));
+		}
+		this.setForeground(imageColor);
+		g2.setPaint(imageColor);
+		if (this.getAction().toString() != "Label") {
+			g2.draw(imageShape);
+		}
 		g2.setColor(new Color(255, 255, 255, 0));
 		g2.dispose();
+		long estimatedTime = System.nanoTime() - startTime;
+//		System.out.println(estimatedTime);
 	}
 
 	/**
@@ -114,7 +135,7 @@ public class ImageTxtButton extends JButton {
 			txt = null;
 		} else if (txt.equals("CellIcon")) {
 			txt = null;
-		} else if (txt.equals("DNA")) {
+		} else if (txt.equals("DNAIcon")) {
 			txt = null;
 		} else if (txt.length() > 5) {
 			txt = txt.substring(0, 4);
@@ -123,66 +144,61 @@ public class ImageTxtButton extends JButton {
 
 	}
 
-	/**
-	 * Draws Shape for this button.
-	 * 
-	 * @param g2  the graphics to paint.
-	 * @param txt the text.
-	 */
-	private void drawColoredShape(Graphics2D g2, String txt) {
+	// TODO
+	private Shape getImageShape() {
 		Shape sh = null;
-		switch (this.getAction().toString()) {
-		case "Metabolite":
-			this.setForeground(ColorPalette.WP_BLUE);
-			g2.setPaint(ColorPalette.WP_BLUE);
-			g2.draw(new Rectangle(4, 6, 24, 20));
-			break;
-		case "Label":
-			break;
-		case "Pathway":
-			this.setForeground(ColorPalette.WP_GREEN);
-			g2.setPaint(ColorPalette.WP_GREEN);
-			g2.draw(new RoundRectangle2D.Double(4, 6, 24, 20, 8, 8));
-			break;
-		case "Disease": // Concepts
+		switch (getText()) {
+		case "Pathway": // Concepts
+		case "Disease":
 		case "Phenotype":
 		case "Event":
+		case "Undefined":
 		case "Cell":
 		case "Organ":
-			g2.draw(new RoundRectangle2D.Double(4, 6, 24, 20, 8, 8));
+			sh = new RoundRectangle2D.Double(4, 6, 24, 20, 8, 8);
 			break;
 		case "Alias":
-			g2.draw(new Ellipse2D.Double(4, 6, 24, 20));
+			sh = new Ellipse2D.Double(4, 6, 24, 20);
 			break;
-		case "Undefined":
-			g2.setStroke(
-					new BasicStroke(1, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 10, new float[] { 4, 4 }, 0));
-			g2.draw(new RoundRectangle2D.Double(4, 6, 24, 20, 8, 8));
+		case "Label": // nothing
 			break;
 		case "Hexagon":
-			sh = ShapeCatalog.getRegularPolygon(6, 17, 17);
-			g2.draw(formatShape(sh, 8, 8, 17, 17));
+			sh = formatShape(ShapeCatalog.getRegularPolygon(6, 17, 17), 8, 8, 17, 17);
 			break;
 		case "Octagon":
-			sh = ShapeCatalog.getRegularPolygon(8, 17, 17);
-			g2.draw(formatShape(sh, 8, 8, 17, 17));
+			sh = formatShape(ShapeCatalog.getRegularPolygon(8, 17, 17), 8, 8, 17, 17);
 			break;
-		case "Coronavirus":
-			sh = ShapeCatalog.getPluggableShape(Internal.CORONAVIRUS);
-			g2.draw(formatShape(sh, 4, 4, 24, 24));
-			break;
-		case "CellIcon":
-			sh = ShapeCatalog.getPluggableShape(Internal.CELL_ICON);
-			g2.draw(formatShape(sh, 4, 4, 24, 24));
-			break;
-		case "DNA":
-			sh = ShapeCatalog.getPluggableShape(Internal.DNA);
-			g2.draw(formatShape(sh, 12, 4, 8, 24));
+//		case "Coronavirus":
+//			sh = formatShape(ShapeCatalog.getPluggableShape(Internal.CORONAVIRUS), 4, 4, 24, 24);
+//			break;
+//		case "CellIcon":
+//			sh = formatShape(ImageButtonShapes.getButtonShape(ButtonList.CELL_ICON_BUTTON), 4, 4, 24, 19);
+//			break;
+		case "DNAIcon":
+			sh = formatShape(ShapeCatalog.getPluggableShape(Internal.DNA), 12, 4, 8, 24);
 			break;
 		default:
-			g2.draw(new Rectangle(4, 6, 24, 20));
+			sh = new Rectangle(4, 6, 24, 20);
 			break;
 		}
+		return sh;
+	}
+
+	// TODO
+	private Color getImageColor() {
+		Color color = null;
+		switch (getText()) {
+		case "Metabolite":
+			color = ColorPalette.WP_BLUE;
+			break;
+		case "Pathway":
+			color = ColorPalette.WP_GREEN;
+			break;
+		default:
+			color = ColorPalette.WP_BLACK;
+			break;
+		}
+		return color;
 	}
 
 	/**

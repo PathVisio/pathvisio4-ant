@@ -18,6 +18,7 @@ package org.pathvisio.gui.dialogs;
 
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -105,6 +106,7 @@ public class StateDialog extends PathwayElementDialog implements ItemListener {
 		super.refresh();
 		// sets text label
 		symText.setText(getInput().getTextLabel());
+		symText.setFont(new Font("Tahoma", Font.PLAIN, 10));// UI Design
 		// sets xref
 		Xref xref = getInput().getXref();
 		String id = XrefUtils.getIdentifier(xref);

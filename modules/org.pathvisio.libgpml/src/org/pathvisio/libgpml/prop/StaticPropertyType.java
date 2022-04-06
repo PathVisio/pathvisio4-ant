@@ -40,7 +40,7 @@ public enum StaticPropertyType implements PropertyType {
 	DATANODETYPE, STATETYPE, GROUPTYPE,
 	
 	// DataNode
-	GROUP,
+	ALIASREF,
 
 	// line style properties
 

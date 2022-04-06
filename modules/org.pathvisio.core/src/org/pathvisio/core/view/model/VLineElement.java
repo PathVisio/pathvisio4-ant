@@ -36,6 +36,7 @@ import org.pathvisio.libgpml.model.connector.ConnectorShape.WayPoint;
 import org.pathvisio.libgpml.model.GraphLink.LinkableFrom;
 import org.pathvisio.libgpml.model.type.LineStyleType;
 import org.pathvisio.libgpml.model.type.ArrowHeadType;
+import org.pathvisio.libgpml.model.Group;
 import org.pathvisio.libgpml.model.LineElement;
 import org.pathvisio.libgpml.model.LineElement.Anchor;
 import org.pathvisio.libgpml.model.LineElement.LinePoint;
@@ -229,8 +230,8 @@ public class VLineElement extends VPathwayElement implements VGroupable, Adjusta
 	}
 
 	/**
-	 * returns the gap that goes with the specified ArrowHeadType If no line ending, the
-	 * method returns 0
+	 * returns the gap that goes with the specified ArrowHeadType If no line ending,
+	 * the method returns 0
 	 */
 	private double getGap(ArrowHeadType type) {
 		double gap = 0;
@@ -608,7 +609,7 @@ public class VLineElement extends VPathwayElement implements VGroupable, Adjusta
 		for (LinePoint p : getPathwayObject().getLinePoints()) {
 			p.moveBy(canvas.mFromV(vdx), canvas.mFromV(vdy));
 		}
-		// Redraw graphRefs //TODO
+		// Redraw elementRefs //TODO
 		for (Anchor anchor : getPathwayObject().getAnchors()) {
 			for (LinkableFrom ref : anchor.getLinkableFroms()) {
 				if (ref instanceof LinePoint) {
@@ -619,7 +620,7 @@ public class VLineElement extends VPathwayElement implements VGroupable, Adjusta
 				}
 			}
 		}
-//		for (GraphRefContainer ref : gdata.getReferences()) {
+//		for (GraphRefContainer ref : gdata.getReferences()) { TODO 
 //			if (ref instanceof LinePoint) {
 //				VPoint vp = canvas.getPoint((LinePoint) ref);
 //				if (vp != null) {

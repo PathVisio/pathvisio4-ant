@@ -135,14 +135,14 @@ public class Group extends ShapedElement implements Xrefable {
 	 * element members are added.
 	 */
 	public void updateDimensions() {
-		// if it is the first pathway element being added, the dimensions are still 0
+		// if newly created group TODO 
 		if (getWidth() == 0 || getHeight() == 0) {
 			Rectangle2D r = getMinRotatedBounds();
 			setCenterX(r.getCenterX());
 			setCenterY(r.getCenterY());
 			setWidth(r.getWidth());
 			setHeight(r.getHeight());
-		} else {
+		} else { 
 			Rectangle2D r = getRotatedBounds();
 			setCenterX(r.getCenterX());
 			setCenterY(r.getCenterY());
@@ -504,6 +504,18 @@ public class Group extends ShapedElement implements Xrefable {
 		default:
 			// do nothing
 		}
+	}
+
+	/**
+	 * TODO
+	 */
+	@Override
+	public String toString() {
+		String result = "Group " + getElementId();
+		if (textLabel != null && !Utils.stringEquals(textLabel, "")) {
+			result = result + ": " + textLabel;
+		}
+		return result;
 	}
 
 }

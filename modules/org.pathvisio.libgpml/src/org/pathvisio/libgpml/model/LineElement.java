@@ -1706,7 +1706,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 
 		/**
 		 * NB: This may be called any number of times when this point is already
-		 * unlinked
+		 * unlinked TODO 
 		 */
 		@Override
 		public void unlink() {

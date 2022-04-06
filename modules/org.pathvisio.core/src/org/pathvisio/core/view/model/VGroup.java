@@ -186,7 +186,7 @@ public class VGroup extends VShapedElement implements VElementMouseListener {
 	}
 
 	/**
-	 * Moves group and its group members. 
+	 * Moves group and its group members.
 	 */
 	@Override
 	protected void vMoveBy(double dx, double dy) {
@@ -201,6 +201,10 @@ public class VGroup extends VShapedElement implements VElementMouseListener {
 	 */
 	@Override
 	protected void doDraw(Graphics2D g2d) {
+		
+		// Refresh dimensions before drawing
+		getPathwayObject().updateDimensions(); 
+		
 		// Build the flags
 		int flags = 0;
 		if (isSelected())
@@ -221,7 +225,7 @@ public class VGroup extends VShapedElement implements VElementMouseListener {
 		drawTextLabel(g2d);
 
 		drawHighlight(g2d);
-		// TODO allow customization?
+		// TODO allow customisation?
 	}
 
 	boolean mouseover = false;
