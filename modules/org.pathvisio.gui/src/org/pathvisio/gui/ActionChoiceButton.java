@@ -16,8 +16,6 @@
  ******************************************************************************/
 package org.pathvisio.gui;
 
-import com.mammothsoftware.frwk.ddb.DropDownButton;
-
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -28,10 +26,15 @@ import java.awt.event.ActionListener;
 
 import javax.swing.Action;
 import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+
+import org.pathvisio.core.util.Resources;
+
+import com.mammothsoftware.frwk.ddb.DropDownButton;
 
 /**
  * Toggle drop-down button, intended to be used in the PathVisio toolbar.
@@ -44,21 +47,12 @@ import javax.swing.JPopupMenu;
  * heading with addLabel. The action added first will be the initially selected
  * action.
  */
-public class GraphicsChoiceButton extends DropDownButton {
+public class ActionChoiceButton extends DropDownButton {
 
-	public GraphicsChoiceButton() {
+	public ActionChoiceButton() {
 		// set icon to null for now, we'll use the icon
 		// from the first action added with addButtons
 		super(null);
-	}
-
-	private int numItemPerRow = 6;
-
-	/**
-	 * Set the number of actions per row in the pop-up. Default is 6.
-	 */
-	public void setNumItemsPerRow(int value) {
-		numItemPerRow = value;
 	}
 
 	// remember if we already set an action
@@ -69,6 +63,7 @@ public class GraphicsChoiceButton extends DropDownButton {
 	 * invoked multiple times.
 	 */
 	public void addButtons(Action[] aa) {
+		int row = 0;
 		JPanel pane = new JPanel();
 		pane.setBackground(Color.WHITE);
 		pane.setLayout(new GridBagLayout());
@@ -83,45 +78,27 @@ public class GraphicsChoiceButton extends DropDownButton {
 
 		int i = 0;
 		for (final Action a : aa) {
-			c.gridx = i % numItemPerRow;
-			c.gridy = i / numItemPerRow;
+			c.gridy = i;
 
-			// clicking a button should cause the popupmenu disappear, any better way to do
-			// it?
-			final ImageTxtButton button = new ImageTxtButton(a); // TODO
+			// clicking a button should cause the pop-up menu disappear, any better way?
+			final JButton button = new JButton(a); 
+			button.setPreferredSize(new Dimension(100, 24)); // UI Design
 			button.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					button.setContentAreaFilled(false);
 					popup.setVisible(false);
-					Icon icon = (Icon) a.getValue(Action.SMALL_ICON);
-					if (icon != null) {
-						setIcon(icon);
-						setDirectAction(a);
-					}
+					setDirectAction(a);
 				}
 			});
 			pane.add(button, c);
 			i++;
 		}
 
-		// fill the rest spaces using dummy button when there are less than
-		// numItemPerRow items, any better way?
-		for (; i < numItemPerRow; i++) {
-			c.gridx = i;
-			JButton dummy = new JButton();
-			Dimension dim = new Dimension(25, 0);
-			dummy.setPreferredSize(dim);
-			dummy.setContentAreaFilled(false);
-			pane.add(dummy, c);
-		}
-
 		addComponent(pane);
 
 		if (noIconSet) {
-			Action firstAction = aa[0];
-			setIcon((Icon) firstAction.getValue(Action.SMALL_ICON));
-			setDirectActionEnabled(true);
-			setDirectAction(firstAction);
+			ImageIcon buttonImage = new ImageIcon(Resources.getResourceURL("theme.gif"));			
+			setIcon((Icon) buttonImage);
+			setDirectActionEnabled(false);
 			noIconSet = false;
 		}
 
@@ -133,7 +110,7 @@ public class GraphicsChoiceButton extends DropDownButton {
 	public void addLabel(String s) {
 		JLabel title = new JLabel(s);
 		title.setForeground(new Color(50, 21, 110));// UI design
-		title.setFont(new Font("sanserif", Font.BOLD, 11));
+		title.setFont(new Font("sanserif", Font.BOLD, 11)); // UI design
 		JPanel titlePanel = new JPanel();
 		titlePanel.setBackground(new Color(221, 231, 238)); // UI design
 		titlePanel.add(title);

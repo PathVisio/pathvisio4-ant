@@ -96,7 +96,7 @@ public class CommonActions implements ApplicationEventListener {
 			va.registerToGroup(pasteAction, ViewActions.GROUP_ENABLE_VPATHWAY_LOADED);
 			va.registerToGroup(pasteAction, ViewActions.GROUP_ENABLE_EDITMODE);
 			va.registerToGroup(colorBackgroundAction, ViewActions.GROUP_ENABLE_VPATHWAY_LOADED); // TODO
-			va.registerToGroup(colorThemeAction, ViewActions.GROUP_ENABLE_VPATHWAY_LOADED); // TODO
+			va.registerToGroup(applyThemeActions, ViewActions.GROUP_ENABLE_VPATHWAY_LOADED); // TODO
 			va.registerToGroup(zoomActions, ViewActions.GROUP_ENABLE_VPATHWAY_LOADED);
 			va.registerToGroup(layoutActions, ViewActions.GROUP_ENABLE_EDITMODE);
 			va.registerToGroup(layoutActions, ViewActions.GROUP_ENABLE_WHEN_SELECTION);
@@ -120,7 +120,7 @@ public class CommonActions implements ApplicationEventListener {
 	public final Action copyAction;
 	public final Action pasteAction;
 	public final ColorBackgroundAction colorBackgroundAction; // TODO
-	public final ColorThemeAction colorThemeAction; // TODO
+	public final Action[] applyThemeActions; // TODO
 
 	public final Action exitAction;
 
@@ -162,7 +162,9 @@ public class CommonActions implements ApplicationEventListener {
 		copyAction = new ViewActions.CopyAction(se.getEngine());
 		pasteAction = new ViewActions.PasteAction(se.getEngine());
 		colorBackgroundAction = new ColorBackgroundAction(se.getEngine());
-		colorThemeAction = new ColorThemeAction(se.getEngine()); //TODO
+		applyThemeActions = new Action[] { new ApplyThemeAction(se.getEngine(), Theme.WIKIPATHWAYS),
+				new ApplyThemeAction(se.getEngine(), Theme.WIKIPATHWAYS2),
+				new ApplyThemeAction(se.getEngine(), Theme.WIKIPATHWAYS3) }; // TODO
 		exportAction = new ExportAction(se);
 		importAction = new ImportAction(se);
 		aboutAction = new AboutAction(se);
@@ -448,14 +450,14 @@ public class CommonActions implements ApplicationEventListener {
 
 		public void actionPerformed(ActionEvent e) {
 			PathwayModel p = engine.getActivePathwayModel();
-			if(colorChooser == null) {
+			if (colorChooser == null) {
 				colorChooser = new JColorChooser();
 			}
 			if (p != null) {
 				Color initColor = p.getPathway().getBackgroundColor();
 				Color newColor = JColorChooser.showDialog(colorChooser, "Choose a background color", initColor);
 				if (newColor != null) {
-					engine.getActiveVPathwayModel().getUndoManager().newAction("Color Background"); //TODO 
+					engine.getActiveVPathwayModel().getUndoManager().newAction("Color Background"); // TODO
 					p.getPathway().setBackgroundColor(newColor);
 					engine.getActiveVPathwayModel().redraw();
 				}
@@ -466,14 +468,16 @@ public class CommonActions implements ApplicationEventListener {
 	/**
 	 * TODO
 	 */
-	public static class ColorThemeAction extends AbstractAction {
+	public static class ApplyThemeAction extends AbstractAction {
 		Engine engine;
+		Theme colorTheme = null;
 
-		public ColorThemeAction(Engine engine) {
+		public ApplyThemeAction(Engine engine, String colorTheme) {
 			super();
 			this.engine = engine;
-			putValue(NAME, "Theme");
-			putValue(SHORT_DESCRIPTION, "Set Wikipathways theme");
+			this.colorTheme = new Theme(colorTheme);
+			putValue(NAME, colorTheme.toString());
+			putValue(SHORT_DESCRIPTION, "Set theme");
 			// engine.addApplicationEventListener(this);
 			// setEnabled(false);
 		}
@@ -481,9 +485,8 @@ public class CommonActions implements ApplicationEventListener {
 		public void actionPerformed(ActionEvent e) {
 			PathwayModel p = engine.getActivePathwayModel();
 			if (p != null) {
-				engine.getActiveVPathwayModel().getUndoManager().newAction("Color Theme"); //TODO 
-				Theme wp = new Theme("Wikipathways");
-				wp.colorPathwayModel(p);
+				engine.getActiveVPathwayModel().getUndoManager().newAction("Color Theme"); // TODO
+				colorTheme.colorPathwayModel(p);
 				engine.getActiveVPathwayModel().redraw();
 			}
 		}

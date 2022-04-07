@@ -29,6 +29,7 @@ import org.pathvisio.libgpml.model.shape.IShape;
 import org.pathvisio.libgpml.model.shape.ShapeType;
 import org.pathvisio.libgpml.model.type.DataNodeType;
 import org.pathvisio.libgpml.util.ColorUtils;
+import org.pathvisio.libgpml.util.Utils;
 
 /**
  * Color Theme class. For coloring of pathway model objects.
@@ -41,11 +42,13 @@ import org.pathvisio.libgpml.util.ColorUtils;
  */
 public class Theme {
 
+	String name; 
 	// ================================================================================
 	// Available Themes
 	// ================================================================================
-	public static final String WIKIPATHWAY_COLOR_THEME = "Wikipathways";
-	public static final String OTHER = "Other";
+	public static final String WIKIPATHWAYS = "Wikipathways";
+	public static final String WIKIPATHWAYS2 = "Wikipathways2";
+	public static final String WIKIPATHWAYS3 = "Wikipathways3";
 
 	// ================================================================================
 	// Color-able Fields
@@ -59,12 +62,14 @@ public class Theme {
 	private Color colorShapeFill;
 	private Color colorShapeGrey;
 	private Color colorShapeDarkGrey;
+	private boolean colorShapes = false;
 
 	// ================================================================================
 	// Constructors
 	// ================================================================================
 	public Theme(String theme) {
-		if (theme == WIKIPATHWAY_COLOR_THEME) {
+		this.name = theme;
+		if (theme == WIKIPATHWAYS) {
 			colorBackground = ColorPalette.WP_WHITE;
 			colorDefault = ColorPalette.WP_BLACK;
 			colorMetabolite = ColorPalette.WP_BLUE;
@@ -74,16 +79,27 @@ public class Theme {
 			colorShapeFill = ColorPalette.TRANSPARENT;
 			colorShapeGrey = ColorPalette.WP_CUSTOM_PV_MGREY;
 			colorShapeDarkGrey = ColorPalette.WP_DGREY;
-		} else if (theme == OTHER) {
+		} else if (theme == WIKIPATHWAYS2) {
 			colorBackground = ColorPalette.WP_WHITE;
 			colorDefault = ColorPalette.WP_BLACK;
 			colorMetabolite = ColorPalette.WP_BLUE;
-			colorPathway = ColorPalette.WP_GREEN;
+			colorPathway = ColorPalette.WP_ORANGE;
 			colorDataNodeFill = ColorPalette.WP_WHITE;
 			colorLabel = ColorPalette.WP_BLACK;
 			colorShapeFill = ColorPalette.TRANSPARENT;
 			colorShapeGrey = ColorPalette.WP_CUSTOM_PV_MGREY;
 			colorShapeDarkGrey = ColorPalette.WP_DGREY;
+		}else if (theme == WIKIPATHWAYS3) {
+			colorBackground = ColorPalette.WP_WHITE;
+			colorDefault = ColorPalette.WP_BLACK;
+			colorMetabolite = ColorPalette.WP_BLUE;
+			colorPathway = ColorPalette.WP_DGREEN;
+			colorDataNodeFill = ColorPalette.WP_WHITE;
+			colorLabel = ColorPalette.WP_BLACK;
+			colorShapeFill = ColorPalette.TRANSPARENT;
+			colorShapeGrey = ColorPalette.WP_CUSTOM_PV_MGREY;
+			colorShapeDarkGrey = ColorPalette.WP_DGREY;
+			colorShapes = true;
 		}
 	}
 
@@ -100,8 +116,10 @@ public class Theme {
 			setInitialColors(d);
 		}
 		// TODO States
-		for (Shape s : p.getShapes()) {
-			setInitialColors(s);
+		if (colorShapes) {
+			for (Shape s : p.getShapes()) {
+				setInitialColors(s);
+			}
 		}
 //		for (Label l : p.getLabels()) { TODO 
 ////			l.setFillColor(colorTransparent);
@@ -161,6 +179,14 @@ public class Theme {
 			e.setTextColor(colorDefault);
 			e.setBorderColor(colorDefault);
 		}
+	}
+	
+	/**
+	 * TODO
+	 */
+	@Override
+	public String toString() {
+		return name;
 	}
 
 }

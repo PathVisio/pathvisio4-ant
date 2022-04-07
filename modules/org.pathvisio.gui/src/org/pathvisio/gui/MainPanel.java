@@ -40,6 +40,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
@@ -102,6 +103,8 @@ public class MainPanel extends JPanel implements VPathwayModelListener, Applicat
 
 	private JTable propertyTable;
 	private JComboBox zoomCombo;
+	private JComboBox themeCombo;
+	private JMenu themeMenu;
 	protected BackpagePane backpagePane;
 	protected BackpageTextProvider bpt;
 	protected DataPaneTextProvider dpt;
@@ -328,6 +331,20 @@ public class MainPanel extends JPanel implements VPathwayModelListener, Applicat
 
 	}
 
+	/**
+	 * {@link ActionListener} for the Theme combobox on the toolbar.
+	 */
+	protected class ThemeComboListener implements ActionListener {
+
+		public void actionPerformed(ActionEvent e) {
+			JComboBox combo = (JComboBox) e.getSource();
+			Object s = combo.getSelectedItem();
+			if (s instanceof Action) {
+				((Action) s).actionPerformed(e);
+			}
+		}
+	}
+
 	protected void addCommonToolbarActions(final SwingEngine swingEngine, JToolBar tb) {
 		// copy, paste and undo buttons
 		tb.addSeparator();
@@ -338,7 +355,9 @@ public class MainPanel extends JPanel implements VPathwayModelListener, Applicat
 		tb.addSeparator();
 
 		// zoom drop-down
-		addToToolbar(new JLabel("Zoom:", JLabel.LEFT));
+		JLabel zoomLabel = new JLabel("Zoom:", JLabel.LEFT);
+		zoomLabel.setVerticalAlignment(JLabel.CENTER);
+		addToToolbar(zoomLabel);
 		zoomCombo = new JComboBox(actions.zoomActions);
 		zoomCombo.setMaximumSize(zoomCombo.getPreferredSize());
 		zoomCombo.setEditable(true);
@@ -389,8 +408,12 @@ public class MainPanel extends JPanel implements VPathwayModelListener, Applicat
 		// colorBackground ... TODO
 		addToToolbar(actions.colorBackgroundAction);
 
-		// colorTheme ... TODO
-		addToToolbar(actions.colorThemeAction);
+		// define the drop-down menu for themes
+		ActionChoiceButton themeButton = new ActionChoiceButton();
+		themeButton.setToolTipText("Select a theme to apply");
+		themeButton.addButtons("Themes", actions.applyThemeActions);
+		addToToolbar(themeButton, TB_GROUP_SHOW_IF_EDITMODE);		
+		tb.addSeparator();
 
 	}
 

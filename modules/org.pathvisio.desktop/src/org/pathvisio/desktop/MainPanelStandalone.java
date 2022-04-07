@@ -104,8 +104,9 @@ public class MainPanelStandalone extends MainPanel {
 		JMenu viewMenu = new JMenu("View");
 		JMenu zoomMenu = new JMenu("Zoom");
 		viewMenu.add(zoomMenu);
-		for (Action a : actions.zoomActions)
+		for (Action a : actions.zoomActions) {
 			addToMenu(a, zoomMenu);
+		}
 
 		JMenu pluginsMenu = new JMenu("Plugins");// new
 //		pluginsMenu.add(standaloneActions.pluginManagerAction);
@@ -120,9 +121,11 @@ public class MainPanelStandalone extends MainPanel {
 		JMenu curationMenu = new JMenu("Curation"); // TODO
 		addToMenu(actions.undoAction, curationMenu);
 		toolMenu.add(curationMenu);
-
-		helpMenu.add(actions.aboutAction);
-		helpMenu.add(standaloneActions.helpAction);
+		JMenu themeMenu = new JMenu("Apply Theme");
+		toolMenu.add(themeMenu);
+		for (Action a : actions.applyThemeActions) {
+			addToMenu(a, themeMenu);
+		}
 
 		mb.add(fileMenu);
 		mb.add(editMenu);

@@ -18,6 +18,7 @@ package org.pathvisio.gui.dialogs;
 
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -58,6 +59,7 @@ import org.pathvisio.libgpml.debug.Logger;
 import org.pathvisio.libgpml.model.type.DataNodeType;
 import org.pathvisio.libgpml.util.XrefUtils;
 import org.pathvisio.libgpml.model.DataNode;
+import org.pathvisio.libgpml.model.Group;
 import org.pathvisio.core.util.ProgressKeeper;
 import org.pathvisio.gui.DataSourceModel;
 import org.pathvisio.gui.ProgressDialog;
@@ -80,9 +82,12 @@ public class DataNodeDialog extends PathwayElementDialog {
 	CompleterQueryTextArea symText;// for text label
 	private CompleterQueryTextField idText; // for xref identifier TODO private?
 	private DataSourceModel dsm; // for xref dataSource
-	private PermissiveComboBox dbCombo;
-	private PermissiveComboBox typeCombo;
+	private PermissiveComboBox dbCombo; // all registered datasource
+	private PermissiveComboBox typeCombo; // all datanode types
 	private DataNodeDialog curDlg;
+	private JTextField aliasRfText; // for xref dataSource
+	private JButton aliasRfButton; // for xref dataSource
+
 
 	/**
 	 * Instantiates a datanode dialog.
@@ -116,6 +121,7 @@ public class DataNodeDialog extends PathwayElementDialog {
 		super.refresh();
 		// sets text label
 		symText.setText(getInput().getTextLabel());
+		symText.setFont(new Font("Tahoma", Font.PLAIN, 10));// UI Design
 		// sets xref
 		Xref xref = getInput().getXref();
 		String id = XrefUtils.getIdentifier(xref);
@@ -130,6 +136,8 @@ public class DataNodeDialog extends PathwayElementDialog {
 			dsType = DataSourceHandler.DSTYPE_BY_DNTYPE.get(dnType);
 		}
 		dsm.setTypeFilter(dsType);
+		aliasRfText.setText(getInput().getAliasRef() == null ? "" : getInput().getAliasRef().toString());
+		aliasRfButton.setText(getInput().getAliasRef() == null ? "Link" : "Unlink");
 		pack();
 	}
 
@@ -287,12 +295,15 @@ public class DataNodeDialog extends PathwayElementDialog {
 	protected void addCustomTabs(JTabbedPane parent) {
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridBagLayout());
-
-		// Search panel and Manual entry (field) panel
+		// ========================================
+		// 3 Panels: Search, Manual Entry, and Alias
+		// ========================================
 		JPanel searchPanel = new JPanel();
 		JPanel fieldPanel = new JPanel();
+		JPanel aliasPanel = new JPanel();
 		searchPanel.setBorder(BorderFactory.createTitledBorder("Search"));
 		fieldPanel.setBorder(BorderFactory.createTitledBorder("Manual entry"));
+		aliasPanel.setBorder(BorderFactory.createTitledBorder("Alias"));
 		GridBagConstraints panelConstraints = new GridBagConstraints();
 		panelConstraints.fill = GridBagConstraints.BOTH;
 		panelConstraints.gridx = 0;
@@ -300,11 +311,13 @@ public class DataNodeDialog extends PathwayElementDialog {
 		panelConstraints.weighty = 1;
 		panelConstraints.insets = new Insets(2, 2, 2, 2);
 		panelConstraints.gridy = GridBagConstraints.RELATIVE;
-
 		panel.add(searchPanel, panelConstraints);
 		panel.add(fieldPanel, panelConstraints);
+		panel.add(aliasPanel, panelConstraints);
 
-		// Search panel elements
+		// ========================================
+		// Search Panel
+		// ========================================
 		searchPanel.setLayout(new GridBagLayout());
 		final JTextField searchText = new JTextField();
 		final JButton searchButton = new JButton("Search");
@@ -335,13 +348,15 @@ public class DataNodeDialog extends PathwayElementDialog {
 		searchConstraints.weightx = 0;
 		searchPanel.add(searchButton, searchConstraints);
 
-		// Manual entry panel elements
+		// ========================================
+		// Manual Entry Panel
+		// ========================================
 		fieldPanel.setLayout(new GridBagLayout());
 
 		JLabel symLabel = new JLabel("Text label");
 		JLabel idLabel = new JLabel("Identifier");
 		JLabel dbLabel = new JLabel("Database");
-		JLabel typeLabel = new JLabel("Biological type");
+		JLabel typeLabel = new JLabel("DataNode type");
 
 		// text label
 		symText = new CompleterQueryTextArea(new OptionProvider() {
@@ -390,8 +405,8 @@ public class DataNodeDialog extends PathwayElementDialog {
 		dsm.setPrimaryFilter(true);
 		dsm.setSpeciesFilter(swingEngine.getCurrentOrganism());
 		dbCombo = new PermissiveComboBox(dsm);
+		// datanode types
 		typeCombo = new PermissiveComboBox(DataNodeType.getValues());
-
 		GridBagConstraints c = new GridBagConstraints();
 		c.ipadx = c.ipady = 5;
 		c.anchor = GridBagConstraints.FIRST_LINE_START;
@@ -471,13 +486,54 @@ public class DataNodeDialog extends PathwayElementDialog {
 				refresh();
 			}
 		});
+		// ========================================
+		// Alias Panel
+		// ========================================	
+		aliasPanel.setLayout(new GridBagLayout());
+		JLabel aliasRefLabel = new JLabel("Linked to group");
+		aliasRfText = new JTextField();
+		c.ipadx = c.ipady = 5;
+		c.anchor = GridBagConstraints.FIRST_LINE_START;
+		c.weightx = 0;
+		c.gridx = 0;
+		c.gridy = GridBagConstraints.RELATIVE;
+		aliasPanel.add(aliasRefLabel, c);
+		c.gridx = 1;
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.weightx = 1;
+		aliasPanel.add(aliasRfText, c);
+		System.out.println("AliasRefText" + symText.getText());
+		// button and action
+		aliasRfButton = new JButton("Link");
+//		if (e!= null) { //TODO 
+//			if (e.getAliasRef() != null) { 
+//				aliasRfButton.setText("Unlink");
+//			}
+//		}
+		aliasRfButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Group aliasRef = getInput().getAliasRef(); 
+				if (aliasRef !=null && aliasRfButton.getText()=="Unlink") {
+					getInput().unsetAliasRef();
+					refresh();
+				} else { // link stuff
+				}
+			}
+		});
+		aliasRfButton.setToolTipText("Links/unlinks alias datanode to group aliasRef"); //TODO 
+		c.gridx = GridBagConstraints.RELATIVE;
+		c.weightx = 0;
+		aliasPanel.add(aliasRfButton, c);
 
+		// ========================================
+		// Etc
+		// ========================================
 		symText.setEnabled(!readonly);
 		idText.setEnabled(!readonly);
 		dbCombo.setEnabled(!readonly);
 		typeCombo.setEnabled(!readonly);
-
-		parent.add(TAB_PROPERTIES, panel); // TODO
+		aliasRfText.setEnabled(readonly);
+		parent.add(TAB_PROPERTIES, panel);
 		parent.setSelectedComponent(panel);
 	}
 }

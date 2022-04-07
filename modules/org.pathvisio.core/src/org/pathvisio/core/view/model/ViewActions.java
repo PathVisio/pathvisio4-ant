@@ -23,6 +23,7 @@ import java.awt.event.InputEvent;
 import java.awt.geom.Point2D;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.EventListener;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -30,6 +31,7 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.swing.AbstractAction;
+import java.awt.event.ActionListener;
 import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -59,6 +61,7 @@ import org.pathvisio.libgpml.model.LineElement.LinePoint;
 import org.pathvisio.libgpml.model.type.StateType;
 import org.pathvisio.core.util.Resources;
 import org.pathvisio.libgpml.util.Utils;
+import org.pathvisio.core.view.MouseEvent;
 import org.pathvisio.core.view.model.SelectionBox.SelectionEvent;
 import org.pathvisio.core.view.model.SelectionBox.SelectionListener;
 
@@ -120,7 +123,7 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 	public final GroupAction toggleParalog;
 	public final GroupAction toggleTransparent;
 
-	public final AddAlias addAlias;
+	public final AddAliasAction addAlias;
 	public final DeleteAction delete1;
 	public final DeleteAction delete2;
 	public final CopyAction copy;
@@ -156,14 +159,14 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 		selectLabels = new SelectObjectAction("Labels", Label.class);
 		selectAll = new SelectAllAction();
 
-		toggleGroup = new GroupAction(GroupType.GROUP); 
+		toggleGroup = new GroupAction(GroupType.GROUP);
 		toggleComplex = new GroupAction(GroupType.COMPLEX);
-		togglePathway= new GroupAction(GroupType.PATHWAY); 
-		toggleAnalog= new GroupAction(GroupType.ANALOG); 
-		toggleParalog= new GroupAction(GroupType.PARALOG); 
-		toggleTransparent= new GroupAction(GroupType.TRANSPARENT); 
-		
-		addAlias = new AddAlias();
+		togglePathway = new GroupAction(GroupType.PATHWAY);
+		toggleAnalog = new GroupAction(GroupType.ANALOG);
+		toggleParalog = new GroupAction(GroupType.PARALOG);
+		toggleTransparent = new GroupAction(GroupType.TRANSPARENT);
+
+		addAlias = new AddAliasAction();
 		delete1 = new DeleteAction(java.awt.event.KeyEvent.VK_DELETE);
 		delete2 = new DeleteAction(java.awt.event.KeyEvent.VK_BACK_SPACE);
 		copy = new CopyAction(engine);
@@ -719,7 +722,7 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 		}
 
 		/**
-		 * Action creates Group and sets type. 
+		 * Action creates Group and sets type.
 		 */
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -776,11 +779,11 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 	 * @author unknown
 	 *
 	 */
-	private class AddAlias extends AbstractAction {
+	private class AddAliasAction extends AbstractAction {
 
 		private final static int POSITION_OFFSET = 65;
 
-		AddAlias() {
+		AddAliasAction() {
 			super("Add Alias...");
 		}
 
@@ -808,49 +811,98 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 
 	}
 
-	/**
-	 * @author unknown
-	 *
-	 */
-	private class AddAliasRef extends AbstractAction {
-
-		private Group group = null;
-
-		AddAliasRef() {
-			super("Reference Group...");
-		}
-
-		/**
-		 *
-		 */
-		public void actionPerformed(ActionEvent arg0) {
-			List<VDrawable> selection = vPathwayModel.getSelectedGraphics();
-			if (selection.size() > 0) {
-				vPathwayModel.getUndoManager().newAction("Add AliasRef");
-				for (VDrawable d : selection) {
-					if (d instanceof VDataNode) {
-						DataNode dn = (DataNode) d.getPathwayObject();
-						if (dn.getType() != DataNodeType.ALIAS) {
-							JOptionPane.showMessageDialog(null, "Please set data node type to Alias first", "Info",
-									JOptionPane.OK_OPTION);
-							return; // do not set new data node type
-						} else {
-							dn.setAliasRef(group);
-						}
-					}
-				}
-			}
-		}
-
-		public void setGroup(PathwayElement group) {
-			this.group = (Group) group;
-		}
-
-		private void resetPosition() {
-			group = null;
-		}
-
-	}
+//	/**
+//	 * @author unknown
+//	 *
+//	 */
+//	private class AddAliasRef2 extends AbstractAction {
+//		private String linkLbl ="link", unlinkLbl ="unlink", linkTt = "link this", unlinkTt = "unlink this";
+//
+//		public AddAliasRef2() {
+//			super();
+//			putValue(NAME, linkLbl);
+//			putValue(SHORT_DESCRIPTION, linkTt);
+//			setLabel();
+//		}
+//
+//		public void actionPerformed(ActionEvent e) {
+//			if (!isEnabled())
+//				return; // Don't perform action if not enabled
+//			Group g = vPathwayModel.toggleGroup(vPathwayModel.getSelectedGraphics());
+//			if (g != null) {
+//				g.getPathwayElement().setGroupStyle(groupStyle);
+//			}
+//		}
+//
+//		public void selectionEvent(SelectionEvent e) {
+//			switch (e.type) {
+//			case SelectionEvent.OBJECT_ADDED:
+//			case SelectionEvent.OBJECT_REMOVED:
+//			case SelectionEvent.SELECTION_CLEARED:
+//				setLabel();
+//			}
+//		}
+//
+//		private void setLabel() {
+//			setEnabled(true);
+//			if (unGrouped >= 2) {
+//				putValue(Action.NAME, linkLbl);
+//				putValue(SHORT_DESCRIPTION, linkTt);
+//			} else {
+//				putValue(Action.NAME, unlinkLbl);
+//				putValue(SHORT_DESCRIPTION, unlinkTt);
+//			}
+//		}
+//	}
+//
+//	/**
+//	 * @author unknown
+//	 *
+//	 */
+//	private class LinkAliasRefAction extends AbstractAction implements EventListener {
+//
+//		private Group group = null;
+//
+//		LinkAliasRefAction() {
+//			super("Link to Group...");
+//		}
+//
+//		/**
+//		 *
+//		 */
+//		public void actionPerformed(ActionEvent arg0) {
+//			List<VDrawable> selection = vPathwayModel.getSelectedGraphics();
+//			if (selection.size() > 0) {
+//				vPathwayModel.getUndoManager().newAction("Add AliasRef");
+//				for (VDrawable d : selection) {
+//					if (d instanceof VDataNode) {
+//						DataNode dn = (DataNode) d.getPathwayObject();
+//						if (dn.getType() != DataNodeType.ALIAS) {
+//							JOptionPane.showMessageDialog(null, "Please set data node type to Alias first", "Info",
+//									JOptionPane.OK_OPTION);
+//							return; // do not set new data node type
+//						} else {
+//
+//							dn.setAliasRef(group);
+//							ActionListener listener = new ActionListener() {
+//		
+//								public void actionPerformed(ActionEvent e) {
+//									line.getPathwayElement()
+//											.setConnectorType(ConnectorType.fromName(e.getActionCommand()));
+//								}
+//							};
+//						}
+//					}
+//				}
+//			}
+//		}
+//		public void setGroup(PathwayElement group) {
+//			this.group = (Group) group;
+//		}
+//		private void resetPosition() {
+//			group = null;
+//		}
+//	}
 
 	private class DeleteAction extends AbstractAction {
 
