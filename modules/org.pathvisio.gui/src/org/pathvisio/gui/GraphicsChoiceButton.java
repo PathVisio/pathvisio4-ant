@@ -44,12 +44,14 @@ import javax.swing.JPopupMenu;
  * heading with addLabel. The action added first will be the initially selected
  * action.
  */
-public class GraphicsChoiceButton extends DropDownButton {
+public class GraphicsChoiceButton extends ActionDropDownButton {
 
-	public GraphicsChoiceButton() {
+	String buttonText; 
+	
+	public GraphicsChoiceButton(String buttonText) {
 		// set icon to null for now, we'll use the icon
 		// from the first action added with addButtons
-		super(null);
+		super(buttonText);
 	}
 
 	private int numItemPerRow = 6;
@@ -123,7 +125,13 @@ public class GraphicsChoiceButton extends DropDownButton {
 
 		if (noIconSet) {
 			Action firstAction = aa[0];
-			setIcon((Icon) firstAction.getValue(Action.SMALL_ICON));
+			Icon icon = (Icon) firstAction.getValue(Action.SMALL_ICON);
+			if (icon != null) {
+				setIcon(icon);
+			} 
+			if (buttonText == "Gene") {
+				
+			}
 			setDirectActionEnabled(true);
 			setDirectAction(firstAction);
 			noIconSet = false;

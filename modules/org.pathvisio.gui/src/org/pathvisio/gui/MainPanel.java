@@ -367,7 +367,7 @@ public class MainPanel extends JPanel implements VPathwayModelListener, Applicat
 		tb.addSeparator();
 
 		// define the drop-down menu for data nodes
-		GraphicsChoiceButton datanodeButton = new GraphicsChoiceButton();
+		GraphicsChoiceButton datanodeButton = new GraphicsChoiceButton("Gene");
 		datanodeButton.setToolTipText("Select a data node to draw");
 		datanodeButton.addButtons("Molecules", actions.newMoleculeDatanodeActions);
 		datanodeButton.addButtons("Concepts", actions.newConceptDatanodeActions);
@@ -376,7 +376,7 @@ public class MainPanel extends JPanel implements VPathwayModelListener, Applicat
 		tb.addSeparator(new Dimension(2, 0));
 
 		// define the drop-down menu for shapes
-		GraphicsChoiceButton shapeButton = new GraphicsChoiceButton();
+		GraphicsChoiceButton shapeButton = new GraphicsChoiceButton("Label");
 		shapeButton.setToolTipText("Select a shape to draw");
 		itemsDropDown = shapeButton;
 		shapeButton.addButtons("Basic shapes", actions.newShapeActions);
@@ -387,7 +387,7 @@ public class MainPanel extends JPanel implements VPathwayModelListener, Applicat
 		tb.addSeparator(new Dimension(2, 0));
 
 		// define the drop-down menu for interactions
-		GraphicsChoiceButton lineButton = new GraphicsChoiceButton();
+		GraphicsChoiceButton lineButton = new GraphicsChoiceButton("");
 		lineButton.setToolTipText("Select an interaction to draw");
 		lineButton.addButtons("Basic interactions", actions.newInteractionActions);
 		lineButton.addButtons("Interaction panel", actions.newInteractionPanelActions);
@@ -395,7 +395,7 @@ public class MainPanel extends JPanel implements VPathwayModelListener, Applicat
 		tb.addSeparator(new Dimension(2, 0));
 
 		// define the drop-down menu for templates
-		GraphicsChoiceButton templateButton = new GraphicsChoiceButton();
+		GraphicsChoiceButton templateButton = new GraphicsChoiceButton("");
 		templateButton.setToolTipText("Select a template to draw");
 		templateButton.addButtons("Templates", actions.newTemplateActions);
 		addToToolbar(templateButton, TB_GROUP_SHOW_IF_EDITMODE);

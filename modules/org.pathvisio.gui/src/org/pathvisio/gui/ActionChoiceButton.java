@@ -53,8 +53,8 @@ public class ActionChoiceButton extends ActionDropDownButton {
 
 	int buttonWidth; 
 	
-	public ActionChoiceButton(String name, int buttonWidth) {
-		super(name);
+	public ActionChoiceButton(String buttonText, int buttonWidth) {
+		super(buttonText);
 		this.buttonWidth = buttonWidth;
 	}
 
@@ -122,4 +122,6 @@ public class ActionChoiceButton extends ActionDropDownButton {
 		}
 		addButtons(aa);
 	}
+	
+	
 }

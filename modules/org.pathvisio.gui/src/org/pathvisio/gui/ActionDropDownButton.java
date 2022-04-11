@@ -57,10 +57,10 @@ public class ActionDropDownButton extends JButton implements ActionListener {
 	private boolean directActionEnabled = true;
 	private ActionListener directAction = null;
 
-	public ActionDropDownButton(String name) {
+	public ActionDropDownButton(String buttonText) {
 		super();
 		this.setBorder(null);
-		mainButton = new JButton(name);
+		mainButton = new JButton(buttonText);
 		arrowButton = new RolloverButton(new DownArrow(), 11, false);
 		init();
 	}
@@ -211,6 +211,12 @@ public class ActionDropDownButton extends JButton implements ActionListener {
 	public void setDirectAction(ActionListener defaultAction) {
 		directAction = defaultAction;
 
+	}
+
+	@Override
+	/** sets the icon for the left part only */
+	public void setIcon(Icon icon) {
+		mainButton.setIcon(icon);
 	}
 
 	/**
