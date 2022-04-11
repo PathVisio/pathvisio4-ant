@@ -95,7 +95,6 @@ public class CommonActions implements ApplicationEventListener {
 			va.registerToGroup(copyAction, ViewActions.GROUP_ENABLE_WHEN_SELECTION);
 			va.registerToGroup(pasteAction, ViewActions.GROUP_ENABLE_VPATHWAY_LOADED);
 			va.registerToGroup(pasteAction, ViewActions.GROUP_ENABLE_EDITMODE);
-			va.registerToGroup(colorBackgroundAction, ViewActions.GROUP_ENABLE_VPATHWAY_LOADED); // TODO
 			va.registerToGroup(applyThemeActions, ViewActions.GROUP_ENABLE_VPATHWAY_LOADED); // TODO
 			va.registerToGroup(zoomActions, ViewActions.GROUP_ENABLE_VPATHWAY_LOADED);
 			va.registerToGroup(layoutActions, ViewActions.GROUP_ENABLE_EDITMODE);
@@ -119,7 +118,6 @@ public class CommonActions implements ApplicationEventListener {
 	public final ViewActions.UndoAction undoAction;
 	public final Action copyAction;
 	public final Action pasteAction;
-	public final ColorBackgroundAction colorBackgroundAction; // TODO
 	public final Action[] applyThemeActions; // TODO
 
 	public final Action exitAction;
@@ -133,7 +131,6 @@ public class CommonActions implements ApplicationEventListener {
 	// Objects Side Panel
 	public final Action[] newMoleculeDatanodeActions;
 	public final Action[] newConceptDatanodeActions;
-	public final Action[] newInteractionActions;
 	public final Action[] newInteractionPanelActions;
 	public final Action[] newRLInteractionActions; // TODO
 	public final Action[] newLabelActions;
@@ -161,10 +158,8 @@ public class CommonActions implements ApplicationEventListener {
 		undoAction = new ViewActions.UndoAction(se.getEngine());
 		copyAction = new ViewActions.CopyAction(se.getEngine());
 		pasteAction = new ViewActions.PasteAction(se.getEngine());
-		colorBackgroundAction = new ColorBackgroundAction(se.getEngine());
 		applyThemeActions = new Action[] { new ApplyThemeAction(se.getEngine(), Theme.WIKIPATHWAYS),
-				new ApplyThemeAction(se.getEngine(), Theme.WIKIPATHWAYS2),
-				new ApplyThemeAction(se.getEngine(), Theme.WIKIPATHWAYS3) }; // TODO
+				new ApplyThemeAction(se.getEngine(), Theme.WIKIPATHWAYS_MIN) }; // TODO
 		exportAction = new ExportAction(se);
 		importAction = new ImportAction(se);
 		aboutAction = new AboutAction(se);
@@ -292,9 +287,8 @@ public class CommonActions implements ApplicationEventListener {
 		// Basic Shapes (Objects Side Panel)
 		// ================================================================================
 		newShapeActions = new Action[] { new NewElementAction(e, new DefaultTemplates.LabelTemplate()),
-				new NewElementAction(e,
-						new DefaultTemplates.GraphicalLineTemplate("Undirected", LineStyleType.SOLID,
-								ArrowHeadType.UNDIRECTED, ArrowHeadType.UNDIRECTED, ConnectorType.STRAIGHT)),
+				new NewElementAction(e, new DefaultTemplates.GraphicalLineTemplate("Undirected", LineStyleType.SOLID,
+						ArrowHeadType.UNDIRECTED, ArrowHeadType.UNDIRECTED, ConnectorType.STRAIGHT)),
 //				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.EDGE)),
 				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.ARC)),
 				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.BRACE)),
@@ -308,31 +302,6 @@ public class CommonActions implements ApplicationEventListener {
 
 //				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(MIMShapes.MIM_DEGRADATION_SHAPE)), 
 		};
-
-		// ================================================================================
-		// Basic Interactions (Objects Side Panel)
-		// ================================================================================
-		newInteractionActions = new Action[] {
-				new NewElementAction(e,
-						new DefaultTemplates.InteractionTemplate("undirected", LineStyleType.SOLID,
-								ArrowHeadType.UNDIRECTED, ArrowHeadType.UNDIRECTED, ConnectorType.STRAIGHT)),
-				new NewElementAction(e,
-						new DefaultTemplates.InteractionTemplate("directed", LineStyleType.SOLID,
-								ArrowHeadType.UNDIRECTED, ArrowHeadType.DIRECTED, ConnectorType.STRAIGHT)),
-				new NewElementAction(e,
-						new DefaultTemplates.InteractionTemplate("dashedline", LineStyleType.DASHED,
-								ArrowHeadType.UNDIRECTED, ArrowHeadType.UNDIRECTED, ConnectorType.STRAIGHT)),
-				new NewElementAction(e,
-						new DefaultTemplates.InteractionTemplate("dashedarrow", LineStyleType.DASHED,
-								ArrowHeadType.UNDIRECTED, ArrowHeadType.DIRECTED, ConnectorType.STRAIGHT)),
-				new NewElementAction(e,
-						new DefaultTemplates.InteractionTemplate("elbow", LineStyleType.SOLID, ArrowHeadType.UNDIRECTED,
-								ArrowHeadType.UNDIRECTED, ConnectorType.ELBOW)),
-				new NewElementAction(e,
-						new DefaultTemplates.InteractionTemplate("curve", LineStyleType.SOLID, ArrowHeadType.UNDIRECTED,
-								ArrowHeadType.UNDIRECTED, ConnectorType.CURVED)),
-				new NewElementAction(e, new DefaultTemplates.InteractionTemplate("inhibition", LineStyleType.SOLID,
-						ArrowHeadType.UNDIRECTED, ArrowHeadType.INHIBITION, ConnectorType.STRAIGHT)), };
 
 		// actions for "Receptor/ligand interactions" section
 		newRLInteractionActions = new Action[] {
@@ -430,39 +399,6 @@ public class CommonActions implements ApplicationEventListener {
 				new NewElementAction(e, new DefaultTemplates.ReactionTemplate()),
 				new NewElementAction(e, new DefaultTemplates.PhosphorylationTemplate()),
 				new NewElementAction(e, new DefaultTemplates.ReversibleReactionTemplate()), };
-	}
-
-	/**
-	 * "ColorBackground" action, sets background color of pathway to selected color.
-	 */
-	public static class ColorBackgroundAction extends AbstractAction {
-		Engine engine;
-		private JColorChooser colorChooser;
-
-		public ColorBackgroundAction(Engine engine) {
-			super();
-			this.engine = engine;
-			putValue(NAME, "Background");
-			putValue(SHORT_DESCRIPTION, "Choose a background color");
-			// engine.addApplicationEventListener(this);
-			// setEnabled(false);
-		}
-
-		public void actionPerformed(ActionEvent e) {
-			PathwayModel p = engine.getActivePathwayModel();
-			if (colorChooser == null) {
-				colorChooser = new JColorChooser();
-			}
-			if (p != null) {
-				Color initColor = p.getPathway().getBackgroundColor();
-				Color newColor = JColorChooser.showDialog(colorChooser, "Choose a background color", initColor);
-				if (newColor != null) {
-					engine.getActiveVPathwayModel().getUndoManager().newAction("Color Background"); // TODO
-					p.getPathway().setBackgroundColor(newColor);
-					engine.getActiveVPathwayModel().redraw();
-				}
-			}
-		}
 	}
 
 	/**

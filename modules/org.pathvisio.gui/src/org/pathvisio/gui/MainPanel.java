@@ -40,7 +40,6 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
@@ -50,7 +49,6 @@ import javax.swing.KeyStroke;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
-
 import org.pathvisio.core.ApplicationEvent;
 import org.pathvisio.core.Engine.ApplicationEventListener;
 import org.pathvisio.core.view.model.Handle;
@@ -61,8 +59,6 @@ import org.pathvisio.core.view.model.VPathwayElement;
 import org.pathvisio.core.view.model.VPathwayModel;
 import org.pathvisio.core.view.model.VPathwayModelEvent;
 import org.pathvisio.core.view.model.VPathwayModelListener;
-import org.pathvisio.core.view.model.VPathwayObject;
-import org.pathvisio.core.view.model.ViewActions;
 import org.pathvisio.gui.BackpageTextProvider.BackpageAttributes;
 import org.pathvisio.gui.BackpageTextProvider.BackpageXrefs;
 import org.pathvisio.gui.CommonActions.ZoomAction;
@@ -70,8 +66,6 @@ import org.pathvisio.gui.dnd.PathwayImportHandler;
 import org.pathvisio.gui.handler.PathwayTableModel;
 import org.pathvisio.libgpml.debug.Logger;
 import org.pathvisio.libgpml.model.PathwayElement;
-import org.pathvisio.libgpml.model.PathwayObject;
-import org.pathvisio.libgpml.util.ColorUtils;
 import org.pathvisio.libgpml.util.Utils;
 
 import com.mammothsoftware.frwk.ddb.DropDownButton;
@@ -103,8 +97,6 @@ public class MainPanel extends JPanel implements VPathwayModelListener, Applicat
 
 	private JTable propertyTable;
 	private JComboBox zoomCombo;
-	private JComboBox themeCombo;
-	private JMenu themeMenu;
 	protected BackpagePane backpagePane;
 	protected BackpageTextProvider bpt;
 	protected DataPaneTextProvider dpt;
@@ -207,7 +199,6 @@ public class MainPanel extends JPanel implements VPathwayModelListener, Applicat
 		int numItemsPerRow = 10;
 		objectsPane.addButtons(actions.newMoleculeDatanodeActions, "Molecules", numItemsPerRow);
 		objectsPane.addButtons(actions.newConceptDatanodeActions, "Concepts", numItemsPerRow);
-		objectsPane.addButtons(actions.newInteractionActions, "Basic interactions", numItemsPerRow);
 		objectsPane.addButtons(actions.newInteractionPanelActions, "Interaction panel", numItemsPerRow);
 		// objectsPane.addButtons(actions.newRLInteractionActions, "Receptor/ligand",
 		// numItemsPerRow);
@@ -331,20 +322,6 @@ public class MainPanel extends JPanel implements VPathwayModelListener, Applicat
 
 	}
 
-	/**
-	 * {@link ActionListener} for the Theme combobox on the toolbar.
-	 */
-	protected class ThemeComboListener implements ActionListener {
-
-		public void actionPerformed(ActionEvent e) {
-			JComboBox combo = (JComboBox) e.getSource();
-			Object s = combo.getSelectedItem();
-			if (s instanceof Action) {
-				((Action) s).actionPerformed(e);
-			}
-		}
-	}
-
 	protected void addCommonToolbarActions(final SwingEngine swingEngine, JToolBar tb) {
 		// copy, paste and undo buttons
 		tb.addSeparator();
@@ -389,7 +366,6 @@ public class MainPanel extends JPanel implements VPathwayModelListener, Applicat
 		// define the drop-down menu for interactions
 		GraphicsChoiceButton lineButton = new GraphicsChoiceButton("");
 		lineButton.setToolTipText("Select an interaction to draw");
-		lineButton.addButtons("Basic interactions", actions.newInteractionActions);
 		lineButton.addButtons("Interaction panel", actions.newInteractionPanelActions);
 		addToToolbar(lineButton, TB_GROUP_SHOW_IF_EDITMODE);
 		tb.addSeparator(new Dimension(2, 0));
@@ -404,11 +380,8 @@ public class MainPanel extends JPanel implements VPathwayModelListener, Applicat
 		// layout actions
 		addToToolbar(actions.layoutActions);
 
-		// colorBackground ... TODO
-		addToToolbar(actions.colorBackgroundAction);
-
 		// define the drop-down menu for themes
-		ActionChoiceButton themeButton = new ActionChoiceButton("Theme", 100);
+		ActionChoiceButton themeButton = new ActionChoiceButton("Theme", 150);
 		themeButton.setToolTipText("Select a theme to apply");
 		themeButton.addButtons(null, actions.applyThemeActions);
 		addToToolbar(themeButton, TB_GROUP_SHOW_IF_EDITMODE);

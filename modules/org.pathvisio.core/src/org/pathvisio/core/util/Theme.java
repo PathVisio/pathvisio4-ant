@@ -47,8 +47,7 @@ public class Theme {
 	// Available Themes
 	// ================================================================================
 	public static final String WIKIPATHWAYS = "Wikipathways";
-	public static final String WIKIPATHWAYS2 = "Wikipathways2";
-	public static final String WIKIPATHWAYS3 = "Wikipathways3";
+	public static final String WIKIPATHWAYS_MIN = "Wikipathways Minimal";
 
 	// ================================================================================
 	// Color-able Fields
@@ -79,17 +78,7 @@ public class Theme {
 			colorShapeFill = ColorPalette.TRANSPARENT;
 			colorShapeGrey = ColorPalette.WP_CUSTOM_PV_MGREY;
 			colorShapeDarkGrey = ColorPalette.WP_DGREY;
-		} else if (theme == WIKIPATHWAYS2) {
-			colorBackground = ColorPalette.WP_WHITE;
-			colorDefault = ColorPalette.WP_BLACK;
-			colorMetabolite = ColorPalette.WP_DBLUE;
-			colorPathway = ColorPalette.WP_DGREEN;
-			colorDataNodeFill = ColorPalette.WP_WHITE;
-			colorLabel = ColorPalette.WP_BLACK;
-			colorShapeFill = ColorPalette.TRANSPARENT;
-			colorShapeGrey = ColorPalette.WP_CUSTOM_PV_MGREY;
-			colorShapeDarkGrey = ColorPalette.WP_DGREY;
-		}else if (theme == WIKIPATHWAYS3) {
+		}else if (theme == WIKIPATHWAYS_MIN) {
 			colorBackground = ColorPalette.WP_WHITE;
 			colorDefault = ColorPalette.WP_BLACK;
 			colorMetabolite = ColorPalette.WP_BLUE;
