@@ -113,7 +113,7 @@ public class PopupDialogHandler {
 			result = new GroupDialog(swingEngine, (Group) e, readonly, frame, locationComp);
 			break;
 		default:
-			result = new PathwayElementDialog(swingEngine, e, readonly, frame, "Element properties", locationComp);
+			result = new PathwayElementDialog(swingEngine, e, readonly, frame, e.getObjectType().getTag() + " properties", locationComp);
 		}
 		for (PopupDialogHook hook : hooks) {
 			hook.popupDialogHook(e, result);

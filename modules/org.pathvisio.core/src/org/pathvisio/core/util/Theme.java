@@ -82,8 +82,8 @@ public class Theme {
 		} else if (theme == WIKIPATHWAYS2) {
 			colorBackground = ColorPalette.WP_WHITE;
 			colorDefault = ColorPalette.WP_BLACK;
-			colorMetabolite = ColorPalette.WP_BLUE;
-			colorPathway = ColorPalette.WP_ORANGE;
+			colorMetabolite = ColorPalette.WP_DBLUE;
+			colorPathway = ColorPalette.WP_DGREEN;
 			colorDataNodeFill = ColorPalette.WP_WHITE;
 			colorLabel = ColorPalette.WP_BLACK;
 			colorShapeFill = ColorPalette.TRANSPARENT;

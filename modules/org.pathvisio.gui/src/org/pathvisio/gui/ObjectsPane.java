@@ -70,7 +70,7 @@ public class ObjectsPane extends JPanel {
 				// ||a.toString().equals("CellIcon"
 				// || a.toString().equals("Coronavirus")
 				//|| a.toString().equals("DNAIcon")
-				button = new ImageTxtButton(a);
+				button = new ImageTextButton(a);
 			} else {
 				button = new ImageButton(a);
 			}

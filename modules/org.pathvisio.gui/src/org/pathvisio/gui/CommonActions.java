@@ -293,10 +293,10 @@ public class CommonActions implements ApplicationEventListener {
 		// ================================================================================
 		newShapeActions = new Action[] { new NewElementAction(e, new DefaultTemplates.LabelTemplate()),
 				new NewElementAction(e,
-						new DefaultTemplates.GraphicalLineTemplate("undirected", LineStyleType.SOLID,
+						new DefaultTemplates.GraphicalLineTemplate("Undirected", LineStyleType.SOLID,
 								ArrowHeadType.UNDIRECTED, ArrowHeadType.UNDIRECTED, ConnectorType.STRAIGHT)),
+//				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.EDGE)),
 				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.ARC)),
-				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.EDGE)),
 				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.BRACE)),
 				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.OVAL)),
 				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.ROUNDED_RECTANGLE)),

@@ -52,12 +52,12 @@ import org.pathvisio.libgpml.util.ColorUtils;
  *
  * @author bing
  */
-public class ImageTxtButton extends JButton {
+public class ImageTextButton extends JButton {
 
 	Shape imageShape;
 	Color imageColor;
 
-	public ImageTxtButton(Action a) {
+	public ImageTextButton(Action a) {
 		super();
 		this.setAction(a);
 		this.setRolloverEnabled(true);

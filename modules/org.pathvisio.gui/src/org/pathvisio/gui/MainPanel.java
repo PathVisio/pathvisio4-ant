@@ -157,9 +157,9 @@ public class MainPanel extends JPanel implements VPathwayModelListener, Applicat
 		JMenu viewMenu = new JMenu("View");
 		JMenu zoomMenu = new JMenu("Zoom");
 		viewMenu.add(zoomMenu);
-		for (Action a : actions.zoomActions)
+		for (Action a : actions.zoomActions) {
 			addToMenu(a, zoomMenu);
-
+		}
 		JMenu helpMenu = new JMenu("Help");
 
 		mb.add(fileMenu);
@@ -371,7 +371,6 @@ public class MainPanel extends JPanel implements VPathwayModelListener, Applicat
 		datanodeButton.setToolTipText("Select a data node to draw");
 		datanodeButton.addButtons("Molecules", actions.newMoleculeDatanodeActions);
 		datanodeButton.addButtons("Concepts", actions.newConceptDatanodeActions);
-		datanodeButton.addButtons("Miscellaneous", actions.newMiscShapeActions);
 //		datanodeButton.addButtons("Annotations", actions.newAnnotationActions);
 		addToToolbar(datanodeButton, TB_GROUP_SHOW_IF_EDITMODE);
 		tb.addSeparator(new Dimension(2, 0));
@@ -409,10 +408,10 @@ public class MainPanel extends JPanel implements VPathwayModelListener, Applicat
 		addToToolbar(actions.colorBackgroundAction);
 
 		// define the drop-down menu for themes
-		ActionChoiceButton themeButton = new ActionChoiceButton();
+		ActionChoiceButton themeButton = new ActionChoiceButton("Theme", 100);
 		themeButton.setToolTipText("Select a theme to apply");
-		themeButton.addButtons("Themes", actions.applyThemeActions);
-		addToToolbar(themeButton, TB_GROUP_SHOW_IF_EDITMODE);		
+		themeButton.addButtons(null, actions.applyThemeActions);
+		addToToolbar(themeButton, TB_GROUP_SHOW_IF_EDITMODE);
 		tb.addSeparator();
 
 	}
@@ -456,6 +455,8 @@ public class MainPanel extends JPanel implements VPathwayModelListener, Applicat
 		if (mayAddAction(a)) {
 			JButton b = getToolBar().add(a);
 			b.setFocusable(false);
+			int w = b.getMinimumSize().width;
+			b.setPreferredSize(new Dimension(w, 25)); // make same height as other buttons
 			addToToolbarGroup(b, group);
 			return b;
 		}

@@ -23,6 +23,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.Action;
 import javax.swing.Icon;
@@ -47,12 +49,13 @@ import com.mammothsoftware.frwk.ddb.DropDownButton;
  * heading with addLabel. The action added first will be the initially selected
  * action.
  */
-public class ActionChoiceButton extends DropDownButton {
+public class ActionChoiceButton extends ActionDropDownButton {
 
-	public ActionChoiceButton() {
-		// set icon to null for now, we'll use the icon
-		// from the first action added with addButtons
-		super(null);
+	int buttonWidth; 
+	
+	public ActionChoiceButton(String name, int buttonWidth) {
+		super(name);
+		this.buttonWidth = buttonWidth;
 	}
 
 	// remember if we already set an action
@@ -63,7 +66,6 @@ public class ActionChoiceButton extends DropDownButton {
 	 * invoked multiple times.
 	 */
 	public void addButtons(Action[] aa) {
-		int row = 0;
 		JPanel pane = new JPanel();
 		pane.setBackground(Color.WHITE);
 		pane.setLayout(new GridBagLayout());
@@ -79,10 +81,9 @@ public class ActionChoiceButton extends DropDownButton {
 		int i = 0;
 		for (final Action a : aa) {
 			c.gridy = i;
-
 			// clicking a button should cause the pop-up menu disappear, any better way?
-			final JButton button = new JButton(a); 
-			button.setPreferredSize(new Dimension(100, 24)); // UI Design
+			final JButton button = new JButton(a);
+			button.setPreferredSize(new Dimension(buttonWidth, 24)); // UI Design
 			button.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					popup.setVisible(false);
@@ -92,16 +93,11 @@ public class ActionChoiceButton extends DropDownButton {
 			pane.add(button, c);
 			i++;
 		}
-
 		addComponent(pane);
-
 		if (noIconSet) {
-			ImageIcon buttonImage = new ImageIcon(Resources.getResourceURL("theme.gif"));			
-			setIcon((Icon) buttonImage);
 			setDirectActionEnabled(false);
 			noIconSet = false;
 		}
-
 	}
 
 	/**
@@ -110,7 +106,7 @@ public class ActionChoiceButton extends DropDownButton {
 	public void addLabel(String s) {
 		JLabel title = new JLabel(s);
 		title.setForeground(new Color(50, 21, 110));// UI design
-		title.setFont(new Font("sanserif", Font.BOLD, 11)); // UI design
+		title.setFont(new Font("sanserif", Font.BOLD, 11)); // UI design}
 		JPanel titlePanel = new JPanel();
 		titlePanel.setBackground(new Color(221, 231, 238)); // UI design
 		titlePanel.add(title);
@@ -121,7 +117,9 @@ public class ActionChoiceButton extends DropDownButton {
 	 * add item buttons and section label to the drop-down menu
 	 */
 	public void addButtons(String label, Action[] aa) {
-		addLabel(label);
+		if (label != null) {
+			addLabel(label);
+		}
 		addButtons(aa);
 	}
 }

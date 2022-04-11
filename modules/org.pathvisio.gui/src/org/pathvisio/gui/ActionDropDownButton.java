@@ -48,9 +48,8 @@ import com.mammothsoftware.frwk.ddb.RolloverButton;
  * heading with addLabel. The action added first will be the initially selected
  * action.
  */
-public class ActionChoiceButton2 extends JButton implements ActionListener {
-	
-	private String buttonName; 
+public class ActionDropDownButton extends JButton implements ActionListener {
+
 	private JPopupMenu popup = new JPopupMenu();
 	private JToolBar tb = new ToolBar();
 	private JButton mainButton;
@@ -58,11 +57,10 @@ public class ActionChoiceButton2 extends JButton implements ActionListener {
 	private boolean directActionEnabled = true;
 	private ActionListener directAction = null;
 
-	public ActionChoiceButton2(String name) {
+	public ActionDropDownButton(String name) {
 		super();
 		this.setBorder(null);
-		this.buttonName = name;
-		mainButton = new RolloverButton(25, false);
+		mainButton = new JButton(name);
 		arrowButton = new RolloverButton(new DownArrow(), 11, false);
 		init();
 	}
@@ -115,14 +113,18 @@ public class ActionChoiceButton2 extends JButton implements ActionListener {
 	private void init() {
 		initRolloverListener();
 
+		mainButton.setRequestFocusEnabled(false);
+		mainButton.setRolloverEnabled(true);
+		int w = (int) mainButton.getPreferredSize().getWidth();
+		mainButton.setMaximumSize(new Dimension(w, 100));
+		mainButton.setPreferredSize(new Dimension(w, 25));
+
 		Icon disDownArrow = new DisabledDownArrow();
 		arrowButton.setDisabledIcon(disDownArrow);
 		arrowButton.setMaximumSize(new Dimension(11, 100));
+
 		mainButton.addActionListener(this);
 		arrowButton.addActionListener(this);
-		mainButton.setText(buttonName);
-		mainButton.setMaximumSize(new Dimension(70, 100));
-
 		setMargin(new Insets(0, 0, 0, 0));
 
 		// Windows draws border around buttons, but not toolbar buttons
@@ -147,10 +149,10 @@ public class ActionChoiceButton2 extends JButton implements ActionListener {
 		int width = (int) (mainButton.getPreferredSize().getWidth() + arrowButton.getPreferredSize().getWidth());
 		int height = (int) Math.max(mainButton.getPreferredSize().getHeight(),
 				arrowButton.getPreferredSize().getHeight());
-
 		setMaximumSize(new Dimension(width, height));
 		setMinimumSize(new Dimension(width, height));
 		setPreferredSize(new Dimension(width, height));
+
 	}
 
 	/**
@@ -199,6 +201,21 @@ public class ActionChoiceButton2 extends JButton implements ActionListener {
 		return popup;
 	}
 
+	/**
+	 * Sets the Action that will be executed when the main part of the dropdown
+	 * button is clicked. This value is only used if set
+	 * 
+	 * @param defaultAction A menu item, action or other actionListener that will
+	 *                      get invoked
+	 */
+	public void setDirectAction(ActionListener defaultAction) {
+		directAction = defaultAction;
+
+	}
+
+	/**
+	 * Down arrow icon.
+	 */
 	private static class DownArrow implements Icon {
 
 		Color arrowColor = Color.black;
@@ -220,6 +237,9 @@ public class ActionChoiceButton2 extends JButton implements ActionListener {
 
 	}
 
+	/**
+	 * Disabled down arrow icon.
+	 */
 	private static class DisabledDownArrow extends DownArrow {
 
 		public DisabledDownArrow() {
@@ -234,29 +254,14 @@ public class ActionChoiceButton2 extends JButton implements ActionListener {
 		}
 	}
 
+	/**
+	 * Updates UI
+	 */
 	private static class ToolBar extends JToolBar {
 		public void updateUI() {
 			super.updateUI();
 			setBorder(null);
 		}
 	}
-
-	/**
-	 * Set the Action that will be executed when the main part of the dropdown
-	 * button is clicked. This value is only used if set
-	 * 
-	 * @param defaultAction A menuitem, action or other actionListener that will get
-	 *                      invoked
-	 */
-	public void setDirectAction(ActionListener defaultAction) {
-		directAction = defaultAction;
-
-	}
-
-//	@Override
-//	/** sets the icon for the left part only */
-//	public void setIcon(Icon icon) {
-//		setIcon(null);
-//	}
 
 }

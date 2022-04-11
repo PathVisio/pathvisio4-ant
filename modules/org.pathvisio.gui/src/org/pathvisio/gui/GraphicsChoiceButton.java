@@ -68,7 +68,7 @@ public class GraphicsChoiceButton extends DropDownButton {
 	 * Add a group of actions, which will be displayed in the pop-up. This can be
 	 * invoked multiple times.
 	 */
-	public void addButtons(Action[] aa) {
+	public void addButtons(Action[] aa, String label) {
 		JPanel pane = new JPanel();
 		pane.setBackground(Color.WHITE);
 		pane.setLayout(new GridBagLayout());
@@ -86,9 +86,13 @@ public class GraphicsChoiceButton extends DropDownButton {
 			c.gridx = i % numItemPerRow;
 			c.gridy = i / numItemPerRow;
 
-			// clicking a button should cause the popupmenu disappear, any better way to do
-			// it?
-			final ImageTxtButton button = new ImageTxtButton(a); // TODO
+			// clicking a button should cause the pop-up menu disappear, any better way?
+			final JButton button;
+			if (label.equals("Molecules") || label.equals("Concepts") || a.toString().equals("Label")) {
+				button = new ImageTextButton(a);
+			} else {
+				button = new ImageButton(a);
+			}
 			button.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					button.setContentAreaFilled(false);
@@ -145,6 +149,6 @@ public class GraphicsChoiceButton extends DropDownButton {
 	 */
 	public void addButtons(String label, Action[] aa) {
 		addLabel(label);
-		addButtons(aa);
+		addButtons(aa, label);
 	}
 }
