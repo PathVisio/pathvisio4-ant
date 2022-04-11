@@ -49,7 +49,7 @@ public class Converter {
 				+ "Converts between GPML format and several other formats:\n"
 				+ "\t- GPML (.gpml/.xml) <-> GenMAPP (.mapp)\n" + "\t- GPML (.gpml/.xml) -> SVG (.svg)\n"
 				+ "\t- GPML (.gpml/.xml) -> PNG (.png); Zoom value at 100 by default, can be changed for PNG\n"
-				+ "\t- GPML (.gpml/.xml) -> TIFF (.tiff)\n" + "\t- GPML (.gpml/.xml) -> PDF (.pdf)\n"
+				+ "\t- GPML (.gpml/.xml) -> PDF (.pdf)\n"
 				+ "The conversion direction is determined from the extension of the input file.\n" + "Return codes:\n"
 				+ "\t 0: OK\n" + "\t-1: Parameter or file error\n" + "\t-2: Conversion error\n");
 	}
@@ -74,12 +74,11 @@ public class Converter {
 		engine.addPathwayModelExporter(new GpmlFormat());
 		engine.addPathwayModelExporter(new BatikImageExporter(ImageExporter.TYPE_SVG));
 		engine.addPathwayModelExporter(new RasterImageExporter(ImageExporter.TYPE_PNG));
-		engine.addPathwayModelExporter(new BatikImageExporter(ImageExporter.TYPE_TIFF));
 		engine.addPathwayModelExporter(new BatikImageExporter(ImageExporter.TYPE_PDF));
 		engine.addPathwayModelExporter(new EUGeneExporter());
 //		engine.addPathwayExporter(new DataNodeListExporter());
 
-		// Transient dependency on Biopax converter TODO 
+		// Transient dependency on Biopax converter TODO
 //		try {
 //			Class<?> c = Class.forName("org.pathvisio.biopax3.BiopaxFormat");
 //			Object o = c.newInstance();

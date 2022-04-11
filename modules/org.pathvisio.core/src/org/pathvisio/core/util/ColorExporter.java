@@ -198,8 +198,6 @@ public class ColorExporter implements VPathwayModelListener {
 				exporter = new BatikImageExporter(ImageExporter.TYPE_PNG);
 			} else if (outStr.endsWith(ImageExporter.TYPE_PDF)) {
 				exporter = new BatikImageExporter(ImageExporter.TYPE_PDF);
-			} else if (outStr.endsWith(ImageExporter.TYPE_TIFF)) {
-				exporter = new BatikImageExporter(ImageExporter.TYPE_TIFF);
 			} else {
 				exporter = new BatikImageExporter(ImageExporter.TYPE_SVG);
 			}
@@ -220,6 +218,6 @@ public class ColorExporter implements VPathwayModelListener {
 						+ "Parameters:\n" + "\t-c\tA string containing the graphId of the object to color, followed "
 						+ "by the color to be used for that object (hexadecimal, e.g. FF0000 for red)\n"
 						+ "The export format is determined by the output file extension and can be one of: "
-						+ "svg, pdf, png, tiff");
+						+ "svg, pdf, png");
 	}
 }

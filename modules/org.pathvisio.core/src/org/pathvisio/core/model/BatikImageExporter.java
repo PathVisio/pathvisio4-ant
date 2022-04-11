@@ -32,7 +32,6 @@ import org.apache.batik.transcoder.TranscoderOutput;
 import org.apache.batik.transcoder.TranscodingHints;
 import org.apache.batik.transcoder.image.ImageTranscoder;
 import org.apache.batik.transcoder.image.PNGTranscoder;
-import org.apache.batik.transcoder.image.TIFFTranscoder;
 import org.pathvisio.core.preferences.GlobalPreference;
 import org.pathvisio.core.preferences.PreferenceManager;
 import org.pathvisio.core.view.model.VPathwayModel;
@@ -43,7 +42,7 @@ import org.w3c.dom.Document;
 
 /**
  * Export Pathway image through Batik, which can handle a number of file formats
- * including SVG, PNG, PDF and TIFF
+ * including SVG, PNG, and PDF.
  */
 public class BatikImageExporter extends ImageExporter {
 
@@ -84,8 +83,6 @@ public class BatikImageExporter extends ImageExporter {
 			return;
 		} else if (getType().equals(TYPE_PNG)) {
 			t = new PNGTranscoder();
-		} else if (getType().equals(TYPE_TIFF)) {
-			t = new TIFFTranscoder();
 		} else if (getType().equals(TYPE_PDF)) {
 			try {
 				Class<?> pdfClass = Class.forName("org.apache.fop.svg.PDFTranscoder");

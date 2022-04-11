@@ -34,7 +34,6 @@ import org.pathvisio.libgpml.model.PathwayModel;
  */
 public abstract class ImageExporter implements PathwayModelExporter {
 	public static final String TYPE_PNG = "png";
-	public static final String TYPE_TIFF = "tiff";
 	public static final String TYPE_PDF = "pdf";
 	public static final String TYPE_SVG = "svg";
 
