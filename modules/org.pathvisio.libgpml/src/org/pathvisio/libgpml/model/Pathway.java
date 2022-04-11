@@ -239,6 +239,7 @@ public class Pathway extends PathwayElement implements Xrefable {
 	public void setDescription(String v) {
 		if (v != null && !Utils.stringEquals(description, v)) {
 			description = v;
+			fireObjectModifiedEvent(PathwayObjectEvent.createSinglePropertyEvent(this, StaticProperty.DESCRIPTION));
 		}
 	}
 
@@ -458,8 +459,9 @@ public class Pathway extends PathwayElement implements Xrefable {
 	public Set<StaticProperty> getStaticPropertyKeys() {
 		Set<StaticProperty> result = super.getStaticPropertyKeys();
 		Set<StaticProperty> propsPathway = EnumSet.of(StaticProperty.TITLE, StaticProperty.ORGANISM,
-				StaticProperty.SOURCE, StaticProperty.VERSION, StaticProperty.LICENSE, StaticProperty.XREF,
-				StaticProperty.BOARDWIDTH, StaticProperty.BOARDHEIGHT, StaticProperty.BACKGROUNDCOLOR);
+				StaticProperty.DESCRIPTION, StaticProperty.SOURCE, StaticProperty.VERSION, StaticProperty.LICENSE,
+				StaticProperty.XREF, StaticProperty.BOARDWIDTH, StaticProperty.BOARDHEIGHT,
+				StaticProperty.BACKGROUNDCOLOR);
 //		Set<StaticProperty> propsAuthor = EnumSet.of(StaticProperty.AUTHOR, StaticProperty.NAME,
 //				StaticProperty.USERNAME, StaticProperty.ORDER); //TODO AUTHORS?
 		result.addAll(propsPathway);
@@ -480,6 +482,9 @@ public class Pathway extends PathwayElement implements Xrefable {
 				break;
 			case ORGANISM:
 				result = getOrganism();
+				break;
+			case DESCRIPTION:
+				result = getDescription();
 				break;
 			case SOURCE:
 				result = getSource();
@@ -503,7 +508,7 @@ public class Pathway extends PathwayElement implements Xrefable {
 				result = getBackgroundColor();
 				break;
 			case AUTHOR:
-				// do nothing TODO 
+				// do nothing TODO
 				break;
 			default:
 				// do nothing
@@ -524,12 +529,15 @@ public class Pathway extends PathwayElement implements Xrefable {
 	@Override
 	public void setStaticProperty(StaticProperty key, Object value) {
 		super.setStaticProperty(key, value);
-		switch (key) { //TODO 
+		switch (key) { // TODO
 		case TITLE:
 			setTitle((String) value);
 			break;
 		case ORGANISM:
 			setOrganism((String) value);
+			break;
+		case DESCRIPTION:
+			setDescription((String) value);
 			break;
 		case SOURCE:
 			setSource((String) value);
@@ -553,7 +561,7 @@ public class Pathway extends PathwayElement implements Xrefable {
 			setBackgroundColor((Color) value);
 			break;
 		case AUTHOR:
-			// do nothing TODO 
+			// do nothing TODO
 			break;
 		default:
 			// do nothing

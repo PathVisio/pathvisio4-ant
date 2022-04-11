@@ -48,6 +48,7 @@ import org.pathvisio.core.Engine;
 import org.pathvisio.libgpml.debug.Logger;
 import org.pathvisio.libgpml.model.type.DataNodeType;
 import org.pathvisio.libgpml.model.type.GroupType;
+import org.pathvisio.libgpml.model.type.HAlignType;
 import org.pathvisio.libgpml.model.Annotation;
 import org.pathvisio.libgpml.model.Citation;
 import org.pathvisio.libgpml.model.CopyElement;
@@ -74,8 +75,10 @@ import org.pathvisio.libgpml.model.Pathway;
 import org.pathvisio.libgpml.model.PathwayModelEvent;
 import org.pathvisio.libgpml.model.PathwayModelListener;
 import org.pathvisio.libgpml.model.type.ObjectType;
+import org.pathvisio.libgpml.model.type.VAlignType;
 import org.pathvisio.core.preferences.GlobalPreference;
 import org.pathvisio.core.preferences.PreferenceManager;
+import org.pathvisio.core.util.ColorPalette;
 import org.pathvisio.libgpml.util.Utils;
 import org.pathvisio.core.view.KeyEvent;
 import org.pathvisio.core.view.LayoutType;
@@ -781,7 +784,9 @@ public class VPathwayModel implements PathwayModelListener {
 		// No more nested or overlapping groups!
 		else {
 			// Form new group with all selected elementsselectPathwayObjects
-			Group group = new Group(GroupType.GROUP); // TODO default?
+			Group group = new Group(GroupType.GROUP); 
+			group.setHAlign(HAlignType.CENTER); // textLabel by default top center
+			group.setVAlign(VAlignType.TOP);
 			data.add(group);
 			for (VDrawable g : selection) {
 				PathwayElement pe = (PathwayElement) g.getPathwayObject();
@@ -1718,8 +1723,6 @@ public class VPathwayModel implements PathwayModelListener {
 			registerKeyboardAction(viewActions.paste);
 			parent.registerKeyboardAction(KEY_SELECT_DATA_NODES, viewActions.selectDataNodes);
 			parent.registerKeyboardAction(KEY_SELECT_INTERACTIONS, viewActions.selectInteractions);
-			registerKeyboardAction(viewActions.toggleGroup);
-			registerKeyboardAction(viewActions.toggleComplex);
 			registerKeyboardAction(viewActions.selectAll);
 			registerKeyboardAction(viewActions.delete1);
 			registerKeyboardAction(viewActions.delete2);

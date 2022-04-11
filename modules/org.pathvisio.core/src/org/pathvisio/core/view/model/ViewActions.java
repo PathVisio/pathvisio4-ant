@@ -116,7 +116,7 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 	public final SelectObjectAction selectLabels;
 	public final SelectAllAction selectAll;
 
-	public final GroupAction toggleGroup; // TODO
+	public final GroupAction toggleGroup;
 	public final GroupAction toggleComplex;
 	public final GroupAction togglePathway;
 	public final GroupAction toggleAnalog;
@@ -139,8 +139,14 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 	public final OrderUpAction orderUp;
 	public final OrderDownAction orderDown;
 	public final ShowUnlinkedConnectors showUnlinked;
-	public final AddState addState;
+	
+	public final AddState addStateProteinModification;
+	public final AddState addStateGeneticVariant;
+	public final AddState addStateEpigeneticModification;
+	public final AddState addStateUndefined;
+
 	public final RemoveState removeState;
+	
 	public final TextFormattingAction formatText;
 
 	private final Engine engine;
@@ -182,8 +188,13 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 		orderUp = new OrderUpAction(engine);
 		orderDown = new OrderDownAction(engine);
 		showUnlinked = new ShowUnlinkedConnectors();
-		addState = new AddState();
+		
+		addStateProteinModification= new AddState(StateType.PROTEIN_MODIFICATION);
+		addStateGeneticVariant= new AddState(StateType.GENETIC_VARIANT);
+		addStateEpigeneticModification= new AddState(StateType.EPIGENETIC_MODIFICATION);
+		addStateUndefined= new AddState(StateType.UNDEFINED);
 		removeState = new RemoveState();
+		
 		formatText = new TextFormattingAction(engine, null);
 
 		registerToGroup(selectDataNodes, GROUP_ENABLE_VPATHWAY_LOADED);
@@ -630,8 +641,13 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 	 *
 	 */
 	private class AddState extends AbstractAction {
-		AddState() {
-			super("Add State...");
+		
+		private StateType type;
+		
+		AddState(StateType type) {
+			super(type.toString());
+			this.type = type; 
+			
 		}
 
 		/**
@@ -645,7 +661,7 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 					if (g instanceof VDataNode) {
 						VDataNode gp = (VDataNode) g;
 						// default state
-						State elt = gp.getPathwayObject().addState("", StateType.UNDEFINED, 1.0, 1.0);
+						State elt = gp.getPathwayObject().addState("", type, 1.0, 1.0);
 						DefaultTemplates.setInitialSize(elt);
 						elt.setShapeType(ShapeType.OVAL);
 //						engine.getActivePathwayModel().add(elt); TODO 
@@ -685,8 +701,7 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 	 */
 	private class GroupAction extends GroupActionBase {
 		public GroupAction(GroupType type) {
-			super(type.getName(), "Break group", "Group selected elements", "Ungroup selected group", type, KeyStroke
-					.getKeyStroke(java.awt.event.KeyEvent.VK_G, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+			super(type.getName(), "Break group", "Group selected elements", "Ungroup selected group", type);
 		}
 	}
 
@@ -696,20 +711,19 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 	 */
 	private class GroupActionBase extends AbstractAction implements SelectionListener {
 		private String groupLbl, ungroupLbl, groupTt, ungroupTt;
-		private GroupType groupStyle;
+		private GroupType type;
 
 		/**
 		 * @param groupLbl
 		 * @param ungroupLbl
 		 * @param groupTt
 		 * @param ungroupTt
-		 * @param style
+		 * @param type
 		 * @param keyStroke
 		 */
-		public GroupActionBase(String groupLbl, String ungroupLbl, String groupTt, String ungroupTt, GroupType style,
-				KeyStroke keyStroke) {
+		public GroupActionBase(String groupLbl, String ungroupLbl, String groupTt, String ungroupTt, GroupType type) {
 			super();
-			this.groupStyle = style;
+			this.type = type;
 			this.groupLbl = groupLbl;
 			this.ungroupLbl = ungroupLbl;
 			this.groupTt = groupTt;
@@ -717,7 +731,6 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 			vPathwayModel.addSelectionListener(this);
 			putValue(NAME, groupLbl);
 			putValue(SHORT_DESCRIPTION, groupTt);
-			putValue(ACCELERATOR_KEY, keyStroke);
 			setLabel();
 		}
 
@@ -731,7 +744,7 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 			}
 			VGroup g = vPathwayModel.toggleGroup(vPathwayModel.getSelectedGraphics());
 			if (g != null) {
-				g.getPathwayObject().setType(groupStyle);
+				g.getPathwayObject().setType(type);
 				// TODO !!!!
 				if (vPathwayModel != null) {
 					vPathwayModel.getUndoManager().newAction("Change Group");

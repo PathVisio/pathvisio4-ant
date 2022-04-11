@@ -55,7 +55,6 @@ import org.pathvisio.gui.dialogs.PathwayElementDialog;
 import org.pathvisio.gui.view.VPathwayModelSwing;
 import org.pathvisio.libgpml.model.type.AnchorShapeType;
 import org.pathvisio.libgpml.model.type.ConnectorType;
-import org.pathvisio.libgpml.model.type.GroupType;
 
 /**
  * Implementation of {@link VPathwayModelListener} that handles right-click
@@ -163,8 +162,13 @@ public class PathwayElementMenuListener implements VPathwayModelListener {
 			}
 		}
 
+		JMenu stateMenu = new JMenu("Add State...");
+		stateMenu.add(vActions.addStateProteinModification);
+		stateMenu.add(vActions.addStateGeneticVariant); 
+		stateMenu.add(vActions.addStateEpigeneticModification);
+		stateMenu.add(vActions.addStateUndefined);
 		if (e instanceof VDataNode) {
-			menu.add(vActions.addState);
+			menu.add(stateMenu);
 		}
 		if (e instanceof VState) {
 			menu.add(vActions.removeState);

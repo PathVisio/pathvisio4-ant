@@ -22,7 +22,6 @@ import com.jgoodies.forms.layout.FormLayout;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -31,27 +30,18 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
-import javax.swing.JTree;
 import javax.swing.SwingUtilities;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.event.TreeSelectionListener;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreePath;
-import javax.swing.tree.TreeSelectionModel;
 
 import org.pathvisio.libgpml.debug.Logger;
-import org.pathvisio.libgpml.model.Citation;
+import org.pathvisio.libgpml.model.Evidence;
 import org.pathvisio.libgpml.model.PathwayElement;
-import org.pathvisio.libgpml.model.PathwayElement.AnnotationRef;
-import org.pathvisio.libgpml.model.PathwayElement.CitationRef;
 import org.pathvisio.libgpml.model.PathwayElement.EvidenceRef;
 import org.pathvisio.libgpml.model.Referenceable.Citable;
 import org.pathvisio.libgpml.util.Utils;
@@ -59,46 +49,41 @@ import org.pathvisio.libgpml.util.XrefUtils;
 import org.bridgedb.Xref;
 import org.pathvisio.core.util.Resources;
 import org.pathvisio.gui.SwingEngine;
-import org.pathvisio.gui.dialogs.CitationRefDialog;
+import org.pathvisio.gui.dialogs.CitationDialog;
 
 /**
  * 
  * @author unknown
  */
-public class CitationRefTreePanel extends RefTreePanel implements ActionListener {
-
-	private static final String ADD = "New citation";
+public class EvidencePanel extends PathwayElementPanel implements ActionListener {
+	
+	private static final String ADD = "New evidence";
 	private static final String REMOVE = "Remove";
 	private static final String EDIT = "Edit";
 	private static final URL IMG_EDIT = Resources.getResourceURL("edit.gif");
 	private static final URL IMG_REMOVE = Resources.getResourceURL("cancel.gif");
 
-	List<CitationRef> citationRefs;
+	List<EvidenceRef> evidenceRefs;
 
-	JScrollPane treePnl;
-	JPanel infoPnl;
-	JPanel addPnl;
+	JScrollPane refPanel;
 	JButton addBtn;
 
 	final private SwingEngine swingEngine;
 	boolean readOnly = false;
 
 	/**
-	 * Instantiates citationRef panel
+	 * Instantiates evidenceRef panel
 	 * 
 	 * @param swingEngine
 	 */
-	public CitationRefTreePanel(SwingEngine swingEngine) {
+	public EvidencePanel(SwingEngine swingEngine) {
 		this.swingEngine = swingEngine;
 		setLayout(new BorderLayout(5, 5));
-		citationRefs = new ArrayList<CitationRef>();
-		infoPnl = new JPanel();
-		infoPnl.setBorder(BorderFactory.createTitledBorder("Information"));
-		add(infoPnl, BorderLayout.CENTER);
+		evidenceRefs = new ArrayList<EvidenceRef>();
 		addBtn = new JButton(ADD);
 		addBtn.setActionCommand(ADD);
 		addBtn.addActionListener(this);
-		addPnl = new JPanel();
+		JPanel addPnl = new JPanel();
 		addPnl.add(addBtn);
 		add(addPnl, BorderLayout.SOUTH);
 	}
@@ -125,37 +110,22 @@ public class CitationRefTreePanel extends RefTreePanel implements ActionListener
 	 * Refresh.
 	 */
 	public void refresh() {
-		if (treePnl != null) {
-			remove(treePnl);
+		if (refPanel != null)
+			remove(refPanel);
+
+		// TODO
+		evidenceRefs = getInput().getEvidenceRefs();
+
+		DefaultFormBuilder b = new DefaultFormBuilder(new FormLayout("fill:pref:grow"));
+		for (EvidenceRef evidenceRef : evidenceRefs) {
+			b.append(new EvidenceRefPanel(evidenceRef));
+			b.nextLine();
 		}
-		// tree
-		citationRefs = getInput().getCitationRefs();
-		DefaultMutableTreeNode root = new DefaultMutableTreeNode("Citations (nested Annotations and Evidences)");
-		addCitationRefNodes(root, citationRefs);
-		JTree tree = new JTree(root);
-//		tree.setRootVisible(false); // sets root folder invisible
-		tree.setEditable(true); // TODO
-		treePnl = new JScrollPane(tree);
-		add(treePnl, BorderLayout.NORTH);
-		setBackground(Color.WHITE);
+		JPanel p = b.getPanel();
+		p.setBackground(Color.WHITE);
+		refPanel = new JScrollPane(p);
+		add(refPanel, BorderLayout.CENTER);
 		validate();
-
-		tree.addTreeSelectionListener(new TreeSelectionListener() {
-			public void valueChanged(TreeSelectionEvent e) {
-				DefaultMutableTreeNode node = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
-				// if nothing is selected
-				if (node == null) {
-					return;
-				}
-				// retrieve the node that was selected 
-				Object nodeInfo = node.getUserObject();
-				// react to the node selection
-				infoPnl = new ViewRefPanel((CitationRef) nodeInfo);
-				infoPnl.setBorder(BorderFactory.createTitledBorder("Information"));
-				add(infoPnl, BorderLayout.CENTER);
-			}
-		});
-
 	}
 
 //	/**
@@ -172,45 +142,40 @@ public class CitationRefTreePanel extends RefTreePanel implements ActionListener
 //	}
 
 	/**
-	 * Panel which displays CitationRef
+	 * Panel which displays EvidenceRef
 	 * 
 	 * @author unknown
 	 */
-	private class ViewRefPanel extends JPanel implements HyperlinkListener, ActionListener {
-		CitationRef citationRef;
+	private class EvidenceRefPanel extends JPanel implements HyperlinkListener, ActionListener {
+		EvidenceRef evidenceRef;
 		JPanel btnPanel;
 
 		/**
 		 * Instantiates panel
 		 * 
-		 * @param citationRef
+		 * @param evidenceRef
 		 */
-		public ViewRefPanel(CitationRef citationRef) {
-			this.citationRef = citationRef;
-//			setBackground(new Color(255,255,255,0));
+		public EvidenceRefPanel(EvidenceRef evidenceRef) {
+			this.evidenceRef = evidenceRef;
+			setBackground(Color.WHITE);
+			setLayout(new FormLayout("2dlu, fill:[100dlu,min]:grow, 1dlu, pref, 2dlu", "2dlu, pref, 2dlu"));
 			JTextPane txt = new JTextPane();
 			txt.setContentType("text/html");
 			txt.setEditable(false);
-			Citation citation = citationRef.getCitation();
+			Evidence evidence = evidenceRef.getEvidence();
 			// index starts from 1
-			int ordinal = getInput().getPathwayModel().getCitations().indexOf(citation) + 1;
-			txt.setText("<html>" + "<B>" + ordinal + ":</B> " + xrefToString(citation.getXref()) + "</html>");
+			int ordinal = getInput().getPathwayModel().getEvidences().indexOf(evidence) + 1;
+			txt.setText("<html>" + "<B>" + ordinal + ":</B> " + xrefToString(evidence.getXref()) + "</html>");
 			txt.addHyperlinkListener(this);
 			CellConstraints cc = new CellConstraints();
 			add(txt, cc.xy(2, 2));
-			
-			addBtn = new JButton(ADD);
-			addBtn.setActionCommand(ADD);
-			addBtn.addActionListener(this);
-			addPnl = new JPanel();
-			addPnl.add(addBtn);
-			
-			btnPanel = new JPanel();
+
+			btnPanel = new JPanel(new FormLayout("pref", "pref, pref"));
 			JButton btnEdit = new JButton();
 			btnEdit.setActionCommand(EDIT);
 			btnEdit.addActionListener(this);
 			btnEdit.setIcon(new ImageIcon(IMG_EDIT));
-//			btnEdit.setBackground(new Color(255,255,255,0));
+			btnEdit.setBackground(Color.WHITE);
 			btnEdit.setBorder(null);
 			btnEdit.setToolTipText("Edit literature reference");
 
@@ -265,14 +230,15 @@ public class CitationRefTreePanel extends RefTreePanel implements ActionListener
 		public void actionPerformed(ActionEvent e) {
 			String action = e.getActionCommand();
 			if (EDIT.equals(action)) {
-				edit(citationRef);
+				edit(evidenceRef);
 			} else if (REMOVE.equals(action)) {
-				CitationRefTreePanel.this.remove(citationRef);
+				EvidencePanel.this.remove(evidenceRef);
 			}
 		}
 
 		static final String PUBMED_URL = "http://www.ncbi.nlm.nih.gov/pubmed/";
 
+		// TODO need a solution for more...
 		public String xrefToString(Xref xref) {
 			StringBuilder builder = new StringBuilder();
 			String pmid = XrefUtils.getIdentifier(xref);
@@ -286,6 +252,7 @@ public class CitationRefTreePanel extends RefTreePanel implements ActionListener
 			System.out.println(builder.toString());
 			return builder.toString();
 		}
+
 	}
 
 	/**
@@ -298,35 +265,35 @@ public class CitationRefTreePanel extends RefTreePanel implements ActionListener
 	}
 
 	/**
-	 * When "Edit" button is pressed. A CitationDialog is opened for given
-	 * citationRef.
+	 * When "Edit" button is pressed. A EvidenceDialog is opened for given
+	 * evidenceRef.
 	 * 
 	 * @param xref
 	 */
-	private void edit(CitationRef citationRef) {
-		if (citationRef != null) {
-			CitationRefDialog d = new CitationRefDialog(getInput(), citationRef, null, this, false);
+	private void edit(EvidenceRef evidenceRef) {
+		if (evidenceRef != null) {
+			CitationDialog d = new CitationDialog(getInput(), null, null, this, false);
 			d.setVisible(true);
 		}
 		refresh();
 	}
 
 	/**
-	 * When "Remove" button is pressed. The given citationRef is removed.
+	 * When "Remove" button is pressed. The given evidenceRef is removed.
 	 * 
-	 * @param citationRef
+	 * @param evidenceRef
 	 */
-	private void remove(CitationRef citationRef) {
-		((PathwayElement) getInput()).removeCitationRef(citationRef); // TODO
+	private void remove(EvidenceRef evidenceRef) {
+		((PathwayElement) getInput()).removeEvidenceRef(evidenceRef); // TODO
 		refresh();
 	}
 
 	/**
-	 * When ADD "New reference" button is pressed. A CitationDialog is opened.
+	 * When ADD "New reference" button is pressed. A EvidenceDialog is opened.
 	 */
 	private void addPressed() {
-		CitationRef citationRef = null; // new citationRef
-		final CitationRefDialog d = new CitationRefDialog(getInput(), citationRef, null, this);
+		EvidenceRef evidenceRef = null; // new evidenceRef
+		final CitationDialog d = new CitationDialog(getInput(), null, null, this);
 		if (!SwingUtilities.isEventDispatchThread()) {
 			try {
 				SwingUtilities.invokeAndWait(new Runnable() {
@@ -340,9 +307,9 @@ public class CitationRefTreePanel extends RefTreePanel implements ActionListener
 		} else {
 			d.setVisible(true);
 		}
-		if (d.getExitCode().equals(CitationRefDialog.OK)) {
+		if (d.getExitCode().equals(CitationDialog.OK)) {
 			// TODO seems weird but ok for now...
-//			getInput().addCitation(citationRef.getCitation());
+//			getInput().addEvidence(evidenceRef.getEvidence());
 			refresh();
 		} else {
 

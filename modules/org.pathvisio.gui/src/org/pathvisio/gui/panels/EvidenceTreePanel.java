@@ -53,13 +53,13 @@ import org.pathvisio.libgpml.util.XrefUtils;
 import org.bridgedb.Xref;
 import org.pathvisio.core.util.Resources;
 import org.pathvisio.gui.SwingEngine;
-import org.pathvisio.gui.dialogs.CitationRefDialog;
+import org.pathvisio.gui.dialogs.CitationDialog;
 
 /**
  * 
  * @author unknown
  */
-public class AnnotationRefTreePanel extends RefTreePanel implements ActionListener {
+public class EvidenceTreePanel extends RefTreePanel implements ActionListener {
 
 	private static final String ADD = "New reference";
 	private static final String REMOVE = "Remove";
@@ -67,7 +67,7 @@ public class AnnotationRefTreePanel extends RefTreePanel implements ActionListen
 	private static final URL IMG_EDIT = Resources.getResourceURL("edit.gif");
 	private static final URL IMG_REMOVE = Resources.getResourceURL("cancel.gif");
 
-	List<AnnotationRef> annotationRefs;
+	List<EvidenceRef> evidenceRefs;
 
 	JScrollPane refPanel;
 	JButton addBtn;
@@ -80,10 +80,10 @@ public class AnnotationRefTreePanel extends RefTreePanel implements ActionListen
 	 * 
 	 * @param swingEngine
 	 */
-	public AnnotationRefTreePanel(SwingEngine swingEngine) {
+	public EvidenceTreePanel(SwingEngine swingEngine) {
 		this.swingEngine = swingEngine;
 		setLayout(new BorderLayout(5, 5));
-		annotationRefs = new ArrayList<AnnotationRef>();
+		evidenceRefs = new ArrayList<EvidenceRef>();
 		addBtn = new JButton(ADD);
 		addBtn.setActionCommand(ADD);
 		addBtn.addActionListener(this);
@@ -118,9 +118,9 @@ public class AnnotationRefTreePanel extends RefTreePanel implements ActionListen
 			remove(refPanel);
 		}
 		// tree
-		annotationRefs = getInput().getAnnotationRefs();
-		DefaultMutableTreeNode root = new DefaultMutableTreeNode("Annotations (nested Citations)");
-		addAnnotationRefNodes(root, annotationRefs);
+		evidenceRefs = getInput().getEvidenceRefs();
+		DefaultMutableTreeNode root = new DefaultMutableTreeNode("Evidences");
+		addEvidenceRefNodes(root, evidenceRefs);
 		JTree tree = new JTree(root);
 //		tree.setRootVisible(false); // sets root folder invisible
 		tree.setEditable(true); // TODO
@@ -274,7 +274,7 @@ public class AnnotationRefTreePanel extends RefTreePanel implements ActionListen
 	 */
 	private void edit(CitationRef citationRef) {
 		if (citationRef != null) {
-			CitationRefDialog d = new CitationRefDialog(getInput(), citationRef, null, this, false);
+			CitationDialog d = new CitationDialog(getInput(), citationRef, null, this, false);
 			d.setVisible(true);
 		}
 		refresh();
@@ -295,7 +295,7 @@ public class AnnotationRefTreePanel extends RefTreePanel implements ActionListen
 	 */
 	private void addPressed() {
 		CitationRef citationRef = null; // new citationRef
-		final CitationRefDialog d = new CitationRefDialog(getInput(), citationRef, null, this);
+		final CitationDialog d = new CitationDialog(getInput(), citationRef, null, this);
 		if (!SwingUtilities.isEventDispatchThread()) {
 			try {
 				SwingUtilities.invokeAndWait(new Runnable() {
@@ -309,7 +309,7 @@ public class AnnotationRefTreePanel extends RefTreePanel implements ActionListen
 		} else {
 			d.setVisible(true);
 		}
-		if (d.getExitCode().equals(CitationRefDialog.OK)) {
+		if (d.getExitCode().equals(CitationDialog.OK)) {
 			// TODO seems weird but ok for now...
 //			getInput().addCitation(citationRef.getCitation());
 			refresh();

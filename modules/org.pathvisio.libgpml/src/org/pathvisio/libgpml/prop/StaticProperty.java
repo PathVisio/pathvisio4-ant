@@ -36,9 +36,10 @@ public enum StaticProperty implements Property {
 	// ========================================
 	TITLE("title", "Title", StaticPropertyType.STRING, 101),
 	ORGANISM("organism", "Organism", StaticPropertyType.ORGANISM, 102),
-	SOURCE("source", "Source", StaticPropertyType.STRING, 103),
-	VERSION("version", "Version", StaticPropertyType.STRING, 104),
-	LICENSE("license", "License", StaticPropertyType.STRING, 105),
+	DESCRIPTION("description", "Description", StaticPropertyType.DESCRIPTION, 103),
+	SOURCE("source", "Source", StaticPropertyType.STRING, 104),
+	VERSION("version", "Version", StaticPropertyType.STRING, 105),
+	LICENSE("license", "License", StaticPropertyType.STRING, 106),
 
 	// author
 	AUTHOR("author", "Author", StaticPropertyType.AUTHOR, 110),

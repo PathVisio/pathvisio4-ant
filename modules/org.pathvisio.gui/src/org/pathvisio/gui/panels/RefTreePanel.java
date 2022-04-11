@@ -53,7 +53,7 @@ import org.pathvisio.libgpml.util.XrefUtils;
 import org.bridgedb.Xref;
 import org.pathvisio.core.util.Resources;
 import org.pathvisio.gui.SwingEngine;
-import org.pathvisio.gui.dialogs.CitationRefDialog;
+import org.pathvisio.gui.dialogs.CitationDialog;
 
 /**
  * 

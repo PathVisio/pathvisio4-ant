@@ -67,17 +67,18 @@ public class PropertyDisplayManager {
 	static {
 		PreferenceManager.init();
 
-		// register core property types
+		// register core static property types
 		registerTypeHandler(new BooleanHandler());
 		registerTypeHandler(NumberHandler.buildHandler(StaticPropertyType.DOUBLE, Double.class));
 		registerTypeHandler(NumberHandler.buildHandler(StaticPropertyType.INTEGER, Integer.class));
 		registerTypeHandler(new AngleHandler());
 		registerTypeHandler(new ColorHandler());
+		registerTypeHandler(new FontHandler());
 		registerTypeHandler(new CommentsHandler());
+		registerTypeHandler(new DescriptionHandler());
 		registerTypeHandler(new XrefHandler());
 		registerTypeHandler(new AliasRefHandler());
 		registerTypeHandler(new DataSourceHandler());
-		registerTypeHandler(new FontHandler());
 		registerTypeHandler(new ComboHandler(StaticPropertyType.ORGANISM, Organism.latinNames(), false));
 		registerTypeHandler(new ComboHandler(StaticPropertyType.DATANODETYPE, DataNodeType.getNames(), false));
 		registerTypeHandler(new ComboHandler(StaticPropertyType.STATETYPE, StateType.getNames(), false));
@@ -97,14 +98,6 @@ public class PropertyDisplayManager {
 		for (StaticProperty p : StaticProperty.values()) {
 			registerProperty(p);
 		}
-
-		// Register specific dynamic property TODO
-		// TODO: refactor as Static Property with next GPML update
-//		registerProperty(CellularComponentType.CELL_COMPONENT_PROPERTY);
-//		setPropertyScope(
-//				CellularComponentType.CELL_COMPONENT_PROPERTY, 
-//				EnumSet.of(ObjectType.SHAPE)
-//		);
 	}
 
 	/**

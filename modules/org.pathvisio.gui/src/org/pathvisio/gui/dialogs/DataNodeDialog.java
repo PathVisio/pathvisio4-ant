@@ -36,6 +36,7 @@ import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
 import javax.swing.BorderFactory;
+import javax.swing.ComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -85,9 +86,9 @@ public class DataNodeDialog extends PathwayElementDialog {
 	private PermissiveComboBox dbCombo; // all registered datasource
 	private PermissiveComboBox typeCombo; // all datanode types
 	private DataNodeDialog curDlg;
-	private JTextField aliasRfText; // for xref dataSource
-	private JButton aliasRfButton; // for xref dataSource
-
+	private JTextField aliasRfText; // for aliasRef dataSource
+	private JButton unlinkButton; // for unlink
+	private PermissiveComboBox aliasRefCombo; // all datanode types
 
 	/**
 	 * Instantiates a datanode dialog.
@@ -136,8 +137,6 @@ public class DataNodeDialog extends PathwayElementDialog {
 			dsType = DataSourceHandler.DSTYPE_BY_DNTYPE.get(dnType);
 		}
 		dsm.setTypeFilter(dsType);
-		aliasRfText.setText(getInput().getAliasRef() == null ? "" : getInput().getAliasRef().toString());
-		aliasRfButton.setText(getInput().getAliasRef() == null ? "Link" : "Unlink");
 		pack();
 	}
 
@@ -488,7 +487,7 @@ public class DataNodeDialog extends PathwayElementDialog {
 		});
 		// ========================================
 		// Alias Panel
-		// ========================================	
+		// ========================================
 		aliasPanel.setLayout(new GridBagLayout());
 		JLabel aliasRefLabel = new JLabel("Linked to group");
 		aliasRfText = new JTextField();
@@ -503,27 +502,34 @@ public class DataNodeDialog extends PathwayElementDialog {
 		c.weightx = 1;
 		aliasPanel.add(aliasRfText, c);
 		System.out.println("AliasRefText" + symText.getText());
-		// button and action
-		aliasRfButton = new JButton("Link");
-//		if (e!= null) { //TODO 
-//			if (e.getAliasRef() != null) { 
-//				aliasRfButton.setText("Unlink");
-//			}
-//		}
-		aliasRfButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				Group aliasRef = getInput().getAliasRef(); 
-				if (aliasRef !=null && aliasRfButton.getText()=="Unlink") {
-					getInput().unsetAliasRef();
+
+		// group combo box
+		DataNode e = getInput();
+		if (e != null) { // TODO
+			aliasRefCombo = new PermissiveComboBox((ComboBoxModel) e.getPathwayModel().getGroups());
+			aliasPanel.add(aliasRefCombo, c);
+			// type add listener
+			aliasRefCombo.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					Group item = (Group) aliasRefCombo.getSelectedItem();
+					getInput().setAliasRef(item);
 					refresh();
-				} else { // link stuff
 				}
+			});
+		}
+
+		// button and action
+		unlinkButton = new JButton("Unlink");
+		unlinkButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				getInput().unsetAliasRef();
+				refresh();
 			}
 		});
-		aliasRfButton.setToolTipText("Links/unlinks alias datanode to group aliasRef"); //TODO 
+		unlinkButton.setToolTipText("Unlinks alias datanode from group aliasRef"); // TODO
 		c.gridx = GridBagConstraints.RELATIVE;
 		c.weightx = 0;
-		aliasPanel.add(aliasRfButton, c);
+		aliasPanel.add(unlinkButton, c);
 
 		// ========================================
 		// Etc

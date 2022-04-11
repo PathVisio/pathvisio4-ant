@@ -89,29 +89,21 @@ public class GroupPainterRegistry {
 			// Draw group outline
 			int sw = 1;
 			Rectangle2D rect = group.getVBounds();
+
+			// different alpha when selected and mouse over
+			int alpha = (mouseover || anchors || selected) ? TRANSLUCENCY_LEVEL : TRANSLUCENCY_LEVEL_HOVER;
+
 			// fill
-			g.setColor(ColorUtils.makeTransparent(DEFAULT_GRAY, TRANSLUCENCY_LEVEL));
+			g.setColor(ColorUtils.makeTransparent(DEFAULT_GRAY, alpha));
 			g.fillRect((int) rect.getX(), (int) rect.getY(), (int) rect.getWidth(), (int) rect.getHeight());
 			// border
 			g.setColor(BORDER_GRAY);
 			g.setStroke(
 					new BasicStroke(sw, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 1, new float[] { 4, 2 }, 0));
 			g.drawRect((int) rect.getX(), (int) rect.getY(), (int) rect.getWidth() - sw, (int) rect.getHeight() - sw);
-
-			// Group highlight, on mouseover, linkanchors display and selection
-			if (mouseover || anchors || selected) {
-				// fill
-				g.setColor(ColorUtils.makeTransparent(DEFAULT_GRAY, TRANSLUCENCY_LEVEL_HOVER));
-				g.fillRect((int) rect.getX(), (int) rect.getY(), (int) rect.getWidth(), (int) rect.getHeight());
-				// border
-				g.setColor(BORDER_GRAY);
-				g.setStroke(new BasicStroke(sw, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 1, new float[] { 4, 2 },
-						0));
-				g.drawRect((int) rect.getX(), (int) rect.getY(), (int) rect.getWidth() - sw,
-						(int) rect.getHeight() - sw);
-			}
 		}
 	};
+
 	/**
 	 * Painter for {@link GroupType#TRANSPARENT}. Group appears as transparent
 	 * rectangle. When mouse over group, fill color changes to blue.
@@ -190,25 +182,16 @@ public class GroupPainterRegistry {
 			outline.lineTo(vLeft, vTop + vMargin);
 			outline.closePath();
 
+			// different alpha when selected and mouse over
+			int alpha = (mouseover || anchors || selected) ? TRANSLUCENCY_LEVEL : TRANSLUCENCY_LEVEL_HOVER;
+
 			// fill
-			g.setColor(ColorUtils.makeTransparent(DEFAULT_GRAY, TRANSLUCENCY_LEVEL));
+			g.setColor(ColorUtils.makeTransparent(DEFAULT_GRAY, alpha));
 			g.fill(outline);
 			// border
 			g.setColor(BORDER_GRAY);
 			g.setStroke(new BasicStroke());
 			g.draw(outline);
-
-			// Group highlight, on mouseover, linkanchors display and selection
-			if (mouseover || anchors || selected) {
-				// fill
-				g.setColor(ColorUtils.makeTransparent(DEFAULT_GRAY, TRANSLUCENCY_LEVEL_HOVER));
-				g.fill(outline);
-
-				// border
-				g.setColor(BORDER_GRAY);
-				g.setStroke(new BasicStroke());
-				g.draw(outline);
-			}
 		}
 	};
 
@@ -222,26 +205,11 @@ public class GroupPainterRegistry {
 			boolean anchors = (flags & VGroup.FLAG_ANCHORSVISIBLE) != 0;
 			boolean selected = (flags & VGroup.FLAG_SELECTED) != 0;
 
+			int sw = 1;
 			Rectangle2D rect = group.getVBounds();
-
-			String label = group.getPathwayObject().getTextLabel();
-
-			int size = (int) group.vFromM(32);
-			g.setFont(new Font("Times", 0, size));
-			Rectangle2D tb = g.getFontMetrics().getStringBounds(label, g);
 
 			// different alpha when selected and mouse over
 			int alpha = (mouseover || anchors || selected) ? TRANSLUCENCY_LEVEL : TRANSLUCENCY_LEVEL_HOVER;
-
-			if (tb.getWidth() <= rect.getWidth()) {
-				int yoffset = (int) rect.getY();
-				int xoffset = (int) rect.getX() + (int) (rect.getWidth() / 2) - (int) (tb.getWidth() / 2);
-				yoffset += (int) (rect.getHeight() / 2) + (int) (tb.getHeight() / 2);
-				g.setColor(BORDER_GRAY);
-				g.drawString(label, xoffset, yoffset);
-			}
-
-			int sw = 1;
 
 			// fill
 			g.setColor(ColorUtils.makeTransparent(PATHWAY_GREEN, alpha));

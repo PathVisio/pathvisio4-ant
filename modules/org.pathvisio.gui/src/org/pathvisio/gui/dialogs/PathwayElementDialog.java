@@ -37,11 +37,13 @@ import org.pathvisio.core.util.Resources;
 import org.pathvisio.core.view.model.UndoAction;
 import org.pathvisio.core.view.model.VPathwayModel;
 import org.pathvisio.gui.SwingEngine;
-import org.pathvisio.gui.panels.AnnotationRefTreePanel;
-import org.pathvisio.gui.panels.LitReferencePanel;
-import org.pathvisio.gui.panels.CitationRefTreePanel;
+import org.pathvisio.gui.panels.AnnotationPanel;
+import org.pathvisio.gui.panels.AnnotationTreePanel;
+import org.pathvisio.gui.panels.CitationPanel;
+import org.pathvisio.gui.panels.CitationTreePanel;
 import org.pathvisio.gui.panels.CommentPanel;
-import org.pathvisio.gui.panels.EvidenceRefTreePanel;
+import org.pathvisio.gui.panels.EvidencePanel;
+import org.pathvisio.gui.panels.EvidenceTreePanel;
 import org.pathvisio.gui.panels.PathwayElementPanel;
 
 /**
@@ -136,9 +138,9 @@ public class PathwayElementDialog extends OkCancelDialog {
 	private void createTabs() {
 		addPathwayElementPanel(TAB_COMMENTS, new CommentPanel());
 //		addPathwayElementPanel(TAB_LITERATURE, new CitationRefPanel(swingEngine)); //TODO 
-		addPathwayElementPanel("Annotations", new AnnotationRefTreePanel(swingEngine)); // TODO
-		addPathwayElementPanel("Citations", new CitationRefTreePanel(swingEngine)); // TODO
-		addPathwayElementPanel("Evidences", new EvidenceRefTreePanel(swingEngine)); // TODO
+		addPathwayElementPanel("Annotations", new AnnotationPanel(swingEngine)); // TODO
+		addPathwayElementPanel("Citations", new CitationPanel(swingEngine)); // TODO
+		addPathwayElementPanel("Evidences", new EvidencePanel(swingEngine)); // TODO
 		addCustomTabs(dialogPane);
 	}
 

@@ -66,7 +66,7 @@ import org.pathvisio.core.view.model.VPathwayObject;
 import org.pathvisio.core.view.model.ViewActions;
 import org.pathvisio.gui.dialogs.AboutDlg;
 import org.pathvisio.gui.dialogs.PathwayElementDialog;
-import org.pathvisio.gui.dialogs.CitationRefDialog;
+import org.pathvisio.gui.dialogs.CitationDialog;
 import org.pathvisio.gui.handler.ColorHandler;
 
 /**
@@ -746,9 +746,9 @@ public class CommonActions implements ApplicationEventListener {
 				// TODO
 				CitationRef xref = pwElm.addCitation(null, null);
 
-				CitationRefDialog d = new CitationRefDialog(pwElm, xref, null, parent);
+				CitationDialog d = new CitationDialog(pwElm, xref, null, parent);
 				d.setVisible(true);
-				if (d.getExitCode().equals(CitationRefDialog.OK)) {
+				if (d.getExitCode().equals(CitationDialog.OK)) {
 					// Citation was already added? TODO
 					// before: m.addElementReference(xref);
 				} else {

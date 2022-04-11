@@ -62,7 +62,7 @@ import org.xml.sax.SAXException;
  * 
  * @author unknown
  */
-public class CitationRefDialog extends OkCancelDialog {
+public class CitationDialog extends OkCancelDialog {
 
 	final static String ADD = "Add";
 	final static String REMOVE = "Remove";
@@ -84,18 +84,19 @@ public class CitationRefDialog extends OkCancelDialog {
 	 * @param locationComp
 	 * @param cancellable
 	 */
-	public CitationRefDialog(Citable citable, CitationRef citationRef, Frame frame, Component locationComp, boolean cancellable) {
+	public CitationDialog(Citable citable, CitationRef citationRef, Frame frame, Component locationComp, boolean cancellable) {
 		super(frame, "Literature reference properties", locationComp, true, cancellable);
 		this.citable = citable; 
 		this.citationRef = citationRef;
 		setDialogComponent(createDialogPane());
+		setSize(300, 250);// UI Design
 		refresh();
 	}
 
 	/**
 	 * Instantiates a citation dialog with boolean cancellable true.
 	 */
-	public CitationRefDialog(Citable citable, CitationRef citationRef, Frame frame, Component locationComp) {
+	public CitationDialog(Citable citable, CitationRef citationRef, Frame frame, Component locationComp) {
 		this(citable, citationRef, frame, locationComp, true);
 	}
 

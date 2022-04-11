@@ -749,6 +749,17 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 						PathwayObjectEvent.createSinglePropertyEvent(PathwayElement.this, StaticProperty.COMMENT));
 			}
 		}
+
+		/**
+		 * Writes comment out as a string. 
+		 */
+		public String toString() {
+			String src = "";
+			if (source != null && !"".equals(source)) {
+				src = " (" + source + ")";
+			}
+			return commentText + src;
+		}
 	}
 
 	/**
@@ -1170,12 +1181,12 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 			String value = "value=" + annotation.getValue();
 			String type = "type=" + annotation.getType().getName();
 			result = ordinal + value + ", " + type;
-			// xref optional 
+			// xref optional
 			String xref = annotation.getXref().getKnownUrl();
 			if (xref != null && !Utils.stringEquals(xref, "")) {
 				result += xref;
 			}
-			// urlLink optional 
+			// urlLink optional
 			String urlLink = annotation.getUrlLink();
 			if (urlLink != null && !Utils.stringEquals(urlLink, "") && !Utils.stringEquals(urlLink, xref)) {
 				result += ", " + urlLink;
