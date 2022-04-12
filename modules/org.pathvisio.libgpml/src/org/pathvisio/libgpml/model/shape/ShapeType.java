@@ -108,14 +108,18 @@ public class ShapeType implements IShape {
 	public static final ShapeType VESICLE = new ShapeType("Vesicle", ellipse); // oval
 
 	// ========================================
-	// Special shapes
+	// Miscellaneous shapes
 	// ========================================
-	public static final ShapeType CORONAVIRUS = new ShapeType("Coronavirus",
-			ShapeCatalog.getPluggableShape(Internal.CORONAVIRUS));
-	public static final ShapeType DNA = new ShapeType("DNAIcon", ShapeCatalog.getPluggableShape(Internal.DNA)); //
-	public static final ShapeType RNA = new ShapeType("RNAIcon", ShapeCatalog.getPluggableShape(Internal.RNA)); //
+	public static final ShapeType CORONAVIRUS_ICON = new ShapeType("CoronavirusIcon",
+			ShapeCatalog.getPluggableShape(Internal.CORONAVIRUS_ICON));
+	public static final ShapeType DNA_ICON = new ShapeType("DNAIcon",
+			ShapeCatalog.getPluggableShape(Internal.DNA_ICON)); //
+	public static final ShapeType RNA_ICON = new ShapeType("RNAIcon",
+			ShapeCatalog.getPluggableShape(Internal.RNA_ICON)); //
 	public static final ShapeType CELL_ICON = new ShapeType("CellIcon",
-			ShapeCatalog.getPluggableShape(Internal.CELL_ICON)); //
+			ShapeCatalog.getPluggableShape(Internal.CELL_ICON));
+	public static final ShapeType MEMBRANE_ICON = new ShapeType("MembraneIcon",
+			ShapeCatalog.getPluggableShape(Internal.MEMBRANE_ICON));
 
 	// ========================================
 	// Rarely used/Deprecated TODO
@@ -126,7 +130,7 @@ public class ShapeType implements IShape {
 	public static final ShapeType LYSOSOME = new ShapeType("Lysosome", null);
 	public static final ShapeType CYTOSOL = new ShapeType("CytosolRegion", null);
 
-	// Deprecated since GPML2013a? TODO
+	// Deprecated since GPML2013a TODO
 	public static final ShapeType MEMBRANE = new ShapeType("Membrane", null); // roundRect
 	public static final ShapeType CELLA = new ShapeType("CellA", null); // oval
 	public static final ShapeType RIBOSOME = new ShapeType("Ribosome", null); // Hexagon

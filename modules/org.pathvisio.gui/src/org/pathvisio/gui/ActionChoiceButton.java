@@ -51,15 +51,12 @@ import com.mammothsoftware.frwk.ddb.DropDownButton;
  */
 public class ActionChoiceButton extends ActionDropDownButton {
 
-	int buttonWidth; 
-	
+	int buttonWidth;
+
 	public ActionChoiceButton(String buttonText, int buttonWidth) {
 		super(buttonText);
 		this.buttonWidth = buttonWidth;
 	}
-
-	// remember if we already set an action
-	private boolean noIconSet = true;
 
 	/**
 	 * Add a group of actions, which will be displayed in the pop-up. This can be
@@ -94,10 +91,7 @@ public class ActionChoiceButton extends ActionDropDownButton {
 			i++;
 		}
 		addComponent(pane);
-		if (noIconSet) {
-			setDirectActionEnabled(false);
-			noIconSet = false;
-		}
+		setDirectActionEnabled(false);
 	}
 
 	/**
@@ -106,7 +100,7 @@ public class ActionChoiceButton extends ActionDropDownButton {
 	public void addLabel(String s) {
 		JLabel title = new JLabel(s);
 		title.setForeground(new Color(50, 21, 110));// UI design
-		title.setFont(new Font("sanserif", Font.BOLD, 11)); // UI design}
+		title.setFont(new Font("sanserif", Font.BOLD, 11)); // UI design
 		JPanel titlePanel = new JPanel();
 		titlePanel.setBackground(new Color(221, 231, 238)); // UI design
 		titlePanel.add(title);
@@ -122,6 +116,5 @@ public class ActionChoiceButton extends ActionDropDownButton {
 		}
 		addButtons(aa);
 	}
-	
-	
+
 }

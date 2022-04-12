@@ -16,10 +16,6 @@
  ******************************************************************************/
 package org.pathvisio.gui;
 
-import java.awt.Color;
-import javax.swing.JColorChooser;
-import javax.swing.JDialog;
-
 import java.awt.Component;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -44,10 +40,7 @@ import org.pathvisio.libgpml.model.type.ArrowHeadType;
 import org.pathvisio.libgpml.model.PathwayModel;
 import org.pathvisio.libgpml.model.PathwayModel.StatusFlagEvent;
 import org.pathvisio.libgpml.model.PathwayModel.StatusFlagListener;
-import org.pathvisio.libgpml.model.shape.ArrowShape;
-import org.pathvisio.libgpml.model.shape.ShapeRegistry;
 import org.pathvisio.libgpml.model.shape.ShapeType;
-import org.pathvisio.libgpml.model.PathwayObject;
 import org.pathvisio.libgpml.model.Label;
 import org.pathvisio.libgpml.model.PathwayElement;
 import org.pathvisio.libgpml.model.PathwayElement.CitationRef;
@@ -62,12 +55,10 @@ import org.pathvisio.core.view.model.VElement;
 import org.pathvisio.core.view.model.VLabel;
 import org.pathvisio.core.view.model.VPathwayElement;
 import org.pathvisio.core.view.model.VPathwayModel;
-import org.pathvisio.core.view.model.VPathwayObject;
 import org.pathvisio.core.view.model.ViewActions;
 import org.pathvisio.gui.dialogs.AboutDlg;
 import org.pathvisio.gui.dialogs.PathwayElementDialog;
 import org.pathvisio.gui.dialogs.CitationDialog;
-import org.pathvisio.gui.handler.ColorHandler;
 
 /**
  * A collection of {@link Action}s that may be used throughout the program (e.g.
@@ -99,8 +90,6 @@ public class CommonActions implements ApplicationEventListener {
 			va.registerToGroup(zoomActions, ViewActions.GROUP_ENABLE_VPATHWAY_LOADED);
 			va.registerToGroup(layoutActions, ViewActions.GROUP_ENABLE_EDITMODE);
 			va.registerToGroup(layoutActions, ViewActions.GROUP_ENABLE_WHEN_SELECTION);
-			va.registerToGroup(newElementActions, ViewActions.GROUP_ENABLE_EDITMODE);
-			va.registerToGroup(newElementActions, ViewActions.GROUP_ENABLE_VPATHWAY_LOADED);
 
 			va.resetGroupStates();
 		}
@@ -125,8 +114,6 @@ public class CommonActions implements ApplicationEventListener {
 	public final Action[] zoomActions;
 
 	public final Action[] layoutActions;
-
-	public final Action[][] newElementActions;
 
 	// Objects Side Panel
 	public final Action[] newMoleculeDatanodeActions;
@@ -192,71 +179,7 @@ public class CommonActions implements ApplicationEventListener {
 		};
 
 		// ================================================================================
-		// New Element (Top Action Bar)
-		// ================================================================================
-		newElementActions = new Action[][] {
-				new Action[] {
-						new NewElementAction(e, new DefaultTemplates.DataNodeTemplate(DataNodeType.GENEPRODUCT)) },
-				new Action[] {
-						new NewElementAction(e, new DefaultTemplates.DataNodeTemplate(DataNodeType.METABOLITE)) },
-				// TODO
-				new Action[] { new NewElementAction(e, new DefaultTemplates.LabelTemplate()) },
-				new Action[] {
-						new NewElementAction(e,
-								new DefaultTemplates.InteractionTemplate("undirected", LineStyleType.SOLID,
-										ArrowHeadType.UNDIRECTED, ArrowHeadType.UNDIRECTED, ConnectorType.STRAIGHT)),
-						new NewElementAction(e,
-								new DefaultTemplates.InteractionTemplate("directed", LineStyleType.SOLID,
-										ArrowHeadType.UNDIRECTED, ArrowHeadType.DIRECTED, ConnectorType.STRAIGHT)),
-						new NewElementAction(e,
-								new DefaultTemplates.InteractionTemplate("dashedline", LineStyleType.DASHED,
-										ArrowHeadType.UNDIRECTED, ArrowHeadType.UNDIRECTED, ConnectorType.STRAIGHT)),
-						new NewElementAction(e,
-								new DefaultTemplates.InteractionTemplate("dashedarrow", LineStyleType.DASHED,
-										ArrowHeadType.UNDIRECTED, ArrowHeadType.DIRECTED, ConnectorType.STRAIGHT)),
-						new NewElementAction(e,
-								new DefaultTemplates.InteractionTemplate("elbow", LineStyleType.SOLID,
-										ArrowHeadType.UNDIRECTED, ArrowHeadType.UNDIRECTED, ConnectorType.ELBOW)),
-						new NewElementAction(e,
-								new DefaultTemplates.InteractionTemplate("curve", LineStyleType.SOLID,
-										ArrowHeadType.UNDIRECTED, ArrowHeadType.UNDIRECTED, ConnectorType.CURVED)), },
-				new Action[] { new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.RECTANGLE)) },
-				new Action[] { new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.OVAL)) },
-				new Action[] { new NewElementAction(e,
-						new DefaultTemplates.InteractionTemplate("directed", LineStyleType.SOLID,
-								ArrowHeadType.UNDIRECTED, ArrowHeadType.DIRECTED, ConnectorType.STRAIGHT)), },
-				// new Action[] {
-				// new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.ARC))
-				// },
-				// new Action[] {
-				// new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.BRACE))
-				// },
-				new Action[] { new NewElementAction(e,
-						new DefaultTemplates.InteractionTemplate("inhibition", LineStyleType.SOLID,
-								ArrowHeadType.UNDIRECTED, ArrowHeadType.INHIBITION, ConnectorType.STRAIGHT)) },
-//					new Action[] {
-//							new NewElementAction(e, new DefaultTemplates.LineTemplate(
-//									"ligandround", LineStyle.SOLID, LineType.LINE, LineType.LIGAND_ROUND, ConnectorType.STRAIGHT)
-//							),
-//							new NewElementAction(e, new DefaultTemplates.LineTemplate(
-//									"receptorround", LineStyle.SOLID, LineType.LINE, LineType.RECEPTOR_ROUND, ConnectorType.STRAIGHT)
-//							),
-//							new NewElementAction(e, new DefaultTemplates.LineTemplate(
-//									"ligandsquare", LineStyle.SOLID, LineType.LINE, LineType.LIGAND_SQUARE, ConnectorType.STRAIGHT)
-//							),
-//							new NewElementAction(e, new DefaultTemplates.LineTemplate(
-//									"receptorsquare", LineStyle.SOLID, LineType.LINE, LineType.RECEPTOR_SQUARE, ConnectorType.STRAIGHT)
-//							),
-//					},
-				new Action[] { new NewElementAction(e, new DefaultTemplates.DataNodeInteractionTemplate()) },
-				new Action[] { new NewElementAction(e, new DefaultTemplates.ReactionTemplate()) },
-				new Action[] { new NewElementAction(e, new DefaultTemplates.PhosphorylationTemplate()) },
-				new Action[] { new NewElementAction(e, new DefaultTemplates.ReversibleReactionTemplate()) },
-
-		};
-
-		// ================================================================================
-		// Molecule DataNode (Objects Side Panel)
+		// New Molecule DataNode Actions
 		// ================================================================================
 		newMoleculeDatanodeActions = new Action[] {
 				new NewElementAction(e, new DefaultTemplates.DataNodeTemplate(DataNodeType.GENEPRODUCT)),
@@ -266,7 +189,7 @@ public class CommonActions implements ApplicationEventListener {
 				new NewElementAction(e, new DefaultTemplates.DataNodeTemplate(DataNodeType.RNA)), };
 
 		// ================================================================================
-		// Concept DataNode (Objects Side Panel)
+		// New Concept DataNode Actions
 		// ================================================================================
 		newConceptDatanodeActions = new Action[] {
 				new NewElementAction(e, new DefaultTemplates.DataNodeTemplate(DataNodeType.PATHWAY)),
@@ -279,12 +202,12 @@ public class CommonActions implements ApplicationEventListener {
 				new NewElementAction(e, new DefaultTemplates.DataNodeTemplate(DataNodeType.UNDEFINED)), };
 
 		// ================================================================================
-		// Label (Objects Side Panel)
+		// New Label Actions
 		// ================================================================================
 		newLabelActions = new Action[] { new NewElementAction(e, new DefaultTemplates.LabelTemplate()), };
 
 		// ================================================================================
-		// Basic Shapes (Objects Side Panel)
+		// New Basic Shapes Actions
 		// ================================================================================
 		newShapeActions = new Action[] { new NewElementAction(e, new DefaultTemplates.LabelTemplate()),
 				new NewElementAction(e, new DefaultTemplates.GraphicalLineTemplate("Undirected", LineStyleType.SOLID,
@@ -319,7 +242,7 @@ public class CommonActions implements ApplicationEventListener {
 		};
 
 		// ================================================================================
-		// Interaction Panel (Objects Side Panel)
+		// New Interaction Panel Actions
 		// ================================================================================
 		newInteractionPanelActions = new Action[] {
 				new NewElementAction(e,
@@ -352,7 +275,7 @@ public class CommonActions implements ApplicationEventListener {
 								ConnectorType.STRAIGHT)), };
 
 		// ================================================================================
-		// Cellular Compartment (Objects Side Panel)
+		// New Cellular Compartment Shape Actions
 		// ================================================================================
 		newCellularComponentActions = new Action[] {
 				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.CELL)),
@@ -382,16 +305,17 @@ public class CommonActions implements ApplicationEventListener {
 		};
 
 		// ================================================================================
-		// Miscellaneous Shapes (Objects Side Panel)
+		// New Miscellaneous Shapes Actions
 		// ================================================================================
 		newMiscShapeActions = new Action[] {
-				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.CORONAVIRUS)),
-				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.DNA)),
-				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.RNA)),
-				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.CELL_ICON)), };
+				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.CORONAVIRUS_ICON)),
+				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.DNA_ICON)),
+				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.RNA_ICON)),
+				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.CELL_ICON)),
+				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.MEMBRANE_ICON)), };
 
 		// ================================================================================
-		// DataNode Interaction Template (Objects Side Panel)
+		// New DataNode-Interaction Template Actions
 		// ================================================================================
 		newTemplateActions = new Action[] {
 				new NewElementAction(e, new DefaultTemplates.InhibitionInteractionTemplate()),

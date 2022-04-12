@@ -52,8 +52,8 @@ import org.pathvisio.core.util.Theme;
  */
 public abstract class DefaultTemplates {
 
-	private final static Theme theme = new Theme("Wikipathways"); //default theme TODO 
-	
+	private final static Theme theme = new Theme("Wikipathways"); // default theme TODO
+
 	/* Some default colors */
 	private final static Color COLOR_DEFAULT = ColorPalette.WP_BLACK;
 	private final static Color COLOR_METABOLITE = ColorPalette.WP_BLUE;
@@ -79,6 +79,7 @@ public abstract class DefaultTemplates {
 	private static final double SHAPE_SIZE_100 = 100;
 	private static final double SHAPE_SIZE_120 = 120;
 	private static final double SHAPE_SIZE_150 = 150;
+	private static final double SHAPE_SIZE_185 = 185;
 	private static final double SHAPE_SIZE_200 = 200;
 
 	/* Default Z-order values */
@@ -126,15 +127,18 @@ public abstract class DefaultTemplates {
 					|| type == ShapeType.GOLGI_APPARATUS) {
 				((Shape) o).setWidth(SHAPE_SIZE_100);
 				((Shape) o).setHeight(SHAPE_SIZE_200);
-			} else if (type == ShapeType.CORONAVIRUS) {
+			} else if (type == ShapeType.CORONAVIRUS_ICON) {
 				((Shape) o).setWidth(SHAPE_SIZE_50);
 				((Shape) o).setHeight(SHAPE_SIZE_50);
+			} else if (type == ShapeType.DNA_ICON || type == ShapeType.RNA_ICON) {
+				((Shape) o).setWidth(SHAPE_SIZE_30);
+				((Shape) o).setHeight(SHAPE_SIZE_100);
 			} else if (type == ShapeType.CELL_ICON) {
 				((Shape) o).setWidth(SHAPE_SIZE_150);
 				((Shape) o).setHeight(SHAPE_SIZE_120);
-			} else if (type == ShapeType.DNA || type == ShapeType.RNA) {
-				((Shape) o).setWidth(SHAPE_SIZE_30);
-				((Shape) o).setHeight(SHAPE_SIZE_100);
+			} else if (type == ShapeType.MEMBRANE_ICON) {
+				((Shape) o).setWidth(SHAPE_SIZE_185);
+				((Shape) o).setHeight(SHAPE_SIZE_120);
 			} else {
 				((Shape) o).setWidth(SHAPE_SIZE_30);
 				((Shape) o).setHeight(SHAPE_SIZE_30);
@@ -168,6 +172,7 @@ public abstract class DefaultTemplates {
 		/**
 		 * Default implementation returns the view of the last added object
 		 */
+		@Override
 		public VElement getDragElement(VPathwayModel vp) {
 			if (lastAdded != null) {
 				VPathwayObject g = vp.getPathwayElementView(lastAdded);
@@ -179,15 +184,18 @@ public abstract class DefaultTemplates {
 			return null; // No last object
 		}
 
+		@Override
 		public String getDescription() {
 			return "Draw new " + getName();
 		}
 
+		@Override
 		public URL getIconLocation() {
 			return Resources.getResourceURL(
 					getClass().getSimpleName().toLowerCase() + "/new" + getName().toLowerCase() + ".gif"); // TODO
 		}
 
+		@Override
 		public void postInsert(PathwayElement[] newElements) {
 		}
 	}
@@ -206,13 +214,14 @@ public abstract class DefaultTemplates {
 			this.type = type;
 		}
 
+		@Override
 		public DataNode[] addElements(PathwayModel p, double mx, double my) {
 			// instantiate data node
 			DataNode e = new DataNode(type.toString(), type);
 			// set graphics
 			setInitialColors(e);
 			setInitialShapeBorder(e);
-			if (type == DataNodeType.PATHWAY) { // TODO 
+			if (type == DataNodeType.PATHWAY) { // TODO
 				e.setFontWeight(true);
 			}
 			e.setCenterX(mx);
@@ -227,11 +236,13 @@ public abstract class DefaultTemplates {
 			return new DataNode[] { e };
 		}
 
+		@Override
 		public VElement getDragElement(VPathwayModel vp) {
 			VDataNode g = (VDataNode) super.getDragElement(vp);
 			return g.handleSE;
 		}
 
+		@Override
 		public String getName() {
 			return type.toString();
 		}
@@ -276,6 +287,12 @@ public abstract class DefaultTemplates {
 			}
 		}
 
+		@Override
+		public URL getIconLocation() {
+			// icons for data nodes are painted instead.
+			return null;
+		}
+
 	}
 
 	// ================================================================================
@@ -286,6 +303,7 @@ public abstract class DefaultTemplates {
 	 */
 	public static class LabelTemplate extends SingleElementTemplate {
 
+		@Override
 		public Label[] addElements(PathwayModel p, double mx, double my) {
 			// instantiate a label
 			Label e = new Label("Label");
@@ -303,12 +321,20 @@ public abstract class DefaultTemplates {
 			return new Label[] { e };
 		}
 
+		@Override
 		public VElement getDragElement(VPathwayModel vp) {
 			return null; // Don't drag label on insert
 		}
 
+		@Override
 		public String getName() {
 			return "Label";
+		}
+
+		@Override
+		public URL getIconLocation() {
+			// icons for data nodes are painted instead.
+			return null;
 		}
 	}
 
@@ -327,8 +353,8 @@ public abstract class DefaultTemplates {
 				ShapeType.SARCOPLASMIC_RETICULUM, ShapeType.ORGANELLE, ShapeType.VESICLE, ShapeType.EXTRACELLULAR));
 
 		// miscellaneous shapes
-		static final Set<ShapeType> MISC_SHAPE_SET = new HashSet<>(
-				Arrays.asList(ShapeType.CORONAVIRUS, ShapeType.DNA, ShapeType.RNA, ShapeType.CELL_ICON));
+		static final Set<ShapeType> MISC_SHAPE_SET = new HashSet<>(Arrays.asList(ShapeType.CORONAVIRUS_ICON,
+				ShapeType.DNA_ICON, ShapeType.RNA_ICON, ShapeType.CELL_ICON, ShapeType.MEMBRANE_ICON));
 
 		public ShapeTemplate(ShapeType shapeType) {
 			this.shapeType = shapeType;

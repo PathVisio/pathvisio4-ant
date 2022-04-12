@@ -16,16 +16,20 @@
  ******************************************************************************/
 package org.pathvisio.gui;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Shape;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.geom.RoundRectangle2D;
 
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
@@ -56,11 +60,14 @@ public class ActionDropDownButton extends JButton implements ActionListener {
 	private JButton arrowButton;
 	private boolean directActionEnabled = true;
 	private ActionListener directAction = null;
+	private String buttonText;
+	private Shape buttonImage;
 
 	public ActionDropDownButton(String buttonText) {
 		super();
 		this.setBorder(null);
-		mainButton = new JButton(buttonText);
+		this.buttonText = buttonText;
+		mainButton = new JButton(this.buttonText);
 		arrowButton = new RolloverButton(new DownArrow(), 11, false);
 		init();
 	}
@@ -210,7 +217,6 @@ public class ActionDropDownButton extends JButton implements ActionListener {
 	 */
 	public void setDirectAction(ActionListener defaultAction) {
 		directAction = defaultAction;
-
 	}
 
 	@Override
@@ -269,5 +275,14 @@ public class ActionDropDownButton extends JButton implements ActionListener {
 			setBorder(null);
 		}
 	}
+
+	protected void setMainButtonText(String text) {
+		mainButton.setText(text);
+	}
+
+	protected void paintMainButton(JButton button) {
+		mainButton.repaint();
+	}
+	
 
 }

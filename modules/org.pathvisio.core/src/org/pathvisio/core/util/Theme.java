@@ -82,7 +82,7 @@ public class Theme {
 			colorBackground = ColorPalette.WP_WHITE;
 			colorDefault = ColorPalette.WP_BLACK;
 			colorMetabolite = ColorPalette.WP_BLUE;
-			colorPathway = ColorPalette.WP_DGREEN;
+			colorPathway = ColorPalette.WP_GREEN;
 			colorDataNodeFill = ColorPalette.WP_WHITE;
 			colorLabel = ColorPalette.WP_BLACK;
 			colorShapeFill = ColorPalette.TRANSPARENT;
@@ -148,7 +148,7 @@ public class Theme {
 
 	// miscellaneous shapes
 	public static final Set<ShapeType> MISC_SHAPE_SET = new HashSet<>(
-			Arrays.asList(ShapeType.CORONAVIRUS, ShapeType.DNA, ShapeType.RNA, ShapeType.CELL_ICON));
+			Arrays.asList(ShapeType.CORONAVIRUS_ICON, ShapeType.DNA_ICON, ShapeType.RNA_ICON, ShapeType.CELL_ICON, ShapeType.MEMBRANE_ICON));
 
 	/**
 	 * Sets text, border, and fill color.

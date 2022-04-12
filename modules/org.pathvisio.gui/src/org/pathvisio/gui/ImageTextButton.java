@@ -41,7 +41,6 @@ import java.awt.event.FocusAdapter;
 import org.pathvisio.core.util.ColorPalette;
 import org.pathvisio.core.view.model.DefaultTemplates;
 import org.pathvisio.gui.CommonActions.NewElementAction;
-import org.pathvisio.gui.ImageButtonShapes.ButtonList;
 import org.pathvisio.libgpml.model.shape.ShapeCatalog;
 import org.pathvisio.libgpml.model.shape.ShapeCatalog.Internal;
 import org.pathvisio.libgpml.model.type.DataNodeType;
@@ -56,12 +55,14 @@ public class ImageTextButton extends JButton {
 
 	Shape imageShape;
 	Color imageColor;
+	String category;
 
-	public ImageTextButton(Action a) {
+	public ImageTextButton(Action a, String category) {
 		super();
 		this.setAction(a);
 		this.setRolloverEnabled(true);
 		initRolloverListener();
+		this.category = category; // to differentiate between datanode and shape "Cell"
 		this.imageShape = getImageShape(); // set shape
 		this.imageColor = getImageColor(); // set color
 		this.setTextString(getText()); // set text
@@ -100,8 +101,6 @@ public class ImageTextButton extends JButton {
 	 */
 	@Override
 	protected void paintComponent(Graphics g) {
-		long startTime = System.nanoTime();
-//		System.out.println(this.getAction().toString());
 		super.paintComponent(g);
 		Graphics2D g2 = (Graphics2D) g.create();
 		if (this.getAction().toString() == "Undefined") {
@@ -110,81 +109,106 @@ public class ImageTextButton extends JButton {
 		}
 		this.setForeground(imageColor);
 		g2.setPaint(imageColor);
-		if (this.getAction().toString() != "Label") {
+		if (imageShape != null) {
 			g2.draw(imageShape);
 		}
-		g2.setColor(new Color(255, 255, 255, 0));
+		g2.setColor(new Color(255, 255, 255, 0)); // Transparent
 		g2.dispose();
-		long estimatedTime = System.nanoTime() - startTime;
-//		System.out.println(estimatedTime);
 	}
 
 	/**
-	 * Sets String text for this button
-	 * 
-	 * @param txt the text.
+	 * @param txt
 	 */
 	private void setTextString(String txt) {
-		if (txt.equals("Undefined")) {
-			txt = "?";
-		} else if (txt.equals("Hexagon")) {
-			txt = "6";
-		} else if (txt.equals("Octagon")) {
-			txt = "8";
-		} else if (txt.equals("Coronavirus")) {
-			txt = null;
-		} else if (txt.equals("CellIcon")) {
-			txt = null;
-		} else if (txt.equals("DNAIcon")) {
-			txt = null;
-		} else if (txt.length() > 5) {
-			txt = txt.substring(0, 4);
+		String txtString;
+		switch (txt) {
+		case "Undefined":
+			txtString = "?";
+			break;
+		case "GeneProduct": // Molecules
+		case "Metabolite":
+		case "Protein":
+		case "DNA":
+		case "RNA":
+		case "Pathway": // Concepts
+		case "Disease":
+		case "Phenotype":
+		case "Event":
+		case "Organ":
+		case "Alias":
+		case "Label":
+			if (txt.length() > 5) {
+				txtString = txt.substring(0, 4);
+			} else {
+				txtString = txt;
+			}
+			break;
+		case "Cell":
+			if (category == "Concepts") {
+				txtString = txt;
+			} else {
+				txtString = null;
+			}
+			break;
+		default:
+			txtString = null;
+			break;
 		}
-		this.setText(txt);
-
+		this.setText(txtString);
 	}
 
-	// TODO
+	/**
+	 * @return
+	 */
 	private Shape getImageShape() {
 		Shape sh = null;
 		switch (getText()) {
+		case "GeneProduct": // Molecules
+		case "Metabolite":
+		case "Protein":
+		case "DNA":
+		case "RNA":
+			sh = new Rectangle(4, 6, 24, 20);
+			break;
 		case "Pathway": // Concepts
 		case "Disease":
 		case "Phenotype":
 		case "Event":
 		case "Undefined":
-		case "Cell":
 		case "Organ":
 			sh = new RoundRectangle2D.Double(4, 6, 24, 20, 8, 8);
+			break;
+		case "Cell":
+			if (category == "Concepts") {
+				sh = new RoundRectangle2D.Double(4, 6, 24, 20, 8, 8);
+			} else {
+				sh = null;
+			}
 			break;
 		case "Alias":
 			sh = new Ellipse2D.Double(4, 6, 24, 20);
 			break;
-		case "Label": // nothing
+		case "Label":
 			break;
-		case "Hexagon":
-			sh = formatShape(ShapeCatalog.getRegularPolygon(6, 17, 17), 8, 8, 17, 17);
+		case "CoronavirusIcon":
+			sh = formatShape(ShapeCatalog.getPluggableShape(Internal.CORONAVIRUS_ICON), 4, 4, 24, 24);
 			break;
-		case "Octagon":
-			sh = formatShape(ShapeCatalog.getRegularPolygon(8, 17, 17), 8, 8, 17, 17);
-			break;
-//		case "Coronavirus":
-//			sh = formatShape(ShapeCatalog.getPluggableShape(Internal.CORONAVIRUS), 4, 4, 24, 24);
-//			break;
-//		case "CellIcon":
-//			sh = formatShape(ImageButtonShapes.getButtonShape(ButtonList.CELL_ICON_BUTTON), 4, 4, 24, 19);
-//			break;
 		case "DNAIcon":
-			sh = formatShape(ShapeCatalog.getPluggableShape(Internal.DNA), 12, 4, 8, 24);
+			sh = formatShape(ShapeCatalog.getPluggableShape(Internal.DNA_ICON), 12, 4, 8, 24);
+			break;
+		case "RNAIcon":
+			sh = formatShape(ShapeCatalog.getPluggableShape(Internal.RNA_ICON), 12, 4, 8, 24);
 			break;
 		default:
-			sh = new Rectangle(4, 6, 24, 20);
+			sh = null;
 			break;
 		}
 		return sh;
 	}
 
-	// TODO
+	/**
+	 * @return
+	 */
 	private Color getImageColor() {
 		Color color = null;
 		switch (getText()) {

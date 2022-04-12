@@ -63,17 +63,7 @@ public class ObjectsPane extends JPanel {
 			c.gridx = i % numItemPerRow;
 			c.gridy = i / numItemPerRow;
 
-			final JButton button;
-
-			if (label.equals("Molecules") || label.equals("Concepts") || a.toString().equals("Label")) {
-				// // a.toString().equals("Hexagon") ||a.toString().equals("Octagon")
-				// ||a.toString().equals("CellIcon"
-				// || a.toString().equals("Coronavirus")
-				//|| a.toString().equals("DNAIcon")
-				button = new ImageTextButton(a);
-			} else {
-				button = new ImageButton(a);
-			}
+			final ImageTextButton button = new ImageTextButton(a, label);
 			button.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					button.setContentAreaFilled(false);

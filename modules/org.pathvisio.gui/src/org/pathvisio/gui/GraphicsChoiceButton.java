@@ -18,13 +18,20 @@ package org.pathvisio.gui;
 
 import com.mammothsoftware.frwk.ddb.DropDownButton;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Shape;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.geom.RoundRectangle2D;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.Action;
 import javax.swing.Icon;
@@ -46,12 +53,14 @@ import javax.swing.JPopupMenu;
  */
 public class GraphicsChoiceButton extends ActionDropDownButton {
 
-	String buttonText; 
-	
-	public GraphicsChoiceButton(String buttonText) {
+	String buttonText;
+	Shape imageShape = new RoundRectangle2D.Double(4, 6, 24, 20, 8, 8);
+	Color imageColor;
+
+	public GraphicsChoiceButton() {
 		// set icon to null for now, we'll use the icon
 		// from the first action added with addButtons
-		super(buttonText);
+		super(null);
 	}
 
 	private int numItemPerRow = 6;
@@ -84,17 +93,15 @@ public class GraphicsChoiceButton extends ActionDropDownButton {
 		final JPopupMenu popup = getPopupMenu();
 
 		int i = 0;
+		Map<Action, JButton> actionToButton = new HashMap<Action, JButton>();
+		;
 		for (final Action a : aa) {
 			c.gridx = i % numItemPerRow;
 			c.gridy = i / numItemPerRow;
 
 			// clicking a button should cause the pop-up menu disappear, any better way?
-			final JButton button;
-			if (label.equals("Molecules") || label.equals("Concepts") || a.toString().equals("Label")) {
-				button = new ImageTextButton(a);
-			} else {
-				button = new ImageButton(a);
-			}
+			final ImageTextButton button = new ImageTextButton(a, label);
+			actionToButton.put(a, button);
 			button.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					button.setContentAreaFilled(false);
@@ -103,6 +110,10 @@ public class GraphicsChoiceButton extends ActionDropDownButton {
 					if (icon != null) {
 						setIcon(icon);
 						setDirectAction(a);
+						setMainButtonText(null);
+					} else {
+						setIcon(null);
+						setMainButtonText(actionToButton.get(a).getText());
 					}
 				}
 			});
@@ -128,12 +139,12 @@ public class GraphicsChoiceButton extends ActionDropDownButton {
 			Icon icon = (Icon) firstAction.getValue(Action.SMALL_ICON);
 			if (icon != null) {
 				setIcon(icon);
-			} 
-			if (buttonText == "Gene") {
-				
+			} else {
+				setMainButtonText(actionToButton.get(firstAction).getText());
 			}
 			setDirectActionEnabled(true);
 			setDirectAction(firstAction);
+			this.repaint();
 			noIconSet = false;
 		}
 
@@ -159,4 +170,7 @@ public class GraphicsChoiceButton extends ActionDropDownButton {
 		addLabel(label);
 		addButtons(aa, label);
 	}
+
+
+
 }
