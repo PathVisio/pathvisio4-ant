@@ -198,15 +198,6 @@ public class ImageTextButton extends JButton {
 			break;
 		case "Label":
 			break;
-		case "CoronavirusIcon":
-			sh = formatShape(ShapeCatalog.getPluggableShape(Internal.CORONAVIRUS_ICON), 6, 6, 20, 20);
-			break;
-		case "DNAIcon":
-			sh = formatShape(ShapeCatalog.getPluggableShape(Internal.DNA_ICON), 13, 6, 7, 20);
-			break;
-		case "RNAIcon":
-			sh = formatShape(ShapeCatalog.getPluggableShape(Internal.RNA_ICON), 13, 6, 7, 20);
-			break;
 		default:
 			sh = null;
 			break;
