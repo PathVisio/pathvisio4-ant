@@ -63,8 +63,8 @@ public class ImageTextButton extends JButton {
 		this.setRolloverEnabled(true);
 		initRolloverListener();
 		this.category = category; // to differentiate between datanode and shape "Cell"
-		this.imageShape = getImageShape(); // set shape
-		this.imageColor = getImageColor(); // set color
+		this.imageShape = setImageShape(); // set shape
+		this.imageColor = setImageColor(); // set color
 		this.setTextString(getText()); // set text
 		// UI Design
 		Dimension dim = new Dimension(33, 33);
@@ -116,6 +116,14 @@ public class ImageTextButton extends JButton {
 		g2.dispose();
 	}
 
+	protected Shape getImageShape() {
+		return imageShape;
+	}
+
+	protected Color getImageColor() {
+		return imageColor;
+	}
+
 	/**
 	 * @param txt
 	 */
@@ -160,7 +168,7 @@ public class ImageTextButton extends JButton {
 	/**
 	 * @return
 	 */
-	private Shape getImageShape() {
+	private Shape setImageShape() {
 		Shape sh = null;
 		switch (getText()) {
 		case "GeneProduct": // Molecules
@@ -191,13 +199,13 @@ public class ImageTextButton extends JButton {
 		case "Label":
 			break;
 		case "CoronavirusIcon":
-			sh = formatShape(ShapeCatalog.getPluggableShape(Internal.CORONAVIRUS_ICON), 4, 4, 24, 24);
+			sh = formatShape(ShapeCatalog.getPluggableShape(Internal.CORONAVIRUS_ICON), 6, 6, 20, 20);
 			break;
 		case "DNAIcon":
-			sh = formatShape(ShapeCatalog.getPluggableShape(Internal.DNA_ICON), 12, 4, 8, 24);
+			sh = formatShape(ShapeCatalog.getPluggableShape(Internal.DNA_ICON), 13, 6, 7, 20);
 			break;
 		case "RNAIcon":
-			sh = formatShape(ShapeCatalog.getPluggableShape(Internal.RNA_ICON), 12, 4, 8, 24);
+			sh = formatShape(ShapeCatalog.getPluggableShape(Internal.RNA_ICON), 13, 6, 7, 20);
 			break;
 		default:
 			sh = null;
@@ -209,7 +217,7 @@ public class ImageTextButton extends JButton {
 	/**
 	 * @return
 	 */
-	private Color getImageColor() {
+	private Color setImageColor() {
 		Color color = null;
 		switch (getText()) {
 		case "Metabolite":

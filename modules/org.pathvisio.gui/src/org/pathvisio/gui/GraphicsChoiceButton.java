@@ -93,7 +93,7 @@ public class GraphicsChoiceButton extends ActionDropDownButton {
 		final JPopupMenu popup = getPopupMenu();
 
 		int i = 0;
-		Map<Action, JButton> actionToButton = new HashMap<Action, JButton>();
+		Map<Action, ImageTextButton> aToB = new HashMap<Action, ImageTextButton>();
 		;
 		for (final Action a : aa) {
 			c.gridx = i % numItemPerRow;
@@ -101,7 +101,7 @@ public class GraphicsChoiceButton extends ActionDropDownButton {
 
 			// clicking a button should cause the pop-up menu disappear, any better way?
 			final ImageTextButton button = new ImageTextButton(a, label);
-			actionToButton.put(a, button);
+			aToB.put(a, button);
 			button.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					button.setContentAreaFilled(false);
@@ -110,10 +110,15 @@ public class GraphicsChoiceButton extends ActionDropDownButton {
 					if (icon != null) {
 						setIcon(icon);
 						setDirectAction(a);
-						setMainButtonText(null);
+						getMainButton().setText(null);
+						((MirrorButton) getMainButton()).setImageShape(null);
+						((MirrorButton) getMainButton()).setImageColor(Color.BLACK);
 					} else {
 						setIcon(null);
-						setMainButtonText(actionToButton.get(a).getText());
+						ImageTextButton b = aToB.get(a);
+						getMainButton().setText(b.getText());
+						((MirrorButton) getMainButton()).setImageShape(b.getImageShape());
+						((MirrorButton) getMainButton()).setImageColor(b.getImageColor());
 					}
 				}
 			});
@@ -139,8 +144,14 @@ public class GraphicsChoiceButton extends ActionDropDownButton {
 			Icon icon = (Icon) firstAction.getValue(Action.SMALL_ICON);
 			if (icon != null) {
 				setIcon(icon);
+				getMainButton().setText(null);
+				((MirrorButton) getMainButton()).setImageShape(null);
+				((MirrorButton) getMainButton()).setImageColor(Color.BLACK);
 			} else {
-				setMainButtonText(actionToButton.get(firstAction).getText());
+				ImageTextButton b = aToB.get(firstAction);
+				getMainButton().setText(b.getText());
+				((MirrorButton) getMainButton()).setImageShape(b.getImageShape());
+				((MirrorButton) getMainButton()).setImageColor(b.getImageColor());
 			}
 			setDirectActionEnabled(true);
 			setDirectAction(firstAction);
@@ -170,7 +181,5 @@ public class GraphicsChoiceButton extends ActionDropDownButton {
 		addLabel(label);
 		addButtons(aa, label);
 	}
-
-
 
 }

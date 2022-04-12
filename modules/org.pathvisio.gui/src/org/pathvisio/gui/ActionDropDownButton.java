@@ -16,7 +16,6 @@
  ******************************************************************************/
 package org.pathvisio.gui;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Shape;
 import java.awt.Component;
@@ -29,7 +28,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.geom.RoundRectangle2D;
+import java.awt.geom.AffineTransform;
 
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
@@ -60,14 +59,11 @@ public class ActionDropDownButton extends JButton implements ActionListener {
 	private JButton arrowButton;
 	private boolean directActionEnabled = true;
 	private ActionListener directAction = null;
-	private String buttonText;
-	private Shape buttonImage;
 
 	public ActionDropDownButton(String buttonText) {
 		super();
 		this.setBorder(null);
-		this.buttonText = buttonText;
-		mainButton = new JButton(this.buttonText);
+		mainButton = new MirrorButton(buttonText);
 		arrowButton = new RolloverButton(new DownArrow(), 11, false);
 		init();
 	}
@@ -276,13 +272,51 @@ public class ActionDropDownButton extends JButton implements ActionListener {
 		}
 	}
 
-	protected void setMainButtonText(String text) {
-		mainButton.setText(text);
+	protected JButton getMainButton() {
+		return mainButton;
 	}
 
-	protected void paintMainButton(JButton button) {
-		mainButton.repaint();
+	public class MirrorButton extends JButton {
+
+		private Shape imageShape;
+		private Color imageColor;
+
+		public MirrorButton(String text) {
+			super();
+			this.setText(text);
+		}
+
+		protected void setImageShape(Shape shape) {
+			this.imageShape = shape;
+		}
+
+		protected void setImageColor(Color color) {
+			this.imageColor = color;
+		}
+
+		/**
+		 * Paints this button.
+		 */
+		@Override
+		protected void paintComponent(Graphics g) {
+			super.paintComponent(g);
+			Graphics2D g2 = (Graphics2D) g.create();
+//			if (this.getAction().toString() == "Undefined") {
+//				g2.setStroke(
+//						new BasicStroke(1, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 10, new float[] { 4, 4 }, 0));
+//			}
+			this.setForeground(imageColor);
+			g2.setPaint(imageColor);
+			AffineTransform at = new AffineTransform();
+			at.translate(0, -4);
+			Shape shapeToDraw = at.createTransformedShape(imageShape);
+			if (shapeToDraw != null) {
+				g2.draw(shapeToDraw);
+			}
+			g2.setColor(new Color(255, 255, 255, 0)); // Transparent
+			g2.dispose();
+		}
+
 	}
-	
 
 }
