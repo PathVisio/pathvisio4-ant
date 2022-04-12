@@ -118,7 +118,7 @@ public class CitationPanel extends PathwayElementPanel implements ActionListener
 
 		DefaultFormBuilder b = new DefaultFormBuilder(new FormLayout("fill:pref:grow"));
 		for (CitationRef citationRef : citationRefs) {
-			b.append(new LitRefPanel(citationRef));
+			b.append(new CitationRefPanel(citationRef));
 			b.nextLine();
 		}
 		JPanel p = b.getPanel();
@@ -146,7 +146,7 @@ public class CitationPanel extends PathwayElementPanel implements ActionListener
 	 * 
 	 * @author unknown
 	 */
-	private class LitRefPanel extends JPanel implements HyperlinkListener, ActionListener {
+	private class CitationRefPanel extends JPanel implements HyperlinkListener, ActionListener {
 		CitationRef citationRef;
 		JPanel btnPanel;
 
@@ -155,7 +155,7 @@ public class CitationPanel extends PathwayElementPanel implements ActionListener
 		 * 
 		 * @param citationRef
 		 */
-		public LitRefPanel(CitationRef citationRef) {
+		public CitationRefPanel(CitationRef citationRef) {
 			this.citationRef = citationRef;
 			setBackground(Color.WHITE);
 			setLayout(new FormLayout("2dlu, fill:[100dlu,min]:grow, 1dlu, pref, 2dlu", "2dlu, pref, 2dlu"));

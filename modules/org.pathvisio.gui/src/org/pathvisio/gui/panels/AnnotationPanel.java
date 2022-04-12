@@ -40,16 +40,16 @@ import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
 import org.pathvisio.libgpml.debug.Logger;
-import org.pathvisio.libgpml.model.Citation;
+import org.pathvisio.libgpml.model.Annotation;
 import org.pathvisio.libgpml.model.PathwayElement;
-import org.pathvisio.libgpml.model.PathwayElement.CitationRef;
+import org.pathvisio.libgpml.model.PathwayElement.AnnotationRef;
 import org.pathvisio.libgpml.model.Referenceable.Citable;
 import org.pathvisio.libgpml.util.Utils;
 import org.pathvisio.libgpml.util.XrefUtils;
 import org.bridgedb.Xref;
 import org.pathvisio.core.util.Resources;
 import org.pathvisio.gui.SwingEngine;
-import org.pathvisio.gui.dialogs.CitationDialog;
+import org.pathvisio.gui.dialogs.AnnotationDialog;
 
 /**
  * 
@@ -63,7 +63,7 @@ public class AnnotationPanel extends PathwayElementPanel implements ActionListen
 	private static final URL IMG_EDIT = Resources.getResourceURL("edit.gif");
 	private static final URL IMG_REMOVE = Resources.getResourceURL("cancel.gif");
 
-	List<CitationRef> citationRefs;
+	List<AnnotationRef> annotationRefs;
 
 	JScrollPane refPanel;
 	JButton addBtn;
@@ -72,14 +72,14 @@ public class AnnotationPanel extends PathwayElementPanel implements ActionListen
 	boolean readOnly = false;
 
 	/**
-	 * Instantiates citationRef panel
+	 * Instantiates annotationRef panel
 	 * 
 	 * @param swingEngine
 	 */
 	public AnnotationPanel(SwingEngine swingEngine) {
 		this.swingEngine = swingEngine;
 		setLayout(new BorderLayout(5, 5));
-		citationRefs = new ArrayList<CitationRef>();
+		annotationRefs = new ArrayList<AnnotationRef>();
 		addBtn = new JButton(ADD);
 		addBtn.setActionCommand(ADD);
 		addBtn.addActionListener(this);
@@ -114,11 +114,11 @@ public class AnnotationPanel extends PathwayElementPanel implements ActionListen
 			remove(refPanel);
 
 		// TODO
-		citationRefs = getInput().getCitationRefs();
+		annotationRefs = getInput().getAnnotationRefs();
 
 		DefaultFormBuilder b = new DefaultFormBuilder(new FormLayout("fill:pref:grow"));
-		for (CitationRef citationRef : citationRefs) {
-			b.append(new LitRefPanel(citationRef));
+		for (AnnotationRef annotationRef : annotationRefs) {
+			b.append(new AnnotationRefPanel(annotationRef));
 			b.nextLine();
 		}
 		JPanel p = b.getPanel();
@@ -128,44 +128,32 @@ public class AnnotationPanel extends PathwayElementPanel implements ActionListen
 		validate();
 	}
 
-//	/**
-//	 * Sets the current pathway element.
-//	 * 
-//	 * @param e
-//	 */
-//	public void setInput(PathwayElement e) {
-////		if (e != getInput()) { //TODO 
-////			elmMgr = e.getParent().getBiopaxElementManager();
-////			refMgr = e.getBiopaxReferenceManager();
-////		}
-//		super.setInput(e);
-//	}
 
 	/**
-	 * Panel which displays CitationRef
+	 * Panel which displays AnnotationRef
 	 * 
 	 * @author unknown
 	 */
-	private class LitRefPanel extends JPanel implements HyperlinkListener, ActionListener {
-		CitationRef citationRef;
+	private class AnnotationRefPanel extends JPanel implements HyperlinkListener, ActionListener {
+		AnnotationRef annotationRef;
 		JPanel btnPanel;
 
 		/**
 		 * Instantiates panel
 		 * 
-		 * @param citationRef
+		 * @param annotationRef
 		 */
-		public LitRefPanel(CitationRef citationRef) {
-			this.citationRef = citationRef;
+		public AnnotationRefPanel(AnnotationRef annotationRef) {
+			this.annotationRef = annotationRef;
 			setBackground(Color.WHITE);
 			setLayout(new FormLayout("2dlu, fill:[100dlu,min]:grow, 1dlu, pref, 2dlu", "2dlu, pref, 2dlu"));
 			JTextPane txt = new JTextPane();
 			txt.setContentType("text/html");
 			txt.setEditable(false);
-			Citation citation = citationRef.getCitation();
+			Annotation annotation = annotationRef.getAnnotation();
 			// index starts from 1
-			int ordinal = getInput().getPathwayModel().getCitations().indexOf(citation) + 1;
-			txt.setText("<html>" + "<B>" + ordinal + ":</B> " + xrefToString(citation.getXref()) + "</html>");
+			int ordinal = getInput().getPathwayModel().getAnnotations().indexOf(annotation) + 1;
+			txt.setText("<html>" + "<B>" + ordinal + ":</B> " + xrefToString(annotation.getXref()) + "</html>");
 			txt.addHyperlinkListener(this);
 			CellConstraints cc = new CellConstraints();
 			add(txt, cc.xy(2, 2));
@@ -230,9 +218,9 @@ public class AnnotationPanel extends PathwayElementPanel implements ActionListen
 		public void actionPerformed(ActionEvent e) {
 			String action = e.getActionCommand();
 			if (EDIT.equals(action)) {
-				edit(citationRef);
+				edit(annotationRef);
 			} else if (REMOVE.equals(action)) {
-				AnnotationPanel.this.remove(citationRef);
+				AnnotationPanel.this.remove(annotationRef);
 			}
 		}
 
@@ -265,35 +253,35 @@ public class AnnotationPanel extends PathwayElementPanel implements ActionListen
 	}
 
 	/**
-	 * When "Edit" button is pressed. A CitationDialog is opened for given
-	 * citationRef.
+	 * When "Edit" button is pressed. A AnnotationDialog is opened for given
+	 * annotationRef.
 	 * 
 	 * @param xref
 	 */
-	private void edit(CitationRef citationRef) {
-		if (citationRef != null) {
-			CitationDialog d = new CitationDialog(getInput(), citationRef, null, this, false);
+	private void edit(AnnotationRef annotationRef) {
+		if (annotationRef != null) {
+			AnnotationDialog d = new AnnotationDialog(getInput(), annotationRef, null, this, false);
 			d.setVisible(true);
 		}
 		refresh();
 	}
 
 	/**
-	 * When "Remove" button is pressed. The given citationRef is removed.
+	 * When "Remove" button is pressed. The given annotationRef is removed.
 	 * 
-	 * @param citationRef
+	 * @param annotationRef
 	 */
-	private void remove(CitationRef citationRef) {
-		((PathwayElement) getInput()).removeCitationRef(citationRef); // TODO
+	private void remove(AnnotationRef annotationRef) {
+		((PathwayElement) getInput()).removeAnnotationRef(annotationRef); // TODO
 		refresh();
 	}
 
 	/**
-	 * When ADD "New reference" button is pressed. A CitationDialog is opened.
+	 * When ADD "New reference" button is pressed. A AnnotationDialog is opened.
 	 */
 	private void addPressed() {
-		CitationRef citationRef = null; // new citationRef
-		final CitationDialog d = new CitationDialog(getInput(), citationRef, null, this);
+		AnnotationRef annotationRef = null; // new annotationRef
+		final AnnotationDialog d = new AnnotationDialog(getInput(), annotationRef, null, this);
 		if (!SwingUtilities.isEventDispatchThread()) {
 			try {
 				SwingUtilities.invokeAndWait(new Runnable() {
@@ -307,9 +295,9 @@ public class AnnotationPanel extends PathwayElementPanel implements ActionListen
 		} else {
 			d.setVisible(true);
 		}
-		if (d.getExitCode().equals(CitationDialog.OK)) {
+		if (d.getExitCode().equals(AnnotationDialog.OK)) {
 			// TODO seems weird but ok for now...
-//			getInput().addCitation(citationRef.getCitation());
+//			getInput().addAnnotation(annotationRef.getAnnotation());
 			refresh();
 		} else {
 

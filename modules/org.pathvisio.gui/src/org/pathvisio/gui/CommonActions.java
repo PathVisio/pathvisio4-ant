@@ -330,14 +330,14 @@ public class CommonActions implements ApplicationEventListener {
 	 */
 	public static class ApplyThemeAction extends AbstractAction {
 		Engine engine;
-		Theme colorTheme = null;
+		Theme theme = null;
 
-		public ApplyThemeAction(Engine engine, String colorTheme) {
+		public ApplyThemeAction(Engine engine, Theme theme) {
 			super();
 			this.engine = engine;
-			this.colorTheme = new Theme(colorTheme);
-			putValue(NAME, colorTheme.toString());
-			putValue(SHORT_DESCRIPTION, "Set theme");
+			this.theme = theme;
+			putValue(NAME, theme.getName());
+			putValue(SHORT_DESCRIPTION, "Apply " + theme.getDescription());
 			// engine.addApplicationEventListener(this);
 			// setEnabled(false);
 		}
@@ -345,8 +345,8 @@ public class CommonActions implements ApplicationEventListener {
 		public void actionPerformed(ActionEvent e) {
 			PathwayModel p = engine.getActivePathwayModel();
 			if (p != null) {
-				engine.getActiveVPathwayModel().getUndoManager().newAction("Color Theme"); // TODO
-				colorTheme.colorPathwayModel(p);
+				engine.getActiveVPathwayModel().getUndoManager().newAction("Apply Theme"); // TODO
+				theme.colorPathwayModel(p);
 				engine.getActiveVPathwayModel().redraw();
 			}
 		}

@@ -215,7 +215,7 @@ public class ImageTextButton extends JButton {
 			color = ColorPalette.WP_BLUE;
 			break;
 		case "Pathway":
-			color = ColorPalette.WP_GREEN;
+			color = ColorPalette.WP_DGREEN;
 			break;
 		default:
 			color = ColorPalette.WP_BLACK;

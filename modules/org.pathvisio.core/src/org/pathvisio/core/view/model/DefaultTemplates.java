@@ -18,9 +18,6 @@ package org.pathvisio.core.view.model;
 
 import java.awt.Color;
 import java.net.URL;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 
 import org.pathvisio.libgpml.model.type.ConnectorType;
 import org.pathvisio.libgpml.model.type.DataNodeType;
@@ -52,16 +49,10 @@ import org.pathvisio.core.util.Theme;
  */
 public abstract class DefaultTemplates {
 
-	private final static Theme theme = new Theme("Wikipathways"); // default theme TODO
+	private final static Theme theme = Theme.WIKIPATHWAYS; // default theme
 
 	/* Some default colors */
-	private final static Color COLOR_DEFAULT = ColorPalette.WP_BLACK;
-	private final static Color COLOR_METABOLITE = ColorPalette.WP_BLUE;
-	private final static Color COLOR_PATHWAY = ColorPalette.WP_GREEN;
 	private final static Color COLOR_LABEL = ColorPalette.WP_BLACK;
-	private final static Color COLOR_TRANSPARENT = ColorPalette.TRANSPARENT;
-	private final static Color COLOR_SHAPE_GREY = ColorPalette.WP_CUSTOM_PV_MGREY;
-	private final static Color COLOR_SHAPE_DGREY = ColorPalette.WP_DGREY;
 
 	/* Initial sizes */
 	private static final double DATANODE_WIDTH = 90; // NB: "DATANODE" used to be named "GENEPRODUCT"
@@ -219,7 +210,7 @@ public abstract class DefaultTemplates {
 			// instantiate data node
 			DataNode e = new DataNode(type.toString(), type);
 			// set graphics
-			setInitialColors(e);
+			theme.setInitialColors(e);
 			setInitialShapeBorder(e);
 			if (type == DataNodeType.PATHWAY) { // TODO
 				e.setFontWeight(true);
@@ -265,25 +256,6 @@ public abstract class DefaultTemplates {
 				e.setBorderStyle(LineStyleType.DASHED);
 			} else { // molecule datanodes
 				e.setShapeType(ShapeType.RECTANGLE);
-			}
-		}
-
-		/**
-		 * Sets text, border, and fill color.
-		 * 
-		 * @param e the data node.
-		 */
-		public void setInitialColors(DataNode e) {
-			DataNodeType type = e.getType();
-			if (type == DataNodeType.PATHWAY) {
-				e.setTextColor(COLOR_PATHWAY);
-				e.setBorderColor(COLOR_PATHWAY);
-			} else if (type == DataNodeType.METABOLITE) {
-				e.setTextColor(COLOR_METABOLITE);
-				e.setBorderColor(COLOR_METABOLITE);
-			} else {
-				e.setTextColor(COLOR_DEFAULT);
-				e.setBorderColor(COLOR_DEFAULT);
 			}
 		}
 
@@ -347,15 +319,6 @@ public abstract class DefaultTemplates {
 	public static class ShapeTemplate extends SingleElementTemplate {
 		ShapeType shapeType;
 
-		// cellular component shapes
-		static final Set<ShapeType> CELL_COMPONENT_SET = new HashSet<>(Arrays.asList(ShapeType.CELL, ShapeType.NUCLEUS,
-				ShapeType.ENDOPLASMIC_RETICULUM, ShapeType.GOLGI_APPARATUS, ShapeType.MITOCHONDRIA,
-				ShapeType.SARCOPLASMIC_RETICULUM, ShapeType.ORGANELLE, ShapeType.VESICLE, ShapeType.EXTRACELLULAR));
-
-		// miscellaneous shapes
-		static final Set<ShapeType> MISC_SHAPE_SET = new HashSet<>(Arrays.asList(ShapeType.CORONAVIRUS_ICON,
-				ShapeType.DNA_ICON, ShapeType.RNA_ICON, ShapeType.CELL_ICON, ShapeType.MEMBRANE_ICON));
-
 		public ShapeTemplate(ShapeType shapeType) {
 			this.shapeType = shapeType;
 		}
@@ -370,7 +333,7 @@ public abstract class DefaultTemplates {
 			setInitialSize(e);
 			setInitialBorderStyle(e);
 			setInitialBorderWidth(e);
-			setInitialColors(e);
+			theme.setInitialColors(e);
 			e.setZOrder(Z_ORDER_SHAPE);
 			addElement(e, p);
 			return new Shape[] { e };
@@ -404,30 +367,10 @@ public abstract class DefaultTemplates {
 		 */
 		public void setInitialBorderWidth(Shape e) {
 			IShape type = e.getShapeType();
-			if (CELL_COMPONENT_SET.contains(type)) {
+			if (Theme.CELL_COMPONENT_SET.contains(type)) {
 				e.setBorderWidth(3);
 			} else {
 				e.setBorderWidth(1);
-			}
-		}
-
-		/**
-		 * Sets text, border, and fill color.
-		 * 
-		 * @param shape
-		 */
-		public void setInitialColors(Shape e) {
-			IShape type = e.getShapeType();
-			e.setFillColor(COLOR_TRANSPARENT);
-			if (CELL_COMPONENT_SET.contains(type)) {
-				e.setTextColor(COLOR_SHAPE_GREY);
-				e.setBorderColor(COLOR_SHAPE_GREY);
-			} else if (MISC_SHAPE_SET.contains(type)) {
-				e.setTextColor(COLOR_SHAPE_GREY);
-				e.setBorderColor(COLOR_SHAPE_DGREY);
-			} else {
-				e.setTextColor(COLOR_DEFAULT);
-				e.setBorderColor(COLOR_DEFAULT);
 			}
 		}
 
@@ -694,14 +637,12 @@ public abstract class DefaultTemplates {
 			lastCatalyst.setTextLabel("Catalyst");
 
 			lastStartNode.setType(DataNodeType.METABOLITE);
-			lastStartNode.setBorderColor(COLOR_METABOLITE);
-			lastStartNode.setTextColor(COLOR_METABOLITE);
+			theme.setInitialColors(lastStartNode);
 			lastStartNode.setShapeType(ShapeType.ROUNDED_RECTANGLE);
 			lastStartNode.setTextLabel("Substrate");
 
 			lastEndNode.setType(DataNodeType.METABOLITE);
-			lastEndNode.setBorderColor(COLOR_METABOLITE);
-			lastEndNode.setTextColor(COLOR_METABOLITE);
+			theme.setInitialColors(lastEndNode);
 			lastEndNode.setShapeType(ShapeType.ROUNDED_RECTANGLE);
 			lastEndNode.setTextLabel("Product");
 
@@ -751,14 +692,12 @@ public abstract class DefaultTemplates {
 			lastCatalyst2.setTextLabel("Catalyst 2");
 
 			lastStartNode.setType(DataNodeType.METABOLITE);
-			lastStartNode.setBorderColor(COLOR_METABOLITE);
-			lastStartNode.setTextColor(COLOR_METABOLITE);
+			theme.setInitialColors(lastStartNode);
 			lastStartNode.setShapeType(ShapeType.ROUNDED_RECTANGLE);
 			lastStartNode.setTextLabel("Metabolite 1");
 
 			lastEndNode.setType(DataNodeType.METABOLITE);
-			lastEndNode.setBorderColor(COLOR_METABOLITE);
-			lastEndNode.setTextColor(COLOR_METABOLITE);
+			theme.setInitialColors(lastEndNode);
 			lastEndNode.setShapeType(ShapeType.ROUNDED_RECTANGLE);
 			lastEndNode.setTextLabel("Metabolite 2");
 			lastLine.setEndArrowHeadType(ArrowHeadType.CONVERSION);

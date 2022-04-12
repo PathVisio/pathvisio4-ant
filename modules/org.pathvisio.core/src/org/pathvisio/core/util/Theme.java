@@ -41,13 +41,35 @@ import org.pathvisio.libgpml.util.Utils;
  * @author finterly
  */
 public class Theme {
+	// ================================================================================
+	// Theme Names
+	// ================================================================================
+	public static final String WP = "Wikipathways";
+	public static final String WP_MIN = "Wikipathways minimal";
 
-	String name; 
 	// ================================================================================
-	// Available Themes
+	// Instantiate Themes
 	// ================================================================================
-	public static final String WIKIPATHWAYS = "Wikipathways";
-	public static final String WIKIPATHWAYS_MIN = "Wikipathways Minimal";
+	public static final Theme WIKIPATHWAYS = new Theme(WP);
+	public static final Theme WIKIPATHWAYS_MIN = new Theme(WP_MIN);
+	
+	// ================================================================================
+	// Sets: also used in {@link DefaultTemplates}
+	// ================================================================================
+	// cellular component shapes
+	public static final Set<ShapeType> CELL_COMPONENT_SET = new HashSet<>(Arrays.asList(ShapeType.CELL,
+			ShapeType.NUCLEUS, ShapeType.ENDOPLASMIC_RETICULUM, ShapeType.GOLGI_APPARATUS, ShapeType.MITOCHONDRIA,
+			ShapeType.SARCOPLASMIC_RETICULUM, ShapeType.ORGANELLE, ShapeType.VESICLE, ShapeType.EXTRACELLULAR));
+
+	// miscellaneous shapes
+	public static final Set<ShapeType> MISC_SHAPE_SET = new HashSet<>(Arrays.asList(ShapeType.CORONAVIRUS_ICON,
+			ShapeType.DNA_ICON, ShapeType.RNA_ICON, ShapeType.CELL_ICON, ShapeType.MEMBRANE_ICON));
+
+	// ================================================================================
+	// Theme Properties
+	// ================================================================================
+	String name; // the name of the theme
+	String description; // description of the theme
 
 	// ================================================================================
 	// Color-able Fields
@@ -66,23 +88,25 @@ public class Theme {
 	// ================================================================================
 	// Constructors
 	// ================================================================================
-	public Theme(String theme) {
-		this.name = theme;
-		if (theme == WIKIPATHWAYS) {
+	public Theme(String name) {
+		this.name = name;
+		if (name == WP) {
+			description = "WikiPathways theme";
 			colorBackground = ColorPalette.WP_WHITE;
 			colorDefault = ColorPalette.WP_BLACK;
 			colorMetabolite = ColorPalette.WP_BLUE;
-			colorPathway = ColorPalette.WP_GREEN;
+			colorPathway = ColorPalette.WP_DGREEN;
 			colorDataNodeFill = ColorPalette.WP_WHITE;
 			colorLabel = ColorPalette.WP_BLACK;
 			colorShapeFill = ColorPalette.TRANSPARENT;
 			colorShapeGrey = ColorPalette.WP_CUSTOM_PV_MGREY;
 			colorShapeDarkGrey = ColorPalette.WP_DGREY;
-		}else if (theme == WIKIPATHWAYS_MIN) {
+		} else if (name == WP_MIN) {
+			description = "WikiPathways minimal theme (graphical elements grayscale)";
 			colorBackground = ColorPalette.WP_WHITE;
 			colorDefault = ColorPalette.WP_BLACK;
 			colorMetabolite = ColorPalette.WP_BLUE;
-			colorPathway = ColorPalette.WP_GREEN;
+			colorPathway = ColorPalette.WP_DGREEN;
 			colorDataNodeFill = ColorPalette.WP_WHITE;
 			colorLabel = ColorPalette.WP_BLACK;
 			colorShapeFill = ColorPalette.TRANSPARENT;
@@ -90,6 +114,24 @@ public class Theme {
 			colorShapeDarkGrey = ColorPalette.WP_DGREY;
 			colorShapes = true;
 		}
+	}
+
+	// ================================================================================
+	// Accessors
+	// ================================================================================
+
+	/**
+	 * @return
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * @return
+	 */
+	public String getDescription() {
+		return description;
 	}
 
 	// ================================================================================
@@ -142,13 +184,6 @@ public class Theme {
 	// ================================================================================
 	// Color Shapes
 	// ================================================================================
-	public static final Set<ShapeType> CELL_COMPONENT_SET = new HashSet<>(Arrays.asList(ShapeType.CELL,
-			ShapeType.NUCLEUS, ShapeType.ENDOPLASMIC_RETICULUM, ShapeType.GOLGI_APPARATUS, ShapeType.MITOCHONDRIA,
-			ShapeType.SARCOPLASMIC_RETICULUM, ShapeType.ORGANELLE, ShapeType.VESICLE, ShapeType.EXTRACELLULAR));
-
-	// miscellaneous shapes
-	public static final Set<ShapeType> MISC_SHAPE_SET = new HashSet<>(
-			Arrays.asList(ShapeType.CORONAVIRUS_ICON, ShapeType.DNA_ICON, ShapeType.RNA_ICON, ShapeType.CELL_ICON, ShapeType.MEMBRANE_ICON));
 
 	/**
 	 * Sets text, border, and fill color.
@@ -169,7 +204,7 @@ public class Theme {
 			e.setBorderColor(colorDefault);
 		}
 	}
-	
+
 	/**
 	 * TODO
 	 */
