@@ -26,7 +26,6 @@ import org.pathvisio.libgpml.debug.Logger;
 import org.pathvisio.libgpml.debug.WorkerThreadOnly;
 import org.pathvisio.libgpml.model.PathwayObject;
 import org.pathvisio.libgpml.model.Xrefable;
-import org.pathvisio.libgpml.model.type.ObjectType;
 import org.pathvisio.libgpml.util.XrefUtils;
 
 /**

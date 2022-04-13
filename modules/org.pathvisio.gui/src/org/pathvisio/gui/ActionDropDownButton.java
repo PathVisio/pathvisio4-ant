@@ -29,6 +29,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.AffineTransform;
+import java.awt.BasicStroke;
 
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
@@ -50,69 +51,40 @@ import com.mammothsoftware.frwk.ddb.RolloverButton;
  * Actions are added in groups with addButtons. Between groups you can add a
  * heading with addLabel. The action added first will be the initially selected
  * action.
+ * 
+ * Adapted from DropDownButton.java @author m. bangham Copyright 2005 Mammoth
+ * Software LLC
+ * 
+ * @author finterly
  */
 public class ActionDropDownButton extends JButton implements ActionListener {
 
 	private JPopupMenu popup = new JPopupMenu();
 	private JToolBar tb = new ToolBar();
-	private JButton mainButton;
+	private MainButton mainButton;
 	private JButton arrowButton;
 	private boolean directActionEnabled = true;
 	private ActionListener directAction = null;
 
+	// ================================================================================
+	// Constructor and Initiation Methods
+	// ================================================================================
+	/**
+	 * Instantiates a ActionDropDown Button
+	 * 
+	 * @param buttonText the text to set for this button.
+	 */
 	public ActionDropDownButton(String buttonText) {
 		super();
 		this.setBorder(null);
-		mainButton = new MirrorButton(buttonText);
+		mainButton = new MainButton(buttonText);
 		arrowButton = new RolloverButton(new DownArrow(), 11, false);
 		init();
 	}
 
-	public void setToolTipText(String text) {
-		mainButton.setToolTipText(text);
-		arrowButton.setToolTipText(text);
-	}
-
-	public void setEnabled(boolean enabled) {
-		super.setEnabled(enabled);
-		mainButton.setEnabled(enabled);
-		arrowButton.setEnabled(enabled);
-	}
-
-	public void updateUI() {
-		super.updateUI();
-		setBorder(null);
-	}
-
-	protected Border getRolloverBorder() {
-		return BorderFactory.createRaisedBevelBorder();
-	}
-
-	private void initRolloverListener() {
-		MouseListener l = new MouseAdapter() {
-			Border mainBorder = null;
-			Border arrowBorder = null;
-
-			public void mouseEntered(MouseEvent e) {
-				mainBorder = mainButton.getBorder();
-				arrowBorder = mainButton.getBorder();
-				mainButton.setBorder(new CompoundBorder(getRolloverBorder(), mainBorder));
-				arrowButton.setBorder(new CompoundBorder(getRolloverBorder(), arrowBorder));
-				mainButton.getModel().setRollover(true);
-				arrowButton.getModel().setRollover(true);
-			}
-
-			public void mouseExited(MouseEvent e) {
-				mainButton.setBorder(mainBorder);
-				arrowButton.setBorder(arrowBorder);
-				mainButton.getModel().setRollover(false);
-				arrowButton.getModel().setRollover(false);
-			}
-		};
-		mainButton.addMouseListener(l);
-		arrowButton.addMouseListener(l);
-	}
-
+	/**
+	 * Initiates this button.
+	 */
 	private void init() {
 		initRolloverListener();
 
@@ -140,13 +112,15 @@ public class ActionDropDownButton extends JButton implements ActionListener {
 		add(tb);
 
 		setFixedSize(mainButton, arrowButton);
-
 	}
 
-	/*
+	/**
 	 * Forces the width of this button to be the sum of the widths of the main
 	 * button and the arrow button. The height is the max of the main button or the
 	 * arrow button.
+	 * 
+	 * @param mainButton  the main button (left).
+	 * @param arrowButton the arrow drop down button (right).
 	 */
 	private void setFixedSize(JButton mainButton, JButton arrowButton) {
 		int width = (int) (mainButton.getPreferredSize().getWidth() + arrowButton.getPreferredSize().getWidth());
@@ -155,7 +129,44 @@ public class ActionDropDownButton extends JButton implements ActionListener {
 		setMaximumSize(new Dimension(width, height));
 		setMinimumSize(new Dimension(width, height));
 		setPreferredSize(new Dimension(width, height));
+	}
 
+	// ================================================================================
+	// Accessors
+	// ================================================================================
+	/**
+	 * Returns the main button of this drop down button.
+	 * 
+	 * @return mainButton the main button.
+	 */
+	protected MainButton getMainButton() {
+		return mainButton;
+	}
+
+	/**
+	 * Returns the popup menu.
+	 * 
+	 * @return popup
+	 */
+	public JPopupMenu getPopupMenu() {
+		return popup;
+	}
+
+	/**
+	 * Sets the icon for the main button (left part) only.
+	 */
+	@Override
+	public void setIcon(Icon icon) {
+		mainButton.setIcon(icon);
+	}
+
+	/**
+	 * Returns the border for this button.
+	 * 
+	 * @return the raise bevel border.
+	 */
+	protected Border getRolloverBorder() {
+		return BorderFactory.createRaisedBevelBorder();
 	}
 
 	/**
@@ -178,6 +189,68 @@ public class ActionDropDownButton extends JButton implements ActionListener {
 	}
 
 	/**
+	 * Sets tool tip text.
+	 */
+	@Override
+	public void setToolTipText(String text) {
+		mainButton.setToolTipText(text);
+		arrowButton.setToolTipText(text);
+	}
+
+	/**
+	 * Sets enabled boolean.
+	 */
+	@Override
+	public void setEnabled(boolean enabled) {
+		super.setEnabled(enabled);
+		mainButton.setEnabled(enabled);
+		arrowButton.setEnabled(enabled);
+	}
+
+	/**
+	 * Updates UI.
+	 */
+	@Override
+	public void updateUI() {
+		super.updateUI();
+		setBorder(null);
+	}
+
+	// ================================================================================
+	// Listener Methods
+	// ================================================================================
+	/**
+	 * Initiates rollover listener.
+	 */
+	private void initRolloverListener() {
+		MouseListener l = new MouseAdapter() {
+			Border mainBorder = null;
+			Border arrowBorder = null;
+
+			public void mouseEntered(MouseEvent e) {
+				mainBorder = mainButton.getBorder();
+				arrowBorder = mainButton.getBorder();
+				mainButton.setBorder(new CompoundBorder(getRolloverBorder(), mainBorder));
+				arrowButton.setBorder(new CompoundBorder(getRolloverBorder(), arrowBorder));
+				mainButton.getModel().setRollover(true);
+				arrowButton.getModel().setRollover(true);
+			}
+
+			public void mouseExited(MouseEvent e) {
+				mainButton.setBorder(mainBorder);
+				arrowButton.setBorder(arrowBorder);
+				mainButton.getModel().setRollover(false);
+				arrowButton.getModel().setRollover(false);
+			}
+		};
+		mainButton.addMouseListener(l);
+		arrowButton.addMouseListener(l);
+	}
+
+	// ================================================================================
+	// Action Methods
+	// ================================================================================
+	/**
 	 * If true, the direct action will be executed when the left button is clicked.
 	 * If false, both the left and the right part of the button work the same way
 	 * 
@@ -187,6 +260,12 @@ public class ActionDropDownButton extends JButton implements ActionListener {
 		this.directActionEnabled = value;
 	}
 
+	/**
+	 * Performs action
+	 *
+	 * @param ae the action event.
+	 */
+	@Override
 	public void actionPerformed(ActionEvent ae) {
 		// if the directAction behaviour is enabled, and a directAction is set, and
 		// the source of the event is the left part,
@@ -200,10 +279,6 @@ public class ActionDropDownButton extends JButton implements ActionListener {
 		}
 	}
 
-	public JPopupMenu getPopupMenu() {
-		return popup;
-	}
-
 	/**
 	 * Sets the Action that will be executed when the main part of the dropdown
 	 * button is clicked. This value is only used if set
@@ -215,12 +290,9 @@ public class ActionDropDownButton extends JButton implements ActionListener {
 		directAction = defaultAction;
 	}
 
-	@Override
-	/** sets the icon for the left part only */
-	public void setIcon(Icon icon) {
-		mainButton.setIcon(icon);
-	}
-
+	// ================================================================================
+	// DownArrow Icon Class
+	// ================================================================================
 	/**
 	 * Down arrow icon.
 	 */
@@ -228,6 +300,10 @@ public class ActionDropDownButton extends JButton implements ActionListener {
 
 		Color arrowColor = Color.black;
 
+		/**
+		 * Paints this icon.
+		 */
+		@Override
 		public void paintIcon(Component c, Graphics g, int x, int y) {
 			g.setColor(arrowColor);
 			g.drawLine(x, y, x + 4, y);
@@ -235,25 +311,42 @@ public class ActionDropDownButton extends JButton implements ActionListener {
 			g.drawLine(x + 2, y + 2, x + 2, y + 2);
 		}
 
+		/**
+		 * Returns icon width.
+		 */
+		@Override
 		public int getIconWidth() {
 			return 6;
 		}
 
+		/**
+		 * Returns icon height.
+		 */
+		@Override
 		public int getIconHeight() {
 			return 4;
 		}
-
 	}
 
+	// ================================================================================
+	// Disabled DownArrow Icon Class
+	// ================================================================================
 	/**
 	 * Disabled down arrow icon.
 	 */
 	private static class DisabledDownArrow extends DownArrow {
 
+		/**
+		 * Constructor for disabled down arrow icon.
+		 */
 		public DisabledDownArrow() {
 			arrowColor = new Color(140, 140, 140);
 		}
 
+		/**
+		 * Paints this icon.
+		 */
+		@Override
 		public void paintIcon(Component c, Graphics g, int x, int y) {
 			super.paintIcon(c, g, x, y);
 			g.setColor(Color.WHITE);
@@ -262,36 +355,60 @@ public class ActionDropDownButton extends JButton implements ActionListener {
 		}
 	}
 
+	// ================================================================================
+	// ToolBar Class
+	// ================================================================================
 	/**
-	 * Updates UI
+	 * ToolBar.
 	 */
 	private static class ToolBar extends JToolBar {
+
+		/**
+		 * Updates UI.
+		 */
+		@Override
 		public void updateUI() {
 			super.updateUI();
 			setBorder(null);
 		}
 	}
 
-	protected JButton getMainButton() {
-		return mainButton;
-	}
-
-	public class MirrorButton extends JButton {
+	// ================================================================================
+	// MainButton Class
+	// ================================================================================
+	/**
+	 * The MainButton of the drop down button. The mainButton stores properties
+	 * shape, color, and stroke. This button class allows the main button to mirror
+	 * the appearance of a corresponding ImageTextButton.
+	 * 
+	 * NB: used by {@link GraphicsChoiceButton}.
+	 * 
+	 * @author finterly
+	 */
+	public class MainButton extends JButton {
 
 		private Shape imageShape;
 		private Color imageColor;
+		private BasicStroke imageStroke;
 
-		public MirrorButton(String text) {
+		public MainButton(String text) {
 			super();
 			this.setText(text);
 		}
 
-		protected void setImageShape(Shape shape) {
+		/**
+		 * Updates the paint properties of this button.
+		 * 
+		 * @param text   the text of this button.
+		 * @param shape  the shape to be painted on button.
+		 * @param color  the paint color.
+		 * @param stroke the paint stroke.
+		 */
+		protected void updateButton(String text, Shape shape, Color color, BasicStroke stroke) {
+			this.setText(text);
 			this.imageShape = shape;
-		}
-
-		protected void setImageColor(Color color) {
 			this.imageColor = color;
+			this.imageStroke = stroke;
 		}
 
 		/**
@@ -301,12 +418,11 @@ public class ActionDropDownButton extends JButton implements ActionListener {
 		protected void paintComponent(Graphics g) {
 			super.paintComponent(g);
 			Graphics2D g2 = (Graphics2D) g.create();
-//			if (this.getAction().toString() == "Undefined") {
-//				g2.setStroke(
-//						new BasicStroke(1, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 10, new float[] { 4, 4 }, 0));
-//			}
 			this.setForeground(imageColor);
 			g2.setPaint(imageColor);
+			if (imageStroke != null) {
+				g2.setStroke(imageStroke);
+			}
 			AffineTransform at = new AffineTransform();
 			at.translate(0, -4);
 			Shape shapeToDraw = at.createTransformedShape(imageShape);

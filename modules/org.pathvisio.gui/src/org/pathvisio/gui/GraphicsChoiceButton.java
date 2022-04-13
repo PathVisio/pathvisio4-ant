@@ -16,20 +16,13 @@
  ******************************************************************************/
 package org.pathvisio.gui;
 
-import com.mammothsoftware.frwk.ddb.DropDownButton;
-
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Shape;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.geom.RoundRectangle2D;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,7 +34,7 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 
 /**
- * Toggle drop-down button, intended to be used in the PathVisio toolbar.
+ * Toggle drop-down button for Actions, added as a panel of graphic buttons.
  * <p>
  * This button consists of a regular icon button on the left, and a drop-down
  * arrow on the right. When the drop-down arrow is clicked, a popup menu is
@@ -53,10 +46,9 @@ import javax.swing.JPopupMenu;
  */
 public class GraphicsChoiceButton extends ActionDropDownButton {
 
-	String buttonText;
-	Shape imageShape = new RoundRectangle2D.Double(4, 6, 24, 20, 8, 8);
-	Color imageColor;
-
+	/**
+	 * Instantiates a GraphicsChoiceButton Button
+	 */
 	public GraphicsChoiceButton() {
 		// set icon to null for now, we'll use the icon
 		// from the first action added with addButtons
@@ -66,7 +58,7 @@ public class GraphicsChoiceButton extends ActionDropDownButton {
 	private int numItemPerRow = 6;
 
 	/**
-	 * Set the number of actions per row in the pop-up. Default is 6.
+	 * Sets the number of actions per row in the pop-up. Default is 6.
 	 */
 	public void setNumItemsPerRow(int value) {
 		numItemPerRow = value;
@@ -76,8 +68,10 @@ public class GraphicsChoiceButton extends ActionDropDownButton {
 	private boolean noIconSet = true;
 
 	/**
-	 * Add a group of actions, which will be displayed in the pop-up. This can be
+	 * Adds a group of actions, which will be displayed in the pop-up. This can be
 	 * invoked multiple times.
+	 * 
+	 * @param aa the array of actions.
 	 */
 	public void addButtons(Action[] aa, String label) {
 		JPanel pane = new JPanel();
@@ -110,15 +104,12 @@ public class GraphicsChoiceButton extends ActionDropDownButton {
 					if (icon != null) {
 						setIcon(icon);
 						setDirectAction(a);
-						getMainButton().setText(null);
-						((MirrorButton) getMainButton()).setImageShape(null);
-						((MirrorButton) getMainButton()).setImageColor(Color.BLACK);
+						getMainButton().updateButton(null, null, Color.BLACK, null);
 					} else {
 						setIcon(null);
 						ImageTextButton b = aToB.get(a);
-						getMainButton().setText(b.getText());
-						((MirrorButton) getMainButton()).setImageShape(b.getImageShape());
-						((MirrorButton) getMainButton()).setImageColor(b.getImageColor());
+						getMainButton().updateButton(b.getText(), b.getImageShape(), b.getImageColor(),
+								b.getImageStroke());
 					}
 				}
 			});
@@ -139,19 +130,17 @@ public class GraphicsChoiceButton extends ActionDropDownButton {
 
 		addComponent(pane);
 
+		// sets initial main button
 		if (noIconSet) {
 			Action firstAction = aa[0];
 			Icon icon = (Icon) firstAction.getValue(Action.SMALL_ICON);
 			if (icon != null) {
 				setIcon(icon);
-				getMainButton().setText(null);
-				((MirrorButton) getMainButton()).setImageShape(null);
-				((MirrorButton) getMainButton()).setImageColor(Color.BLACK);
+				getMainButton().updateButton(null, null, Color.BLACK, null);
+
 			} else {
 				ImageTextButton b = aToB.get(firstAction);
-				getMainButton().setText(b.getText());
-				((MirrorButton) getMainButton()).setImageShape(b.getImageShape());
-				((MirrorButton) getMainButton()).setImageColor(b.getImageColor());
+				getMainButton().updateButton(b.getText(), b.getImageShape(), b.getImageColor(), b.getImageStroke());
 			}
 			setDirectActionEnabled(true);
 			setDirectAction(firstAction);
@@ -162,7 +151,9 @@ public class GraphicsChoiceButton extends ActionDropDownButton {
 	}
 
 	/**
-	 * add section label to the drop-down menu
+	 * Adds section label to the drop-down menu.
+	 * 
+	 * @param s the string for the label.
 	 */
 	public void addLabel(String s) {
 		JLabel title = new JLabel(s);
@@ -175,7 +166,10 @@ public class GraphicsChoiceButton extends ActionDropDownButton {
 	}
 
 	/**
-	 * add item buttons and section label to the drop-down menu
+	 * Adds item buttons and section label to the drop-down menu.
+	 * 
+	 * @param label the string for the label.
+	 * @param aa    the array of actions.
 	 */
 	public void addButtons(String label, Action[] aa) {
 		addLabel(label);

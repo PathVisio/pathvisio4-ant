@@ -18,49 +18,46 @@ package org.pathvisio.gui;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.Action;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 
-import org.pathvisio.core.util.Resources;
-
-import com.mammothsoftware.frwk.ddb.DropDownButton;
-
 /**
- * Toggle drop-down button, intended to be used in the PathVisio toolbar.
+ * Toggle drop-down button for Actions, added as a vertical list of buttons.
  * <p>
  * This button consists of a regular icon button on the left, and a drop-down
  * arrow on the right. When the drop-down arrow is clicked, a popup menu is
  * shown from which you can choose from a list of possible actions.
  * <p>
- * Actions are added in groups with addButtons. Between groups you can add a
- * heading with addLabel. The action added first will be the initially selected
- * action.
+ * 
+ * @author finterly
  */
-public class ActionChoiceButton extends ActionDropDownButton {
+public class TextChoiceButton extends ActionDropDownButton {
 
-	int buttonWidth;
+	int buttonWidth; // width of button choices (popup menu)
 
-	public ActionChoiceButton(String buttonText, int buttonWidth) {
+	/**
+	 * Instantiates a TextChoice Button
+	 * 
+	 * @param buttonText  the text of the main button.
+	 * @param buttonWidth the width of button choices (popup menu)
+	 */
+	public TextChoiceButton(String buttonText, int buttonWidth) {
 		super(buttonText);
 		this.buttonWidth = buttonWidth;
 	}
 
 	/**
-	 * Add a group of actions, which will be displayed in the pop-up. This can be
-	 * invoked multiple times.
+	 * Adds a group of actions, which will be displayed in the pop-up as a vertical
+	 * list. This can be invoked multiple times.
+	 * 
+	 * @param aa the array of actions.
 	 */
 	public void addButtons(Action[] aa) {
 		JPanel pane = new JPanel();
@@ -92,29 +89,6 @@ public class ActionChoiceButton extends ActionDropDownButton {
 		}
 		addComponent(pane);
 		setDirectActionEnabled(false);
-	}
-
-	/**
-	 * add section label to the drop-down menu
-	 */
-	public void addLabel(String s) {
-		JLabel title = new JLabel(s);
-		title.setForeground(new Color(50, 21, 110));// UI design
-		title.setFont(new Font("sanserif", Font.BOLD, 11)); // UI design
-		JPanel titlePanel = new JPanel();
-		titlePanel.setBackground(new Color(221, 231, 238)); // UI design
-		titlePanel.add(title);
-		addComponent(titlePanel);
-	}
-
-	/**
-	 * add item buttons and section label to the drop-down menu
-	 */
-	public void addButtons(String label, Action[] aa) {
-		if (label != null) {
-			addLabel(label);
-		}
-		addButtons(aa);
 	}
 
 }

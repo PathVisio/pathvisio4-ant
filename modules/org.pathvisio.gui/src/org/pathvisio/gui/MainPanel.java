@@ -381,9 +381,9 @@ public class MainPanel extends JPanel implements VPathwayModelListener, Applicat
 		addToToolbar(actions.layoutActions);
 
 		// define the drop-down menu for themes
-		ActionChoiceButton themeButton = new ActionChoiceButton("Theme", 150);
+		TextChoiceButton themeButton = new TextChoiceButton("Theme", 150);
 		themeButton.setToolTipText("Select a theme to apply");
-		themeButton.addButtons(null, actions.applyThemeActions);
+		themeButton.addButtons(actions.applyThemeActions);
 		addToToolbar(themeButton, TB_GROUP_SHOW_IF_EDITMODE);
 		tb.addSeparator();
 
