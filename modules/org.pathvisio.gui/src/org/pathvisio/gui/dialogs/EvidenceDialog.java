@@ -64,8 +64,8 @@ public class EvidenceDialog extends OkCancelDialog {
 	private final static String QUERY = "Query PubMed"; // TODO button
 	private final static String VALUE = "Value";
 	private final static String XREF_IDENTIFIER = "Identifier *";
-	private final static String XREF_DATASOURCE = "DataSource *";
-	private final static String URL_LINK = "Url";
+	private final static String XREF_DATASOURCE = "Database *";
+	private final static String URL_LINK = "Url link";
 
 	// fields
 	private JTextField valueText;
@@ -125,7 +125,7 @@ public class EvidenceDialog extends OkCancelDialog {
 			setText(id, xrefIdentifier);
 			DataSource ds = XrefUtils.getDataSource(evidenceRef.getEvidence().getXref());
 			setText(ds.getCompactIdentifierPrefix(), xrefDataSource);
-			// sets value
+			// sets urlLink
 			urlLinkText.setText(evidenceRef.getEvidence().getUrlLink());
 			urlLinkText.setFont(new Font("Tahoma", Font.PLAIN, 10));// UI Design
 		}
@@ -136,25 +136,31 @@ public class EvidenceDialog extends OkCancelDialog {
 	 */
 	protected void okPressed() {
 		// old information
+		String oldValue = null;
 		String oldIdentifier = null;
 		DataSource oldDataSource = null;
+		String oldUrlLink = null;
 		if (evidenceRef != null) {
+			oldValue = evidenceRef.getEvidence().getValue();
 			oldIdentifier = evidenceRef.getEvidence().getXref().getId();
 			oldDataSource = evidenceRef.getEvidence().getXref().getDataSource();
+			oldUrlLink = evidenceRef.getEvidence().getUrlLink();
 		}
 		// new information
+		String newValue = valueText.getText();
 		String newIdentifier = xrefIdentifier.getText().trim();
 		String newDataSourceStr = xrefDataSource.getText();
 		DataSource newDataSource = XrefUtils.getXrefDataSource(newDataSourceStr);
+		String newUrlLink = urlLinkText.getText();
 		// if changed
-		if (oldIdentifier != newIdentifier || oldDataSource != newDataSource) {
-			Xref xref = new Xref(newIdentifier, newDataSource);
-			if (xref != null) {
-				// if evidenceRef exists, removed first
-				if (evidenceRef != null) {
+		if (oldValue != newValue || oldIdentifier != newIdentifier || oldDataSource != newDataSource
+				|| oldUrlLink != newUrlLink) {
+			Xref newXref = new Xref(newIdentifier, newDataSource);
+			if (newXref != null) { // xref required
+				if (evidenceRef != null) { // if evidenceRef exists, removed first
 					evidenceable.removeEvidenceRef(evidenceRef);
 				}
-//				evidenceable.addEvidence(xref, null); // TODO urlLink empty
+				evidenceable.addEvidence(newValue, newXref, newUrlLink);
 			}
 		}
 		super.okPressed();

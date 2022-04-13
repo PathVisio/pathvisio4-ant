@@ -18,14 +18,17 @@ package org.pathvisio.gui.dialogs;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Font;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -69,11 +72,14 @@ public class CitationDialog extends OkCancelDialog {
 //	final static String REMOVE = "Remove";
 	private final static String QUERY = "Query PubMed"; // button
 	private final static String XREF_IDENTIFIER = "Identifier *";
-	private final static String XREF_DATASOURCE = "DataSource *";
+	private final static String XREF_DATASOURCE = "Database *";
+	private final static String INSTRUCTION = "Database:Id And/Or Url link required ";
+	private final static String URL_LINK = "Url link*";
 
 	// fields
 	private JTextField xrefIdentifier;
 	private JTextField xrefDataSource;
+	private JTextField urlLinkText;
 
 	private Citable citable;
 	private CitationRef citationRef;
@@ -119,10 +125,13 @@ public class CitationDialog extends OkCancelDialog {
 	 */
 	protected void refresh() {
 		if (citationRef != null) {
+			// sets xref
 			String id = XrefUtils.getIdentifier(citationRef.getCitation().getXref());
 			setText(id, xrefIdentifier);
 			DataSource ds = XrefUtils.getDataSource(citationRef.getCitation().getXref());
 			setText(ds.getCompactIdentifierPrefix(), xrefDataSource);
+			// sets urlLink
+			setText(citationRef.getCitation().getUrlLink(), urlLinkText);
 		}
 	}
 
@@ -133,23 +142,25 @@ public class CitationDialog extends OkCancelDialog {
 		// old information
 		String oldIdentifier = null;
 		DataSource oldDataSource = null;
+		String oldUrlLink = null;
 		if (citationRef != null) {
 			oldIdentifier = citationRef.getCitation().getXref().getId();
 			oldDataSource = citationRef.getCitation().getXref().getDataSource();
+			oldUrlLink = citationRef.getCitation().getUrlLink();
 		}
 		// new information
 		String newIdentifier = xrefIdentifier.getText().trim();
 		String newDataSourceStr = xrefDataSource.getText();
 		DataSource newDataSource = XrefUtils.getXrefDataSource(newDataSourceStr);
+		String newUrlLink = urlLinkText.getText();
 		// if changed
-		if (oldIdentifier != newIdentifier || oldDataSource != newDataSource) {
-			Xref xref = new Xref(newIdentifier, newDataSource);
-			if (xref != null) {
-				// if citationRef exists, removed first
-				if (citationRef != null) {
+		if (oldIdentifier != newIdentifier || oldDataSource != newDataSource || oldUrlLink != newUrlLink) {
+			Xref newXref = new Xref(newIdentifier, newDataSource);
+			if (newXref != null || newUrlLink != null) { // xref or urlLink required
+				if (citationRef != null) {// if citationRef exists, remove first
 					citable.removeCitationRef(citationRef);
 				}
-				citable.addCitation(xref, null); // TODO urlLink empty
+				citable.addCitation(newXref, newUrlLink);
 			}
 		}
 		super.okPressed();
@@ -200,12 +211,23 @@ public class CitationDialog extends OkCancelDialog {
 	protected Component createDialogPane() {
 		JPanel contents = new JPanel();
 		contents.setLayout(new GridBagLayout());
+		JPanel xrefPanel = new JPanel();
+		JPanel urlPanel = new JPanel();
+//		xrefPanel.setBorder(BorderFactory.createTitledBorder(TEXTLABEL));
+//		urlPanel.setBorder(BorderFactory.createTitledBorder(HREF));
+		GridBagConstraints pc = new GridBagConstraints();
+		pc.fill = GridBagConstraints.BOTH;
+		pc.gridx = 0;
+		pc.weightx = 1;
+		pc.weighty = 1;
+		pc.insets = new Insets(2, 2, 2, 2);
+		pc.gridy = GridBagConstraints.RELATIVE;
+		contents.add(xrefPanel, pc);
+		pc.fill = GridBagConstraints.CENTER;
+		contents.add(new JLabel(INSTRUCTION), pc);
+		pc.fill = GridBagConstraints.BOTH;
+		contents.add(urlPanel, pc);
 
-		JLabel lblXrefIdentifier = new JLabel(XREF_IDENTIFIER);
-		JLabel lblXrefDataSource = new JLabel(XREF_DATASOURCE);
-
-		xrefIdentifier = new JTextField();
-		xrefDataSource = new JTextField();
 		final DefaultStyledDocument doc = new DefaultStyledDocument();
 		doc.setDocumentFilter(new DocumentFilter() {
 			public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr)
@@ -230,30 +252,51 @@ public class CitationDialog extends OkCancelDialog {
 
 		});
 
+		// ========================================
+		// Xref Panel
+		// ========================================
+		JLabel lblXrefIdentifier = new JLabel(XREF_IDENTIFIER);
+		JLabel lblXrefDataSource = new JLabel(XREF_DATASOURCE);
+		xrefIdentifier = new JTextField();
+		xrefDataSource = new JTextField();
 		JButton query = new JButton(QUERY);
 		query.addActionListener(this);
 		query.setToolTipText("Query publication information from PubMed");
 
-		GridBagConstraints c = new GridBagConstraints();
-		c.ipadx = c.ipady = 5;
-		c.anchor = GridBagConstraints.FIRST_LINE_START;
-		c.gridx = 0;
-		c.gridy = GridBagConstraints.RELATIVE;
-		c.weightx = 0;
-		contents.add(lblXrefIdentifier, c);
-		contents.add(lblXrefDataSource, c);
+		xrefPanel.setLayout(new GridBagLayout());
+		GridBagConstraints xc = new GridBagConstraints();
+		xc.anchor = GridBagConstraints.FIRST_LINE_START;
+		xc.gridx = 0;
+		xc.gridy = GridBagConstraints.RELATIVE;
+		xc.weightx = 0;
+		xrefPanel.add(lblXrefIdentifier, xc);
+		xrefPanel.add(lblXrefDataSource, xc);
+		xc.gridx = 1;
+		xc.fill = GridBagConstraints.HORIZONTAL;
+		xc.weightx = 1;
+		xrefPanel.add(xrefIdentifier, xc);
+		xrefPanel.add(xrefDataSource, xc);
+		xc.gridx = 2;
+		xc.fill = GridBagConstraints.NONE;
+		xrefPanel.add(query);
 
-		c.gridx = 1;
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.weightx = 1;
-		contents.add(xrefIdentifier, c);
-		contents.add(xrefDataSource, c);
-		c.fill = GridBagConstraints.BOTH;
-		c.weighty = 1;
+		// ========================================
+		// UrlLink Panel
+		// ========================================
+		JLabel lblUrlLink = new JLabel(URL_LINK);
+		urlLinkText = new JTextField();
 
-		c.gridx = 2;
-		c.fill = GridBagConstraints.NONE;
-		contents.add(query);
+		urlPanel.setLayout(new GridBagLayout());
+		GridBagConstraints uc = new GridBagConstraints();
+		uc.anchor = GridBagConstraints.FIRST_LINE_START;
+		uc.gridx = 0;
+		uc.gridy = GridBagConstraints.RELATIVE;
+		uc.weightx = 0;
+		urlPanel.add(lblUrlLink, uc);
+		uc.gridx = 1;
+		uc.fill = GridBagConstraints.HORIZONTAL;
+		uc.weightx = 1;
+		urlPanel.add(urlLinkText, uc);
 
 		return contents;
 	}

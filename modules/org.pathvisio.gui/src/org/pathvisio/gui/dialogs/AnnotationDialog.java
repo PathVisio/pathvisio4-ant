@@ -74,8 +74,8 @@ public class AnnotationDialog extends OkCancelDialog {
 	private final static String VALUE = "Value *";
 	private final static String TYPE = "Type *";
 	private final static String XREF_IDENTIFIER = "Identifier";
-	private final static String XREF_DATASOURCE = "DataSource";
-	private final static String URL_LINK = "Url";
+	private final static String XREF_DATASOURCE = "Database";
+	private final static String URL_LINK = "Url link";
 
 	// fields
 	private JTextField valueText;
@@ -139,9 +139,8 @@ public class AnnotationDialog extends OkCancelDialog {
 			setText(id, xrefIdentifier);
 			DataSource ds = XrefUtils.getDataSource(annotationRef.getAnnotation().getXref());
 			setText(ds.getCompactIdentifierPrefix(), xrefDataSource);
-			// sets value
+			// sets urlLink
 			urlLinkText.setText(annotationRef.getAnnotation().getUrlLink());
-			urlLinkText.setFont(new Font("Tahoma", Font.PLAIN, 10));// UI Design
 		}
 	}
 
@@ -150,25 +149,34 @@ public class AnnotationDialog extends OkCancelDialog {
 	 */
 	protected void okPressed() {
 		// old information
+		String oldValue = null;
+		AnnotationType oldType = null;
 		String oldIdentifier = null;
 		DataSource oldDataSource = null;
+		String oldUrlLink = null;
 		if (annotationRef != null) {
+			oldValue = annotationRef.getAnnotation().getValue();
+			oldType = annotationRef.getAnnotation().getType();
 			oldIdentifier = annotationRef.getAnnotation().getXref().getId();
 			oldDataSource = annotationRef.getAnnotation().getXref().getDataSource();
+			oldUrlLink = annotationRef.getAnnotation().getUrlLink();
 		}
 		// new information
+		String newValue = valueText.getText();
+		AnnotationType newType = (AnnotationType) typeCombo.getSelectedItem();
 		String newIdentifier = xrefIdentifier.getText().trim();
 		String newDataSourceStr = xrefDataSource.getText();
 		DataSource newDataSource = XrefUtils.getXrefDataSource(newDataSourceStr);
+		String newUrlLink = urlLinkText.getText();
 		// if changed
-		if (oldIdentifier != newIdentifier || oldDataSource != newDataSource) {
-			Xref xref = new Xref(newIdentifier, newDataSource);
-			if (xref != null) {
-				// if annotationRef exists, removed first
-				if (annotationRef != null) {
+		if (oldValue != newValue || oldType != newType || oldIdentifier != newIdentifier
+				|| oldDataSource != newDataSource || oldUrlLink != newUrlLink) {
+			Xref newXref = new Xref(newIdentifier, newDataSource);
+			if (newValue != null && newType != null) { // value and type required
+				if (annotationRef != null) {// if annotationRef exists, removed first
 					annotatable.removeAnnotationRef(annotationRef);
 				}
-//				annotatable.addAnnotation(xref, null); // TODO urlLink empty
+				annotatable.addAnnotation(newValue, newType, newXref, newUrlLink);
 			}
 		}
 		super.okPressed();
