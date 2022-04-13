@@ -55,7 +55,7 @@ import org.pathvisio.gui.dialogs.EvidenceDialog;
  * @author unknown
  */
 public class EvidencePanel extends PathwayElementPanel implements ActionListener {
-	
+
 	private static final String ADD = "New evidence";
 	private static final String REMOVE = "Remove";
 	private static final String EDIT = "Edit";
@@ -109,12 +109,10 @@ public class EvidencePanel extends PathwayElementPanel implements ActionListener
 	 * Refresh.
 	 */
 	public void refresh() {
-		if (refPanel != null)
+		if (refPanel != null) {
 			remove(refPanel);
-
-		// TODO
+		}
 		evidenceRefs = getInput().getEvidenceRefs();
-
 		DefaultFormBuilder b = new DefaultFormBuilder(new FormLayout("fill:pref:grow"));
 		for (EvidenceRef evidenceRef : evidenceRefs) {
 			b.append(new EvidenceRefPanel(evidenceRef));
@@ -126,19 +124,6 @@ public class EvidencePanel extends PathwayElementPanel implements ActionListener
 		add(refPanel, BorderLayout.CENTER);
 		validate();
 	}
-
-//	/**
-//	 * Sets the current pathway element.
-//	 * 
-//	 * @param e
-//	 */
-//	public void setInput(PathwayElement e) {
-////		if (e != getInput()) { //TODO 
-////			elmMgr = e.getParent().getBiopaxElementManager();
-////			refMgr = e.getBiopaxReferenceManager();
-////		}
-//		super.setInput(e);
-//	}
 
 	/**
 	 * Panel which displays EvidenceRef

@@ -55,7 +55,7 @@ import org.pathvisio.gui.dialogs.AnnotationDialog;
  * @author unknown
  */
 public class AnnotationPanel extends PathwayElementPanel implements ActionListener {
-	
+
 	private static final String ADD = "New annotation";
 	private static final String REMOVE = "Remove";
 	private static final String EDIT = "Edit";
@@ -109,12 +109,10 @@ public class AnnotationPanel extends PathwayElementPanel implements ActionListen
 	 * Refresh.
 	 */
 	public void refresh() {
-		if (refPanel != null)
+		if (refPanel != null) {
 			remove(refPanel);
-
-		// TODO
+		}
 		annotationRefs = getInput().getAnnotationRefs();
-
 		DefaultFormBuilder b = new DefaultFormBuilder(new FormLayout("fill:pref:grow"));
 		for (AnnotationRef annotationRef : annotationRefs) {
 			b.append(new AnnotationRefPanel(annotationRef));
@@ -126,7 +124,6 @@ public class AnnotationPanel extends PathwayElementPanel implements ActionListen
 		add(refPanel, BorderLayout.CENTER);
 		validate();
 	}
-
 
 	/**
 	 * Panel which displays AnnotationRef

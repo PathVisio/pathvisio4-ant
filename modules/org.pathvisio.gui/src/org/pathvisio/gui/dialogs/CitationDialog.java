@@ -139,31 +139,51 @@ public class CitationDialog extends OkCancelDialog {
 	 * When "Ok" button is pressed. The citationRef is created or updated.
 	 */
 	protected void okPressed() {
+		boolean done = true;
 		// old information
-		String oldIdentifier = null;
-		DataSource oldDataSource = null;
-		String oldUrlLink = null;
+		String oldId = null;
+		DataSource oldDs = null;
+		String oldUrl = null;
 		if (citationRef != null) {
-			oldIdentifier = citationRef.getCitation().getXref().getId();
-			oldDataSource = citationRef.getCitation().getXref().getDataSource();
-			oldUrlLink = citationRef.getCitation().getUrlLink();
+			oldId = citationRef.getCitation().getXref().getId();
+			oldDs = citationRef.getCitation().getXref().getDataSource();
+			oldUrl = citationRef.getCitation().getUrlLink();
 		}
 		// new information
-		String newIdentifier = xrefIdentifier.getText().trim();
-		String newDataSourceStr = xrefDataSource.getText();
-		DataSource newDataSource = XrefUtils.getXrefDataSource(newDataSourceStr);
-		String newUrlLink = urlLinkText.getText();
-		// if changed
-		if (oldIdentifier != newIdentifier || oldDataSource != newDataSource || oldUrlLink != newUrlLink) {
-			Xref newXref = new Xref(newIdentifier, newDataSource);
-			if (newXref != null || newUrlLink != null) { // xref or urlLink required
-				if (citationRef != null) {// if citationRef exists, remove first
+		String newId = xrefIdentifier.getText().trim();
+		DataSource newDs= XrefUtils.getXrefDataSource(xrefDataSource.getText());
+		String newUrl = urlLinkText.getText();
+		// checks requirements
+		if (newUrl.equals("") && (newId.equals("") && newDs == null)) {
+			done = false;
+			JOptionPane.showMessageDialog(this,
+					"A citation requires a valid Database:id and/or Url link.\n Please input more information.", "Error",
+					JOptionPane.ERROR_MESSAGE);
+		}
+		if (!newId.equals("") && newDs == null) {
+			done = false;
+			JOptionPane.showMessageDialog(this,
+					"This citation has an identifier but no database.\n Please specify a database system.", "Error",
+					JOptionPane.ERROR_MESSAGE);
+		} else if (newId.equals("") && newDs != null) {
+			done = false;
+			JOptionPane.showMessageDialog(this,
+					"This citation has a database but no identifier.\n Please specify an identifier.", "Error",
+					JOptionPane.ERROR_MESSAGE);
+		}
+		// update
+		if (oldId != newId || oldDs != newDs || oldUrl != newUrl) {
+			Xref newXref = new Xref(newId, newDs);
+			if (newXref != null || newUrl != null) { 
+				if (citationRef != null) {// removed/replaces old citationRef
 					citable.removeCitationRef(citationRef);
 				}
-				citable.addCitation(newXref, newUrlLink);
+				citable.addCitation(newXref, newUrl);
 			}
 		}
-		super.okPressed();
+		if (done) { // TODO
+			super.okPressed();
+		}
 	}
 
 	/**

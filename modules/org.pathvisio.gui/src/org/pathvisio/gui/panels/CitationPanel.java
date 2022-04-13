@@ -56,7 +56,7 @@ import org.pathvisio.gui.dialogs.CitationDialog;
  * @author unknown
  */
 public class CitationPanel extends PathwayElementPanel implements ActionListener {
-	
+
 	private static final String ADD = "New citation";
 	private static final String REMOVE = "Remove";
 	private static final String EDIT = "Edit";
@@ -110,12 +110,10 @@ public class CitationPanel extends PathwayElementPanel implements ActionListener
 	 * Refresh.
 	 */
 	public void refresh() {
-		if (refPanel != null)
+		if (refPanel != null) {
 			remove(refPanel);
-
-		// TODO
+		}
 		citationRefs = getInput().getCitationRefs();
-
 		DefaultFormBuilder b = new DefaultFormBuilder(new FormLayout("fill:pref:grow"));
 		for (CitationRef citationRef : citationRefs) {
 			b.append(new CitationRefPanel(citationRef));
@@ -127,19 +125,6 @@ public class CitationPanel extends PathwayElementPanel implements ActionListener
 		add(refPanel, BorderLayout.CENTER);
 		validate();
 	}
-
-//	/**
-//	 * Sets the current pathway element.
-//	 * 
-//	 * @param e
-//	 */
-//	public void setInput(PathwayElement e) {
-////		if (e != getInput()) { //TODO 
-////			elmMgr = e.getParent().getBiopaxElementManager();
-////			refMgr = e.getBiopaxReferenceManager();
-////		}
-//		super.setInput(e);
-//	}
 
 	/**
 	 * Panel which displays CitationRef

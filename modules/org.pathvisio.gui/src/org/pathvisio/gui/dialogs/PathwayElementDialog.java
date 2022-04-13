@@ -207,8 +207,9 @@ public class PathwayElementDialog extends OkCancelDialog {
 		if (done) {
 			VPathwayModel p = swingEngine.getEngine().getActiveVPathwayModel();
 			p.getUndoManager().newAction(new UndoAction("Modified element properties", originalPathway));
-			if (p != null)
+			if (p != null) {
 				p.redraw();
+			}
 			setVisible(false);
 		}
 	}
