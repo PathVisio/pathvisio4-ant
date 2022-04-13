@@ -98,7 +98,7 @@ public enum StaticProperty implements Property {
 	RELY("relY", "Relative Y", StaticPropertyType.DOUBLE, 211, true, false, false),
 
 	// label
-	HREF("href", "Link", StaticPropertyType.STRING, 220),
+	HREF("href", "Hyperlink", StaticPropertyType.STRING, 220),
 
 	// brace
 	ORIENTATION("Orientation", "Orientation", StaticPropertyType.ORIENTATION, 230), // TODO????

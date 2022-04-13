@@ -64,10 +64,12 @@ public class PathwayDialog extends PathwayElementDialog {
 	/**
 	 * Returns the pathway element for this dialog.
 	 */
+	@Override
 	protected Pathway getInput() {
 		return (Pathway) super.getInput();
 	}
 
+	@Override
 	protected void addCustomTabs(JTabbedPane parent) {
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridBagLayout());
@@ -118,6 +120,7 @@ public class PathwayDialog extends PathwayElementDialog {
 		parent.setSelectedComponent(panel);
 	}
 
+	@Override
 	protected void okPressed() {
 		super.okPressed();
 		swingEngine.getEngine().getActivePathwayModel().getPathway().setTitle(titleField.getText());

@@ -53,8 +53,9 @@ import org.pathvisio.gui.util.FontChooser;
 public class LabelDialog extends PathwayElementDialog {
 
 	// labels
-	private final static String TEXTLABEL = "Text label *:";
-	private final static String HREF = "Link : ";
+	private final static String TEXTLABEL = "Text label * ";
+	private final static String HREF = "Hyperlink";
+	private final static String FONT = "Font: ";
 
 	// fields
 	private JTextArea text;
@@ -99,8 +100,8 @@ public class LabelDialog extends PathwayElementDialog {
 		panel.setLayout(new GridBagLayout());
 		JPanel textPanel = new JPanel();
 		JPanel hrefPanel = new JPanel();
-//		textPanel.setBorder(BorderFactory.createTitledBorder("TextLabel *"));
-//		hrefPanel.setBorder(BorderFactory.createTitledBorder("Link "));
+		textPanel.setBorder(BorderFactory.createTitledBorder(TEXTLABEL));
+		hrefPanel.setBorder(BorderFactory.createTitledBorder(HREF));
 		GridBagConstraints panelConstraints = new GridBagConstraints();
 		panelConstraints.fill = GridBagConstraints.BOTH;
 		panelConstraints.gridx = 0;
@@ -111,9 +112,14 @@ public class LabelDialog extends PathwayElementDialog {
 		panel.add(textPanel, panelConstraints);
 		panel.add(hrefPanel, panelConstraints);
 
-		JLabel textlbl = new JLabel(TEXTLABEL);
-		text = new JTextArea();
+		// Search panel elements
+		textPanel.setLayout(new FormLayout("4dlu, pref, 4dlu, pref, 4dlu, pref, pref:grow, 4dlu",
+				"4dlu, pref, 4dlu, fill:pref:grow, 4dlu, pref, 4dlu"));
 
+		// ========================================
+		// TextLabel Panel
+		// ========================================
+		text = new JTextArea();
 		fontPreview = new JLabel(getFont().getFamily());
 
 		final JButton font = new JButton("...");
@@ -135,17 +141,10 @@ public class LabelDialog extends PathwayElementDialog {
 			}
 		});
 
-		// ========================================
-		// TextLabel Panel
-		// ========================================
-		// Search panel elements
-		textPanel.setLayout(new FormLayout("4dlu, pref, 4dlu, pref, 4dlu, pref, pref:grow, 4dlu",
-				"4dlu, pref, 4dlu, fill:pref:grow, 4dlu, pref, 4dlu"));
-
 		CellConstraints cc = new CellConstraints();
-		textPanel.add(textlbl, cc.xy(2, 2));
+		textPanel.add(new JLabel(""), cc.xy(2, 2));// dummy component
 		textPanel.add(new JScrollPane(text), cc.xyw(2, 4, 6));
-		textPanel.add(new JLabel("Font : "), cc.xy(2, 6));
+		textPanel.add(new JLabel(FONT), cc.xy(2, 6));
 		textPanel.add(fontPreview, cc.xy(4, 6));
 		textPanel.add(font, cc.xy(6, 6));
 
@@ -171,20 +170,30 @@ public class LabelDialog extends PathwayElementDialog {
 		// ========================================
 		// Href Panel
 		// ========================================
-		JLabel hreflbl = new JLabel(HREF);
 		href = new JTextField();
 		hrefPanel.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
-		c.anchor = GridBagConstraints.FIRST_LINE_START;
-		c.weightx = 0;
-		c.gridx = 0;
-		c.gridy = GridBagConstraints.RELATIVE;
-		hrefPanel.add(hreflbl, c);
-		c.insets = new Insets(0, 0, 0, 0);
-		c.gridx = 1;
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.weightx = 1;
 		hrefPanel.add(href, c);
+		href.getDocument().addDocumentListener(new DocumentListener() {
+			public void changedUpdate(DocumentEvent e) {
+				saveHref();
+			}
+
+			public void insertUpdate(DocumentEvent e) {
+				saveHref();
+			}
+
+			public void removeUpdate(DocumentEvent e) {
+				saveHref();
+			}
+
+			private void saveHref() {
+				if (getInput() != null)
+					getInput().setHref(href.getText());
+			}
+		});
 
 		// ========================================
 		// Etc

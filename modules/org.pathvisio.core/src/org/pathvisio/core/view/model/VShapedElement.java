@@ -144,7 +144,12 @@ public abstract class VShapedElement extends VPathwayElement implements VLinkabl
 			handleSW.setAngle(135);
 			handleNW.setAngle(225);
 
-			if (this instanceof VDataNode || this instanceof VLabel || !isRotatable) {
+			/*
+			 * Allow rotation for Shapes and States. Do not allow rotation of DataNode,
+			 * Label, and Group. Note:Rotation of group will increase its size infinitely
+			 * (bug). TODO
+			 */
+			if (this instanceof VDataNode || this instanceof VLabel || this instanceof VGroup || !isRotatable) {
 				// No rotation handle for these objects
 				handles = new Handle[] { handleN, handleNE, handleE, handleSE, handleS, handleSW, handleW, handleNW, };
 			} else {
