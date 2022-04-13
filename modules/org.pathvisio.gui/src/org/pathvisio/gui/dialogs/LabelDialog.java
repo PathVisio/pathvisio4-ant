@@ -28,6 +28,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -53,7 +54,7 @@ public class LabelDialog extends PathwayElementDialog {
 
 	// labels
 	private final static String TEXTLABEL = "Text label *:";
-	private final static String HREF = "Href";
+	private final static String HREF = "Link : ";
 
 	// fields
 	private JTextArea text;
@@ -96,15 +97,22 @@ public class LabelDialog extends PathwayElementDialog {
 	protected void addCustomTabs(JTabbedPane parent) {
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridBagLayout());
-
-		// Search panel elements
-		panel.setLayout(new FormLayout("4dlu, pref, 4dlu, pref, 4dlu, pref, pref:grow, 4dlu",
-				"4dlu, pref, 4dlu, fill:pref:grow, 4dlu, pref, 4dlu"));
+		JPanel textPanel = new JPanel();
+		JPanel hrefPanel = new JPanel();
+//		textPanel.setBorder(BorderFactory.createTitledBorder("TextLabel *"));
+//		hrefPanel.setBorder(BorderFactory.createTitledBorder("Link "));
+		GridBagConstraints panelConstraints = new GridBagConstraints();
+		panelConstraints.fill = GridBagConstraints.BOTH;
+		panelConstraints.gridx = 0;
+		panelConstraints.weightx = 1;
+		panelConstraints.weighty = 1;
+		panelConstraints.insets = new Insets(2, 2, 2, 2);
+		panelConstraints.gridy = GridBagConstraints.RELATIVE;
+		panel.add(textPanel, panelConstraints);
+		panel.add(hrefPanel, panelConstraints);
 
 		JLabel textlbl = new JLabel(TEXTLABEL);
-		JLabel hreflbl = new JLabel(HREF);
 		text = new JTextArea();
-		href = new JTextField();
 
 		fontPreview = new JLabel(getFont().getFamily());
 
@@ -127,14 +135,19 @@ public class LabelDialog extends PathwayElementDialog {
 			}
 		});
 
+		// ========================================
+		// TextLabel Panel
+		// ========================================
+		// Search panel elements
+		textPanel.setLayout(new FormLayout("4dlu, pref, 4dlu, pref, 4dlu, pref, pref:grow, 4dlu",
+				"4dlu, pref, 4dlu, fill:pref:grow, 4dlu, pref, 4dlu"));
+
 		CellConstraints cc = new CellConstraints();
-		panel.add(textlbl, cc.xy(2, 2));
-		panel.add(new JScrollPane(text), cc.xyw(2, 4, 6));
-		panel.add(new JLabel("Font:"), cc.xy(2, 6));
-		panel.add(fontPreview, cc.xy(4, 6));
-		panel.add(font, cc.xy(6, 6));
-		panel.add(hreflbl, cc.xy(2, 7));
-		panel.add(href, cc.xyw(3, 7, 5));
+		textPanel.add(textlbl, cc.xy(2, 2));
+		textPanel.add(new JScrollPane(text), cc.xyw(2, 4, 6));
+		textPanel.add(new JLabel("Font : "), cc.xy(2, 6));
+		textPanel.add(fontPreview, cc.xy(4, 6));
+		textPanel.add(font, cc.xy(6, 6));
 
 		text.getDocument().addDocumentListener(new DocumentListener() {
 			public void changedUpdate(DocumentEvent e) {
@@ -154,6 +167,28 @@ public class LabelDialog extends PathwayElementDialog {
 					getInput().setTextLabel(text.getText());
 			}
 		});
+
+		// ========================================
+		// Href Panel
+		// ========================================
+		JLabel hreflbl = new JLabel(HREF);
+		href = new JTextField();
+		hrefPanel.setLayout(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+		c.anchor = GridBagConstraints.FIRST_LINE_START;
+		c.weightx = 0;
+		c.gridx = 0;
+		c.gridy = GridBagConstraints.RELATIVE;
+		hrefPanel.add(hreflbl, c);
+		c.insets = new Insets(0, 0, 0, 0);
+		c.gridx = 1;
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.weightx = 1;
+		hrefPanel.add(href, c);
+
+		// ========================================
+		// Etc
+		// ========================================
 		text.setEnabled(!readonly);
 		href.setEnabled(!readonly);
 
