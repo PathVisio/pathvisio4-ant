@@ -25,8 +25,10 @@ import org.pathvisio.libgpml.model.DataNode;
 import org.pathvisio.libgpml.model.DataNode.State;
 import org.pathvisio.libgpml.model.Group;
 import org.pathvisio.libgpml.model.Interaction;
+import org.pathvisio.libgpml.model.Label;
 import org.pathvisio.libgpml.model.Pathway;
 import org.pathvisio.libgpml.model.PathwayElement;
+import org.pathvisio.libgpml.model.Shape;
 import org.pathvisio.libgpml.model.ShapedElement;
 import org.pathvisio.gui.SwingEngine;
 
@@ -38,7 +40,7 @@ import org.pathvisio.gui.SwingEngine;
  * It is possible to add hooks to this handler, so that plugins can register new
  * panels to be added to PathwayElement Popup dialogs.
  * 
- * @author unknown
+ * @author unknown, finterly
  */
 public class PopupDialogHandler {
 	final private SwingEngine swingEngine;
@@ -105,9 +107,11 @@ public class PopupDialogHandler {
 		case INTERACTION:
 			result = new InteractionDialog(swingEngine, (Interaction) e, readonly, frame, locationComp);
 			break;
-		case LABEL: // for both Label and Shape, instantiate new LabelDialog 
+		case LABEL: 
+			result = new LabelDialog(swingEngine, (Label) e, readonly, frame, locationComp);
+			break;
 		case SHAPE:
-			result = new LabelDialog(swingEngine, (ShapedElement) e, readonly, frame, locationComp);
+			result = new ShapeDialog(swingEngine, (Shape) e, readonly, frame, locationComp);
 			break;
 		case GROUP:
 			result = new GroupDialog(swingEngine, (Group) e, readonly, frame, locationComp);

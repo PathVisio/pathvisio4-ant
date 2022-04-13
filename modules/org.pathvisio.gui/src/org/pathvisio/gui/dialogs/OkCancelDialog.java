@@ -43,6 +43,7 @@ import org.pathvisio.core.util.Resources;
  * The central panel can have arbitrarily complex contents
  */
 public class OkCancelDialog extends JDialog implements ActionListener {
+	
 	public static final String OK = "Ok";
 	public static final String CANCEL = "Cancel";
 

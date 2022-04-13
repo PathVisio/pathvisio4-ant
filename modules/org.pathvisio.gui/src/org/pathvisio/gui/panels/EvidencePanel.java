@@ -43,13 +43,12 @@ import org.pathvisio.libgpml.debug.Logger;
 import org.pathvisio.libgpml.model.Evidence;
 import org.pathvisio.libgpml.model.PathwayElement;
 import org.pathvisio.libgpml.model.PathwayElement.EvidenceRef;
-import org.pathvisio.libgpml.model.Referenceable.Citable;
 import org.pathvisio.libgpml.util.Utils;
 import org.pathvisio.libgpml.util.XrefUtils;
 import org.bridgedb.Xref;
 import org.pathvisio.core.util.Resources;
 import org.pathvisio.gui.SwingEngine;
-import org.pathvisio.gui.dialogs.CitationDialog;
+import org.pathvisio.gui.dialogs.EvidenceDialog;
 
 /**
  * 
@@ -272,7 +271,7 @@ public class EvidencePanel extends PathwayElementPanel implements ActionListener
 	 */
 	private void edit(EvidenceRef evidenceRef) {
 		if (evidenceRef != null) {
-			CitationDialog d = new CitationDialog(getInput(), null, null, this, false);
+			EvidenceDialog d = new EvidenceDialog(getInput(), evidenceRef, null, this, false);
 			d.setVisible(true);
 		}
 		refresh();
@@ -293,7 +292,7 @@ public class EvidencePanel extends PathwayElementPanel implements ActionListener
 	 */
 	private void addPressed() {
 		EvidenceRef evidenceRef = null; // new evidenceRef
-		final CitationDialog d = new CitationDialog(getInput(), null, null, this);
+		final EvidenceDialog d = new EvidenceDialog(getInput(), evidenceRef, null, this);
 		if (!SwingUtilities.isEventDispatchThread()) {
 			try {
 				SwingUtilities.invokeAndWait(new Runnable() {
@@ -307,7 +306,7 @@ public class EvidencePanel extends PathwayElementPanel implements ActionListener
 		} else {
 			d.setVisible(true);
 		}
-		if (d.getExitCode().equals(CitationDialog.OK)) {
+		if (d.getExitCode().equals(EvidenceDialog.OK)) {
 			// TODO seems weird but ok for now...
 //			getInput().addEvidence(evidenceRef.getEvidence());
 			refresh();

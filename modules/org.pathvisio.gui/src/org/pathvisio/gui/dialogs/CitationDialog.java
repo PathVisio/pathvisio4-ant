@@ -60,21 +60,23 @@ import org.xml.sax.SAXException;
  * Dialog for entering citations. For convenience, you can enter a pubmed id and
  * query the details from pubmed.
  * 
- * @author unknown
+ * @author unknown, finterly
  */
 public class CitationDialog extends OkCancelDialog {
 
-	final static String ADD = "Add";
-	final static String REMOVE = "Remove";
-	final static String QUERY = "Query PubMed";
+	// labels
+//	final static String ADD = "Add";
+//	final static String REMOVE = "Remove";
+	private final static String QUERY = "Query PubMed"; // button
+	private final static String XREF_IDENTIFIER = "Identifier *";
+	private final static String XREF_DATASOURCE = "DataSource *";
 
-	final static String XREF_IDENTIFIER = "Identifier";
-	final static String XREF_DATASOURCE = "DataSource";
+	// fields
+	private JTextField xrefIdentifier;
+	private JTextField xrefDataSource;
 
-	Citable citable;
-	CitationRef citationRef;
-	JTextField xrefIdentifier;
-	JTextField xrefDataSource;
+	private Citable citable;
+	private CitationRef citationRef;
 
 	/**
 	 * Instantiates a citation dialog.
@@ -84,9 +86,10 @@ public class CitationDialog extends OkCancelDialog {
 	 * @param locationComp
 	 * @param cancellable
 	 */
-	public CitationDialog(Citable citable, CitationRef citationRef, Frame frame, Component locationComp, boolean cancellable) {
+	public CitationDialog(Citable citable, CitationRef citationRef, Frame frame, Component locationComp,
+			boolean cancellable) {
 		super(frame, "Literature reference properties", locationComp, true, cancellable);
-		this.citable = citable; 
+		this.citable = citable;
 		this.citationRef = citationRef;
 		setDialogComponent(createDialogPane());
 		setSize(300, 250);// UI Design
@@ -142,7 +145,7 @@ public class CitationDialog extends OkCancelDialog {
 		if (oldIdentifier != newIdentifier || oldDataSource != newDataSource) {
 			Xref xref = new Xref(newIdentifier, newDataSource);
 			if (xref != null) {
-				// if citationRef exists, removed first 
+				// if citationRef exists, removed first
 				if (citationRef != null) {
 					citable.removeCitationRef(citationRef);
 				}

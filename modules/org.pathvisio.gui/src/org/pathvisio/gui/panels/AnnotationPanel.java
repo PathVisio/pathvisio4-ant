@@ -43,7 +43,6 @@ import org.pathvisio.libgpml.debug.Logger;
 import org.pathvisio.libgpml.model.Annotation;
 import org.pathvisio.libgpml.model.PathwayElement;
 import org.pathvisio.libgpml.model.PathwayElement.AnnotationRef;
-import org.pathvisio.libgpml.model.Referenceable.Citable;
 import org.pathvisio.libgpml.util.Utils;
 import org.pathvisio.libgpml.util.XrefUtils;
 import org.bridgedb.Xref;

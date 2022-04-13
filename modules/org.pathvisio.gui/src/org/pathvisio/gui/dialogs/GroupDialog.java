@@ -58,22 +58,26 @@ import org.pathvisio.gui.completer.OptionProvider;
 import org.pathvisio.gui.util.PermissiveComboBox;
 
 /**
+ * Dialog for editing Groups.
  * 
- * @author unknown
+ * @author unknown, finterly
  */
 public class GroupDialog extends PathwayElementDialog implements ItemListener {
 
-	/**
-	 * Dialog for editing Reactions/ Interactions. In addition to the standard
-	 * comments and literature tabs, this has a tab for looking up accession numbers
-	 * of reactions/interactions.
-	 */
+	// labels
+	private final static String TEXTLABEL = "Text label";
+	private final static String TYPE = "Group type *";
+	private final static String XREF_IDENTIFIER = "Identifier";
+	private final static String XREF_DATASOURCE = "Database";
+
+	// fields
 	private static final long serialVersionUID = 1L; // TODO?
-	private CompleterQueryTextArea symText;// for text label
-	private CompleterQueryTextField idText;// for Xref identifier
-	private DataSourceModel dsm;// for Xref dataSource
-	private PermissiveComboBox dbCombo;
-	private PermissiveComboBox typeCombo;
+	private CompleterQueryTextArea labelText;// for text label
+	private CompleterQueryTextField idText;// for xref identifier
+	private DataSourceModel dsm;// for xref dataSource
+	private PermissiveComboBox dbCombo; // all registered datasource
+	private PermissiveComboBox typeCombo; // for group type
+
 
 	/**
 	 * Instantiates a group dialog.
@@ -104,9 +108,9 @@ public class GroupDialog extends PathwayElementDialog implements ItemListener {
 	 */
 	public final void refresh() {
 		super.refresh();
-		// sets text label 
-		symText.setText(getInput().getTextLabel());
-		symText.setFont(new Font("Tahoma", Font.PLAIN, 10));// UI Design
+		// sets text label
+		labelText.setText(getInput().getTextLabel());
+		labelText.setFont(new Font("Tahoma", Font.PLAIN, 10));// UI Design
 		// sets xref
 		Xref xref = getInput().getXref();
 		String id = XrefUtils.getIdentifier(xref);
@@ -146,12 +150,12 @@ public class GroupDialog extends PathwayElementDialog implements ItemListener {
 		// Manual entry panel elements
 		fieldPanel.setLayout(new GridBagLayout());
 
-		JLabel textLabel = new JLabel("Text label");
-		JLabel typeLabel = new JLabel("Group type");
-		JLabel idLabel = new JLabel("Identifier");
-		JLabel dbLabel = new JLabel("Database");
+		JLabel textLabel = new JLabel(TEXTLABEL);
+		JLabel typeLabel = new JLabel(TYPE);
+		JLabel idLabel = new JLabel(XREF_IDENTIFIER);
+		JLabel dbLabel = new JLabel(XREF_DATASOURCE);
 		// text label
-		symText = new CompleterQueryTextArea(new OptionProvider() {
+		labelText = new CompleterQueryTextArea(new OptionProvider() {
 			public List<String> provideOptions(String text) {
 				if (text == null)
 					return Collections.emptyList();
@@ -167,8 +171,8 @@ public class GroupDialog extends PathwayElementDialog implements ItemListener {
 				return symbols;
 			}
 		}, true);
-		symText.setColumns(20);
-		symText.setRows(2);
+		labelText.setColumns(20);
+		labelText.setRows(2);
 		// xref identifier
 		idText = new CompleterQueryTextField(new OptionProvider() {
 			public List<String> provideOptions(final String text) {
@@ -212,14 +216,14 @@ public class GroupDialog extends PathwayElementDialog implements ItemListener {
 		c.gridx = 1;
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.weightx = 1;
-		
-		fieldPanel.add(new JScrollPane(symText), c);
+
+		fieldPanel.add(new JScrollPane(labelText), c);
 		fieldPanel.add(typeCombo, c);
 		fieldPanel.add(idText, c);
 		fieldPanel.add(dbCombo, c);
-		
+
 		// text label add listener
-		symText.getDocument().addDocumentListener(new DocumentListener() {
+		labelText.getDocument().addDocumentListener(new DocumentListener() {
 			public void changedUpdate(DocumentEvent e) {
 				setText();
 			}
@@ -233,7 +237,7 @@ public class GroupDialog extends PathwayElementDialog implements ItemListener {
 			}
 
 			private void setText() {
-				getInput().setTextLabel(symText.getText());
+				getInput().setTextLabel(labelText.getText());
 			}
 		});
 		// xref identifier add listener
@@ -280,12 +284,12 @@ public class GroupDialog extends PathwayElementDialog implements ItemListener {
 			}
 		});
 
-		symText.setEnabled(!readonly);
+		labelText.setEnabled(!readonly);
 		idText.setEnabled(!readonly);
 		dbCombo.setEnabled(!readonly);
 		typeCombo.setEnabled(!readonly);
 
-		parent.add(TAB_PROPERTIES, panel); //TODO 
+		parent.add(TAB_PROPERTIES, panel); // TODO
 		parent.setSelectedComponent(panel);
 	}
 

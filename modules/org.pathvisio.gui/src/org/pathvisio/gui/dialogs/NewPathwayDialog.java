@@ -42,6 +42,12 @@ import org.pathvisio.gui.util.PermissiveComboBox;
  */
 public class NewPathwayDialog extends OkCancelDialog {
 
+	// labels
+	private final static String TITLE = "Title *";
+	private final static String ORGANISM = "Organism *";
+	private final static String DESCRIPTION = "Description ";
+
+	// fields
 	private JTextField titleField;
 	private PermissiveComboBox organismComboBox;
 	private JTextArea descriptionArea;
@@ -71,9 +77,9 @@ public class NewPathwayDialog extends OkCancelDialog {
 
 		fieldPanel.setLayout(new GridBagLayout());
 
-		JLabel titleFieldLabel = new JLabel("Title");
-		JLabel orgComboLabel = new JLabel("Organism");
-		JLabel descriptionLabel = new JLabel("Description ");
+		JLabel titleFieldLabel = new JLabel(TITLE);
+		JLabel orgComboLabel = new JLabel(ORGANISM);
+		JLabel descriptionLabel = new JLabel(DESCRIPTION);
 
 		titleField = new JTextField();
 		organismComboBox = new PermissiveComboBox(Organism.latinNamesArray());
@@ -89,6 +95,7 @@ public class NewPathwayDialog extends OkCancelDialog {
 		fieldPanel.add(titleFieldLabel, c);
 		fieldPanel.add(orgComboLabel, c);
 		c.insets = new Insets(15, 0, 0, 0); // top padding
+		fieldPanel.add(descriptionLabel, c);
 
 		c.insets = new Insets(0, 0, 0, 0);
 		c.gridx = 1;

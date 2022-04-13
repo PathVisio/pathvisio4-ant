@@ -24,16 +24,12 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTextField;
-import javax.swing.JTextPane;
 import javax.swing.SwingWorker;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
@@ -51,65 +47,58 @@ import org.pathvisio.core.data.PubMedQuery;
 import org.pathvisio.core.data.PubMedResult;
 import org.pathvisio.core.util.ProgressKeeper;
 import org.pathvisio.gui.ProgressDialog;
-import org.pathvisio.gui.util.PermissiveComboBox;
-import org.pathvisio.libgpml.model.Annotation;
-import org.pathvisio.libgpml.model.PathwayElement;
-import org.pathvisio.libgpml.model.PathwayElement.AnnotationRef;
-import org.pathvisio.libgpml.model.Referenceable.Annotatable;
-import org.pathvisio.libgpml.model.type.AnnotationType;
-import org.pathvisio.libgpml.model.type.GroupType;
+import org.pathvisio.libgpml.model.PathwayElement.EvidenceRef;
+import org.pathvisio.libgpml.model.Referenceable.Evidenceable;
 import org.pathvisio.libgpml.util.XrefUtils;
 import org.xml.sax.SAXException;
 
 /**
- * Dialog for entering annotations. For convenience, you can enter a pubmed id
- * and query the details from pubmed.
+ * Dialog for entering evidences. For convenience, you can enter a pubmed id and
+ * query the details from pubmed.
  * 
  * @author unknown, finterly
  */
-public class AnnotationDialog extends OkCancelDialog {
+public class EvidenceDialog extends OkCancelDialog {
 
 	// labels
 	private final static String QUERY = "Query PubMed"; // TODO button
-	private final static String VALUE = "Value *";
-	private final static String TYPE = "Type *";
-	private final static String XREF_IDENTIFIER = "Identifier";
-	private final static String XREF_DATASOURCE = "DataSource";
+	private final static String VALUE = "Value";
+	private final static String XREF_IDENTIFIER = "Identifier *";
+	private final static String XREF_DATASOURCE = "DataSource *";
 	private final static String URL_LINK = "Url";
 
 	// fields
 	private JTextField valueText;
-	private PermissiveComboBox typeCombo;
 	private JTextField xrefIdentifier;
 	private JTextField xrefDataSource;
 	private JTextField urlLinkText;
 
-	private Annotatable annotatable;
-	private AnnotationRef annotationRef;
+	private Evidenceable evidenceable;
+	private EvidenceRef evidenceRef;
 
 	/**
-	 * Instantiates a annotation dialog.
+	 * Instantiates a evidence dialog.
 	 * 
-	 * @param annotationRef
+	 * @param evidenceRef
 	 * @param frame
 	 * @param locationComp
 	 * @param cancellable
 	 */
-	public AnnotationDialog(Annotatable annotatable, AnnotationRef annotationRef, Frame frame, Component locationComp,
+	public EvidenceDialog(Evidenceable evidenceable, EvidenceRef evidenceRef, Frame frame, Component locationComp,
 			boolean cancellable) {
 		super(frame, "Literature reference properties", locationComp, true, cancellable);
-		this.annotatable = annotatable;
-		this.annotationRef = annotationRef;
+		this.evidenceable = evidenceable;
+		this.evidenceRef = evidenceRef;
 		setDialogComponent(createDialogPane());
 		setSize(300, 250);// UI Design
 		refresh();
 	}
 
 	/**
-	 * Instantiates a annotation dialog with boolean cancellable true.
+	 * Instantiates a evidence dialog with boolean cancellable true.
 	 */
-	public AnnotationDialog(Annotatable annotatable, AnnotationRef annotationRef, Frame frame, Component locationComp) {
-		this(annotatable, annotationRef, frame, locationComp, true);
+	public EvidenceDialog(Evidenceable evidenceable, EvidenceRef evidenceRef, Frame frame, Component locationComp) {
+		this(evidenceable, evidenceRef, frame, locationComp, true);
 	}
 
 	/**
@@ -127,34 +116,31 @@ public class AnnotationDialog extends OkCancelDialog {
 	 * Refresh.
 	 */
 	protected void refresh() {
-		if (annotationRef != null) {
+		if (evidenceRef != null) {
 			// sets value
-			valueText.setText(annotationRef.getAnnotation().getValue());
+			valueText.setText(evidenceRef.getEvidence().getValue());
 			valueText.setFont(new Font("Tahoma", Font.PLAIN, 10));// UI Design
-			// sets type
-			String type = annotationRef.getAnnotation().getType().toString();
-			typeCombo.setSelectedItem(AnnotationType.fromName(type));
 			// sets xref
-			String id = XrefUtils.getIdentifier(annotationRef.getAnnotation().getXref());
+			String id = XrefUtils.getIdentifier(evidenceRef.getEvidence().getXref());
 			setText(id, xrefIdentifier);
-			DataSource ds = XrefUtils.getDataSource(annotationRef.getAnnotation().getXref());
+			DataSource ds = XrefUtils.getDataSource(evidenceRef.getEvidence().getXref());
 			setText(ds.getCompactIdentifierPrefix(), xrefDataSource);
 			// sets value
-			urlLinkText.setText(annotationRef.getAnnotation().getUrlLink());
+			urlLinkText.setText(evidenceRef.getEvidence().getUrlLink());
 			urlLinkText.setFont(new Font("Tahoma", Font.PLAIN, 10));// UI Design
 		}
 	}
 
 	/**
-	 * When "Ok" button is pressed. The annotationRef is created or updated.
+	 * When "Ok" button is pressed. The evidenceRef is created or updated.
 	 */
 	protected void okPressed() {
 		// old information
 		String oldIdentifier = null;
 		DataSource oldDataSource = null;
-		if (annotationRef != null) {
-			oldIdentifier = annotationRef.getAnnotation().getXref().getId();
-			oldDataSource = annotationRef.getAnnotation().getXref().getDataSource();
+		if (evidenceRef != null) {
+			oldIdentifier = evidenceRef.getEvidence().getXref().getId();
+			oldDataSource = evidenceRef.getEvidence().getXref().getDataSource();
 		}
 		// new information
 		String newIdentifier = xrefIdentifier.getText().trim();
@@ -164,11 +150,11 @@ public class AnnotationDialog extends OkCancelDialog {
 		if (oldIdentifier != newIdentifier || oldDataSource != newDataSource) {
 			Xref xref = new Xref(newIdentifier, newDataSource);
 			if (xref != null) {
-				// if annotationRef exists, removed first
-				if (annotationRef != null) {
-					annotatable.removeAnnotationRef(annotationRef);
+				// if evidenceRef exists, removed first
+				if (evidenceRef != null) {
+					evidenceable.removeEvidenceRef(evidenceRef);
 				}
-//				annotatable.addAnnotation(xref, null); // TODO urlLink empty
+//				evidenceable.addEvidence(xref, null); // TODO urlLink empty
 			}
 		}
 		super.okPressed();
@@ -221,13 +207,11 @@ public class AnnotationDialog extends OkCancelDialog {
 		contents.setLayout(new GridBagLayout());
 
 		JLabel lblValue = new JLabel(VALUE);
-		JLabel lblType = new JLabel(TYPE);
 		JLabel lblXrefIdentifier = new JLabel(XREF_IDENTIFIER);
 		JLabel lblXrefDataSource = new JLabel(XREF_DATASOURCE);
 		JLabel lblUrlLink = new JLabel(URL_LINK);
 
 		valueText = new JTextField();
-		typeCombo = new PermissiveComboBox(AnnotationType.getValues());
 		xrefIdentifier = new JTextField();
 		xrefDataSource = new JTextField();
 		urlLinkText = new JTextField();
@@ -267,7 +251,6 @@ public class AnnotationDialog extends OkCancelDialog {
 		c.gridy = GridBagConstraints.RELATIVE;
 		c.weightx = 0;
 		contents.add(lblValue, c);
-		contents.add(lblType, c);
 		contents.add(lblXrefIdentifier, c);
 		contents.add(lblXrefDataSource, c);
 		contents.add(lblUrlLink, c);
@@ -276,7 +259,6 @@ public class AnnotationDialog extends OkCancelDialog {
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.weightx = 1;
 		contents.add(valueText, c);
-		contents.add(typeCombo, c);
 		contents.add(xrefIdentifier, c);
 		contents.add(xrefDataSource, c);
 		contents.add(urlLinkText, c);

@@ -76,16 +76,26 @@ import org.pathvisio.gui.util.PermissiveComboBox;
  * literature tabs, this has a tab for looking up accession numbers for genes
  * and metabolites.
  * 
- * @author unknown
+ * @author unknown, finterly
  */
 public class DataNodeDialog extends PathwayElementDialog {
 
+	//labels 
+	private final static String SYM = "Text label *";
+	private final static String TYPE = "DataNode type *";
+	private final static String XREF_IDENTIFIER = "Identifier";
+	private final static String XREF_DATASOURCE = "Database";
+
+	// fields
 	CompleterQueryTextArea symText;// for text label
 	private CompleterQueryTextField idText; // for xref identifier TODO private?
 	private DataSourceModel dsm; // for xref dataSource
 	private PermissiveComboBox dbCombo; // all registered datasource
 	private PermissiveComboBox typeCombo; // all datanode types
+
 	private DataNodeDialog curDlg;
+
+	// alias fields
 	private JTextField aliasRfText; // for aliasRef dataSource
 	private JButton unlinkButton; // for unlink
 	private PermissiveComboBox aliasRefCombo; // all datanode types
@@ -352,10 +362,10 @@ public class DataNodeDialog extends PathwayElementDialog {
 		// ========================================
 		fieldPanel.setLayout(new GridBagLayout());
 
-		JLabel symLabel = new JLabel("Text label");
-		JLabel idLabel = new JLabel("Identifier");
-		JLabel dbLabel = new JLabel("Database");
-		JLabel typeLabel = new JLabel("DataNode type");
+		JLabel symLabel = new JLabel(SYM);
+		JLabel typeLabel = new JLabel(TYPE);
+		JLabel idLabel = new JLabel(XREF_IDENTIFIER);
+		JLabel dbLabel = new JLabel(XREF_DATASOURCE);
 
 		// text label
 		symText = new CompleterQueryTextArea(new OptionProvider() {

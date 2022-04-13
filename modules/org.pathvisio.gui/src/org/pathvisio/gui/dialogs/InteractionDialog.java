@@ -55,20 +55,25 @@ import org.pathvisio.gui.completer.OptionProvider;
 import org.pathvisio.gui.util.PermissiveComboBox;
 
 /**
+ * Dialog for editing Reactions/ Interactions. In addition to the standard
+ * comments and literature tabs, this has a tab for looking up accession numbers
+ * of reactions/interactions.
  * 
- * @author unknown
+ * @author unknown, finterly
  */
 public class InteractionDialog extends PathwayElementDialog implements ItemListener {
 
-	/**
-	 * Dialog for editing Reactions/ Interactions. In addition to the standard
-	 * comments and literature tabs, this has a tab for looking up accession numbers
-	 * of reactions/interactions.
-	 */
+	// labels
+	private final static String START_ARROW = "Start arrow *";
+	private final static String END_ARROW = "End arrow *";
+	private final static String XREF_IDENTIFIER = "Identifier";
+	private final static String XREF_DATASOURCE = "Database";
+
+	// fields
 	private static final long serialVersionUID = 1L; // TODO?
 	private CompleterQueryTextField idText;// for xref identifier
 	private DataSourceModel dsm;// for xref dataSource
-	private PermissiveComboBox dbCombo;
+	private PermissiveComboBox dbCombo; // all registered datasource
 	private PermissiveComboBox startTypeCombo; // for start arrow head type
 	private PermissiveComboBox endTypeCombo;// for end arrow head type
 
@@ -142,10 +147,10 @@ public class InteractionDialog extends PathwayElementDialog implements ItemListe
 		// Manual entry panel elements
 		fieldPanel.setLayout(new GridBagLayout());
 
-		JLabel startLabel = new JLabel("Start arrow");
-		JLabel endLabel = new JLabel("End arrow");
-		JLabel idLabel = new JLabel("Identifier");
-		JLabel dbLabel = new JLabel("Database");
+		JLabel startLabel = new JLabel(START_ARROW);
+		JLabel endLabel = new JLabel(END_ARROW);
+		JLabel idLabel = new JLabel(XREF_IDENTIFIER);
+		JLabel dbLabel = new JLabel(XREF_DATASOURCE);
 
 		idText = new CompleterQueryTextField(new OptionProvider() {
 			public List<String> provideOptions(final String text) {

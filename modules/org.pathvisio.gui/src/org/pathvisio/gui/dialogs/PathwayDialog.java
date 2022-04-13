@@ -43,11 +43,16 @@ import org.pathvisio.gui.util.PermissiveComboBox;
  * @author unknown
  */
 public class PathwayDialog extends PathwayElementDialog {
-	
+
+	// labels
+	private final static String TITLE = "Title *";
+	private final static String ORGANISM = "Organism *";
+	private final static String DESCRIPTION = "Description ";
+
+	// fields
 	private JTextField titleField;
 	private PermissiveComboBox organismComboBox;
 	private JTextArea descriptionArea;
-
 
 	protected PathwayDialog(SwingEngine swingEngine, Pathway e, boolean readonly, Frame frame, String title,
 			Component locationComp) {
@@ -78,9 +83,9 @@ public class PathwayDialog extends PathwayElementDialog {
 
 		fieldPanel.setLayout(new GridBagLayout());
 
-		JLabel titleFieldLabel = new JLabel("Title");
-		JLabel orgComboLabel = new JLabel("Organism ");
-		JLabel descriptionLabel = new JLabel("Description ");
+		JLabel titleFieldLabel = new JLabel(TITLE);
+		JLabel orgComboLabel = new JLabel(ORGANISM);
+		JLabel descriptionLabel = new JLabel(DESCRIPTION);
 
 		titleField = new JTextField();
 		titleField.setText(swingEngine.getEngine().getActivePathwayModel().getPathway().getTitle());
@@ -108,7 +113,7 @@ public class PathwayDialog extends PathwayElementDialog {
 		c.ipady = 40; // taller text area for description
 		c.insets = new Insets(15, 0, 0, 0); // top padding
 		fieldPanel.add(new JScrollPane(descriptionArea), c);
-		
+
 		parent.add(TAB_PROPERTIES, panel);
 		parent.setSelectedComponent(panel);
 	}

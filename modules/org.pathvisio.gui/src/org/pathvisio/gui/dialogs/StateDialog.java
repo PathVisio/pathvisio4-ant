@@ -58,16 +58,19 @@ import org.pathvisio.gui.completer.OptionProvider;
 import org.pathvisio.gui.util.PermissiveComboBox;
 
 /**
+ * Dialog for editing States.
  * 
- * @author unknown
+ * @author unknown, finterly
  */
 public class StateDialog extends PathwayElementDialog implements ItemListener {
 
-	/**
-	 * Dialog for editing Reactions/ Interactions. In addition to the standard
-	 * comments and literature tabs, this has a tab for looking up accession numbers
-	 * of reactions/interactions.
-	 */
+	// labels
+	private final static String SYM = "Text label";
+	private final static String TYPE = "State type *";
+	private final static String XREF_IDENTIFIER = "Identifier";
+	private final static String XREF_DATASOURCE = "Database";
+
+	// fields
 	private static final long serialVersionUID = 1L; // TODO?
 	private CompleterQueryTextArea symText; // for text label
 	private CompleterQueryTextField idText;// for xref identifier
@@ -146,10 +149,10 @@ public class StateDialog extends PathwayElementDialog implements ItemListener {
 		// Manual entry panel elements
 		fieldPanel.setLayout(new GridBagLayout());
 
-		JLabel textLabel = new JLabel("Text label");
-		JLabel typeLabel = new JLabel("State type");
-		JLabel idLabel = new JLabel("Identifier");
-		JLabel dbLabel = new JLabel("Database");
+		JLabel textLabel = new JLabel(SYM);
+		JLabel typeLabel = new JLabel(TYPE);
+		JLabel idLabel = new JLabel(XREF_IDENTIFIER);
+		JLabel dbLabel = new JLabel(XREF_DATASOURCE);
 		// text label
 		symText = new CompleterQueryTextArea(new OptionProvider() {
 			public List<String> provideOptions(String text) {
@@ -280,7 +283,7 @@ public class StateDialog extends PathwayElementDialog implements ItemListener {
 				refresh();
 			}
 		});
-		
+
 		symText.setEnabled(!readonly);
 		idText.setEnabled(!readonly);
 		dbCombo.setEnabled(!readonly);

@@ -22,9 +22,7 @@ import com.jgoodies.forms.layout.FormLayout;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.Frame;
-import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -34,49 +32,45 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import org.pathvisio.libgpml.model.Label;
 import org.pathvisio.libgpml.model.ShapedElement;
 import org.pathvisio.gui.SwingEngine;
 import org.pathvisio.gui.util.FontChooser;
 
 /**
- * Dialog to modify label specific properties
+ * Dialog to modify shape specific properties
  * 
  * @author thomas, finterly
  *
  */
-public class LabelDialog extends PathwayElementDialog {
+public class ShapeDialog extends PathwayElementDialog {
 
 	// labels
-	private final static String TEXTLABEL = "Text label *:";
-	private final static String HREF = "Href";
+	private final static String TEXTLABEL = "Text label:";
 
 	// fields
 	private JTextArea text;
-	private JTextField href;
 	private JLabel fontPreview;
 
-	protected LabelDialog(SwingEngine swingEngine, Label e, boolean readonly, Frame frame, Component locationComp) {
-		super(swingEngine, e, readonly, frame, "Label properties", locationComp);
+	protected ShapeDialog(SwingEngine swingEngine, ShapedElement e, boolean readonly, Frame frame,
+			Component locationComp) {
+		super(swingEngine, e, readonly, frame, "Shape properties", locationComp);
 		text.requestFocus();
 	}
 
 	/**
 	 * Get the pathway element for this dialog
 	 */
-	protected Label getInput() {
-		return (Label) super.getInput();
+	protected ShapedElement getInput() {
+		return (ShapedElement) super.getInput();
 	}
 
 	protected void refresh() {
 		super.refresh();
 		if (getInput() != null) {
-			// set text label
-			Label input = getInput();
+			ShapedElement input = getInput();
 			text.setText(input.getTextLabel());
 			int style = input.getFontWeight() ? Font.BOLD : Font.PLAIN;
 			style |= input.getFontStyle() ? Font.ITALIC : Font.PLAIN;
@@ -84,9 +78,6 @@ public class LabelDialog extends PathwayElementDialog {
 			text.setFont(f); // UI Design
 			fontPreview.setFont(f);
 			fontPreview.setText(f.getName());
-			// set href
-			href.setText(input.getHref());
-			href.setFont(new Font("Tahoma", Font.PLAIN, 10));// UI Design
 		} else {
 			text.setText("");
 			fontPreview.setText("");
@@ -101,10 +92,8 @@ public class LabelDialog extends PathwayElementDialog {
 		panel.setLayout(new FormLayout("4dlu, pref, 4dlu, pref, 4dlu, pref, pref:grow, 4dlu",
 				"4dlu, pref, 4dlu, fill:pref:grow, 4dlu, pref, 4dlu"));
 
-		JLabel textlbl = new JLabel(TEXTLABEL);
-		JLabel hreflbl = new JLabel(HREF);
+		JLabel label = new JLabel(TEXTLABEL);
 		text = new JTextArea();
-		href = new JTextField();
 
 		fontPreview = new JLabel(getFont().getFamily());
 
@@ -128,13 +117,11 @@ public class LabelDialog extends PathwayElementDialog {
 		});
 
 		CellConstraints cc = new CellConstraints();
-		panel.add(textlbl, cc.xy(2, 2));
+		panel.add(label, cc.xy(2, 2));
 		panel.add(new JScrollPane(text), cc.xyw(2, 4, 6));
 		panel.add(new JLabel("Font:"), cc.xy(2, 6));
 		panel.add(fontPreview, cc.xy(4, 6));
 		panel.add(font, cc.xy(6, 6));
-		panel.add(hreflbl, cc.xy(2, 7));
-		panel.add(href, cc.xyw(3, 7, 5));
 
 		text.getDocument().addDocumentListener(new DocumentListener() {
 			public void changedUpdate(DocumentEvent e) {
@@ -155,7 +142,6 @@ public class LabelDialog extends PathwayElementDialog {
 			}
 		});
 		text.setEnabled(!readonly);
-		href.setEnabled(!readonly);
 
 		parent.add(TAB_PROPERTIES, panel);
 		parent.setSelectedComponent(panel);
