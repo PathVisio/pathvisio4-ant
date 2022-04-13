@@ -68,8 +68,6 @@ import org.xml.sax.SAXException;
 public class CitationDialog extends OkCancelDialog {
 
 	// labels
-//	final static String ADD = "Add";
-//	final static String REMOVE = "Remove";
 	private final static String QUERY = "Query PubMed"; // button
 	private final static String XREF_IDENTIFIER = "Identifier *";
 	private final static String XREF_DATASOURCE = "Database *";
@@ -84,8 +82,11 @@ public class CitationDialog extends OkCancelDialog {
 	private Citable citable;
 	private CitationRef citationRef;
 
+	// ================================================================================
+	// Constructors
+	// ================================================================================
 	/**
-	 * Instantiates a citation dialog.
+	 * Instantiates a Citation dialog.
 	 * 
 	 * @param citationRef
 	 * @param frame
@@ -109,6 +110,9 @@ public class CitationDialog extends OkCancelDialog {
 		this(citable, citationRef, frame, locationComp, true);
 	}
 
+	// ================================================================================
+	// Accessors
+	// ================================================================================
 	/**
 	 * Sets text in text field.
 	 * 
@@ -120,6 +124,9 @@ public class CitationDialog extends OkCancelDialog {
 			field.setText(text);
 	}
 
+	// ================================================================================
+	// Refresh
+	// ================================================================================
 	/**
 	 * Refresh.
 	 */
@@ -135,12 +142,17 @@ public class CitationDialog extends OkCancelDialog {
 		}
 	}
 
+	// ================================================================================
+	// OK Pressed Method
+	// ================================================================================
 	/**
 	 * When "Ok" button is pressed. The citationRef is created or updated.
 	 */
 	protected void okPressed() {
 		boolean done = true;
-		// old information
+		// ========================================
+		// Old information
+		// ========================================
 		String oldId = null;
 		DataSource oldDs = null;
 		String oldUrl = null;
@@ -149,16 +161,20 @@ public class CitationDialog extends OkCancelDialog {
 			oldDs = citationRef.getCitation().getXref().getDataSource();
 			oldUrl = citationRef.getCitation().getUrlLink();
 		}
-		// new information
+		// ========================================
+		// New information
+		// ========================================
 		String newId = xrefIdentifier.getText().trim();
-		DataSource newDs= XrefUtils.getXrefDataSource(xrefDataSource.getText());
+		DataSource newDs = XrefUtils.getXrefDataSource(xrefDataSource.getText());
 		String newUrl = urlLinkText.getText();
-		// checks requirements
+		// ========================================
+		// Check requirements
+		// ========================================
 		if (newUrl.equals("") && (newId.equals("") && newDs == null)) {
 			done = false;
 			JOptionPane.showMessageDialog(this,
-					"A citation requires a valid Database:id and/or Url link.\n Please input more information.", "Error",
-					JOptionPane.ERROR_MESSAGE);
+					"A citation requires a valid Database:id and/or Url link.\n Please input more information.",
+					"Error", JOptionPane.ERROR_MESSAGE);
 		}
 		if (!newId.equals("") && newDs == null) {
 			done = false;
@@ -171,21 +187,22 @@ public class CitationDialog extends OkCancelDialog {
 					"This citation has a database but no identifier.\n Please specify an identifier.", "Error",
 					JOptionPane.ERROR_MESSAGE);
 		}
-		// update
-		if (oldId != newId || oldDs != newDs || oldUrl != newUrl) {
-			Xref newXref = new Xref(newId, newDs);
-			if (newXref != null || newUrl != null) { 
-				if (citationRef != null) {// removed/replaces old citationRef
-					citable.removeCitationRef(citationRef);
-				}
-				citable.addCitation(newXref, newUrl);
-			}
+		// ========================================
+		// New CitationRef
+		// ========================================
+		Xref newXref = new Xref(newId, newDs);
+		if (newXref != null || newUrl != null) {
+			citable.removeCitationRef(citationRef); // remove old first
+			citable.addCitation(newXref, newUrl); // "replace" with new
 		}
 		if (done) { // TODO
 			super.okPressed();
 		}
 	}
 
+	// ================================================================================
+	// Query Methods
+	// ================================================================================
 	/**
 	 * When "Query" button is pressed.
 	 */
@@ -223,6 +240,9 @@ public class CitationDialog extends OkCancelDialog {
 		super.actionPerformed(e);
 	}
 
+	// ================================================================================
+	// Dialog and Panels
+	// ================================================================================
 	/**
 	 * Creates Dialog pane. // TODO removed author stuff
 	 * 
@@ -233,8 +253,6 @@ public class CitationDialog extends OkCancelDialog {
 		contents.setLayout(new GridBagLayout());
 		JPanel xrefPanel = new JPanel();
 		JPanel urlPanel = new JPanel();
-//		xrefPanel.setBorder(BorderFactory.createTitledBorder(TEXTLABEL));
-//		urlPanel.setBorder(BorderFactory.createTitledBorder(HREF));
 		GridBagConstraints pc = new GridBagConstraints();
 		pc.fill = GridBagConstraints.BOTH;
 		pc.gridx = 0;
