@@ -80,7 +80,7 @@ import org.pathvisio.gui.util.PermissiveComboBox;
  */
 public class DataNodeDialog extends PathwayElementDialog {
 
-	//labels 
+	// labels
 	private final static String SYM = "Text label *";
 	private final static String TYPE = "DataNode type *";
 	private final static String XREF_IDENTIFIER = "Identifier";
@@ -94,11 +94,6 @@ public class DataNodeDialog extends PathwayElementDialog {
 	private PermissiveComboBox typeCombo; // all datanode types
 
 	private DataNodeDialog curDlg;
-
-	// alias fields
-	private JTextField aliasRfText; // for aliasRef dataSource
-	private JButton unlinkButton; // for unlink
-	private PermissiveComboBox aliasRefCombo; // all datanode types
 
 	/**
 	 * Instantiates a datanode dialog.
@@ -305,14 +300,12 @@ public class DataNodeDialog extends PathwayElementDialog {
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridBagLayout());
 		// ========================================
-		// 3 Panels: Search, Manual Entry, and Alias
+		// Two Panels: Search and Manual Entry
 		// ========================================
 		JPanel searchPanel = new JPanel();
 		JPanel fieldPanel = new JPanel();
-		JPanel aliasPanel = new JPanel();
 		searchPanel.setBorder(BorderFactory.createTitledBorder("Search"));
 		fieldPanel.setBorder(BorderFactory.createTitledBorder("Manual entry"));
-		aliasPanel.setBorder(BorderFactory.createTitledBorder("Alias"));
 		GridBagConstraints panelConstraints = new GridBagConstraints();
 		panelConstraints.fill = GridBagConstraints.BOTH;
 		panelConstraints.gridx = 0;
@@ -322,7 +315,6 @@ public class DataNodeDialog extends PathwayElementDialog {
 		panelConstraints.gridy = GridBagConstraints.RELATIVE;
 		panel.add(searchPanel, panelConstraints);
 		panel.add(fieldPanel, panelConstraints);
-		panel.add(aliasPanel, panelConstraints);
 
 		// ========================================
 		// Search Panel
@@ -495,51 +487,6 @@ public class DataNodeDialog extends PathwayElementDialog {
 				refresh();
 			}
 		});
-		// ========================================
-		// Alias Panel
-		// ========================================
-		aliasPanel.setLayout(new GridBagLayout());
-		JLabel aliasRefLabel = new JLabel("Linked to group");
-		aliasRfText = new JTextField();
-		c.ipadx = c.ipady = 5;
-		c.anchor = GridBagConstraints.FIRST_LINE_START;
-		c.weightx = 0;
-		c.gridx = 0;
-		c.gridy = GridBagConstraints.RELATIVE;
-		aliasPanel.add(aliasRefLabel, c);
-		c.gridx = 1;
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.weightx = 1;
-		aliasPanel.add(aliasRfText, c);
-		System.out.println("AliasRefText" + symText.getText());
-
-		// group combo box
-		DataNode e = getInput();
-		if (e != null) { // TODO
-			aliasRefCombo = new PermissiveComboBox((ComboBoxModel) e.getPathwayModel().getGroups());
-			aliasPanel.add(aliasRefCombo, c);
-			// type add listener
-			aliasRefCombo.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					Group item = (Group) aliasRefCombo.getSelectedItem();
-					getInput().setAliasRef(item);
-					refresh();
-				}
-			});
-		}
-
-		// button and action
-		unlinkButton = new JButton("Unlink");
-		unlinkButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				getInput().unsetAliasRef();
-				refresh();
-			}
-		});
-		unlinkButton.setToolTipText("Unlinks alias datanode from group aliasRef"); // TODO
-		c.gridx = GridBagConstraints.RELATIVE;
-		c.weightx = 0;
-		aliasPanel.add(unlinkButton, c);
 
 		// ========================================
 		// Etc
@@ -548,7 +495,6 @@ public class DataNodeDialog extends PathwayElementDialog {
 		idText.setEnabled(!readonly);
 		dbCombo.setEnabled(!readonly);
 		typeCombo.setEnabled(!readonly);
-		aliasRfText.setEnabled(readonly);
 		parent.add(TAB_PROPERTIES, panel);
 		parent.setSelectedComponent(panel);
 	}

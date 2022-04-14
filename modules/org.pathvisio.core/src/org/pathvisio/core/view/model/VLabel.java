@@ -16,7 +16,12 @@
  ******************************************************************************/
 package org.pathvisio.core.view.model;
 
+import java.awt.Color;
+
+import org.pathvisio.core.preferences.GlobalPreference;
+import org.pathvisio.core.preferences.PreferenceManager;
 import org.pathvisio.libgpml.model.Label;
+import org.pathvisio.libgpml.util.Utils;
 
 /**
  * Represents the view of a PathwayElement with ObjectType.LABEL.
@@ -41,5 +46,32 @@ public class VLabel extends VShapedElement {
 	@Override
 	public Label getPathwayObject() {
 		return (Label) super.getPathwayObject();
+	}
+
+	/**
+	 * TODO
+	 * 
+	 * @return
+	 */
+	@Override
+	protected Color getTextColor() {
+		Color textColor = getPathwayObject().getTextColor();
+		/*
+		 * the selection is not colored red when in edit mode it is possible to see a
+		 * color change immediately
+		 */
+		if (isSelected() && !canvas.isEditMode()) {
+			textColor = selectColor;
+		}
+		// if hyperlink set color
+		Label o = getPathwayObject();
+		if (o.getHref() != null && !Utils.stringEquals(o.getHref(), "")) {
+			if (PreferenceManager.getCurrent() == null) {
+				PreferenceManager.init();
+			}
+			Color hyperlinkColor = PreferenceManager.getCurrent().getColor(GlobalPreference.COLOR_LINK);
+			o.setTextColor(hyperlinkColor);
+		}
+		return textColor;
 	}
 }

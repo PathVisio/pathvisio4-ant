@@ -112,7 +112,11 @@ public abstract class VShapedElement extends VPathwayElement implements VLinkabl
 			handleR = new Handle(Handle.Freedom.ROTATION, this, this);
 			handleR.setAngle(1);
 			handles = new Handle[] { handleR };
-		} else if (this instanceof VState) {
+		} else if (this instanceof VState) { // TODO
+			/*
+			 * States are usually small, the number of handles is reduced for a cleaner
+			 * look. There are only NE, SE, SW, and NW handles. No N, E, S, and W handles.
+			 */
 			handleNE = new Handle(Handle.Freedom.NEGFREE, this, this);
 			handleSE = new Handle(Handle.Freedom.FREE, this, this);
 			handleSW = new Handle(Handle.Freedom.NEGFREE, this, this);
@@ -123,7 +127,13 @@ public abstract class VShapedElement extends VPathwayElement implements VLinkabl
 			handleSW.setAngle(135);
 			handleNW.setAngle(225);
 
-			handles = new Handle[] { handleNE, handleSE, handleSW, handleNW, };
+			// Rotation handle
+			handleR = new Handle(Handle.Freedom.ROTATION, this, this);
+			handleR.setAngle(1);
+			handles = new Handle[] { handleN, handleNE, handleE, handleSE, handleS, handleSW, handleW, handleNW,
+					handleR };
+
+			handles = new Handle[] { handleNE, handleSE, handleSW, handleNW, handleR };
 		} else {
 			handleN = new Handle(Handle.Freedom.Y, this, this);
 			handleE = new Handle(Handle.Freedom.X, this, this);
@@ -153,6 +163,7 @@ public abstract class VShapedElement extends VPathwayElement implements VLinkabl
 				// No rotation handle for these objects
 				handles = new Handle[] { handleN, handleNE, handleE, handleSE, handleS, handleSW, handleW, handleNW, };
 			} else {
+				// Rotation handle
 				handleR = new Handle(Handle.Freedom.ROTATION, this, this);
 				handleR.setAngle(1);
 
