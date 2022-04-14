@@ -56,7 +56,6 @@ public class ImageTextButton extends JButton {
 	Shape imageShape; // shape to be painted on button
 	Color imageColor; // paint color of button
 	BasicStroke imageStroke; // paint stroke
-	String category; // button category (e.g. Molecules, Concepts, Interactions...)
 
 	// ================================================================================
 	// Constructor
@@ -68,12 +67,11 @@ public class ImageTextButton extends JButton {
 	 * @param category the button category (e.g. Molecules, Concepts,
 	 *                 Interactions...).
 	 */
-	public ImageTextButton(Action a, String category) {
+	public ImageTextButton(Action a) {
 		super();
 		this.setAction(a);
 		this.setRolloverEnabled(true);
 		initRolloverListener();
-		this.category = category; // to differentiate between datanode and shape "Cell"
 		this.setImageShape(); // set shape
 		this.setImageColor(); // set color
 		this.setImageStroke(); // set stroke
@@ -145,15 +143,9 @@ public class ImageTextButton extends JButton {
 		case "Phenotype":
 		case "Event":
 		case "Undefined":
+		case "CellNode":
 		case "Organ":
 			sh = new RoundRectangle2D.Double(4, 6, 24, 20, 8, 8);
-			break;
-		case "Cell":
-			if (category == "Concepts") { // to differentiate from Shape "Cell"
-				sh = new RoundRectangle2D.Double(4, 6, 24, 20, 8, 8);
-			} else {
-				sh = null;
-			}
 			break;
 		case "Alias":
 			sh = new Ellipse2D.Double(4, 6, 24, 20);
@@ -252,12 +244,8 @@ public class ImageTextButton extends JButton {
 				t = text;
 			}
 			break;
-		case "Cell":
-			if (category == "Concepts") {
-				t = text;
-			} else {
-				t = null;
-			}
+		case "CellNode":
+			t = "Cell";
 			break;
 		default:
 			t = null;

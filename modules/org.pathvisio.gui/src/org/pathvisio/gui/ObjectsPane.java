@@ -63,7 +63,7 @@ public class ObjectsPane extends JPanel {
 			c.gridx = i % numItemPerRow;
 			c.gridy = i / numItemPerRow;
 
-			final ImageTextButton button = new ImageTextButton(a, label);
+			final ImageTextButton button = new ImageTextButton(a);
 			button.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					button.setContentAreaFilled(false);

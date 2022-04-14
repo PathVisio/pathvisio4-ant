@@ -87,6 +87,9 @@ public class AnnotationDialog extends OkCancelDialog {
 	private Annotatable annotatable;
 	private AnnotationRef annotationRef;
 
+	// ================================================================================
+	// Constructors
+	// ================================================================================
 	/**
 	 * Instantiates a annotation dialog.
 	 * 
@@ -112,6 +115,9 @@ public class AnnotationDialog extends OkCancelDialog {
 		this(annotatable, annotationRef, frame, locationComp, true);
 	}
 
+	// ================================================================================
+	// Accessors
+	// ================================================================================
 	/**
 	 * Sets text in text field.
 	 * 
@@ -123,6 +129,9 @@ public class AnnotationDialog extends OkCancelDialog {
 			field.setText(text);
 	}
 
+	// ================================================================================
+	// Refresh
+	// ================================================================================
 	/**
 	 * Refresh.
 	 */
@@ -144,44 +153,66 @@ public class AnnotationDialog extends OkCancelDialog {
 		}
 	}
 
+	// ================================================================================
+	// OK Pressed Method
+	// ================================================================================
 	/**
 	 * When "Ok" button is pressed. The annotationRef is created or updated.
 	 */
 	protected void okPressed() {
-		// old information
+		boolean done = true;
+		// ========================================
+		// Old information
+		// ========================================
 		String oldValue = null;
 		AnnotationType oldType = null;
-		String oldIdentifier = null;
-		DataSource oldDataSource = null;
-		String oldUrlLink = null;
+		String oldId = null;
+		DataSource oldDs = null;
+		String oldUrl = null;
 		if (annotationRef != null) {
 			oldValue = annotationRef.getAnnotation().getValue();
 			oldType = annotationRef.getAnnotation().getType();
-			oldIdentifier = annotationRef.getAnnotation().getXref().getId();
-			oldDataSource = annotationRef.getAnnotation().getXref().getDataSource();
-			oldUrlLink = annotationRef.getAnnotation().getUrlLink();
+			oldId = annotationRef.getAnnotation().getXref().getId();
+			oldDs = annotationRef.getAnnotation().getXref().getDataSource();
+			oldUrl = annotationRef.getAnnotation().getUrlLink();
 		}
-		// new information
+		// ========================================
+		// New information
+		// ========================================
 		String newValue = valueText.getText();
 		AnnotationType newType = (AnnotationType) typeCombo.getSelectedItem();
-		String newIdentifier = xrefIdentifier.getText().trim();
-		String newDataSourceStr = xrefDataSource.getText();
-		DataSource newDataSource = XrefUtils.getXrefDataSource(newDataSourceStr);
-		String newUrlLink = urlLinkText.getText();
-		// if changed
-		if (oldValue != newValue || oldType != newType || oldIdentifier != newIdentifier
-				|| oldDataSource != newDataSource || oldUrlLink != newUrlLink) {
-			Xref newXref = new Xref(newIdentifier, newDataSource);
-			if (newValue != null && newType != null) { // value and type required
-				if (annotationRef != null) {// if annotationRef exists, removed first
-					annotatable.removeAnnotationRef(annotationRef);
-				}
-				annotatable.addAnnotation(newValue, newType, newXref, newUrlLink);
-			}
+		String newId = xrefIdentifier.getText().trim();
+		DataSource newDs = XrefUtils.getXrefDataSource(xrefDataSource.getText());
+		String newUrl = urlLinkText.getText();
+		// ========================================
+		// Check requirements
+		// ========================================
+		if (newValue.equals("")) {
+			done = false;
+			JOptionPane.showMessageDialog(this, "An annotation requires a value.\n Please input more information.",
+					"Error", JOptionPane.ERROR_MESSAGE);
 		}
-		super.okPressed();
+		if (newType == null) {
+			done = false;
+			JOptionPane.showMessageDialog(this, "An annotation must have an annotation type.\\n Please select a type.",
+					"Error", JOptionPane.ERROR_MESSAGE);
+		}
+		// ========================================
+		// New AnnotationRef
+		// ========================================
+		Xref newXref = new Xref(newId, newDs);
+		if (newValue != null && newType != null) {
+			annotatable.removeAnnotationRef(annotationRef); // remove old first
+			annotatable.addAnnotation(newValue, newType, newXref, newUrl); // "replace" with new
+		}
+		if (done) { // TODO
+			super.okPressed();
+		}
 	}
 
+	// ================================================================================
+	// Query Methods
+	// ================================================================================
 	/**
 	 * When "Query" button is pressed.
 	 */
@@ -219,6 +250,9 @@ public class AnnotationDialog extends OkCancelDialog {
 		super.actionPerformed(e);
 	}
 
+	// ================================================================================
+	// Dialog and Panels
+	// ================================================================================
 	/**
 	 * Creates Dialog pane.
 	 * 

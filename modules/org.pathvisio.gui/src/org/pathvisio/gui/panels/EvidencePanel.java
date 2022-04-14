@@ -56,12 +56,14 @@ import org.pathvisio.gui.dialogs.EvidenceDialog;
  */
 public class EvidencePanel extends PathwayElementPanel implements ActionListener {
 
+	// labels
 	private static final String ADD = "New evidence";
 	private static final String REMOVE = "Remove";
 	private static final String EDIT = "Edit";
 	private static final URL IMG_EDIT = Resources.getResourceURL("edit.gif");
 	private static final URL IMG_REMOVE = Resources.getResourceURL("cancel.gif");
 
+	// fields
 	List<EvidenceRef> evidenceRefs;
 
 	JScrollPane refPanel;
@@ -70,6 +72,9 @@ public class EvidencePanel extends PathwayElementPanel implements ActionListener
 	final private SwingEngine swingEngine;
 	boolean readOnly = false;
 
+	// ================================================================================
+	// Constructors
+	// ================================================================================
 	/**
 	 * Instantiates evidenceRef panel
 	 * 
@@ -87,6 +92,9 @@ public class EvidencePanel extends PathwayElementPanel implements ActionListener
 		add(addPnl, BorderLayout.SOUTH);
 	}
 
+	// ================================================================================
+	// Accessors
+	// ================================================================================
 	/**
 	 * Sets read only,
 	 */
@@ -105,6 +113,9 @@ public class EvidencePanel extends PathwayElementPanel implements ActionListener
 		return (PathwayElement) super.getInput();
 	}
 
+	// ================================================================================
+	// Refresh
+	// ================================================================================
 	/**
 	 * Refresh.
 	 */
@@ -125,120 +136,9 @@ public class EvidencePanel extends PathwayElementPanel implements ActionListener
 		validate();
 	}
 
-	/**
-	 * Panel which displays EvidenceRef
-	 * 
-	 * @author unknown
-	 */
-	private class EvidenceRefPanel extends JPanel implements HyperlinkListener, ActionListener {
-		EvidenceRef evidenceRef;
-		JPanel btnPanel;
-
-		/**
-		 * Instantiates panel
-		 * 
-		 * @param evidenceRef
-		 */
-		public EvidenceRefPanel(EvidenceRef evidenceRef) {
-			this.evidenceRef = evidenceRef;
-			setBackground(Color.WHITE);
-			setLayout(new FormLayout("2dlu, fill:[100dlu,min]:grow, 1dlu, pref, 2dlu", "2dlu, pref, 2dlu"));
-			JTextPane txt = new JTextPane();
-			txt.setContentType("text/html");
-			txt.setEditable(false);
-			Evidence evidence = evidenceRef.getEvidence();
-			// index starts from 1
-			int ordinal = getInput().getPathwayModel().getEvidences().indexOf(evidence) + 1;
-			txt.setText("<html>" + "<B>" + ordinal + ":</B> " + xrefToString(evidence.getXref()) + "</html>");
-			txt.addHyperlinkListener(this);
-			CellConstraints cc = new CellConstraints();
-			add(txt, cc.xy(2, 2));
-
-			btnPanel = new JPanel(new FormLayout("pref", "pref, pref"));
-			JButton btnEdit = new JButton();
-			btnEdit.setActionCommand(EDIT);
-			btnEdit.addActionListener(this);
-			btnEdit.setIcon(new ImageIcon(IMG_EDIT));
-			btnEdit.setBackground(Color.WHITE);
-			btnEdit.setBorder(null);
-			btnEdit.setToolTipText("Edit literature reference");
-
-			JButton btnRemove = new JButton();
-			btnRemove.setActionCommand(REMOVE);
-			btnRemove.addActionListener(this);
-			btnRemove.setIcon(new ImageIcon(IMG_REMOVE));
-			btnRemove.setBackground(Color.WHITE);
-			btnRemove.setBorder(null);
-			btnRemove.setToolTipText("Remove literature reference");
-
-			MouseAdapter maHighlight = new MouseAdapter() {
-				public void mouseEntered(MouseEvent e) {
-					e.getComponent().setBackground(new Color(200, 200, 255));
-				}
-
-				public void mouseExited(MouseEvent e) {
-					e.getComponent().setBackground(Color.WHITE);
-				}
-			};
-			btnEdit.addMouseListener(maHighlight);
-			btnRemove.addMouseListener(maHighlight);
-
-			btnPanel.add(btnEdit, cc.xy(1, 1));
-			btnPanel.add(btnRemove, cc.xy(1, 2));
-
-			add(btnPanel, cc.xy(4, 2));
-			btnPanel.setVisible(false);
-
-			MouseAdapter maHide = new MouseAdapter() {
-				public void mouseEntered(MouseEvent e) {
-					if (!readOnly)
-						btnPanel.setVisible(true);
-				}
-
-				public void mouseExited(MouseEvent e) {
-					if (!contains(e.getPoint())) {
-						btnPanel.setVisible(false);
-					}
-				}
-			};
-			addMouseListener(maHide);
-			txt.addMouseListener(maHide);
-		}
-
-		public void hyperlinkUpdate(HyperlinkEvent e) {
-			if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
-				swingEngine.openUrl(e.getURL());
-			}
-		}
-
-		public void actionPerformed(ActionEvent e) {
-			String action = e.getActionCommand();
-			if (EDIT.equals(action)) {
-				edit(evidenceRef);
-			} else if (REMOVE.equals(action)) {
-				EvidencePanel.this.remove(evidenceRef);
-			}
-		}
-
-		static final String PUBMED_URL = "http://www.ncbi.nlm.nih.gov/pubmed/";
-
-		// TODO need a solution for more...
-		public String xrefToString(Xref xref) {
-			StringBuilder builder = new StringBuilder();
-			String pmid = XrefUtils.getIdentifier(xref);
-			String ds = XrefUtils.getDataSource(xref).getFullName();
-			if (!Utils.isEmpty(pmid)) {
-				builder.append("<A href='" + xref.getKnownUrl()).append("'>").append(ds).append(" ").append(pmid)
-						.append("</A>.");
-			}
-			System.out.println(xref.getKnownUrl());
-			System.out.println(ds);
-			System.out.println(builder.toString());
-			return builder.toString();
-		}
-
-	}
-
+	// ================================================================================
+	// ADD, EDIT, and REMOVE Methods
+	// ================================================================================
 	/**
 	 * Action for when ADD "New reference" button is pressed.
 	 */
@@ -276,8 +176,7 @@ public class EvidencePanel extends PathwayElementPanel implements ActionListener
 	 * When ADD "New reference" button is pressed. A EvidenceDialog is opened.
 	 */
 	private void addPressed() {
-		EvidenceRef evidenceRef = null; // new evidenceRef
-		final EvidenceDialog d = new EvidenceDialog(getInput(), evidenceRef, null, this);
+		final EvidenceDialog d = new EvidenceDialog(getInput(), null, null, this);
 		if (!SwingUtilities.isEventDispatchThread()) {
 			try {
 				SwingUtilities.invokeAndWait(new Runnable() {
@@ -292,11 +191,144 @@ public class EvidencePanel extends PathwayElementPanel implements ActionListener
 			d.setVisible(true);
 		}
 		if (d.getExitCode().equals(EvidenceDialog.OK)) {
-			// TODO seems weird but ok for now...
-//			getInput().addEvidence(evidenceRef.getEvidence());
 			refresh();
 		} else {
 
 		}
+	}
+
+	// ================================================================================
+	// EvidenceRefPanel Class
+	// ================================================================================
+	/**
+	 * Panel which displays EvidenceRef
+	 * 
+	 * @author unknown
+	 */
+	private class EvidenceRefPanel extends JPanel implements HyperlinkListener, ActionListener {
+
+		static final String PUBMED_URL = "http://www.ncbi.nlm.nih.gov/pubmed/";
+		EvidenceRef evidenceRef;
+		JPanel btnPanel;
+
+		// ================================================================================
+		// Display Panel
+		// ================================================================================
+		/**
+		 * Instantiates panel
+		 * 
+		 * @param evidenceRef
+		 */
+		public EvidenceRefPanel(EvidenceRef evidenceRef) {
+			this.evidenceRef = evidenceRef;
+			setBackground(Color.WHITE);
+			setLayout(new FormLayout("2dlu, fill:[100dlu,min]:grow, 1dlu, pref, 2dlu", "2dlu, pref, 2dlu"));
+			JTextPane txt = new JTextPane();
+			txt.setContentType("text/html");
+			txt.setEditable(false);
+			Evidence evidence = evidenceRef.getEvidence();
+			// index starts from 1
+			int ordinal = getInput().getPathwayModel().getEvidences().indexOf(evidence) + 1;
+			txt.setText("<html>" + "<B>" + ordinal + ":</B> " + xrefToString(evidence.getXref()) + "</html>");
+			txt.addHyperlinkListener(this);
+			CellConstraints cc = new CellConstraints();
+			add(txt, cc.xy(2, 2));
+
+			btnPanel = new JPanel(new FormLayout("pref", "pref, pref"));
+			JButton btnEdit = new JButton();
+			btnEdit.setActionCommand(EDIT);
+			btnEdit.addActionListener(this);
+			btnEdit.setIcon(new ImageIcon(IMG_EDIT));
+			btnEdit.setBackground(Color.WHITE);
+			btnEdit.setBorder(null);
+			btnEdit.setToolTipText("Edit evidence");
+
+			JButton btnRemove = new JButton();
+			btnRemove.setActionCommand(REMOVE);
+			btnRemove.addActionListener(this);
+			btnRemove.setIcon(new ImageIcon(IMG_REMOVE));
+			btnRemove.setBackground(Color.WHITE);
+			btnRemove.setBorder(null);
+			btnRemove.setToolTipText("Remove evidence");
+
+			MouseAdapter maHighlight = new MouseAdapter() {
+				public void mouseEntered(MouseEvent e) {
+					e.getComponent().setBackground(new Color(200, 200, 255));
+				}
+
+				public void mouseExited(MouseEvent e) {
+					e.getComponent().setBackground(Color.WHITE);
+				}
+			};
+			btnEdit.addMouseListener(maHighlight);
+			btnRemove.addMouseListener(maHighlight);
+
+			btnPanel.add(btnEdit, cc.xy(1, 1));
+			btnPanel.add(btnRemove, cc.xy(1, 2));
+
+			add(btnPanel, cc.xy(4, 2));
+			btnPanel.setVisible(false);
+
+			MouseAdapter maHide = new MouseAdapter() {
+				public void mouseEntered(MouseEvent e) {
+					if (!readOnly)
+						btnPanel.setVisible(true);
+				}
+
+				public void mouseExited(MouseEvent e) {
+					if (!contains(e.getPoint())) {
+						btnPanel.setVisible(false);
+					}
+				}
+			};
+			addMouseListener(maHide);
+			txt.addMouseListener(maHide);
+		}
+
+		/**
+		 * Updates hyperlink.
+		 */
+		public void hyperlinkUpdate(HyperlinkEvent e) {
+			if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
+				swingEngine.openUrl(e.getURL());
+			}
+		}
+
+		/**
+		 * Edit and Remove actions.
+		 */
+		public void actionPerformed(ActionEvent e) {
+			String action = e.getActionCommand();
+			if (EDIT.equals(action)) {
+				edit(evidenceRef);
+			} else if (REMOVE.equals(action)) {
+				EvidencePanel.this.remove(evidenceRef);
+			}
+		}
+
+		/**
+		 * Returns string for the evidence. // TODO need a solution for more...
+		 * 
+		 * @param xref
+		 * @return
+		 */
+		public String xrefToString(Xref xref) {
+			StringBuilder builder = new StringBuilder();
+			System.out.println("Xref " + xref);
+			System.out.println("DS " + XrefUtils.getDataSource(xref));
+			System.out.println("FullName " + XrefUtils.getDataSource(xref).getFullName());
+
+			String pmid = XrefUtils.getIdentifier(xref);
+			String ds = XrefUtils.getDataSource(xref).getFullName();
+			if (!Utils.isEmpty(pmid)) {
+				builder.append("<A href='" + xref.getKnownUrl()).append("'>").append(ds).append(" ").append(pmid)
+						.append("</A>.");
+			}
+			System.out.println(xref.getKnownUrl());
+			System.out.println(ds);
+			System.out.println(builder.toString());
+			return builder.toString();
+		}
+
 	}
 }

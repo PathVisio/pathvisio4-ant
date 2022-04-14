@@ -241,7 +241,7 @@ public class CitationPanel extends PathwayElementPanel implements ActionListener
 			btnEdit.setIcon(new ImageIcon(IMG_EDIT));
 			btnEdit.setBackground(Color.WHITE);
 			btnEdit.setBorder(null);
-			btnEdit.setToolTipText("Edit literature reference");
+			btnEdit.setToolTipText("Edit citation");
 
 			JButton btnRemove = new JButton();
 			btnRemove.setActionCommand(REMOVE);
@@ -249,7 +249,7 @@ public class CitationPanel extends PathwayElementPanel implements ActionListener
 			btnRemove.setIcon(new ImageIcon(IMG_REMOVE));
 			btnRemove.setBackground(Color.WHITE);
 			btnRemove.setBorder(null);
-			btnRemove.setToolTipText("Remove literature reference");
+			btnRemove.setToolTipText("Remove citation");
 
 			MouseAdapter maHighlight = new MouseAdapter() {
 				public void mouseEntered(MouseEvent e) {

@@ -94,7 +94,7 @@ public class GraphicsChoiceButton extends ActionDropDownButton {
 			c.gridy = i / numItemPerRow;
 
 			// clicking a button should cause the pop-up menu disappear, any better way?
-			final ImageTextButton button = new ImageTextButton(a, label);
+			final ImageTextButton button = new ImageTextButton(a);
 			aToB.put(a, button);
 			button.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
