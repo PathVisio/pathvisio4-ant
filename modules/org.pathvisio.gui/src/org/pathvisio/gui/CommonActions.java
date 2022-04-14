@@ -195,7 +195,7 @@ public class CommonActions implements ApplicationEventListener {
 				new NewElementAction(e, new DefaultTemplates.DataNodeTemplate(DataNodeType.PATHWAY)),
 				new NewElementAction(e, new DefaultTemplates.DataNodeTemplate(DataNodeType.DISEASE)),
 				new NewElementAction(e, new DefaultTemplates.DataNodeTemplate(DataNodeType.PHENOTYPE)),
-				new NewElementAction(e, new DefaultTemplates.DataNodeTemplate(DataNodeType.ALIAS)),
+//				new NewElementAction(e, new DefaultTemplates.DataNodeTemplate(DataNodeType.ALIAS)),
 				new NewElementAction(e, new DefaultTemplates.DataNodeTemplate(DataNodeType.EVENT)),
 				new NewElementAction(e, new DefaultTemplates.DataNodeTemplate(DataNodeType.CELL)),
 				new NewElementAction(e, new DefaultTemplates.DataNodeTemplate(DataNodeType.ORGAN)),
@@ -653,7 +653,7 @@ public class CommonActions implements ApplicationEventListener {
 
 	/**
 	 * Provides direct access to the literature reference dialog
-	 * ({@link PublicationXrefDialog}) from the right click menu.
+	 * ({@link CitationDialog}) from the right click menu.
 	 */
 	public static class AddLiteratureAction extends PathwayElementDialogAction {
 		public AddLiteratureAction(SwingEngine swingEngine, Component parent, VElement e) {
@@ -687,6 +687,27 @@ public class CommonActions implements ApplicationEventListener {
 		}
 	}
 
+	/**
+	 * Pops up the pathway element dialog directly on the literature tab.
+	 */
+	public static class EditLiteratureAction extends PathwayElementDialogAction {
+	
+		public EditLiteratureAction(SwingEngine swingEngine, Component parent, VElement e) {
+			super(swingEngine, parent, e);
+			putValue(NAME, "Edit literature references");
+			putValue(SHORT_DESCRIPTION, "Edit the literature references of this element");
+			setEnabled(e.getDrawing().isEditMode());
+		}
+	
+		protected String getSelectedPanel() {
+			return PathwayElementDialog.TAB_LITERATURE;
+		}
+	}
+
+	/**
+	 * 
+	 * @author unknown
+	 */
 	public static class AddHrefAction extends AbstractAction {
 
 		SwingEngine se;
@@ -713,23 +734,6 @@ public class CommonActions implements ApplicationEventListener {
 					}
 				}
 			}
-		}
-	}
-
-	/**
-	 * Pops up the pathway element dialog directly on the literature tab.
-	 */
-	public static class EditLiteratureAction extends PathwayElementDialogAction {
-
-		public EditLiteratureAction(SwingEngine swingEngine, Component parent, VElement e) {
-			super(swingEngine, parent, e);
-			putValue(NAME, "Edit literature references");
-			putValue(SHORT_DESCRIPTION, "Edit the literature references of this element");
-			setEnabled(e.getDrawing().isEditMode());
-		}
-
-		protected String getSelectedPanel() {
-			return PathwayElementDialog.TAB_LITERATURE;
 		}
 	}
 

@@ -29,6 +29,7 @@ import org.pathvisio.core.preferences.Preference;
 import org.pathvisio.core.preferences.PreferenceManager;
 import org.pathvisio.libgpml.debug.Logger;
 import org.pathvisio.libgpml.model.PathwayElement;
+import org.pathvisio.libgpml.model.DataNode;
 import org.pathvisio.libgpml.model.PathwayObject;
 import org.pathvisio.libgpml.model.shape.ShapeType;
 import org.pathvisio.libgpml.model.type.HAlignType;
@@ -77,7 +78,6 @@ public class PropertyDisplayManager {
 		registerTypeHandler(new CommentsHandler());
 		registerTypeHandler(new DescriptionHandler());
 		registerTypeHandler(new XrefHandler());
-		registerTypeHandler(new AliasRefHandler());
 		registerTypeHandler(new DataSourceHandler());
 		registerTypeHandler(new ComboHandler(StaticPropertyType.ORGANISM, Organism.latinNames(), false));
 		registerTypeHandler(new ComboHandler(StaticPropertyType.DATANODETYPE, DataNodeType.getNames(), false));
@@ -117,6 +117,27 @@ public class PropertyDisplayManager {
 		Set<Object> result = new HashSet<Object>();
 		// add static properties
 		for (Property p : e.getStaticPropertyKeys()) {
+			ObjectType ot = e.getObjectType();
+			// for Group, do not add BorderColor/Width/Style, FillColor and ShapeType
+			if (ot == ObjectType.GROUP) {
+				if (p == StaticProperty.BORDERCOLOR || p == StaticProperty.BORDERSTYLE
+						|| p == StaticProperty.BORDERWIDTH || p == StaticProperty.FILLCOLOR
+						|| p == StaticProperty.SHAPETYPE) {
+					continue;
+				}
+			}
+			// for Datanode, do not add AliasRef unless type Alias
+			if (ot == ObjectType.DATANODE) {
+				if (((DataNode) e).getType() != DataNodeType.ALIAS && p == StaticProperty.ALIASREF) {
+					continue;
+				}
+			}
+			// for Datanode, Label, and Group, do not add Rotation
+			if (ot == ObjectType.DATANODE || ot == ObjectType.LABEL || ot == ObjectType.GROUP) {
+				if (p == StaticProperty.ROTATION) {
+					continue;
+				}
+			}
 			if (isVisible(p)) {
 				result.add(p);
 			}
