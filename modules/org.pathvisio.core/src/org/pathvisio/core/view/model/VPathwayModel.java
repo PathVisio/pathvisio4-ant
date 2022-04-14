@@ -339,12 +339,15 @@ public class VPathwayModel implements PathwayModelListener {
 	 */
 	public void fromModel(PathwayModel pathwayModel) {
 		Logger.log.trace("Create view structure");
-
 		data = pathwayModel;
-		// TODO Should Pathway be included in PathwayElements...or not really?
-		fromModelElement(data.getPathway());
+		fromModelElement(data.getPathway()); // pathway TODO part of pathway elements? 
 		for (PathwayElement o : data.getPathwayElements()) {
 			fromModelElement(o);
+			if (o.getObjectType() == ObjectType.DATANODE) {
+				for (State st : ((DataNode) o).getStates()) { // states
+					fromModelElement(st);
+				}
+			}
 		}
 		// data.fireObjectModifiedEvent(new PathwayEvent(null,
 		// PathwayEvent.MODIFIED_GENERAL));
