@@ -212,9 +212,6 @@ public abstract class DefaultTemplates {
 			// set graphics
 			theme.setInitialColors(e);
 			setInitialShapeBorder(e);
-			if (type == DataNodeType.PATHWAY) { // TODO
-				e.setFontWeight(true);
-			}
 			e.setCenterX(mx);
 			e.setCenterY(my);
 			setInitialSize(e);

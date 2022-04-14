@@ -124,6 +124,9 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 	public final GroupAction toggleTransparent;
 
 	public final AddAliasAction addAlias;
+	public final UnlinkAliasRefAction unlinkAliasRef;
+	//TODO LinkAliasRefAction to be created
+	
 	public final DeleteAction delete1;
 	public final DeleteAction delete2;
 	public final CopyAction copy;
@@ -139,14 +142,14 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 	public final OrderUpAction orderUp;
 	public final OrderDownAction orderDown;
 	public final ShowUnlinkedConnectors showUnlinked;
-	
+
 	public final AddState addStateProteinModification;
 	public final AddState addStateGeneticVariant;
 	public final AddState addStateEpigeneticModification;
 	public final AddState addStateUndefined;
 
 	public final RemoveState removeState;
-	
+
 	public final TextFormattingAction formatText;
 
 	private final Engine engine;
@@ -173,6 +176,8 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 		toggleTransparent = new GroupAction(GroupType.TRANSPARENT);
 
 		addAlias = new AddAliasAction();
+		unlinkAliasRef = new UnlinkAliasRefAction();
+
 		delete1 = new DeleteAction(java.awt.event.KeyEvent.VK_DELETE);
 		delete2 = new DeleteAction(java.awt.event.KeyEvent.VK_BACK_SPACE);
 		copy = new CopyAction(engine);
@@ -188,13 +193,13 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 		orderUp = new OrderUpAction(engine);
 		orderDown = new OrderDownAction(engine);
 		showUnlinked = new ShowUnlinkedConnectors();
-		
-		addStateProteinModification= new AddState(StateType.PROTEIN_MODIFICATION);
-		addStateGeneticVariant= new AddState(StateType.GENETIC_VARIANT);
-		addStateEpigeneticModification= new AddState(StateType.EPIGENETIC_MODIFICATION);
-		addStateUndefined= new AddState(StateType.UNDEFINED);
+
+		addStateProteinModification = new AddState(StateType.PROTEIN_MODIFICATION);
+		addStateGeneticVariant = new AddState(StateType.GENETIC_VARIANT);
+		addStateEpigeneticModification = new AddState(StateType.EPIGENETIC_MODIFICATION);
+		addStateUndefined = new AddState(StateType.UNDEFINED);
 		removeState = new RemoveState();
-		
+
 		formatText = new TextFormattingAction(engine, null);
 
 		registerToGroup(selectDataNodes, GROUP_ENABLE_VPATHWAY_LOADED);
@@ -641,13 +646,13 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 	 *
 	 */
 	private class AddState extends AbstractAction {
-		
+
 		private StateType type;
-		
+
 		AddState(StateType type) {
 			super(type.toString());
-			this.type = type; 
-			
+			this.type = type;
+
 		}
 
 		/**
@@ -824,50 +829,35 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 
 	}
 
-//	/**
-//	 * @author unknown
-//	 *
-//	 */
-//	private class AddAliasRef2 extends AbstractAction {
-//		private String linkLbl ="link", unlinkLbl ="unlink", linkTt = "link this", unlinkTt = "unlink this";
-//
-//		public AddAliasRef2() {
-//			super();
-//			putValue(NAME, linkLbl);
-//			putValue(SHORT_DESCRIPTION, linkTt);
-//			setLabel();
-//		}
-//
-//		public void actionPerformed(ActionEvent e) {
-//			if (!isEnabled())
-//				return; // Don't perform action if not enabled
-//			Group g = vPathwayModel.toggleGroup(vPathwayModel.getSelectedGraphics());
-//			if (g != null) {
-//				g.getPathwayElement().setGroupStyle(groupStyle);
-//			}
-//		}
-//
-//		public void selectionEvent(SelectionEvent e) {
-//			switch (e.type) {
-//			case SelectionEvent.OBJECT_ADDED:
-//			case SelectionEvent.OBJECT_REMOVED:
-//			case SelectionEvent.SELECTION_CLEARED:
-//				setLabel();
-//			}
-//		}
-//
-//		private void setLabel() {
-//			setEnabled(true);
-//			if (unGrouped >= 2) {
-//				putValue(Action.NAME, linkLbl);
-//				putValue(SHORT_DESCRIPTION, linkTt);
-//			} else {
-//				putValue(Action.NAME, unlinkLbl);
-//				putValue(SHORT_DESCRIPTION, unlinkTt);
-//			}
-//		}
-//	}
-//
+	/**
+	 * @author unknown
+	 *
+	 */
+	private class UnlinkAliasRefAction extends AbstractAction implements EventListener {
+
+		private Group group = null;
+
+		UnlinkAliasRefAction() {
+			super("Unlink from Group...");
+		}
+
+		/**
+		 *
+		 */
+		public void actionPerformed(ActionEvent arg0) {
+			List<VDrawable> selection = vPathwayModel.getSelectedGraphics();
+			if (selection.size() > 0) {
+				vPathwayModel.getUndoManager().newAction("Unlink AliasRef");
+				for (VDrawable d : selection) {
+					if (d instanceof VDataNode) {
+						DataNode dn = (DataNode) d.getPathwayObject();
+						dn.unsetAliasRef();
+					}
+				}
+			}
+		}
+	}
+
 //	/**
 //	 * @author unknown
 //	 *

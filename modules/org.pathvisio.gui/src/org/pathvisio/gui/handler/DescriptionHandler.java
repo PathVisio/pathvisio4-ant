@@ -36,7 +36,7 @@ import org.pathvisio.libgpml.prop.PropertyType;
 import org.pathvisio.libgpml.prop.StaticPropertyType;
 
 /**
- * This class knows how to edit comments.
+ * This class knows how to edit pathway description.
  * 
  * @author finterly
  */
@@ -78,7 +78,7 @@ public class DescriptionHandler extends AbstractCellEditor
 
 	public void updateEditor(SwingEngine aSwingEngine, Collection<PathwayElement> elements, PathwayModel pathway,
 			PropertyView propHandler) {
-		// can only edit comments for a single item at a time
+		// TODO only edit for a single item at a time
 		canEdit = propHandler.elements.size() == 1;
 		swingEngine = aSwingEngine;
 		if (canEdit) {

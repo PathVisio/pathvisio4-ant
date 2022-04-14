@@ -41,6 +41,7 @@ import org.pathvisio.core.view.model.VGroup;
 import org.pathvisio.core.view.model.VInfoBox;
 import org.pathvisio.core.view.model.VLabel;
 import org.pathvisio.core.view.model.VLineElement;
+import org.pathvisio.core.view.model.VPathwayElement;
 import org.pathvisio.core.view.model.VPathwayModel;
 import org.pathvisio.core.view.model.VPathwayModelEvent;
 import org.pathvisio.core.view.model.VPathwayModelListener;
@@ -53,8 +54,10 @@ import org.pathvisio.gui.CommonActions.EditLiteratureAction;
 import org.pathvisio.gui.CommonActions.PropertiesAction;
 import org.pathvisio.gui.dialogs.PathwayElementDialog;
 import org.pathvisio.gui.view.VPathwayModelSwing;
+import org.pathvisio.libgpml.model.DataNode;
 import org.pathvisio.libgpml.model.type.AnchorShapeType;
 import org.pathvisio.libgpml.model.type.ConnectorType;
+import org.pathvisio.libgpml.model.type.DataNodeType;
 
 /**
  * Implementation of {@link VPathwayModelListener} that handles right-click
@@ -133,7 +136,9 @@ public class PathwayElementMenuListener implements VPathwayModelListener {
 		menu.add(a);
 		menu.addSeparator();
 
-		// TODO
+		// ========================================
+		// Group View Actions
+		// ========================================
 		JMenu groupMenu = new JMenu("Create Group");
 		groupMenu.add(vActions.toggleGroup); // Group (default)
 		groupMenu.add(vActions.toggleComplex); // Complex
@@ -141,7 +146,7 @@ public class PathwayElementMenuListener implements VPathwayModelListener {
 		groupMenu.add(vActions.toggleAnalog); // Analog
 		groupMenu.add(vActions.toggleParalog); // Paralog
 		groupMenu.add(vActions.toggleTransparent); // Transparent
-		
+
 		// Show group/ungroup when multiple objects or a group are selected
 		if ((e instanceof VGroup)) {
 			menu.add(vActions.toggleGroup);
@@ -149,7 +154,7 @@ public class PathwayElementMenuListener implements VPathwayModelListener {
 			menu.addSeparator();
 		} else if (vp.getSelectedGraphics().size() > 1) {
 			boolean includesGroup = false;
-			for (VDrawable p : vp.getSelectedGraphics()) { // TODO
+			for (VDrawable p : vp.getSelectedGraphics()) {
 				if (p instanceof VGroup) {
 					includesGroup = true;
 				}
@@ -162,18 +167,31 @@ public class PathwayElementMenuListener implements VPathwayModelListener {
 			}
 		}
 
+		// ========================================
+		// DataNode View Actions
+		// ========================================
 		JMenu stateMenu = new JMenu("Add State...");
 		stateMenu.add(vActions.addStateProteinModification);
-		stateMenu.add(vActions.addStateGeneticVariant); 
+		stateMenu.add(vActions.addStateGeneticVariant);
 		stateMenu.add(vActions.addStateEpigeneticModification);
 		stateMenu.add(vActions.addStateUndefined);
 		if (e instanceof VDataNode) {
 			menu.add(stateMenu);
+			DataNode dn = ((VDataNode) e).getPathwayObject();
+			if (dn.getType() == DataNodeType.ALIAS && dn.getAliasRef() != null) {
+				menu.add(vActions.unlinkAliasRef);
+			}
 		}
+		// ========================================
+		// State View Actions
+		// ========================================
 		if (e instanceof VState) {
 			menu.add(vActions.removeState);
 		}
 
+		// ========================================
+		// Line Element View Actions
+		// ========================================
 		if ((e instanceof VLineElement)) {
 			final VLineElement line = (VLineElement) e;
 
@@ -228,6 +246,9 @@ public class PathwayElementMenuListener implements VPathwayModelListener {
 			menu.add(anchorMenu);
 		}
 
+		// ========================================
+		// Z-Order View Actions
+		// ========================================
 		JMenu orderMenu = new JMenu("Order");
 		orderMenu.add(vActions.orderBringToFront);
 		orderMenu.add(vActions.orderSendToBack);
@@ -235,8 +256,11 @@ public class PathwayElementMenuListener implements VPathwayModelListener {
 		orderMenu.add(vActions.orderDown);
 		menu.add(orderMenu);
 
-		if (e instanceof VPathwayObject) {
-			JMenu litMenu = new JMenu("Literature");
+		// ========================================
+		// Literature View Actions TODO
+		// ========================================
+		if (e instanceof VPathwayElement) {
+			JMenu litMenu = new JMenu("References");
 			litMenu.add(new AddLiteratureAction(swingEngine, component, e));
 			litMenu.add(new EditLiteratureAction(swingEngine, component, e));
 			menu.add(litMenu);
@@ -254,18 +278,23 @@ public class PathwayElementMenuListener implements VPathwayModelListener {
 			menu.add(pathLitRef);
 		}
 
+		// ========================================
+		// Label View Actions
+		// ========================================
 		if (e instanceof VLabel) {
 			menu.addSeparator();
 			menu.add(new CommonActions.AddHrefAction(e, swingEngine));
 		}
 
+		// ========================================
+		// Etc.
+		// ========================================
 		menu.addSeparator();
-
+		
 		// give plug-ins a chance to add menu items.
 		for (PathwayElementMenuHook hook : hooks) {
 			hook.pathwayElementMenuHook(e, menu);
 		}
-
 		return menu;
 	}
 

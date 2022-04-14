@@ -41,6 +41,7 @@ import org.pathvisio.libgpml.model.PathwayElement;
 import org.pathvisio.libgpml.model.PathwayObject;
 import org.pathvisio.libgpml.model.PathwayObjectEvent;
 import org.pathvisio.libgpml.model.PathwayObjectListener;
+import org.pathvisio.libgpml.prop.StaticProperty;
 
 /**
  * The model for the table in the Properties side panel. Each row corresponds to
@@ -158,7 +159,7 @@ public class PathwayTableModel extends AbstractTableModel
 				if (!shown)
 					shownProperties.add(tp);
 			} else {
-				// System.err.println("\tremoveing " + tp + " from shown");
+				// System.err.println("\tremoving " + tp + " from shown");
 				shownProperties.remove(tp);
 			}
 			Collections.sort(shownProperties);
@@ -206,8 +207,14 @@ public class PathwayTableModel extends AbstractTableModel
 	}
 
 	public boolean isCellEditable(int rowIndex, int columnIndex) {
+		// cannot directly edit aliasRef
+		if (getPropertyAt(rowIndex).getType() == StaticProperty.ALIASREF) {
+			return false;
+		}
+		// TODO some pathway properties should not be editable
 		return columnIndex == 1 && swingEngine.getEngine().hasVPathwayModel()
 				&& swingEngine.getEngine().getActiveVPathwayModel().isEditMode();
+
 	}
 
 	public void selectionEvent(SelectionEvent e) {
