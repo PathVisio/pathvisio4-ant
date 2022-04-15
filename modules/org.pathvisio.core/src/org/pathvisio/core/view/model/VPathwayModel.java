@@ -39,6 +39,7 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.swing.Action;
+import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import javax.swing.Timer;
 
@@ -49,13 +50,10 @@ import org.pathvisio.libgpml.debug.Logger;
 import org.pathvisio.libgpml.model.type.DataNodeType;
 import org.pathvisio.libgpml.model.type.GroupType;
 import org.pathvisio.libgpml.model.type.HAlignType;
-import org.pathvisio.libgpml.model.Annotation;
-import org.pathvisio.libgpml.model.Citation;
 import org.pathvisio.libgpml.model.CopyElement;
 import org.pathvisio.libgpml.model.DataNode;
 import org.pathvisio.libgpml.model.DataNode.State;
 import org.pathvisio.libgpml.model.Drawable;
-import org.pathvisio.libgpml.model.Evidence;
 import org.pathvisio.libgpml.model.GraphLink.LinkableTo;
 import org.pathvisio.libgpml.model.GraphicalLine;
 import org.pathvisio.libgpml.model.Group;
@@ -78,7 +76,6 @@ import org.pathvisio.libgpml.model.type.ObjectType;
 import org.pathvisio.libgpml.model.type.VAlignType;
 import org.pathvisio.core.preferences.GlobalPreference;
 import org.pathvisio.core.preferences.PreferenceManager;
-import org.pathvisio.core.util.ColorPalette;
 import org.pathvisio.libgpml.util.Utils;
 import org.pathvisio.core.view.KeyEvent;
 import org.pathvisio.core.view.LayoutType;
@@ -340,7 +337,7 @@ public class VPathwayModel implements PathwayModelListener {
 	public void fromModel(PathwayModel pathwayModel) {
 		Logger.log.trace("Create view structure");
 		data = pathwayModel;
-		fromModelElement(data.getPathway()); // pathway TODO part of pathway elements? 
+		fromModelElement(data.getPathway()); // pathway TODO part of pathway elements?
 		for (PathwayElement o : data.getPathwayElements()) {
 			fromModelElement(o);
 			if (o.getObjectType() == ObjectType.DATANODE) {
@@ -787,7 +784,7 @@ public class VPathwayModel implements PathwayModelListener {
 		// No more nested or overlapping groups!
 		else {
 			// Form new group with all selected elementsselectPathwayObjects
-			Group group = new Group(GroupType.GROUP); 
+			Group group = new Group(GroupType.GROUP);
 			group.setHAlign(HAlignType.CENTER); // textLabel by default top center
 			group.setVAlign(VAlignType.TOP);
 			data.add(group);
@@ -1395,6 +1392,7 @@ public class VPathwayModel implements PathwayModelListener {
 			fireVPathwayEvent(
 					new VPathwayModelEvent(this, pressedObject, e, VPathwayModelEventType.ELEMENT_CLICKED_UP));
 		}
+		handleLinkAliasRef();// TODO
 	}
 
 	/**
@@ -1799,6 +1797,117 @@ public class VPathwayModel implements PathwayModelListener {
 			case 40:
 				undoManager.newAction("Move object");
 				selection.vMoveBy(0, increment);
+			}
+		}
+	}
+
+	// ================================================================================
+	// Move Methods
+	// ================================================================================
+	/**
+	 * Move multiple elements together (either a group or a selection).
+	 * <p>
+	 * This method makes sure that elements are not moved twice if they are part of
+	 * another element that is being moved. For example: If a State is moved at the
+	 * same time as its parent DataNode, then the state is not moved. If a group
+	 * member is moved together with the parent group, then the member is not moved.
+	 * 
+	 * @param toMove
+	 * @param vdx
+	 * @param vdy
+	 */
+	public void moveMultipleElements(Collection<? extends VElement> toMove, double vdx, double vdy) {
+		// collect all elementIds in selection
+		Set<PathwayObject> elts = new HashSet<PathwayObject>();
+		for (VElement o : toMove) {
+			if (o instanceof VPathwayObject) {
+				PathwayObject elt = ((VPathwayObject) o).getPathwayObject();
+				if (elt != null) {
+					elts.add(elt);
+				}
+			}
+		}
+		for (VElement o : toMove) {
+			// skip if parent of state is also in selection.
+			if (o instanceof VState) {
+				if (elts.contains(((VState) o).getPathwayObject().getDataNode()))
+					continue;
+			}
+			if (o instanceof VPathwayElement) {
+				if (o instanceof VGroupable) {
+					// skip if parent group is also in selection
+					if (elts.contains(((VGroupable) o).getPathwayObject().getGroupRef())) {
+						continue;
+					}
+				}
+				o.vMoveBy(vdx, vdy);
+			}
+		}
+	}
+
+	// ================================================================================
+	// LinkAliasRef Methods
+	// ================================================================================
+	private boolean doLinkAliasRef = false; // indicates if alias is to be linked to aliasRef
+	private DataNode alias = null; // the current alias to be linked
+
+	/**
+	 * Initiates process for alias data node to be linked to an aliasRef group.
+	 * 
+	 * @param dn the alias datanode to be linked.
+	 */
+	public void startLinkAliasRef(DataNode dn) {
+		if (dn.getType() == DataNodeType.ALIAS) {// precautionary check if type Alias
+			alias = dn;
+			doLinkAliasRef = true;
+		}
+	}
+
+	/**
+	 * Stops the aliasRef linking process. Called when linking task is cancelled or
+	 * when alias datanode is successfully linked.
+	 */
+	public void stopLinkAliasRef() {
+		alias = null;
+		doLinkAliasRef = false;
+	}
+
+	/**
+	 * Called when user fails to click on a valid VGroup/Group to link Alias to.
+	 * 
+	 * <p>
+	 * NB:
+	 * <ol>
+	 * <li>Message dialog again instructs user to click on a group for linking.
+	 * <li>If cancel is selected, the linking task is stopped.
+	 * </ol>
+	 */
+	public void failLinkAliasRef() {
+		Object[] options = { "Try Again", "Cancel" };
+		int n = JOptionPane.showOptionDialog(null, "Please click on a Group to Link Alias DataNode.", "Message",
+				JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
+		if (n == 1) { // cancel linking aliasRef
+			JOptionPane.showConfirmDialog(null, "Alias DataNode was not Linked to a Group.", "Warning",
+					JOptionPane.PLAIN_MESSAGE);
+			stopLinkAliasRef();
+		}
+	}
+
+	/**
+	 * Links alias data node to aliasRef group if new selection is a VGroup,
+	 * otherwise prompts user to try again or cancel {@link #failLinkAliasRef()}.
+	 */
+	public void handleLinkAliasRef() {
+		if (doLinkAliasRef) {
+			if (selection.getSelection().size() != 1) {
+				failLinkAliasRef();
+			} else if (selection.getSelection().iterator().next() instanceof VGroup) {
+				alias.setAliasRef(((VGroup) selection.getSelection().iterator().next()).getPathwayObject());
+				JOptionPane.showConfirmDialog(null, "Alias DataNode successfully Linked to Group.", "Message",
+						JOptionPane.PLAIN_MESSAGE);
+				stopLinkAliasRef();
+			} else {
+				failLinkAliasRef();
 			}
 		}
 	}
@@ -2271,7 +2380,7 @@ public class VPathwayModel implements PathwayModelListener {
 				continue;
 			}
 			lastAdded = null;
-			// shift location of pathway element for pasting 
+			// shift location of pathway element for pasting
 			if (newElement instanceof LineElement) {
 				// if line element, shift position of its points
 				for (LinePoint mp : ((LineElement) newElement).getLinePoints()) {
@@ -2636,50 +2745,6 @@ public class VPathwayModel implements PathwayModelListener {
 			VElement elt = i.next();
 			if (elt.toBeRemoved()) {
 				i.remove();
-			}
-		}
-	}
-
-	// ================================================================================
-	// Move Methods
-	// ================================================================================
-	/**
-	 * Move multiple elements together (either a group or a selection).
-	 * <p>
-	 * This method makes sure that elements are not moved twice if they are part of
-	 * another element that is being moved. For example: If a State is moved at the
-	 * same time as its parent DataNode, then the state is not moved. If a group
-	 * member is moved together with the parent group, then the member is not moved.
-	 * 
-	 * @param toMove
-	 * @param vdx
-	 * @param vdy
-	 */
-	public void moveMultipleElements(Collection<? extends VElement> toMove, double vdx, double vdy) {
-		// collect all elementIds in selection
-		Set<PathwayObject> elts = new HashSet<PathwayObject>();
-		for (VElement o : toMove) {
-			if (o instanceof VPathwayObject) {
-				PathwayObject elt = ((VPathwayObject) o).getPathwayObject();
-				if (elt != null) {
-					elts.add(elt);
-				}
-			}
-		}
-		for (VElement o : toMove) {
-			// skip if parent of state is also in selection.
-			if (o instanceof VState) {
-				if (elts.contains(((VState) o).getPathwayObject().getDataNode()))
-					continue;
-			}
-			if (o instanceof VPathwayElement) {
-				if (o instanceof VGroupable) {
-					// skip if parent group is also in selection
-					if (elts.contains(((VGroupable) o).getPathwayObject().getGroupRef())) {
-						continue;
-					}
-				}
-				o.vMoveBy(vdx, vdy);
 			}
 		}
 	}

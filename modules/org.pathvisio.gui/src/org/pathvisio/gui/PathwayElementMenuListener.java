@@ -178,8 +178,12 @@ public class PathwayElementMenuListener implements VPathwayModelListener {
 		if (e instanceof VDataNode) {
 			menu.add(stateMenu);
 			DataNode dn = ((VDataNode) e).getPathwayObject();
-			if (dn.getType() == DataNodeType.ALIAS && dn.getAliasRef() != null) {
-				menu.add(vActions.unlinkAliasRef);
+			if (dn.getType() == DataNodeType.ALIAS) {
+				if (dn.getAliasRef() != null) {
+					menu.add(vActions.unlinkAliasRef);
+				} else {
+					menu.add(vActions.linkAliasRef); //TODO 
+				}
 			}
 		}
 		// ========================================
@@ -290,7 +294,7 @@ public class PathwayElementMenuListener implements VPathwayModelListener {
 		// Etc.
 		// ========================================
 		menu.addSeparator();
-		
+
 		// give plug-ins a chance to add menu items.
 		for (PathwayElementMenuHook hook : hooks) {
 			hook.pathwayElementMenuHook(e, menu);

@@ -147,9 +147,9 @@ public class ImageTextButton extends JButton {
 		case "Organ":
 			sh = new RoundRectangle2D.Double(4, 6, 24, 20, 8, 8);
 			break;
-//		case "Alias":
-//			sh = new Ellipse2D.Double(4, 6, 24, 20);
-//			break;
+		case "Alias":
+			sh = new Ellipse2D.Double(4, 6, 24, 20);
+			break;
 		case "Label":
 			break;
 		default:
@@ -236,7 +236,7 @@ public class ImageTextButton extends JButton {
 		case "Phenotype":
 		case "Event":
 		case "Organ":
-//		case "Alias":
+		case "Alias":
 		case "Label":
 			if (text.length() > 5) {
 				t = text.substring(0, 4);
