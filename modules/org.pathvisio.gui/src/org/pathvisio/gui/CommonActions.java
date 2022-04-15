@@ -348,6 +348,17 @@ public class CommonActions implements ApplicationEventListener {
 				engine.getActiveVPathwayModel().getUndoManager().newAction("Apply Theme"); // TODO
 				theme.colorPathwayModel(p);
 				engine.getActiveVPathwayModel().redraw();
+				int n = JOptionPane.showConfirmDialog(null,
+						"Warning: Applying theme will overwrite pathway model\ngraphics properties. Are you sure you want to continue?",
+						"Message", JOptionPane.YES_NO_OPTION);
+				if (n == JOptionPane.YES_OPTION) { // yes
+					JOptionPane.showConfirmDialog(null, theme.getName() + " theme applied.", "Message",
+							JOptionPane.PLAIN_MESSAGE);
+				}
+				if (n == JOptionPane.NO_OPTION) { // no
+					engine.getActiveVPathwayModel().undo();
+					JOptionPane.showConfirmDialog(null, "Theme not applied.", "Message", JOptionPane.PLAIN_MESSAGE);
+				}
 			}
 		}
 	}
@@ -691,14 +702,14 @@ public class CommonActions implements ApplicationEventListener {
 	 * Pops up the pathway element dialog directly on the literature tab.
 	 */
 	public static class EditLiteratureAction extends PathwayElementDialogAction {
-	
+
 		public EditLiteratureAction(SwingEngine swingEngine, Component parent, VElement e) {
 			super(swingEngine, parent, e);
 			putValue(NAME, "Edit literature references");
 			putValue(SHORT_DESCRIPTION, "Edit the literature references of this element");
 			setEnabled(e.getDrawing().isEditMode());
 		}
-	
+
 		protected String getSelectedPanel() {
 			return PathwayElementDialog.TAB_LITERATURE;
 		}
