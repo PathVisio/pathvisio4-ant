@@ -229,7 +229,7 @@ public class AnnotationPanel extends PathwayElementPanel implements ActionListen
 			Annotation annotation = annotationRef.getAnnotation();
 			// index starts from 1
 			int ordinal = getInput().getPathwayModel().getAnnotations().indexOf(annotation) + 1;
-			txt.setText("<html>" + "<B>" + ordinal + ":</B> " + xrefToString(annotation.getXref()) + "</html>");
+			txt.setText("<html>" + "<B>" + ordinal + ":</B> " + annotationToString(annotation) + "</html>");
 			txt.addHyperlinkListener(this);
 			CellConstraints cc = new CellConstraints();
 			add(txt, cc.xy(2, 2));
@@ -312,22 +312,42 @@ public class AnnotationPanel extends PathwayElementPanel implements ActionListen
 		 * @param xref
 		 * @return
 		 */
-		public String xrefToString(Xref xref) {
-			StringBuilder builder = new StringBuilder();
-			System.out.println("Xref " + xref);
-			System.out.println("DS " + XrefUtils.getDataSource(xref));
-			System.out.println("FullName " + XrefUtils.getDataSource(xref).getFullName());
-
-			String pmid = XrefUtils.getIdentifier(xref);
-			String ds = XrefUtils.getDataSource(xref).getFullName();
-			if (!Utils.isEmpty(pmid)) {
-				builder.append("<A href='" + xref.getKnownUrl()).append("'>").append(ds).append(" ").append(pmid)
-						.append("</A>.");
+		public String annotationToString(Annotation annotation) {
+			String result = "";
+			// value and type required
+			result = annotation.getType().getName() + ": " + annotation.getValue();
+			// xref optional
+			String xref = annotation.getXref().getKnownUrl();
+			if (xref != null && !Utils.stringEquals(xref, "")) {
+				result += xref;
 			}
-			System.out.println(xref.getKnownUrl());
-			System.out.println(ds);
-			System.out.println(builder.toString());
-			return builder.toString();
+			// urlLink optional
+			String urlLink = annotation.getUrlLink();
+			if (urlLink != null && !Utils.stringEquals(urlLink, "") && !Utils.stringEquals(urlLink, xref)) {
+				result += "; " + urlLink;
+			}
+			return result;
+		}
+
+		/**
+		 * Returns string for xref.
+		 * 
+		 * @param xref
+		 * @return
+		 */
+		public String buildString(Xref xref) {
+			if (xref != null) {
+				StringBuilder builder = new StringBuilder();
+				String pmid = XrefUtils.getIdentifier(xref);
+				String ds = XrefUtils.getDataSource(xref).getFullName();
+				if (!Utils.isEmpty(pmid)) {
+					builder.append("<A href='" + xref.getKnownUrl()).append("'>").append(ds).append(" ").append(pmid)
+							.append("</A>.");
+				}
+				return builder.toString();
+			} else {
+				return "";
+			}
 		}
 
 	}

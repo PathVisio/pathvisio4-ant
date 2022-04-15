@@ -56,6 +56,7 @@ import org.pathvisio.gui.DataSourceModel;
 import org.pathvisio.gui.ProgressDialog;
 import org.pathvisio.gui.util.PermissiveComboBox;
 import org.pathvisio.libgpml.model.PathwayElement;
+import org.pathvisio.libgpml.model.PathwayElement.AnnotationRef;
 import org.pathvisio.libgpml.model.PathwayElement.CitationRef;
 import org.pathvisio.libgpml.model.Referenceable.Citable;
 import org.pathvisio.libgpml.model.type.ObjectType;
@@ -68,7 +69,7 @@ import org.xml.sax.SAXException;
  * 
  * @author unknown, finterly
  */
-public class CitationDialog extends OkCancelDialog {
+public class CitationDialog extends ReferenceDialog {
 
 	// labels
 	private final static String QUERY = "Query PubMed"; // button
@@ -99,7 +100,7 @@ public class CitationDialog extends OkCancelDialog {
 	 */
 	public CitationDialog(Citable citable, CitationRef citationRef, Frame frame, Component locationComp,
 			boolean cancellable) {
-		super(frame, "Literature reference properties", locationComp, true, cancellable);
+		super(frame, "Citation properties", locationComp, true, cancellable);
 		this.citable = citable;
 		this.citationRef = citationRef;
 		setDialogComponent(createDialogPane());
@@ -178,8 +179,8 @@ public class CitationDialog extends OkCancelDialog {
 		if (newUrl.equals("") && (newId.equals("") && newDs == null)) {
 			done = false;
 			JOptionPane.showMessageDialog(this,
-					"A Citation requires a valid Database:id and/or Url link.\nPlease input more information.",
-					"Error", JOptionPane.ERROR_MESSAGE);
+					"A Citation requires a valid Database:id and/or Url link.\nPlease input more information.", "Error",
+					JOptionPane.ERROR_MESSAGE);
 		}
 		if (!newId.equals("") && newDs == null) {
 			done = false;
@@ -197,8 +198,9 @@ public class CitationDialog extends OkCancelDialog {
 		// ========================================
 		Xref newXref = new Xref(newId, newDs);
 		if (newXref != null || newUrl != null) {
-			citable.removeCitationRef(citationRef); // remove old first
-			citable.addCitation(newXref, newUrl); // "replace" with new
+			CitationRef newC = citable.addCitation(newXref, newUrl); // add new info
+			copyRefsOldToNew(citationRef, newC);
+			citable.removeCitationRef(citationRef); // remove old info
 		}
 		if (done) { // TODO
 			super.okPressed();
@@ -231,7 +233,7 @@ public class CitationDialog extends OkCancelDialog {
 		PubMedResult pmr = pmq.getResult();
 		if (pmr != null) {
 			xrefIdentifier.setText(pmr.getId()); // write the trimmed pmid to the dialog
-			dsm.setSelectedItem(dsm); //TODO 
+			dsm.setSelectedItem(dsm); // TODO
 		}
 	}
 
@@ -325,7 +327,7 @@ public class CitationDialog extends OkCancelDialog {
 		xc.gridx = 2;
 		xc.fill = GridBagConstraints.NONE;
 		xrefPanel.add(query);
-		
+
 		// ========================================
 		// UrlLink Panel
 		// ========================================

@@ -104,11 +104,4 @@ public class CopyElement {
 		}
 	}
 
-	/**
-	 * 
-	 */
-	public void getGroup() {
-		// TODO
-	}
-
 }

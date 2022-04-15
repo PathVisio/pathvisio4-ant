@@ -70,7 +70,7 @@ import org.xml.sax.SAXException;
  * 
  * @author unknown, finterly
  */
-public class AnnotationDialog extends OkCancelDialog {
+public class AnnotationDialog extends ReferenceDialog {
 
 	// labels
 	private final static String VALUE = "Value *";
@@ -103,7 +103,7 @@ public class AnnotationDialog extends OkCancelDialog {
 	 */
 	public AnnotationDialog(Annotatable annotatable, AnnotationRef annotationRef, Frame frame, Component locationComp,
 			boolean cancellable) {
-		super(frame, "Literature reference properties", locationComp, true, cancellable);
+		super(frame, "Annotation properties", locationComp, true, cancellable);
 		this.annotatable = annotatable;
 		this.annotationRef = annotationRef;
 		setDialogComponent(createDialogPane());
@@ -206,8 +206,9 @@ public class AnnotationDialog extends OkCancelDialog {
 		// ========================================
 		Xref newXref = new Xref(newId, newDs);
 		if (newValue != null && newType != null) {
-			annotatable.removeAnnotationRef(annotationRef); // remove old first
-			annotatable.addAnnotation(newValue, newType, newXref, newUrl); // "replace" with new
+			AnnotationRef newA = annotatable.addAnnotation(newValue, newType, newXref, newUrl); // add new info
+			copyRefsOldToNew(annotationRef, newA);
+			annotatable.removeAnnotationRef(annotationRef); // remove old info
 		}
 		if (done) { // TODO
 			super.okPressed();

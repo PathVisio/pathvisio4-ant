@@ -61,7 +61,7 @@ import org.xml.sax.SAXException;
  * 
  * @author unknown, finterly
  */
-public class EvidenceDialog extends OkCancelDialog {
+public class EvidenceDialog extends ReferenceDialog {
 
 	// labels
 	private final static String QUERY = "Query PubMed"; // TODO button
@@ -93,7 +93,7 @@ public class EvidenceDialog extends OkCancelDialog {
 	 */
 	public EvidenceDialog(Evidenceable evidenceable, EvidenceRef evidenceRef, Frame frame, Component locationComp,
 			boolean cancellable) {
-		super(frame, "Literature reference properties", locationComp, true, cancellable);
+		super(frame, "Evidence properties", locationComp, true, cancellable);
 		this.evidenceable = evidenceable;
 		this.evidenceRef = evidenceRef;
 		setDialogComponent(createDialogPane());

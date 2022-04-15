@@ -229,7 +229,7 @@ public class CitationPanel extends PathwayElementPanel implements ActionListener
 			Citation citation = citationRef.getCitation();
 			// index starts from 1
 			int ordinal = getInput().getPathwayModel().getCitations().indexOf(citation) + 1;
-			txt.setText("<html>" + "<B>" + ordinal + ":</B> " + xrefToString(citation.getXref()) + "</html>");
+			txt.setText("<html>" + "<B>" + ordinal + ":</B> " + buildString(citation) + "</html>");
 			txt.addHyperlinkListener(this);
 			CellConstraints cc = new CellConstraints();
 			add(txt, cc.xy(2, 2));
@@ -312,21 +312,24 @@ public class CitationPanel extends PathwayElementPanel implements ActionListener
 		 * @param xref
 		 * @return
 		 */
-		public String xrefToString(Xref xref) {
+		public String buildString(Citation citation) {
 			StringBuilder builder = new StringBuilder();
-			System.out.println("Xref " + xref);
-			System.out.println("DS " + XrefUtils.getDataSource(xref));
-			System.out.println("FullName " + XrefUtils.getDataSource(xref).getFullName());
-
-			String pmid = XrefUtils.getIdentifier(xref);
-			String ds = XrefUtils.getDataSource(xref).getFullName();
-			if (!Utils.isEmpty(pmid)) {
-				builder.append("<A href='" + xref.getKnownUrl()).append("'>").append(ds).append(" ").append(pmid)
-						.append("</A>.");
+			// Xref
+			Xref xref = citation.getXref();
+			if (xref != null) {
+				String pmid = XrefUtils.getIdentifier(xref);
+				String ds = XrefUtils.getDataSource(xref).getFullName();
+				if (!Utils.isEmpty(pmid)) {
+					builder.append("<A href='" + xref.getKnownUrl()).append("'>").append(ds).append(" ").append(pmid)
+							.append("</A>.");
+				}
 			}
-			System.out.println(xref.getKnownUrl());
-			System.out.println(ds);
-			System.out.println(builder.toString());
+			//Url
+			String urlLink = citation.getUrlLink();
+			if (!Utils.isEmpty(urlLink)) {
+				builder.append("<A href='" + urlLink).append("'>").append(urlLink)
+				.append("</A>.");
+			}
 			return builder.toString();
 		}
 
