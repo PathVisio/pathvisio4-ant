@@ -22,6 +22,7 @@ import java.awt.Font;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.util.regex.Matcher;
@@ -50,6 +51,7 @@ import org.bridgedb.Xref;
 import org.pathvisio.core.data.PubMedQuery;
 import org.pathvisio.core.data.PubMedResult;
 import org.pathvisio.core.util.ProgressKeeper;
+import org.pathvisio.gui.DataSourceModel;
 import org.pathvisio.gui.ProgressDialog;
 import org.pathvisio.gui.util.PermissiveComboBox;
 import org.pathvisio.libgpml.model.Annotation;
@@ -58,6 +60,7 @@ import org.pathvisio.libgpml.model.PathwayElement.AnnotationRef;
 import org.pathvisio.libgpml.model.Referenceable.Annotatable;
 import org.pathvisio.libgpml.model.type.AnnotationType;
 import org.pathvisio.libgpml.model.type.GroupType;
+import org.pathvisio.libgpml.model.type.ObjectType;
 import org.pathvisio.libgpml.util.XrefUtils;
 import org.xml.sax.SAXException;
 
@@ -70,7 +73,6 @@ import org.xml.sax.SAXException;
 public class AnnotationDialog extends OkCancelDialog {
 
 	// labels
-	private final static String QUERY = "Query PubMed"; // TODO button
 	private final static String VALUE = "Value *";
 	private final static String TYPE = "Type *";
 	private final static String XREF_IDENTIFIER = "Identifier";
@@ -81,7 +83,8 @@ public class AnnotationDialog extends OkCancelDialog {
 	private JTextField valueText;
 	private PermissiveComboBox typeCombo;
 	private JTextField xrefIdentifier;
-	private JTextField xrefDataSource;
+	private DataSourceModel dsm; // for xref dataSource
+	private PermissiveComboBox dbCombo; // all registered datasource
 	private JTextField urlLinkText;
 
 	private Annotatable annotatable;
@@ -147,7 +150,8 @@ public class AnnotationDialog extends OkCancelDialog {
 			String id = XrefUtils.getIdentifier(annotationRef.getAnnotation().getXref());
 			setText(id, xrefIdentifier);
 			DataSource ds = XrefUtils.getDataSource(annotationRef.getAnnotation().getXref());
-			setText(ds.getCompactIdentifierPrefix(), xrefDataSource);
+			dsm.setSelectedItem(ds);
+			dsm.setObjectTypeFilter(ObjectType.ANNOTATION);
 			// sets urlLink
 			urlLinkText.setText(annotationRef.getAnnotation().getUrlLink());
 		}
@@ -182,19 +186,19 @@ public class AnnotationDialog extends OkCancelDialog {
 		String newValue = valueText.getText();
 		AnnotationType newType = (AnnotationType) typeCombo.getSelectedItem();
 		String newId = xrefIdentifier.getText().trim();
-		DataSource newDs = XrefUtils.getXrefDataSource(xrefDataSource.getText());
+		DataSource newDs = (DataSource) dsm.getSelectedItem();
 		String newUrl = urlLinkText.getText();
 		// ========================================
 		// Check requirements
 		// ========================================
 		if (newValue.equals("")) {
 			done = false;
-			JOptionPane.showMessageDialog(this, "An annotation requires a value.\n Please input more information.",
+			JOptionPane.showMessageDialog(this, "An Annotation requires a value.\nPlease input more information.",
 					"Error", JOptionPane.ERROR_MESSAGE);
 		}
 		if (newType == null) {
 			done = false;
-			JOptionPane.showMessageDialog(this, "An annotation must have an annotation type.\\n Please select a type.",
+			JOptionPane.showMessageDialog(this, "An Annotation must have an annotation type.\\nPlease select a type.",
 					"Error", JOptionPane.ERROR_MESSAGE);
 		}
 		// ========================================
@@ -208,46 +212,6 @@ public class AnnotationDialog extends OkCancelDialog {
 		if (done) { // TODO
 			super.okPressed();
 		}
-	}
-
-	// ================================================================================
-	// Query Methods
-	// ================================================================================
-	/**
-	 * When "Query" button is pressed.
-	 */
-	protected void queryPressed() {
-		final PubMedQuery pmq = new PubMedQuery(xrefIdentifier.getText().trim());
-		final ProgressKeeper pk = new ProgressKeeper();
-		ProgressDialog d = new ProgressDialog(JOptionPane.getFrameForComponent(this), "", pk, true, true);
-
-		SwingWorker<Void, Void> sw = new SwingWorker<Void, Void>() {
-			protected Void doInBackground() throws SAXException, IOException, ParserConfigurationException {
-				pk.setTaskName("Querying PubMed");
-				pmq.execute();
-				pk.finished();
-				return null;
-			}
-		};
-
-		sw.execute();
-		d.setVisible(true);
-
-		PubMedResult pmr = pmq.getResult();
-		if (pmr != null) {
-			xrefIdentifier.setText(pmr.getId()); // write the trimmed pmid to the dialog
-			xrefDataSource.setText("PubMed");
-		}
-	}
-
-	/**
-	 * Action for when "Query" button is pressed.
-	 */
-	public void actionPerformed(ActionEvent e) {
-		if (QUERY.equals(e.getActionCommand())) {
-			queryPressed();
-		}
-		super.actionPerformed(e);
 	}
 
 	// ================================================================================
@@ -271,7 +235,10 @@ public class AnnotationDialog extends OkCancelDialog {
 		valueText = new JTextField();
 		typeCombo = new PermissiveComboBox(AnnotationType.getValues());
 		xrefIdentifier = new JTextField();
-		xrefDataSource = new JTextField();
+		dsm = new DataSourceModel();
+		dsm.setPrimaryFilter(true);
+		dsm.setObjectTypeFilter(ObjectType.ANNOTATION);
+		dbCombo = new PermissiveComboBox(dsm);
 		urlLinkText = new JTextField();
 
 		final DefaultStyledDocument doc = new DefaultStyledDocument();
@@ -298,11 +265,8 @@ public class AnnotationDialog extends OkCancelDialog {
 
 		});
 
-		JButton query = new JButton(QUERY);
-		query.addActionListener(this);
-		query.setToolTipText("Query publication information from PubMed");
-
 		GridBagConstraints c = new GridBagConstraints();
+		c.insets = new Insets(0, 15, 0, 0);
 		c.ipadx = c.ipady = 5;
 		c.anchor = GridBagConstraints.FIRST_LINE_START;
 		c.gridx = 0;
@@ -314,21 +278,15 @@ public class AnnotationDialog extends OkCancelDialog {
 		contents.add(lblXrefDataSource, c);
 		contents.add(lblUrlLink, c);
 
+		c.insets = new Insets(0, 0, 0, 50);
 		c.gridx = 1;
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.weightx = 1;
 		contents.add(valueText, c);
 		contents.add(typeCombo, c);
 		contents.add(xrefIdentifier, c);
-		contents.add(xrefDataSource, c);
+		contents.add(dbCombo, c);
 		contents.add(urlLinkText, c);
-
-		c.fill = GridBagConstraints.BOTH;
-		c.weighty = 1;
-
-		c.gridx = 2;
-		c.fill = GridBagConstraints.NONE;
-		contents.add(query);
 
 		return contents;
 	}

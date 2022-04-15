@@ -88,7 +88,7 @@ public class DataNodeDialog extends PathwayElementDialog {
 
 	// fields
 	CompleterQueryTextArea symText;// for text label
-	private CompleterQueryTextField idText; // for xref identifier TODO private?
+	private CompleterQueryTextField idText; // for xref identifier
 	private DataSourceModel dsm; // for xref dataSource
 	private PermissiveComboBox dbCombo; // all registered datasource
 	private PermissiveComboBox typeCombo; // all datanode types

@@ -44,6 +44,7 @@ import org.pathvisio.libgpml.model.PathwayElement;
 import org.pathvisio.libgpml.model.PathwayModel;
 import org.pathvisio.libgpml.model.PathwayObject;
 import org.pathvisio.libgpml.model.type.DataNodeType;
+import org.pathvisio.libgpml.model.type.ObjectType;
 import org.pathvisio.libgpml.prop.PropertyType;
 import org.pathvisio.libgpml.prop.StaticPropertyType;
 
@@ -73,9 +74,22 @@ public class DataSourceHandler extends DefaultCellEditor
 	 * @param o    Filter for specified organism. If null, don't filter on organism.
 	 * @return filtered set.
 	 */
-	public static Set<DataSource> getFilteredSetAlt(Boolean primary, String[] type, Object o, Boolean interaction) {
+	public static Set<DataSource> getFilteredSetAlt(Boolean primary, String[] type, Object o, Boolean interaction,
+			ObjectType objectType) {
 		final Set<DataSource> result = new HashSet<DataSource>();
 		final Set<String> types = new HashSet<String>();
+		// if citation TODO
+		if (objectType == ObjectType.CITATION) {
+			result.add(DataSource.getExistingByFullName("PubMed"));
+			result.add(DataSource.getExistingByFullName("DOI"));
+			return result;
+		}
+		// if evidence TODO
+		if (objectType == ObjectType.EVIDENCE) {
+			DataSource eco = DataSource.register("ECO", "ECO").compactIdentifierPrefix("ECO").asDataSource(); // TODO
+			result.add(eco);
+			return result;
+		}
 		if (type != null)
 			types.addAll(Arrays.asList(type));
 		for (DataSource ds : DataSource.getDataSources()) {
@@ -122,8 +136,8 @@ public class DataSourceHandler extends DefaultCellEditor
 		if (DSTYPE_BY_DNTYPE.containsKey(dnType))
 			dsType = DSTYPE_BY_DNTYPE.get(dnType);
 
-		dataSources.addAll(
-				getFilteredSetAlt(true, dsType, Organism.fromLatinName(pathway.getPathway().getOrganism()), false));
+		dataSources.addAll(getFilteredSetAlt(true, dsType, Organism.fromLatinName(pathway.getPathway().getOrganism()),
+				false, null));
 
 		if (isDifferent(dataSources)) {
 			renderer.removeAllItems();

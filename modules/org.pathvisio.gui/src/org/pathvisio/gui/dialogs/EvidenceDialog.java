@@ -46,9 +46,12 @@ import org.bridgedb.Xref;
 import org.pathvisio.core.data.PubMedQuery;
 import org.pathvisio.core.data.PubMedResult;
 import org.pathvisio.core.util.ProgressKeeper;
+import org.pathvisio.gui.DataSourceModel;
 import org.pathvisio.gui.ProgressDialog;
+import org.pathvisio.gui.util.PermissiveComboBox;
 import org.pathvisio.libgpml.model.PathwayElement.EvidenceRef;
 import org.pathvisio.libgpml.model.Referenceable.Evidenceable;
+import org.pathvisio.libgpml.model.type.ObjectType;
 import org.pathvisio.libgpml.util.XrefUtils;
 import org.xml.sax.SAXException;
 
@@ -70,12 +73,16 @@ public class EvidenceDialog extends OkCancelDialog {
 	// fields
 	private JTextField valueText;
 	private JTextField xrefIdentifier;
-	private JTextField xrefDataSource;
+	private DataSourceModel dsm; // for xref dataSource
+	private PermissiveComboBox dbCombo; // all registered datasource
 	private JTextField urlLinkText;
 
 	private Evidenceable evidenceable;
 	private EvidenceRef evidenceRef;
 
+	// ================================================================================
+	// Constructors
+	// ================================================================================
 	/**
 	 * Instantiates a evidence dialog.
 	 * 
@@ -101,6 +108,9 @@ public class EvidenceDialog extends OkCancelDialog {
 		this(evidenceable, evidenceRef, frame, locationComp, true);
 	}
 
+	// ================================================================================
+	// Accessors
+	// ================================================================================
 	/**
 	 * Sets text in text field.
 	 * 
@@ -112,6 +122,9 @@ public class EvidenceDialog extends OkCancelDialog {
 			field.setText(text);
 	}
 
+	// ================================================================================
+	// Refresh
+	// ================================================================================
 	/**
 	 * Refresh.
 	 */
@@ -124,48 +137,78 @@ public class EvidenceDialog extends OkCancelDialog {
 			String id = XrefUtils.getIdentifier(evidenceRef.getEvidence().getXref());
 			setText(id, xrefIdentifier);
 			DataSource ds = XrefUtils.getDataSource(evidenceRef.getEvidence().getXref());
-			setText(ds.getCompactIdentifierPrefix(), xrefDataSource);
+			dsm.setSelectedItem(ds);
+			dsm.setObjectTypeFilter(ObjectType.EVIDENCE);
 			// sets urlLink
 			urlLinkText.setText(evidenceRef.getEvidence().getUrlLink());
 			urlLinkText.setFont(new Font("Tahoma", Font.PLAIN, 10));// UI Design
 		}
 	}
 
+	// ================================================================================
+	// OK Pressed Method
+	// ================================================================================
 	/**
 	 * When "Ok" button is pressed. The evidenceRef is created or updated.
 	 */
 	protected void okPressed() {
-		// old information
+		boolean done = true;
+		// ========================================
+		// Old information
+		// ========================================
 		String oldValue = null;
-		String oldIdentifier = null;
-		DataSource oldDataSource = null;
-		String oldUrlLink = null;
+		String oldId = null;
+		DataSource oldDs = null;
+		String oldUrl = null;
 		if (evidenceRef != null) {
 			oldValue = evidenceRef.getEvidence().getValue();
-			oldIdentifier = evidenceRef.getEvidence().getXref().getId();
-			oldDataSource = evidenceRef.getEvidence().getXref().getDataSource();
-			oldUrlLink = evidenceRef.getEvidence().getUrlLink();
+			oldId = evidenceRef.getEvidence().getXref().getId();
+			oldDs = evidenceRef.getEvidence().getXref().getDataSource();
+			oldUrl = evidenceRef.getEvidence().getUrlLink();
 		}
-		// new information
+		// ========================================
+		// New information
+		// ========================================
 		String newValue = valueText.getText();
-		String newIdentifier = xrefIdentifier.getText().trim();
-		String newDataSourceStr = xrefDataSource.getText();
-		DataSource newDataSource = XrefUtils.getXrefDataSource(newDataSourceStr);
-		String newUrlLink = urlLinkText.getText();
-		// if changed
-		if (oldValue != newValue || oldIdentifier != newIdentifier || oldDataSource != newDataSource
-				|| oldUrlLink != newUrlLink) {
-			Xref newXref = new Xref(newIdentifier, newDataSource);
-			if (newXref != null) { // xref required
-				if (evidenceRef != null) { // if evidenceRef exists, removed first
-					evidenceable.removeEvidenceRef(evidenceRef);
-				}
-				evidenceable.addEvidence(newValue, newXref, newUrlLink);
-			}
+		String newId = xrefIdentifier.getText().trim();
+		DataSource newDs = (DataSource) dsm.getSelectedItem();
+		String newUrl = urlLinkText.getText();
+		// ========================================
+		// Check requirements
+		// ========================================
+		if ((newId.equals("") || newDs == null)) {
+			done = false;
+			JOptionPane.showMessageDialog(this,
+					"An Evidence requires a valid Database:id.\nPlease input more information.", "Error",
+					JOptionPane.ERROR_MESSAGE);
 		}
-		super.okPressed();
+		if (!newId.equals("") && newDs == null) {
+			done = false;
+			JOptionPane.showMessageDialog(this,
+					"This Evidence has an identifier but no database.\nPlease specify a database system.", "Error",
+					JOptionPane.ERROR_MESSAGE);
+		} else if (newId.equals("") && newDs != null) {
+			done = false;
+			JOptionPane.showMessageDialog(this,
+					"This Evidence has a database but no identifier.\nPlease specify an identifier.", "Error",
+					JOptionPane.ERROR_MESSAGE);
+		}
+		// ========================================
+		// New EvidenceRef
+		// ========================================
+		Xref newXref = new Xref(newId, newDs);
+		if (newXref != null) {
+			evidenceable.removeEvidenceRef(evidenceRef); // remove old first
+			evidenceable.addEvidence(newValue, newXref, newUrl); // "replace" with new
+		}
+		if (done) { // TODO
+			super.okPressed();
+		}
 	}
 
+	// ================================================================================
+	// Query Methods
+	// ================================================================================
 	/**
 	 * When "Query" button is pressed.
 	 */
@@ -189,7 +232,7 @@ public class EvidenceDialog extends OkCancelDialog {
 		PubMedResult pmr = pmq.getResult();
 		if (pmr != null) {
 			xrefIdentifier.setText(pmr.getId()); // write the trimmed pmid to the dialog
-			xrefDataSource.setText("PubMed");
+			dsm.setSelectedItem(dsm); // TODO
 		}
 	}
 
@@ -203,6 +246,9 @@ public class EvidenceDialog extends OkCancelDialog {
 		super.actionPerformed(e);
 	}
 
+	// ================================================================================
+	// Dialog and Panels
+	// ================================================================================
 	/**
 	 * Creates Dialog pane.
 	 * 
@@ -219,7 +265,10 @@ public class EvidenceDialog extends OkCancelDialog {
 
 		valueText = new JTextField();
 		xrefIdentifier = new JTextField();
-		xrefDataSource = new JTextField();
+		dsm = new DataSourceModel();
+		dsm.setPrimaryFilter(true);
+		dsm.setObjectTypeFilter(ObjectType.EVIDENCE);
+		dbCombo = new PermissiveComboBox(dsm);
 		urlLinkText = new JTextField();
 
 		final DefaultStyledDocument doc = new DefaultStyledDocument();
@@ -266,11 +315,8 @@ public class EvidenceDialog extends OkCancelDialog {
 		c.weightx = 1;
 		contents.add(valueText, c);
 		contents.add(xrefIdentifier, c);
-		contents.add(xrefDataSource, c);
+		contents.add(dbCombo, c);
 		contents.add(urlLinkText, c);
-
-		c.fill = GridBagConstraints.BOTH;
-		c.weighty = 1;
 
 		c.gridx = 2;
 		c.fill = GridBagConstraints.NONE;

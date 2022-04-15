@@ -52,10 +52,13 @@ import org.bridgedb.Xref;
 import org.pathvisio.core.data.PubMedQuery;
 import org.pathvisio.core.data.PubMedResult;
 import org.pathvisio.core.util.ProgressKeeper;
+import org.pathvisio.gui.DataSourceModel;
 import org.pathvisio.gui.ProgressDialog;
+import org.pathvisio.gui.util.PermissiveComboBox;
 import org.pathvisio.libgpml.model.PathwayElement;
 import org.pathvisio.libgpml.model.PathwayElement.CitationRef;
 import org.pathvisio.libgpml.model.Referenceable.Citable;
+import org.pathvisio.libgpml.model.type.ObjectType;
 import org.pathvisio.libgpml.util.XrefUtils;
 import org.xml.sax.SAXException;
 
@@ -76,7 +79,8 @@ public class CitationDialog extends OkCancelDialog {
 
 	// fields
 	private JTextField xrefIdentifier;
-	private JTextField xrefDataSource;
+	private DataSourceModel dsm; // for xref dataSource
+	private PermissiveComboBox dbCombo; // all registered datasource
 	private JTextField urlLinkText;
 
 	private Citable citable;
@@ -136,7 +140,8 @@ public class CitationDialog extends OkCancelDialog {
 			String id = XrefUtils.getIdentifier(citationRef.getCitation().getXref());
 			setText(id, xrefIdentifier);
 			DataSource ds = XrefUtils.getDataSource(citationRef.getCitation().getXref());
-			setText(ds.getCompactIdentifierPrefix(), xrefDataSource);
+			dsm.setSelectedItem(ds);
+			dsm.setObjectTypeFilter(ObjectType.CITATION);
 			// sets urlLink
 			setText(citationRef.getCitation().getUrlLink(), urlLinkText);
 		}
@@ -165,7 +170,7 @@ public class CitationDialog extends OkCancelDialog {
 		// New information
 		// ========================================
 		String newId = xrefIdentifier.getText().trim();
-		DataSource newDs = XrefUtils.getXrefDataSource(xrefDataSource.getText());
+		DataSource newDs = (DataSource) dsm.getSelectedItem();
 		String newUrl = urlLinkText.getText();
 		// ========================================
 		// Check requirements
@@ -173,18 +178,18 @@ public class CitationDialog extends OkCancelDialog {
 		if (newUrl.equals("") && (newId.equals("") && newDs == null)) {
 			done = false;
 			JOptionPane.showMessageDialog(this,
-					"A citation requires a valid Database:id and/or Url link.\n Please input more information.",
+					"A Citation requires a valid Database:id and/or Url link.\nPlease input more information.",
 					"Error", JOptionPane.ERROR_MESSAGE);
 		}
 		if (!newId.equals("") && newDs == null) {
 			done = false;
 			JOptionPane.showMessageDialog(this,
-					"This citation has an identifier but no database.\n Please specify a database system.", "Error",
+					"This Citation has an identifier but no database.\nPlease specify a database system.", "Error",
 					JOptionPane.ERROR_MESSAGE);
 		} else if (newId.equals("") && newDs != null) {
 			done = false;
 			JOptionPane.showMessageDialog(this,
-					"This citation has a database but no identifier.\n Please specify an identifier.", "Error",
+					"This Citation has a database but no identifier.\nPlease specify an identifier.", "Error",
 					JOptionPane.ERROR_MESSAGE);
 		}
 		// ========================================
@@ -226,7 +231,7 @@ public class CitationDialog extends OkCancelDialog {
 		PubMedResult pmr = pmq.getResult();
 		if (pmr != null) {
 			xrefIdentifier.setText(pmr.getId()); // write the trimmed pmid to the dialog
-			xrefDataSource.setText("PubMed");
+			dsm.setSelectedItem(dsm); //TODO 
 		}
 	}
 
@@ -296,7 +301,10 @@ public class CitationDialog extends OkCancelDialog {
 		JLabel lblXrefIdentifier = new JLabel(XREF_IDENTIFIER);
 		JLabel lblXrefDataSource = new JLabel(XREF_DATASOURCE);
 		xrefIdentifier = new JTextField();
-		xrefDataSource = new JTextField();
+		dsm = new DataSourceModel();
+		dsm.setPrimaryFilter(true);
+		dsm.setObjectTypeFilter(ObjectType.CITATION);
+		dbCombo = new PermissiveComboBox(dsm);
 		JButton query = new JButton(QUERY);
 		query.addActionListener(this);
 		query.setToolTipText("Query publication information from PubMed");
@@ -313,11 +321,11 @@ public class CitationDialog extends OkCancelDialog {
 		xc.fill = GridBagConstraints.HORIZONTAL;
 		xc.weightx = 1;
 		xrefPanel.add(xrefIdentifier, xc);
-		xrefPanel.add(xrefDataSource, xc);
+		xrefPanel.add(dbCombo, xc);
 		xc.gridx = 2;
 		xc.fill = GridBagConstraints.NONE;
 		xrefPanel.add(query);
-
+		
 		// ========================================
 		// UrlLink Panel
 		// ========================================

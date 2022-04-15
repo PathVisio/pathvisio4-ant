@@ -28,6 +28,7 @@ import javax.swing.event.ListDataListener;
 import org.bridgedb.DataSource;
 import org.bridgedb.bio.Organism;
 import org.pathvisio.gui.handler.DataSourceHandler;
+import org.pathvisio.libgpml.model.type.ObjectType;
 
 /**
  * Stick this into a ComboBox to let the user select a {@link DataSource}.
@@ -47,6 +48,13 @@ public class DataSourceModel implements ComboBoxModel {
 	private List<DataSource> items = new ArrayList<DataSource>();
 
 	DataSource selectedItem;
+
+	private Organism organism = null;
+	private String[] type = null;
+	private Boolean primary = null;
+	private Boolean interaction = false;
+
+	private ObjectType objectType = null;
 
 	public Object getSelectedItem() {
 		return selectedItem;
@@ -100,7 +108,7 @@ public class DataSourceModel implements ComboBoxModel {
 	 */
 	private void initItems() {
 		items = new ArrayList<DataSource>();
-		items.addAll(DataSourceHandler.getFilteredSetAlt(primary, type, organism, interaction));
+		items.addAll(DataSourceHandler.getFilteredSetAlt(primary, type, organism, interaction, objectType));
 //		items.remove(DataSource.getExistingBySystemCode("EnBs"));
 //		items.remove(DataSource.getExistingBySystemCode("EnCe"));
 //		items.remove(DataSource.getExistingBySystemCode("EnGg"));
@@ -138,11 +146,6 @@ public class DataSourceModel implements ComboBoxModel {
 		fireEvent(e);
 	}
 
-	private Organism organism = null;
-	private String[] type = null;
-	private Boolean primary = null;
-	private Boolean interaction = false;
-
 	public void setSpeciesFilter(Organism aOrganism) {
 		organism = aOrganism;
 		initItems();
@@ -165,6 +168,11 @@ public class DataSourceModel implements ComboBoxModel {
 
 	public void setTypeFilter(String[] aType) {
 		type = aType;
+		initItems();
+	}
+
+	public void setObjectTypeFilter(ObjectType aObjectType) {
+		objectType = aObjectType;
 		initItems();
 	}
 }
