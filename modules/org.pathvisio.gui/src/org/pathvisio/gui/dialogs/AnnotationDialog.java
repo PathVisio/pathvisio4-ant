@@ -166,21 +166,6 @@ public class AnnotationDialog extends ReferenceDialog {
 	protected void okPressed() {
 		boolean done = true;
 		// ========================================
-		// Old information
-		// ========================================
-		String oldValue = null;
-		AnnotationType oldType = null;
-		String oldId = null;
-		DataSource oldDs = null;
-		String oldUrl = null;
-		if (annotationRef != null) {
-			oldValue = annotationRef.getAnnotation().getValue();
-			oldType = annotationRef.getAnnotation().getType();
-			oldId = annotationRef.getAnnotation().getXref().getId();
-			oldDs = annotationRef.getAnnotation().getXref().getDataSource();
-			oldUrl = annotationRef.getAnnotation().getUrlLink();
-		}
-		// ========================================
 		// New information
 		// ========================================
 		String newValue = valueText.getText();
@@ -204,13 +189,13 @@ public class AnnotationDialog extends ReferenceDialog {
 		// ========================================
 		// New AnnotationRef
 		// ========================================
-		Xref newXref = new Xref(newId, newDs);
-		if (newValue != null && newType != null) {
-			AnnotationRef newA = annotatable.addAnnotation(newValue, newType, newXref, newUrl); // add new info
-			copyRefsOldToNew(annotationRef, newA);
-			annotatable.removeAnnotationRef(annotationRef); // remove old info
-		}
 		if (done) { // TODO
+			Xref newXref = XrefUtils.createXref(newId, newDs);
+			if (newValue != null && newType != null) {
+				AnnotationRef newA = annotatable.addAnnotation(newValue, newType, newXref, newUrl); // add new info
+				copyRefsOldToNew(annotationRef, newA);
+				annotatable.removeAnnotationRef(annotationRef); // remove old info
+			}
 			super.okPressed();
 		}
 	}

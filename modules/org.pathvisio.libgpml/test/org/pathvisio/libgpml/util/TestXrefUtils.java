@@ -53,7 +53,6 @@ public class TestXrefUtils extends TestCase {
 		assertFalse(XrefUtils.equivalentXrefs(xref1, xref2));
 		assertFalse(XrefUtils.equivalentXrefs(xref1, xref3));
 		assertTrue(XrefUtils.equivalentXrefs(xref3, xref4));
-
 	}
 
 }

@@ -154,19 +154,6 @@ public class EvidenceDialog extends ReferenceDialog {
 	protected void okPressed() {
 		boolean done = true;
 		// ========================================
-		// Old information
-		// ========================================
-		String oldValue = null;
-		String oldId = null;
-		DataSource oldDs = null;
-		String oldUrl = null;
-		if (evidenceRef != null) {
-			oldValue = evidenceRef.getEvidence().getValue();
-			oldId = evidenceRef.getEvidence().getXref().getId();
-			oldDs = evidenceRef.getEvidence().getXref().getDataSource();
-			oldUrl = evidenceRef.getEvidence().getUrlLink();
-		}
-		// ========================================
 		// New information
 		// ========================================
 		String newValue = valueText.getText();
@@ -196,12 +183,12 @@ public class EvidenceDialog extends ReferenceDialog {
 		// ========================================
 		// New EvidenceRef
 		// ========================================
-		Xref newXref = new Xref(newId, newDs);
-		if (newXref != null) {
-			evidenceable.removeEvidenceRef(evidenceRef); // remove old first
-			evidenceable.addEvidence(newValue, newXref, newUrl); // "replace" with new
-		}
 		if (done) { // TODO
+			Xref newXref = XrefUtils.createXref(newId, newDs);
+			if (newXref != null) {
+				evidenceable.removeEvidenceRef(evidenceRef); // remove old first
+				evidenceable.addEvidence(newValue, newXref, newUrl); // "replace" with new
+			}
 			super.okPressed();
 		}
 	}

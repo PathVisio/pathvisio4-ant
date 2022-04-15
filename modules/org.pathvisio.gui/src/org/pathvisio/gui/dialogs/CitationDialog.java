@@ -157,17 +157,6 @@ public class CitationDialog extends ReferenceDialog {
 	protected void okPressed() {
 		boolean done = true;
 		// ========================================
-		// Old information
-		// ========================================
-		String oldId = null;
-		DataSource oldDs = null;
-		String oldUrl = null;
-		if (citationRef != null) {
-			oldId = citationRef.getCitation().getXref().getId();
-			oldDs = citationRef.getCitation().getXref().getDataSource();
-			oldUrl = citationRef.getCitation().getUrlLink();
-		}
-		// ========================================
 		// New information
 		// ========================================
 		String newId = xrefIdentifier.getText().trim();
@@ -196,13 +185,13 @@ public class CitationDialog extends ReferenceDialog {
 		// ========================================
 		// New CitationRef
 		// ========================================
-		Xref newXref = new Xref(newId, newDs);
-		if (newXref != null || newUrl != null) {
-			CitationRef newC = citable.addCitation(newXref, newUrl); // add new info
-			copyRefsOldToNew(citationRef, newC);
-			citable.removeCitationRef(citationRef); // remove old info
-		}
 		if (done) { // TODO
+			Xref newXref = XrefUtils.createXref(newId, newDs);
+			if (newXref != null || newUrl != null) {
+				CitationRef newC = citable.addCitation(newXref, newUrl); // add new info
+				copyRefsOldToNew(citationRef, newC);
+				citable.removeCitationRef(citationRef); // remove old info
+			}
 			super.okPressed();
 		}
 	}

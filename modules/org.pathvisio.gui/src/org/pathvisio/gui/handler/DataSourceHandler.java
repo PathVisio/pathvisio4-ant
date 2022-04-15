@@ -90,8 +90,9 @@ public class DataSourceHandler extends DefaultCellEditor
 			result.add(eco);
 			return result;
 		}
-		if (type != null)
+		if (type != null) {
 			types.addAll(Arrays.asList(type));
+		}
 		for (DataSource ds : DataSource.getDataSources()) {
 			if ((primary == null || primary == ds.isPrimary()) && (type == null || types.contains(ds.getType()))
 					&& (o == null || ds.getOrganism() == null || o == ds.getOrganism())) {

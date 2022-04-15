@@ -30,7 +30,7 @@ import org.pathvisio.libgpml.debug.Logger;
 public class XrefUtils {
 
 	/**
-	 * Instantiates an {@link Xref} given string identifier and dataSource.
+	 * Instantiates an {@link Xref} given String identifier and dataSource.
 	 * {@link getXrefDataSource} returns a {@link DataSource} for string compact
 	 * identifier prefix, fullName, or systemCode.
 	 * 
@@ -39,12 +39,36 @@ public class XrefUtils {
 	 * @return the xref for given identifier and data source.
 	 */
 	public static Xref createXref(String identifier, String dataSource) {
-		// TODO allow identifier to be null or empty
-		if (identifier == null)
-			identifier = "";
+		if (identifier == null) {
+			identifier = ""; // TODO for now allow identifier to be null or empty
+		}
 		// data source cannot be null nor empty
 		if (dataSource != null && !dataSource.equals("")) {
 			return new Xref(identifier, getXrefDataSource(dataSource));
+		} else {
+			return null;
+		}
+	}
+
+	/**
+	 * Instantiates an {@link Xref} given String identifier and DataSource
+	 * dataSource.
+	 * 
+	 * NB: Temporary Method? BridgeDB as of (15/04/2022) still allows the
+	 * instantiation of and Xref with null DataSource. This is not desirable for
+	 * some use cases.
+	 * 
+	 * @param identifier the identifier of the database entry.
+	 * @param dataSource the source of database entry.
+	 * @return the xref for given identifier and data source.
+	 */
+	public static Xref createXref(String identifier, DataSource dataSource) {
+		if (identifier == null) {
+			identifier = ""; // TODO for now allow identifier to be null or empty
+		}
+		// data source cannot be null nor empty
+		if (dataSource != null && !dataSource.equals("")) {
+			return new Xref(identifier, dataSource);
 		} else {
 			return null;
 		}
