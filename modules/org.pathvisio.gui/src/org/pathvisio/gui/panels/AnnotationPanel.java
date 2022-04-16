@@ -41,8 +41,10 @@ import javax.swing.event.HyperlinkListener;
 
 import org.pathvisio.libgpml.debug.Logger;
 import org.pathvisio.libgpml.model.Annotation;
+import org.pathvisio.libgpml.model.Citation;
 import org.pathvisio.libgpml.model.PathwayElement;
 import org.pathvisio.libgpml.model.PathwayElement.AnnotationRef;
+import org.pathvisio.libgpml.model.type.AnnotationType;
 import org.pathvisio.libgpml.util.Utils;
 import org.pathvisio.libgpml.util.XrefUtils;
 import org.bridgedb.Xref;
@@ -229,7 +231,7 @@ public class AnnotationPanel extends PathwayElementPanel implements ActionListen
 			Annotation annotation = annotationRef.getAnnotation();
 			// index starts from 1
 			int ordinal = getInput().getPathwayModel().getAnnotations().indexOf(annotation) + 1;
-			txt.setText("<html>" + "<B>" + ordinal + ":</B> " + annotationToString(annotation) + "</html>");
+			txt.setText("<html>" + "<B>" + ordinal + ":</B> " + buildString(annotation) + "</html>");
 			txt.addHyperlinkListener(this);
 			CellConstraints cc = new CellConstraints();
 			add(txt, cc.xy(2, 2));
@@ -307,47 +309,35 @@ public class AnnotationPanel extends PathwayElementPanel implements ActionListen
 		}
 
 		/**
-		 * Returns string for the annotation. // TODO need a solution for more...
+		 * Returns string for the citation.
 		 * 
 		 * @param xref
 		 * @return
 		 */
-		public String annotationToString(Annotation annotation) {
-			String result = "";
-			// value and type required
-			result = annotation.getType().getName() + ": " + annotation.getValue();
-			// xref optional
-			String xref = annotation.getXref().getKnownUrl();
-			if (xref != null && !Utils.stringEquals(xref, "")) {
-				result += xref;
+		public String buildString(Annotation annotation) {
+			StringBuilder builder = new StringBuilder();
+			// Value and Type
+			String value = annotation.getValue();
+			AnnotationType type = annotation.getType();
+			if (value != null && type != null) {
+				builder.append(value).append("(" + type.getName() + ")").append("</A>");
 			}
-			// urlLink optional
-			String urlLink = annotation.getUrlLink();
-			if (urlLink != null && !Utils.stringEquals(urlLink, "") && !Utils.stringEquals(urlLink, xref)) {
-				result += "; " + urlLink;
-			}
-			return result;
-		}
-
-		/**
-		 * Returns string for xref.
-		 * 
-		 * @param xref
-		 * @return
-		 */
-		public String buildString(Xref xref) {
+			// Xref
+			Xref xref = annotation.getXref();
 			if (xref != null) {
-				StringBuilder builder = new StringBuilder();
 				String pmid = XrefUtils.getIdentifier(xref);
 				String ds = XrefUtils.getDataSource(xref).getFullName();
 				if (!Utils.isEmpty(pmid)) {
-					builder.append("<A href='" + xref.getKnownUrl()).append("'>").append(ds).append(" ").append(pmid)
-							.append("</A>.");
+					builder.append("; <A href='" + xref.getKnownUrl()).append("'>").append(ds).append(" ").append(pmid)
+							.append("</A>");
 				}
-				return builder.toString();
-			} else {
-				return "";
 			}
+			// Url
+			String urlLink = annotation.getUrlLink();
+			if (!Utils.isEmpty(urlLink)) {
+				builder.append("; <A href='" + urlLink).append("'>").append(urlLink).append("</A>");
+			}
+			return builder.toString();
 		}
 
 	}

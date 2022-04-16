@@ -307,13 +307,14 @@ public class CitationPanel extends PathwayElementPanel implements ActionListener
 		}
 
 		/**
-		 * Returns string for the citation. // TODO need a solution for more...
+		 * Returns string for the citation. 
 		 * 
 		 * @param xref
 		 * @return
 		 */
 		public String buildString(Citation citation) {
 			StringBuilder builder = new StringBuilder();
+			boolean semicolon = false;
 			// Xref
 			Xref xref = citation.getXref();
 			if (xref != null) {
@@ -321,14 +322,17 @@ public class CitationPanel extends PathwayElementPanel implements ActionListener
 				String ds = XrefUtils.getDataSource(xref).getFullName();
 				if (!Utils.isEmpty(pmid)) {
 					builder.append("<A href='" + xref.getKnownUrl()).append("'>").append(ds).append(" ").append(pmid)
-							.append("</A>.");
+							.append("</A>");
+					semicolon = true;
 				}
 			}
-			//Url
+			// Url
 			String urlLink = citation.getUrlLink();
 			if (!Utils.isEmpty(urlLink)) {
-				builder.append("<A href='" + urlLink).append("'>").append(urlLink)
-				.append("</A>.");
+				if (semicolon) {
+					builder.append("; ");
+				}
+				builder.append("<A href='" + urlLink).append("'>").append(urlLink).append("</A>");
 			}
 			return builder.toString();
 		}

@@ -39,11 +39,11 @@ public class XrefUtils {
 	 * @return the xref for given identifier and data source.
 	 */
 	public static Xref createXref(String identifier, String dataSource) {
-		if (identifier == null) {
-			identifier = ""; // TODO for now allow identifier to be null or empty
-		}
-		// data source cannot be null nor empty
-		if (dataSource != null && !dataSource.equals("")) {
+//		if (identifier == null) {
+//			identifier = ""; // TODO for now allow identifier to be null or empty
+//		}
+		// both identifier and data must be valid
+		if (identifier != null && !identifier.equals("") && dataSource != null && !dataSource.equals("")) {
 			return new Xref(identifier, getXrefDataSource(dataSource));
 		} else {
 			return null;
@@ -63,11 +63,11 @@ public class XrefUtils {
 	 * @return the xref for given identifier and data source.
 	 */
 	public static Xref createXref(String identifier, DataSource dataSource) {
-		if (identifier == null) {
-			identifier = ""; // TODO for now allow identifier to be null or empty
-		}
-		// data source cannot be null nor empty
-		if (dataSource != null && !dataSource.equals("")) {
+//		if (identifier == null) {
+//			identifier = ""; // TODO for now allow identifier to be null or empty
+//		}
+		// both identifier and data must be valid
+		if (identifier != null && !identifier.equals("") && dataSource != null && !dataSource.equals("")) {
 			return new Xref(identifier, dataSource);
 		} else {
 			return null;

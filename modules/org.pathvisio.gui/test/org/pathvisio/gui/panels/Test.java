@@ -31,9 +31,14 @@ public class Test extends TestCase {
 	public void test() {
 		
 		DataSourceTxt.init();
-		Xref xref = new Xref("2", DataSource.getExistingByFullName("PubMed"));	
-		System.out.println(xref.getDataSource().getMainUrl());
-		System.out.println(xref.getKnownUrl());
+		Xref xref = new Xref("", DataSource.getExistingByFullName("PubMed"));	
+		System.out.println(xref);
+		
+		Xref xref2 = new Xref("2", null);	
+		System.out.println(xref2);
+		
+		Xref xref3 = new Xref("", null);
+		System.out.println(xref3);
 
 	
 	}

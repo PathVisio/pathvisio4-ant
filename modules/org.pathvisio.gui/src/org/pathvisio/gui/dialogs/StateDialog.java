@@ -254,9 +254,7 @@ public class StateDialog extends PathwayElementDialog implements ItemListener {
 			}
 
 			private void setText() {
-				// sets xref id
-				DataSource ds = XrefUtils.getDataSource(getInput().getXref());// TODO
-				getInput().setXref(new Xref(idText.getText(), ds));
+				getInput().setXref(XrefUtils.createXref(idText.getText(), (DataSource) dsm.getSelectedItem()));
 			}
 		});
 
@@ -264,9 +262,7 @@ public class StateDialog extends PathwayElementDialog implements ItemListener {
 		dsm.addListDataListener(new ListDataListener() {
 
 			public void contentsChanged(final ListDataEvent arg0) {
-				// sets xref dataSource
-				String id = XrefUtils.getIdentifier(getInput().getXref());// TODO
-				getInput().setXref(new Xref(id, (DataSource) dsm.getSelectedItem()));
+				getInput().setXref(XrefUtils.createXref(idText.getText(), (DataSource) dsm.getSelectedItem()));
 			}
 
 			public void intervalAdded(final ListDataEvent arg0) {

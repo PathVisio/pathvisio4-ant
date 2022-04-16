@@ -200,6 +200,7 @@ public class InteractionDialog extends PathwayElementDialog implements ItemListe
 		fieldPanel.add(endTypeCombo, c);
 		fieldPanel.add(idText, c);
 		fieldPanel.add(dbCombo, c);
+
 		// xref identifier add listener
 		idText.getDocument().addDocumentListener(new DocumentListener() {
 			public void changedUpdate(final DocumentEvent e) {
@@ -215,18 +216,15 @@ public class InteractionDialog extends PathwayElementDialog implements ItemListe
 			}
 
 			private void setText() {
-				// sets xref id
-				DataSource ds = XrefUtils.getDataSource(getInput().getXref());// TODO
-				getInput().setXref(new Xref(idText.getText(), ds));
+				getInput().setXref(XrefUtils.createXref(idText.getText(), (DataSource) dsm.getSelectedItem()));
 			}
 		});
+
 		// xref datasource add listener
 		dsm.addListDataListener(new ListDataListener() {
 
 			public void contentsChanged(final ListDataEvent arg0) {
-				// sets xref dataSource
-				String id = XrefUtils.getIdentifier(getInput().getXref());// TODO
-				getInput().setXref(new Xref(id, (DataSource) dsm.getSelectedItem()));
+				getInput().setXref(XrefUtils.createXref(idText.getText(), (DataSource) dsm.getSelectedItem()));
 			}
 
 			public void intervalAdded(final ListDataEvent arg0) {
@@ -235,6 +233,7 @@ public class InteractionDialog extends PathwayElementDialog implements ItemListe
 			public void intervalRemoved(final ListDataEvent arg0) {
 			}
 		});
+
 		// start arrowhead add listener
 		startTypeCombo.addActionListener(new ActionListener() {
 			public void actionPerformed(final ActionEvent e) {

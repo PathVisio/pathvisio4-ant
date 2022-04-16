@@ -40,9 +40,11 @@ import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
 import org.pathvisio.libgpml.debug.Logger;
+import org.pathvisio.libgpml.model.Annotation;
 import org.pathvisio.libgpml.model.Evidence;
 import org.pathvisio.libgpml.model.PathwayElement;
 import org.pathvisio.libgpml.model.PathwayElement.EvidenceRef;
+import org.pathvisio.libgpml.model.type.AnnotationType;
 import org.pathvisio.libgpml.util.Utils;
 import org.pathvisio.libgpml.util.XrefUtils;
 import org.bridgedb.Xref;
@@ -229,7 +231,7 @@ public class EvidencePanel extends PathwayElementPanel implements ActionListener
 			Evidence evidence = evidenceRef.getEvidence();
 			// index starts from 1
 			int ordinal = getInput().getPathwayModel().getEvidences().indexOf(evidence) + 1;
-			txt.setText("<html>" + "<B>" + ordinal + ":</B> " + xrefToString(evidence.getXref()) + "</html>");
+			txt.setText("<html>" + "<B>" + ordinal + ":</B> " + buildString(evidence) + "</html>");
 			txt.addHyperlinkListener(this);
 			CellConstraints cc = new CellConstraints();
 			add(txt, cc.xy(2, 2));
@@ -307,26 +309,42 @@ public class EvidencePanel extends PathwayElementPanel implements ActionListener
 		}
 
 		/**
-		 * Returns string for the evidence. // TODO need a solution for more...
+		 * Returns string for the citation.
 		 * 
 		 * @param xref
 		 * @return
 		 */
-		public String xrefToString(Xref xref) {
+		public String buildString(Evidence evidence) {
 			StringBuilder builder = new StringBuilder();
-			System.out.println("Xref " + xref);
-			System.out.println("DS " + XrefUtils.getDataSource(xref));
-			System.out.println("FullName " + XrefUtils.getDataSource(xref).getFullName());
-
-			String pmid = XrefUtils.getIdentifier(xref);
-			String ds = XrefUtils.getDataSource(xref).getFullName();
-			if (!Utils.isEmpty(pmid)) {
-				builder.append("<A href='" + xref.getKnownUrl()).append("'>").append(ds).append(" ").append(pmid)
-						.append("</A>.");
+			boolean semicolon = false;
+			// Value and Type
+			String value = evidence.getValue();
+			if (value != null) {
+				builder.append(value);
+				semicolon = true;
 			}
-			System.out.println(xref.getKnownUrl());
-			System.out.println(ds);
-			System.out.println(builder.toString());
+			// Xref
+			Xref xref = evidence.getXref();
+			if (xref != null) {
+				String pmid = XrefUtils.getIdentifier(xref);
+				String ds = XrefUtils.getDataSource(xref).getFullName();
+				if (!Utils.isEmpty(pmid)) {
+					if (semicolon) {
+						builder.append("; ");
+					}
+					builder.append("; <A href='" + xref.getKnownUrl()).append("'>").append(ds).append(" ").append(pmid)
+							.append("</A>");
+					semicolon = true;
+				}
+			}
+			// Url
+			String urlLink = evidence.getUrlLink();
+			if (!Utils.isEmpty(urlLink)) {
+				if (semicolon) {
+					builder.append("; ");
+				}
+				builder.append("; <A href='" + urlLink).append("'>").append(urlLink).append("</A>");
+			}
 			return builder.toString();
 		}
 

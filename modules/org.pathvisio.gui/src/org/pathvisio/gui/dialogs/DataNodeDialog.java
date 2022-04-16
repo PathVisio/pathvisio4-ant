@@ -36,7 +36,6 @@ import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
 import javax.swing.BorderFactory;
-import javax.swing.ComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -60,7 +59,6 @@ import org.pathvisio.libgpml.debug.Logger;
 import org.pathvisio.libgpml.model.type.DataNodeType;
 import org.pathvisio.libgpml.util.XrefUtils;
 import org.pathvisio.libgpml.model.DataNode;
-import org.pathvisio.libgpml.model.Group;
 import org.pathvisio.core.util.ProgressKeeper;
 import org.pathvisio.gui.DataSourceModel;
 import org.pathvisio.gui.ProgressDialog;
@@ -289,6 +287,7 @@ public class DataNodeDialog extends PathwayElementDialog {
 //			typeCombo.setSelectedItem(DataNodeType.ORGAN);
 //		else if ("gene".equals(type))
 //			typeCombo.setSelectedItem(DataNodeType.GENEPRODUCT);
+
 		dsm.setSelectedItem(ref.getDataSource());
 
 	}
@@ -443,6 +442,7 @@ public class DataNodeDialog extends PathwayElementDialog {
 				getInput().setTextLabel(symText.getText());
 			}
 		});
+
 		// xref identifier add listener
 		idText.getDocument().addDocumentListener(new DocumentListener() {
 			public void changedUpdate(DocumentEvent e) {
@@ -458,9 +458,7 @@ public class DataNodeDialog extends PathwayElementDialog {
 			}
 
 			private void setText() {
-				// sets xref identifier
-				DataSource ds = XrefUtils.getDataSource(getInput().getXref());// TODO
-				getInput().setXref(new Xref(idText.getText(), ds));
+				getInput().setXref(XrefUtils.createXref(idText.getText(), (DataSource) dsm.getSelectedItem()));
 			}
 		});
 
@@ -468,9 +466,7 @@ public class DataNodeDialog extends PathwayElementDialog {
 		dsm.addListDataListener(new ListDataListener() {
 
 			public void contentsChanged(ListDataEvent arg0) {
-				// sets xref datasource
-				String id = XrefUtils.getIdentifier(getInput().getXref());// TODO
-				getInput().setXref(new Xref(id, (DataSource) dsm.getSelectedItem()));
+				getInput().setXref(XrefUtils.createXref(idText.getText(), (DataSource) dsm.getSelectedItem()));
 			}
 
 			public void intervalAdded(ListDataEvent arg0) {
@@ -479,6 +475,7 @@ public class DataNodeDialog extends PathwayElementDialog {
 			public void intervalRemoved(ListDataEvent arg0) {
 			}
 		});
+
 		// type add listener
 		typeCombo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
