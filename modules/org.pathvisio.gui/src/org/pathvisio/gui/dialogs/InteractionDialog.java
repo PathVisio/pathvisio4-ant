@@ -46,6 +46,7 @@ import org.bridgedb.IDMapperException;
 import org.bridgedb.IDMapperStack;
 import org.bridgedb.Xref;
 import org.pathvisio.libgpml.model.type.ArrowHeadType;
+import org.pathvisio.libgpml.model.type.ObjectType;
 import org.pathvisio.libgpml.util.XrefUtils;
 import org.pathvisio.libgpml.model.Interaction;
 import org.pathvisio.gui.DataSourceModel;
@@ -117,7 +118,7 @@ public class InteractionDialog extends PathwayElementDialog implements ItemListe
 		startTypeCombo.setSelectedItem(ArrowHeadType.fromName(startType));
 		String endType = getInput().getEndArrowHeadType().toString();
 		endTypeCombo.setSelectedItem(ArrowHeadType.fromName(endType));
-		dsm.setInteractionFilter(true);
+		dsm.setObjectTypeFilter(ObjectType.INTERACTION);
 		pack();
 	}
 

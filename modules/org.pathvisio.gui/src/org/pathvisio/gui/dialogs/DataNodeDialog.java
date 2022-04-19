@@ -278,6 +278,13 @@ public class DataNodeDialog extends PathwayElementDialog {
 		case "event":
 			typeCombo.setSelectedItem(DataNodeType.EVENT);
 			break;
+		case "cellnode":
+			typeCombo.setSelectedItem(DataNodeType.CELL_NODE);
+			break;
+		case "organ":
+			typeCombo.setSelectedItem(DataNodeType.ORGAN);
+			break;
+			
 		default:
 			// do nothing
 		}

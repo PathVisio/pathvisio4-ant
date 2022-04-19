@@ -74,8 +74,7 @@ public class DataSourceHandler extends DefaultCellEditor
 	 * @param o    Filter for specified organism. If null, don't filter on organism.
 	 * @return filtered set.
 	 */
-	public static Set<DataSource> getFilteredSetAlt(Boolean primary, String[] type, Object o, Boolean interaction,
-			ObjectType objectType) {
+	public static Set<DataSource> getFilteredSetAlt(Boolean primary, String[] type, Object o, ObjectType objectType) {
 		final Set<DataSource> result = new HashSet<DataSource>();
 		final Set<String> types = new HashSet<String>();
 		// if citation TODO
@@ -104,13 +103,24 @@ public class DataSourceHandler extends DefaultCellEditor
 
 	public static final Map<String, String[]> DSTYPE_BY_DNTYPE = new HashMap<String, String[]>();
 	static {
+		// default
 		DSTYPE_BY_DNTYPE.put(DataNodeType.UNDEFINED.getName(), null);
-		DSTYPE_BY_DNTYPE.put(DataNodeType.METABOLITE.getName(), new String[] { "metabolite" });
-		DSTYPE_BY_DNTYPE.put(DataNodeType.COMPLEX.getName(), null);
-		DSTYPE_BY_DNTYPE.put(DataNodeType.PATHWAY.getName(), new String[] { "pathway" });
-		DSTYPE_BY_DNTYPE.put(DataNodeType.PROTEIN.getName(), new String[] { "gene", "protein" });
+		// molecule
 		DSTYPE_BY_DNTYPE.put(DataNodeType.GENEPRODUCT.getName(), new String[] { "gene", "protein" });
+		DSTYPE_BY_DNTYPE.put(DataNodeType.METABOLITE.getName(), new String[] { "metabolite" });
+		DSTYPE_BY_DNTYPE.put(DataNodeType.PROTEIN.getName(), new String[] { "gene", "protein" });
+		DSTYPE_BY_DNTYPE.put(DataNodeType.DNA.getName(), new String[] { "gene", "protein" });
 		DSTYPE_BY_DNTYPE.put(DataNodeType.RNA.getName(), new String[] { "gene", "protein" });
+		DSTYPE_BY_DNTYPE.put(DataNodeType.COMPLEX.getName(), null);
+		// concept
+		DSTYPE_BY_DNTYPE.put(DataNodeType.PATHWAY.getName(), new String[] { "pathway" });
+		DSTYPE_BY_DNTYPE.put(DataNodeType.DISEASE.getName(), null);
+		DSTYPE_BY_DNTYPE.put(DataNodeType.PHENOTYPE.getName(), null);
+		DSTYPE_BY_DNTYPE.put(DataNodeType.ALIAS.getName(), null);
+		DSTYPE_BY_DNTYPE.put(DataNodeType.EVENT.getName(), null);
+		DSTYPE_BY_DNTYPE.put(DataNodeType.CELL_NODE.getName(), null);
+		DSTYPE_BY_DNTYPE.put(DataNodeType.ORGAN.getName(), null);
+		// TODO
 	}
 
 	public void updateEditor(SwingEngine swingEngine, Collection<PathwayElement> elements, PathwayModel pathway,
@@ -137,8 +147,8 @@ public class DataSourceHandler extends DefaultCellEditor
 		if (DSTYPE_BY_DNTYPE.containsKey(dnType))
 			dsType = DSTYPE_BY_DNTYPE.get(dnType);
 
-		dataSources.addAll(getFilteredSetAlt(true, dsType, Organism.fromLatinName(pathway.getPathway().getOrganism()),
-				false, null));
+		dataSources.addAll(
+				getFilteredSetAlt(true, dsType, Organism.fromLatinName(pathway.getPathway().getOrganism()), null));
 
 		if (isDifferent(dataSources)) {
 			renderer.removeAllItems();

@@ -52,8 +52,6 @@ public class DataSourceModel implements ComboBoxModel {
 	private Organism organism = null;
 	private String[] type = null;
 	private Boolean primary = null;
-	private Boolean interaction = false;
-
 	private ObjectType objectType = null;
 
 	public Object getSelectedItem() {
@@ -108,7 +106,7 @@ public class DataSourceModel implements ComboBoxModel {
 	 */
 	private void initItems() {
 		items = new ArrayList<DataSource>();
-		items.addAll(DataSourceHandler.getFilteredSetAlt(primary, type, organism, interaction, objectType));
+		items.addAll(DataSourceHandler.getFilteredSetAlt(primary, type, organism, objectType));
 //		items.remove(DataSource.getExistingBySystemCode("EnBs"));
 //		items.remove(DataSource.getExistingBySystemCode("EnCe"));
 //		items.remove(DataSource.getExistingBySystemCode("EnGg"));
@@ -158,11 +156,6 @@ public class DataSourceModel implements ComboBoxModel {
 
 	public void setPrimaryFilter(Boolean aPrimary) {
 		primary = aPrimary;
-		initItems();
-	}
-
-	public void setInteractionFilter(Boolean aInteraction) {
-		interaction = aInteraction;
 		initItems();
 	}
 
