@@ -229,7 +229,7 @@ public class CitationPanel extends PathwayElementPanel implements ActionListener
 			Citation citation = citationRef.getCitation();
 			// index starts from 1
 			int ordinal = getInput().getPathwayModel().getCitations().indexOf(citation) + 1;
-			txt.setText("<html>" + "<B>" + ordinal + ":</B> " + buildString(citation) + "</html>");
+			txt.setText("<html>" + "<B>" + ordinal + ":</B> " + citationRef.toString() + "</html>");
 			txt.addHyperlinkListener(this);
 			CellConstraints cc = new CellConstraints();
 			add(txt, cc.xy(2, 2));
@@ -304,37 +304,6 @@ public class CitationPanel extends PathwayElementPanel implements ActionListener
 			} else if (REMOVE.equals(action)) {
 				CitationPanel.this.remove(citationRef);
 			}
-		}
-
-		/**
-		 * Returns string for the citation. 
-		 * 
-		 * @param xref
-		 * @return
-		 */
-		public String buildString(Citation citation) {
-			StringBuilder builder = new StringBuilder();
-			boolean semicolon = false;
-			// Xref
-			Xref xref = citation.getXref();
-			if (xref != null) {
-				String pmid = XrefUtils.getIdentifier(xref);
-				String ds = XrefUtils.getDataSource(xref).getFullName();
-				if (!Utils.isEmpty(pmid)) {
-					builder.append("<A href='" + xref.getKnownUrl()).append("'>").append(ds).append(" ").append(pmid)
-							.append("</A>");
-					semicolon = true;
-				}
-			}
-			// Url
-			String urlLink = citation.getUrlLink();
-			if (!Utils.isEmpty(urlLink)) {
-				if (semicolon) {
-					builder.append("; ");
-				}
-				builder.append("<A href='" + urlLink).append("'>").append(urlLink).append("</A>");
-			}
-			return builder.toString();
 		}
 
 	}

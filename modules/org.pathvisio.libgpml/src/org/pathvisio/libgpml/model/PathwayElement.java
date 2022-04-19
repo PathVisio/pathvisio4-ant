@@ -751,7 +751,7 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 		}
 
 		/**
-		 * Writes comment out as a string. 
+		 * Writes comment out as a string.
 		 */
 		public String toString() {
 			String src = "";
@@ -1171,27 +1171,42 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 		}
 
 		/**
-		 * TODO
+		 * Writes annotationRef out as a string.
 		 */
 		@Override
 		public String toString() {
-			String result = "";
-			String ordinal = "<B>a" + (getPathwayModel().getAnnotations().indexOf(annotation) + 1) + ":</B> ";
-			// value and type required
-			String value = "value=" + annotation.getValue();
-			String type = "type=" + annotation.getType().getName();
-			result = ordinal + value + ", " + type;
-			// xref optional
-			String xref = annotation.getXref().getKnownUrl();
-			if (xref != null && !Utils.stringEquals(xref, "")) {
-				result += xref;
+			boolean semicolon = false;
+			StringBuilder builder = new StringBuilder();
+			// Value and Type
+			String value = annotation.getValue();
+			AnnotationType type = annotation.getType();
+			if (value != null && type != null) {
+				builder.append(value).append(" (" + type.getName() + ")").append("</A>");
+				semicolon = true;
 			}
-			// urlLink optional
+			// Xref
+			Xref xref = annotation.getXref();
+			if (xref != null) {
+				String id = XrefUtils.getIdentifier(xref);
+				String ds = XrefUtils.getDataSource(xref).getFullName();
+				if (semicolon) {
+					builder.append("; ");
+				}
+				if (!Utils.isEmpty(id)) {
+					builder.append("<A href='" + xref.getKnownUrl()).append("'>").append(ds).append(" ").append(id)
+							.append("</A>");
+					semicolon = true;
+				}
+			}
+			// Url
 			String urlLink = annotation.getUrlLink();
-			if (urlLink != null && !Utils.stringEquals(urlLink, "") && !Utils.stringEquals(urlLink, xref)) {
-				result += ", " + urlLink;
+			if (!Utils.isEmpty(urlLink)) {
+				if (semicolon) {
+					builder.append("; ");
+				}
+				builder.append("<A href='" + urlLink).append("'>").append(urlLink).append("</A>");
 			}
-			return "<html>" + result + "</html>";
+			return builder.toString();
 		}
 
 	}
@@ -1473,23 +1488,32 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 		}
 
 		/**
-		 * TODO
+		 * Writes citationRef out as a string.
 		 */
 		@Override
 		public String toString() {
-			String result = "";
-			String ordinal = "<B>c" + (getPathwayModel().getCitations().indexOf(citation) + 1) + ":</B> ";
-			String xref = citation.getXref().getKnownUrl();
+			StringBuilder builder = new StringBuilder();
+			boolean semicolon = false;
+			// Xref
+			Xref xref = citation.getXref();
+			if (xref != null) {
+				String id = XrefUtils.getIdentifier(xref);
+				String ds = XrefUtils.getDataSource(xref).getFullName();
+				if (!Utils.isEmpty(id)) {
+					builder.append("<A href='" + xref.getKnownUrl()).append("'>").append(ds).append(" ").append(id)
+							.append("</A>");
+					semicolon = true;
+				}
+			}
+			// Url
 			String urlLink = citation.getUrlLink();
-			result += ordinal;
-			// either xref or urlLink required
-			if (xref != null && !Utils.stringEquals(xref, "")) {
-				result += xref;
+			if (!Utils.isEmpty(urlLink)) {
+				if (semicolon) {
+					builder.append("; ");
+				}
+				builder.append("<A href='" + urlLink).append("'>").append(urlLink).append("</A>");
 			}
-			if (urlLink != null && !Utils.stringEquals(urlLink, "") && !Utils.stringEquals(urlLink, xref)) {
-				result += ", " + urlLink;
-			}
-			return "<html>" + result + "</html>";
+			return builder.toString();
 		}
 
 	}
@@ -1652,26 +1676,41 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 		}
 
 		/**
-		 * TODO
+		 * Writes evidenceRef out as string.
 		 */
 		@Override
 		public String toString() {
-			String result = "";
-			String ordinal = "<B>c" + (getPathwayModel().getCitations().indexOf(evidence) + 1) + ":</B> ";
-			// required xref
-			String xref = evidence.getXref().getKnownUrl();
-			result += ordinal + xref;
-			// optional urlLink
-			String urlLink = evidence.getUrlLink();
-			if (urlLink != null && !Utils.stringEquals(urlLink, "") && !Utils.stringEquals(urlLink, xref)) {
-				result += ", " + urlLink;
-			}
-			// optional value
+			StringBuilder builder = new StringBuilder();
+			boolean semicolon = false;
+			// Value and Type
 			String value = evidence.getValue();
-			if (value != null && !Utils.stringEquals(value, "")) {
-				result += ", value=" + value;
+			if (value != null) {
+				builder.append(value);
+				semicolon = true;
 			}
-			return "<html>" + result + "</html>";
+			// Xref
+			Xref xref = evidence.getXref();
+			if (xref != null) {
+				String id = XrefUtils.getIdentifier(xref);
+				String ds = XrefUtils.getDataSource(xref).getFullName();
+				if (!Utils.isEmpty(id)) {
+					if (semicolon) {
+						builder.append("; ");
+					}
+					builder.append("<A href='" + xref.getKnownUrl()).append("'>").append(ds).append(" ").append(id)
+							.append("</A>");
+					semicolon = true;
+				}
+			}
+			// Url
+			String urlLink = evidence.getUrlLink();
+			if (!Utils.isEmpty(urlLink)) {
+				if (semicolon) {
+					builder.append("; ");
+				}
+				builder.append("<A href='" + urlLink).append("'>").append(urlLink).append("</A>");
+			}
+			return builder.toString();
 		}
 	}
 

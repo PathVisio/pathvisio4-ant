@@ -231,7 +231,7 @@ public class EvidencePanel extends PathwayElementPanel implements ActionListener
 			Evidence evidence = evidenceRef.getEvidence();
 			// index starts from 1
 			int ordinal = getInput().getPathwayModel().getEvidences().indexOf(evidence) + 1;
-			txt.setText("<html>" + "<B>" + ordinal + ":</B> " + buildString(evidence) + "</html>");
+			txt.setText("<html>" + "<B>" + ordinal + ":</B> " + evidenceRef.toString() + "</html>");
 			txt.addHyperlinkListener(this);
 			CellConstraints cc = new CellConstraints();
 			add(txt, cc.xy(2, 2));
@@ -306,46 +306,6 @@ public class EvidencePanel extends PathwayElementPanel implements ActionListener
 			} else if (REMOVE.equals(action)) {
 				EvidencePanel.this.remove(evidenceRef);
 			}
-		}
-
-		/**
-		 * Returns string for the citation.
-		 * 
-		 * @param xref
-		 * @return
-		 */
-		public String buildString(Evidence evidence) {
-			StringBuilder builder = new StringBuilder();
-			boolean semicolon = false;
-			// Value and Type
-			String value = evidence.getValue();
-			if (value != null) {
-				builder.append(value);
-				semicolon = true;
-			}
-			// Xref
-			Xref xref = evidence.getXref();
-			if (xref != null) {
-				String pmid = XrefUtils.getIdentifier(xref);
-				String ds = XrefUtils.getDataSource(xref).getFullName();
-				if (!Utils.isEmpty(pmid)) {
-					if (semicolon) {
-						builder.append("; ");
-					}
-					builder.append("; <A href='" + xref.getKnownUrl()).append("'>").append(ds).append(" ").append(pmid)
-							.append("</A>");
-					semicolon = true;
-				}
-			}
-			// Url
-			String urlLink = evidence.getUrlLink();
-			if (!Utils.isEmpty(urlLink)) {
-				if (semicolon) {
-					builder.append("; ");
-				}
-				builder.append("; <A href='" + urlLink).append("'>").append(urlLink).append("</A>");
-			}
-			return builder.toString();
 		}
 
 	}

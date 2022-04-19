@@ -231,7 +231,7 @@ public class AnnotationPanel extends PathwayElementPanel implements ActionListen
 			Annotation annotation = annotationRef.getAnnotation();
 			// index starts from 1
 			int ordinal = getInput().getPathwayModel().getAnnotations().indexOf(annotation) + 1;
-			txt.setText("<html>" + "<B>" + ordinal + ":</B> " + buildString(annotation) + "</html>");
+			txt.setText("<html>" + "<B>" + ordinal + ":</B> " + annotationRef.toString() + "</html>");
 			txt.addHyperlinkListener(this);
 			CellConstraints cc = new CellConstraints();
 			add(txt, cc.xy(2, 2));
@@ -306,38 +306,6 @@ public class AnnotationPanel extends PathwayElementPanel implements ActionListen
 			} else if (REMOVE.equals(action)) {
 				AnnotationPanel.this.remove(annotationRef);
 			}
-		}
-
-		/**
-		 * Returns string for the citation.
-		 * 
-		 * @param xref
-		 * @return
-		 */
-		public String buildString(Annotation annotation) {
-			StringBuilder builder = new StringBuilder();
-			// Value and Type
-			String value = annotation.getValue();
-			AnnotationType type = annotation.getType();
-			if (value != null && type != null) {
-				builder.append(value).append("(" + type.getName() + ")").append("</A>");
-			}
-			// Xref
-			Xref xref = annotation.getXref();
-			if (xref != null) {
-				String pmid = XrefUtils.getIdentifier(xref);
-				String ds = XrefUtils.getDataSource(xref).getFullName();
-				if (!Utils.isEmpty(pmid)) {
-					builder.append("; <A href='" + xref.getKnownUrl()).append("'>").append(ds).append(" ").append(pmid)
-							.append("</A>");
-				}
-			}
-			// Url
-			String urlLink = annotation.getUrlLink();
-			if (!Utils.isEmpty(urlLink)) {
-				builder.append("; <A href='" + urlLink).append("'>").append(urlLink).append("</A>");
-			}
-			return builder.toString();
 		}
 
 	}
