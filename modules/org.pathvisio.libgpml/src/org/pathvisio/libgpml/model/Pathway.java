@@ -31,6 +31,7 @@ import org.pathvisio.libgpml.model.type.LineStyleType;
 import org.pathvisio.libgpml.model.type.ObjectType;
 import org.pathvisio.libgpml.prop.StaticProperty;
 import org.pathvisio.libgpml.util.Utils;
+import org.pathvisio.libgpml.util.XrefUtils;
 
 /**
  * This class stores metadata for a Pathway. Pathway is treated as a
@@ -460,12 +461,9 @@ public class Pathway extends PathwayElement implements Xrefable {
 		Set<StaticProperty> result = super.getStaticPropertyKeys();
 		Set<StaticProperty> propsPathway = EnumSet.of(StaticProperty.TITLE, StaticProperty.ORGANISM,
 				StaticProperty.DESCRIPTION, StaticProperty.SOURCE, StaticProperty.VERSION, StaticProperty.LICENSE,
-				StaticProperty.XREF, StaticProperty.BOARDWIDTH, StaticProperty.BOARDHEIGHT,
+				StaticProperty.AUTHOR, StaticProperty.XREF, StaticProperty.BOARDWIDTH, StaticProperty.BOARDHEIGHT,
 				StaticProperty.BACKGROUNDCOLOR);
-//		Set<StaticProperty> propsAuthor = EnumSet.of(StaticProperty.AUTHOR, StaticProperty.NAME,
-//				StaticProperty.USERNAME, StaticProperty.ORDER); //TODO AUTHORS?
 		result.addAll(propsPathway);
-//		result.addAll(propsAuthor);
 		return result;
 	}
 
@@ -508,7 +506,7 @@ public class Pathway extends PathwayElement implements Xrefable {
 				result = getBackgroundColor();
 				break;
 			case AUTHOR:
-				// do nothing TODO
+				result = getAuthors();
 				break;
 			default:
 				// do nothing
@@ -699,6 +697,34 @@ public class Pathway extends PathwayElement implements Xrefable {
 				fireObjectModifiedEvent(
 						PathwayObjectEvent.createSinglePropertyEvent(Pathway.this, StaticProperty.AUTHOR));
 			}
+		}
+
+		/**
+		 * Writes author out as a string. TODO
+		 */
+		public String toString() {
+			StringBuilder builder = new StringBuilder();
+			// Order
+			if (order != 0) {
+				builder.append(order + ": ");
+			}
+			// Name
+			if (name != null) {
+				builder.append(name);
+			}
+			// Username
+			if (username != null) {
+				builder.append(" (" + username + ")");
+			}
+			// Xref
+			if (xref != null) {
+				String id = XrefUtils.getIdentifier(xref);
+				String ds = XrefUtils.getDataSource(xref).getFullName();
+				if (!Utils.isEmpty(id)) {
+					builder.append(" ").append(ds).append(" ").append(id);
+				}
+			}
+			return builder.toString();
 		}
 
 	}
