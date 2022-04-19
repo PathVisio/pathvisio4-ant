@@ -197,7 +197,7 @@ public class CommonActions implements ApplicationEventListener {
 				new NewElementAction(e, new DefaultTemplates.DataNodeTemplate(DataNodeType.PHENOTYPE)),
 				new NewElementAction(e, new DefaultTemplates.DataNodeTemplate(DataNodeType.ALIAS)),
 				new NewElementAction(e, new DefaultTemplates.DataNodeTemplate(DataNodeType.EVENT)),
-				new NewElementAction(e, new DefaultTemplates.DataNodeTemplate(DataNodeType.CELL)),
+				new NewElementAction(e, new DefaultTemplates.DataNodeTemplate(DataNodeType.CELL_NODE)),
 				new NewElementAction(e, new DefaultTemplates.DataNodeTemplate(DataNodeType.ORGAN)),
 				new NewElementAction(e, new DefaultTemplates.DataNodeTemplate(DataNodeType.UNDEFINED)), };
 

@@ -244,7 +244,7 @@ public abstract class DefaultTemplates {
 			DataNodeType type = e.getType();
 			// concept datanodes
 			if (type == DataNodeType.PATHWAY || type == DataNodeType.DISEASE || type == DataNodeType.PHENOTYPE
-					|| type == DataNodeType.EVENT || type == DataNodeType.CELL || type == DataNodeType.ORGAN) {
+					|| type == DataNodeType.EVENT || type == DataNodeType.CELL_NODE || type == DataNodeType.ORGAN) {
 				e.setShapeType(ShapeType.ROUNDED_RECTANGLE);
 			} else if (type == DataNodeType.ALIAS) {
 				e.setShapeType(ShapeType.OVAL);
