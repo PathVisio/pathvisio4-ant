@@ -24,8 +24,11 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.RoundRectangle2D;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 import org.pathvisio.libgpml.debug.Logger;
@@ -47,7 +50,7 @@ public class ShapeType implements IShape {
 	// ================================================================================
 	// Instantiates and registers shapes
 	// ================================================================================
-	private static final Map<String, ShapeType> nameToShapeType = new TreeMap<String, ShapeType>(
+	private static final Map<String, ShapeType> SHAPETYPE_MAP = new TreeMap<String, ShapeType>(
 			String.CASE_INSENSITIVE_ORDER);
 	private static final List<ShapeType> VISIBLE_VALUES = new ArrayList<ShapeType>();
 
@@ -131,13 +134,39 @@ public class ShapeType implements IShape {
 	public static final ShapeType CYTOSOL = new ShapeType("CytosolRegion", null);
 
 	// Deprecated since GPML2013a TODO
+	@Deprecated
 	public static final ShapeType MEMBRANE = new ShapeType("Membrane", null); // roundRect
+	@Deprecated
 	public static final ShapeType CELLA = new ShapeType("CellA", null); // oval
+	@Deprecated
 	public static final ShapeType RIBOSOME = new ShapeType("Ribosome", null); // Hexagon
+	@Deprecated
 	public static final ShapeType ORGANA = new ShapeType("OrganA", null); // oval
+	@Deprecated
 	public static final ShapeType ORGANB = new ShapeType("OrganB", null); // oval
+	@Deprecated
 	public static final ShapeType ORGANC = new ShapeType("OrganC", null); // oval
+	@Deprecated
 	public static final ShapeType PROTEINB = new ShapeType("ProteinB", null); // hexagon
+
+	// ========================================
+	// Deprecated Map Methods
+	// ========================================
+
+	/**
+	 * This map is used to track deprecated ShapeTypes for exclusion from the GUI.
+	 */
+	public static final Set<String> DEPRECATED_SHAPETYPES = new HashSet<String>();
+
+	static {
+		DEPRECATED_SHAPETYPES.add(MEMBRANE.getName());
+		DEPRECATED_SHAPETYPES.add(CELLA.getName());
+		DEPRECATED_SHAPETYPES.add(RIBOSOME.getName());
+		DEPRECATED_SHAPETYPES.add(ORGANA.getName());
+		DEPRECATED_SHAPETYPES.add(ORGANB.getName());
+		DEPRECATED_SHAPETYPES.add(ORGANC.getName());
+		DEPRECATED_SHAPETYPES.add(PROTEINB.getName());
+	}
 
 	// ================================================================================
 	// Properties
@@ -169,7 +198,7 @@ public class ShapeType implements IShape {
 		this.shape = shape;
 		this.isResizeable = isResizeable;
 		this.isRotatable = isRotatable;
-		nameToShapeType.put(name, this); // adds this name and ShapeType to map.
+		SHAPETYPE_MAP.put(name, this); // adds this name and ShapeType to map.
 		VISIBLE_VALUES.add(this);
 	}
 
@@ -194,8 +223,8 @@ public class ShapeType implements IShape {
 	 *         returns a new ShapeType.
 	 */
 	public static ShapeType register(String name, Shape shape) {
-		if (nameToShapeType.containsKey(name)) {
-			return nameToShapeType.get(name);
+		if (SHAPETYPE_MAP.containsKey(name)) {
+			return SHAPETYPE_MAP.get(name);
 		} else {
 			Logger.log.trace("Registered shape type " + name);
 			return new ShapeType(name, shape);
@@ -258,7 +287,7 @@ public class ShapeType implements IShape {
 	 * @return the ShapeType with given string name.
 	 */
 	public static ShapeType fromName(String name) {
-		return nameToShapeType.get(name);
+		return SHAPETYPE_MAP.get(name);
 	}
 
 	/**
@@ -268,7 +297,7 @@ public class ShapeType implements IShape {
 	 *         insertion.
 	 */
 	static public String[] getNames() {
-		return nameToShapeType.keySet().toArray(new String[nameToShapeType.size()]);
+		return SHAPETYPE_MAP.keySet().toArray(new String[SHAPETYPE_MAP.size()]);
 	}
 
 	/**
@@ -277,7 +306,7 @@ public class ShapeType implements IShape {
 	 * @return shapeTypes the list of all registered ShapeTypes.
 	 */
 	static public ShapeType[] getValues() {
-		return nameToShapeType.values().toArray(new ShapeType[0]);
+		return SHAPETYPE_MAP.values().toArray(new ShapeType[0]);
 	}
 
 	/**
