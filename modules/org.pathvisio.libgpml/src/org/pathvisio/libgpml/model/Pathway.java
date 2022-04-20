@@ -493,6 +493,9 @@ public class Pathway extends PathwayElement implements Xrefable {
 			case LICENSE:
 				result = getLicense();
 				break;
+			case AUTHOR:
+				result = getAuthors();
+				break;
 			case XREF:
 				result = getXref();
 				break;
@@ -504,9 +507,6 @@ public class Pathway extends PathwayElement implements Xrefable {
 				break;
 			case BACKGROUNDCOLOR:
 				result = getBackgroundColor();
-				break;
-			case AUTHOR:
-				result = getAuthors();
 				break;
 			default:
 				// do nothing
@@ -546,6 +546,9 @@ public class Pathway extends PathwayElement implements Xrefable {
 		case LICENSE:
 			setLicense((String) value);
 			break;
+		case AUTHOR:
+			// do nothing TODO
+			break;
 		case XREF:
 			setXref((Xref) value);
 			break;
@@ -557,9 +560,6 @@ public class Pathway extends PathwayElement implements Xrefable {
 			break;
 		case BACKGROUNDCOLOR:
 			setBackgroundColor((Color) value);
-			break;
-		case AUTHOR:
-			// do nothing TODO
 			break;
 		default:
 			// do nothing
