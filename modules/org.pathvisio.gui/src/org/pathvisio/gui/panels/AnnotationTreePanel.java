@@ -56,10 +56,19 @@ import org.pathvisio.gui.SwingEngine;
 import org.pathvisio.gui.dialogs.CitationDialog;
 
 /**
+ * This panel displays a JTree of a Pathway Element's Annotations (referenced by AnnotationRefs).
  * 
- * @author unknown
+ * <p>
+ * NB:
+ * <ol>
+ * <li>AnnotationRef(s) may have nested CitationRef(s) which are displayed in a
+ * JTree.
+ * <li>CitationRef(s) can also have nested AnnotationRef(s) and EvidenceRef(s).
+ * </ol>
+ * 
+ * @author finterly
  */
-public class AnnotationTreePanel extends RefTreePanel implements ActionListener {
+public class AnnotationTreePanel extends ReferenceTreePanel implements ActionListener {
 
 	private static final String ADD = "New reference";
 	private static final String REMOVE = "Remove";

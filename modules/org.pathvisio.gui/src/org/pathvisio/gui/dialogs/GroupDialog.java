@@ -60,7 +60,7 @@ import org.pathvisio.gui.util.PermissiveComboBox;
 /**
  * Dialog for editing Groups.
  * 
- * @author unknown, finterly
+ * @author finterly
  */
 public class GroupDialog extends PathwayElementDialog implements ItemListener {
 
@@ -77,7 +77,6 @@ public class GroupDialog extends PathwayElementDialog implements ItemListener {
 	private DataSourceModel dsm;// for xref dataSource
 	private PermissiveComboBox dbCombo; // all registered datasource
 	private PermissiveComboBox typeCombo; // for group type
-
 
 	/**
 	 * Instantiates a group dialog.

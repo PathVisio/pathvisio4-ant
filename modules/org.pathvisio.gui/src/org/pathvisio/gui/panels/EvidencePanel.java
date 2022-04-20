@@ -54,7 +54,7 @@ import org.pathvisio.gui.dialogs.EvidenceDialog;
 
 /**
  * 
- * @author unknown
+ * @author finterly
  */
 public class EvidencePanel extends PathwayElementPanel implements ActionListener {
 

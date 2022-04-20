@@ -54,7 +54,7 @@ import org.pathvisio.gui.dialogs.AnnotationDialog;
 
 /**
  * 
- * @author unknown
+ * @author finterly
  */
 public class AnnotationPanel extends PathwayElementPanel implements ActionListener {
 

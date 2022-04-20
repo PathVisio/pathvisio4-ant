@@ -40,7 +40,7 @@ import org.pathvisio.gui.util.PermissiveComboBox;
  * Dialog to easily edit the properties of a pathway, such as the pathway title,
  * organism, etc.
  * 
- * @author unknown
+ * @author unknown, finterly
  */
 public class PathwayDialog extends PathwayElementDialog {
 

@@ -33,17 +33,13 @@ import org.pathvisio.libgpml.prop.StaticProperty;
 import org.pathvisio.libgpml.util.XrefUtils;
 import org.bridgedb.DataSource;
 import org.bridgedb.Xref;
-import org.pathvisio.core.util.Resources;
 import org.pathvisio.core.view.model.UndoAction;
 import org.pathvisio.core.view.model.VPathwayModel;
 import org.pathvisio.gui.SwingEngine;
 import org.pathvisio.gui.panels.AnnotationPanel;
-import org.pathvisio.gui.panels.AnnotationTreePanel;
 import org.pathvisio.gui.panels.CitationPanel;
-import org.pathvisio.gui.panels.CitationTreePanel;
 import org.pathvisio.gui.panels.CommentPanel;
 import org.pathvisio.gui.panels.EvidencePanel;
-import org.pathvisio.gui.panels.EvidenceTreePanel;
 import org.pathvisio.gui.panels.PathwayElementPanel;
 
 /**

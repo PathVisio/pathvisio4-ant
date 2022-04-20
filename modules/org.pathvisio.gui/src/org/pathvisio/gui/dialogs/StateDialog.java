@@ -60,7 +60,7 @@ import org.pathvisio.gui.util.PermissiveComboBox;
 /**
  * Dialog for editing States.
  * 
- * @author unknown, finterly
+ * @author finterly
  */
 public class StateDialog extends PathwayElementDialog implements ItemListener {
 

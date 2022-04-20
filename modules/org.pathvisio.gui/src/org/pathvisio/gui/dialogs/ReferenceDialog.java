@@ -78,7 +78,7 @@ import org.xml.sax.SAXException;
  * (e.g. Annotation, Citation, Evidence) information to the PathwayModel. The
  * Copy Methods below help copy over nested InfoRef information.
  * 
- * @author unknown, finterly
+ * @author finterly
  */
 public abstract class ReferenceDialog extends OkCancelDialog {
 

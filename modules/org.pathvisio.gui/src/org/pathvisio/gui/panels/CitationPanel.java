@@ -52,7 +52,7 @@ import org.pathvisio.gui.dialogs.CitationDialog;
 
 /**
  * 
- * @author unknown
+ * @author unknown, finterly
  */
 public class CitationPanel extends PathwayElementPanel implements ActionListener {
 

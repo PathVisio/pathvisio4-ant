@@ -16,50 +16,21 @@
  ******************************************************************************/
 package org.pathvisio.gui.panels;
 
-import com.jgoodies.forms.builder.DefaultFormBuilder;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
-
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
-
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextPane;
-import javax.swing.JTree;
-import javax.swing.SwingUtilities;
-import javax.swing.event.HyperlinkEvent;
-import javax.swing.event.HyperlinkListener;
 import javax.swing.tree.DefaultMutableTreeNode;
-
-import org.pathvisio.libgpml.debug.Logger;
-import org.pathvisio.libgpml.model.Citation;
-import org.pathvisio.libgpml.model.PathwayElement;
 import org.pathvisio.libgpml.model.PathwayElement.AnnotationRef;
 import org.pathvisio.libgpml.model.PathwayElement.CitationRef;
 import org.pathvisio.libgpml.model.PathwayElement.EvidenceRef;
-import org.pathvisio.libgpml.model.Referenceable.Citable;
-import org.pathvisio.libgpml.util.Utils;
-import org.pathvisio.libgpml.util.XrefUtils;
-import org.bridgedb.Xref;
-import org.pathvisio.core.util.Resources;
-import org.pathvisio.gui.SwingEngine;
-import org.pathvisio.gui.dialogs.CitationDialog;
 
 /**
+ * Parent class for CitationTreePanel and AnnotationTreePanel.
  * 
- * @author unknown
+ * NB: EvidenceRefs do not have nested InfoRefs.
+ * 
+ * @author finterly
  */
-public abstract class RefTreePanel extends PathwayElementPanel implements ActionListener {
+public abstract class ReferenceTreePanel extends PathwayElementPanel implements ActionListener {
 
 	protected void addCitationRefNodes(DefaultMutableTreeNode node, List<CitationRef> citationRefs) {
 		for (CitationRef cr : citationRefs) {

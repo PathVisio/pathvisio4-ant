@@ -68,7 +68,7 @@ import org.xml.sax.SAXException;
  * Dialog for entering annotations. For convenience, you can enter a pubmed id
  * and query the details from pubmed.
  * 
- * @author unknown, finterly
+ * @author finterly
  */
 public class AnnotationDialog extends ReferenceDialog {
 

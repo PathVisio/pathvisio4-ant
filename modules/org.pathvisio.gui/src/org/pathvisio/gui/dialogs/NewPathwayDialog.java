@@ -38,7 +38,7 @@ import org.pathvisio.gui.util.PermissiveComboBox;
 /**
  * Dialog asks user for pathway title and organism when new pathways is created
  * 
- * @author mkutmon, dslenter
+ * @author mkutmon, dslenter, finterly
  */
 public class NewPathwayDialog extends OkCancelDialog {
 

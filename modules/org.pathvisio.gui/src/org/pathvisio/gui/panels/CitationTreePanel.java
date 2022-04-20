@@ -16,13 +16,10 @@
  ******************************************************************************/
 package org.pathvisio.gui.panels;
 
-import com.jgoodies.forms.builder.DefaultFormBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -62,10 +59,20 @@ import org.pathvisio.gui.SwingEngine;
 import org.pathvisio.gui.dialogs.CitationDialog;
 
 /**
+ * This panel displays a JTree of a Pathway Element's Citations (referenced by
+ * CitationRefs).
  * 
- * @author unknown
+ * <p>
+ * NB:
+ * <ol>
+ * <li>CitationRef(s) can also have nested AnnotationRef(s) and EvidenceRef(s).
+ * <li>AnnotationRef(s) may have nested CitationRef(s) which are displayed in a
+ * JTree.
+ * </ol>
+ * 
+ * @author finterly
  */
-public class CitationTreePanel extends RefTreePanel implements ActionListener {
+public class CitationTreePanel extends ReferenceTreePanel implements ActionListener {
 
 	private static final String ADD = "New citation";
 	private static final String REMOVE = "Remove";
@@ -147,7 +154,7 @@ public class CitationTreePanel extends RefTreePanel implements ActionListener {
 				if (node == null) {
 					return;
 				}
-				// retrieve the node that was selected 
+				// retrieve the node that was selected
 				Object nodeInfo = node.getUserObject();
 				// react to the node selection
 				infoPnl = new ViewRefPanel((CitationRef) nodeInfo);
@@ -198,13 +205,13 @@ public class CitationTreePanel extends RefTreePanel implements ActionListener {
 			txt.addHyperlinkListener(this);
 			CellConstraints cc = new CellConstraints();
 			add(txt, cc.xy(2, 2));
-			
+
 			addBtn = new JButton(ADD);
 			addBtn.setActionCommand(ADD);
 			addBtn.addActionListener(this);
 			addPnl = new JPanel();
 			addPnl.add(addBtn);
-			
+
 			btnPanel = new JPanel();
 			JButton btnEdit = new JButton();
 			btnEdit.setActionCommand(EDIT);

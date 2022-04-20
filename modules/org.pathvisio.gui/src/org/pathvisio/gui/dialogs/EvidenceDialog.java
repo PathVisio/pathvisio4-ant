@@ -59,7 +59,7 @@ import org.xml.sax.SAXException;
  * Dialog for entering evidences. For convenience, you can enter a pubmed id and
  * query the details from pubmed.
  * 
- * @author unknown, finterly
+ * @author finterly
  */
 public class EvidenceDialog extends ReferenceDialog {
 
