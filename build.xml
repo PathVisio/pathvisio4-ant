@@ -113,6 +113,8 @@
 				<include name="com.springsource*.jar" />
 				<include name="org.apache.felix.bundlerepository-1.6.6.jar" />
 				<include name="commons*.jar" />
+				<include name="osgi*.jar" />
+				<include name="jaxb*.jar" />
 			</fileset>
 		</copy>
 		<unjar src="modules/org.pathvisio.launcher.jar" dest="build/exe" />
