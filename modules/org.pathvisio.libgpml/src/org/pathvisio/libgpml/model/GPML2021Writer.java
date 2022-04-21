@@ -49,6 +49,12 @@ import org.pathvisio.libgpml.util.XrefUtils;
 
 /**
  * This class writes a PathwayModel to an output (GPML 2021).
+ * <p>
+ * NB:
+ * <ol>
+ * <li>GPML2021 is the current gpml format.
+ * <li>In the GUI, Pathways are saved/written in the GPML2021 format.
+ * </ol>
  * 
  * @author finterly
  */
@@ -231,7 +237,7 @@ public class GPML2021Writer extends GPML2021FormatAbstract implements GpmlFormat
 	 * @param e       the jdom element.
 	 */
 	protected void writeUrl(String urlLink, Element e) {
-		if (urlLink != null) {
+		if (urlLink != null && !Utils.stringEquals(urlLink, "")) {
 			Element u = new Element("Url", e.getNamespace());
 			u.setAttribute("link", urlLink);
 			e.addContent(u);

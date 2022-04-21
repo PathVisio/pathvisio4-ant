@@ -106,7 +106,7 @@ public class GPML2013aReader extends GPML2013aFormatAbstract implements GpmlForm
 	 * @return pathwayModel the pathway model after reading root element.
 	 * @throws ConverterException
 	 */
-	public PathwayModel readFromRoot(PathwayModel pathwayModel, Element root) throws ConverterException {
+	public void readFromRoot(PathwayModel pathwayModel, Element root) throws ConverterException {
 
 		Set<String> elementIdSet = new HashSet<String>(); // all elementIds
 		Map<String, PublicationXref> idToPublicationXref = new HashMap<String, PublicationXref>(); // ids and biopax
@@ -135,7 +135,6 @@ public class GPML2013aReader extends GPML2013aFormatAbstract implements GpmlForm
 		readPointElementRefs(pathwayModel, graphIdToGroup, elementToPoint);
 		// removes empty groups
 		removeEmptyGroups(pathwayModel);
-		return pathwayModel;
 	}
 
 	/**

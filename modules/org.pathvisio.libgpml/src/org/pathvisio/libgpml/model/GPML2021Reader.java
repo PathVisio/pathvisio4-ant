@@ -89,7 +89,7 @@ public class GPML2021Reader extends GPML2021FormatAbstract implements GpmlFormat
 	 * @return pathwayModel the pathway model after reading root element.
 	 * @throws ConverterException
 	 */
-	public PathwayModel readFromRoot(PathwayModel pathwayModel, Element root) throws ConverterException {
+	public void readFromRoot(PathwayModel pathwayModel, Element root) throws ConverterException {
 		readPathway(pathwayModel.getPathway(), root);
 		// reads annotation/citation/evidence ref info into a map
 		Map<String, Element> refIdToJdomElement = new HashMap<String, Element>();
@@ -108,7 +108,6 @@ public class GPML2021Reader extends GPML2021FormatAbstract implements GpmlFormat
 		readPointElementRefs(pathwayModel, elementToPoint);
 		// removes empty groups
 		removeEmptyGroups(pathwayModel);
-		return pathwayModel;
 	}
 
 	/**

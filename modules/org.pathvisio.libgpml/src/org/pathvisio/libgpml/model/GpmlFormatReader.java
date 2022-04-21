@@ -28,8 +28,8 @@ public interface GpmlFormatReader extends GpmlFormatVersion {
 
 //	public PathwayObject mapElement(Element e) throws ConverterException; TODO 
 
-	//public void readFromRoot(PathwayModel pwy, Element root) throws ConverterException;
+	public void readFromRoot(PathwayModel pwy, Element root) throws ConverterException;
 	
-	public PathwayModel readFromRoot(PathwayModel pwy, Element root) throws ConverterException;
+//	public void readFromRoot(PathwayModel pwy, Element root) throws ConverterException;
 
 }

@@ -77,7 +77,7 @@ public class Citation extends PathwayObject {
 	public ObjectType getObjectType() {
 		return ObjectType.CITATION;
 	}
-	
+
 	/**
 	 * Returns this Citation Xref.
 	 * 
@@ -290,8 +290,9 @@ public class Citation extends PathwayObject {
 			return false;
 		}
 		// checks if url link property equivalent
-		if (!Objects.equals(urlLink, citation.getUrlLink()))
+		if (!Utils.stringNullEqualsEmpty(urlLink, citation.getUrlLink())) {
 			return false;
+		}
 		return true;
 	}
 

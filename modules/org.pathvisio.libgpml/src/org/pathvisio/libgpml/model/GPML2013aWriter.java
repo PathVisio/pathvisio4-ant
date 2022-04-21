@@ -50,8 +50,14 @@ import org.pathvisio.libgpml.util.ColorUtils;
 import org.pathvisio.libgpml.util.XrefUtils;
 
 /**
- * This class writes a PathwayModel to an output (GPML 2013a). If writing
- * (converting) GPML2021 to GPML2013a, warning messages are thrown.
+ * This class writes a PathwayModel to an output (GPML 2013a).
+ * <p>
+ * NB:
+ * <ol>
+ * <li>If writing (converting) GPML2021 to GPML2013a, warning messages are
+ * thrown.
+ * <li>In the GUI, export allows writing to the GPML2013a format.
+ * </ol>
  * 
  * @author finterly
  */
@@ -513,7 +519,7 @@ public class GPML2013aWriter extends GPML2013aFormatAbstract implements GpmlForm
 				setAttr(base + ".Graphics.Point", "RelX", pt, Double.toString(point.getRelX()));
 				setAttr(base + ".Graphics.Point", "RelY", pt, Double.toString(point.getRelY()));
 			}
-			// if start or end point, write arrowhead type. 
+			// if start or end point, write arrowhead type.
 			if (i == 0) {
 				writeArrowHeadType(lineElement.getStartArrowHeadType(), base, pt);
 			} else if (i == points.size() - 1) {

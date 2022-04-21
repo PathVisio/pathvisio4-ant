@@ -193,6 +193,26 @@ public class Utils {
 	}
 
 	/**
+	 * Compares two Strings, returning <code>true</code> if they are equal. In this
+	 * case, null is considered equal to Empty.
+	 *
+	 * @see java.lang.String#equals(Object)
+	 * @param str1 the first String, may be null or empty
+	 * @param str2 the second String, may be null or empty
+	 * @return <code>true</code> if the Strings are equal, case sensitive, or both
+	 *         <code>null</code> or empty
+	 */
+	public static boolean stringNullEqualsEmpty(String str1, String str2) {
+		if (str1 == null && stringEquals(str2, "")) {
+			return true; // str1 is null and str2 is empty
+		} else if (str2 == null && stringEquals(str1, "")) {
+			return true;// str2 is null and str1 is empty
+		} else {
+			return stringEquals(str1, str2); // check
+		}
+	}
+
+	/**
 	 * Get the direction of the line on the x axis
 	 * 
 	 * @param start The start point of the line

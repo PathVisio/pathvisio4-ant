@@ -59,18 +59,29 @@ public class CopyElement {
 	}
 
 	/**
-	 * Loads references. NB: To be called after new pathway element is added to a
-	 * pathway model.
+	 * Loads references.
+	 * <p>
+	 * NB:
+	 * <ol>
+	 * <li>To be called after new pathway element is added to a pathway model.
+	 * thrown.
+	 * <li>The srcElement may be the immediate copy element source of the new pathway
+	 * element, or an older source.
+	 * </ol>
+	 * 
+	 * @param srcElement the source element to copy references from.
 	 */
-	public void loadReferences() {
-		if (newElement != null && sourceElement != null) {
-			loadAnnotationRefs(sourceElement.getAnnotationRefs());
-			loadCitationRefs(sourceElement.getCitationRefs());
-			loadEvidenceRefs(sourceElement.getEvidenceRefs());
+	public void loadReferences(PathwayElement srcElement) {
+		if (newElement != null && srcElement != null) {
+			loadAnnotationRefs(srcElement.getAnnotationRefs());
+			loadCitationRefs(srcElement.getCitationRefs());
+			loadEvidenceRefs(srcElement.getEvidenceRefs());
 		}
 	}
 
 	/**
+	 * Loads citationsRefs and nested annotationRefs if applicable.
+	 * 
 	 * @param citationRefs
 	 */
 	private void loadCitationRefs(List<CitationRef> citationRefs) {
@@ -81,9 +92,8 @@ public class CopyElement {
 	}
 
 	/**
+	 * Loads annotationRefs and nested citationRefs and evidenceRefs if applicable.
 	 * 
-	 */
-	/**
 	 * @param annotationRefs
 	 */
 	private void loadAnnotationRefs(List<AnnotationRef> annotationRefs) {
@@ -96,6 +106,8 @@ public class CopyElement {
 	}
 
 	/**
+	 * Loads evidenceRefs.
+	 * 
 	 * @param evidenceRefs
 	 */
 	private void loadEvidenceRefs(List<EvidenceRef> evidenceRefs) {

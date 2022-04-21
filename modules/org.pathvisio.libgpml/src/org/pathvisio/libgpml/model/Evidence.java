@@ -231,7 +231,7 @@ public class Evidence extends PathwayObject {
 			return false;
 		}
 		// checks if url link property equivalent
-		if (!Objects.equals(urlLink, evidence.getUrlLink()))
+		if (!Utils.stringNullEqualsEmpty(urlLink, evidence.getUrlLink()))
 			return false;
 		return true;
 	}

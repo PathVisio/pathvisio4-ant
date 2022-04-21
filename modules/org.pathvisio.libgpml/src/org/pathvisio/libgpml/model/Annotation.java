@@ -265,7 +265,7 @@ public class Annotation extends PathwayObject {
 			return false;
 		}
 		// checks if url link property equivalent
-		if (!Objects.equals(urlLink, annotation.getUrlLink())) {
+		if (!Utils.stringNullEqualsEmpty(urlLink, annotation.getUrlLink())) {
 			return false;
 		}
 		return true;
