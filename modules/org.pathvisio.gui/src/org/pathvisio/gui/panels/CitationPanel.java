@@ -43,6 +43,8 @@ import org.pathvisio.libgpml.debug.Logger;
 import org.pathvisio.libgpml.model.Citation;
 import org.pathvisio.libgpml.model.PathwayElement;
 import org.pathvisio.libgpml.model.PathwayElement.CitationRef;
+import org.pathvisio.libgpml.model.PathwayObject;
+import org.pathvisio.libgpml.model.Referenceable.Citable;
 import org.pathvisio.libgpml.util.Utils;
 import org.pathvisio.libgpml.util.XrefUtils;
 import org.bridgedb.Xref;
@@ -111,6 +113,19 @@ public class CitationPanel extends PathwayElementPanel implements ActionListener
 	@Override
 	protected PathwayElement getInput() {
 		return (PathwayElement) super.getInput();
+	}
+
+	/**
+	 * Sets the pathway element.
+	 * 
+	 * @param e
+	 */
+	@Override
+	public void setInput(PathwayObject e) {
+		if (e != getInput() && e instanceof Citable) {
+			citationRefs = ((Citable) e).getCitationRefs();
+		}
+		super.setInput(e);
 	}
 
 	// ================================================================================
@@ -191,9 +206,9 @@ public class CitationPanel extends PathwayElementPanel implements ActionListener
 			d.setVisible(true);
 		}
 		if (d.getExitCode().equals(CitationDialog.OK)) {
-			refresh();
+			refresh(); // refresh
 		} else {
-
+			// nothing
 		}
 	}
 

@@ -43,7 +43,10 @@ import org.pathvisio.libgpml.debug.Logger;
 import org.pathvisio.libgpml.model.Annotation;
 import org.pathvisio.libgpml.model.Citation;
 import org.pathvisio.libgpml.model.PathwayElement;
+import org.pathvisio.libgpml.model.PathwayObject;
 import org.pathvisio.libgpml.model.PathwayElement.AnnotationRef;
+import org.pathvisio.libgpml.model.Referenceable.Annotatable;
+import org.pathvisio.libgpml.model.Referenceable.Citable;
 import org.pathvisio.libgpml.model.type.AnnotationType;
 import org.pathvisio.libgpml.util.Utils;
 import org.pathvisio.libgpml.util.XrefUtils;
@@ -113,6 +116,19 @@ public class AnnotationPanel extends PathwayElementPanel implements ActionListen
 	@Override
 	protected PathwayElement getInput() {
 		return (PathwayElement) super.getInput();
+	}
+
+	/**
+	 * Sets the pathway element.
+	 * 
+	 * @param e
+	 */
+	@Override
+	public void setInput(PathwayObject e) {
+		if (e != getInput() && e instanceof Annotatable) {
+			annotationRefs = ((Annotatable) e).getAnnotationRefs();
+		}
+		super.setInput(e);
 	}
 
 	// ================================================================================

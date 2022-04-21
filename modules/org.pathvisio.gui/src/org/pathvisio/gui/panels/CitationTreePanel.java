@@ -47,6 +47,7 @@ import javax.swing.tree.TreeSelectionModel;
 import org.pathvisio.libgpml.debug.Logger;
 import org.pathvisio.libgpml.model.Citation;
 import org.pathvisio.libgpml.model.PathwayElement;
+import org.pathvisio.libgpml.model.PathwayObject;
 import org.pathvisio.libgpml.model.PathwayElement.AnnotationRef;
 import org.pathvisio.libgpml.model.PathwayElement.CitationRef;
 import org.pathvisio.libgpml.model.PathwayElement.EvidenceRef;
@@ -129,6 +130,19 @@ public class CitationTreePanel extends ReferenceTreePanel implements ActionListe
 	}
 
 	/**
+	 * Sets the pathway element.
+	 * 
+	 * @param e
+	 */
+	@Override
+	public void setInput(PathwayObject e) {
+		if (e != getInput() && e instanceof Citable) {
+			citationRefs = ((Citable) e).getCitationRefs();
+		}
+		super.setInput(e);
+	}
+
+	/**
 	 * Refresh.
 	 */
 	public void refresh() {
@@ -140,7 +154,7 @@ public class CitationTreePanel extends ReferenceTreePanel implements ActionListe
 		DefaultMutableTreeNode root = new DefaultMutableTreeNode("Citations (nested Annotations and Evidences)");
 		addCitationRefNodes(root, citationRefs);
 		JTree tree = new JTree(root);
-//		tree.setRootVisible(false); // sets root folder invisible
+		tree.setRootVisible(false); // sets root folder invisible
 		tree.setEditable(true); // TODO
 		treePnl = new JScrollPane(tree);
 		add(treePnl, BorderLayout.NORTH);
@@ -165,18 +179,6 @@ public class CitationTreePanel extends ReferenceTreePanel implements ActionListe
 
 	}
 
-//	/**
-//	 * Sets the current pathway element.
-//	 * 
-//	 * @param e
-//	 */
-//	public void setInput(PathwayElement e) {
-////		if (e != getInput()) { //TODO 
-////			elmMgr = e.getParent().getBiopaxElementManager();
-////			refMgr = e.getBiopaxReferenceManager();
-////		}
-//		super.setInput(e);
-//	}
 
 	/**
 	 * Panel which displays CitationRef

@@ -282,7 +282,8 @@ public class SwingEngine implements ApplicationEventListener, PathwayModel.Statu
 		private final String taskName;
 		private final Preference dirPreference;
 
-		public PathwayModelChooser(String taskName, int dialogType, Preference dirPreference, Set<? extends PathwayModelIO> set) {
+		public PathwayModelChooser(String taskName, int dialogType, Preference dirPreference,
+				Set<? extends PathwayModelIO> set) {
 			jfc = new JFileChooser();
 			this.taskName = taskName;
 			this.dirPreference = dirPreference;
@@ -436,7 +437,8 @@ public class SwingEngine implements ApplicationEventListener, PathwayModel.Statu
 		return false;
 	}
 
-	private final Set<PathwayModelIO> GPML_FORMAT_ONLY = Utils.setOf((PathwayModelIO) new GpmlFormat());
+	private final Set<PathwayModelIO> GPML_FORMAT_ONLY = Utils
+			.setOf((PathwayModelIO) new GpmlFormat(GpmlFormat.CURRENT));
 
 	/**
 	 * Opens a file chooser dialog, and opens the chosen pathway.
@@ -444,8 +446,8 @@ public class SwingEngine implements ApplicationEventListener, PathwayModel.Statu
 	 * @return true if a pathway was openend, false if the operation was cancelled
 	 */
 	public boolean openPathwayModel() {
-		PathwayModelChooser pc = new PathwayModelChooser("Open", JFileChooser.OPEN_DIALOG, GlobalPreference.DIR_LAST_USED_OPEN,
-				GPML_FORMAT_ONLY);
+		PathwayModelChooser pc = new PathwayModelChooser("Open", JFileChooser.OPEN_DIALOG,
+				GlobalPreference.DIR_LAST_USED_OPEN, GPML_FORMAT_ONLY);
 		int status = pc.show();
 
 		if (status == JFileChooser.APPROVE_OPTION) {
@@ -466,8 +468,8 @@ public class SwingEngine implements ApplicationEventListener, PathwayModel.Statu
 	}
 
 	public boolean savePathwayModelAs() {
-		PathwayModelChooser pc = new PathwayModelChooser("Save", JFileChooser.SAVE_DIALOG, GlobalPreference.DIR_LAST_USED_SAVE,
-				GPML_FORMAT_ONLY);
+		PathwayModelChooser pc = new PathwayModelChooser("Save", JFileChooser.SAVE_DIALOG,
+				GlobalPreference.DIR_LAST_USED_SAVE, GPML_FORMAT_ONLY);
 		int status = pc.show();
 
 		if (status == JFileChooser.APPROVE_OPTION) {
@@ -521,22 +523,18 @@ public class SwingEngine implements ApplicationEventListener, PathwayModel.Statu
 	public boolean canDiscardPathwayModel() {
 		PathwayModel pathway = engine.getActivePathwayModel();
 		// checking not necessary if there is no pathway or if pathway is not changed.
-
-		if (pathway == null || !pathway.hasChanged())
+		if (pathway == null || !pathway.hasChanged()) {
 			return true;
-		int result = JOptionPane.showConfirmDialog(frame, "Save changes?",
-				"Your pathway has changed. Do you want to save?", JOptionPane.YES_NO_CANCEL_OPTION,
-				JOptionPane.QUESTION_MESSAGE);
-		if (result == JOptionPane.CANCEL_OPTION) // cancel
-		{
-			return false;
-		} else if (result == JOptionPane.YES_OPTION) // yes
-		{
-			// return false if save is cancelled.
+		}
+		int result = JOptionPane.showConfirmDialog(frame, "Do you want to save changes?", "PathVisio",
+				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+		if (result == JOptionPane.CANCEL_OPTION) {
+			return false;// cancel
+		} else if (result == JOptionPane.YES_OPTION) {
+			// yes, return false if save is cancelled.
 			return (savePathwayModel());
 		}
-		// yes or no
-		return true;
+		return true; // yes or no
 	}
 
 	public void applicationEvent(ApplicationEvent e) {

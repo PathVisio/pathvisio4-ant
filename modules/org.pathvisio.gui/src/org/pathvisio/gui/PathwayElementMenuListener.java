@@ -49,8 +49,8 @@ import org.pathvisio.core.view.model.VPathwayObject;
 import org.pathvisio.core.view.model.VState;
 import org.pathvisio.core.view.model.ViewActions;
 import org.pathvisio.core.view.model.ViewActions.PositionPasteAction;
-import org.pathvisio.gui.CommonActions.AddLiteratureAction;
-import org.pathvisio.gui.CommonActions.EditLiteratureAction;
+import org.pathvisio.gui.CommonActions.AddCitationAction;
+import org.pathvisio.gui.CommonActions.EditCitationAction;
 import org.pathvisio.gui.CommonActions.PropertiesAction;
 import org.pathvisio.gui.dialogs.PathwayElementDialog;
 import org.pathvisio.gui.view.VPathwayModelSwing;
@@ -265,8 +265,8 @@ public class PathwayElementMenuListener implements VPathwayModelListener {
 		// ========================================
 		if (e instanceof VPathwayElement) {
 			JMenu litMenu = new JMenu("References");
-			litMenu.add(new AddLiteratureAction(swingEngine, component, e));
-			litMenu.add(new EditLiteratureAction(swingEngine, component, e));
+			litMenu.add(new AddCitationAction(swingEngine, component, e));
+			litMenu.add(new EditCitationAction(swingEngine, component, e));
 			menu.add(litMenu);
 
 			menu.addSeparator();
@@ -275,10 +275,10 @@ public class PathwayElementMenuListener implements VPathwayModelListener {
 
 		if (pathLitRef != null) {
 			menu.addSeparator();
-			pathLitRef.add(new AddLiteratureAction(swingEngine, component,
-					swingEngine.getEngine().getActiveVPathwayModel().getMappInfo()));
-			pathLitRef.add(new EditLiteratureAction(swingEngine, component,
-					swingEngine.getEngine().getActiveVPathwayModel().getMappInfo()));
+			pathLitRef.add(new AddCitationAction(swingEngine, component,
+					swingEngine.getEngine().getActiveVPathwayModel().getVInfoBox()));
+			pathLitRef.add(new EditCitationAction(swingEngine, component,
+					swingEngine.getEngine().getActiveVPathwayModel().getVInfoBox()));
 			menu.add(pathLitRef);
 		}
 
@@ -315,7 +315,7 @@ public class PathwayElementMenuListener implements VPathwayModelListener {
 				VCitation c = (VCitation) e.getAffectedElement();
 				PathwayElementDialog d = swingEngine.getPopupDialogHandler()
 						.getInstance(c.getParent().getPathwayObject(), false, null, null);
-				d.selectPathwayElementPanel(PathwayElementDialog.TAB_LITERATURE);
+				d.selectPathwayElementPanel(PathwayElementDialog.TAB_CITATIONS);
 				d.setVisible(true);
 				break;
 			}

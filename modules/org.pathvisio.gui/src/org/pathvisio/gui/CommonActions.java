@@ -634,7 +634,7 @@ public class CommonActions implements ApplicationEventListener {
 			if (element instanceof SelectionBox) {
 				SelectionBox s = (SelectionBox) element;
 				if (s.getSelection().size() == 0) {
-					element = element.getDrawing().getMappInfo();
+					element = element.getDrawing().getVInfoBox();
 				}
 			}
 			// If handle, select parent
@@ -663,32 +663,26 @@ public class CommonActions implements ApplicationEventListener {
 	}
 
 	/**
-	 * Provides direct access to the literature reference dialog
+	 * Provides direct access to the citation reference dialog
 	 * ({@link CitationDialog}) from the right click menu.
 	 */
-	public static class AddLiteratureAction extends PathwayElementDialogAction {
-		public AddLiteratureAction(SwingEngine swingEngine, Component parent, VElement e) {
+	public static class AddCitationAction extends PathwayElementDialogAction {
+		public AddCitationAction(SwingEngine swingEngine, Component parent, VElement e) {
 			super(swingEngine, parent, e);
-			putValue(NAME, "Add literature reference");
-			putValue(SHORT_DESCRIPTION, "Add a literature reference to this element");
+			putValue(NAME, "Add Citation");
+			putValue(SHORT_DESCRIPTION, "Add a Citation to this element");
 			setEnabled(e.getDrawing().isEditMode());
 		}
 
 		public void actionPerformed(ActionEvent e) {
 			if (element instanceof VPathwayElement) {
-
 				PathwayElement pwElm = ((VPathwayElement) element).getPathwayObject();
-				// TODO
-				CitationRef xref = pwElm.addCitation(null, null);
-
-				CitationDialog d = new CitationDialog(pwElm, xref, null, parent);
+				CitationDialog d = new CitationDialog(pwElm, null, null, parent);
 				d.setVisible(true);
 				if (d.getExitCode().equals(CitationDialog.OK)) {
-					// Citation was already added? TODO
-					// before: m.addElementReference(xref);
+					// citationRef was added
 				} else {
-					// remove invalid citation?
-					pwElm.removeCitationRef(xref);
+					// nothing
 				}
 			}
 		}
@@ -699,19 +693,19 @@ public class CommonActions implements ApplicationEventListener {
 	}
 
 	/**
-	 * Pops up the pathway element dialog directly on the literature tab.
+	 * Pops up the pathway element dialog directly on the citations tab.
 	 */
-	public static class EditLiteratureAction extends PathwayElementDialogAction {
+	public static class EditCitationAction extends PathwayElementDialogAction {
 
-		public EditLiteratureAction(SwingEngine swingEngine, Component parent, VElement e) {
+		public EditCitationAction(SwingEngine swingEngine, Component parent, VElement e) {
 			super(swingEngine, parent, e);
-			putValue(NAME, "Edit literature references");
-			putValue(SHORT_DESCRIPTION, "Edit the literature references of this element");
+			putValue(NAME, "Edit Citations");
+			putValue(SHORT_DESCRIPTION, "Edit the Citations of this element");
 			setEnabled(e.getDrawing().isEditMode());
 		}
 
 		protected String getSelectedPanel() {
-			return PathwayElementDialog.TAB_LITERATURE;
+			return PathwayElementDialog.TAB_CITATIONS;
 		}
 	}
 
