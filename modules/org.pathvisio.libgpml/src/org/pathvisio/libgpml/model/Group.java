@@ -135,14 +135,14 @@ public class Group extends ShapedElement implements Xrefable {
 	 * element members are added.
 	 */
 	public void updateDimensions() {
-		// if newly created group TODO 
+		// if newly created group TODO
 		if (getWidth() == 0 || getHeight() == 0) {
 			Rectangle2D r = getMinRotatedBounds();
 			setCenterX(r.getCenterX());
 			setCenterY(r.getCenterY());
 			setWidth(r.getWidth());
 			setHeight(r.getHeight());
-		} else { 
+		} else {
 			Rectangle2D r = getRotatedBounds();
 			setCenterX(r.getCenterX());
 			setCenterY(r.getCenterY());
@@ -300,6 +300,17 @@ public class Group extends ShapedElement implements Xrefable {
 	 */
 	public static final double DEFAULT_M_MARGIN = 8;
 	public static final double COMPLEX_M_MARGIN = 12;
+
+	/**
+	 * Rotation is not allowed for Groups and will always be set to 0 (default).
+	 * 
+	 * @param v
+	 */
+	@Override
+	public void setRotation(Double v) {
+		// rotation not allowed
+		super.setRotation(0.0);
+	}
 
 	/**
 	 * Returns margin for group bounding-box around contained elements depending on
