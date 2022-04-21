@@ -68,11 +68,9 @@ public class PathwayModelTransferable implements Transferable {
 	 * ('text'), so returns true for any DataFlavor that stores text, not only xml.
 	 */
 	public static final DataFlavor GPML_DATA_FLAVOR = new DataFlavor(String.class, "text/xml");
-	/** @deprecated use GPML_DATA_FLAVOR instead */
-	public static final DataFlavor gpmlDataFlavor = GPML_DATA_FLAVOR;
 
 	List<CopyElement> elements;
-	PathwayModel pathway;
+	PathwayModel pathwayModel;
 
 	public PathwayModelTransferable(List<CopyElement> elements) {
 		this(null, elements);
@@ -83,7 +81,7 @@ public class PathwayModelTransferable implements Transferable {
 		if (source == null) {
 			source = new PathwayModel();
 		}
-		this.pathway = source;
+		this.pathwayModel = source;
 	}
 
 	/**
@@ -104,15 +102,7 @@ public class PathwayModelTransferable implements Transferable {
 			}
 		}
 
-//		// Create dummy parent so we can copy over TODO 
-//		// the referenced biopax elements?
-//		// How to copy over references? 
-//		PathwayModel dummyParent = new PathwayModel();
-//		for (Citation citation: pathway.getCitations()) {
-//			Citation newCitation = citation.copy();
-//			dummyParent.addCitation(newCitation);
-//		}
-
+		// Map stores pathway object copy information.  
 		BidiMap<PathwayObject, PathwayObject> newerToSource = new DualHashBidiMap<>();
 
 		for (CopyElement copyElement : elements) {
@@ -121,14 +111,9 @@ public class PathwayModelTransferable implements Transferable {
 			CopyElement copyOfCopyElement = newElement.copy();
 			PathwayElement newerElement = copyOfCopyElement.getNewElement();
 
-			// Check for valid graphRef (with respect to other copied elements)
-//			// do not add group yet
-//			if (e.getClass() == Group.class) {
-//				continue;
-//			}
 			pnew.add(newerElement);
 			// load references
-			copyOfCopyElement.loadReferences();
+			copyOfCopyElement.loadReferences(srcElement);
 			// store information
 			newerToSource.put(newerElement, srcElement);
 			if (newerElement instanceof LineElement) {
@@ -143,7 +128,7 @@ public class PathwayModelTransferable implements Transferable {
 				}
 			}
 		}
-
+		
 		for (PathwayObject newerElement : newerToSource.keySet()) {
 			PathwayObject srcElement = newerToSource.get(newerElement);
 			// link LineElement LinePoint elementRefs
@@ -165,7 +150,7 @@ public class PathwayModelTransferable implements Transferable {
 					}
 				}
 			}
-			
+
 			// add group members in new Group
 			else if (newerElement.getObjectType() == ObjectType.GROUP
 					&& srcElement.getObjectType() == ObjectType.GROUP) {
@@ -174,65 +159,32 @@ public class PathwayModelTransferable implements Transferable {
 					if (newerMember != null) {
 						((Group) newerElement).addPathwayElement(newerMember);
 					}
-				}			
+				}
 			}
-			
-//			// add group members in new Group
-//			else if (newerElement.getObjectType() == ObjectType.GROUP
-//					&& srcElement.getObjectType() == ObjectType.GROUP) {
-//				List<Groupable> newerMembers = new ArrayList<Groupable>();
-//				boolean complete = true;
-//				for (Groupable srcMember : ((Group) srcElement).getPathwayElements()) {
-//					if (!newerToSource.containsValue((PathwayElement) srcMember)) {
-//						complete = false;
-//						System.out
-//								.println("Group not copied, not all members of the group were selected to be copied.");
-//					} else {
-//						System.out.println("group2!");
-//						newerMembers.add((Groupable) newerToSource.getKey(srcMember));
-//					}
-//				}
-//				if (complete) {
-//					System.out.println("complete!"); 
-//					((Group) newerElement).addPathwayElements(newerMembers);
-//					System.out.println(((Group) newerElement).getPathwayElements());
-//				}
-//			}
-			
-			
-			/*
-			 * If Alias DataNode:
-			 * 
-			 * write warning if the Group aliasRef refers to is not present in the new
-			 * pathway. TODO...depends on if pasting to same pathway or not and if group is
-			 * also included...
-			 */
-			// set aliasRef if any
+
+			// set aliasRef if any, and link to group if group also copied
 			if (newerElement.getObjectType() == ObjectType.DATANODE
 					&& srcElement.getObjectType() == ObjectType.DATANODE) {
 				if (((DataNode) newerElement).getType() == DataNodeType.ALIAS
 						&& ((DataNode) srcElement).getType() == DataNodeType.ALIAS) {
 					Group srcAliasRef = ((DataNode) srcElement).getAliasRef();
+					System.out.println("IS TRUE??" + srcAliasRef != null);
 					if (srcAliasRef != null) {
 						Group newerAliasRef = (Group) newerToSource.getKey(srcAliasRef);
 						// if group aliasRef was also copied
 						if (newerAliasRef != null) {
 							((DataNode) newerElement).setAliasRef(newerAliasRef);
 						}
-						// if group already present in pathway
-						else if (pnew.hasPathwayObject(srcAliasRef)) {
-							((DataNode) newerElement).setAliasRef(srcAliasRef);
-						}
-						// aliasRef for newer element is lost
-						else {
-							System.out.println("aliasRef connection for this datanode was lost");
-						}
+					}
+					// otherwise aliasRef is not linked to any group 
+					else {
+						System.out.println("Alias DataNode unlinked to group");
 					}
 				}
 			}
 		}
 
-		// If no mappinfo, create a dummy one that we can recognize later on
+		// If no mappinfo, create a dummy one that we can recognize later on TODO 
 		if (!infoFound) {
 			Pathway info = new Pathway();
 			info.setSource(INFO_DATASOURCE);
@@ -240,7 +192,7 @@ public class PathwayModelTransferable implements Transferable {
 		}
 
 		try {
-			Document doc = GpmlFormat.createJdom(pnew);
+			Document doc = new GpmlFormat(GpmlFormat.CURRENT).createJdom(pnew);
 			out = xmlout.outputString(doc);
 		} catch (Exception e) {
 			Logger.log.error("Unable to copy to clipboard", e);

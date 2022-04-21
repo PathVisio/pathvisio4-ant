@@ -64,7 +64,7 @@ public class PathVisioMain {
 	 */
 	public static final List<String> mustActivate = Arrays.asList (new String[] {
 		"derby",
-		"org.w3c.dom.events",
+		//"org.w3c.dom.events",
 		"org.bridgedb.rdb",
 		"org.pathvisio.libgpml",
 		"org.pathvisio.core",

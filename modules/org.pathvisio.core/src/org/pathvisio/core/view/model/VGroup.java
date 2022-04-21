@@ -201,18 +201,19 @@ public class VGroup extends VShapedElement implements VElementMouseListener {
 	 */
 	@Override
 	protected void doDraw(Graphics2D g2d) {
-		
-		// Refresh dimensions before drawing
-		getPathwayObject().updateDimensions(); 
-		
 		// Build the flags
 		int flags = 0;
-		if (isSelected())
+		if (isSelected()) {
 			flags += FLAG_SELECTED;
-		if (mouseover)
+		}
+		if (mouseover) {
 			flags += FLAG_MOUSEOVER;
-		if (anchorsShowing)
+		}
+		if (anchorsShowing) {
 			flags += FLAG_ANCHORSVISIBLE;
+		}
+		// Refresh dimensions before drawing
+		getPathwayObject().updateDimensions();
 
 		// Draw the group style appearance
 		GroupPainter p = GroupPainterRegistry.getPainter(getPathwayObject().getType().toString());
@@ -224,8 +225,7 @@ public class VGroup extends VShapedElement implements VElementMouseListener {
 		g2d.setFont(getVFont());
 		drawTextLabel(g2d);
 
-		drawHighlight(g2d);
-		// TODO allow customisation?
+//		drawHighlight(g2d); //TODO
 	}
 
 	boolean mouseover = false;
@@ -260,38 +260,38 @@ public class VGroup extends VShapedElement implements VElementMouseListener {
 		}
 	}
 
-	/**
-	 *
-	 */
-	@Override
-	protected Shape calculateVOutline() {
-		// Include rotation and stroke
-		Area a = new Area(getVShape(true));
-		return a;
-	}
-
-	/**
-	 *
-	 */
-	@Override
-	protected Shape getVShape(boolean rotate) {
-		Rectangle2D mb = null;
-		if (rotate) {
-			mb = getPathwayObject().getRotatedBounds();
-		} else {
-			mb = getPathwayObject().getBounds();
-		}
-		return canvas.vFromM(mb);
-	}
-
-	/**
-	 *
-	 */
-	@Override
-	protected void setVScaleRectangle(Rectangle2D r) {
-		// TODO Auto-generated method stub
-
-	}
+//	/**
+//	 * TODO 
+//	 */
+//	@Override
+//	protected Shape calculateVOutline() {
+//		// Include rotation and stroke
+//		Area a = new Area(getVShape(true));
+//		return a;
+//	}
+//
+//	/**
+//	 * TODO 
+//	 */
+//	@Override
+//	protected Shape getVShape(boolean rotate) {
+//		Rectangle2D mb = null;
+//		if (rotate) {
+//			mb = getPathwayObject().getRotatedBounds();
+//		} else {
+//			mb = getPathwayObject().getBounds();
+//		}
+//		return canvas.vFromM(mb);
+//	}
+//
+//	/**
+//	 * TODO 
+//	 */
+//	@Override
+//	protected void setVScaleRectangle(Rectangle2D r) {
+//		// TODO Auto-generated method stub
+//
+//	}
 
 	private LinkProvider linkAnchorDelegate = new DefaultLinkAnchorDelegate(this);
 	private boolean anchorsShowing = false;

@@ -42,7 +42,6 @@ import org.pathvisio.libgpml.model.DataNode.State;
 import org.pathvisio.libgpml.model.GraphLink.LinkableFrom;
 import org.pathvisio.libgpml.model.GraphLink.LinkableTo;
 import org.pathvisio.libgpml.model.LineElement.Anchor;
-import org.pathvisio.libgpml.model.type.ObjectType;
 import org.pathvisio.libgpml.util.Utils;
 
 /**
@@ -109,18 +108,17 @@ public class PathwayModel {
 	}
 
 	/**
-	 * Replaces the pathway object containing metadata, e.g. title, organism...
+	 * Replaces the basic info of the Pathway, e.g. title, organism...
 	 * 
-	 * NB: Pathway cannot be set and must be replaced. There can only be one pathway
-	 * per pathway model.
+	 * NB: There can only be one pathway per pathway model. Reference information is
+	 * not copied over.
 	 * 
-	 * @return pathway the new pathway for this pathway model.
+	 * @return newInfo the new pathway info.
 	 */
-	public void replacePathway(Pathway pathway) {
-		this.pathway = pathway;
+	public void replacePathwayInfo(Pathway newInfo) {
+		pathway.copyValuesFrom(newInfo);
 	}
 
-	// TODO
 	/**
 	 * Returns all pathway elements for the pathway model (dataNodes, interactions,
 	 * graphicalLines, labels, shapes, and groups). Excludes pathway? TODO
@@ -128,14 +126,15 @@ public class PathwayModel {
 	 * @return the pathway elements for this pathway model.
 	 */
 	public List<PathwayElement> getPathwayElements() {
-		return Stream.of(dataNodes, interactions, graphicalLines, labels, shapes, groups).flatMap(Collection::stream)
-				.collect(Collectors.toList());
+		List<PathwayElement> result = Stream.of(dataNodes, interactions, graphicalLines, labels, shapes, groups)
+				.flatMap(Collection::stream).collect(Collectors.toList());
+		result.add(pathway);
+		return result;
 	}
 
-	// TODO
 	/**
-	 * Returns all shaped pathway elements for the pathway model (dataNodes, labels,
-	 * shapes, and groups). Excludes state? TODO
+	 * Returns all shaped pathway elements for the pathway model (dataNodes, states,
+	 * labels, shapes, and groups). NB: Includes states.
 	 * 
 	 * @return the pathway elements for this pathway model.
 	 */
@@ -148,10 +147,9 @@ public class PathwayModel {
 				.collect(Collectors.toList());
 	}
 
-	// TODO
 	/**
 	 * Returns all shaped pathway elements for the pathway model (dataNodes, labels,
-	 * shapes, and groups) excluding states.
+	 * shapes, and groups). NB: Excludes states.
 	 * 
 	 * @return the pathway elements for this pathway model.
 	 */
@@ -159,7 +157,6 @@ public class PathwayModel {
 		return Stream.of(dataNodes, labels, shapes, groups).flatMap(Collection::stream).collect(Collectors.toList());
 	}
 
-	// TODO
 	/**
 	 * Returns all line pathway elements for the pathway model (interactions and
 	 * graphicalLines).
@@ -844,7 +841,7 @@ public class PathwayModel {
 	 * the object. Fires PathwayEvent.DELETED event <i>after</i> removal of the
 	 * object
 	 * 
-	 *  //TODO remove pathwayElement instead...
+	 * //TODO remove pathwayElement instead...
 	 * 
 	 * @param o the pathway object to remove.
 	 */
@@ -870,9 +867,7 @@ public class PathwayModel {
 		assert (o != null);
 		switch (o.getObjectType()) {
 		case PATHWAY:
-			System.out.println("There was an attempt to add PATHWAY to pathway model?");
-			// There can be only one mappInfo object, so if we're trying to add it, remove
-			// the old one. //TODO REPLACE OR JUST SKIP?
+			replacePathwayInfo((Pathway) o); // TODO
 			break;
 		case DATANODE:
 			addDataNode((DataNode) o);
@@ -1027,8 +1022,8 @@ public class PathwayModel {
 	 */
 	public PathwayModel clone() {
 		PathwayModel result = new PathwayModel();
-		// TODO!
-		result.replacePathway((Pathway) pathway.copy().getNewElement());
+		// copy Pathway separately TODO
+		// result.replacePathway(pathway);
 		BidiMap<PathwayObject, PathwayObject> newToSource = new DualHashBidiMap<>();
 		for (PathwayElement e : getPathwayElements()) {
 			CopyElement copyElement = e.copy();
@@ -1036,7 +1031,7 @@ public class PathwayModel {
 			PathwayElement srcElement = copyElement.getSourceElement();
 			result.add(newElement);
 			// load references
-			copyElement.loadReferences();
+			copyElement.loadReferences(srcElement);
 			// store information
 			newToSource.put(newElement, srcElement);
 			// specially store anchor information
@@ -1096,7 +1091,7 @@ public class PathwayModel {
 		if (sourceFile != null) {
 			result.sourceFile = new File(sourceFile.getAbsolutePath());
 		}
-		// do not copy status flag listeners
+		// do not copy status flag listeners TODO 
 //		for(StatusFlagListener l : statusFlagListeners) {
 //			result.addStatusFlagListener(l);
 //		}
@@ -1130,29 +1125,30 @@ public class PathwayModel {
 	 *                 classpath, an exception will be thrown.
 	 */
 	public void writeToXml(File file, boolean validate) throws ConverterException {
-		GpmlFormat.writeToXml(this, file, validate);
+		GpmlFormat gpmlFormat = new GpmlFormat(GpmlFormat.CURRENT);
+		gpmlFormat.writeToXml(this, file, validate);
 		setSourceFile(file);
-//		clearChangedFlag();
+		clearChangedFlag();
 
 	}
 
 	public void readFromXml(Reader in, boolean validate) throws ConverterException {
 		GpmlFormat.readFromXml(this, in, validate);
 		setSourceFile(null);
-//		clearChangedFlag();
+		clearChangedFlag();
 	}
 
 	public void readFromXml(InputStream in, boolean validate) throws ConverterException {
 		GpmlFormat.readFromXml(this, in, validate);
 		setSourceFile(null);
-//		clearChangedFlag();
+		clearChangedFlag();
 	}
 
 	public void readFromXml(File file, boolean validate) throws ConverterException {
 		Logger.log.info("Start reading the XML file: " + file);
 		GpmlFormat.readFromXml(this, file, validate);
 		setSourceFile(file);
-//		clearChangedFlag();
+		clearChangedFlag();
 	}
 
 //	public void writeToMapp (File file) throws ConverterException
@@ -1182,7 +1178,7 @@ public class PathwayModel {
 	}
 
 	/**
-	 * clearChangedFlag should be called after when the current pathway is known to
+	 * ClearChangedFlag should be called after when the current pathway is known to
 	 * be the same as the one on disk. This happens when you just opened it, or when
 	 * you just saved it.
 	 */
@@ -1244,7 +1240,7 @@ public class PathwayModel {
 	 * 
 	 * @param e The element to check the board size for
 	 */
-	public void checkMBoardSize(PathwayObject e) { // TODO was protected
+	protected void checkMBoardSize(PathwayObject e) {
 		final int BORDER_SIZE = 30;
 		double mw = getPathway().getBoardWidth();
 		double mh = getPathway().getBoardHeight();

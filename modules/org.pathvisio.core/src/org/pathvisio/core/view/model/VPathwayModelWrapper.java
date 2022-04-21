@@ -46,8 +46,7 @@ public abstract interface VPathwayModelWrapper {
 
 	public void registerKeyboardAction(KeyStroke k, Action a);
 
-	public void copyToClipboard(PathwayModel source, List<CopyElement> copyElements); // TODO PathwayObject or
-																							// PathwayElement
+	public void copyToClipboard(PathwayModel source, List<CopyElement> copyElements); 
 
 	public void pasteFromClipboard();
 

@@ -54,7 +54,8 @@ public class AutoSave {
 	private void autoSaveFile() throws ConverterException {
 		PathwayModel p = engine.getActivePathwayModel();
 		if (p != null) {
-			GpmlFormat.writeToXml(p, autoSaveFile, true);
+			GpmlFormat g = new GpmlFormat(GpmlFormat.CURRENT);
+			g.writeToXml(p, autoSaveFile, true);
 			Logger.log.info("Autosaved");
 		}
 	}

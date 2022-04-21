@@ -74,7 +74,6 @@ import org.pathvisio.gui.dnd.PathwayImportHandler;
 import org.pathvisio.libgpml.model.CopyElement;
 import org.pathvisio.libgpml.model.PathwayElement;
 import org.pathvisio.libgpml.model.PathwayModel;
-import org.pathvisio.libgpml.model.PathwayObject;
 
 /**
  * Swing-dependent implementation of VPathway.

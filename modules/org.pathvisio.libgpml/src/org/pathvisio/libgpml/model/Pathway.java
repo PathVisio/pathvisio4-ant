@@ -25,6 +25,7 @@ import java.util.Set;
 
 import org.bridgedb.Xref;
 import org.pathvisio.libgpml.model.GraphLink.LinkableTo;
+import org.pathvisio.libgpml.model.LineElement.Anchor;
 import org.pathvisio.libgpml.model.type.ArrowHeadType;
 import org.pathvisio.libgpml.model.type.ConnectorType;
 import org.pathvisio.libgpml.model.type.LineStyleType;
@@ -34,15 +35,15 @@ import org.pathvisio.libgpml.util.Utils;
 import org.pathvisio.libgpml.util.XrefUtils;
 
 /**
- * This class stores metadata for a Pathway. Pathway is treated as a
- * {@link PathwayElement} for simplicity of listeners and implementation.
- * 
- * Because of multiple optional parameters, a builder pattern is implemented for
- * Pathway. Example of how a Pathway object can be created:
- * 
- * Pathway pathway = new Pathway.PathwayBuilder("Title", 100, 100,
- * Color.decode("#ffffff")).setOrganism("Homo Sapiens")
- * .setSource("WikiPathways").setVersion("r1").setLicense("CC0").setXref(xref).build();
+ * The Pathway class stores information or metadata for a Pathway Model.
+ * <p>
+ * NB:
+ * <ol>
+ * <li>Pathway is treated as a {@link PathwayElement} for simplicity of
+ * listeners and implementation.
+ * <li>There can only be one Pathway per a PathwayModel.
+ * <li>A Pathway references its PathwayModel, but has no elementId (null).
+ * </ol>
  * 
  * @author finterly
  */
@@ -379,21 +380,20 @@ public class Pathway extends PathwayElement implements Xrefable {
 			noFire -= 1;
 			return;
 		}
-//		if (pathwayModel != null)
+//		if (pathwayModel != null) { TODO 
 //			pathwayModel.childModified(e);
+//		}
 		for (PathwayObjectListener g : listeners) {
 			g.gmmlObjectModified(e);
 		}
 	}
 
 	/**
-	 * Terminates this pathway. The pathway model, if any, is unset from this
-	 * pathway. Links to all annotationRefs, citationRefs, and evidenceRefs are
-	 * removed from this data node.
+	 * Terminates this pathway. Pathway should not be terminated.
 	 */
 	@Override
 	protected void terminate() {
-		// Is pathway allowed to be terminated? TODO
+		// pathway should not be terminated
 	}
 
 	// ================================================================================
@@ -413,21 +413,14 @@ public class Pathway extends PathwayElement implements Xrefable {
 		boardHeight = src.boardHeight;
 		backgroundColor = src.backgroundColor;
 		authors = new ArrayList<Author>(); // TODO
+		// copy authors
 		for (Author c : src.authors) {
 			try {
 				addAuthor((Author) c.clone());
 			} catch (CloneNotSupportedException e) {
-				assert (false);
-				/* not going to happen */
+				assert (false); // not going to happen
 			}
 		}
-//		for (Author a : src.authors) {
-//			Author na = addAuthor(a.getName());
-//			na.setUsername(a.getUsername());
-//			na.setOrder(a.getOrder());
-//			na.setXref(a.getXref());
-//			addAuthor(a);
-//		}
 		organism = src.organism;
 		source = src.source;
 		version = src.version;
@@ -443,7 +436,7 @@ public class Pathway extends PathwayElement implements Xrefable {
 	 * No events will be sent to the parent of the original.
 	 */
 	public CopyElement copy() {
-		Pathway result = new Pathway(); // TODO
+		Pathway result = new Pathway();
 		result.copyValuesFrom(this);
 		return new CopyElement(result, this);
 	}

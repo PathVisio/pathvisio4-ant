@@ -546,7 +546,7 @@ public class Engine {
 	 * Exports given pathway to file. This function doesn't act on the active
 	 * pathway.
 	 * 
-	 * @param pathway the pathway model to export
+	 * @param pathwayModel the pathway model to export
 	 * @param file    file to write to.
 	 * @returns a list of warnings that occurred during export, or an empty list if
 	 *          there were none.

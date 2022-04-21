@@ -42,7 +42,7 @@ import junit.framework.TestCase;
  * 
  * @author finterly
  */
-public class TestCopy extends TestCase {
+public class TestCopyReferences extends TestCase {
 
 	private PathwayModel p;
 	private DataNode o1;
@@ -70,27 +70,6 @@ public class TestCopy extends TestCase {
 		i1.addAnchor(0, null);
 	}
 
-	
-	/**
-	 * 
-	 */
-	@Test
-	public void testClonePathway() {
-		// link dataNode and interaction
-		i1.setStartElementRef(o1);
-		PathwayModel p2 = p.clone(); 
-		
-		System.out.println(p.getPathwayObjects());
-		System.out.println(p2.getPathwayObjects());
-
-//		p2.addInteraction(o2);
-//		assertEquals(o2.getPathwayModel(), p2);
-//		for (LinePoint i : o2.getLinePoints()) {
-//			assertEquals(i.getPathwayModel(), p2);
-//		}
-//		assertEquals(o2.getAnchors().get(0).getPathwayModel(), p2);
-	}
-	
 	/**
 	 * 
 	 */
@@ -130,87 +109,6 @@ public class TestCopy extends TestCase {
 		assertTrue(o2.hasCitationRef(cr2));
 		assertTrue(p2.hasPathwayObject(c2));
 
-	}
-
-	/**
-	 * 
-	 */
-	@Test
-	public void testCopyInteraction() {
-		Interaction o2 = (Interaction) i1.copy().getNewElement();
-		assertEquals(i1, i1);
-		assertFalse(i1 == o2);
-		assertEquals(i1.getPathwayModel(), p);
-		assertNull(o2.getPathwayModel());
-
-		PathwayModel p2 = new PathwayModel();
-		p2.addInteraction(o2);
-		assertEquals(o2.getPathwayModel(), p2);
-		for (LinePoint i : o2.getLinePoints()) {
-			assertEquals(i.getPathwayModel(), p2);
-		}
-		assertEquals(o2.getAnchors().get(0).getPathwayModel(), p2);
-	}
-
-	/**
-	 * 
-	 */
-	@Test
-	public void testCopyGraphicalLine() {
-		GraphicalLine o1 = new GraphicalLine();
-		p.addGraphicalLine(o1);
-
-		List<LinePoint> points = new ArrayList<LinePoint>();
-		points.add(o1.new LinePoint(9, 18));
-		points.add(o1.new LinePoint(9, 18));
-		o1.setLinePoints(points);
-		o1.addAnchor(0, null);
-
-		GraphicalLine o2 = (GraphicalLine) o1.copy().getNewElement();
-		assertEquals(o1, o1);
-		assertFalse(o1 == o2);
-		assertEquals(o1.getPathwayModel(), p);
-		assertNull(o2.getPathwayModel());
-
-		PathwayModel p2 = new PathwayModel();
-		p2.addGraphicalLine(o2);
-		assertEquals(o2.getPathwayModel(), p2);
-		for (LinePoint i : o2.getLinePoints()) {
-			assertEquals(i.getPathwayModel(), p2);
-		}
-		assertEquals(o2.getAnchors().get(0).getPathwayModel(), p2);
-	}
-
-	/**
-	 * 
-	 */
-	@Test
-	public void testCopyLabel() {
-		Label o1 = new Label("o1");
-		p.addLabel(o1);
-
-		Label o2 = (Label) o1.copy().getNewElement();
-
-		assertEquals(o1, o1);
-		assertFalse(o1 == o2);
-		assertEquals(o1.getPathwayModel(), p);
-		assertNull(o2.getPathwayModel());
-	}
-
-	/**
-	 * 
-	 */
-	@Test
-	public void testCopyShape() {
-		Shape o1 = new Shape();
-		p.addShape(o1);
-
-		Shape o2 = (Shape) o1.copy().getNewElement();
-
-		assertEquals(o1, o1);
-		assertFalse(o1 == o2);
-		assertEquals(o1.getPathwayModel(), p);
-		assertNull(o2.getPathwayModel());
 	}
 
 }

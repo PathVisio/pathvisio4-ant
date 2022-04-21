@@ -58,7 +58,7 @@ public class VInfoBox extends VPathwayElement {
 
 	public VInfoBox(VPathwayModel canvas, Pathway o) {
 		super(canvas, o);
-		canvas.setMappInfo(this);
+		canvas.setVInfoBox(this);
 	}
 
 	/**
@@ -93,7 +93,6 @@ public class VInfoBox extends VPathwayElement {
 		if (isSelected()) {
 			g.setColor(selectColor);
 		}
-
 		// draw name and organism
 		String[][] text = new String[][] { { "Title: ", getPathwayObject().getTitle() },
 				{ "Organism: ", getPathwayObject().getOrganism() },

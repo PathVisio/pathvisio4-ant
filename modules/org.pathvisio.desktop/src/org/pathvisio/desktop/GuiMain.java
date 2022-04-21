@@ -63,10 +63,8 @@ import org.pathvisio.libgpml.model.GpmlFormat;
  * {@link #createAndShowGUI(MainPanelStandalone, SwingEngine)} to perform custom
  * actions before showing the GUI.
  * 
- * @author thomas
- * @author anwesha
- *
- */
+ * @author thomas, anwesha, finterly
+ */ 
 public class GuiMain implements GdbEventListener {
 
 	GuiMain() {
@@ -212,7 +210,7 @@ public class GuiMain implements GdbEventListener {
 		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
 		frame.setIconImage(Toolkit.getDefaultToolkit().createImage(Resources.getLogo()));
-		
+
 		frame.add(mainPanel, BorderLayout.CENTER);
 
 		JPanel statusBar = new JPanel();
@@ -366,12 +364,19 @@ public class GuiMain implements GdbEventListener {
 		processOptions();
 	}
 
+	/**
+	 * Initiates importer for the current Gpml version. GpmlFormat.CURRENT writes
+	 * current version, and reads both current and previous versions.
+	 * 
+	 * @param engine
+	 */
 	private void initImporters(Engine engine) {
-		engine.addPathwayModelImporter(new GpmlFormat());
+		engine.addPathwayModelImporter(new GpmlFormat(GpmlFormat.CURRENT));
 	}
 
 	private void initExporters(Engine engine, GdbManager gdbManager) {
-		engine.addPathwayModelExporter(new GpmlFormat());
+		engine.addPathwayModelExporter(new GpmlFormat(GpmlFormat.CURRENT));
+		engine.addPathwayModelExporter(new GpmlFormat(GpmlFormat.PREVIOUS));
 		engine.addPathwayModelExporter(new RasterImageExporter(ImageExporter.TYPE_PNG));
 		engine.addPathwayModelExporter(new BatikImageExporter(ImageExporter.TYPE_SVG));
 		engine.addPathwayModelExporter(new BatikImageExporter(ImageExporter.TYPE_PDF));

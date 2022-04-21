@@ -168,20 +168,20 @@ public class VPathwayModel implements PathwayModelListener {
 	}
 
 	/**
-	 * Returns the MappInfo containing information on the pathway
+	 * Returns the VInfoBox containing information on the pathway
 	 * 
 	 * @return vInfoBox the view of infobox.
 	 */
-	public VInfoBox getMappInfo() {
+	public VInfoBox getVInfoBox() {
 		return vInfoBox;
 	}
 
 	/**
-	 * Sets the MappInfo containing information on the pathway
+	 * Sets the VInfoBox containing information on the pathway
 	 *
 	 * @param v the view infobox to set.
 	 */
-	public void setMappInfo(VInfoBox v) {
+	public void setVInfoBox(VInfoBox v) {
 		this.vInfoBox = v;
 	}
 
@@ -337,7 +337,7 @@ public class VPathwayModel implements PathwayModelListener {
 	public void fromModel(PathwayModel pathwayModel) {
 		Logger.log.trace("Create view structure");
 		data = pathwayModel;
-		fromModelElement(data.getPathway()); // pathway TODO part of pathway elements?
+//		fromModelElement(data.getPathway()); // pathway TODO part of pathway elements?
 		for (PathwayElement o : data.getPathwayElements()) {
 			fromModelElement(o);
 			if (o.getObjectType() == ObjectType.DATANODE) {
@@ -2335,10 +2335,9 @@ public class VPathwayModel implements PathwayModelListener {
 	 * Makes a copy of all PathwayElements in current selection, and puts them in
 	 * the global clipboard.
 	 */
-	public void copyToClipboard() { // TODO PathwayObject or PathwayElement
+	public void copyToClipboard() {
 		List<CopyElement> result = new ArrayList<CopyElement>();
 		for (VElement g : drawingObjects) {
-			// pathway element or pathway object? TODO
 			if (g.isSelected() && g instanceof VPathwayElement && !(g instanceof SelectionBox)) {
 				result.add(((VPathwayElement) g).getPathwayObject().copy());
 			}
@@ -2357,7 +2356,7 @@ public class VPathwayModel implements PathwayModelListener {
 	}
 
 	/**
-	 * @param elements the list of elements. //TODO PathwayObject or PathwayElement
+	 * @param elements the list of elements.
 	 * @param xShift
 	 * @param yShift
 	 */
@@ -2365,20 +2364,21 @@ public class VPathwayModel implements PathwayModelListener {
 		undoManager.newAction("Paste");
 		clearSelection();
 
-//		List<Annotation> annotations = new ArrayList<Annotation>();
-//		List<Citation> citations = new ArrayList<Citation>();
-//		List<Evidence> evidences = new ArrayList<Evidence>();
-
+		/*
+		 * This map provides PathwayObject "relationship" reference information. For
+		 * example, if both a LineElement and the DataNode it is pointing to are copied,
+		 * then they need to be reconnected.
+		 */
 		BidiMap<PathwayObject, PathwayObject> newerToSource = new DualHashBidiMap<>();
 
 		// Copy pathway objects of given list
 		for (CopyElement copyElement : elements) {
 			PathwayElement newElement = copyElement.getNewElement();
 			PathwayElement srcElement = copyElement.getSourceElement();
-			// if pathway, skip because it should be unique
-			if (newElement.getClass() == Pathway.class) {
-				continue;
-			}
+//			// if pathway, skip because it should be unique TODO 
+//			if (newElement.getObjectType() == ObjectType.PATHWAY) {
+//				continue;
+//			}
 			lastAdded = null;
 			// shift location of pathway element for pasting
 			if (newElement instanceof LineElement) {
@@ -2401,10 +2401,9 @@ public class VPathwayModel implements PathwayModelListener {
 			// prepare for paste
 			CopyElement copyOfCopyElement = newElement.copy();
 			PathwayElement newerElement = copyOfCopyElement.getNewElement();
-			// paste
 			data.add(newerElement); // causes lastAdded to be set
 			// load references
-			copyOfCopyElement.loadReferences();
+			copyOfCopyElement.loadReferences(srcElement);
 			// store information
 			newerToSource.put(newerElement, srcElement);
 			if (newerElement instanceof LineElement) {
@@ -2418,7 +2417,6 @@ public class VPathwayModel implements PathwayModelListener {
 					}
 				}
 			}
-
 			lastAdded.select();
 			if (!(lastAdded instanceof VGroup)) { // avoids "double selecting" grouped objects
 				selection.addToSelection(lastAdded);
@@ -2460,44 +2458,27 @@ public class VPathwayModel implements PathwayModelListener {
 				}
 			}
 
-			/*
-			 * If Alias DataNode:
-			 * 
-			 * write warning if the Group aliasRef refers to is not present in the new
-			 * pathway. TODO...depends on if pasting to same pathway or not and if group is
-			 * also included...
-			 */
-			// set aliasRef if any
+			// set aliasRef if any, and link to group if group also copied
 			if (newerElement.getObjectType() == ObjectType.DATANODE
 					&& srcElement.getObjectType() == ObjectType.DATANODE) {
 				if (((DataNode) newerElement).getType() == DataNodeType.ALIAS
 						&& ((DataNode) srcElement).getType() == DataNodeType.ALIAS) {
 					Group srcAliasRef = ((DataNode) srcElement).getAliasRef();
+					// if group aliasRef was also copied
 					if (srcAliasRef != null) {
 						Group newerAliasRef = (Group) newerToSource.getKey(srcAliasRef);
-						// if group aliasRef was also copied
 						if (newerAliasRef != null) {
 							((DataNode) newerElement).setAliasRef(newerAliasRef);
 						}
-						// if group already present in pathway
-						else if (data.hasPathwayObject(srcAliasRef)) {
-							((DataNode) newerElement).setAliasRef(srcAliasRef);
-						}
-						// aliasRef for newer element is lost
-						else {
-							System.out.println("aliasRef connection for this datanode was lost");
-						}
+					}
+					// otherwise aliasRef is not linked to any group
+					else {
+						JOptionPane.showConfirmDialog(null, "Copy of alias data node not linked to group.", "Warning",
+								JOptionPane.PLAIN_MESSAGE);
 					}
 				}
 			}
 		}
-
-		// Refresh connector shapes
-//		for (PathwayObject o : elements) {
-//			if (o instanceof LineElement) {
-//				((LineElement) o).getConnectorShape().recalculateShape(((LineElement) o));
-//			}
-//		}
 		moveGraphicsTop(getSelectedGraphics());
 		redraw();
 	}

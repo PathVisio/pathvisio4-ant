@@ -68,10 +68,8 @@ public class Converter {
 		DataSourceTxt.init();
 		PreferenceManager.init();
 		Engine engine = new Engine();
-		engine.addPathwayModelImporter(new GpmlFormat());
-//    	engine.addPathwayImporter(new MappFormat()); TODO
-//		engine.addPathwayExporter(new MappFormat()); TODO 
-		engine.addPathwayModelExporter(new GpmlFormat());
+		engine.addPathwayModelImporter(new GpmlFormat(GpmlFormat.CURRENT));
+		engine.addPathwayModelExporter(new GpmlFormat(GpmlFormat.PREVIOUS));
 		engine.addPathwayModelExporter(new BatikImageExporter(ImageExporter.TYPE_SVG));
 		engine.addPathwayModelExporter(new RasterImageExporter(ImageExporter.TYPE_PNG));
 		engine.addPathwayModelExporter(new BatikImageExporter(ImageExporter.TYPE_PDF));
