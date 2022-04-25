@@ -88,7 +88,7 @@ public class Evidence extends PathwayObject {
 	 * 
 	 * @param v the name, term, or text of this evidence.
 	 */
-	public void setValue(String v) {
+	protected void setValue(String v) {
 		if (v != null && Utils.stringEquals(value, v)) {
 			value = v;
 		}
@@ -108,7 +108,7 @@ public class Evidence extends PathwayObject {
 	 * 
 	 * @param v the xref of this evidence.
 	 */
-	public void setXref(Xref v) {
+	protected void setXref(Xref v) {
 		if (v == null) {
 			throw new IllegalArgumentException("Evidence must have valid xref.");
 		}
@@ -132,7 +132,7 @@ public class Evidence extends PathwayObject {
 	 * 
 	 * @param v the url link.
 	 */
-	public void setUrlLink(String v) {
+	protected void setUrlLink(String v) {
 		if (v != null && !Utils.stringEquals(urlLink, v)) {
 			urlLink = v;
 		}

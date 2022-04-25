@@ -90,7 +90,7 @@ public class Annotation extends PathwayObject {
 	 * 
 	 * @param v the name, term, or text of this annotation.
 	 */
-	public void setValue(String v) {
+	protected void setValue(String v) {
 		if (v == null) {
 			throw new IllegalArgumentException("Value is a required field for Annotation.");
 		}
@@ -114,7 +114,7 @@ public class Annotation extends PathwayObject {
 	 * 
 	 * @param v the type to set for this annotation, e.g. ontology term.
 	 */
-	public void setType(AnnotationType v) {
+	protected void setType(AnnotationType v) {
 		if (type != v && v != null) {
 			type = v;
 			fireObjectModifiedEvent(PathwayObjectEvent.createSinglePropertyEvent(this, StaticProperty.ANNOTATIONTYPE));
@@ -135,7 +135,7 @@ public class Annotation extends PathwayObject {
 	 * 
 	 * @param v the xref to set for this annotation.
 	 */
-	public void setXref(Xref v) {
+	protected void setXref(Xref v) {
 		if (v != null) {
 			xref = v;
 			fireObjectModifiedEvent(PathwayObjectEvent.createSinglePropertyEvent(this, StaticProperty.XREF));
@@ -156,7 +156,7 @@ public class Annotation extends PathwayObject {
 	 * 
 	 * @param v the url link.
 	 */
-	public void setUrlLink(String v) {
+	protected void setUrlLink(String v) {
 		if (v != null && !Utils.stringEquals(urlLink, v)) {
 			urlLink = v;
 			fireObjectModifiedEvent(PathwayObjectEvent.createSinglePropertyEvent(this, StaticProperty.ANNOTATION));

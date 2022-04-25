@@ -92,7 +92,7 @@ public class Citation extends PathwayObject {
 	 * 
 	 * @param v the xref of this citation.
 	 */
-	public void setXref(Xref v) {
+	protected void setXref(Xref v) {
 		if (v != null) {
 			xref = v;
 			fireObjectModifiedEvent(PathwayObjectEvent.createSinglePropertyEvent(this, StaticProperty.XREF));
@@ -113,7 +113,7 @@ public class Citation extends PathwayObject {
 	 * 
 	 * @param v the url link.
 	 */
-	public void setUrlLink(String v) {
+	protected void setUrlLink(String v) {
 		if (v != null && !Utils.stringEquals(urlLink, v)) {
 			urlLink = v;
 		}
@@ -133,7 +133,7 @@ public class Citation extends PathwayObject {
 	 * 
 	 * @param v the title.
 	 */
-	public void setTitle(String v) {
+	protected void setTitle(String v) {
 		if (v != null && !Utils.stringEquals(title, v)) {
 			title = v;
 		}
@@ -153,7 +153,7 @@ public class Citation extends PathwayObject {
 	 * 
 	 * @param v the source.
 	 */
-	public void setSource(String v) {
+	protected void setSource(String v) {
 		if (v != null && !Utils.stringEquals(source, v)) {
 			source = v;
 		}
@@ -173,7 +173,7 @@ public class Citation extends PathwayObject {
 	 * 
 	 * @param v the year.
 	 */
-	public void setYear(String v) {
+	protected void setYear(String v) {
 		if (v != null && !Utils.stringEquals(year, v)) {
 			year = v;
 		}
@@ -193,7 +193,7 @@ public class Citation extends PathwayObject {
 	 * 
 	 * @param authors the list of authors.
 	 */
-	public void setAuthors(List<String> authors) {
+	protected void setAuthors(List<String> authors) {
 		this.authors = authors;
 	}
 
