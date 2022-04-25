@@ -35,6 +35,7 @@ import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
@@ -78,6 +79,9 @@ public class StateDialog extends PathwayElementDialog implements ItemListener {
 	private PermissiveComboBox dbCombo;
 	private PermissiveComboBox typeCombo;
 
+	// ================================================================================
+	// Constructors
+	// ================================================================================
 	/**
 	 * Instantiates a state dialog.
 	 * 
@@ -95,6 +99,9 @@ public class StateDialog extends PathwayElementDialog implements ItemListener {
 		setPreferredSize(new Dimension(320, 300)); // UI Design
 	}
 
+	// ================================================================================
+	// Accessors
+	// ================================================================================
 	/**
 	 * Returns the pathway element for this dialog.
 	 */
@@ -102,6 +109,9 @@ public class StateDialog extends PathwayElementDialog implements ItemListener {
 		return (State) super.getInput();
 	}
 
+	// ================================================================================
+	// Refresh
+	// ================================================================================
 	/**
 	 * Refresh.
 	 */
@@ -123,6 +133,45 @@ public class StateDialog extends PathwayElementDialog implements ItemListener {
 		pack();
 	}
 
+	// ================================================================================
+	// OK Pressed Method
+	// ================================================================================
+	/**
+	 * When "Ok" button is pressed, checks if Xref is valid.
+	 */
+	@Override
+	protected void okPressed() {
+		boolean done = true;
+		// ========================================
+		// New information
+		// ========================================
+		String newId = idText.getText().trim();
+		DataSource newDs = (DataSource) dsm.getSelectedItem();
+		// ========================================
+		// Check requirements
+		// ========================================
+		if (!newId.equals("") && newDs == null) {
+			done = false;
+			JOptionPane.showMessageDialog(this,
+					"You annotated this pathway element with an identifier but no database.\nPlease specify a database system.",
+					"Error", JOptionPane.ERROR_MESSAGE);
+		} else if (newId.equals("") && newDs != null) {
+			done = false;
+			JOptionPane.showMessageDialog(this,
+					"You annotated this pathway element with a database but no identifier.\nPlease specify an identifier.",
+					"Error", JOptionPane.ERROR_MESSAGE);
+		}
+		// ========================================
+		// done
+		// ========================================
+		if (done) {
+			super.okPressed();
+		}
+	}
+
+	// ================================================================================
+	// Dialog and Panels
+	// ================================================================================
 	/**
 	 * Adds custom tabs to this dialog.
 	 */

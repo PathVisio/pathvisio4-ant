@@ -182,32 +182,12 @@ public class PathwayElementDialog extends OkCancelDialog {
 	 * undo event.
 	 */
 	protected void okPressed() {
-		boolean done = true;
-		if (this instanceof DataNodeDialog || this instanceof StateDialog || this instanceof InteractionDialog
-				|| this instanceof GroupDialog) {
-			Xref xref = ((Xrefable) input).getXref();
-			String id = XrefUtils.getIdentifier(xref);
-			DataSource ds = XrefUtils.getDataSource(xref);
-			if (!id.equals("") && ds == null) {
-				done = false;
-				JOptionPane.showMessageDialog(this,
-						"You annotated this pathway element with an identifier but no database.\n Please specify a database system.",
-						"Error", JOptionPane.ERROR_MESSAGE);
-			} else if (id.equals("") && ds != null) {
-				done = false;
-				JOptionPane.showMessageDialog(this,
-						"You annotated this pathway element with a database but no identifier.\n Please specify an identifier.",
-						"Error", JOptionPane.ERROR_MESSAGE);
-			}
+		VPathwayModel p = swingEngine.getEngine().getActiveVPathwayModel();
+		p.getUndoManager().newAction(new UndoAction("Modified element properties", originalPathway));
+		if (p != null) {
+			p.redraw();
 		}
-		if (done) {
-			VPathwayModel p = swingEngine.getEngine().getActiveVPathwayModel();
-			p.getUndoManager().newAction(new UndoAction("Modified element properties", originalPathway));
-			if (p != null) {
-				p.redraw();
-			}
-			setVisible(false);
-		}
+		setVisible(false);
 	}
 
 	/**
