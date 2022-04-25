@@ -80,7 +80,7 @@ public class PathwayModel {
 	 */
 	public PathwayModel() {
 		this.pathway = new Pathway();
-		pathway.setPathwayModelTo(this); // TODO
+		pathway.setPathwayModelTo(this);
 		this.elementIdToPathwayObject = new HashMap<String, PathwayObject>();
 		this.elementRefToLinePoints = new HashMap<LinkableTo, Set<LinkableFrom>>();
 		this.aliasRefToAliases = new HashMap<Group, Set<DataNode>>();
@@ -108,20 +108,46 @@ public class PathwayModel {
 	}
 
 	/**
-	 * Replaces the basic info of the Pathway, e.g. title, organism...
+	 * Replaces the Pathway, calls {@link removeOldPathway} and then
+	 * {@link setNewPathway}.
 	 * 
-	 * NB: There can only be one pathway per pathway model. Reference information is
-	 * not copied over.
+	 * NB: There can only be one pathway per pathway model.
 	 * 
 	 * @return newInfo the new pathway info.
 	 */
-	public void replacePathwayInfo(Pathway newInfo) {
-		pathway.copyValuesFrom(newInfo);
+	protected void replacePathway(Pathway newP) {
+		Pathway oldP = pathway;
+		removeOldPathway(oldP);
+		setNewPathway(newP);
 	}
 
 	/**
-	 * Returns all pathway elements for the pathway model (dataNodes, interactions,
-	 * graphicalLines, labels, shapes, and groups). Excludes pathway? TODO
+	 * Removes old pathway prior to {@link setNewPathway}, both called by
+	 * {@link replacePathway}.
+	 * 
+	 * @param oldP the old pathway.
+	 */
+	private void removeOldPathway(Pathway oldP) {
+		oldP.terminate();
+		fireObjectModifiedEvent(new PathwayModelEvent(oldP, PathwayModelEvent.DELETED));
+	}
+
+	/**
+	 * Sets new pathway after to {@link removeOldPathway}, both called by
+	 * {@link replacePathway}.
+	 * 
+	 * @param newP the new pathway to be set.
+	 */
+	private void setNewPathway(Pathway newP) {
+		this.pathway = newP;
+		newP.setPathwayModelTo(this);
+		fireObjectModifiedEvent(new PathwayModelEvent(newP, PathwayModelEvent.ADDED));
+		checkMBoardSize(newP);
+	}
+
+	/**
+	 * Returns all pathway elements for the pathway model (pathway, dataNodes,
+	 * interactions, graphicalLines, labels, shapes, and groups). Includes Pathway.
 	 * 
 	 * @return the pathway elements for this pathway model.
 	 */
@@ -240,11 +266,11 @@ public class PathwayModel {
 
 	/**
 	 * Removes the mapping of given elementId key from the elementIdToPathwayObject
-	 * hash map. TODO public?
+	 * hash map.
 	 * 
 	 * @param elementId the elementId key.
 	 */
-	public void removeElementId(String elementId) {
+	protected void removeElementId(String elementId) {
 		elementIdToPathwayObject.remove(elementId);
 	}
 
@@ -867,7 +893,7 @@ public class PathwayModel {
 		assert (o != null);
 		switch (o.getObjectType()) {
 		case PATHWAY:
-			replacePathwayInfo((Pathway) o); // TODO
+			replacePathway((Pathway) o); // TODO
 			break;
 		case DATANODE:
 			addDataNode((DataNode) o);
@@ -1091,7 +1117,7 @@ public class PathwayModel {
 		if (sourceFile != null) {
 			result.sourceFile = new File(sourceFile.getAbsolutePath());
 		}
-		// do not copy status flag listeners TODO 
+		// do not copy status flag listeners TODO
 //		for(StatusFlagListener l : statusFlagListeners) {
 //			result.addStatusFlagListener(l);
 //		}

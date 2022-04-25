@@ -39,6 +39,7 @@ import org.pathvisio.core.ApplicationEvent;
 import org.pathvisio.core.preferences.GlobalPreference;
 import org.pathvisio.core.preferences.PreferenceManager;
 import org.pathvisio.core.view.model.ViewActions;
+import org.pathvisio.core.view.model.ViewActions.ShowUnlinkedConnectors;
 import org.pathvisio.gui.BackpageTextProvider.BackpageAttributes;
 import org.pathvisio.libgpml.debug.Logger;
 import org.pathvisio.gui.DataPaneTextProvider;
@@ -119,7 +120,7 @@ public class MainPanelStandalone extends MainPanel {
 
 		JMenu toolMenu = new JMenu("Tools"); // TODO
 		JMenu curationMenu = new JMenu("Curation"); // TODO
-		addToMenu(actions.undoAction, curationMenu);
+//		addToMenu(ShowUnlinkedConnectors.showUnlinked, curationMenu);
 		toolMenu.add(curationMenu);
 		JMenu themeMenu = new JMenu("Apply Theme");
 		toolMenu.add(themeMenu);

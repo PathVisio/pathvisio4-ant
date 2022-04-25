@@ -388,14 +388,6 @@ public class Pathway extends PathwayElement implements Xrefable {
 		}
 	}
 
-	/**
-	 * Terminates this pathway. Pathway should not be terminated.
-	 */
-	@Override
-	protected void terminate() {
-		// pathway should not be terminated
-	}
-
 	// ================================================================================
 	// Copy Methods
 	// ================================================================================
