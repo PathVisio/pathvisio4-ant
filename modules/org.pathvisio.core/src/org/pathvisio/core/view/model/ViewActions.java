@@ -23,7 +23,6 @@ import java.awt.event.InputEvent;
 import java.awt.geom.Point2D;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.EventListener;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -31,7 +30,6 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.swing.AbstractAction;
-import java.awt.event.ActionListener;
 import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -46,6 +44,7 @@ import org.pathvisio.libgpml.model.shape.ShapeType;
 import org.pathvisio.libgpml.model.type.AnchorShapeType;
 import org.pathvisio.libgpml.model.type.DataNodeType;
 import org.pathvisio.libgpml.model.type.GroupType;
+import org.pathvisio.libgpml.model.type.ObjectType;
 import org.pathvisio.libgpml.model.LineElement;
 import org.pathvisio.libgpml.model.DataNode;
 import org.pathvisio.libgpml.model.DataNode.State;
@@ -61,8 +60,6 @@ import org.pathvisio.libgpml.model.LineElement.LinePoint;
 import org.pathvisio.libgpml.model.type.StateType;
 import org.pathvisio.core.util.Resources;
 import org.pathvisio.libgpml.util.Utils;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import org.pathvisio.core.view.model.SelectionBox.SelectionEvent;
 import org.pathvisio.core.view.model.SelectionBox.SelectionListener;
 
@@ -142,7 +139,7 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 	public final AddAnchorAction addAnchor;
 	public final WaypointAction addWaypoint;
 	public final WaypointAction removeWaypoint;
-	public final ShowUnlinkedConnectors showUnlinked;
+	public final ShowUnlinkedAction showUnlinked;
 
 	// ========================================
 	// Group Actions
@@ -225,7 +222,7 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 		addAnchor = new AddAnchorAction();
 		addWaypoint = new WaypointAction(true);
 		removeWaypoint = new WaypointAction(false);
-		showUnlinked = new ShowUnlinkedConnectors();
+		showUnlinked = new ShowUnlinkedAction(engine);
 
 		// ================================================================================
 		// Group Actions
@@ -416,6 +413,11 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 	//
 	// ================================================================================
 
+	/**
+	 * Selects objects.
+	 * 
+	 * @author unknown
+	 */
 	private class SelectClassAction extends AbstractAction {
 
 		Class<?> c;
@@ -431,7 +433,7 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 	}
 
 	/**
-	 * Selects all objects of a given objectType
+	 * Selects all objects of a given ObjectType
 	 * 
 	 * @author anwesha
 	 */
@@ -466,6 +468,11 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 	//
 	// ================================================================================
 
+	/**
+	 * Selects all objects.
+	 * 
+	 * @author unknown
+	 */
 	private class SelectAllAction extends AbstractAction {
 
 		public SelectAllAction() {
@@ -518,7 +525,7 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 	}
 
 	/**
-	 * Links Alias DataNode to an AliasRef Group.
+	 * Links an AliasRef Group to an Alias DataNode.
 	 * 
 	 * @author finterly
 	 */
@@ -563,7 +570,7 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 	}
 
 	/**
-	 * UnLinks Alias DataNode from an AliasRef Group.
+	 * UnLinks an AliasRef Group from an Alias DataNode.
 	 * 
 	 * @author finterly
 	 */
@@ -591,8 +598,9 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 	}
 
 	/**
+	 * Adds a State to the current DataNode.
+	 * 
 	 * @author unknown
-	 *
 	 */
 	private class AddState extends AbstractAction {
 
@@ -625,6 +633,11 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 		}
 	}
 
+	/**
+	 * Removes the current State from its DataNode.
+	 * 
+	 * @author unknown
+	 */
 	private class RemoveState extends AbstractAction {
 		RemoveState() {
 			super("Remove State...");
@@ -661,10 +674,10 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 			this.add = add;
 
 			if (add) {
-				putValue(NAME, "Add waypoint");
+				putValue(NAME, "Add Waypoint");
 				putValue(SHORT_DESCRIPTION, "Add a waypoint to the selected line");
 			} else {
-				putValue(NAME, "Remove last waypoint");
+				putValue(NAME, "Remove Last Waypoint");
 				putValue(SHORT_DESCRIPTION, "Removes the last waypoint from the selected line");
 			}
 			vPathwayModel.addSelectionListener(this);
@@ -742,8 +755,9 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 	}
 
 	/**
+	 * Adds an Anchor to the current LineElement.
+	 * 
 	 * @author unknown
-	 *
 	 */
 	private class AddAnchorAction extends AbstractAction implements SelectionListener {
 
@@ -752,7 +766,7 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 		 */
 		public AddAnchorAction() {
 			vPathwayModel.addSelectionListener(this);
-			putValue(NAME, "Add anchor");
+			putValue(NAME, "Add Anchor");
 			putValue(SHORT_DESCRIPTION, "Add an anchor point to the selected line");
 			putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R,
 					Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
@@ -793,13 +807,19 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 	}
 
 	/**
-	 * Action that toggles highlight of points that are not linked to an object
+	 * Action that toggles highlight of Interaction points that are not linked to an
+	 * object.
 	 *
 	 * @author unknown
 	 */
-	public class ShowUnlinkedConnectors extends AbstractAction {
-		public ShowUnlinkedConnectors() {
-			putValue(NAME, "Highlight unlinked interactions");
+	public static class ShowUnlinkedAction extends AbstractAction {
+
+		Engine engine;
+
+		public ShowUnlinkedAction(Engine engine) {
+			super();
+			this.engine = engine;
+			putValue(NAME, "Highlight Unlinked Interactions");
 			putValue(SHORT_DESCRIPTION, "Highlight all interactions that are not linked");
 			putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_L,
 					Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
@@ -809,11 +829,11 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 		 *
 		 */
 		public void actionPerformed(ActionEvent e) {
-			vPathwayModel.resetHighlight();
-			// TODO only get LineElements?
-			for (PathwayElement pe : vPathwayModel.getPathwayModel().getPathwayElements()) {
-				if (pe instanceof LineElement) { // TODO line or interaction?
-					VLineElement vl = (VLineElement) vPathwayModel.getPathwayElementView(pe);
+			VPathwayModel vp = engine.getActiveVPathwayModel();
+			vp.resetHighlight();
+			for (PathwayElement pe : vp.getPathwayModel().getPathwayElements()) {
+				if (pe.getObjectType() == ObjectType.INTERACTION) { // check interactions only
+					VLineElement vl = (VLineElement) vp.getPathwayElementView(pe);
 					LinkableTo grs = ((LineElement) pe).getStartElementRef();
 					LinkableTo gre = ((LineElement) pe).getEndElementRef();
 					if (grs == null) {
@@ -828,8 +848,9 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 	}
 
 	/**
+	 * Group actions.
+	 * 
 	 * @author unknown
-	 *
 	 */
 	private class GroupAction extends GroupActionBase {
 		public GroupAction(GroupType type) {
@@ -838,8 +859,9 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 	}
 
 	/**
+	 * Group actions base.
+	 * 
 	 * @author unknown
-	 *
 	 */
 	private class GroupActionBase extends AbstractAction implements SelectionListener {
 		private String groupLbl, ungroupLbl, groupTt, ungroupTt;
@@ -920,6 +942,11 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 		}
 	}
 
+	/**
+	 * Delete action.
+	 * 
+	 * @author unknown
+	 */
 	private class DeleteAction extends AbstractAction {
 
 		public DeleteAction(int ke) {
@@ -945,26 +972,11 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 		}
 	}
 
-	// private abstract class EnableOnSelectAction extends AbstractAction implements
-	// SelectionListener {
-	// public EnableOnSelectAction() {
-	// vPathway.addSelectionListener(this);
-	// }
-
-	// public void selectionEvent(SelectionEvent e) {
-	// setEnabled(vPathway.getSelectedGraphics().size() > 0);
-	// }
-	// }
-
-	// ================================================================================
-	//
-	// Classes for Abstract Actions Below:
-	//
-	// ================================================================================
-
 	/**
-	 * "Copy" command in the menu / toolbar, copies selected pathway elements to the
+	 * Copy command in the menu / toolbar, copies selected pathway elements to the
 	 * clipboard
+	 * 
+	 * @author unknown.
 	 */
 	public static class CopyAction extends AbstractAction {
 		Engine engine;
@@ -989,7 +1001,9 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 	}
 
 	/**
-	 * "Paste" command in the menu / toolbar, pastes from clipboard.
+	 * Paste command in the menu / toolbar, pastes from clipboard.
+	 * 
+	 * @author unknown.
 	 */
 	public static class PasteAction extends AbstractAction {
 		Engine engine;
@@ -1014,7 +1028,9 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 	}
 
 	/**
-	 * "Paste" command from the right click menu, pastes from clipboard.
+	 * Paste command from the right click menu, pastes from clipboard.
+	 * 
+	 * @author unknown.
 	 */
 	public static class PositionPasteAction extends AbstractAction {
 		private static final long serialVersionUID = 1L;
@@ -1052,8 +1068,10 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 	}
 
 	/**
-	 * "Nudge" action, moves selected element(s) a bit in the direction of the
-	 * cursor key pressed.
+	 * Nudge action, moves selected element(s) a bit in the direction of the cursor
+	 * key pressed.
+	 * 
+	 * @author unknown.
 	 */
 	public static class KeyMoveAction extends AbstractAction {
 		Engine engine;
@@ -1079,7 +1097,11 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 		}
 	}
 
-	/** "Undo" command in the menu / toolbar */
+	/**
+	 * Undo command in the menu / toolbar
+	 * 
+	 * @author unknown
+	 */
 	public static class UndoAction extends AbstractAction implements UndoManagerListener, ApplicationEventListener {
 		Engine engine;
 
@@ -1124,6 +1146,8 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 
 	/**
 	 * Action to change the order of the selected object
+	 * 
+	 * @author unknown
 	 */
 	public static class OrderTopAction extends AbstractAction {
 		Engine engine;
@@ -1147,6 +1171,8 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 
 	/**
 	 * Action to change the order of the selected object
+	 * 
+	 * @author unknown
 	 */
 	public static class OrderBottomAction extends AbstractAction {
 		Engine engine;
@@ -1170,6 +1196,8 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 
 	/**
 	 * Action to change the order of the selected object
+	 * 
+	 * @author unknown
 	 */
 	public static class OrderUpAction extends AbstractAction {
 		Engine engine;
@@ -1193,6 +1221,8 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 
 	/**
 	 * Action to change the order of the selected object
+	 * 
+	 * @author unknown
 	 */
 	public static class OrderDownAction extends AbstractAction {
 		Engine engine;

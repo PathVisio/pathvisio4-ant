@@ -43,7 +43,6 @@ import org.pathvisio.libgpml.model.PathwayModel.StatusFlagListener;
 import org.pathvisio.libgpml.model.shape.ShapeType;
 import org.pathvisio.libgpml.model.Label;
 import org.pathvisio.libgpml.model.PathwayElement;
-import org.pathvisio.libgpml.model.PathwayElement.CitationRef;
 import org.pathvisio.core.util.Resources;
 import org.pathvisio.core.util.Theme;
 import org.pathvisio.core.view.LayoutType;
@@ -66,7 +65,7 @@ import org.pathvisio.gui.dialogs.CitationDialog;
  * the proper group in {@ViewActions} when a new {@link VPathwayModel} is
  * created.
  * 
- * @author thomas
+ * @author thomas, finterly
  * @see {@link ViewActions}
  */
 public class CommonActions implements ApplicationEventListener {
@@ -108,6 +107,7 @@ public class CommonActions implements ApplicationEventListener {
 	public final Action copyAction;
 	public final Action pasteAction;
 	public final Action[] applyThemeActions; // TODO
+	public final Action showUnlinkedAction;
 
 	public final Action exitAction;
 
@@ -147,6 +147,8 @@ public class CommonActions implements ApplicationEventListener {
 		pasteAction = new ViewActions.PasteAction(se.getEngine());
 		applyThemeActions = new Action[] { new ApplyThemeAction(se.getEngine(), Theme.WIKIPATHWAYS),
 				new ApplyThemeAction(se.getEngine(), Theme.WIKIPATHWAYS_MIN) }; // TODO
+		showUnlinkedAction = new ViewActions.ShowUnlinkedAction(se.getEngine());
+
 		exportAction = new ExportAction(se);
 		importAction = new ImportAction(se);
 		aboutAction = new AboutAction(se);
@@ -326,7 +328,9 @@ public class CommonActions implements ApplicationEventListener {
 	}
 
 	/**
-	 * TODO
+	 * Applies theme (color) to the current pathway.
+	 * 
+	 * @author finterly
 	 */
 	public static class ApplyThemeAction extends AbstractAction {
 		Engine engine;
@@ -366,6 +370,8 @@ public class CommonActions implements ApplicationEventListener {
 	/**
 	 * When triggered, zoom percentage is set so that the entire pathway fits in the
 	 * view
+	 * 
+	 * @author unknown
 	 */
 	public static class ZoomToFitAction extends AbstractAction {
 
@@ -395,6 +401,8 @@ public class CommonActions implements ApplicationEventListener {
 	/**
 	 * Zooms the view to a fixed percentage. The zoom percentage is decided at
 	 * creation time
+	 * 
+	 * @author unknown
 	 */
 	public static class ZoomAction extends AbstractAction {
 
@@ -428,6 +436,8 @@ public class CommonActions implements ApplicationEventListener {
 	 * This action constitutes both the save and save as menu items, and can save
 	 * both to the wiki in the case of the applet, or to file in the case of the
 	 * standalone application
+	 * 
+	 * @author unknown
 	 */
 	public static class SaveAction extends AbstractAction implements StatusFlagListener, ApplicationEventListener {
 		boolean isSaveAs; // is either save... or save as...
@@ -495,8 +505,10 @@ public class CommonActions implements ApplicationEventListener {
 	}
 
 	/**
-	 * Import a Pathway from a different format than GPML, usually that means
-	 * GenMAPP format
+	 * Imports a Pathway from a different format than GPML, usually that means
+	 * GenMAPP format.
+	 * 
+	 * @author unknown
 	 */
 	public static class ImportAction extends AbstractAction {
 
@@ -520,7 +532,11 @@ public class CommonActions implements ApplicationEventListener {
 		}
 	}
 
-	/** Export a pathway to a different pathway, raster or vector image format */
+	/**
+	 * Exports a pathway to a different pathway, raster or vector image format
+	 * 
+	 * @author unknown
+	 */
 	public static class ExportAction extends AbstractAction {
 
 		SwingEngine swingEngine;
@@ -544,7 +560,11 @@ public class CommonActions implements ApplicationEventListener {
 		}
 	}
 
-	/** Create a new pathway element or elements based on a {@link Template} */ // implements VPathwayListener
+	/**
+	 * Creates a new pathway element or elements based on a {@link Template}
+	 * 
+	 * @author unknown
+	 */
 	public static class NewElementAction extends AbstractAction {
 		Template template;
 
@@ -585,6 +605,8 @@ public class CommonActions implements ApplicationEventListener {
 	 * Perform simple layout operations such as aligning, setting common size and
 	 * distributing evenly. Note that this doesn't include graph layout algorithms.
 	 * see {@link LayoutType} for a list of possible layouts
+	 * 
+	 * @author unknown
 	 */
 	public static class LayoutAction extends AbstractAction {
 		LayoutType type;
@@ -612,6 +634,8 @@ public class CommonActions implements ApplicationEventListener {
 	 * right-click menu on a PathwayElement. When the action is triggered, the
 	 * PathwayElementDialog is shown, but which tab is shown depends on the
 	 * implementation of getSelectedPanel
+	 * 
+	 * @author unknown
 	 */
 	private static abstract class PathwayElementDialogAction extends AbstractAction {
 		// TODO: use parameterization instead of inheritance to create different
@@ -665,6 +689,8 @@ public class CommonActions implements ApplicationEventListener {
 	/**
 	 * Provides direct access to the citation reference dialog
 	 * ({@link CitationDialog}) from the right click menu.
+	 * 
+	 * @author unknown, finterly
 	 */
 	public static class AddCitationAction extends PathwayElementDialogAction {
 		public AddCitationAction(SwingEngine swingEngine, Component parent, VElement e) {
@@ -694,6 +720,8 @@ public class CommonActions implements ApplicationEventListener {
 
 	/**
 	 * Pops up the pathway element dialog directly on the citations tab.
+	 * 
+	 * @author unknown, finterly
 	 */
 	public static class EditCitationAction extends PathwayElementDialogAction {
 
@@ -710,6 +738,7 @@ public class CommonActions implements ApplicationEventListener {
 	}
 
 	/**
+	 * Adds action to Label hyperlink (href).
 	 * 
 	 * @author unknown
 	 */
@@ -742,7 +771,11 @@ public class CommonActions implements ApplicationEventListener {
 		}
 	}
 
-	/** Pops up the pathway element dialog directly on the comments tab */
+	/**
+	 * Pops up the pathway element dialog directly on the comments tab
+	 * 
+	 * @author unknown
+	 */
 	public static class PropertiesAction extends PathwayElementDialogAction {
 
 		public PropertiesAction(SwingEngine swingEngine, Component parent, VElement e) {
@@ -756,7 +789,11 @@ public class CommonActions implements ApplicationEventListener {
 		}
 	}
 
-	/** Pops up the @{link AboutDlg} */
+	/**
+	 * Pops up the @{link AboutDlg}.
+	 * 
+	 * @author unknown
+	 */
 	public static class AboutAction extends AbstractAction {
 
 		SwingEngine swingengine;
@@ -778,6 +815,8 @@ public class CommonActions implements ApplicationEventListener {
 	/**
 	 * Exit menu item. Quit the program with System.exit after checking for unsaved
 	 * changes
+	 * 
+	 * @author unknown
 	 */
 	public static class ExitAction extends AbstractAction {
 
