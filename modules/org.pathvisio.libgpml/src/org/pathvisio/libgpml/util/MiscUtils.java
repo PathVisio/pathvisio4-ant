@@ -23,14 +23,5 @@ import java.util.List;
  */
 public class MiscUtils {
 
-	/**
-	 * Case insensitive contains method for List.
-	 * 
-	 * @param str     the string.
-	 * @param strList the string list.
-	 * @return true if string list contains given string regardless of case.
-	 */
-	public static boolean containsCaseInsensitive(String str, List<String> strList) {
-		return strList.stream().anyMatch(x -> x.equalsIgnoreCase(str));
-	}
+
 }

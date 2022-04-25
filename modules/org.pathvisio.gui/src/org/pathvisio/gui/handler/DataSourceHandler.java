@@ -51,6 +51,8 @@ import org.pathvisio.libgpml.prop.StaticPropertyType;
 /**
  * This class knows how to handle a datasource, which is context sensitive and
  * needs to be updated before use.
+ * 
+ * @author unknown
  */
 public class DataSourceHandler extends DefaultCellEditor
 		implements ContextSensitiveEditor, TableCellRenderer, TypeHandler {

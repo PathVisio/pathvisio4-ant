@@ -58,8 +58,8 @@ import javax.swing.tree.TreePath;
 
 import org.pathvisio.core.preferences.Preference;
 import org.pathvisio.core.preferences.PreferenceManager;
+import org.pathvisio.core.util.ColorConverter;
 import org.pathvisio.gui.SwingEngine;
-import org.pathvisio.libgpml.util.ColorConverter;
 
 /**
  * Global dialog for setting the user preferences.

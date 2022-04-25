@@ -19,7 +19,7 @@ package org.pathvisio.core.preferences;
 import java.awt.Color;
 import java.io.File;
 
-import org.pathvisio.libgpml.util.ColorConverter;
+import org.pathvisio.core.util.ColorConverter;
 import org.pathvisio.libgpml.util.Utils;
 
 /**
