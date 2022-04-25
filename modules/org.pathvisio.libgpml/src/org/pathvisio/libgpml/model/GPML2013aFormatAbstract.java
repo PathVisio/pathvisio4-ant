@@ -48,7 +48,7 @@ import org.pathvisio.libgpml.io.ConverterException;
 import org.pathvisio.libgpml.model.shape.ShapeType;
 import org.pathvisio.libgpml.model.type.ArrowHeadType;
 import org.pathvisio.libgpml.util.ColorUtils;
-import org.pathvisio.libgpml.util.MiscUtils;
+import org.pathvisio.libgpml.util.Utils;
 import org.xml.sax.SAXException;
 
 /**
@@ -364,7 +364,7 @@ public abstract class GPML2013aFormatAbstract {
 		for (ArrowHeadType arrowHead : arrowHeads) {
 			List<String> arrowHeadStrs = IA_PANEL_MAP.get(arrowHead);
 			// case insensitive method for matching in list
-			if (MiscUtils.containsCaseInsensitive(arrowHeadStr, arrowHeadStrs)) {
+			if (Utils.containsCaseInsensitive(arrowHeadStr, arrowHeadStrs)) {
 				return arrowHead;
 			}
 		}
