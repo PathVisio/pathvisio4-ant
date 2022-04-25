@@ -62,7 +62,7 @@ public enum StaticProperty implements Property {
 	// Xrefable
 	// ========================================
 	XREF("xref", "Database:Id", StaticPropertyType.XREF, 150),
-
+	
 	// ========================================
 	// Pathway Canvas Graphics
 	// ========================================
@@ -96,9 +96,6 @@ public enum StaticProperty implements Property {
 
 	// label
 	HREF("href", "Hyperlink", StaticPropertyType.STRING, 220),
-
-	// brace
-	ORIENTATION("Orientation", "Orientation", StaticPropertyType.ORIENTATION, 230), // TODO????
 
 	// rect properties
 	CENTERX("centerX", "Center X", StaticPropertyType.DOUBLE, 240, true, false, false),

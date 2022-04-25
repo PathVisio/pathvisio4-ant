@@ -34,7 +34,7 @@ public enum StaticPropertyType implements PropertyType {
 	COMMENT, ANNOTATION, CITATION, EVIDENCE, ANNOTATIONREF, CITATIONREF, EVIDENCEREF, ANNOTATIONTYPE,
 
 	// Xrefable
-	XREF, IDENTIFIER, DATASOURCE, //TODO
+	XREF, DATASOURCE, //TODO
 
 	// ShapedElement
 	DATANODETYPE, STATETYPE, GROUPTYPE,
@@ -42,14 +42,12 @@ public enum StaticPropertyType implements PropertyType {
 	// DataNode
 	ALIASREF,
 
-	// line style properties
-
 	// LineElement
 	ARROWHEADTYPE, LINKABLETO, ANCHORSHAPETYPE, CONNECTORTYPE,
 
 	// Style properties
-	FONTNAME, HALIGNTYPE, VALIGNTYPE, SHAPETYPE, LINESTYLETYPE, // for both lines and shape borders
-	ORIENTATION, ROTATION; // TODO brace???
+	FONTNAME, HALIGNTYPE, VALIGNTYPE, SHAPETYPE, LINESTYLETYPE, // for both lines and shape borders 
+	ROTATION; // for state and group
 
 	private String id;
 
