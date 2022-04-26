@@ -554,6 +554,63 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 	 */
 	public abstract CopyElement copy();
 
+	/**
+	 * Copies references from the given source pathway element.
+	 * <p>
+	 * NB:
+	 * <ol>
+	 * <li>To be called after new pathway element is added to a pathway model.
+	 * <li>The srcElement may be the immediate copy element source of the new
+	 * pathway element, or an older source.
+	 * </ol>
+	 * 
+	 * @param srcElement the source element to copy references from.
+	 */
+	public void copyReferencesFrom(PathwayElement srcElement) {
+		if (srcElement != null && this.getObjectType() == srcElement.getObjectType()) {
+			copyAnnotationRefs(srcElement.getAnnotationRefs());
+			copyCitationRefs(srcElement.getCitationRefs());
+			copyEvidenceRefs(srcElement.getEvidenceRefs());
+		}
+	}
+
+	/**
+	 * Copies citationsRefs and nested annotationRefs if applicable.
+	 * 
+	 * @param citationRefs
+	 */
+	private void copyCitationRefs(List<CitationRef> citationRefs) {
+		for (CitationRef citationRef : citationRefs) {
+			this.addCitation(citationRef.getCitation().copyRef());
+			copyAnnotationRefs(citationRef.getAnnotationRefs());
+		}
+	}
+
+	/**
+	 * Copies annotationRefs and nested citationRefs and evidenceRefs if applicable.
+	 * 
+	 * @param annotationRefs
+	 */
+	private void copyAnnotationRefs(List<AnnotationRef> annotationRefs) {
+		for (AnnotationRef annotationRef : annotationRefs) {
+			this.addAnnotation(annotationRef.getAnnotation().copyRef());
+			copyCitationRefs(annotationRef.getCitationRefs());
+			copyEvidenceRefs(annotationRef.getEvidenceRefs());
+
+		}
+	}
+
+	/**
+	 * Copies evidenceRefs.
+	 * 
+	 * @param evidenceRefs
+	 */
+	private void copyEvidenceRefs(List<EvidenceRef> evidenceRefs) {
+		for (EvidenceRef evidenceRef : evidenceRefs) {
+			this.addEvidence(evidenceRef.getEvidence().copyRef());
+		}
+	}
+
 	// ================================================================================
 	// Property Methods
 	// ================================================================================

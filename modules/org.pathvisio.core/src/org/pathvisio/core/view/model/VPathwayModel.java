@@ -2403,7 +2403,7 @@ public class VPathwayModel implements PathwayModelListener {
 			PathwayElement newerElement = copyOfCopyElement.getNewElement();
 			data.add(newerElement); // causes lastAdded to be set
 			// load references
-			copyOfCopyElement.loadReferences(srcElement);
+			newerElement.copyReferencesFrom(srcElement);
 			// store information
 			newerToSource.put(newerElement, srcElement);
 			if (newerElement instanceof LineElement) {

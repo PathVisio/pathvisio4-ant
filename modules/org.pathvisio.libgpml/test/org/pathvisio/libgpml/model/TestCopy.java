@@ -123,7 +123,7 @@ public class TestCopy extends TestCase {
 		assertTrue(p2.hasPathwayObject(o2));
 
 		// load references for new element
-		copy.loadReferences(copy.getSourceElement());
+		o2.copyReferencesFrom(copy.getSourceElement());
 		CitationRef cr2 = o2.getCitationRefs().get(0);
 		Citation c2 = cr2.getCitation();
 		assertEquals(c2.getUrlLink(), "String");

@@ -355,7 +355,6 @@ public class DataNode extends ShapedElement implements Xrefable {
 			result.copyValuesFrom(s);
 		}
 		xref = src.xref;
-//		aliasRef = src.aliasRef; TODO not this yet
 		fireObjectModifiedEvent(PathwayObjectEvent.createAllPropertiesEvent(this));
 	}
 
@@ -370,6 +369,29 @@ public class DataNode extends ShapedElement implements Xrefable {
 		DataNode result = new DataNode(textLabel, type);
 		result.copyValuesFrom(this);
 		return new CopyElement(result, this);
+	}
+
+	/**
+	 * Copies references from the given source data node, including state
+	 * references.
+	 * <p>
+	 * NB:
+	 * <ol>
+	 * <li>For each state, copies references from the corresponding source state.
+	 * <li>To be called after new data node is added to a pathway model.
+	 * <li>The source data node may be the immediate copy element source of the new
+	 * data node, or an older source data node.
+	 * </ol>
+	 * 
+	 * @param srcDataNode the source element to copy references from.
+	 */
+	@Override
+	public void copyReferencesFrom(PathwayElement srcDataNode) {
+		super.copyReferencesFrom(srcDataNode);
+		List<State> srcStates = ((DataNode) srcDataNode).getStates();
+		for (int i = 0; i < getStates().size(); i++) {
+			states.get(i).copyReferencesFrom(srcStates.get(i));
+		}
 	}
 
 	// ================================================================================

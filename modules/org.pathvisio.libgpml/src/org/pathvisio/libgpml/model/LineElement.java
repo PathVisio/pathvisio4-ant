@@ -1186,14 +1186,6 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 		fireObjectModifiedEvent(PathwayObjectEvent.createAllPropertiesEvent(this));
 	}
 
-	/**
-	 * Copy Object. The object will not be part of the same Pathway object, it's
-	 * parent will be set to null.
-	 *
-	 * No events will be sent to the parent of the original.
-	 */
-	public abstract CopyElement copy();
-
 	// ================================================================================
 	// Property Methods
 	// ================================================================================
@@ -1706,7 +1698,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 
 		/**
 		 * NB: This may be called any number of times when this point is already
-		 * unlinked TODO 
+		 * unlinked TODO
 		 */
 		@Override
 		public void unlink() {

@@ -1057,7 +1057,7 @@ public class PathwayModel {
 			PathwayElement srcElement = copyElement.getSourceElement();
 			result.add(newElement);
 			// load references
-			copyElement.loadReferences(srcElement);
+			newElement.copyReferencesFrom(srcElement);
 			// store information
 			newToSource.put(newElement, srcElement);
 			// specially store anchor information

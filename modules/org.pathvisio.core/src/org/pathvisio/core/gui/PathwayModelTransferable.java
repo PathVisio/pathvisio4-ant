@@ -113,7 +113,7 @@ public class PathwayModelTransferable implements Transferable {
 
 			pnew.add(newerElement);
 			// load references
-			copyOfCopyElement.loadReferences(srcElement);
+			newerElement.copyReferencesFrom(srcElement);
 			// store information
 			newerToSource.put(newerElement, srcElement);
 			if (newerElement instanceof LineElement) {

@@ -445,7 +445,7 @@ public abstract class ShapedElement extends PathwayElement implements LinkableTo
 
 	/**
 	 * Sets point value for the size of the font. Rounds any decimals to the nearest
-	 * 0.5. 
+	 * 0.5.
 	 * 
 	 * @param v the value for the size of the font.
 	 * @throws IllegalArgumentException if fontSize is a negative value.
@@ -887,14 +887,6 @@ public abstract class ShapedElement extends PathwayElement implements LinkableTo
 		rotation = src.rotation;
 		fireObjectModifiedEvent(PathwayObjectEvent.createAllPropertiesEvent(this));
 	}
-
-	/**
-	 * Copy Object. The object will not be part of the same Pathway object, it's
-	 * parent will be set to null.
-	 *
-	 * No events will be sent to the parent of the original.
-	 */
-	public abstract CopyElement copy();
 
 	// ================================================================================
 	// Property Methods
