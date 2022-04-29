@@ -107,7 +107,7 @@
 				<include name="org.pathvisio.*.jar" />
 				<!--<include name="javax.*.jar"/>-->
 				<include name="com.sun.*.jar" />
-				<include name="jarkarta*.jar" />
+				<include name="jakarta*.jar" />
 				<include name="org.jdom.*.jar" />
 				<!--<include name="commons-math*.jar"/>-->
 				<include name="com.springsource*.jar" />
