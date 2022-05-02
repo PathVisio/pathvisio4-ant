@@ -63,7 +63,7 @@ public enum HAlignType {
 	/**
 	 * Returns HAlignType enum constant from given string name.
 	 * 
-	 * @param name the string value.
+	 * @param value the string value.
 	 * @return HAlignType enum constant.
 	 */
 	public static HAlignType fromName(String value) {

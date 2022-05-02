@@ -51,9 +51,9 @@ public enum StaticProperty implements Property {
 	// Pathway Element
 	// ========================================
 	COMMENT("comment", "Comment", StaticPropertyType.COMMENT, 130),
-	ANNOTATION("annotation", "Annotation", StaticPropertyType.ANNOTATION, 131, false, true, false),
-	CITATION("citation", "Citation", StaticPropertyType.CITATION, 132, false, true, false),
-	EVIDENCE("evidence", "Evidence", StaticPropertyType.EVIDENCE, 133, false, true, false),
+	ANNOTATIONREF("annotationRef", "AnnotationRef", StaticPropertyType.ANNOTATIONREF, 131, false, true, false),
+	CITATIONREF("citationRef", "CitationRef", StaticPropertyType.CITATIONREF, 132, false, true, false),
+	EVIDENCEREF("evidenceRef", "EvidenceRef", StaticPropertyType.EVIDENCEREF, 133, false, true, false),
 
 	// types
 	ANNOTATIONTYPE("annotationType", "Annotation Type", StaticPropertyType.ANNOTATIONTYPE, 140),

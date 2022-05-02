@@ -34,8 +34,11 @@ import org.pathvisio.libgpml.prop.Property;
 /**
  * PropertyView ties together functionality to view / edit a property on one or
  * more PathwayElements at the same time.
+ * 
+ * @author unknown.
  */
 public class PropertyView implements Comparable<PropertyView> {
+
 	private VPathwayModel vPathwayModel;
 	Collection<PathwayElement> elements;
 	private Object value;
@@ -45,6 +48,8 @@ public class PropertyView implements Comparable<PropertyView> {
 	private TableCellRenderer propertyLabelRenderer = new PropertyLabelRenderer();
 
 	/**
+	 * Instantiates PropertyView.
+	 * 
 	 * @param aType     is either String for a dynamic property, or StaticProperty
 	 *                  for a static property;
 	 * @param aVPathway is used to register undo actions when setting a value to
@@ -61,7 +66,10 @@ public class PropertyView implements Comparable<PropertyView> {
 	}
 
 	/**
-	 * Add a PathwayElement to the set of elements that are viewed / edited together
+	 * Adds a PathwayElement to the set of elements that are viewed / edited
+	 * together
+	 * 
+	 * @param e the pathway element to be added.
 	 */
 	public void addElement(PathwayElement e) {
 		elements.add(e);
@@ -69,8 +77,10 @@ public class PropertyView implements Comparable<PropertyView> {
 	}
 
 	/**
-	 * Remove a PathwayElement to the set of elements that are viewed / edited
+	 * Removes a PathwayElement from the set of elements that are viewed / edited
 	 * together
+	 * 
+	 * @param e the pathway element to be removed.
 	 */
 	public void removeElement(PathwayElement e) {
 		elements.remove(e);
@@ -78,11 +88,10 @@ public class PropertyView implements Comparable<PropertyView> {
 	}
 
 	/**
-	 * Refresh the viewer / editor value by checking all PathwayElements This
+	 * Refreshes the viewer / editor value by checking all PathwayElements This
 	 * notifies the PropertyView that one of the PathwayElements has changed or that
 	 * the PathwayElement list has been changed, and a new value should be cached.
 	 */
-
 	public void refreshValue() {
 		if (elements.size() == 1) {
 			value = elements.iterator().next().getPropertyEx(type);

@@ -197,7 +197,7 @@ public class XrefUtils {
 	 * Returns the identifier for given {@link Xref} if valid, otherwise returns
 	 * null.
 	 * 
-	 * @param xrefthe xref.
+	 * @param xref the xref.
 	 * @return dataSource the dataSource for given xref.
 	 */
 	public static DataSource getDataSource(Xref xref) {

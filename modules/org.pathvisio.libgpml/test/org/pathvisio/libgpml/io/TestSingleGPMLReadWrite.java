@@ -43,8 +43,8 @@ public class TestSingleGPMLReadWrite extends TestCase {
 	/**
 	 * Reads a GPML2013a/GPML2021 file.
 	 * 
-	 * @throws ConverterException
-	 * @throws IOException
+	 * @throws ConverterException 
+	 * @throws IOException      
 	 */
 	@Before
 	public void setUp() throws IOException, ConverterException {

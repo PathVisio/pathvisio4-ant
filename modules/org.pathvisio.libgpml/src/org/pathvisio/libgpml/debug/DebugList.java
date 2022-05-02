@@ -40,7 +40,7 @@ import java.util.ListIterator;
  * This is intended to debug problems with single-threaded usage of lists, I
  * don't know how useful it will be for debugging multi-threading problems.
  *
- * This class wraps around an ordinary ArrayList<E>
+ * This class wraps around an ordinary ArrayList&lt;E&gt;
  *
  * @param <E> List element type
  * @author unknown 

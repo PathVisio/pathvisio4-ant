@@ -1,13 +1,13 @@
 /*******************************************************************************
  * PathVisio, a tool for data visualization and analysis using biological pathways
  * Copyright 2006-2022 BiGCaT Bioinformatics, WikiPathways
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License.  You may obtain a copy
  * of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the
@@ -55,7 +55,7 @@ import org.pathvisio.libgpml.util.XrefUtils;
  * <li>GPML2021 is the current gpml format.
  * <li>In the GUI, Pathways are saved/written in the GPML2021 format.
  * </ol>
- * 
+ *
  * @author finterly
  */
 public class GPML2021Writer extends GPML2021FormatAbstract implements GpmlFormatWriter {
@@ -65,7 +65,7 @@ public class GPML2021Writer extends GPML2021FormatAbstract implements GpmlFormat
 
 	/**
 	 * Constructor for GPML writer.
-	 * 
+	 *
 	 * @param xsdFile the schema file.
 	 * @param nsGPML  the GPML namespace.
 	 */
@@ -75,7 +75,7 @@ public class GPML2021Writer extends GPML2021FormatAbstract implements GpmlFormat
 
 	/**
 	 * Writes the JDOM {@link Document} document to the outputstream specified.
-	 * 
+	 *
 	 * @param pathwayModel the pathway model.
 	 * @param output       the outputstream to which the JDOM document should be
 	 *                     written
@@ -84,6 +84,7 @@ public class GPML2021Writer extends GPML2021FormatAbstract implements GpmlFormat
 	 *                     classpath, an exception will be thrown.
 	 * @throws ConverterException
 	 */
+	@Override
 	public void writeToXml(PathwayModel pathwayModel, OutputStream output, boolean validate) throws ConverterException {
 
 		Document doc = createJdom(pathwayModel);
@@ -95,7 +96,7 @@ public class GPML2021Writer extends GPML2021FormatAbstract implements GpmlFormat
 		XMLOutputter xmlOutput = new XMLOutputter(Format.getPrettyFormat());
 		Format xmlformat = xmlOutput.getFormat();
 		xmlformat.setEncoding("UTF-8");
-//		xmlformat.setTextMode(Format.TextMode.NORMALIZE); TODO Default to preserve spaces? 
+//		xmlformat.setTextMode(Format.TextMode.NORMALIZE); // for now, use default to preserve spaces TODO 
 		xmlOutput.setFormat(xmlformat);
 
 		try {
@@ -111,13 +112,14 @@ public class GPML2021Writer extends GPML2021FormatAbstract implements GpmlFormat
 
 	/**
 	 * Writes the JDOM document to the file specified.
-	 * 
+	 *
 	 * @param pathwayModel the pathway model.
 	 * @param file         the file to which the JDOM document should be saved.
 	 * @param validate     if true, validate the dom structure before writing to
 	 *                     file.
 	 * @throws ConverterException
 	 */
+	@Override
 	public void writeToXml(PathwayModel pathwayModel, File file, boolean validate) throws ConverterException {
 		OutputStream out;
 		try {
@@ -131,10 +133,11 @@ public class GPML2021Writer extends GPML2021FormatAbstract implements GpmlFormat
 	/**
 	 * Creates and returns the JDOM document {@link Document} written from given
 	 * pathwayModel {@link PathwayModel} data.
-	 * 
+	 *
 	 * @param pathwayModel the pathway model to be written.
 	 * @throws ConverterException
 	 */
+	@Override
 	public Document createJdom(PathwayModel pathwayModel) throws ConverterException {
 		// removes empty groups
 		removeEmptyGroups(pathwayModel);
@@ -163,7 +166,7 @@ public class GPML2021Writer extends GPML2021FormatAbstract implements GpmlFormat
 	/**
 	 * Writes pathway object {@link Pathway} information and authors list to root
 	 * element.
-	 * 
+	 *
 	 * @param pathwayModel the pathway model.
 	 * @param root         the root element.
 	 * @throws ConverterException
@@ -204,7 +207,7 @@ public class GPML2021Writer extends GPML2021FormatAbstract implements GpmlFormat
 	 * Writes xref {@link Xref} information to new element. Xref is required for
 	 * Evidences. Xref is optional for the Pathway, DataNodes, States, Interactions,
 	 * Groups, and Annotations. For Citations, either Xref and/or Url are required.
-	 * 
+	 *
 	 * @param xref     the xref of the pathway or pathway element.
 	 * @param e        the parent element.
 	 * @param required if true, xref is a required property.
@@ -232,7 +235,7 @@ public class GPML2021Writer extends GPML2021FormatAbstract implements GpmlFormat
 	/**
 	 * Writes url link information to new element. Url is optional for Annotations
 	 * and Evidences. For Citations, either Xref and/or Url are required.
-	 * 
+	 *
 	 * @param urlLink the url link.
 	 * @param e       the jdom element.
 	 */
@@ -246,7 +249,7 @@ public class GPML2021Writer extends GPML2021FormatAbstract implements GpmlFormat
 
 	/**
 	 * Writes author {@link Author} information.
-	 * 
+	 *
 	 * @param authors the list of authors.
 	 * @param root    the root element.
 	 * @throws ConverterException
@@ -279,7 +282,7 @@ public class GPML2021Writer extends GPML2021FormatAbstract implements GpmlFormat
 
 	/**
 	 * Writes comments {@link Comment} information for pathway or pathway element.
-	 * 
+	 *
 	 * @param comments the list of comments of pathway or pathway element.
 	 * @param e        the parent element.
 	 * @throws ConverterException
@@ -305,7 +308,7 @@ public class GPML2021Writer extends GPML2021FormatAbstract implements GpmlFormat
 	/**
 	 * Writes dynamic property information for pathway or pathway element.
 	 * {@link PathwayElement#getDynamicProperty}
-	 * 
+	 *
 	 * @param dynamicProperties the list of dynamic properties.
 	 * @param e                 the parent element.
 	 * @throws ConverterException
@@ -333,7 +336,7 @@ public class GPML2021Writer extends GPML2021FormatAbstract implements GpmlFormat
 	 * {@link Pathway#getAnnotationRefs , ElementInfo#getAnnotationRefs}. In
 	 * GPML2021, annotationRef can have citationRefs and/or evidenceRefs nested
 	 * inside.
-	 * 
+	 *
 	 * @param annotationRefs the list of annotation references.
 	 * @param e              the parent element.
 	 * @throws ConverterException
@@ -353,7 +356,7 @@ public class GPML2021Writer extends GPML2021FormatAbstract implements GpmlFormat
 	/**
 	 * Writes citation reference information for pathway or pathway element.
 	 * {@link Pathway#getCitationRefs , ElementInfo#getCitationRefs}.
-	 * 
+	 *
 	 * @param citationRefs the list of citation references.
 	 * @param e            the parent element.
 	 * @throws ConverterException
@@ -374,8 +377,8 @@ public class GPML2021Writer extends GPML2021FormatAbstract implements GpmlFormat
 	/**
 	 * Writes evidence reference information for pathway or pathway element
 	 * {@link Pathway#getEvidenceRefs , ElementInfo#getEvidenceRefs}.
-	 * 
-	 * 
+	 *
+	 *
 	 * @param evidenceRefs the list of evidence references.
 	 * @param e            the parent element.
 	 * @throws ConverterException
@@ -394,7 +397,7 @@ public class GPML2021Writer extends GPML2021FormatAbstract implements GpmlFormat
 
 	/**
 	 * Writes datanode {@link DataNode} information.
-	 * 
+	 *
 	 * @param dataNodes the list of datanodes.
 	 * @param root      the root element.
 	 * @throws ConverterException
@@ -427,7 +430,7 @@ public class GPML2021Writer extends GPML2021FormatAbstract implements GpmlFormat
 	/**
 	 * Writes aliasRef property information for a data node. Used in
 	 * {@link #writeDataNodes}.
-	 * 
+	 *
 	 * @param aliasRef the group for which data node is an alias.
 	 * @param e        the parent jdom element.
 	 */
@@ -442,7 +445,7 @@ public class GPML2021Writer extends GPML2021FormatAbstract implements GpmlFormat
 
 	/**
 	 * Writes state {@link State} information.
-	 * 
+	 *
 	 * @param states the list of states.
 	 * @param dn     the parent data node element.
 	 * @throws ConverterException
@@ -471,7 +474,7 @@ public class GPML2021Writer extends GPML2021FormatAbstract implements GpmlFormat
 
 	/**
 	 * Writes interaction {@link Interaction} information.
-	 * 
+	 *
 	 * @param interactions the list of interactions.
 	 * @param root         the root element;
 	 * @throws ConverterException
@@ -497,7 +500,7 @@ public class GPML2021Writer extends GPML2021FormatAbstract implements GpmlFormat
 
 	/**
 	 * Writes graphical line {@link GraphicalLine} information.
-	 * 
+	 *
 	 * @param graphicalLines the list of graphical lines.
 	 * @param root           the root element.
 	 * @throws ConverterException
@@ -523,7 +526,7 @@ public class GPML2021Writer extends GPML2021FormatAbstract implements GpmlFormat
 	/**
 	 * Writes line element {@link LineElement} information for interactions or
 	 * graphicalLines.
-	 * 
+	 *
 	 * @param lineElement the interaction or graphicalLine.
 	 * @param ln          the line element.
 	 * @throws ConverterException
@@ -542,7 +545,7 @@ public class GPML2021Writer extends GPML2021FormatAbstract implements GpmlFormat
 
 	/**
 	 * Writes point {@link LinePoint} information.
-	 * 
+	 *
 	 * @param points the list of points.
 	 * @param wyps   the parent element.
 	 * @throws ConverterException
@@ -580,7 +583,7 @@ public class GPML2021Writer extends GPML2021FormatAbstract implements GpmlFormat
 	/**
 	 * Writes elementRef property information. Returns boolean if elementRef is
 	 * written. Used in {@link #writePoints}.
-	 * 
+	 *
 	 * @param elementRef the elementRef.
 	 * @param e          the parent jdom element.
 	 * @return true if elementRef exists and is successfully written.
@@ -598,7 +601,7 @@ public class GPML2021Writer extends GPML2021FormatAbstract implements GpmlFormat
 
 	/**
 	 * Writes anchor {@link Anchor} information.
-	 * 
+	 *
 	 * @param anchors the list of anchors.
 	 * @param wyps    the parent element.
 	 * @throws ConverterException
@@ -623,7 +626,7 @@ public class GPML2021Writer extends GPML2021FormatAbstract implements GpmlFormat
 
 	/**
 	 * Writes label {@link Label} information.
-	 * 
+	 *
 	 * @param labels the list of labels.
 	 * @param root   the root element.
 	 * @throws ConverterException
@@ -654,7 +657,7 @@ public class GPML2021Writer extends GPML2021FormatAbstract implements GpmlFormat
 
 	/**
 	 * Writes shape {@link Shape} information.
-	 * 
+	 *
 	 * @param shapes the list of shapes.
 	 * @param root   the root element.
 	 * @throws ConverterException
@@ -684,7 +687,7 @@ public class GPML2021Writer extends GPML2021FormatAbstract implements GpmlFormat
 
 	/**
 	 * Writes group {@link Group} information.
-	 * 
+	 *
 	 * @param groups the list of groups.
 	 * @param root   the root element.
 	 * @throws ConverterException
@@ -717,7 +720,7 @@ public class GPML2021Writer extends GPML2021FormatAbstract implements GpmlFormat
 
 	/**
 	 * Writes annotation {@link Annotation} information.
-	 * 
+	 *
 	 * @param annotations the list of annotations.
 	 * @param root        the root element.
 	 * @throws ConverterException
@@ -746,7 +749,7 @@ public class GPML2021Writer extends GPML2021FormatAbstract implements GpmlFormat
 
 	/**
 	 * Writes citation {@link Citation} information.
-	 * 
+	 *
 	 * @param citations the list of citations.
 	 * @param root      the root element.
 	 * @throws ConverterException
@@ -773,7 +776,7 @@ public class GPML2021Writer extends GPML2021FormatAbstract implements GpmlFormat
 
 	/**
 	 * Writes evidence {@link Evidence} information.
-	 * 
+	 *
 	 * @param evidences the list of evidences.
 	 * @param root      the root element.
 	 * @throws ConverterException
@@ -803,7 +806,7 @@ public class GPML2021Writer extends GPML2021FormatAbstract implements GpmlFormat
 
 	/**
 	 * Writes elementId {@link PathwayObject} property information.
-	 * 
+	 *
 	 * @param elementId the elementId.
 	 * @param e         the parent element.
 	 */
@@ -815,7 +818,7 @@ public class GPML2021Writer extends GPML2021FormatAbstract implements GpmlFormat
 
 	/**
 	 * Writes groupRef property information.
-	 * 
+	 *
 	 * @param groupRef the groupRef.
 	 * @param e        the parent element.
 	 */
@@ -831,7 +834,7 @@ public class GPML2021Writer extends GPML2021FormatAbstract implements GpmlFormat
 	/**
 	 * Writes shapedElement {@link ShapedElement} information for datanodes, labels,
 	 * shapes, or groups.
-	 * 
+	 *
 	 * @param shapedElement the datanode, label, shape, or group.
 	 * @param se            the shape jdom element.
 	 * @throws ConverterException
@@ -848,7 +851,7 @@ public class GPML2021Writer extends GPML2021FormatAbstract implements GpmlFormat
 	/**
 	 * Writes elementId, comment group {comment, dynamic property, annotationRef,
 	 * citationRef) and evidenceRef {@link PathwayElement} information for
-	 * 
+	 *
 	 * @param elementInfo the pathway element.
 	 * @param e           the parent element.
 	 * @throws ConverterException
@@ -864,7 +867,7 @@ public class GPML2021Writer extends GPML2021FormatAbstract implements GpmlFormat
 
 	/**
 	 * Writes rect property information.
-	 * 
+	 *
 	 * @param shapedElement the shaped pathway element.
 	 * @param gfx           the parent graphics element.
 	 * @throws ConverterException
@@ -883,7 +886,7 @@ public class GPML2021Writer extends GPML2021FormatAbstract implements GpmlFormat
 
 	/**
 	 * Writes font property information.
-	 * 
+	 *
 	 * @param shapedElement the shaped pathway element.
 	 * @param gfx           the parent graphics element.
 	 * @throws ConverterException
@@ -902,7 +905,7 @@ public class GPML2021Writer extends GPML2021FormatAbstract implements GpmlFormat
 
 	/**
 	 * Writes shape style property information.
-	 * 
+	 *
 	 * @param shapedElement the shaped pathway element.
 	 * @param gfx           the parent graphics element.
 	 * @throws ConverterException
@@ -925,7 +928,7 @@ public class GPML2021Writer extends GPML2021FormatAbstract implements GpmlFormat
 
 	/**
 	 * Writes line style property information.
-	 * 
+	 *
 	 * @param lineElement the line pathway element.
 	 * @param gfx         the parent graphics element.
 	 * @throws ConverterException

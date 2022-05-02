@@ -1,13 +1,13 @@
 /*******************************************************************************
  * PathVisio, a tool for data visualization and analysis using biological pathways
  * Copyright 2006-2022 BiGCaT Bioinformatics, WikiPathways
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License.  You may obtain a copy
  * of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the
@@ -34,7 +34,7 @@ import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.Namespace;
 import org.jdom2.input.SAXBuilder;
-import org.pathvisio.libgpml.debug.*;
+import org.pathvisio.libgpml.debug.Logger;
 import org.pathvisio.libgpml.io.AbstractPathwayModelFormat;
 import org.pathvisio.libgpml.io.ConverterException;
 import org.pathvisio.libgpml.util.RootElementFinder;
@@ -51,7 +51,7 @@ import org.xml.sax.InputSource;
  * <li>Pathways are saved/written in the current gpml format.
  * <li>Export allows writing to the previous gpml format.
  * </ol>
- * 
+ *
  * @author unknown, finterly
  */
 public class GpmlFormat extends AbstractPathwayModelFormat {
@@ -66,7 +66,7 @@ public class GpmlFormat extends AbstractPathwayModelFormat {
 	// ================================================================================
 	/**
 	 * Instantiates a GpmlFormat.
-	 * 
+	 *
 	 * @param writer
 	 */
 	public GpmlFormat(GpmlFormatWriter writer) {
@@ -86,9 +86,10 @@ public class GpmlFormat extends AbstractPathwayModelFormat {
 	/**
 	 *
 	 */
+	@Override
 	public PathwayModel doImport(File file) throws ConverterException {
 		PathwayModel pathwayModel = new PathwayModel();
-		readFromXml(pathwayModel, file, true); // TODO validate always true here?
+		readFromXml(pathwayModel, file, true); // always validate
 		pathwayModel.clearChangedFlag();
 		return pathwayModel;
 	}
@@ -99,13 +100,15 @@ public class GpmlFormat extends AbstractPathwayModelFormat {
 	/**
 	 *
 	 */
+	@Override
 	public void doExport(File file, PathwayModel pathwayModel) throws ConverterException {
-		writeToXml(pathwayModel, file, true); // TODO validate always true here?
+		writeToXml(pathwayModel, file, true); // always validate
 	}
 
 	/**
 	 *
 	 */
+	@Override
 	public String[] getExtensions() {
 		return new String[] { "gpml", "xml" };
 	}
@@ -113,6 +116,7 @@ public class GpmlFormat extends AbstractPathwayModelFormat {
 	/**
 	 *
 	 */
+	@Override
 	public String getName() {
 		if (writer instanceof GPML2013aWriter) {
 			return "GPML2013a file";
@@ -133,19 +137,9 @@ public class GpmlFormat extends AbstractPathwayModelFormat {
 		return writer.createJdom(data);
 	}
 
-//	static public Element createJdomElement(PathwayElement o) throws ConverterException
-//	{
-//		return CURRENT.createJdomElement(o);
-//	}
-//
-//	public static PathwayElement mapElement(Element e) throws ConverterException
-//	{
-//		return CURRENT.mapElement(e);
-//	}
-
 	/**
 	 * Writes the JDOM document to the file specified
-	 * 
+	 *
 	 * @param pathwayModel the pathway model.
 	 * @param file         the file to which the JDOM document should be saved
 	 * @param validate     if true, validate the dom structure before writing to
@@ -157,6 +151,8 @@ public class GpmlFormat extends AbstractPathwayModelFormat {
 	}
 
 	/**
+	 * Writes the pathway model to output stream.
+	 * 
 	 * @param pathwayModel the pathway model.
 	 * @param out          the file to which the JDOM document should be saved
 	 * @param validate     if true, validate the dom structure before writing to
@@ -168,9 +164,12 @@ public class GpmlFormat extends AbstractPathwayModelFormat {
 		writer.writeToXml(pathwayModel, out, validate);
 	}
 
+	// ================================================================================
+	// Read Methods
+	// ================================================================================
 	/**
-	 * Read the JDOM document from the file specified
-	 * 
+	 * Reads the JDOM document from the file specified
+	 *
 	 * @param pathwayModel the pathway model.
 	 * @param file         the file from which the JDOM document should be read.
 	 * @param validate     if true, validate the dom structure during/after reading.
@@ -186,33 +185,9 @@ public class GpmlFormat extends AbstractPathwayModelFormat {
 		readFromXmlImpl(pathwayModel, new InputSource(in), validate);
 	}
 
-	// ================================================================================
-	// Read Methods
-	// ================================================================================
 	/**
-	 * Read the JDOM document from the string specified
-	 * 
-	 * @param pathwayModel the pathway model.
-	 * @param str          the file from which the JDOM document should be read.
-	 * @param validate     if true, validate the dom structure during/after reading.
-	 * @throws ConverterException
-	 */
-	static public void readFromXml(PathwayModel pathwayModel, String str, boolean validate) throws ConverterException {
-		if (str == null) {
-			return;
-		}
-		InputStream in;
-		try {
-			in = new ByteArrayInputStream(str.getBytes(StandardCharsets.UTF_8));// TODO does this work?
-		} catch (Exception e) {
-			throw new ConverterException(e);
-		}
-		readFromXmlImpl(pathwayModel, new InputSource(in), validate);
-	}
-
-	/**
-	 * Read the JDOM document from the string specified
-	 * 
+	 * Reads the JDOM document from the string specified
+	 *
 	 * @param pathwayModel the pathway model.
 	 * @param in           the file from which the JDOM document should be read.
 	 * @param validate     if true, validate the dom structure during/after reading.
@@ -224,8 +199,8 @@ public class GpmlFormat extends AbstractPathwayModelFormat {
 	}
 
 	/**
-	 * Read the JDOM document from the string specified
-	 * 
+	 * Reads the JDOM document from the string specified
+	 *
 	 * @param pathwayModel the pathway model.
 	 * @param in           the file from which the JDOM document should be read.
 	 * @param validate     if true, validate the dom structure during/after reading.
@@ -237,7 +212,7 @@ public class GpmlFormat extends AbstractPathwayModelFormat {
 
 	/**
 	 * Returns GPML reader given namespace.
-	 * 
+	 *
 	 * @param ns the given namespace.
 	 * @return the correct GPML reader for the given namespace.
 	 */
@@ -254,7 +229,7 @@ public class GpmlFormat extends AbstractPathwayModelFormat {
 
 	/**
 	 * Reads a pathway model from given input source.
-	 * 
+	 *
 	 * @param pathwayModel the pathway model.
 	 * @param is           the file from which the JDOM document should be read.
 	 * @param validate     if true, validate the dom structure during/after reading.
@@ -355,7 +330,10 @@ public class GpmlFormat extends AbstractPathwayModelFormat {
 //	}
 
 	/**
+	 * Returns true if file type is correct. 
+	 * 
 	 * @param f the file.
+	 * @return true if file type correct. 
 	 */
 	@Override
 	public boolean isCorrectType(File f) {
@@ -369,7 +347,7 @@ public class GpmlFormat extends AbstractPathwayModelFormat {
 		}
 	}
 
-//	@Override  TODO 
+	@Override
 	public void doExport(File file, PathwayModel pathwayModel, int zoom) throws ConverterException {
 		// TODO Auto-generated method stub
 	}

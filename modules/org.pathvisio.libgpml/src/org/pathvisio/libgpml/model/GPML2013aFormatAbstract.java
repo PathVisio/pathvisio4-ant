@@ -1,13 +1,13 @@
 /*******************************************************************************
  * PathVisio, a tool for data visualization and analysis using biological pathways
  * Copyright 2006-2022 BiGCaT Bioinformatics, WikiPathways
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License.  You may obtain a copy
  * of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the
@@ -55,7 +55,7 @@ import org.xml.sax.SAXException;
  * Abstract class for GPML2013a format. Contains static properties
  * {@link String}, {@link Map}, {@link BidiMap}, {@link List}, and methods used
  * in reading or writing GPML2013a.
- * 
+ *
  * @author finterly
  */
 public abstract class GPML2013aFormatAbstract {
@@ -72,7 +72,7 @@ public abstract class GPML2013aFormatAbstract {
 
 	/**
 	 * Constructor for GPML2013aFormat Abstract.
-	 * 
+	 *
 	 * @param xsdFile the schema file.
 	 * @param nsGPML  the GPML namespace.
 	 */
@@ -83,7 +83,7 @@ public abstract class GPML2013aFormatAbstract {
 
 	/**
 	 * Returns the GPML schema file.
-	 * 
+	 *
 	 * @return xsdFile the schema file.
 	 */
 	public String getSchemaFile() {
@@ -92,7 +92,7 @@ public abstract class GPML2013aFormatAbstract {
 
 	/**
 	 * Returns the GPML namespace.
-	 * 
+	 *
 	 * @return nsGPML the GPML namespace.
 	 */
 	public Namespace getGpmlNamespace() {
@@ -168,7 +168,7 @@ public abstract class GPML2013aFormatAbstract {
 	 * Converts shapeType {@link String} to UpperCamelCase convention. In GPML2013a,
 	 * naming convention was inconsistent. Moving forward, enum types strings are
 	 * all in UpperCamelCase.
-	 * 
+	 *
 	 * @param str the string.
 	 * @return the string in camelCase format, or string as it was.
 	 * @throws ConverterException
@@ -183,7 +183,7 @@ public abstract class GPML2013aFormatAbstract {
 	/**
 	 * Converts shapeType {@link String} from UpperCamelCase convention back to its
 	 * original appearance in GPML2013a.
-	 * 
+	 *
 	 * @param str the string.
 	 * @return the string in its original format.
 	 * @throws ConverterException
@@ -353,7 +353,7 @@ public abstract class GPML2013aFormatAbstract {
 	/**
 	 * Returns the GPML2021 Interaction Panel arrow head type for given GPML2013a
 	 * arrowHead type string.
-	 * 
+	 *
 	 * @param arrowHeadStr the string for GPML2013a arrow head type.
 	 * @return arrowHead the interaction panel arrow head type which corresponds to
 	 *         arrowHeadStr, or null if no corresponding type exists.
@@ -374,7 +374,7 @@ public abstract class GPML2013aFormatAbstract {
 	/**
 	 * Returns the prioritized GPML2013a arrowHead type string for given GPML2021
 	 * Interaction Panel arrow head type.
-	 * 
+	 *
 	 * @param arrowHead the interaction panel arrow head type for GPML2021e.
 	 * @return the first GPML2013a arrow head which corresponds to the interaction
 	 *         panel arrow head type, or null if no corresponding type exists.
@@ -392,7 +392,7 @@ public abstract class GPML2013aFormatAbstract {
 
 	/**
 	 * Attribute info map is initiated with {@link #initAttributeInfo()}.
-	 * 
+	 *
 	 */
 	private static final Map<String, AttributeInfo> ATTRIBUTE_INFO = initAttributeInfo();
 
@@ -405,12 +405,12 @@ public abstract class GPML2013aFormatAbstract {
 	 * fetched from this map. When writing, if trying to set a default value or an
 	 * optional value to null, the attribute is omitted which results in a leaner
 	 * xml output.
-	 * 
+	 *
 	 * This map defines custom default values not in the GPML2013a schema such as
 	 * default "Label.Graphics@FillColor" as "Transparent". We do not do this for
 	 * GPML2021 as it can be confusing to have custom reading/writing resulting in
 	 * xml which do not adhere to the schema.
-	 * 
+	 *
 	 * @return
 	 */
 	private static Map<String, AttributeInfo> initAttributeInfo() {
@@ -603,7 +603,7 @@ public abstract class GPML2013aFormatAbstract {
 
 		/**
 		 * Creates an object containing the gpml schema definition of a given attribute.
-		 * 
+		 *
 		 * @param aSchemaType the xsd validated type of the attribute.
 		 * @param aDef        the default value for the attribute.
 		 * @param aUse        the use of the attribute.
@@ -617,7 +617,7 @@ public abstract class GPML2013aFormatAbstract {
 
 	/**
 	 * Returns true if given string value and default value are equal.
-	 * 
+	 *
 	 * @param def   the default string.
 	 * @param value the given string.
 	 * @return true if the specified arguments are equal, or both null.
@@ -629,7 +629,7 @@ public abstract class GPML2013aFormatAbstract {
 
 	/**
 	 * Returns true if given string value and default value are numerically equal.
-	 * 
+	 *
 	 * @param def   the string for default number value.
 	 * @param value the string for given number value.
 	 * @return true if absolute value of difference between def and value is less
@@ -647,7 +647,7 @@ public abstract class GPML2013aFormatAbstract {
 
 	/**
 	 * Returns true if given value and default value are the same color object.
-	 * 
+	 *
 	 * @param def   the string for default color object.
 	 * @param value the string for given color object.
 	 * @return true if color is equal, false otherwise.
@@ -721,7 +721,7 @@ public abstract class GPML2013aFormatAbstract {
 	/**
 	 * Removes group from pathwayModel if empty. Check executed after reading and
 	 * before writing.
-	 * 
+	 *
 	 * @param pathwayModel the pathway model.
 	 * @throws ConverterException
 	 */
@@ -742,7 +742,7 @@ public abstract class GPML2013aFormatAbstract {
 	/**
 	 * validates a JDOM document against the xml-schema definition specified by
 	 * 'xsdFile'
-	 * 
+	 *
 	 * @param doc the document to validate
 	 */
 	public void validateDocument(Document doc) throws ConverterException {

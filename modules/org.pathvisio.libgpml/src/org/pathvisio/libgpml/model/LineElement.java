@@ -1,13 +1,13 @@
 /*******************************************************************************
  * PathVisio, a tool for data visualization and analysis using biological pathways
  * Copyright 2006-2022 BiGCaT Bioinformatics, WikiPathways
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License.  You may obtain a copy
  * of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the
@@ -28,12 +28,11 @@ import java.util.Set;
 import org.pathvisio.libgpml.debug.Logger;
 import org.pathvisio.libgpml.model.GraphLink.LinkableFrom;
 import org.pathvisio.libgpml.model.GraphLink.LinkableTo;
-import org.pathvisio.libgpml.model.LineElement.LinePoint;
 import org.pathvisio.libgpml.model.connector.ConnectorRestrictions;
 import org.pathvisio.libgpml.model.connector.ConnectorShape;
+import org.pathvisio.libgpml.model.connector.ConnectorShape.WayPoint;
 import org.pathvisio.libgpml.model.connector.ConnectorShapeFactory;
 import org.pathvisio.libgpml.model.connector.ElbowConnectorShape;
-import org.pathvisio.libgpml.model.connector.ConnectorShape.WayPoint;
 import org.pathvisio.libgpml.model.type.AnchorShapeType;
 import org.pathvisio.libgpml.model.type.ArrowHeadType;
 import org.pathvisio.libgpml.model.type.ConnectorType;
@@ -45,7 +44,7 @@ import org.pathvisio.libgpml.util.Utils;
 /**
  * This abstract class stores information for a Line pathway element, e.g.
  * {@link GraphicalLine} or {@link Interaction}.
- * 
+ *
  * @author finterly
  */
 public abstract class LineElement extends PathwayElement implements Groupable, ConnectorRestrictions {
@@ -68,7 +67,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 	// ================================================================================
 	/**
 	 * Instantiates a line pathway element.
-	 * 
+	 *
 	 * NB: Property groupRef is to be set by {@link #setGroupRefTo(Group)}. In GPML,
 	 * groupRef refers to the elementId (formerly groupId) of the parent gpml:Group.
 	 * Note, a group can also belong in another group. Graphics properties have
@@ -90,7 +89,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 	 * Returns the arrowHead property of the start point. Arrowhead specifies the
 	 * glyph at the ends of graphical lines and interactions. Intermediate points
 	 * have arrowhead type UNDIRECTED (the absence of an arrowhead).
-	 * 
+	 *
 	 * @return startArrowHeadType the arrow head type.
 	 */
 	public ArrowHeadType getStartArrowHeadType() {
@@ -99,7 +98,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 
 	/**
 	 * Sets the arrow head type of the start point.
-	 * 
+	 *
 	 * @param value the arrow head type to set.
 	 */
 	public void setStartArrowHeadType(ArrowHeadType value) {
@@ -114,7 +113,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 	 * Returns the arrowHead property of the end point. Arrowhead specifies the
 	 * glyph at the ends of graphical lines and interactions. Intermediate points
 	 * have arrowhead type UNDIRECTED (the absence of an arrowhead).
-	 * 
+	 *
 	 * @return endArrowHeadType the arrow head type.
 	 */
 	public ArrowHeadType getEndArrowHeadType() {
@@ -123,7 +122,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 
 	/**
 	 * Sets the arrow head type of the end point.
-	 * 
+	 *
 	 * @param value the arrow head type to set.
 	 */
 	public void setEndArrowHeadType(ArrowHeadType value) {
@@ -137,7 +136,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 	/**
 	 * Returns the parent group of this pathway element. In GPML, groupRef refers to
 	 * the elementId (formerly groupId) of the parent gpml:Group.
-	 * 
+	 *
 	 * @return groupRef the parent group of this pathway element.
 	 */
 	@Override
@@ -160,7 +159,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 	 * this pathway element. Adds this pathway element to the the pathwayElements
 	 * list of the new parent group. If there is an old parent group, this pathway
 	 * element is removed from its pathwayElements list.
-	 * 
+	 *
 	 * @param v the new parent group to set.
 	 */
 	@Override
@@ -181,7 +180,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 
 	/**
 	 * Sets the parent group for this pathway element.
-	 * 
+	 *
 	 * @param v the given group to set.
 	 */
 	private void setGroupRef(Group v) {
@@ -208,7 +207,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 	// ================================================================================
 	/**
 	 * Get the points for this line.
-	 * 
+	 *
 	 * @return points the list of points, an empty list if no anchors are defined.
 	 */
 	public List<LinePoint> getLinePoints() {
@@ -218,7 +217,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 	/**
 	 * Sets linePoints to the given list of LinePoints. Removes old points
 	 * {@link removeLinePoints}, if any, then adds new points {@link addLinePoints}.
-	 * 
+	 *
 	 * @param points the list of points to set.
 	 */
 	public void setLinePoints(List<LinePoint> points) {
@@ -239,7 +238,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 	 * Adds all given points to the linePoints list. Adds each point to the pathway
 	 * model {@link PathwayModel#addPathwayObject} if applicable. This method is
 	 * called only by {@link #setLinePoints}.
-	 * 
+	 *
 	 * @param points the points.
 	 */
 	private void addLinePoints(List<LinePoint> points) {
@@ -275,7 +274,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 	// ================================================================================
 	/**
 	 * Get the anchors for this line.
-	 * 
+	 *
 	 * @return anchors the list of anchors, an empty list if no anchors are defined.
 	 */
 	public List<Anchor> getAnchors() {
@@ -284,7 +283,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 
 	/**
 	 * Checks whether anchors has the given anchor.
-	 * 
+	 *
 	 * @param anchor the anchor to look for.
 	 * @return true if has anchor, false otherwise.
 	 */
@@ -294,7 +293,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 
 	/**
 	 * Adds given anchor to anchors list. Sets lineElement for the given anchor.
-	 * 
+	 *
 	 * @param anchor the anchor to be added.
 	 */
 	public void addAnchor(Anchor anchor) {
@@ -312,7 +311,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 	/**
 	 * Adds a new anchor to this line at the given position with anchorShapeType
 	 * property. Calls {@link #addAnchor(Anchor anchor)}.
-	 * 
+	 *
 	 * @param position        the relative position on the line, between 0 (start)
 	 *                        to 1 (end).
 	 * @param anchorShapeType the shape type of the anchor.
@@ -328,7 +327,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 	 * anchorShapeType property. Anchor elementId is set immediately after creation.
 	 * This method is used when reading gpml.Calls
 	 * {@link #addAnchor(Anchor anchor)}.
-	 * 
+	 *
 	 * @param elementId       the elementId to set for created anchor.
 	 * @param position        the relative position on the line, between 0 (start)
 	 *                        to 1 (end).
@@ -344,7 +343,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 	/**
 	 * Removes given anchor from the anchors list. Anchor ceases to exist and is
 	 * terminated.
-	 * 
+	 *
 	 * @param anchor the anchor to be removed.
 	 */
 	public void removeAnchor(Anchor anchor) {
@@ -372,7 +371,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 	// ================================================================================
 	/**
 	 * Returns the color of a line.
-	 * 
+	 *
 	 * @return lineColor the color of a line.
 	 */
 	public Color getLineColor() {
@@ -385,7 +384,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 
 	/**
 	 * Sets the color of a line.
-	 * 
+	 *
 	 * @param v the color of a line.
 	 * @throws IllegalArgumentException if color null.
 	 */
@@ -401,7 +400,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 
 	/**
 	 * Returns the visual appearance of a line, e.g. Solid or Broken.
-	 * 
+	 *
 	 * @return lineStyle the style of a line.
 	 */
 	public LineStyleType getLineStyle() {
@@ -414,7 +413,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 
 	/**
 	 * Sets the visual appearance of a line, e.g. Solid or Broken.
-	 * 
+	 *
 	 * @param v the line style to set.
 	 * @throws IllegalArgumentException if lineStyle null.
 	 */
@@ -430,7 +429,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 
 	/**
 	 * Returns the pixel value for the width of a line.
-	 * 
+	 *
 	 * @return lineWidth the width of a line.
 	 */
 	public double getLineWidth() {
@@ -443,7 +442,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 
 	/**
 	 * Sets the pixel value for the width of a line.
-	 * 
+	 *
 	 * @param v the width of a line.
 	 * @throws IllegalArgumentException if lineWidth is a negative value.
 	 */
@@ -461,7 +460,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 	 * Returns the value of the connectorType property. Specifies a set of rules to
 	 * govern layout of Graphical Lines and Interactions. PathVisio (Java): Line
 	 * Type and GPML: ConnectorType e.g. Curved, Elbow, Straight
-	 * 
+	 *
 	 * @return connectorType the layout of a line.
 	 */
 	public ConnectorType getConnectorType() {
@@ -476,7 +475,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 	 * Sets the value of the connectorType property. Specifies a set of rules to
 	 * govern layout of Graphical Lines and Interactions. PathVisio (Java): Line
 	 * Type and GPML: ConnectorType e.g. Curved, Elbow, Straight
-	 * 
+	 *
 	 * @param v the layout of a line.
 	 * @throws IllegalArgumentException if ConnectorType null.
 	 */
@@ -492,18 +491,20 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 
 	/**
 	 * Returns the z-order of this pathway element.
-	 * 
+	 *
 	 * @return zOrder the order of this pathway element.
 	 */
+	@Override
 	public int getZOrder() {
 		return zOrder;
 	}
 
 	/**
 	 * Sets the z-order of this pathway element.
-	 * 
+	 *
 	 * @param v the order of this pathway element.
 	 */
+	@Override
 	public void setZOrder(int v) {
 		if (zOrder != v) {
 			zOrder = v;
@@ -516,7 +517,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 	// ================================================================================
 	/**
 	 * Returns the start (first) point of points list.
-	 * 
+	 *
 	 * @return the first point of points list.
 	 */
 	public LinePoint getStartLinePoint() {
@@ -525,7 +526,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 
 	/**
 	 * Sets start linePoint coordinates to the coordinates of the given linePoint.
-	 * 
+	 *
 	 * @param linePoint the given line point.
 	 */
 	public void setStartLinePoint(LinePoint linePoint) {
@@ -534,7 +535,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 
 	/**
 	 * Returns the end (last) point of points list.
-	 * 
+	 *
 	 * @return the last point of points list.
 	 */
 	public LinePoint getEndLinePoint() {
@@ -543,7 +544,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 
 	/**
 	 * Sets end linePoint coordinates to the coordinates of the given linePoint.
-	 * 
+	 *
 	 * @param linePoint the given line point.
 	 */
 	public void setEndLinePoint(LinePoint linePoint) {
@@ -552,7 +553,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 
 	/**
 	 * Returns the x coordinate of the start point.
-	 * 
+	 *
 	 * @return the x coordinate of the start point.
 	 */
 	public double getStartLinePointX() {
@@ -561,7 +562,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 
 	/**
 	 * Sets the x coordinate of the start point.
-	 * 
+	 *
 	 * @param v the value to set.
 	 */
 	public void setStartLinePointX(double v) {
@@ -570,7 +571,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 
 	/**
 	 * Returns the y coordinate of the start point.
-	 * 
+	 *
 	 * @return the y coordinate of the start point.
 	 */
 	public double getStartLinePointY() {
@@ -579,7 +580,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 
 	/**
 	 * Sets the y coordinate of the start point.
-	 * 
+	 *
 	 * @param v the value to set.
 	 */
 	public void setStartLinePointY(double v) {
@@ -588,7 +589,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 
 	/**
 	 * Returns the x coordinate of the end point.
-	 * 
+	 *
 	 * @return the x coordinate of the end point.
 	 */
 	public double getEndLinePointX() {
@@ -597,7 +598,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 
 	/**
 	 * Sets the x coordinate of the end point.
-	 * 
+	 *
 	 * @param v the value to set.
 	 */
 	public void setEndLinePointX(double v) {
@@ -606,7 +607,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 
 	/**
 	 * Returns the y coordinate of the end point.
-	 * 
+	 *
 	 * @return the y coordinate of the end point.
 	 */
 	public double getEndLinePointY() {
@@ -615,7 +616,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 
 	/**
 	 * Sets the y coordinate of the end point.
-	 * 
+	 *
 	 * @param v the value to set.
 	 */
 	public void setEndLinePointY(double v) {
@@ -624,7 +625,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 
 	/**
 	 * Returns the elementRef of the end point.
-	 * 
+	 *
 	 * @return the elementRef linkableTo pathway element.
 	 */
 	public LinkableTo getStartElementRef() {
@@ -632,8 +633,8 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 	}
 
 	/**
-	 * Sets the elementRef for the start point. TODO
-	 * 
+	 * Sets the elementRef for the start point. 
+	 *
 	 * @param elementRef to link to.
 	 */
 	public void setStartElementRef(LinkableTo elementRef) {
@@ -642,7 +643,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 
 	/**
 	 * Returns the elementRef of the end point.
-	 * 
+	 *
 	 * @return the elementRef linkableTo pathway element.
 	 */
 	public LinkableTo getEndElementRef() {
@@ -650,8 +651,8 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 	}
 
 	/**
-	 * Sets the elementRef for the end point. TODO
-	 * 
+	 * Sets the elementRef for the end point.
+	 *
 	 * @param elementRef to link to.
 	 */
 	public void setEndElementRef(LinkableTo elementRef) {
@@ -663,11 +664,13 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 	// Point2D Methods
 	// ================================================================================
 	/** converts start point from MPoint to Point2D */
+	@Override
 	public Point2D getStartPoint2D() {
 		return getStartLinePoint().toPoint2D();
 	}
 
 	/** converts end point from MPoint to Point2D */
+	@Override
 	public Point2D getEndPoint2D() {
 		return getEndLinePoint().toPoint2D();
 	}
@@ -688,7 +691,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 	 * Returns the rectangular bounds of this line pathway elements. This method
 	 * simply calls {@link #getBounds()} because lines do not have property
 	 * rotation.
-	 * 
+	 *
 	 * @return the rectangular bounds for this line pathway element.
 	 */
 	@Override
@@ -699,7 +702,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 	/**
 	 * Returns the rectangular bounds for this line pathway element. The bounds for
 	 * a line is calculated from its ends points (first and last).
-	 * 
+	 *
 	 * @return the rectangular bounds for this line pathway element.
 	 */
 	@Override
@@ -711,6 +714,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 	 * Returns the center x coordinate of the bounding box around (start, end) this
 	 * line pathway element.
 	 */
+	@Override
 	public double getCenterX() {
 		double start = getStartLinePointX();
 		double end = getEndLinePointX();
@@ -721,6 +725,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 	 * Sets the x position of the center of the line. This makes the line move as a
 	 * whole
 	 */
+	@Override
 	public void setCenterX(double v) {
 		double dx = v - getCenterX();
 		setStartLinePointX(getStartLinePointX() + dx);
@@ -731,6 +736,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 	 * Returns the center y coordinate of the bounding box around (start, end) this
 	 * line pathway element.
 	 */
+	@Override
 	public double getCenterY() {
 		double start = getStartLinePointY();
 		double end = getEndLinePointY();
@@ -741,6 +747,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 	 * Sets the y position of the center of the line. This makes the line move as a
 	 * whole.
 	 */
+	@Override
 	public void setCenterY(double v) {
 		double dy = v - getCenterY();
 		setStartLinePointY(getStartLinePointY() + dy);
@@ -751,6 +758,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 	 * Calculates and returns the width of the bounding box around (start, end) this
 	 * line pathway element.
 	 */
+	@Override
 	public double getWidth() {
 		double start = getStartLinePointX();
 		double end = getEndLinePointX();
@@ -761,6 +769,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 	 * Calculates and returns the height of the bounding box around (start, end)
 	 * this line pathway element.
 	 */
+	@Override
 	public double getHeight() {
 		double start = getStartLinePointY();
 		double end = getEndLinePointY();
@@ -771,6 +780,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 	 * Returns the left x coordinate of the bounding box around (start, end) this
 	 * line pathway element.
 	 */
+	@Override
 	public double getLeft() {
 		double start = getStartLinePointX();
 		double end = getEndLinePointX();
@@ -780,6 +790,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 	/**
 	 * Sets the position of the left side of the rectangular bounds of the line
 	 */
+	@Override
 	public void setLeft(double v) {
 		if (getDirectionX() > 0) {
 			setStartLinePointX(v);
@@ -792,6 +803,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 	 * Returns the top y coordinate of the bounding box around (start, end) this
 	 * line pathway element.
 	 */
+	@Override
 	public double getTop() {
 		double start = getStartLinePointY();
 		double end = getEndLinePointY();
@@ -801,6 +813,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 	/**
 	 * Sets the position of the top side of the rectangular bounds of the line
 	 */
+	@Override
 	public void setTop(double v) {
 		if (getDirectionY() > 0) {
 			setStartLinePointY(v);
@@ -823,6 +836,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 	 * @param p
 	 * @return
 	 */
+	@Override
 	public Point2D toAbsoluteCoordinate(Point2D p) {
 		double x = p.getX();
 		double y = p.getY();
@@ -844,6 +858,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 	 *         -1,-1 meaning the top-left corner, 1,1 meaning the bottom right
 	 *         corner, and 0,0 meaning the center.
 	 */
+	@Override
 	public Point2D toRelativeCoordinate(Point2D mp) {
 		double relX = mp.getX();
 		double relY = mp.getY();
@@ -887,6 +902,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 	 *
 	 * If the start is not connected to anything, returns SIDE_WEST
 	 */
+	@Override
 	public int getStartSide() {
 		int side = SIDE_WEST;
 
@@ -907,6 +923,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 	 *
 	 * If the end is not connected to anything, returns SIDE_EAST
 	 */
+	@Override
 	public int getEndSide() {
 		int side = SIDE_EAST;
 
@@ -963,7 +980,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 	/**
 	 * Check if either the line segment has less than or equal to 10 degree
 	 * alignment with the side passed
-	 * 
+	 *
 	 * @param side
 	 * @return true if less or equal to 10 degree alignment else false
 	 */
@@ -1030,6 +1047,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 	 * waypoints returned by this method are preferences and the connector shape may
 	 * decide not to use them if they are invalid.
 	 */
+	@Override
 	public WayPoint[] getWayPointPreferences() {
 		List<LinePoint> pts = linePoints;
 		WayPoint[] wps = new WayPoint[pts.size() - 2];
@@ -1042,7 +1060,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 	/**
 	 * Get the side of the given pathway element to which the x and y coordinates
 	 * connect
-	 * 
+	 *
 	 * @param x  the x coordinate
 	 * @param y  the y coordinate
 	 * @param cx
@@ -1093,18 +1111,19 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 	 * defines the boundaries of the area around this point that the connector may
 	 * not cross. This method can be used for advanced connectors that route along
 	 * other objects on the drawing
-	 * 
+	 *
 	 * @return A shape that defines the boundaries of the area around this point
 	 *         that the connector may not cross. Returning null is allowed for
 	 *         implementing classes.
 	 */
-	public Rectangle2D mayCross(Point2D point) { // TODO was Shape before...
+	@Override
+	public Rectangle2D mayCross(Point2D point) { //TODO 
 		PathwayModel pathwayModel = getPathwayModel();
 		Rectangle2D rect = null;
 		if (pathwayModel != null) {
-			for (PathwayObject e : pathwayModel.getPathwayObjects()) { // TODO Object or Elements?
+			for (PathwayObject e : pathwayModel.getPathwayObjects()) { 
 				if (e.getClass() == Shape.class || e.getClass() == DataNode.class || e.getClass() == Label.class) {
-					Rectangle2D b = ((ShapedElement) e).getBounds(); // TODO okay???
+					Rectangle2D b = ((ShapedElement) e).getBounds();
 					if (b.contains(point)) {
 						if (rect == null)
 							rect = b;
@@ -1123,10 +1142,10 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 	/**
 	 * Sets the pathway model for this pathway element. NB: Only set when a pathway
 	 * model adds this pathway element.
-	 * 
+	 *
 	 * NB: This method is not used directly. It is called by
 	 * {@link PathwayModel#addPathwayObject}.
-	 * 
+	 *
 	 * @param pathwayModel the parent pathway model.
 	 */
 	@Override
@@ -1157,13 +1176,18 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 	// Copy Methods
 	// ================================================================================
 	/**
-	 * Note: doesn't change parent, only fields
+	 * Copies values from the given source pathway element.
 	 *
-	 * Used by UndoAction.
+	 * <p>
+	 * NB:
+	 * <ol>
+	 * <li>GroupRef is not copied, but can be set later if the parent group and all
+	 * other pathway element members are copied.
+	 * </ol>
 	 *
-	 * @param src
+	 * @param src the source pathway element.
 	 */
-	public void copyValuesFrom(LineElement src) { // TODO
+	public void copyValuesFrom(LineElement src) {
 		super.copyValuesFrom(src);
 		groupRef = src.groupRef;
 		// copy line points
@@ -1191,7 +1215,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 	// ================================================================================
 	/**
 	 * Returns all static properties for this pathway object.
-	 * 
+	 *
 	 * @return result the set of static property for this pathway object.
 	 */
 	@Override
@@ -1207,7 +1231,10 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 	}
 
 	/**
+	 * Returns static property value for given key.
 	 *
+	 * @param key the key.
+	 * @return the static property value.
 	 */
 	@Override
 	public Object getStaticProperty(StaticProperty key) {
@@ -1221,13 +1248,13 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 				result = getLineColor();
 				break;
 			case LINESTYLE:
-				result = getLineStyle().getName();// TODO
+				result = getLineStyle().getName();
 				break;
 			case LINEWIDTH:
 				result = getLineWidth();
 				break;
 			case CONNECTORTYPE:
-				result = getConnectorType().getName(); // TODO
+				result = getConnectorType().getName(); 
 				break;
 			case STARTX:
 				result = getStartLinePointX();
@@ -1242,10 +1269,10 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 				result = getEndLinePointY();
 				break;
 			case STARTARROWHEADTYPE:
-				result = getStartArrowHeadType().getName(); // TODO
+				result = getStartArrowHeadType().getName();
 				break;
 			case ENDARROWHEADTYPE:
-				result = getEndArrowHeadType().getName();// TODO
+				result = getEndArrowHeadType().getName();
 				break;
 			case STARTELEMENTREF:
 				result = getStartElementRef();
@@ -1269,8 +1296,8 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 	 *
 	 * Value may be null in some cases, e.g. graphRef
 	 *
-	 * @param key
-	 * @param value
+	 * @param key   the key.
+	 * @param value the property value.
 	 */
 	@Override
 	public void setStaticProperty(StaticProperty key, Object value) {
@@ -1345,10 +1372,10 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 	/**
 	 * Abstract class of generic point, extended by {@link LinePoint} and
 	 * {@link Anchor}.
-	 * 
+	 *
 	 * @author unknown, finterly
 	 */
-	public abstract class GenericPoint extends PathwayObject implements Drawable { // TODO
+	public abstract class GenericPoint extends PathwayObject implements Drawable { 
 
 		// ================================================================================
 		// Constructors
@@ -1365,7 +1392,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 		// ================================================================================
 		/**
 		 * Returns the parent interaction or graphicalLine for this point.
-		 * 
+		 *
 		 * @return lineElement the parent line element of this point.
 		 */
 		public LineElement getLineElement() {
@@ -1379,10 +1406,10 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 		/**
 		 * Sets the pathway model for this line point or anchor. The generic point must
 		 * be added to the same pathway model as its parent line.
-		 * 
+		 *
 		 * NB: This method is not used directly. It is called by
 		 * {@link PathwayModel#addPathwayObject}.
-		 * 
+		 *
 		 * @param pathwayModel the parent pathway model.
 		 */
 		@Override
@@ -1408,7 +1435,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 	 * This class stores information for a Point pathway element. This class is
 	 * named LinePoint to avoid name conflict with awt.Point in downstream
 	 * applications.
-	 * 
+	 *
 	 * @author finterly
 	 */
 	public class LinePoint extends GenericPoint implements LinkableFrom {
@@ -1426,10 +1453,9 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 		/**
 		 * Instantiates a Point pathway element, with no reference to another pathway
 		 * element. Method {@link #linkTo} to set elementRef, relX, relY.
-		 * 
-		 * @param arrowHead the arrowhead property of the point (line by default).
-		 * @param x         the x coordinate position of the point.
-		 * @param y         the y coordinate position of the point.
+		 *
+		 * @param x the x coordinate position of the point.
+		 * @param y the y coordinate position of the point.
 		 */
 		public LinePoint(double x, double y) {
 			super();
@@ -1449,7 +1475,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 		// ================================================================================
 		/**
 		 * Returns the object type of this pathway element.
-		 * 
+		 *
 		 * @return the object type.
 		 */
 		@Override
@@ -1459,7 +1485,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 
 		/**
 		 * Returns x coordinate value.
-		 * 
+		 *
 		 * @return x the coordinate value for x.
 		 */
 		public double getX() {
@@ -1472,7 +1498,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 
 		/**
 		 * Sets x coordinate to given value.
-		 * 
+		 *
 		 * @param v the coordinate value to set for x.
 		 */
 		public void setX(double v) {
@@ -1487,7 +1513,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 
 		/**
 		 * Returns y coordinate value.
-		 * 
+		 *
 		 * @return y the coordinate value for y.
 		 */
 		public double getY() {
@@ -1500,7 +1526,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 
 		/**
 		 * Sets y coordinate to given value.
-		 * 
+		 *
 		 * @param v the coordinate value to set for y.
 		 */
 		public void setY(double v) {
@@ -1515,9 +1541,10 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 		/**
 		 * Returns the pathway element to which this point refers to. In GPML, this is
 		 * elementRef which refers to the elementId of a pathway element.
-		 * 
+		 *
 		 * @return elementRef the pathway element to which this point refers.
 		 */
+		@Override
 		public LinkableTo getElementRef() {
 			return elementRef;
 		}
@@ -1551,9 +1578,10 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 		 * pathway element, relX and relY are the relative coordinates on the element,
 		 * where 0,0 is at the center of the object and 1,1 at the bottom right corner
 		 * of the object.
-		 * 
+		 *
 		 * @return relX the relative x coordinate.
 		 */
+		@Override
 		public double getRelX() {
 			return relX;
 		}
@@ -1563,7 +1591,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 		 * element, relX and relY are the relative coordinates on the element, where 0,0
 		 * is at the center of the object and 1,1 at the bottom right corner of the
 		 * object.
-		 * 
+		 *
 		 * @param v the relative x coordinate.
 		 * @throws IllegalArgumentException if relX is not between -1.0 and 1.0. t
 		 */
@@ -1583,9 +1611,10 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 		 * pathway element, relX and relY are the relative coordinates on the element,
 		 * where 0,0 is at the center of the object and 1,1 at the bottom right corner
 		 * of the object.
-		 * 
+		 *
 		 * @return relY the relative y coordinate.
 		 */
+		@Override
 		public double getRelY() {
 			return relY;
 		}
@@ -1595,7 +1624,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 		 * element, relX and relY are the relative coordinates on the element, where 0,0
 		 * is at the center of the object and 1,1 at the bottom right corner of the
 		 * object.
-		 * 
+		 *
 		 * @param v the relative y coordinate.
 		 */
 		private void setRelY(double v) {
@@ -1616,7 +1645,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 		/**
 		 * Checks if the position of this point should be stored as relative or absolute
 		 * coordinates.
-		 * 
+		 *
 		 * @return true if the coordinates are relative, false otherwise.
 		 */
 		public boolean isRelative() {
@@ -1629,7 +1658,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 
 		/**
 		 * Returns absolute coordinates based on elementRef.
-		 * 
+		 *
 		 * @return
 		 */
 		private Point2D getAbsolute() {
@@ -1638,7 +1667,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 
 		/**
 		 * Returns this line point as a {@link Point2D}.
-		 * 
+		 *
 		 * @return this point as point2d.
 		 */
 		public Point2D toPoint2D() {
@@ -1647,7 +1676,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 
 		/**
 		 * Returns the absolute coordinate as a {@link Point2D}.
-		 * 
+		 *
 		 * @return the absolute coordinate as point2d.
 		 */
 		@Override
@@ -1657,7 +1686,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 
 		/**
 		 * Returns the relative coordinate as a {@link Point2D}.
-		 * 
+		 *
 		 * @return the relative coordinate as point2d.
 		 */
 		@Override
@@ -1667,7 +1696,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 
 		/**
 		 * Links this line point to the given object. Updates xy and relXY coordinates.
-		 * 
+		 *
 		 * @param elementRef the linkableTo pathway element or anchor to link to.
 		 */
 		public void linkTo(LinkableTo elementRef) {
@@ -1681,14 +1710,14 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 
 		/**
 		 * Links this line point to the given object. Updates xy and relXY coordinates.
-		 * 
+		 *
 		 * @param elementRef the linkableTo pathway element or anchor to link to.
 		 * @param relX       the relative x coordinate to set.
 		 * @param relY       the relative y coordinate to set.
 		 */
 		@Override
 		public void linkTo(LinkableTo elementRef, double relX, double relY) {
-//			String id = elementRef.getElementId(); // TODO needed? 
+//			String id = elementRef.getElementId(); // TODO needed?
 //			if (id == null) {
 //				id = ((PathwayObject) elementRef).setGeneratedElementId();
 //			}
@@ -1719,7 +1748,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 		 * pathway element, relX and relY are the relative coordinates on the element,
 		 * where 0,0 is at the center of the object and 1,1 at the bottom right corner
 		 * of the object.
-		 * 
+		 *
 		 * @param relX the relative x coordinate.
 		 * @param relY the relative y coordinate.
 		 */
@@ -1735,7 +1764,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 
 		/**
 		 * Moves x and y coordinates for this line point by the given values.
-		 * 
+		 *
 		 * @param deltaX the value to move x coordinate by.
 		 * @param deltaY the value to move y coordinate by.
 		 */
@@ -1748,7 +1777,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 
 		/**
 		 * Moves x and y coordinates for this line point to given values.
-		 * 
+		 *
 		 * @param vx the value to move x coordinate to.
 		 * @param vy the value to move y coordinate to.
 		 */
@@ -1762,7 +1791,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 		/**
 		 * Moves the xy and relXY coordinates for this line point to the coordinate
 		 * values of the given line point.
-		 * 
+		 *
 		 * @param linePoint the linePoint to move to.
 		 */
 		public void moveTo(LinePoint linePoint) {
@@ -1789,10 +1818,10 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 
 		/**
 		 * Returns the z-order of this pathway element.
-		 * 
+		 *
 		 * NB: LinePoint z-order is always z-order of parent line +1. This is because
 		 * z-order is not written out to the gpml file.
-		 * 
+		 *
 		 * @return zOrder the order of this pathway element.
 		 */
 		@Override
@@ -1803,7 +1832,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 		/**
 		 * Do nothing. LinePoint z-order is always z-order of parent line +1. This is
 		 * because z-order is not written out to the gpml file.
-		 * 
+		 *
 		 * @param v the input
 		 */
 		@Override
@@ -1828,7 +1857,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 	/**
 	 * This class stores information for an Anchor pathway element. Anchor element
 	 * is a connection point on a graphical line or an interaction.
-	 * 
+	 *
 	 * @author finterly
 	 */
 	public class Anchor extends GenericPoint implements LinkableTo {
@@ -1841,7 +1870,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 		// ================================================================================
 		/**
 		 * Instantiates an Anchor pathway element.
-		 * 
+		 *
 		 * @param position  the proportional distance of an anchor along the line it
 		 *                  belongs to.
 		 * @param shapeType the visual representation of an anchor.
@@ -1857,7 +1886,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 		// ================================================================================
 		/**
 		 * Returns the object type of this pathway element.
-		 * 
+		 *
 		 * @return the object type.
 		 */
 		@Override
@@ -1868,7 +1897,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 		/**
 		 * Returns the proportional distance of an anchor along the line it belongs to,
 		 * between 0 and 1.
-		 * 
+		 *
 		 * @return position the position of the anchor.
 		 */
 		public double getPosition() {
@@ -1878,7 +1907,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 		/**
 		 * Sets the proportional distance of an anchor along the line it belongs to,
 		 * between 0 and 1.
-		 * 
+		 *
 		 * @param v the position of the anchor to set.
 		 */
 		public void setPosition(double v) {
@@ -1894,7 +1923,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 
 		/**
 		 * Returns the visual representation of an anchor, e.g., none, square.
-		 * 
+		 *
 		 * @return shapeType the shape type of the anchor. Return default square
 		 *         shapeType if null.
 		 */
@@ -1908,7 +1937,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 
 		/**
 		 * Sets the shapeType for given anchor pathway element.
-		 * 
+		 *
 		 * @param v the shape type of the anchor to set.
 		 * @throws IllegalArgumentException if shapeType null.
 		 */
@@ -1928,10 +1957,10 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 
 		/**
 		 * Returns the z-order of this pathway element.
-		 * 
+		 *
 		 * NB: Anchor z-order is always z-order of parent line +1. This is because
 		 * z-order is not written out to the gpml file.
-		 * 
+		 *
 		 * @return zOrder the order of this pathway element.
 		 */
 		@Override
@@ -1942,7 +1971,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 		/**
 		 * Do nothing. Anchor z-order is always z-order of parent line +1. This is
 		 * because z-order is not written out to the gpml file.
-		 * 
+		 *
 		 * @param v the input
 		 */
 		@Override
@@ -1971,7 +2000,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 
 		/**
 		 * Returns the absolute coordinate as a {@link Point2D}.
-		 * 
+		 *
 		 * @return the absolute coordinate as point2d.
 		 */
 		@Override
@@ -1982,7 +2011,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 
 		/**
 		 * Returns the relative coordinate as a {@link Point2D}.
-		 * 
+		 *
 		 * @return the relative coordinate as point2d.
 		 */
 		@Override

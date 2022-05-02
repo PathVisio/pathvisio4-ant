@@ -63,7 +63,7 @@ public enum VAlignType {
 	/**
 	 * Returns VAlignType enum constant from given string name.
 	 * 
-	 * @param name the string value.
+	 * @param value the string value.
 	 * @return VAlignType enum constant.
 	 */
 	public static VAlignType fromName(String value) {

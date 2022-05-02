@@ -1,13 +1,13 @@
 /*******************************************************************************
  * PathVisio, a tool for data visualization and analysis using biological pathways
  * Copyright 2006-2022 BiGCaT Bioinformatics, WikiPathways
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License.  You may obtain a copy
  * of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the
@@ -18,7 +18,6 @@ package org.pathvisio.libgpml.model;
 
 import java.io.InputStream;
 import java.util.ArrayList;
-
 import java.util.List;
 
 import javax.xml.XMLConstants;
@@ -48,7 +47,7 @@ public abstract class GPML2021FormatAbstract {
 
 	/**
 	 * Constructor for GPML2021Format Abstract.
-	 * 
+	 *
 	 * @param xsdFile the schema file.
 	 * @param nsGPML  the GPML namespace.
 	 */
@@ -59,7 +58,7 @@ public abstract class GPML2021FormatAbstract {
 
 	/**
 	 * Returns the GPML schema file.
-	 * 
+	 *
 	 * @return xsdFile the schema file.
 	 */
 	public String getSchemaFile() {
@@ -68,7 +67,7 @@ public abstract class GPML2021FormatAbstract {
 
 	/**
 	 * Returns the GPML namespace.
-	 * 
+	 *
 	 * @return nsGPML the GPML namespace.
 	 */
 	public Namespace getGpmlNamespace() {
@@ -106,11 +105,11 @@ public abstract class GPML2021FormatAbstract {
 	public final static String LINESTYLE_DEFAULT = "Solid";
 	public final static String LINEWIDTH_DEFAULT = "1.0";
 	public final static String CONNECTORTYPE_DEFAULT = "Straight";
-	
+
 	/**
 	 * Removes group from pathwayModel if empty. Check executed after reading and
 	 * before writing.
-	 * 
+	 *
 	 * @param pathwayModel the pathway model.
 	 * @throws ConverterException
 	 */
@@ -131,7 +130,7 @@ public abstract class GPML2021FormatAbstract {
 	/**
 	 * validates a JDOM document against the xml-schema definition specified by
 	 * 'xsdFile'
-	 * 
+	 *
 	 * @param doc the document to validate
 	 */
 	public void validateDocument(Document doc) throws ConverterException {

@@ -1,13 +1,13 @@
 /*******************************************************************************
  * PathVisio, a tool for data visualization and analysis using biological pathways
  * Copyright 2006-2022 BiGCaT Bioinformatics, WikiPathways
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License.  You may obtain a copy
  * of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the
@@ -64,7 +64,7 @@ import org.pathvisio.libgpml.util.XrefUtils;
  * <li>gpml:CommentGroup:Biopax holds references to bp:PublicationXref rdf:id.
  * <li>All openControlledVocabulary belong to the pathway in GPML2013a.
  * </ol>
- * 
+ *
  * @author finterly
  */
 public class GPML2013aReader extends GPML2013aFormatAbstract implements GpmlFormatReader {
@@ -84,12 +84,12 @@ public class GPML2013aReader extends GPML2013aFormatAbstract implements GpmlForm
 	 * pathway model {@link PathwayModel}. Referenced objects or pathway elements
 	 * are read first. For example, Groups are read before other pathway element.
 	 * DataNodes are read before States. And Points are read last.
-	 * 
-	 * 
+	 *
+	 *
 	 * <p>
 	 * NB: In GPML2013a, GraphIds (elementIds) are missing for some pathway
 	 * elements, or may conflict with Biopax rdf:id or GroupId
-	 * 
+	 *
 	 * <ol>
 	 * <li>elementIdSet: stores all ids for a reading session to ensure unique
 	 * elementIds, {@link #readAllElementIds}
@@ -100,12 +100,12 @@ public class GPML2013aReader extends GPML2013aFormatAbstract implements GpmlForm
 	 * <li>lineList: stores line elementIds in the order read,
 	 * {@link #readGraphicalLines}, {@link #readInteractions}, {@link #readPoints}.
 	 * </ol>
-	 * 
+	 *
 	 * @param pathwayModel the given pathway model.
 	 * @param root         the root element of given Jdom document.
-	 * @return pathwayModel the pathway model after reading root element.
 	 * @throws ConverterException
 	 */
+	@Override
 	public void readFromRoot(PathwayModel pathwayModel, Element root) throws ConverterException {
 
 		Set<String> elementIdSet = new HashSet<String>(); // all elementIds
@@ -142,7 +142,7 @@ public class GPML2013aReader extends GPML2013aFormatAbstract implements GpmlForm
 	 * elementIdSet. In GPML2013a, elementId (previously named GraphId) is sometimes
 	 * missing. In order to assign unique new elementIds, we must first read all
 	 * elementIds from the Jdom document to store in elementIdSet.
-	 * 
+	 *
 	 * @param root         the root element.
 	 * @param elementIdSet the set of all elementIds.
 	 */
@@ -167,7 +167,7 @@ public class GPML2013aReader extends GPML2013aFormatAbstract implements GpmlForm
 	/**
 	 * Reads pathway information from root element. Instantiates and returns the
 	 * pathway object {@link Pathway}.
-	 * 
+	 *
 	 * @param root the root element.
 	 * @return pathway the pathway object.
 	 * @throws ConverterException
@@ -204,7 +204,7 @@ public class GPML2013aReader extends GPML2013aFormatAbstract implements GpmlForm
 	/**
 	 * Reads the infobox x and y coordinate information. NB: Infobox is removed in
 	 * GPML2021, as the info box is always located in the top left corner (0,0).
-	 * 
+	 *
 	 * @param pathway the pathway.
 	 * @param root    the root element.
 	 */
@@ -221,7 +221,7 @@ public class GPML2013aReader extends GPML2013aFormatAbstract implements GpmlForm
 	/**
 	 * Reads the Legend CenterX and CenterY to pathway dynamic properties
 	 * {@link Pathway#setDynamicProperty} .
-	 * 
+	 *
 	 * @param pathway the pathway.
 	 * @param root    the root element.
 	 */
@@ -238,14 +238,14 @@ public class GPML2013aReader extends GPML2013aFormatAbstract implements GpmlForm
 	/**
 	 * Reads gpml:Biopax bp:OpenControlledVocabulary information to
 	 * {@link Annotation} for pathway model from root element.
-	 * 
+	 *
 	 * NB:
 	 * <ul>
 	 * <li>In GPML2013a, all annotations are by default added to {@link Pathway}
 	 * using {@link AnnotationRef}.</li>
 	 * <li>New unique elementIds are assigned (missing in GPML2013a).</li>
 	 * </ul>
-	 * 
+	 *
 	 * @param pathwayModel the pathway model.
 	 * @param root         the jdom root element.
 	 * @param elementIdSet the set of all elementIds.
@@ -286,10 +286,10 @@ public class GPML2013aReader extends GPML2013aFormatAbstract implements GpmlForm
 	 * Reads gpml:Biopax:bp:PublicationXref and maps "id" to {@link PublicationXref}
 	 * in idToPublicationXref. PublicationXref stores jdom {@link Element}
 	 * information.
-	 * 
+	 *
 	 * NB: If biopax "id" is not unique, a new unique elementId (value) is assigned,
 	 * added to elementIdSet.
-	 * 
+	 *
 	 * @param root                the jdom root element.
 	 * @param elementIdSet        the set of all elementIds.
 	 * @param idToPublicationXref the map of id to biopax jdom element.
@@ -333,7 +333,7 @@ public class GPML2013aReader extends GPML2013aFormatAbstract implements GpmlForm
 	 * elements in the GPML2013a schema, but was never used/implemented.
 	 * <li>Biopax PublicationXref which do not have a BiopaxRef will not be read.
 	 * </ol>
-	 * 
+	 *
 	 * @param pathwayElement      the element info pathway element object.
 	 * @param e                   the jdom element.
 	 * @param idToPublicationXref the map of id to biopax jdom element.
@@ -388,7 +388,7 @@ public class GPML2013aReader extends GPML2013aFormatAbstract implements GpmlForm
 	 * elements. In GPML2013a there are some duplicated and/or empty gpml:Biopax
 	 * PublicationXref information. This method reads the list of child elements
 	 * until a valid value is obtained.
-	 * 
+	 *
 	 * @param pubxfElements the pubxf children elements with the same local name.
 	 * @return elementText the string text value for the element.
 	 * @throws ConverterException
@@ -420,7 +420,7 @@ public class GPML2013aReader extends GPML2013aFormatAbstract implements GpmlForm
 	 * <li>BiopaxRef was an attribute (not the element) of many of the pathway
 	 * elements in the GPML2013a schema, but was never used/implemented.
 	 * </ol>
-	 * 
+	 *
 	 * @param pathwayElement the pathway element.
 	 * @param e              the jdom element.
 	 * @throws ConverterException
@@ -436,11 +436,11 @@ public class GPML2013aReader extends GPML2013aFormatAbstract implements GpmlForm
 	 * Reads shaped pathway element {@link ShapedElement} information: graphics and
 	 * comment group (comments, biopaxRefs (equivalent to citationRefs), and dynamic
 	 * properties).
-	 * 
+	 *
 	 * NB: {@link #readGroups} does not call this method and instead calls
 	 * {@link #readCommentGroup}. In GPML2013a, Group graphics properties were hard
 	 * coded and were not written to the gpml.
-	 * 
+	 *
 	 * @param shapedElement       the shaped pathway element.
 	 * @param se                  the jdom element.
 	 * @param idToPublicationXref the map of id to biopax jdom element.
@@ -460,10 +460,10 @@ public class GPML2013aReader extends GPML2013aFormatAbstract implements GpmlForm
 	/**
 	 * Reads comment {@link Comment} information for pathway element from jdom
 	 * element.
-	 * 
+	 *
 	 * NB: If pathway element is {@link Pathway} and source is
 	 * WikiPathways-description, set comment as pathway description instead!
-	 * 
+	 *
 	 * @param pathwayElement the pathway element.
 	 * @param e              the jdom element.
 	 * @throws ConverterException
@@ -490,7 +490,7 @@ public class GPML2013aReader extends GPML2013aFormatAbstract implements GpmlForm
 	/**
 	 * Reads gpml:Attribute or dynamic property information for
 	 * {@link PathwayElement} from jdom element.
-	 * 
+	 *
 	 * <p>
 	 * NB:
 	 * <ol>
@@ -501,7 +501,7 @@ public class GPML2013aReader extends GPML2013aFormatAbstract implements GpmlForm
 	 * DoubleLineProperty, updates lineStyle. Otherwise, sets dynamic property.
 	 * </ol>
 	 * NB: Property (dynamic property) was named Attribute in GPML2013a.
-	 * 
+	 *
 	 * @param pathwayElement the pathway element.
 	 * @param root           the jdom root element.
 	 * @throws ConverterException
@@ -555,7 +555,7 @@ public class GPML2013aReader extends GPML2013aFormatAbstract implements GpmlForm
 	 * <li>Rect properties (centerX, centerY, width, height) are not set but
 	 * calculated when needed.
 	 * </ol>
-	 * 
+	 *
 	 * @param pathwayModel        the pathway model.
 	 * @param root                the root element.
 	 * @param elementIdSet        the set of all elementIds.
@@ -609,7 +609,7 @@ public class GPML2013aReader extends GPML2013aFormatAbstract implements GpmlForm
 	 * pathway element. Because a group may refer to another group not yet
 	 * initialized. We read and set groupRef after reading all group elements. The
 	 * groupRef is the "parent" group to which this group refers.
-	 * 
+	 *
 	 * @param pathwayModel   the pathway model.
 	 * @param root           the root element.
 	 * @param groupIdToGroup the map of groupId to group.
@@ -645,7 +645,7 @@ public class GPML2013aReader extends GPML2013aFormatAbstract implements GpmlForm
 	 * <li>GROUP (DEFAULT): gray #b4b46419 rectangle with gray #808080 dashed
 	 * border, hovers to red #ff00000c
 	 * </ol>
-	 * 
+	 *
 	 * @param group the group pathway element.
 	 * @param type  the group type.
 	 * @throws ConverterException
@@ -678,7 +678,7 @@ public class GPML2013aReader extends GPML2013aFormatAbstract implements GpmlForm
 
 	/**
 	 * Reads label {@link Label} information for pathway model from root element.
-	 * 
+	 *
 	 * @param pathwayModel        the pathway model.
 	 * @param root                the root element.
 	 * @param elementIdSet        the set of all elementIds.
@@ -706,7 +706,7 @@ public class GPML2013aReader extends GPML2013aFormatAbstract implements GpmlForm
 
 	/**
 	 * Reads shape {@link Shape} information for pathway model from root element.
-	 * 
+	 *
 	 * @param pathwayModel        the pathway model.
 	 * @param root                the root element.
 	 * @param elementIdSet        the set of all elementIds.
@@ -735,7 +735,7 @@ public class GPML2013aReader extends GPML2013aFormatAbstract implements GpmlForm
 	/**
 	 * Reads data node {@link DataNode} information for pathway model from root
 	 * element.
-	 * 
+	 *
 	 * @param pathwayModel        the pathway model.
 	 * @param root                the root element.
 	 * @param elementIdSet        the set of all elementIds.
@@ -768,7 +768,7 @@ public class GPML2013aReader extends GPML2013aFormatAbstract implements GpmlForm
 
 	/**
 	 * Reads state {@link State} information for pathway model from root element.
-	 * 
+	 *
 	 * @param pathwayModel        the pathway model.
 	 * @param root                the root element.
 	 * @param elementIdSet        the set of all elementIds.
@@ -811,16 +811,16 @@ public class GPML2013aReader extends GPML2013aFormatAbstract implements GpmlForm
 	 * whether a comment for a state is indeed phosphosite information. The
 	 * phosphosite information is parsed and stored in a {@link LinkedHashMap}
 	 * annotationsMap.
-	 * 
+	 *
 	 * For each key value pair in annotationsMap, a new {@link Xref} or
 	 * {@link Annotation} is created. The annotation is added to the pathway model
 	 * after checking for annotations with equivalent properties. A new
 	 * {@link AnnotationRef} is created for the annotation and added to the state.
 	 * Lastly the comment itself is removed from the state so that information is
 	 * not duplicated.
-	 * 
+	 *
 	 * NB: "sitegrpid", "ptm" and "direction" are specially handled.
-	 * 
+	 *
 	 * @param state
 	 * @param elementIdSet
 	 * @throws ConverterException
@@ -907,9 +907,9 @@ public class GPML2013aReader extends GPML2013aFormatAbstract implements GpmlForm
 	 * element. New unique elementIds are assigned to line pathway elements are
 	 * stored in the ordered lineList so that line pathway elements can be retrieved
 	 * based on previous read order.
-	 * 
+	 *
 	 * NB: points are read by {@link #readPoints}.
-	 * 
+	 *
 	 * @param pathwayModel        the pathway model.
 	 * @param root                the root element.
 	 * @param elementIdSet        the set of all elementIds.
@@ -940,9 +940,9 @@ public class GPML2013aReader extends GPML2013aFormatAbstract implements GpmlForm
 	 * root element. New unique elementIds are assigned to line pathway elements are
 	 * stored in the ordered lineList so that line pathway elements can be retrieved
 	 * based on previous read order.
-	 * 
+	 *
 	 * NB: points are read by {@link #readPoints}.
-	 * 
+	 *
 	 * @param pathwayModel        the pathway model.
 	 * @param root                the root element.
 	 * @param elementIdSet        the set of all elementIds.
@@ -971,11 +971,11 @@ public class GPML2013aReader extends GPML2013aFormatAbstract implements GpmlForm
 	 * pathway elements they refer to. {@link Map} elementToPoint stores jdom
 	 * elements for Points and their corresponding LinePoint pathway element so that
 	 * elementRef information can be easily added.
-	 * 
+	 *
 	 * NB: points refer to a group by its GraphId not GroupId(essentially
 	 * elementId). If the pathway element referenced by a point is a group, we must
 	 * search for the group by its GraphId in {@link Map} graphIdToGroup.
-	 * 
+	 *
 	 * @param pathwayModel   the pathway model.
 	 * @param graphIdToGroup the map of graphId to group.
 	 * @param elementToPoint the map of jdom element to line points.
@@ -1008,9 +1008,9 @@ public class GPML2013aReader extends GPML2013aFormatAbstract implements GpmlForm
 	/**
 	 * Reads line element {@link LineElement} information for interaction or
 	 * graphical line from jdom element.
-	 * 
+	 *
 	 * NB: points are read by {@link #readPoints}.
-	 * 
+	 *
 	 * @param lineElement         the line pathway element.
 	 * @param ln                  the jdom line element.
 	 * @param elementIdSet        the set of all elementIds.
@@ -1044,7 +1044,7 @@ public class GPML2013aReader extends GPML2013aFormatAbstract implements GpmlForm
 	 * Reads points {@link LinePoint} for pathway model line pathway elements. Point
 	 * elementRefs must be read after the pathway elements they refer to. Therefore
 	 * points are read last in {@link #readPointElementRefs}.
-	 * 
+	 *
 	 * @param lineElement    the line pathway element.
 	 * @param ln             the jdom line element.
 	 * @param elementIdSet   the set of all elementIds.
@@ -1062,9 +1062,9 @@ public class GPML2013aReader extends GPML2013aFormatAbstract implements GpmlForm
 			String elementId = readElementId(base + ".Graphics.Point", pt, elementIdSet);
 			// if start or end point, set arrowhead type for parent line element
 			if (i == 0) {
-				lineElement.setStartArrowHeadType(readArrowHeadType(pt, base));	
+				lineElement.setStartArrowHeadType(readArrowHeadType(pt, base));
 			} else if (i == pts.size() - 1) {
-				lineElement.setEndArrowHeadType(readArrowHeadType(pt, base));	
+				lineElement.setEndArrowHeadType(readArrowHeadType(pt, base));
 			}
 			double x = Double.parseDouble(getAttr(base + ".Graphics.Point", "X", pt).trim());
 			double y = Double.parseDouble(getAttr(base + ".Graphics.Point", "Y", pt).trim());
@@ -1081,11 +1081,11 @@ public class GPML2013aReader extends GPML2013aFormatAbstract implements GpmlForm
 
 
 	/**
-	 * Returns the arrowHead for give jdom point element. 
-	 * 
-	 * @param pt the jdom point element. 
+	 * Returns the arrowHead for give jdom point element.
+	 *
+	 * @param pt the jdom point element.
 	 * @param base the string for either "Interaction" or "GraphicalLine"
-	 * @return the arrowhead for given jdom point element.  
+	 * @return the arrowhead for given jdom point element.
 	 * @throws ConverterException
 	 */
 	protected ArrowHeadType readArrowHeadType(Element pt, String base) throws ConverterException {
@@ -1096,11 +1096,11 @@ public class GPML2013aReader extends GPML2013aFormatAbstract implements GpmlForm
 		}
 		return arrowHead;
 	}
-	
-	
+
+
 	/**
 	 * Reads anchor {@link Anchor} information for line element from element.
-	 * 
+	 *
 	 * @param lineElement  the line element object.
 	 * @param gfx          the jdom graphics element.
 	 * @param elementIdSet the set of all elementIds.
@@ -1121,7 +1121,7 @@ public class GPML2013aReader extends GPML2013aFormatAbstract implements GpmlForm
 	/**
 	 * Reads xref {@link Xref} information from element. In GPML2013a, Xref is
 	 * required for DataNodes, Interactions, and optional for States.
-	 * 
+	 *
 	 * @param e the element.
 	 * @throws ConverterException
 	 */
@@ -1140,7 +1140,7 @@ public class GPML2013aReader extends GPML2013aFormatAbstract implements GpmlForm
 	 * Returns elementId read for given Element. If elementId is missing (null),
 	 * generates and returns a new unique elementId. New unique elementIds are added
 	 * to elementIdSet.
-	 * 
+	 *
 	 * @param tag          the string tag for
 	 *                     {@link GPML2013aFormatAbstract#getAttr}
 	 * @param e            the jdom element.
@@ -1161,7 +1161,7 @@ public class GPML2013aReader extends GPML2013aFormatAbstract implements GpmlForm
 
 	/**
 	 * Reads and sets groupRef for given (shaped) pathway element and jdom Element.
-	 * 
+	 *
 	 * @param shapedElement  the (shaped) pathway element.
 	 * @param se             the jdom (shaped) pathway element.
 	 * @param groupIdToGroup the map of groupId to group.
@@ -1182,7 +1182,7 @@ public class GPML2013aReader extends GPML2013aFormatAbstract implements GpmlForm
 
 	/**
 	 * Reads rect property information. Jdom handles schema default values.
-	 * 
+	 *
 	 * @param shapedElement the shaped pathway element.
 	 * @param gfx           the jdom graphics element.
 	 * @throws ConverterException
@@ -1201,9 +1201,9 @@ public class GPML2013aReader extends GPML2013aFormatAbstract implements GpmlForm
 
 	/**
 	 * Reads font property information. Jdom handles schema default values.
-	 * 
+	 *
 	 * NB: State has no font properties in GPML2013a, set basically default values.
-	 * 
+	 *
 	 * @param shapedElement the shaped pathwayElement.
 	 * @param gfx           the jdom graphics element.
 	 * @throws ConverterException
@@ -1244,7 +1244,7 @@ public class GPML2013aReader extends GPML2013aFormatAbstract implements GpmlForm
 	 * {@link #readDynamicProperties}.
 	 * <li>If state pathway element has dynamic property key
 	 * </ol>
-	 * 
+	 *
 	 * @param shapedElement the shaped pathway element.
 	 * @param gfx           the jdom graphics element.
 	 * @throws ConverterException
@@ -1285,7 +1285,7 @@ public class GPML2013aReader extends GPML2013aFormatAbstract implements GpmlForm
 
 	/**
 	 * Reads line style property information. Jdom handles schema default values.
-	 * 
+	 *
 	 * @param lineElement the line pathway element.
 	 * @param gfx         the jdom graphics element.
 	 * @throws ConverterException
@@ -1313,7 +1313,7 @@ public class GPML2013aReader extends GPML2013aFormatAbstract implements GpmlForm
 
 	/**
 	 * Local class to help with reading gpml:Biopax:bp:PublicationXref.
-	 * 
+	 *
 	 * @author finterly
 	 */
 	public class PublicationXref {
@@ -1326,7 +1326,7 @@ public class GPML2013aReader extends GPML2013aFormatAbstract implements GpmlForm
 		 * Instantiates a PublicationXref object. Stores the jdom
 		 * gpml:Biopax:PublicationXref and the assigned elementId in
 		 * {@link #readPublicationXrefMap}.
-		 * 
+		 *
 		 * @param element   the jdom element.
 		 * @param elementId the unique elementId, may or may not be the same string as
 		 *                  the original biopax rdf:id.
@@ -1339,7 +1339,7 @@ public class GPML2013aReader extends GPML2013aFormatAbstract implements GpmlForm
 
 		/**
 		 * Returns the jdom gpml:Biopax:PublicationXref element.
-		 * 
+		 *
 		 * @return element the jdom PublicationXref element.
 		 */
 		public Element getElement() {
@@ -1348,7 +1348,7 @@ public class GPML2013aReader extends GPML2013aFormatAbstract implements GpmlForm
 
 		/**
 		 * Returns the assigned unique elementId for this PublicationXref.
-		 * 
+		 *
 		 * @return elementId;
 		 */
 		public String getElementId() {
@@ -1358,7 +1358,7 @@ public class GPML2013aReader extends GPML2013aFormatAbstract implements GpmlForm
 		/**
 		 * Returns true if there is at least one gpml:CommentGroup:BiopaxRef which
 		 * refers to this gpml:Biopax:PublicationXref, false otherwise.
-		 * 
+		 *
 		 * @return true if referenced, false otherwise.
 		 */
 		public boolean getHasRef() {
@@ -1369,7 +1369,7 @@ public class GPML2013aReader extends GPML2013aFormatAbstract implements GpmlForm
 		 * Sets hasRef to true if at least one gpml:CommentGroup:BiopaxRef which refers
 		 * to this gpml:Biopax:PublicationXref, false otherwise. Called in
 		 * {@link readPublicationXrefs}.
-		 * 
+		 *
 		 * @param hasRef the boolean for whether referenced.
 		 */
 		public void setHasRef(boolean hasRef) {

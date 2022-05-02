@@ -23,19 +23,21 @@ import java.awt.geom.GeneralPath;
 
 /**
  * This class defines some shapes. Shapes are defined and registered in the
- * static section of this class. Custom shapes are created using
  * {@link GeneralPath}.
  * 
  * <p>
+ * NB: 
  * <ol>
  * <li>BRACE
  * <li>MITOCHONDRIA
  * <li>SARCOPLASMICRETICULUM
  * <li>ENDOPLASMICRETICULUM
  * <li>GOLGIAPPARATUS
- * <li>CORONAVIRUS //TODO
- * <li>DNA //TODO
- * <li>CELL ICON //TODO
+ * <li>CORONAVIRUS_ICON 
+ * <li>DNA_ICON
+ * <li>RNA_ICON
+ * <li>CELL_ICON 
+ * <li>MEMBRANE_ICON 
  * </ol>
  * 
  * NB: shapes were previously specific to GenMAPP, such as the GenMAPP

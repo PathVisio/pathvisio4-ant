@@ -25,8 +25,8 @@ import java.io.PrintStream;
  * <p>
  * log levels:
  * <ol>
- * <li>1: Trace
- * <li>2: debug
+ * <li>1: debug
+ * <li>2: trace
  * <li>3: info
  * <li>4: warn
  * <li>5: error
@@ -36,7 +36,7 @@ import java.io.PrintStream;
  * @author unknown
  */
 public class Logger {
-	
+
 	private boolean debugEnabled = true;
 	private boolean traceEnabled = false;
 	private boolean infoEnabled = true;
@@ -55,8 +55,10 @@ public class Logger {
 	}
 
 	/**
-	 * if dest is "STDERR" or "STDOUT", the standard error / output are used.
-	 * Otherwise, dest is interpreted as a filename
+	 * If dest is "STDERR" or "STDOUT", the standard error / output are used.
+	 * Otherwise, dest is interpreted as a filename.
+	 * 
+	 * @param dest the destination for log file.
 	 */
 	public void setDest(String dest) {
 		if (dest != null) {
@@ -85,8 +87,14 @@ public class Logger {
 	/**
 	 * get/set log level to a certain level. The higher the level, the move output.
 	 * Messages above this level are discarded.
+	 * 
+	 * @param debug
+	 * @param trace
+	 * @param info
+	 * @param warn
+	 * @param error
+	 * @param fatal
 	 */
-
 	public void setLogLevel(boolean debug, boolean trace, boolean info, boolean warn, boolean error, boolean fatal) {
 		debugEnabled = debug;
 		traceEnabled = trace;

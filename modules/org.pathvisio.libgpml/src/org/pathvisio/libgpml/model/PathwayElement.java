@@ -1,13 +1,13 @@
 /*******************************************************************************
  * PathVisio, a tool for data visualization and analysis using biological pathways
  * Copyright 2006-2022 BiGCaT Bioinformatics, WikiPathways
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License.  You may obtain a copy
  * of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the
@@ -36,9 +36,9 @@ import org.pathvisio.libgpml.util.XrefUtils;
 /**
  * Abstract class of pathway elements which are part of a pathway, have an
  * elementId, have Comment,
- * 
+ *
  * Children: DataNode, State, Interaction, GraphicalLine, Label, Shape, Group.
- * 
+ *
  * @author unknown, AP20070508, finterly
  */
 public abstract class PathwayElement extends PathwayObject implements Cloneable, Annotatable, Citable, Evidenceable {
@@ -75,7 +75,7 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 
 	/*
 	 * Returns the list of comments.
-	 * 
+	 *
 	 * @return comments the list of comments.
 	 */
 	public List<Comment> getComments() {
@@ -84,7 +84,7 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 
 	/**
 	 * Adds given comment to comments list.
-	 * 
+	 *
 	 * @param comment the comment to be added.
 	 */
 	public void addComment(Comment comment) {
@@ -95,9 +95,10 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 	/**
 	 * Creates a comment with given properties and adds to comments list. Calls
 	 * {@link #addComment(Comment comment)}.
-	 * 
+	 *
 	 * @param commentText the text of the comment, between Comment tags in GPML.
 	 * @param source      the source of this comment.
+	 * @return the created comment.
 	 */
 	public Comment addComment(String commentText, String source) {
 		Comment comment = new Comment(commentText, source);
@@ -107,7 +108,7 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 
 	/**
 	 * Removes given comment from comments list.
-	 * 
+	 *
 	 * @param comment the comment to be removed.
 	 */
 	public void removeComment(Comment comment) {
@@ -116,8 +117,8 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 	}
 
 	/**
-	 * Sets comments to the given comments list. TODO
-	 * 
+	 * Sets comments to the given comments list.
+	 *
 	 * @param value the given comment list.
 	 */
 	public void setComments(List<Comment> value) {
@@ -129,7 +130,7 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 
 	/**
 	 * Finds the first comment with a specific source.
-	 * 
+	 *
 	 * @param source the source of the comment to be found.
 	 * @return the comment content with a given source.
 	 */
@@ -144,7 +145,7 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 
 	/**
 	 * Returns the map of dynamic properties.
-	 * 
+	 *
 	 * @return dynamicProperties the map of dynamic properties.
 	 */
 	public Map<String, String> getDynamicProperties() {
@@ -153,7 +154,7 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 
 	/**
 	 * Returns a set of all dynamic property keys.
-	 * 
+	 *
 	 * @return a set of all dynamic property keys.
 	 */
 	public Set<String> getDynamicPropertyKeys() {
@@ -162,7 +163,7 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 
 	/**
 	 * Returns a dynamic property string value.
-	 * 
+	 *
 	 * @param key the key of a key value pair.
 	 * @return the value or dynamic property.
 	 */
@@ -173,7 +174,7 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 	/**
 	 * Sets a dynamic property. Setting to null means removing this dynamic property
 	 * altogether.
-	 * 
+	 *
 	 * @param key   the key of a key value pair.
 	 * @param value the value of a key value pair.
 	 */
@@ -190,7 +191,7 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 	// ================================================================================
 	/**
 	 * Returns the list of annotation references.
-	 * 
+	 *
 	 * @return annotationRefs the list of annotation references, an empty list if no
 	 *         properties are defined.
 	 */
@@ -201,7 +202,7 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 
 	/**
 	 * Checks whether annotationRefs has the given annotationRef.
-	 * 
+	 *
 	 * @param annotationRef the annotationRef to look for.
 	 * @return true if has annotationRef, false otherwise.
 	 */
@@ -213,8 +214,9 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 	/**
 	 * Creates and adds an annotationRef to annotationRefs list. Sets annotable for
 	 * the given annotationRef.
-	 * 
+	 *
 	 * @param annotation the annotation for annotationRef.
+	 * @return the annotationRef of added annotation.
 	 */
 	@Override
 	public AnnotationRef addAnnotation(Annotation annotation) {
@@ -228,7 +230,7 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 			annotationRef.setAnnotatableTo(this);
 			assert (annotationRef.getAnnotatable() == this);
 			annotationRefs.add(annotationRef);
-			fireObjectModifiedEvent(PathwayObjectEvent.createSinglePropertyEvent(this, StaticProperty.ANNOTATION));
+			fireObjectModifiedEvent(PathwayObjectEvent.createSinglePropertyEvent(this, StaticProperty.ANNOTATIONREF));
 		}
 		return annotationRef;
 	}
@@ -238,11 +240,12 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 	 * model. Creates a annotationRef for annotation, and adds to annotationRefs
 	 * list for this annotatable. Calls
 	 * {@link #addAnnotation(Annotation annotation)}.
-	 * 
+	 *
 	 * @param value   the name, term, or text of the annotation.
 	 * @param type    the type of the annotation, e.g. ontology.
 	 * @param xref    the annotation xref.
 	 * @param urlLink the url link of the annotation.
+	 * @return the annotationRef of added annotation.
 	 */
 	@Override
 	public AnnotationRef addAnnotation(String value, AnnotationType type, Xref xref, String urlLink) {
@@ -256,12 +259,13 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 	 * model. Creates a annotationRef for annotation, and adds to annotationRefs
 	 * list for this annotatable. Sets elementId for annotation. This method is used
 	 * when reading gpml. Calls {@link #addAnnotation(Annotation annotation)}.
-	 * 
+	 *
 	 * @param elementId the elementId to set.
 	 * @param value     the name, term, or text of the annotation.
 	 * @param type      the type of the annotation, e.g. ontology.
 	 * @param xref      the annotation xref.
 	 * @param urlLink   the url link of the annotation.
+	 * @return the annotationRef of added annotation.
 	 */
 	@Override
 	public AnnotationRef addAnnotation(String elementId, String value, AnnotationType type, Xref xref, String urlLink) {
@@ -274,7 +278,7 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 	/**
 	 * Removes given annotationRef from annotationRefs list. The annotationRef
 	 * ceases to exist and is terminated.
-	 * 
+	 *
 	 * @param annotationRef the annotationRef to be removed.
 	 */
 	@Override
@@ -282,7 +286,7 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 		if (annotationRef != null) {
 			annotationRefs.remove(annotationRef);
 			annotationRef.terminate();
-			fireObjectModifiedEvent(PathwayObjectEvent.createSinglePropertyEvent(this, StaticProperty.ANNOTATION));
+			fireObjectModifiedEvent(PathwayObjectEvent.createSinglePropertyEvent(this, StaticProperty.ANNOTATIONREF));
 		}
 	}
 
@@ -298,7 +302,7 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 
 	/**
 	 * Returns the list of citation references.
-	 * 
+	 *
 	 * @return citationRefs the list of citations referenced, an empty list if no
 	 *         properties are defined.
 	 */
@@ -309,7 +313,7 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 
 	/**
 	 * Checks whether citationRefs has the given citationRef.
-	 * 
+	 *
 	 * @param citationRef the citationRef to look for.
 	 * @return true if has citationRef, false otherwise.
 	 */
@@ -321,8 +325,9 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 	/**
 	 * Creates and adds an citationRef to citationRefs list. Sets citable for the
 	 * given citationRef.
-	 * 
+	 *
 	 * @param citation the citation for citationRef.
+	 * @return the citationRef of added citation.
 	 */
 	@Override
 	public CitationRef addCitation(Citation citation) {
@@ -336,7 +341,7 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 			citationRef.setCitableTo(this);
 			assert (citationRef.getCitable() == this);
 			citationRefs.add(citationRef);
-			fireObjectModifiedEvent(PathwayObjectEvent.createSinglePropertyEvent(this, StaticProperty.CITATION));
+			fireObjectModifiedEvent(PathwayObjectEvent.createSinglePropertyEvent(this, StaticProperty.CITATIONREF));
 		}
 		return citationRef;
 	}
@@ -345,9 +350,10 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 	 * Creates a citation with given xref and urlLink, and adds citation to pathway
 	 * model. Creates a citationRef for citation, and adds to citationRefs list for
 	 * this citable.Calls {@link #addCitation(Citation citation)}.
-	 * 
+	 *
 	 * @param xref    the citation xref.
 	 * @param urlLink the url link and description (optional) for a web address.
+	 * @return the citationRef of added citation.
 	 */
 	@Override
 	public CitationRef addCitation(Xref xref, String urlLink) {
@@ -361,10 +367,11 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 	 * model. Creates a citationRef for citation, and adds to citationRefs list for
 	 * this citable. Sets elementId for citation. This method is used when reading
 	 * gpml. Calls {@link #addCitation(Citation citation)}.
-	 * 
+	 *
 	 * @param elementId the elementId to set.
 	 * @param xref      the citation xref.
 	 * @param urlLink   the url link and description (optional) for a web address.
+	 * @return the citationRef of added citation.
 	 */
 	@Override
 	public CitationRef addCitation(String elementId, Xref xref, String urlLink) {
@@ -378,7 +385,7 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 	/**
 	 * Removes given citationRef from citationRefs list. The citationRef ceases to
 	 * exist and is terminated.
-	 * 
+	 *
 	 * @param citationRef the citationRef to be removed.
 	 */
 	@Override
@@ -386,7 +393,7 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 		if (citationRef != null && hasCitationRef(citationRef)) {
 			citationRefs.remove(citationRef);
 			citationRef.terminate();
-			fireObjectModifiedEvent(PathwayObjectEvent.createSinglePropertyEvent(this, StaticProperty.CITATION));
+			fireObjectModifiedEvent(PathwayObjectEvent.createSinglePropertyEvent(this, StaticProperty.CITATIONREF));
 		}
 	}
 
@@ -402,7 +409,7 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 
 	/**
 	 * Returns the list of evidence references.
-	 * 
+	 *
 	 * @return evidenceRefs the list of evidences referenced, an empty list if no
 	 *         properties are defined.
 	 */
@@ -413,7 +420,7 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 
 	/**
 	 * Checks whether evidenceRefs has the given evidenceRef.
-	 * 
+	 *
 	 * @param evidenceRef the evidenceRef to look for.
 	 * @return true if has evidenceRef, false otherwise.
 	 */
@@ -425,8 +432,9 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 	/**
 	 * Creates and adds an evidenceRef to evidenceRefs list. Sets evidenceable for
 	 * the given evidenceRef.
-	 * 
+	 *
 	 * @param evidence the evidenceRef for evidenceRef.
+	 * @return the evidenceRef of added evidence.
 	 */
 	@Override
 	public EvidenceRef addEvidence(Evidence evidence) {
@@ -440,7 +448,7 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 			evidenceRef.setEvidenceableTo(this);
 			assert (evidenceRef.getEvidenceable() == this);
 			evidenceRefs.add(evidenceRef);
-			fireObjectModifiedEvent(PathwayObjectEvent.createSinglePropertyEvent(this, StaticProperty.EVIDENCE));
+			fireObjectModifiedEvent(PathwayObjectEvent.createSinglePropertyEvent(this, StaticProperty.EVIDENCEREF));
 		}
 		return evidenceRef;
 	}
@@ -449,10 +457,11 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 	 * Creates an evidence with given properties, and adds evidence to pathway
 	 * model. Creates a evidenceRef for evidence, and adds to evidenceRefs list for
 	 * this evidenceable. Calls {@link #addEvidence(Evidence evidence)}.
-	 * 
+	 *
 	 * @param value   the name, term, or text of the evidence.
 	 * @param xref    the evidence xref.
 	 * @param urlLink the url link and description (optional) for a web address.
+	 * @return the evidenceRef of added evidence.
 	 */
 	@Override
 	public EvidenceRef addEvidence(String value, Xref xref, String urlLink) {
@@ -466,11 +475,12 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 	 * model. Creates a evidenceRef for evidence, and adds to evidenceRefs list for
 	 * this evidenceable. Sets elementId for evidence. This method is used when
 	 * reading gpml. Calls {@link #addEvidence(Evidence evidence)}.
-	 * 
+	 *
 	 * @param elementId the elementId to set.
 	 * @param value     the name, term, or text of the evidence.
 	 * @param xref      the evidence xref.
 	 * @param urlLink   the url link and description (optional) for a web address.
+	 * @return the evidenceRef of added evidence.
 	 */
 	@Override
 	public EvidenceRef addEvidence(String elementId, String value, Xref xref, String urlLink) {
@@ -484,7 +494,7 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 	/**
 	 * Removes given evidenceRef from evidenceRefs list. The evidenceRef ceases to
 	 * exist and is terminated.
-	 * 
+	 *
 	 * @param evidenceRef the evidenceRef to be removed.
 	 */
 	@Override
@@ -492,7 +502,7 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 		if (evidenceRef != null && hasEvidenceRef(evidenceRef)) {
 			evidenceRefs.remove(evidenceRef);
 			evidenceRef.terminate();
-			fireObjectModifiedEvent(PathwayObjectEvent.createSinglePropertyEvent(this, StaticProperty.EVIDENCE));
+			fireObjectModifiedEvent(PathwayObjectEvent.createSinglePropertyEvent(this, StaticProperty.EVIDENCEREF));
 		}
 	}
 
@@ -523,14 +533,18 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 	// Copy Methods
 	// ================================================================================
 	/**
-	 * Note: doesn't change parent, only fields
+	 * Copies values from the given source pathway element.
 	 *
-	 * Used by UndoAction.
-	 * 
-	 * NB: AnnotationRefs, citationRefs, and evidenceRefs are not immediately copied
-	 * but loaded later. TODO
-	 * 
-	 * @param src
+	 * <p>
+	 * NB:
+	 * <ol>
+	 * <li>Doesn't change parent, only fields
+	 * <li>Used by UndoAction.
+	 * <li>AnnotationRefs, citationRefs, and evidenceRefs are copied later using
+	 * {@link copyReferencesFrom}.
+	 * </ol>
+	 *
+	 * @param src the source pathway element.
 	 */
 	public void copyValuesFrom(PathwayElement src) {
 		dynamicProperties = new TreeMap<String, String>(src.dynamicProperties); // create copy
@@ -547,10 +561,10 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 	}
 
 	/**
-	 * Copy Object. The object will not be part of the same Pathway object, it's
-	 * parent will be set to null.
+	 * Copies this pathway element.
 	 *
-	 * No events will be sent to the parent of the original.
+	 * @return the copyElement for the new pathway element and this source pathway
+	 *         element.
 	 */
 	public abstract CopyElement copy();
 
@@ -563,7 +577,7 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 	 * <li>The srcElement may be the immediate copy element source of the new
 	 * pathway element, or an older source.
 	 * </ol>
-	 * 
+	 *
 	 * @param srcElement the source element to copy references from.
 	 */
 	public void copyReferencesFrom(PathwayElement srcElement) {
@@ -576,8 +590,8 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 
 	/**
 	 * Copies citationsRefs and nested annotationRefs if applicable.
-	 * 
-	 * @param citationRefs
+	 *
+	 * @param citationRefs the citationsRefs list.
 	 */
 	private void copyCitationRefs(List<CitationRef> citationRefs) {
 		for (CitationRef citationRef : citationRefs) {
@@ -588,8 +602,8 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 
 	/**
 	 * Copies annotationRefs and nested citationRefs and evidenceRefs if applicable.
-	 * 
-	 * @param annotationRefs
+	 *
+	 * @param annotationRefs the annotationRefs list.
 	 */
 	private void copyAnnotationRefs(List<AnnotationRef> annotationRefs) {
 		for (AnnotationRef annotationRef : annotationRefs) {
@@ -602,8 +616,8 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 
 	/**
 	 * Copies evidenceRefs.
-	 * 
-	 * @param evidenceRefs
+	 *
+	 * @param evidenceRefs the evidenceRefs list.
 	 */
 	private void copyEvidenceRefs(List<EvidenceRef> evidenceRefs) {
 		for (EvidenceRef evidenceRef : evidenceRefs) {
@@ -628,17 +642,24 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 
 	/**
 	 * Returns all static properties for this pathway object.
-	 * 
+	 *
 	 * @return result the set of static property for this pathway object.
 	 */
+	@Override
 	public Set<StaticProperty> getStaticPropertyKeys() {
 		Set<StaticProperty> result = super.getStaticPropertyKeys();
-		Set<StaticProperty> propsPathwayElement = EnumSet.of(StaticProperty.COMMENT, StaticProperty.ANNOTATION,
-				StaticProperty.CITATION, StaticProperty.EVIDENCE); // TODO dynamic property
+		Set<StaticProperty> propsPathwayElement = EnumSet.of(StaticProperty.COMMENT, StaticProperty.ANNOTATIONREF,
+				StaticProperty.CITATIONREF, StaticProperty.EVIDENCEREF);
 		result.addAll(propsPathwayElement);
 		return result;
 	}
 
+	/**
+	 * Returns property of given key.
+	 *
+	 * @param key the key.
+	 * @return
+	 */
 	@Override
 	public Object getPropertyEx(Object key) {
 		if (key instanceof StaticProperty) {
@@ -651,8 +672,10 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 	}
 
 	/**
-	 * Set dynamic or static properties at the same time Will be replaced with
-	 * setProperty in the future.
+	 * Sets dynamic or static properties at the same time.
+	 *
+	 * @param key   the key for the property to set.
+	 * @param value the value for the property to set.
 	 */
 	@Override
 	public void setPropertyEx(Object key, Object value) {
@@ -665,19 +688,28 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 		}
 	}
 
+	/**
+	 * Returns static property value for given key.
+	 *
+	 * @param key the key.
+	 * @return the static property value.
+	 */
 	@Override
 	public Object getStaticProperty(StaticProperty key) {
 		Object result = super.getStaticProperty(key);
 		if (result == null) {
 			switch (key) {
 			case COMMENT:
-				result = getComments();// TODO
+				result = getComments();
 				break;
-			case ANNOTATION: // TODO
+			case ANNOTATIONREF:
+				// advanced TODO
 				break;
-			case CITATION: // TODO
+			case CITATIONREF:
+				// advanced TODO
 				break;
-			case EVIDENCE: // TODO
+			case EVIDENCEREF:
+				// advanced TODO
 				break;
 			default:
 				// do nothing
@@ -692,22 +724,24 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 	 *
 	 * Value may be null in some cases, e.g. graphRef
 	 *
-	 * @param key
-	 * @param value
+	 * @param key   the key.
+	 * @param value the property value.
 	 */
 	@Override
 	public void setStaticProperty(StaticProperty key, Object value) {
 		super.setStaticProperty(key, value);
 		switch (key) {
 		case COMMENT:
-			setComments((List<Comment>) value); // TODO
+			setComments((List<Comment>) value);
 			break;
-		case ANNOTATION: // TODO
+		case ANNOTATIONREF:
+			// advanced TODO
 			break;
-		case CITATION:
-//			setBiopaxRefs((List<String>) value); TODO 
+		case CITATIONREF:
+			// advanced TODO
 			break;
-		case EVIDENCE: // TODO
+		case EVIDENCEREF:
+			// advanced TODO
 			break;
 		default:
 			// do nothing
@@ -722,10 +756,10 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 	 * descriptions or arbitrary notes. Each comment has a source and a text.
 	 * Pathway elements (e.g. DataNode, State, Interaction, GraphicalLine, Label,
 	 * Shape, Group) can have zero or more comments with it.
-	 * 
+	 *
 	 * @author unknown, finterly
 	 */
-	public class Comment implements Cloneable { // TODO clone???
+	public class Comment implements Cloneable {
 
 		private String commentText; // required
 		private String source; // optional
@@ -736,10 +770,10 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 		/**
 		 * Instantiates a Comment with commentText and source. This private constructor
 		 * is called by {@link #addComment(String commentText, String source)}.
-		 * 
+		 *
 		 * @param commentText the text of the comment, between Comment tags in GPML.
 		 * @param source      the source of this comment.
-		 * 
+		 *
 		 */
 		public Comment(String commentText, String source) {
 			setCommentText(commentText);
@@ -751,7 +785,9 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 		// ================================================================================
 
 		/**
-		 * Clones this comment. TODO
+		 * Clones this comment.
+		 * 
+		 * @return the cloned comment.
 		 */
 		@Override
 		public Object clone() throws CloneNotSupportedException {
@@ -764,7 +800,7 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 
 		/**
 		 * Returns the text of this Comment.
-		 * 
+		 *
 		 * @return commentText the text of this comment.
 		 */
 		public String getCommentText() {
@@ -773,7 +809,7 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 
 		/**
 		 * Sets the text of this Comment.
-		 * 
+		 *
 		 * @param v the text of this comment.
 		 */
 		public void setCommentText(String v) {
@@ -786,7 +822,7 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 
 		/**
 		 * Returns the source of this Comment.
-		 * 
+		 *
 		 * @return source the source of this comment.
 		 */
 		public String getSource() {
@@ -796,7 +832,7 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 
 		/**
 		 * Sets the source of this Comment.
-		 * 
+		 *
 		 * @param v the source of this comment.
 		 */
 		public void setSource(String v) {
@@ -810,6 +846,7 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 		/**
 		 * Writes comment out as a string.
 		 */
+		@Override
 		public String toString() {
 			String src = "";
 			if (source != null && !"".equals(source)) {
@@ -822,7 +859,7 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 	/**
 	 * Abstract class of {@link AnnotationRef}, {@link CitationRef}, and
 	 * {@link EvidenceRef}.
-	 * 
+	 *
 	 * @author finterly
 	 *
 	 */
@@ -831,10 +868,10 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 		/**
 		 * Returns the top target pathway element {@link PathwayElement} for a
 		 * {@link AnnotationRef}, {@link CitationRef}, or {@link EvidenceRef}.
-		 * 
+		 *
 		 * NB: Returns the top pathway element, outer class, even if this ref has been
 		 * removed.
-		 * 
+		 *
 		 * @return the top target pathway element of the infoRef.
 		 */
 		public PathwayElement getTopPathwayElement() {
@@ -852,7 +889,7 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 	 * {@link CitationRef} and/or {@link EvidenceRef}. The Annotatable target can be
 	 * a {@link PathwayElement}, or {@link CitationRef}. In gpml:AnnotationRef, the
 	 * attribute elementRef refers to the elementId of the source gpml:Annotation.
-	 * 
+	 *
 	 * @author finterly
 	 */
 	public class AnnotationRef extends InfoRef implements Citable, Evidenceable {
@@ -868,7 +905,7 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 		/**
 		 * Instantiates an AnnotationRef given source {@link Annotation} and initializes
 		 * citationRefs and evidenceRefs lists.
-		 * 
+		 *
 		 * @param annotation the source annotation this AnnotationRef refers to.
 		 */
 		public AnnotationRef(Annotation annotation) {
@@ -882,7 +919,7 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 		// ================================================================================
 		/**
 		 * Returns the annotation referenced.
-		 * 
+		 *
 		 * @return annotation the annotation referenced.
 		 */
 		public Annotation getAnnotation() {
@@ -902,7 +939,7 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 		/**
 		 * Sets the source annotation for this annotationRef. Adds this annotationRef to
 		 * the source annotation.
-		 * 
+		 *
 		 * @param annotation the given source annotation to set.
 		 */
 		public void setAnnotationTo(Annotation annotation) {
@@ -917,7 +954,7 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 
 		/**
 		 * Sets the source annotation for this annotationRef.
-		 * 
+		 *
 		 * @param v the given source annotation to set.
 		 */
 		private void setAnnotation(Annotation v) {
@@ -940,7 +977,7 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 		/**
 		 * Returns the target pathway, pathway element, or citationRef
 		 * {@link Annotatable} for this annotationRef.
-		 * 
+		 *
 		 * @return annotatable the target of the annotationRef.
 		 */
 		public Annotatable getAnnotatable() {
@@ -961,7 +998,7 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 		 * Sets the target pathway element or citationRef {@link Annotatable} for this
 		 * annotationRef. NB: Annotatable is only set when an Annotatable adds an
 		 * AnnotationRef. This method is not used directly.
-		 * 
+		 *
 		 * @param annotatable the given target annotatable to set.
 		 */
 		protected void setAnnotatableTo(Annotatable annotatable) {
@@ -975,7 +1012,7 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 		/**
 		 * Sets the target pathway, pathway element, or citationRef {@link Annotatable}
 		 * for this annotationRef.
-		 * 
+		 *
 		 * @param v the given target annotatable to set.
 		 */
 		private void setAnnotatable(Annotatable v) {
@@ -1000,7 +1037,7 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 		// ================================================================================
 		/**
 		 * Returns the list of citation references.
-		 * 
+		 *
 		 * @return citationRefs the list of citations referenced, an empty list if no
 		 *         properties are defined.
 		 */
@@ -1011,7 +1048,7 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 
 		/**
 		 * Checks whether citationRefs has the given citationRef.
-		 * 
+		 *
 		 * @param citationRef the citationRef to look for.
 		 * @return true if has citationRef, false otherwise.
 		 */
@@ -1023,8 +1060,9 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 		/**
 		 * Creates and adds an citationRef to citationRefs list. Sets citable for the
 		 * given citationRef.
-		 * 
+		 *
 		 * @param citation the citation for citationRef.
+		 * @return the citationRef of added citation.
 		 */
 		@Override
 		public CitationRef addCitation(Citation citation) {
@@ -1038,8 +1076,8 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 				citationRef.setCitableTo(this);
 				assert (citationRef.getCitable() == this);
 				citationRefs.add(citationRef);
-				// TODO
-//				fireObjectModifiedEvent(PathwayElementEvent.createSinglePropertyEvent(this, StaticProperty.CITATIONREF));
+				fireObjectModifiedEvent(
+						PathwayObjectEvent.createSinglePropertyEvent(PathwayElement.this, StaticProperty.CITATIONREF));
 			}
 			return citationRef;
 		}
@@ -1048,9 +1086,10 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 		 * Creates a citation with given xref and urlLink, and adds citation to pathway
 		 * model. Creates a citationRef for citation, and adds to citationRefs list for
 		 * this citable.
-		 * 
+		 *
 		 * @param xref    the citation xref.
 		 * @param urlLink the url link and description (optional) for a web address.
+		 * @return the citationRef of added citation.
 		 */
 		@Override
 		public CitationRef addCitation(Xref xref, String urlLink) {
@@ -1064,10 +1103,11 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 		 * model. Creates a citationRef for citation, and adds to citationRefs list for
 		 * this citable. Sets elementId for citation. This method is used when reading
 		 * gpml. Calls {@link #addCitation(Citation citation)}.
-		 * 
+		 *
 		 * @param elementId the elementId to set.
 		 * @param xref      the citation xref.
 		 * @param urlLink   the url link and description (optional) for a web address.
+		 * @return the citationRef of added citation.
 		 */
 		@Override
 		public CitationRef addCitation(String elementId, Xref xref, String urlLink) {
@@ -1081,7 +1121,7 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 		/**
 		 * Removes given citationRef from citationRefs list. The citationRef ceases to
 		 * exist and is terminated.
-		 * 
+		 *
 		 * @param citationRef the citationRef to be removed.
 		 */
 		@Override
@@ -1089,7 +1129,8 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 			if (citationRef != null && hasCitationRef(citationRef)) {
 				citationRefs.remove(citationRef);
 				citationRef.terminate();
-//				fireObjectModifiedEvent(PathwayElementEvent.createSinglePropertyEvent(this, StaticProperty.CITATIONREF));
+				fireObjectModifiedEvent(
+						PathwayObjectEvent.createSinglePropertyEvent(PathwayElement.this, StaticProperty.CITATIONREF));
 			}
 		}
 
@@ -1108,7 +1149,7 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 		// ================================================================================
 		/**
 		 * Returns the list of evidence references.
-		 * 
+		 *
 		 * @return evidenceRefs the list of evidences referenced, an empty list if no
 		 *         properties are defined.
 		 */
@@ -1119,7 +1160,7 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 
 		/**
 		 * Checks whether citationRefs has the given citationRef.
-		 * 
+		 *
 		 * @param evidenceRef the evidenceRef to look for.
 		 * @return true if has evidenceRef, false otherwise.
 		 */
@@ -1131,8 +1172,9 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 		/**
 		 * Creates and adds an evidenceRef to evidenceRefs list. Sets evidenceable for
 		 * the given evidenceRef.
-		 * 
+		 *
 		 * @param evidence the evidence for evidenceRef.
+		 * @return the evidencRef of added evidence.
 		 */
 		@Override
 		public EvidenceRef addEvidence(Evidence evidence) {
@@ -1146,7 +1188,8 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 				evidenceRef.setEvidenceableTo(this);
 				assert (evidenceRef.getEvidenceable() == this);
 				evidenceRefs.add(evidenceRef);
-//				fireObjectModifiedEvent(PathwayElementEvent.createSinglePropertyEvent(this, StaticProperty.EVIDENCEREF));
+				fireObjectModifiedEvent(
+						PathwayObjectEvent.createSinglePropertyEvent(PathwayElement.this, StaticProperty.EVIDENCEREF));
 			}
 			return evidenceRef;
 		}
@@ -1155,10 +1198,11 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 		 * Creates an evidence with given properties, and adds evidence to pathway
 		 * model. Creates a evidenceRef for evidence, and adds to evidenceRefs list for
 		 * this evidenceable. Calls {@link #addEvidence(Evidence evidence)}.
-		 * 
+		 *
 		 * @param value   the name, term, or text of the evidence.
 		 * @param xref    the evidence xref.
 		 * @param urlLink the url link and description (optional) for a web address.
+		 * @return the evidencRef of added evidence.
 		 */
 		@Override
 		public EvidenceRef addEvidence(String value, Xref xref, String urlLink) {
@@ -1172,11 +1216,12 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 		 * model. Creates a evidenceRef for evidence, and adds to evidenceRefs list for
 		 * this evidenceable. Sets elementId for evidence. This method is used when
 		 * reading gpml. Calls {@link #addEvidence(Evidence evidence)}.
-		 * 
+		 *
 		 * @param elementId the elementId to set.
 		 * @param value     the name, term, or text of the evidence.
 		 * @param xref      the evidence xref.
 		 * @param urlLink   the url link and description (optional) for a web address.
+		 * @return the evidencRef of added evidence.
 		 */
 		@Override
 		public EvidenceRef addEvidence(String elementId, String value, Xref xref, String urlLink) {
@@ -1190,7 +1235,7 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 		/**
 		 * Removes given evidenceRef from evidenceRefs list. The evidenceRef ceases to
 		 * exist and is terminated.
-		 * 
+		 *
 		 * @param evidenceRef the evidenceRef to be removed.
 		 */
 		@Override
@@ -1198,8 +1243,8 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 			if (evidenceRef != null && hasEvidenceRef(evidenceRef)) {
 				evidenceRefs.remove(evidenceRef);
 				evidenceRef.terminate();
-//				fireObjectModifiedEvent(
-//						PathwayElementEvent.createSinglePropertyEvent(this, StaticProperty.EVIDENCEREF));
+				fireObjectModifiedEvent(
+						PathwayObjectEvent.createSinglePropertyEvent(PathwayElement.this, StaticProperty.EVIDENCEREF));
 			}
 		}
 
@@ -1277,7 +1322,7 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 	 * target can be a {@link PathwayElement}, or {@link AnnotationRef}. In
 	 * gpml:CitationRef, the attribute elementRef refers to the elementId of the
 	 * source gpml:Citation.
-	 * 
+	 *
 	 * @author finterly
 	 */
 	public class CitationRef extends InfoRef implements Annotatable {
@@ -1292,7 +1337,7 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 		/**
 		 * Instantiates an CitationRef given source {@link Citation} and initializes
 		 * annotationRefs lists.
-		 * 
+		 *
 		 * @param citation the source citation this CitationRef refers to.
 		 */
 		protected CitationRef(Citation citation) {
@@ -1305,7 +1350,7 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 		// ================================================================================
 		/**
 		 * Returns the citation referenced.
-		 * 
+		 *
 		 * @return citation the citation referenced.
 		 */
 		public Citation getCitation() {
@@ -1324,7 +1369,7 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 		/**
 		 * Sets the source citation for this citationRef. Adds this citationRef to the
 		 * source citation.
-		 * 
+		 *
 		 * @param citation the given source citation to set.
 		 */
 		public void setCitationTo(Citation citation) {
@@ -1339,7 +1384,7 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 
 		/**
 		 * Sets the source citation for this citationRef.
-		 * 
+		 *
 		 * @param v the given source citation to set.
 		 */
 		private void setCitation(Citation v) {
@@ -1362,7 +1407,7 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 		/**
 		 * Returns the target pathway, pathway element, or annotationRef {@link Citable}
 		 * for this citationRef.
-		 * 
+		 *
 		 * @return citable the target of the citationRef.
 		 */
 		public Citable getCitable() {
@@ -1382,7 +1427,7 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 		 * Sets the target pathway, pathway element, or annotationRef {@link Citable}
 		 * for this annotationRef. NB: Citable is only set when an Citable adds a
 		 * CitationRef. This method is not used directly.
-		 * 
+		 *
 		 * @param citable the given target citable to set.
 		 */
 		protected void setCitableTo(Citable citable) {
@@ -1396,7 +1441,7 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 		/**
 		 * Sets the target pathway, pathway element, or annotationRef {@link Citable} to
 		 * which the annotationRef belongs.
-		 * 
+		 *
 		 * @param v the given target citable to set.
 		 */
 		private void setCitable(Citable v) {
@@ -1421,7 +1466,7 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 		// ================================================================================
 		/**
 		 * Returns the list of annotation references.
-		 * 
+		 *
 		 * @return annotationRefs the list of annotations referenced, an empty list if
 		 *         no properties are defined.
 		 */
@@ -1432,7 +1477,7 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 
 		/**
 		 * Checks whether annotationRefs has the given annotationRef.
-		 * 
+		 *
 		 * @param annotationRef the annotationRef to look for.
 		 * @return true if has annotationRef, false otherwise.
 		 */
@@ -1444,8 +1489,9 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 		/**
 		 * Creates and adds an annotationRef to annotationRefs list.Sets annotable for
 		 * the given annotationRef.
-		 * 
+		 *
 		 * @param annotation the annotation for annotationRef.
+		 * @return the annotationRef of added annotation.
 		 */
 		@Override
 		public AnnotationRef addAnnotation(Annotation annotation) {
@@ -1459,8 +1505,8 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 				annotationRef.setAnnotatableTo(this);
 				assert (annotationRef.getAnnotatable() == this);
 				annotationRefs.add(annotationRef);
-				fireObjectModifiedEvent(
-						PathwayObjectEvent.createSinglePropertyEvent(PathwayElement.this, StaticProperty.ANNOTATION));
+				fireObjectModifiedEvent(PathwayObjectEvent.createSinglePropertyEvent(PathwayElement.this,
+						StaticProperty.ANNOTATIONREF));
 			}
 			return annotationRef;
 		}
@@ -1470,11 +1516,12 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 		 * model. Creates a annotationRef for annotation, and adds to annotationRefs
 		 * list for this annotatable. Calls
 		 * {@link #addAnnotation(Annotation annotation)}.
-		 * 
+		 *
 		 * @param value   the name, term, or text of the annotation.
 		 * @param type    the type of the annotation, e.g. ontology.
 		 * @param xref    the annotation xref.
 		 * @param urlLink the url link of the annotation.
+		 * @return the annotationRef of added annotation.
 		 */
 		@Override
 		public AnnotationRef addAnnotation(String value, AnnotationType type, Xref xref, String urlLink) {
@@ -1488,12 +1535,13 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 		 * model. Creates a annotationRef for annotation, and adds to annotationRefs
 		 * list for this annotatable. Sets elementId for annotation. This method is used
 		 * when reading gpml. Calls {@link #addAnnotation(Annotation annotation)}.
-		 * 
+		 *
 		 * @param elementId the elementId to set.
 		 * @param value     the name, term, or text of the annotation.
 		 * @param type      the type of the annotation, e.g. ontology.
 		 * @param xref      the annotation xref.
 		 * @param urlLink   the url link of the annotation.
+		 * @return the annotationRef of added annotation.
 		 */
 		@Override
 		public AnnotationRef addAnnotation(String elementId, String value, AnnotationType type, Xref xref,
@@ -1507,7 +1555,7 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 		/**
 		 * Removes given annotationRef from annotationRefs list. The annotationRef
 		 * ceases to exist and is terminated.
-		 * 
+		 *
 		 * @param annotationRef the annotationRef to be removed.
 		 */
 		@Override
@@ -1515,8 +1563,8 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 			if (annotationRef != null) {
 				annotationRefs.remove(annotationRef);
 				annotationRef.terminate();
-//				fireObjectModifiedEvent(
-//						PathwayElementEvent.createSinglePropertyEvent(this, StaticProperty.ANNOTATIONREF));
+				fireObjectModifiedEvent(PathwayObjectEvent.createSinglePropertyEvent(PathwayElement.this,
+						StaticProperty.ANNOTATIONREF));
 			}
 		}
 
@@ -1581,7 +1629,7 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 	/**
 	 * This class stores information for a EvidenceRef which references an
 	 * {@link Evidence}.
-	 * 
+	 *
 	 * @author finterly
 	 */
 	public class EvidenceRef extends InfoRef {
@@ -1595,7 +1643,7 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 		/**
 		 * Instantiates an EvidenceRef given source {@link Evidence} and initializes
 		 * evidenceRefs lists.
-		 * 
+		 *
 		 * @param evidence the source evidence this EvidenceRef refers to.
 		 */
 		protected EvidenceRef(Evidence evidence) {
@@ -1607,7 +1655,7 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 		// ================================================================================
 		/**
 		 * Returns the evidence referenced.
-		 * 
+		 *
 		 * @return evidence the evidence referenced.
 		 */
 		public Evidence getEvidence() {
@@ -1626,7 +1674,7 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 		/**
 		 * Sets the source evidence for this evidenceRef. Adds this evidencRef to the
 		 * source evidence.
-		 * 
+		 *
 		 * @param evidence the given source evidence to set.
 		 */
 		public void setEvidenceTo(Evidence evidence) {
@@ -1641,7 +1689,7 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 
 		/**
 		 * Sets the source evidence for this evidenceRef.
-		 * 
+		 *
 		 * @param v the given source evidence to set.
 		 */
 		private void setEvidence(Evidence v) {
@@ -1664,7 +1712,7 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 		/**
 		 * Returns the target pathway, pathway element, or evidenceRef
 		 * {@link Evidenceable} for this evidenceRef.
-		 * 
+		 *
 		 * @return evidenceable the target of the evidenceRef.
 		 */
 		public Evidenceable getEvidenceable() {
@@ -1685,7 +1733,7 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 		 * Sets the target pathway, pathway element, or evidenceRef {@link Evidenceable}
 		 * for this evidenceRef. NB: Evidenceable is only set when an Evidenceable adds
 		 * a EvidenceRef. This method is not used directly.
-		 * 
+		 *
 		 * @param evidenceable the given target evidenceable to set.
 		 */
 		protected void setEvidenceableTo(Evidenceable evidenceable) {
@@ -1699,7 +1747,7 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 		/**
 		 * Sets the target pathway, pathway element, or evidenceRef {@link Evidenceable}
 		 * to which the evidenceRef belongs.
-		 * 
+		 *
 		 * @param v the given target evidenceable to set.
 		 */
 		private void setEvidenceable(Evidenceable v) {
