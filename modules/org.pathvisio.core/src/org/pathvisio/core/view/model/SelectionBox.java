@@ -98,15 +98,15 @@ public class SelectionBox extends VElement implements Adjustable {
 	 * @param o
 	 */
 	public void addToSelection(VElement o) {
-		if (o == this || selection.contains(o))
+		if (o == this || selection.contains(o)) {
 			return; // Is selectionbox or already in selection
-		else {
+		} else {
 			o.select();
 			doAdd(o);
 		}
-		if (!isSelecting)
+		if (!isSelecting) {
 			fitToSelection();
-
+		}
 		fireSelectionEvent(new SelectionEvent(this, SelectionEvent.OBJECT_ADDED, o));
 	}
 

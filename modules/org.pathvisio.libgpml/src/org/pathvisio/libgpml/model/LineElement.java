@@ -433,11 +433,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 	 * @return lineWidth the width of a line.
 	 */
 	public double getLineWidth() {
-		if (lineWidth < 0) {
-			return 1.0;
-		} else {
-			return lineWidth;
-		}
+		return lineWidth;
 	}
 
 	/**
@@ -633,7 +629,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 	}
 
 	/**
-	 * Sets the elementRef for the start point. 
+	 * Sets the elementRef for the start point.
 	 *
 	 * @param elementRef to link to.
 	 */
@@ -1117,18 +1113,19 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 	 *         implementing classes.
 	 */
 	@Override
-	public Rectangle2D mayCross(Point2D point) { //TODO 
-		PathwayModel pathwayModel = getPathwayModel();
+	public Rectangle2D mayCross(Point2D point) {
 		Rectangle2D rect = null;
 		if (pathwayModel != null) {
-			for (PathwayObject e : pathwayModel.getPathwayObjects()) { 
-				if (e.getClass() == Shape.class || e.getClass() == DataNode.class || e.getClass() == Label.class) {
+			for (PathwayObject e : pathwayModel.getPathwayObjects()) {
+				ObjectType ot = e.getObjectType();
+				if (ot == ObjectType.SHAPE || ot == ObjectType.DATANODE || ot == ObjectType.LABEL) {
 					Rectangle2D b = ((ShapedElement) e).getBounds();
 					if (b.contains(point)) {
-						if (rect == null)
+						if (rect == null) {
 							rect = b;
-						else
+						} else {
 							rect.add(b);
+						}
 					}
 				}
 			}
@@ -1254,7 +1251,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 				result = getLineWidth();
 				break;
 			case CONNECTORTYPE:
-				result = getConnectorType().getName(); 
+				result = getConnectorType().getName();
 				break;
 			case STARTX:
 				result = getStartLinePointX();
@@ -1375,7 +1372,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 	 *
 	 * @author unknown, finterly
 	 */
-	public abstract class GenericPoint extends PathwayObject implements Drawable { 
+	public abstract class GenericPoint extends PathwayObject implements Drawable {
 
 		// ================================================================================
 		// Constructors
@@ -1462,13 +1459,6 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 			setX(x);
 			setY(y);
 		}
-
-		// TODO
-//		protected LinePoint(LinePoint p) {
-//			this(p.getX(), p.getY());
-//			if (p.elementRef != null)
-//				linkTo(p.elementRef);
-//		}
 
 		// ================================================================================
 		// Accessors
@@ -1568,8 +1558,6 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 					}
 				}
 				elementRef = v;
-//				LineElement.this.fireObjectModifiedEvent(
-//						PathwayObjectEvent.createSinglePropertyEvent(LineElement.this, StaticProperty.ELEMENTREF));
 			}
 		}
 
@@ -1717,17 +1705,15 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 		 */
 		@Override
 		public void linkTo(LinkableTo elementRef, double relX, double relY) {
-//			String id = elementRef.getElementId(); // TODO needed?
-//			if (id == null) {
-//				id = ((PathwayObject) elementRef).setGeneratedElementId();
-//			}
 			setElementRef(elementRef);
 			setRelativePosition(relX, relY);
 		}
 
 		/**
+		 * Unlinks this LinePoint from its LinkableTo elementRef.
+		 * 
 		 * NB: This may be called any number of times when this point is already
-		 * unlinked TODO
+		 * unlinked
 		 */
 		@Override
 		public void unlink() {
@@ -1769,8 +1755,8 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 		 * @param deltaY the value to move y coordinate by.
 		 */
 		public void moveBy(double deltaX, double deltaY) {
-			x = getX() + deltaX; // TODO
-			y = getY() + deltaY; // TODO
+			x = getX() + deltaX;
+			y = getY() + deltaY;
 			LineElement.this
 					.fireObjectModifiedEvent(PathwayObjectEvent.createCoordinatePropertyEvent(LineElement.this));
 		}
@@ -1929,7 +1915,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 		 */
 		public AnchorShapeType getShapeType() {
 			if (shapeType == null) {
-				return AnchorShapeType.SQUARE;
+				return AnchorShapeType.NONE;
 			} else {
 				return shapeType;
 			}
@@ -1943,8 +1929,8 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 		 */
 		public void setShapeType(AnchorShapeType v) {
 			if (v == null) {
-				shapeType = AnchorShapeType.SQUARE;
-			} // TODO
+				shapeType = AnchorShapeType.NONE;
+			}
 			if (shapeType != v) {
 				shapeType = v;
 			}

@@ -254,7 +254,6 @@ public class Group extends ShapedElement implements Xrefable {
 	public void setXref(Xref v) {
 		if (v != null) {
 			xref = v;
-			// TODO
 			fireObjectModifiedEvent(PathwayObjectEvent.createSinglePropertyEvent(this, StaticProperty.XREF));
 		}
 	}
@@ -330,7 +329,9 @@ public class Group extends ShapedElement implements Xrefable {
 
 	/**
 	 * Iterates over all group elements to find the TOTAL rectangular bounds, taking
-	 * into account rotation of the nested elements
+	 * into account rotation of the nested elements.
+	 * 
+	 * NB: For now, groups should never be rotated.
 	 *
 	 * @return the rectangular bounds for this group with rotation taken into
 	 *         account.

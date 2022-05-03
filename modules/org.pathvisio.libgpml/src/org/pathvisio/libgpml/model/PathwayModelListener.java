@@ -29,6 +29,11 @@ import java.util.EventListener;
  */
 public interface PathwayModelListener extends EventListener {
 
+	/**
+	 * Notifies of pathway model modified. 
+	 * 
+	 * @param e the pathway model event. 
+	 */
 	public void pathwayModified(PathwayModelEvent e);
 
 }

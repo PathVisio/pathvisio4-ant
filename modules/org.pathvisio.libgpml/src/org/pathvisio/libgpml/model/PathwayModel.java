@@ -315,7 +315,7 @@ public class PathwayModel {
 	}
 
 	/**
-	 * Register a link from a elementRef to a linePoint(s) //TODO check if correct
+	 * Register a link from a elementRef to a linePoint(s).
 	 *
 	 * @param elementRef the pathway element which can be linked to.
 	 * @param linePoint  the linePoint with given elementRef.
@@ -325,7 +325,7 @@ public class PathwayModel {
 	}
 
 	/**
-	 * Removes a linePoint linked to a elementRef. //TODO check if correct
+	 * Removes a linePoint linked to a elementRef.
 	 *
 	 * @param elementRef the pathway element which is linked to linePoint.
 	 * @param linePoint  the linePoint with given elementRef.
@@ -334,7 +334,7 @@ public class PathwayModel {
 		if (!elementRefToLinePoints.containsKey(elementRef)) {
 			throw new IllegalArgumentException();
 		}
-		elementRefToLinePoints.get(elementRef).remove(linePoint); // TODO
+		elementRefToLinePoints.get(elementRef).remove(linePoint);
 		if (elementRefToLinePoints.get(elementRef).size() == 0) {
 			elementRefToLinePoints.remove(elementRef);
 		}
@@ -762,7 +762,7 @@ public class PathwayModel {
 	 * @param citation the citation to be removed.
 	 */
 	public void removeCitation(Citation citation) {
-		citations.remove(citation);// TODO
+		citations.remove(citation);
 		removePathwayObject(citation);
 	}
 
@@ -867,8 +867,6 @@ public class PathwayModel {
 	 * the object. Fires PathwayEvent.DELETED event <i>after</i> removal of the
 	 * object
 	 *
-	 * //TODO remove pathwayElement instead...
-	 *
 	 * @param o the pathway object to remove.
 	 */
 	protected void removePathwayObject(PathwayObject o) {
@@ -885,7 +883,7 @@ public class PathwayModel {
 
 	/**
 	 * Adds a PathwayObject to this Pathway. Calls the appropriate add method based
-	 * on PathwayObject class. TODO
+	 * on PathwayObject class.
 	 *
 	 * @param o the pathway object to add
 	 */
@@ -893,7 +891,7 @@ public class PathwayModel {
 		assert (o != null);
 		switch (o.getObjectType()) {
 		case PATHWAY:
-			replacePathway((Pathway) o); // TODO
+			replacePathway((Pathway) o);
 			break;
 		case DATANODE:
 			addDataNode((DataNode) o);
@@ -925,14 +923,12 @@ public class PathwayModel {
 		default:
 			System.out.println(o);
 			throw new IllegalArgumentException("Pathway object cannot be directly added to pathway model.");
-//			break; TODO
-
 		}
 	}
 
 	/**
 	 * Removes a PathwayObject from this Pathway. Calls the appropriate remove
-	 * method based on PathwayObject class. TODO
+	 * method based on PathwayObject class.
 	 *
 	 * @param o the pathway object to remove
 	 */
@@ -968,7 +964,6 @@ public class PathwayModel {
 			break;
 		default:
 			throw new IllegalArgumentException("Pathway object cannot be removed from pathway model.");
-//			break;
 		}
 	}
 
@@ -1044,13 +1039,13 @@ public class PathwayModel {
 	// Clone Methods
 	// ================================================================================
 	/**
-	 * TODO Clones all?
+	 * Clones this pathway model.
+	 * 
+	 * @return the clone of this pathway model.
 	 */
 	@Override
 	public PathwayModel clone() {
 		PathwayModel result = new PathwayModel();
-		// copy Pathway separately TODO
-		// result.replacePathway(pathway);
 		BidiMap<PathwayObject, PathwayObject> newToSource = new DualHashBidiMap<>();
 		for (PathwayElement e : getPathwayElements()) {
 			CopyElement copyElement = e.copy();
@@ -1118,7 +1113,7 @@ public class PathwayModel {
 		if (sourceFile != null) {
 			result.sourceFile = new File(sourceFile.getAbsolutePath());
 		}
-		// do not copy status flag listeners TODO
+		// do not copy status flag listeners
 //		for(StatusFlagListener l : statusFlagListeners) {
 //			result.addStatusFlagListener(l);
 //		}
@@ -1232,11 +1227,12 @@ public class PathwayModel {
 	 * Used by children of this Pathway to notify the parent of modifications. A
 	 * coordinate change could trigger dependent objects such as states, groups and
 	 * connectors to be updated as well.
+	 * 
+	 * @param e the pathway object event.
 	 */
 	void childModified(PathwayObjectEvent e) {
 		markChanged();
 		if (e.isCoordinateChange()) {
-			// TODO
 			PathwayObject elt = e.getModifiedPathwayObject();
 			if (elt instanceof LinkableTo) {
 				for (LinkableFrom refc : getReferringLinkableFroms((LinkableTo) elt)) {
@@ -1271,12 +1267,12 @@ public class PathwayModel {
 		final int BORDER_SIZE = 30;
 		double mw = getPathway().getBoardWidth();
 		double mh = getPathway().getBoardHeight();
-		if (e instanceof LineElement) { // TODO
+		if (e instanceof LineElement) {
 			mw = Math.max(mw, BORDER_SIZE
 					+ Math.max(((LineElement) e).getStartLinePointX(), ((LineElement) e).getEndLinePointX()));
 			mh = Math.max(mh, BORDER_SIZE
 					+ Math.max(((LineElement) e).getStartLinePointY(), ((LineElement) e).getEndLinePointY()));
-		} else if (e instanceof ShapedElement) { // TODO
+		} else if (e instanceof ShapedElement) {
 			mw = Math.max(mw, BORDER_SIZE + ((ShapedElement) e).getLeft() + ((ShapedElement) e).getWidth());
 			mh = Math.max(mh, BORDER_SIZE + ((ShapedElement) e).getTop() + ((ShapedElement) e).getHeight());
 		}
@@ -1291,6 +1287,8 @@ public class PathwayModel {
 	 * Implement this interface if you want to be notified when the "changed" status
 	 * changes. This happens e.g. when the user makes a change to an unchanged
 	 * pathway, or when a changed pathway is saved.
+	 * 
+	 * @author unknown
 	 */
 	public interface StatusFlagListener extends EventListener {
 		public void statusFlagChanged(StatusFlagEvent e);
@@ -1298,6 +1296,8 @@ public class PathwayModel {
 
 	/**
 	 * Event for a change in the "changed" status of this Pathway
+	 * 
+	 * @author unknown
 	 */
 	public static class StatusFlagEvent {
 		private boolean newStatus;
@@ -1314,7 +1314,9 @@ public class PathwayModel {
 	private List<StatusFlagListener> statusFlagListeners = new ArrayList<StatusFlagListener>();
 
 	/**
-	 * Register a status flag listener
+	 * Registers a status flag listener
+	 * 
+	 * @param v the given status flag listener to add.
 	 */
 	public void addStatusFlagListener(StatusFlagListener v) {
 		if (!statusFlagListeners.contains(v))
@@ -1322,13 +1324,19 @@ public class PathwayModel {
 	}
 
 	/**
-	 * Remove a status flag listener
+	 * Removes a status flag listener
+	 * 
+	 * @param v the given status flag listener to remove.
 	 */
 	public void removeStatusFlagListener(StatusFlagListener v) {
 		statusFlagListeners.remove(v);
 	}
 
-	// TODO: make private
+	/**
+	 * Fires status flag event. TODO make private if possible
+	 * 
+	 * @param e the status flag event.
+	 */
 	public void fireStatusFlagEvent(StatusFlagEvent e) {
 		for (StatusFlagListener g : statusFlagListeners) {
 			g.statusFlagChanged(e);
@@ -1351,11 +1359,21 @@ public class PathwayModel {
 
 	private List<PathwayModelListener> listeners = new ArrayList<PathwayModelListener>();
 
+	/**
+	 * Adds listener to this pathway model. 
+	 * 
+	 * @param v the pathway model listener to add. 
+	 */
 	public void addListener(PathwayModelListener v) {
 		if (!listeners.contains(v))
 			listeners.add(v);
 	}
 
+	/**
+	 * Removes listener from this pathway model. 
+	 * 
+	 * @param v the pathway model listener to removed. 
+	 */
 	public void removeListener(PathwayModelListener v) {
 		listeners.remove(v);
 	}
@@ -1363,6 +1381,8 @@ public class PathwayModel {
 	/**
 	 * Firing the ObjectModifiedEvent has the side effect of marking the Pathway as
 	 * changed.
+	 * 
+	 * @param e the pathway model event. 
 	 */
 	public void fireObjectModifiedEvent(PathwayModelEvent e) {
 		markChanged();
@@ -1374,6 +1394,11 @@ public class PathwayModel {
 	// ================================================================================
 	// Helper Methods
 	// ================================================================================
+	/**
+	 * Prints a summary of this pathway model. 
+	 * 
+	 * @return the string summary of this pathway model. 
+	 */
 	public String summary() {
 		String result = "    " + toString() + "\n    with Objects:";
 		for (PathwayObject pe : getPathwayObjects()) {

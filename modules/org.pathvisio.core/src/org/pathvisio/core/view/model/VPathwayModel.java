@@ -738,7 +738,6 @@ public class VPathwayModel implements PathwayModelListener {
 		// false if we're going to remove a group.
 		boolean groupSelection = false;
 		Set<Group> groupRefList = new HashSet<Group>();
-
 		/**
 		 * Check group status of current selection
 		 */

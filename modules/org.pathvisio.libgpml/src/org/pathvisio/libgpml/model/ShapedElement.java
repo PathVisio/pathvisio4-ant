@@ -581,11 +581,7 @@ public abstract class ShapedElement extends PathwayElement implements LinkableTo
 	 * @return borderWidth the width of a border.
 	 */
 	public double getBorderWidth() {
-		if (borderWidth < 0) {
-			return 1.0; // TODO: Can borderWidth be zero?
-		} else {
-			return borderWidth;
-		}
+		return borderWidth;
 	}
 
 	/**
@@ -982,7 +978,7 @@ public abstract class ShapedElement extends PathwayElement implements LinkableTo
 				result = getBorderColor();
 				break;
 			case BORDERSTYLE:
-				result = getBorderStyle().getName(); // TODO
+				result = getBorderStyle().getName();
 				break;
 			case BORDERWIDTH:
 				result = getBorderWidth();

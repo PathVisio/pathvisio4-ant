@@ -68,7 +68,7 @@ public class ShapeType implements IShape {
 	public static final ShapeType TRIANGLE = new ShapeType("Triangle", ShapeCatalog.getRegularPolygon(3, 10, 10));
 	public static final ShapeType PENTAGON = new ShapeType("Pentagon", ShapeCatalog.getRegularPolygon(5, 10, 10));
 	public static final ShapeType HEXAGON = new ShapeType("Hexagon", ShapeCatalog.getRegularPolygon(6, 10, 10));
-	public static final ShapeType OCTAGON = new ShapeType("Octagon", ShapeCatalog.getRegularPolygon(8, 10, 10));
+	public static final ShapeType OCTAGON = new ShapeType("Octagon", ShapeCatalog.getPluggableShape(Internal.OCTAGON));
 
 	// ========================================
 	// Basic line shapes

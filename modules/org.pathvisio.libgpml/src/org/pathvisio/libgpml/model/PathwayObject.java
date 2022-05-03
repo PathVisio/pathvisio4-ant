@@ -172,7 +172,9 @@ public abstract class PathwayObject {
 	int noFire = 0;
 
 	/**
-	 * @param times
+	 * Sets noFire to the given integer. 
+	 * 
+	 * @param times the times integer value.
 	 */
 	public void dontFireEvents(int times) {
 		noFire = times;
@@ -181,6 +183,8 @@ public abstract class PathwayObject {
 	private Set<PathwayObjectListener> listeners = new HashSet<PathwayObjectListener>();
 
 	/**
+	 * Returns the listeners for this pathway object.
+	 * 
 	 * @return listeners for this pathway object.
 	 */
 	public Set<PathwayObjectListener> getListeners() {
@@ -188,7 +192,9 @@ public abstract class PathwayObject {
 	}
 
 	/**
-	 * @param v
+	 * Adds pathway object listener.
+	 * 
+	 * @param v the pathway object listener to add.
 	 */
 	public void addListener(PathwayObjectListener v) {
 		if (!listeners.contains(v)) {
@@ -197,14 +203,18 @@ public abstract class PathwayObject {
 	}
 
 	/**
-	 * @param v
+	 * Removes pathway object listener.
+	 * 
+	 * @param v the pathway object listener to remove.
 	 */
 	public void removeListener(PathwayObjectListener v) {
 		listeners.remove(v);
 	}
 
 	/**
-	 * @param e
+	 * Fires object modified event.
+	 * 
+	 * @param e the pathway object event.
 	 */
 	public void fireObjectModifiedEvent(PathwayObjectEvent e) {
 		if (noFire > 0) {
@@ -259,7 +269,8 @@ public abstract class PathwayObject {
 	}
 
 	/**
-	 * Sets properties. Old notes: Will be replaced with setProperty in the future. TODO
+	 * Sets properties. Old notes: Will be replaced with setProperty in the future.
+	 * TODO
 	 *
 	 * @param key   the key for the property to set.
 	 * @param value the value for the property to set.

@@ -62,8 +62,9 @@ public class GroupPainterRegistry {
 	 */
 	public static GroupPainter getPainter(String name) {
 		GroupPainter p = painters.get(name);
-		if (p == null)
+		if (p == null) {
 			p = defaultPainter;
+		}
 		return p;
 	}
 

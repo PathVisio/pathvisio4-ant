@@ -140,7 +140,7 @@ public class Shape extends ShapedElement {
 	 * @return the static property value.
 	 */
 	@Override
-	public Object getStaticProperty(StaticProperty key) { // TODO
+	public Object getStaticProperty(StaticProperty key) {
 		Object result = super.getStaticProperty(key);
 		if (result == null) {
 			switch (key) {

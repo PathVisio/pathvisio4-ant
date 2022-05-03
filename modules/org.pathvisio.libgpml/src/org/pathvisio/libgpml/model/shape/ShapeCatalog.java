@@ -57,7 +57,8 @@ public class ShapeCatalog {
 	public enum Internal {
 
 		// Basic shapes
-
+		OCTAGON,
+		
 		// Basic line shapes
 		BRACE,
 
@@ -77,6 +78,21 @@ public class ShapeCatalog {
 	static public java.awt.Shape getPluggableShape(Internal st) {
 		GeneralPath path = new GeneralPath();
 		switch (st) {
+		// ========================================
+		// Basic shapes
+		// ========================================
+		case OCTAGON: 
+			path.moveTo(52.32, 100);
+			path.lineTo(21.68, 100);
+			path.lineTo(0, 70.71);
+			path.lineTo(0, 29.29);
+			path.lineTo(21.67, 0);
+			path.lineTo(52.32, 0);
+			path.lineTo(74, 29.29);
+			path.lineTo(74, 70.71);
+			path.lineTo(52.32, 100);
+			path.closePath();
+			break;
 		// ========================================
 		// Basic line shapes
 		// ========================================
@@ -434,18 +450,6 @@ public class ShapeCatalog {
 	 */
 	public static java.awt.Shape getRegularPolygon(int sides, double w, double h) {
 		GeneralPath path = new GeneralPath();
-		if (sides == 8) { // separate method for octagon TODO
-			path.moveTo(52.32, 100);
-			path.lineTo(21.68, 100);
-			path.lineTo(0, 70.71);
-			path.lineTo(0, 29.29);
-			path.lineTo(21.67, 0);
-			path.lineTo(52.32, 0);
-			path.lineTo(74, 29.29);
-			path.lineTo(74, 70.71);
-			path.lineTo(52.32, 100);
-			return path;
-		}
 		for (int i = 0; i < sides; ++i) {
 			double angle = Math.PI * 2 * i / sides;
 			double x = (w / 2) * (1 + Math.cos(angle));

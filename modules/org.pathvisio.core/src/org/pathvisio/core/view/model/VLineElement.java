@@ -364,8 +364,9 @@ public class VLineElement extends VPathwayElement implements VGroupable, Adjusta
 		ArrowShape he = heads[1];
 
 		float thickness = (float) vFromM(getPathwayObject().getLineWidth());
-		if (getPathwayObject().getLineStyle() == LineStyleType.DOUBLE)
+		if (getPathwayObject().getLineStyle() == LineStyleType.DOUBLE) {
 			thickness *= 4;
+		}
 		BasicStroke bs = new BasicStroke(thickness);
 
 		Area total = new Area(bs.createStrokedShape(l));

@@ -350,43 +350,6 @@ public class Pathway extends PathwayElement implements Xrefable {
 	}
 
 	// ================================================================================
-	// FireEvent and Listener Methods
-	// ================================================================================
-	int noFire = 0;
-
-	@Override
-	public void dontFireEvents(int times) {
-		noFire = times;
-	}
-
-	private Set<PathwayObjectListener> listeners = new HashSet<PathwayObjectListener>();
-
-	@Override
-	public void addListener(PathwayObjectListener v) {
-		if (!listeners.contains(v))
-			listeners.add(v);
-	}
-
-	@Override
-	public void removeListener(PathwayObjectListener v) {
-		listeners.remove(v);
-	}
-
-	@Override
-	public void fireObjectModifiedEvent(PathwayObjectEvent e) {
-		if (noFire > 0) {
-			noFire -= 1;
-			return;
-		}
-//		if (pathwayModel != null) { TODO
-//			pathwayModel.childModified(e);
-//		}
-		for (PathwayObjectListener g : listeners) {
-			g.gmmlObjectModified(e);
-		}
-	}
-
-	// ================================================================================
 	// Copy Methods
 	// ================================================================================
 	/**
@@ -402,7 +365,6 @@ public class Pathway extends PathwayElement implements Xrefable {
 		boardWidth = src.boardWidth;
 		boardHeight = src.boardHeight;
 		backgroundColor = src.backgroundColor;
-		authors = new ArrayList<Author>(); // TODO
 		// copy authors
 		for (Author c : src.authors) {
 			try {
@@ -511,7 +473,7 @@ public class Pathway extends PathwayElement implements Xrefable {
 	@Override
 	public void setStaticProperty(StaticProperty key, Object value) {
 		super.setStaticProperty(key, value);
-		switch (key) { // TODO
+		switch (key) { 
 		case TITLE:
 			setTitle((String) value);
 			break;
@@ -585,7 +547,7 @@ public class Pathway extends PathwayElement implements Xrefable {
 		// ================================================================================
 
 		/**
-		 * Clones this author. TODO
+		 * Clones this author.
 		 */
 		@Override
 		public Object clone() throws CloneNotSupportedException {
@@ -684,7 +646,7 @@ public class Pathway extends PathwayElement implements Xrefable {
 		}
 
 		/**
-		 * Writes author out as a string. TODO
+		 * Writes author out as a string.
 		 */
 		@Override
 		public String toString() {

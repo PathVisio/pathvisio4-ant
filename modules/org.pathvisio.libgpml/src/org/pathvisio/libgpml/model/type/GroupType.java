@@ -27,8 +27,6 @@ import org.pathvisio.libgpml.debug.Logger;
  * This class contains extensible enum for Group type property. Groups can have
  * different biological meanings (e.g. protein Complex), and can be rendered in
  * different ways based on that.
- *
- * TODO: Add group type="Transparent" to GPML Schema  
  * 
  * NB: group type previously named group style.
  * 

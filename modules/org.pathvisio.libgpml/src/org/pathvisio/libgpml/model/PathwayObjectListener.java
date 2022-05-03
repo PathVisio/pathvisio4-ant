@@ -29,6 +29,11 @@ import java.util.EventListener;
  */
 public interface PathwayObjectListener extends EventListener {
 
+	/**
+	 * Notifies of pathway object changes. 
+	 * 
+	 * @param e the pathway object event. 
+	 */
 	public void gmmlObjectModified(PathwayObjectEvent e);
 
 }

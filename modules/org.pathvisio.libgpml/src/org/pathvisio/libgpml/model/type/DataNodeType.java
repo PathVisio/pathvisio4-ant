@@ -50,8 +50,8 @@ public class DataNodeType {
 	public static final DataNodeType PHENOTYPE = new DataNodeType("Phenotype");
 	public static final DataNodeType ALIAS = new DataNodeType("Alias");
 	public static final DataNodeType EVENT = new DataNodeType("Event");
-	public static final DataNodeType CELL_NODE = new DataNodeType("CellNode"); // TODO
-	public static final DataNodeType ORGAN = new DataNodeType("Organ"); // TODO
+	public static final DataNodeType CELL_NODE = new DataNodeType("CellNode"); 
+	public static final DataNodeType ORGAN = new DataNodeType("Organ");
 
 	private String name;
 
