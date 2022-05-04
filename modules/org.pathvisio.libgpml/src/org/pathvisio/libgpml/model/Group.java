@@ -271,7 +271,6 @@ public class Group extends ShapedElement implements Xrefable {
 			pathwayModel.addDataNode(alias);
 			return alias;
 		}
-		System.out.println("Cannot create an alias for group without valid pathway model.");
 		return null;
 	}
 

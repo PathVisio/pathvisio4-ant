@@ -16,7 +16,6 @@
  ******************************************************************************/
 package org.pathvisio.libgpml.model;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -24,7 +23,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
-import java.nio.charset.StandardCharsets;
 
 import javax.swing.JOptionPane;
 
@@ -238,24 +236,18 @@ public class GpmlFormat extends AbstractPathwayModelFormat {
 	 */
 	private static void readFromXmlImpl(PathwayModel pathwayModel, InputSource is, boolean validate)
 			throws ConverterException {
-//
-//		String schemaFile = CURRENT.getSchemaFile();
-//		URL url = Thread.currentThread().getContextClassLoader().getResource(schemaFile);
-//		File xsdFile = new File(url.getPath());
-
+		// Start XML processing
+		SAXBuilder builder = new SAXBuilder(); // no validation when reading the xml file, validation later.
 		try {
-//			XMLReaderJDOMFactory schemafactory = new XMLReaderXSDFactory(xsdFile); // schema
-
-			SAXBuilder builder = new SAXBuilder();
-
-//			/* if validate by schema */
-//			if (validate) {
-//				builder = new SAXBuilder(schemafactory);
-//				System.out.println("Validated with schema: " + schemaFile);
-//			}
+			Logger.log.trace("Build JDOM tree");
+			// build jdom tree
 			Document doc = builder.build(is);
+			// copy the pathway information to a VPathway
 			Element root = doc.getRootElement();
-
+			if (!root.getName().equals("Pathway")) {
+				throw new ConverterException("Not a Pathway file");
+			}
+			// reader
 			Namespace ns = root.getNamespace();
 			GpmlFormatReader format = getReaderForNamespace(ns);
 			if (format == null) {
@@ -263,13 +255,14 @@ public class GpmlFormat extends AbstractPathwayModelFormat {
 						+ " was not recognized. This application might be out of date.");
 			}
 			Logger.log.info("Recognized format " + ns);
+			// validation
 			if (validate) {
 				format.validateDocument(doc);
 				Logger.log.trace("Validated with schema: " + format.getSchemaFile());
 			}
 			Logger.log.trace("Copy map elements");
 			format.readFromRoot(pathwayModel, root);
-			// Warning message if opening older GPML
+			// warning message if opening older GPML
 			if (!(format instanceof GPML2021Reader)) {
 				JOptionPane.showConfirmDialog(null,
 						"This pathway was written in an older Gpml version.\nSave will automatically update it to GPML2021.",
@@ -284,56 +277,11 @@ public class GpmlFormat extends AbstractPathwayModelFormat {
 		}
 	}
 
-//	private static PathwayModel readFromXmlImplNew(PathwayModel pathwayModel, InputSource is, boolean validate)
-//			throws ConverterException {
-//
-//		try {
-//			InputStream in = new BufferedInputStream(is.getByteStream());
-//			in.mark(0);
-//			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-//			reader.readLine();
-//			String schema = reader.readLine();
-//			in.reset();
-//
-//			SAXBuilder builder = new SAXBuilder();
-//
-////			/* if validate by schema */
-////			if (validate) {
-////				builder = new SAXBuilder(schemafactory);
-////				System.out.println("Validated with schema: " + schemaFile);
-////			}
-//			Document doc = builder.build(in);// new ByteArrayInputStream(byteArray)
-//			Element root = doc.getRootElement();
-//
-//			Namespace ns = root.getNamespace();
-//			GpmlFormatReader format = getReaderForNamespace(ns);
-//			if (format == null) {
-//				throw new ConverterException("This file looks like a pathwayModel, " + "but the namespace " + ns
-//						+ " was not recognized. This application might be out of date.");
-//			}
-//			Logger.log.info("Recognized format " + ns);
-//			if (validate) {
-//				format.validateDocument(doc);
-//				Logger.log.trace("Validated with schema: " + format.getSchemaFile());
-//			}
-//			Logger.log.trace("Copy map elements");
-//			format.readFromRoot(pathwayModel, root);
-//			System.out.println("Read pathway model successfully from gpml file");
-//		} catch (JDOMException e) {
-//			throw new ConverterException(e);
-//		} catch (IOException e) {
-//			throw new ConverterException(e);
-//		} catch (Exception e) {
-//			throw new ConverterException(e); // TODO e.printStackTrace()?
-//		}
-//		return pathwayModel;// TODO do we want to return pathway or not?
-//	}
-
 	/**
-	 * Returns true if file type is correct. 
+	 * Returns true if file type is correct.
 	 * 
 	 * @param f the file.
-	 * @return true if file type correct. 
+	 * @return true if file type correct.
 	 */
 	@Override
 	public boolean isCorrectType(File f) {
@@ -349,7 +297,7 @@ public class GpmlFormat extends AbstractPathwayModelFormat {
 
 	@Override
 	public void doExport(File file, PathwayModel pathwayModel, int zoom) throws ConverterException {
-		// TODO Auto-generated method stub
+		// Auto-generated method stub
 	}
 
 }

@@ -250,7 +250,11 @@ public abstract class VShapedElement extends VPathwayElement implements VLinkabl
 	}
 
 	/**
-	 * TODO
+	 * Adjusts view element to handle.
+	 * 
+	 * @param h the handle.
+	 * @param vnewx the new x.
+	 * @param vnexy the new y.  
 	 */
 	public void adjustToHandle(Handle h, double vnewx, double vnewy) {
 		ShapedElement gdata = getPathwayObject();
@@ -343,13 +347,6 @@ public abstract class VShapedElement extends VPathwayElement implements VLinkabl
 		Point vcr = LinAlg.rotate(new Point(idx, idy), -gdata.getRotation());
 		gdata.setCenterX(gdata.getCenterX() + vcr.x);
 		gdata.setCenterY(gdata.getCenterY() + vcr.y);
-//		if (gdata.getObjectType() == ObjectType.GROUP) { TODO 
-//			((Group) gdata).updateDimensions(); // if group, update dimensions
-//		}
-//		Group parentGroup = gdata.getGroupRef(); // if member of group, update parent group dimensions
-//		if (parentGroup != null) {
-//			parentGroup.updateDimensions();
-//		}
 	}
 
 	/**

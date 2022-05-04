@@ -168,7 +168,6 @@ public class PathwayModelTransferable implements Transferable {
 				if (((DataNode) newerElement).getType() == DataNodeType.ALIAS
 						&& ((DataNode) srcElement).getType() == DataNodeType.ALIAS) {
 					Group srcAliasRef = ((DataNode) srcElement).getAliasRef();
-					System.out.println("IS TRUE??" + srcAliasRef != null);
 					if (srcAliasRef != null) {
 						Group newerAliasRef = (Group) newerToSource.getKey(srcAliasRef);
 						// if group aliasRef was also copied

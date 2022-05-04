@@ -312,6 +312,9 @@ public class SelectionBox extends VElement implements Adjustable {
 		return handleSE;
 	}
 
+	/**
+	 * Adjust selection box to handle.
+	 */
 	public void adjustToHandle(Handle h, double vnewx, double vnewy) {
 		double mnewx = mFromV(vnewx);
 		double mnewy = mFromV(vnewy);
@@ -381,7 +384,6 @@ public class SelectionBox extends VElement implements Adjustable {
 						}
 					}
 					addToSelection(o);
-
 				} else if (o.isSelected() && !groupObjects.contains(o)) {
 					removeFromSelection(o);
 				}
