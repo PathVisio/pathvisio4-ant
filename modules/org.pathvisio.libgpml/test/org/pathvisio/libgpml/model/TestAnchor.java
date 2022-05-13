@@ -90,7 +90,7 @@ public class TestAnchor extends TestCase {
 		assertEquals(pt4.getPathwayModel(), p);
 
 		// add anchor
-		a1 = i1.addAnchor(0.5, AnchorShapeType.SQUARE);
+		a1 = i1.addAnchor(0.5, AnchorShapeType.NONE);
 
 		// checks
 		assertTrue(i1.hasAnchor(a1));

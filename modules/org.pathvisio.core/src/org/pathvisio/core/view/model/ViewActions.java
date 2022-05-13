@@ -40,11 +40,11 @@ import org.pathvisio.core.Engine;
 import org.pathvisio.core.Engine.ApplicationEventListener;
 import org.pathvisio.libgpml.model.connector.ConnectorShape;
 import org.pathvisio.libgpml.model.connector.FreeConnectorShape;
-import org.pathvisio.libgpml.model.shape.ShapeType;
 import org.pathvisio.libgpml.model.type.AnchorShapeType;
 import org.pathvisio.libgpml.model.type.DataNodeType;
 import org.pathvisio.libgpml.model.type.GroupType;
 import org.pathvisio.libgpml.model.type.ObjectType;
+import org.pathvisio.libgpml.model.type.ShapeType;
 import org.pathvisio.libgpml.model.LineElement;
 import org.pathvisio.libgpml.model.DataNode;
 import org.pathvisio.libgpml.model.DataNode.State;
@@ -799,7 +799,7 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 				for (VDrawable g : selection) {
 					if (g instanceof VLineElement) {
 						VLineElement l = (VLineElement) g;
-						l.getPathwayObject().addAnchor(0.4, AnchorShapeType.SQUARE);
+						l.getPathwayObject().addAnchor(0.4, AnchorShapeType.NONE);
 					}
 				}
 			}

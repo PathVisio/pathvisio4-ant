@@ -26,8 +26,8 @@ import org.pathvisio.libgpml.model.Label;
 import org.pathvisio.libgpml.model.PathwayModel;
 import org.pathvisio.libgpml.model.Shape;
 import org.pathvisio.libgpml.model.shape.IShape;
-import org.pathvisio.libgpml.model.shape.ShapeType;
 import org.pathvisio.libgpml.model.type.DataNodeType;
+import org.pathvisio.libgpml.model.type.ShapeType;
 import org.pathvisio.libgpml.util.ColorUtils;
 import org.pathvisio.libgpml.util.Utils;
 

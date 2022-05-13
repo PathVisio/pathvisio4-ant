@@ -22,6 +22,7 @@ import java.net.URL;
 import org.pathvisio.libgpml.model.type.ConnectorType;
 import org.pathvisio.libgpml.model.type.DataNodeType;
 import org.pathvisio.libgpml.model.type.LineStyleType;
+import org.pathvisio.libgpml.model.type.ShapeType;
 import org.pathvisio.libgpml.model.type.AnchorShapeType;
 import org.pathvisio.libgpml.model.type.ArrowHeadType;
 import org.pathvisio.libgpml.model.DataNode.State;
@@ -30,7 +31,6 @@ import org.pathvisio.libgpml.model.Interaction;
 import org.pathvisio.libgpml.model.DataNode;
 import org.pathvisio.libgpml.model.Shape;
 import org.pathvisio.libgpml.model.shape.IShape;
-import org.pathvisio.libgpml.model.shape.ShapeType;
 import org.pathvisio.libgpml.model.LineElement;
 import org.pathvisio.libgpml.model.LineElement.Anchor;
 import org.pathvisio.libgpml.model.Label;
@@ -644,7 +644,7 @@ public abstract class DefaultTemplates {
 			lastEndNode.setTextLabel("Product");
 
 			lastLine.setEndArrowHeadType(ArrowHeadType.CONVERSION);
-			Anchor anchor = lastLine.addAnchor(0.5, AnchorShapeType.SQUARE);
+			Anchor anchor = lastLine.addAnchor(0.5, AnchorShapeType.NONE);
 
 			InteractionTemplate lnt = new InteractionTemplate("undirected", LineStyleType.SOLID,
 					ArrowHeadType.UNDIRECTED, ArrowHeadType.UNDIRECTED, ConnectorType.STRAIGHT);
@@ -699,7 +699,7 @@ public abstract class DefaultTemplates {
 			lastEndNode.setTextLabel("Metabolite 2");
 			lastLine.setEndArrowHeadType(ArrowHeadType.CONVERSION);
 
-			Anchor anchor = lastLine.addAnchor(0.5, AnchorShapeType.SQUARE);
+			Anchor anchor = lastLine.addAnchor(0.5, AnchorShapeType.NONE);
 
 			InteractionTemplate lnt = new InteractionTemplate("undirected", LineStyleType.SOLID,
 					ArrowHeadType.UNDIRECTED, ArrowHeadType.UNDIRECTED, ConnectorType.STRAIGHT);
@@ -717,7 +717,7 @@ public abstract class DefaultTemplates {
 			lastReverseLine.getEndLinePoint().linkTo(lastStartNode, 1, 0.5);
 			lastReverseLine.setEndArrowHeadType(ArrowHeadType.CONVERSION);
 
-			Anchor anchor2 = lastReverseLine.addAnchor(0.5, AnchorShapeType.SQUARE);
+			Anchor anchor2 = lastReverseLine.addAnchor(0.5, AnchorShapeType.NONE);
 
 			InteractionTemplate lnt2 = new InteractionTemplate("undirected", LineStyleType.SOLID,
 					ArrowHeadType.UNDIRECTED, ArrowHeadType.UNDIRECTED, ConnectorType.STRAIGHT);

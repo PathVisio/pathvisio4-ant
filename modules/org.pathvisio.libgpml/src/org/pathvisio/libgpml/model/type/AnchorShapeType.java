@@ -31,9 +31,9 @@ public class AnchorShapeType {
 	private static Map<String, AnchorShapeType> nameToAnchorShapeType = new TreeMap<String, AnchorShapeType>(
 			String.CASE_INSENSITIVE_ORDER);
 
-	public static final AnchorShapeType SQUARE = new AnchorShapeType("Square"); // default
+	public static final AnchorShapeType NONE = new AnchorShapeType("None"); // default
+	public static final AnchorShapeType SQUARE = new AnchorShapeType("Square");
 	public static final AnchorShapeType CIRCLE = new AnchorShapeType("Circle");
-	public static final AnchorShapeType NONE = new AnchorShapeType("None");
 
 	private String name;
 	private boolean disallowLinks;
