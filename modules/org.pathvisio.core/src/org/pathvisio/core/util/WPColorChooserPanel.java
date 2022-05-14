@@ -28,6 +28,7 @@ import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.colorchooser.AbstractColorChooserPanel;
+
 import java.awt.Graphics2D;
 import java.awt.Graphics;
 import java.awt.Rectangle;

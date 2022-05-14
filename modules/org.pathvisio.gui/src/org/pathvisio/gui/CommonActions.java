@@ -300,7 +300,7 @@ public class CommonActions implements ApplicationEventListener {
 				// new NewElementAction(e, new
 				// DefaultTemplates.CellularComponentTemplate(ShapeType.ROUNDED_RECTANGLE,
 				// CellularComponentType.CYTOSOL)),
-				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.EXTRACELLULAR)),
+				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.EXTRACELLULAR_REGION)),
 				// new NewElementAction(e, new
 				// DefaultTemplates.CellularComponentTemplate(ShapeType.ROUNDED_RECTANGLE,
 				// CellularComponentType.MEMBRANE))

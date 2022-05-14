@@ -61,6 +61,6 @@ public class TestColorUtils extends TestCase {
 		assertTrue(ColorUtils.isTransparent(color));
 		assertTrue(ColorUtils.isTransparent(color2));
 	}
-		
+	
 	
 }

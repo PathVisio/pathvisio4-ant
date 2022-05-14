@@ -111,7 +111,7 @@ public abstract class DefaultTemplates {
 				((Shape) o).setWidth(BRACE_WIDTH);
 				((Shape) o).setHeight(BRACE_HEIGHT);
 			} else if (type == ShapeType.MITOCHONDRIA || type == ShapeType.CELL || type == ShapeType.NUCLEUS
-					|| type == ShapeType.ORGANELLE || type == ShapeType.EXTRACELLULAR) {
+					|| type == ShapeType.ORGANELLE || type == ShapeType.EXTRACELLULAR_REGION) {
 				((Shape) o).setWidth(SHAPE_SIZE_200);
 				((Shape) o).setHeight(SHAPE_SIZE_100);
 			} else if (type == ShapeType.SARCOPLASMIC_RETICULUM || type == ShapeType.ENDOPLASMIC_RETICULUM
@@ -352,7 +352,7 @@ public abstract class DefaultTemplates {
 			IShape type = e.getShapeType();
 			if (shapeType == ShapeType.CELL || type == ShapeType.NUCLEUS || type == ShapeType.ORGANELLE) {
 				e.setBorderStyle(LineStyleType.DOUBLE);
-			} else if (type == ShapeType.CYTOSOL || type == ShapeType.EXTRACELLULAR || type == ShapeType.MEMBRANE) {
+			} else if (type == ShapeType.CYTOSOL_REGION || type == ShapeType.EXTRACELLULAR_REGION || type == ShapeType.MEMBRANE_REGION) {
 				e.setBorderStyle(LineStyleType.DASHED); // TODO membrane/cytosol never implemented?
 			} else {
 				e.setBorderStyle(LineStyleType.SOLID);

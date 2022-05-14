@@ -58,6 +58,7 @@ import org.pathvisio.libgpml.model.Shape;
 import org.pathvisio.libgpml.model.ShapedElement;
 import org.pathvisio.libgpml.model.LineElement.LinePoint;
 import org.pathvisio.libgpml.model.type.StateType;
+import org.pathvisio.core.util.ColorPalette;
 import org.pathvisio.core.util.Resources;
 import org.pathvisio.libgpml.util.Utils;
 import org.pathvisio.core.view.model.SelectionBox.SelectionEvent;
@@ -899,7 +900,7 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 			VGroup g = vPathwayModel.toggleGroup(vPathwayModel.getSelectedGraphics());
 			if (g != null) {
 				g.getPathwayObject().setType(type);
-				// TODO !!!!
+				g.getPathwayObject().setTextColor(ColorPalette.WP_DGREY);
 				if (vPathwayModel != null) {
 					vPathwayModel.getUndoManager().newAction("Change Group");
 				}

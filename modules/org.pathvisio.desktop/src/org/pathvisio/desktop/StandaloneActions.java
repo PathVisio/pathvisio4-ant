@@ -132,12 +132,15 @@ public class StandaloneActions implements ApplicationEventListener {
 		public NewPluginManagerAction(PvDesktop desktop) {
 			super();
 			this.pvDesktop = desktop;
-			putValue(NAME, "Plugin manager");
+			putValue(NAME, "Plugin Manager");
 			putValue(SHORT_DESCRIPTION, "Information about active plugins");
 		}
 
 		public void actionPerformed(ActionEvent e) {
-			pvDesktop.getPluginManagerExternal().showGui(pvDesktop.getFrame());
+			// TODO disable until plugins updated
+			// pvDesktop.getPluginManagerExternal().showGui(pvDesktop.getFrame());
+			JOptionPane.showMessageDialog(null, "Plugin Manager currently under construction.");
+
 		}
 	}
 
@@ -151,7 +154,7 @@ public class StandaloneActions implements ApplicationEventListener {
 		public LoadLocalBundlesAction(PvDesktop desktop) {
 			super();
 			this.pvDesktop = desktop;
-			putValue(NAME, "Install local plugins");
+			putValue(NAME, "Install Local Plugins");
 			putValue(SHORT_DESCRIPTION, "Information about active plugins");
 		}
 
@@ -211,7 +214,7 @@ public class StandaloneActions implements ApplicationEventListener {
 
 	/**
 	 * Let the user pick a gene , metabolite or interaction database. Invoked in
-	 * menu->data->select gene database
+	 * menu->file->load identifier mapping->select gene database
 	 */
 	public static class SelectGeneDbAction extends AbstractAction {
 		PvDesktop desktop;
@@ -264,7 +267,7 @@ public class StandaloneActions implements ApplicationEventListener {
 		public SearchAction(SwingEngine swingEngine) {
 			super();
 			this.swingEngine = swingEngine;
-			putValue(NAME, "Search pathways");
+			putValue(NAME, "Search Pathways");
 			putValue(SHORT_DESCRIPTION, "Search pathways for a symbol or identifier");
 		}
 

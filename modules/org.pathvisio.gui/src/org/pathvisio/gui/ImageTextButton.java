@@ -32,6 +32,7 @@ import java.awt.event.MouseListener;
 import java.awt.Graphics2D;
 import javax.swing.Action;
 import javax.swing.JButton;
+
 import org.pathvisio.core.util.ColorPalette;
 
 /**

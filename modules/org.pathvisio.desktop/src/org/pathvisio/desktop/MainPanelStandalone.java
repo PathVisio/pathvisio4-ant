@@ -63,16 +63,25 @@ public class MainPanelStandalone extends MainPanel {
 
 	@Override
 	protected void addMenuActions(JMenuBar mb) {
+
+		// ========================================
+		// File Menu
+		// ========================================
 		JMenu fileMenu = new JMenu("File");
 
 		addToMenu(standaloneActions.newAction, fileMenu);
 		addToMenu(standaloneActions.openAction, fileMenu);
-
-		recentPathwaysMenu = new JMenu("Open Recent");
+		recentPathwaysMenu = new JMenu("Open Recent");// Menu -> File -> Open Recent
 		initRecentPathwayList();
 		fileMenu.add(recentPathwaysMenu);
 		addToMenu(actions.standaloneSaveAction, fileMenu);
 		addToMenu(actions.standaloneSaveAsAction, fileMenu);
+		fileMenu.addSeparator();
+		JMenu loadIdMappingMenu = new JMenu("Load Identifier Mapping"); // Menu -> File -> Load Identifier Mapping
+		addToMenu(standaloneActions.selectGeneDbAction, loadIdMappingMenu);
+		addToMenu(standaloneActions.selectMetaboliteDbAction, loadIdMappingMenu);
+		addToMenu(standaloneActions.selectInteractionDbAction, loadIdMappingMenu); // @author anwesha
+		fileMenu.add(loadIdMappingMenu);
 		fileMenu.addSeparator();
 		addToMenu(actions.importAction, fileMenu);
 		addToMenu(actions.exportAction, fileMenu);
@@ -80,6 +89,9 @@ public class MainPanelStandalone extends MainPanel {
 		addToMenu(standaloneActions.printAction, fileMenu);
 		addToMenu(actions.exitAction, fileMenu);
 
+		// ========================================
+		// Edit Menu
+		// ========================================
 		JMenu editMenu = new JMenu("Edit");
 		addToMenu(actions.undoAction, editMenu);
 		addToMenu(actions.copyAction, editMenu);
@@ -94,14 +106,15 @@ public class MainPanelStandalone extends MainPanel {
 
 		editMenu.add(selectionMenu);
 
-		JMenu dataMenu = new JMenu("Data");
-		addToMenu(standaloneActions.selectGeneDbAction, dataMenu);
-		addToMenu(standaloneActions.selectMetaboliteDbAction, dataMenu);
-		/**
-		 * @author anwesha
-		 */
-		addToMenu(standaloneActions.selectInteractionDbAction, dataMenu);
+		// ========================================
+		// Data Menu: Removed for now TODO 
+		// ========================================
+		// Select database actions moved to Menu -> File -> Load Identifier Mapping..
+		// JMenu dataMenu = new JMenu("Data");
 
+		// ========================================
+		// View Menu
+		// ========================================
 		JMenu viewMenu = new JMenu("View");
 		JMenu zoomMenu = new JMenu("Zoom");
 		viewMenu.add(zoomMenu);
@@ -109,17 +122,26 @@ public class MainPanelStandalone extends MainPanel {
 			addToMenu(a, zoomMenu);
 		}
 
+		// ========================================
+		// Plugins Menu
+		// ========================================
 		JMenu pluginsMenu = new JMenu("Plugins");// new
 //		pluginsMenu.add(standaloneActions.pluginManagerAction);
 		pluginsMenu.add(standaloneActions.newPluginManagerAction);
 		pluginsMenu.add(standaloneActions.loadLocalBundlesAction);
 
+		// ========================================
+		// Help Menu
+		// ========================================
 		JMenu helpMenu = new JMenu("Help");
 		helpMenu.add(actions.aboutAction);
 		helpMenu.add(standaloneActions.helpAction);
 
-		JMenu toolMenu = new JMenu("Tools"); // TODO
-		JMenu curationMenu = new JMenu("Curation"); // TODO
+		// ========================================
+		// Tools Menu
+		// ========================================
+		JMenu toolMenu = new JMenu("Tools"); 
+		JMenu curationMenu = new JMenu("Curation"); 
 		addToMenu(actions.showUnlinkedAction, curationMenu);
 		toolMenu.add(curationMenu);
 		JMenu themeMenu = new JMenu("Apply Theme");
@@ -130,9 +152,9 @@ public class MainPanelStandalone extends MainPanel {
 
 		mb.add(fileMenu);
 		mb.add(editMenu);
-		mb.add(dataMenu);
+		// mb.add(dataMenu); TODO Removed for now  
 		mb.add(viewMenu);
-		mb.add(pluginsMenu);// new
+		mb.add(pluginsMenu);
 		mb.add(helpMenu);
 		mb.add(toolMenu);
 	}

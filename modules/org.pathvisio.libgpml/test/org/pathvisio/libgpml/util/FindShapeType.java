@@ -54,7 +54,7 @@ public class FindShapeType extends TestCase {
 		Map<String, String> shapeTypes = new HashMap<String, String>();
 
 		// Gets all organism directories
-		File dirAllOrganisms = new File("C:/Users/p70073399/Documents/wikipathways-20210527-all-species/cache");
+		File dirAllOrganisms = new File("C:/Users/p70073399/Documents/WP_Cache");
 		String[] dirOrganisms = dirAllOrganisms.list(new FilenameFilter() {
 			@Override
 			public boolean accept(File current, String name) {
@@ -64,7 +64,7 @@ public class FindShapeType extends TestCase {
 		System.out.println(Arrays.toString(dirOrganisms));
 		for (int i = 0; i < dirOrganisms.length; i++) {
 			File dirOrganism = new File(
-					"C:/Users/p70073399/Documents/wikipathways-20210527-all-species/cache/" + dirOrganisms[i]);
+					"C:/Users/p70073399/Documents/WP_Cache/" + dirOrganisms[i]);
 			File[] listOfFiles = dirOrganism.listFiles(new FilenameFilter() {
 				public boolean accept(File dir, String name) {
 					return name.toLowerCase().endsWith(".gpml");
@@ -85,7 +85,7 @@ public class FindShapeType extends TestCase {
 							if (gfx != null) {
 								String shapeType = gfx.getAttributeValue("ShapeType");
 								shapeTypes.put(shapeType, file.getName());
-								if (shapeType == "Membrane region") {
+								if (shapeType == "Sarcoplasmic Reticulum") {
 									System.out.println(file.getName());
 								}
 							}
@@ -95,7 +95,7 @@ public class FindShapeType extends TestCase {
 								String key = dp.getAttributeValue("Key");
 								String value = dp.getAttributeValue("Value");
 								if (Objects.equals(key, "org.pathvisio.CellularComponentProperty")) {
-									if (value.equals("Membrane region")) {
+									if (value.equals("Sarcoplasmic Reticulum")) {
 										System.out.println(file.getName());
 									}
 									shapeTypes.put(value, file.getName());
@@ -114,7 +114,7 @@ public class FindShapeType extends TestCase {
 
 		}
 //		for (String shapeType : shapeTypes.keySet()) {
-//			System.out.println(shapeType + " " + shapeTypes.get(shapeType));
+//			System.out.println(shapeType); //+ " " + shapeTypes.get(shapeType));
 //		}
 	}
 }

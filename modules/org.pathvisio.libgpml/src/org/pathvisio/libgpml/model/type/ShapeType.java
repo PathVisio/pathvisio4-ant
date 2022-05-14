@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  ******************************************************************************/
-package org.pathvisio.libgpml.model.shape;
+package org.pathvisio.libgpml.model.type;
 
 import java.awt.Rectangle;
 import java.awt.Shape;
@@ -32,7 +32,10 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import org.pathvisio.libgpml.debug.Logger;
+import org.pathvisio.libgpml.model.shape.IShape;
+import org.pathvisio.libgpml.model.shape.ShapeCatalog;
 import org.pathvisio.libgpml.model.shape.ShapeCatalog.Internal;
+import org.pathvisio.libgpml.model.shape.ShapeRegistry;
 
 /**
  * This enum class contains extensible enum for Shape type property.
@@ -92,7 +95,7 @@ public class ShapeType implements IShape {
 	// ========================================
 	// Cellular components (basic shape)
 	// ========================================
-	public static final ShapeType EXTRACELLULAR = new ShapeType("ExtracellularRegion", null) {
+	public static final ShapeType EXTRACELLULAR_REGION = new ShapeType("ExtracellularRegion", null) {
 		public Shape getShape(double mw, double mh) { // rounded rectangle
 			return new RoundRectangle2D.Double(0, 0, mw, mh, 20, 20);
 		}
@@ -116,9 +119,9 @@ public class ShapeType implements IShape {
 	public static final ShapeType CORONAVIRUS_ICON = new ShapeType("CoronavirusIcon",
 			ShapeCatalog.getPluggableShape(Internal.CORONAVIRUS_ICON));
 	public static final ShapeType DNA_ICON = new ShapeType("DNAIcon",
-			ShapeCatalog.getPluggableShape(Internal.DNA_ICON)); //
+			ShapeCatalog.getPluggableShape(Internal.DNA_ICON)); 
 	public static final ShapeType RNA_ICON = new ShapeType("RNAIcon",
-			ShapeCatalog.getPluggableShape(Internal.RNA_ICON)); //
+			ShapeCatalog.getPluggableShape(Internal.RNA_ICON)); 
 	public static final ShapeType CELL_ICON = new ShapeType("CellIcon",
 			ShapeCatalog.getPluggableShape(Internal.CELL_ICON));
 	public static final ShapeType MEMBRANE_ICON = new ShapeType("MembraneIcon",
@@ -131,42 +134,8 @@ public class ShapeType implements IShape {
 	public static final ShapeType NUCLEOLUS = new ShapeType("Nucleolus", null);
 	public static final ShapeType VACUOLE = new ShapeType("Vacuole", null);
 	public static final ShapeType LYSOSOME = new ShapeType("Lysosome", null);
-	public static final ShapeType CYTOSOL = new ShapeType("CytosolRegion", null);
-
-	// Deprecated since GPML2013a TODO
-	@Deprecated
-	public static final ShapeType MEMBRANE = new ShapeType("Membrane", null); // roundRect
-	@Deprecated
-	public static final ShapeType CELLA = new ShapeType("CellA", null); // oval
-	@Deprecated
-	public static final ShapeType RIBOSOME = new ShapeType("Ribosome", null); // Hexagon
-	@Deprecated
-	public static final ShapeType ORGANA = new ShapeType("OrganA", null); // oval
-	@Deprecated
-	public static final ShapeType ORGANB = new ShapeType("OrganB", null); // oval
-	@Deprecated
-	public static final ShapeType ORGANC = new ShapeType("OrganC", null); // oval
-	@Deprecated
-	public static final ShapeType PROTEINB = new ShapeType("ProteinB", null); // hexagon
-
-	// ========================================
-	// Deprecated Map Methods
-	// ========================================
-
-	/**
-	 * This map is used to track deprecated ShapeTypes for exclusion from the GUI.
-	 */
-	public static final Set<String> DEPRECATED_SHAPETYPES = new HashSet<String>();
-
-	static {
-		DEPRECATED_SHAPETYPES.add(MEMBRANE.getName());
-		DEPRECATED_SHAPETYPES.add(CELLA.getName());
-		DEPRECATED_SHAPETYPES.add(RIBOSOME.getName());
-		DEPRECATED_SHAPETYPES.add(ORGANA.getName());
-		DEPRECATED_SHAPETYPES.add(ORGANB.getName());
-		DEPRECATED_SHAPETYPES.add(ORGANC.getName());
-		DEPRECATED_SHAPETYPES.add(PROTEINB.getName());
-	}
+	public static final ShapeType CYTOSOL_REGION = new ShapeType("CytosolRegion", null);
+	public static final ShapeType MEMBRANE_REGION = new ShapeType("MembraneRegion", null);
 
 	// ================================================================================
 	// Properties

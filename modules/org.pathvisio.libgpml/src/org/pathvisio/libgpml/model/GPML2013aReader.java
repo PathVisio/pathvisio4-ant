@@ -635,15 +635,11 @@ public class GPML2013aReader extends GPML2013aFormatAbstract implements GpmlForm
 	 * <p>
 	 * Graphics depends on group type:
 	 * <ol>
-	 * <li>Because textLabel was not implemented for groups in 2013a, we set the
-	 * textColor to transparent TODO
-	 * <li>TRANSPARENT: transparent rectangle, hovers to blue #0000ff0c
-	 * <li>COMPLEX: gray #b4b46419 octagon with gray #808080 solid border, hovers to
-	 * red #ff00000c
-	 * <li>PATHWAY: green #00ff000c rectangle with gray #808080 dashed border,
-	 * hovers to green #00ff0019.
-	 * <li>GROUP (DEFAULT): gray #b4b46419 rectangle with gray #808080 dashed
-	 * border, hovers to red #ff00000c
+	 * <li>Below Group colors from Pathvisio3...
+	 * <li>TRANSPARENT: transparent rectangle
+	 * <li>COMPLEX: gray #b4b46419 octagon with gray #808080 solid border
+	 * <li>PATHWAY: green #00ff000c rectangle with gray #808080 dashed border
+	 * <li>GROUP (DEFAULT): gray #b4b46419 rectangle with gray #808080 dashed border
 	 * </ol>
 	 *
 	 * @param group the group pathway element.
@@ -1079,11 +1075,10 @@ public class GPML2013aReader extends GPML2013aFormatAbstract implements GpmlForm
 		lineElement.setLinePoints(ptList);
 	}
 
-
 	/**
 	 * Returns the arrowHead for give jdom point element.
 	 *
-	 * @param pt the jdom point element.
+	 * @param pt   the jdom point element.
 	 * @param base the string for either "Interaction" or "GraphicalLine"
 	 * @return the arrowhead for given jdom point element.
 	 * @throws ConverterException
@@ -1096,7 +1091,6 @@ public class GPML2013aReader extends GPML2013aFormatAbstract implements GpmlForm
 		}
 		return arrowHead;
 	}
-
 
 	/**
 	 * Reads anchor {@link Anchor} information for line element from element.

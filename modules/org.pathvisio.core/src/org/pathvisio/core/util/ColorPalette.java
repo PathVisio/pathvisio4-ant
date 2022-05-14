@@ -17,6 +17,7 @@
 package org.pathvisio.core.util;
 
 import java.awt.Color;
+
 import org.pathvisio.libgpml.util.ColorUtils;
 
 /**

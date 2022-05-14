@@ -32,7 +32,7 @@ import org.bridgedb.Xref;
 import org.jdom2.Element;
 import org.jdom2.Namespace;
 import org.pathvisio.libgpml.io.ConverterException;
-import org.pathvisio.libgpml.model.shape.ShapeType;
+import org.pathvisio.libgpml.model.type.ShapeType;
 import org.pathvisio.libgpml.model.type.ArrowHeadType;
 import org.pathvisio.libgpml.util.ColorUtils;
 import org.pathvisio.libgpml.util.Utils;
@@ -118,6 +118,7 @@ public abstract class GPML2013aFormatAbstract extends GPMLFormatAbstract {
 		SHAPETYPE_TO_CAMELCASE.put("Golgi Apparatus", "GolgiApparatus");
 		SHAPETYPE_TO_CAMELCASE.put("Cytosol region", "CytosolRegion");
 		SHAPETYPE_TO_CAMELCASE.put("Extracellular region", "ExtracellularRegion");
+		SHAPETYPE_TO_CAMELCASE.put("Membrane region", "MembraneRegion");
 	}
 
 	/**
@@ -162,15 +163,8 @@ public abstract class GPML2013aFormatAbstract extends GPMLFormatAbstract {
 	static {
 		DEPRECATED_MAP.put(ShapeType.CELL, ShapeType.ROUNDED_RECTANGLE);
 		DEPRECATED_MAP.put(ShapeType.ORGANELLE, ShapeType.ROUNDED_RECTANGLE);
-		DEPRECATED_MAP.put(ShapeType.MEMBRANE, ShapeType.ROUNDED_RECTANGLE);
-		DEPRECATED_MAP.put(ShapeType.CELLA, ShapeType.OVAL);
 		DEPRECATED_MAP.put(ShapeType.NUCLEUS, ShapeType.OVAL);
-		DEPRECATED_MAP.put(ShapeType.ORGANA, ShapeType.OVAL);
-		DEPRECATED_MAP.put(ShapeType.ORGANB, ShapeType.OVAL);
-		DEPRECATED_MAP.put(ShapeType.ORGANC, ShapeType.OVAL);
 		DEPRECATED_MAP.put(ShapeType.VESICLE, ShapeType.OVAL);
-		DEPRECATED_MAP.put(ShapeType.PROTEINB, ShapeType.HEXAGON);
-		DEPRECATED_MAP.put(ShapeType.RIBOSOME, ShapeType.HEXAGON);
 	}
 
 	/**
@@ -194,9 +188,9 @@ public abstract class GPML2013aFormatAbstract extends GPMLFormatAbstract {
 		CELL_CMPNT_MAP.put(ShapeType.NUCLEOLUS, ShapeType.OVAL);
 		CELL_CMPNT_MAP.put(ShapeType.VACUOLE, ShapeType.OVAL);
 		CELL_CMPNT_MAP.put(ShapeType.VESICLE, ShapeType.OVAL);
-		CELL_CMPNT_MAP.put(ShapeType.CYTOSOL, ShapeType.ROUNDED_RECTANGLE);
-		CELL_CMPNT_MAP.put(ShapeType.EXTRACELLULAR, ShapeType.ROUNDED_RECTANGLE);
-		CELL_CMPNT_MAP.put(ShapeType.MEMBRANE, ShapeType.ROUNDED_RECTANGLE);
+		CELL_CMPNT_MAP.put(ShapeType.CYTOSOL_REGION, ShapeType.ROUNDED_RECTANGLE);
+		CELL_CMPNT_MAP.put(ShapeType.EXTRACELLULAR_REGION, ShapeType.ROUNDED_RECTANGLE);
+		CELL_CMPNT_MAP.put(ShapeType.MEMBRANE_REGION, ShapeType.ROUNDED_RECTANGLE);
 	}
 
 	/**
