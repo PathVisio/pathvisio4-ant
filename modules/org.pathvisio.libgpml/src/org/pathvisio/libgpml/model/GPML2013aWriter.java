@@ -1103,6 +1103,10 @@ public class GPML2013aWriter extends GPML2013aFormatAbstract implements GpmlForm
 		} else {
 			String shapeTypeStr = shapeType.getName();
 			shapeTypeStr = fromCamelCase(shapeTypeStr);
+			// if deprecated shape type, write 2013a shape type string
+			if (DEPRECATED_MAP.containsValue(shapeType)) {
+				shapeTypeStr = DEPRECATED_MAP.getKey(shapeType);
+			}
 			setAttr(base + ".Graphics", "ShapeType", gfx, shapeTypeStr);
 		}
 		String borderStyleStr = shapedElement.getBorderStyle().getName();

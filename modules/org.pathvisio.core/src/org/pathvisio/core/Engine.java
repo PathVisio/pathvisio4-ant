@@ -293,7 +293,7 @@ public class Engine {
 	 * @param p the pathway model.
 	 */
 	public void replacePathwayModel(PathwayModel p) {
-		vPathwayModel.replacePathway(p);
+		vPathwayModel.replacePathwayModel(p);
 		fireApplicationEvent(new ApplicationEvent(vPathwayModel, ApplicationEvent.Type.VPATHWAY_CREATED));
 	}
 

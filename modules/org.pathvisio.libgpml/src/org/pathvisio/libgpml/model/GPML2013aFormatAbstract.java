@@ -153,18 +153,14 @@ public abstract class GPML2013aFormatAbstract extends GPMLFormatAbstract {
 	}
 
 	/**
-	 * This {@link Map} maps deprecated {@link ShapeType} to the new shape types
+	 * This {@link Map} maps deprecated {@link String} to the new {@link ShapeType}
 	 * when reading GPML2013a {@link GPML2013aReader#readShapeStyleProperty}.
-	 * However, if the pathway element has dynamic property with
-	 * {@link #CELL_CMPNT_KEY}, shapeType may be overridden after reading dynamic
-	 * properties.
+	 * 
+	 * NB: for mim-degradation
 	 */
-	public static final Map<ShapeType, ShapeType> DEPRECATED_MAP = new HashMap<ShapeType, ShapeType>();
+	public static final BidiMap<String, ShapeType> DEPRECATED_MAP = new DualHashBidiMap<String, ShapeType>();
 	static {
-		DEPRECATED_MAP.put(ShapeType.CELL, ShapeType.ROUNDED_RECTANGLE);
-		DEPRECATED_MAP.put(ShapeType.ORGANELLE, ShapeType.ROUNDED_RECTANGLE);
-		DEPRECATED_MAP.put(ShapeType.NUCLEUS, ShapeType.OVAL);
-		DEPRECATED_MAP.put(ShapeType.VESICLE, ShapeType.OVAL);
+		DEPRECATED_MAP.put("mim-degradation", ShapeType.DEGRADATION);
 	}
 
 	/**

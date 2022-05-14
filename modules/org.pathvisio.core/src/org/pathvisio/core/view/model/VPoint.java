@@ -64,9 +64,9 @@ public class VPoint implements VDrawable, Adjustable {
 		this.linePoint = mPoint;
 		this.vLineElement = line;
 	}
-	
+
 	/**
-	 * TODO 
+	 * TODO
 	 */
 	@Override
 	public Drawable getPathwayObject() {
@@ -148,14 +148,13 @@ public class VPoint implements VDrawable, Adjustable {
 	public double getVHeight() {
 		return 0;
 	}
-	
+
 	/**
 	 * Returns the z-order from the model //TODO public?
 	 */
 	@Override
 	public int getZOrder() {
-		return getLinePoint().getZOrder(); 
+		return getLinePoint().getZOrder();
 	}
-
 
 }

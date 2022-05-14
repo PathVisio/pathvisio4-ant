@@ -1257,8 +1257,8 @@ public class GPML2013aReader extends GPML2013aFormatAbstract implements GpmlForm
 		shapeTypeStr = toCamelCase(shapeTypeStr);
 		ShapeType shapeType = ShapeType.register(shapeTypeStr, null);
 		// checks deprecated shape type map for newer shape
-		if (DEPRECATED_MAP.containsKey(shapeType)) {
-			shapeType = DEPRECATED_MAP.get(shapeType);
+		if (DEPRECATED_MAP.containsKey(shapeTypeStr)) {
+			shapeType = DEPRECATED_MAP.get(shapeTypeStr);
 		}
 		// set shape style properties
 		shapedElement.setBorderColor(borderColor);

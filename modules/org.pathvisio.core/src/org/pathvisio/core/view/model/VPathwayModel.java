@@ -468,7 +468,7 @@ public class VPathwayModel implements PathwayModelListener {
 	/**
 	 * Used by undo manager.
 	 */
-	public void replacePathway(PathwayModel originalState) {
+	public void replacePathwayModel(PathwayModel originalState) {
 
 		boolean changed = data.hasChanged();
 
@@ -619,8 +619,9 @@ public class VPathwayModel implements PathwayModelListener {
 	 * @param y the y coordinate.
 	 */
 	private void clearSelection(double x, double y) {
-		for (VElement e : drawingObjects)
+		for (VElement e : drawingObjects) {
 			e.deselect();
+		}
 		selection.reset(x, y);
 	}
 

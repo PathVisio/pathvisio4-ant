@@ -22,14 +22,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.pathvisio.libgpml.model.DataNode;
-import org.pathvisio.libgpml.model.Label;
 import org.pathvisio.libgpml.model.PathwayModel;
 import org.pathvisio.libgpml.model.Shape;
 import org.pathvisio.libgpml.model.shape.IShape;
 import org.pathvisio.libgpml.model.type.DataNodeType;
+import org.pathvisio.libgpml.model.type.LineStyleType;
 import org.pathvisio.libgpml.model.type.ShapeType;
-import org.pathvisio.libgpml.util.ColorUtils;
-import org.pathvisio.libgpml.util.Utils;
 
 /**
  * Color Theme class. For coloring of pathway model objects.
@@ -52,7 +50,7 @@ public class Theme {
 	// ================================================================================
 	public static final Theme WIKIPATHWAYS = new Theme(WP);
 	public static final Theme WIKIPATHWAYS_MIN = new Theme(WP_MIN);
-	
+
 	// ================================================================================
 	// Sets: also used in {@link DefaultTemplates}
 	// ================================================================================
@@ -62,8 +60,9 @@ public class Theme {
 			ShapeType.SARCOPLASMIC_RETICULUM, ShapeType.ORGANELLE, ShapeType.VESICLE, ShapeType.EXTRACELLULAR_REGION));
 
 	// miscellaneous shapes
-	public static final Set<ShapeType> MISC_SHAPE_SET = new HashSet<>(Arrays.asList(ShapeType.CORONAVIRUS_ICON,
-			ShapeType.DNA_ICON, ShapeType.RNA_ICON, ShapeType.CELL_ICON, ShapeType.MEMBRANE_ICON, ShapeType.DEGRADATION));
+	public static final Set<ShapeType> MISC_SHAPE_SET = new HashSet<>(
+			Arrays.asList(ShapeType.CORONAVIRUS_ICON, ShapeType.DNA_ICON, ShapeType.RNA_ICON, ShapeType.CELL_ICON,
+					ShapeType.MEMBRANE_ICON, ShapeType.DEGRADATION));
 
 	// ================================================================================
 	// Theme Properties
@@ -121,14 +120,18 @@ public class Theme {
 	// ================================================================================
 
 	/**
-	 * @return
+	 * Returns the name of this Theme.
+	 * 
+	 * @return name the name of this theme.
 	 */
 	public String getName() {
 		return name;
 	}
 
 	/**
-	 * @return
+	 * Returns the description of this Theme.
+	 * 
+	 * @return description the description of this theme.
 	 */
 	public String getDescription() {
 		return description;
@@ -144,23 +147,40 @@ public class Theme {
 	public void colorPathwayModel(PathwayModel p) {
 		p.getPathway().setBackgroundColor(colorBackground);
 		for (DataNode d : p.getDataNodes()) {
+			setInitialShapeBorder(d);
 			setInitialColors(d);
 		}
-		// TODO States
 		if (colorShapes) {
 			for (Shape s : p.getShapes()) {
 				setInitialColors(s);
 			}
 		}
-//		for (Label l : p.getLabels()) { TODO 
-////			l.setFillColor(colorTransparent);
-//			l.setTextColor(colorLabel);
-//		}
 	}
 
 	// ================================================================================
-	// Color DataNodes
+	// DataNode Set Methods: Shape, Border, and Color
 	// ================================================================================
+	/**
+	 * Sets shape and border.
+	 * 
+	 * @param e the data node.
+	 */
+	public void setInitialShapeBorder(DataNode e) {
+		DataNodeType type = e.getType();
+		// concept datanodes
+		if (type == DataNodeType.PATHWAY || type == DataNodeType.DISEASE || type == DataNodeType.PHENOTYPE
+				|| type == DataNodeType.EVENT || type == DataNodeType.CELL_NODE || type == DataNodeType.ORGAN) {
+			e.setShapeType(ShapeType.ROUNDED_RECTANGLE);
+		} else if (type == DataNodeType.ALIAS) {
+			e.setShapeType(ShapeType.OVAL);
+		} else if (type == DataNodeType.UNDEFINED) {
+			e.setShapeType(ShapeType.ROUNDED_RECTANGLE);
+			e.setBorderStyle(LineStyleType.DASHED);
+		} else { // molecule datanodes
+			e.setShapeType(ShapeType.RECTANGLE);
+		}
+	}
+
 	/**
 	 * Sets text, border, and fill color.
 	 * 
@@ -182,7 +202,7 @@ public class Theme {
 	}
 
 	// ================================================================================
-	// Color Shapes
+	// Shape Set Methods: Color
 	// ================================================================================
 
 	/**
@@ -205,8 +225,14 @@ public class Theme {
 		}
 	}
 
+	// ================================================================================
+	// Other Methods
+	// ================================================================================
+
 	/**
-	 * TODO
+	 * Returns String Theme name.
+	 * 
+	 * @return name the name of this Theme.
 	 */
 	@Override
 	public String toString() {
