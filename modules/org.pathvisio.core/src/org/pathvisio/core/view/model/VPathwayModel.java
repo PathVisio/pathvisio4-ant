@@ -1884,9 +1884,9 @@ public class VPathwayModel implements PathwayModelListener {
 	public void failLinkAliasRef() {
 		Object[] options = { "Try Again", "Cancel" };
 		int n = JOptionPane.showOptionDialog(null, "Please click on a Group to Link Alias DataNode.", "Message",
-				JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+				JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE, null, options, options[0]);
 		if (n == 1) { // cancel linking aliasRef
-			JOptionPane.showConfirmDialog(null, "Alias DataNode was not Linked to a Group.", "Warning",
+			JOptionPane.showConfirmDialog(null, "Alias DataNode was Not Linked to a Group.", "Warning",
 					JOptionPane.PLAIN_MESSAGE);
 			stopLinkAliasRef();
 		}

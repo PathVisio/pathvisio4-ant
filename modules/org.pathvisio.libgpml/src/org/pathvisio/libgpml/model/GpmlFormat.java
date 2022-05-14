@@ -264,9 +264,9 @@ public class GpmlFormat extends AbstractPathwayModelFormat {
 			format.readFromRoot(pathwayModel, root);
 			// warning message if opening older GPML
 			if (!(format instanceof GPML2021Reader)) {
-				JOptionPane.showConfirmDialog(null,
+				JOptionPane.showMessageDialog(null,
 						"This pathway was written in an older Gpml version.\nSave will automatically update it to GPML2021.",
-						"Warning", JOptionPane.PLAIN_MESSAGE);
+						"Warning", JOptionPane.WARNING_MESSAGE);
 			}
 		} catch (JDOMException e) {
 			throw new ConverterException(e);

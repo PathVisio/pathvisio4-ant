@@ -26,7 +26,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.pathvisio.core.util.ColorPalette;
+import org.pathvisio.libgpml.model.Group;
 import org.pathvisio.libgpml.model.type.GroupType;
+import org.pathvisio.libgpml.model.type.LineStyleType;
+import org.pathvisio.libgpml.model.type.ShapeType;
 import org.pathvisio.libgpml.util.ColorUtils;
 
 /**
@@ -71,7 +74,7 @@ public class GroupPainterRegistry {
 	private static final int TRANSLUCENCY_LEVEL = (int) (255 * .10); // 25.5
 	private static final int TRANSLUCENCY_LEVEL_HOVER = (int) (255 * .05); // 12.75
 	private static final Color DEFAULT_GRAY = ColorPalette.WP_DGREY;
-	private static final Color PATHWAY_GREEN = ColorPalette.WP_GREEN;
+	private static final Color PATHWAY_GREEN = ColorPalette.WP_DGREEN;
 	private static final Color TRANSPARENT_BLUE = ColorPalette.WP_BLUE;
 	private static final Color BORDER_GRAY = ColorPalette.WP_DGREY;
 
@@ -102,6 +105,13 @@ public class GroupPainterRegistry {
 			g.setStroke(
 					new BasicStroke(sw, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 1, new float[] { 4, 2 }, 0));
 			g.drawRect((int) rect.getX(), (int) rect.getY(), (int) rect.getWidth() - sw, (int) rect.getHeight() - sw);
+
+			// set group properties of pathway model to match the view TODO
+			Group mgroup = group.getPathwayObject();
+			mgroup.setBorderColor(BORDER_GRAY);
+			mgroup.setBorderStyle(LineStyleType.DASHED);
+			mgroup.setFillColor(ColorUtils.makeTransparent(DEFAULT_GRAY, TRANSLUCENCY_LEVEL));
+			mgroup.setShapeType(ShapeType.RECTANGLE);
 		}
 	};
 
@@ -146,6 +156,13 @@ public class GroupPainterRegistry {
 					g.drawString(hint, xoffset, yoffset);
 				}
 			}
+			
+			// set group properties of pathway model to match the view TODO
+			Group mgroup = group.getPathwayObject();
+			mgroup.setBorderColor(ColorPalette.TRANSPARENT);
+			mgroup.setBorderStyle(LineStyleType.SOLID);
+			mgroup.setFillColor(ColorPalette.TRANSPARENT);
+			mgroup.setShapeType(ShapeType.RECTANGLE);
 		}
 	};
 
@@ -193,6 +210,13 @@ public class GroupPainterRegistry {
 			g.setColor(BORDER_GRAY);
 			g.setStroke(new BasicStroke());
 			g.draw(outline);
+			
+			// set group properties of pathway model to match the view TODO
+			Group mgroup = group.getPathwayObject();
+			mgroup.setBorderColor(BORDER_GRAY);
+			mgroup.setBorderStyle(LineStyleType.SOLID);
+			mgroup.setFillColor(ColorUtils.makeTransparent(DEFAULT_GRAY, TRANSLUCENCY_LEVEL));
+			mgroup.setShapeType(ShapeType.OCTAGON); //TODO 
 		}
 	};
 
@@ -220,6 +244,13 @@ public class GroupPainterRegistry {
 			g.setStroke(
 					new BasicStroke(sw, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 1, new float[] { 4, 2 }, 0));
 			g.drawRect((int) rect.getX(), (int) rect.getY(), (int) rect.getWidth() - sw, (int) rect.getHeight() - sw);
+			
+			// set group properties of pathway model to match the view TODO
+			Group mgroup = group.getPathwayObject();
+			mgroup.setBorderColor(BORDER_GRAY);
+			mgroup.setBorderStyle(LineStyleType.DASHED);
+			mgroup.setFillColor(ColorUtils.makeTransparent(PATHWAY_GREEN, TRANSLUCENCY_LEVEL));
+			mgroup.setShapeType(ShapeType.RECTANGLE);
 		}
 	};
 

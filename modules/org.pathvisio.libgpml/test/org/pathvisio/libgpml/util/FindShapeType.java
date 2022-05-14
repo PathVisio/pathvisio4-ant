@@ -85,7 +85,7 @@ public class FindShapeType extends TestCase {
 							if (gfx != null) {
 								String shapeType = gfx.getAttributeValue("ShapeType");
 								shapeTypes.put(shapeType, file.getName());
-								if (shapeType == "Sarcoplasmic Reticulum") {
+								if (shapeType == "mim-degradation") {
 									System.out.println(file.getName());
 								}
 							}
@@ -95,7 +95,7 @@ public class FindShapeType extends TestCase {
 								String key = dp.getAttributeValue("Key");
 								String value = dp.getAttributeValue("Value");
 								if (Objects.equals(key, "org.pathvisio.CellularComponentProperty")) {
-									if (value.equals("Sarcoplasmic Reticulum")) {
+									if (value.equals("mim-phosphorylated")) {
 										System.out.println(file.getName());
 									}
 									shapeTypes.put(value, file.getName());
@@ -113,8 +113,8 @@ public class FindShapeType extends TestCase {
 			}
 
 		}
-//		for (String shapeType : shapeTypes.keySet()) {
-//			System.out.println(shapeType); //+ " " + shapeTypes.get(shapeType));
-//		}
+		for (String shapeType : shapeTypes.keySet()) {
+			System.out.println(shapeType + " " + shapeTypes.get(shapeType));
+		}
 	}
 }

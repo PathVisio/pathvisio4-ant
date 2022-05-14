@@ -561,8 +561,7 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 						DataNode dn = (DataNode) d.getPathwayObject();
 						if (dn.getType() == DataNodeType.ALIAS) { // precautionary check if type Alias
 							vPathwayModel.startLinkAliasRef(dn);
-							JOptionPane.showConfirmDialog(null, "Please click on a Group to Link Alias DataNode",
-									"Message", JOptionPane.PLAIN_MESSAGE);
+							JOptionPane.showMessageDialog(null, "Please click on a Group to Link Alias DataNode");
 						}
 					}
 				}

@@ -63,7 +63,7 @@ public class Theme {
 
 	// miscellaneous shapes
 	public static final Set<ShapeType> MISC_SHAPE_SET = new HashSet<>(Arrays.asList(ShapeType.CORONAVIRUS_ICON,
-			ShapeType.DNA_ICON, ShapeType.RNA_ICON, ShapeType.CELL_ICON, ShapeType.MEMBRANE_ICON));
+			ShapeType.DNA_ICON, ShapeType.RNA_ICON, ShapeType.CELL_ICON, ShapeType.MEMBRANE_ICON, ShapeType.DEGRADATION));
 
 	// ================================================================================
 	// Theme Properties

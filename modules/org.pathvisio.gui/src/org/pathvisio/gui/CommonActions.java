@@ -314,7 +314,8 @@ public class CommonActions implements ApplicationEventListener {
 				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.DNA_ICON)),
 				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.RNA_ICON)),
 				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.CELL_ICON)),
-				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.MEMBRANE_ICON)), };
+				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.MEMBRANE_ICON)),
+				new NewElementAction(e, new DefaultTemplates.ShapeTemplate(ShapeType.DEGRADATION)), };
 
 		// ================================================================================
 		// New DataNode-Interaction Template Actions
@@ -353,15 +354,14 @@ public class CommonActions implements ApplicationEventListener {
 				theme.colorPathwayModel(p);
 				engine.getActiveVPathwayModel().redraw();
 				int n = JOptionPane.showConfirmDialog(null,
-						"Warning: Applying theme will overwrite pathway model\ngraphics properties. Are you sure you want to continue?",
-						"Message", JOptionPane.YES_NO_OPTION);
+						"Applying theme will overwrite pathway model\ngraphics properties. Are you sure you want to continue?",
+						"Warning", JOptionPane.YES_NO_OPTION);
 				if (n == JOptionPane.YES_OPTION) { // yes
-					JOptionPane.showConfirmDialog(null, theme.getName() + " theme applied.", "Message",
-							JOptionPane.PLAIN_MESSAGE);
+					JOptionPane.showMessageDialog(null, theme.getName() + " theme applied.");
 				}
 				if (n == JOptionPane.NO_OPTION) { // no
 					engine.getActiveVPathwayModel().undo();
-					JOptionPane.showConfirmDialog(null, "Theme not applied.", "Message", JOptionPane.PLAIN_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Theme not applied.");
 				}
 			}
 		}

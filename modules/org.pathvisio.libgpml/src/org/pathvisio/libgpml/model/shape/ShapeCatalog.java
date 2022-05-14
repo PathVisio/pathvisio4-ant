@@ -26,18 +26,19 @@ import java.awt.geom.GeneralPath;
  * {@link GeneralPath}.
  * 
  * <p>
- * NB: 
+ * NB:
  * <ol>
  * <li>BRACE
  * <li>MITOCHONDRIA
  * <li>SARCOPLASMICRETICULUM
  * <li>ENDOPLASMICRETICULUM
  * <li>GOLGIAPPARATUS
- * <li>CORONAVIRUS_ICON 
+ * <li>CORONAVIRUS_ICON
  * <li>DNA_ICON
  * <li>RNA_ICON
- * <li>CELL_ICON 
- * <li>MEMBRANE_ICON 
+ * <li>CELL_ICON
+ * <li>MEMBRANE_ICON
+ * <li>DEGRADATION
  * </ol>
  * 
  * NB: shapes were previously specific to GenMAPP, such as the GenMAPP
@@ -58,7 +59,7 @@ public class ShapeCatalog {
 
 		// Basic shapes
 		OCTAGON,
-		
+
 		// Basic line shapes
 		BRACE,
 
@@ -66,7 +67,7 @@ public class ShapeCatalog {
 		MITOCHONDRIA, SARCOPLASMIC_RETICULUM, ENDOPLASMIC_RETICULUM, GOLGI_APPARATUS,
 
 		// Miscellaneous shapes
-		CORONAVIRUS_ICON, DNA_ICON, RNA_ICON, CELL_ICON, MEMBRANE_ICON
+		CORONAVIRUS_ICON, DNA_ICON, RNA_ICON, CELL_ICON, MEMBRANE_ICON, DEGRADATION
 
 	}
 
@@ -81,7 +82,7 @@ public class ShapeCatalog {
 		// ========================================
 		// Basic shapes
 		// ========================================
-		case OCTAGON: 
+		case OCTAGON:
 			path.moveTo(52.32, 100);
 			path.lineTo(21.68, 100);
 			path.lineTo(0, 70.71);
@@ -433,6 +434,16 @@ public class ShapeCatalog {
 				at5.translate(i * 10.5, -40);
 				path.append(at5.createTransformedShape(plipid), false);
 			}
+			break;
+		case DEGRADATION:
+			path.moveTo(31.59f, 18.46f);
+			path.curveTo(31.59f, 25.44f, 25.72f, 31.10f, 18.50f, 31.10f);
+			path.curveTo(11.27f, 31.10f, 5.41f, 25.44f, 5.41f, 18.46f);
+			path.curveTo(5.41f, 11.48f, 11.27f, 5.82f, 18.50f, 5.82f);
+			path.curveTo(25.72f, 5.82f, 31.59f, 11.48f, 31.59f, 18.46f);
+			path.closePath();
+			path.moveTo(0.39f, 0.80f);
+			path.curveTo(34.84f, 36.07f, 35.25f, 35.67f, 35.25f, 35.67f);
 			break;
 		default:
 			break;

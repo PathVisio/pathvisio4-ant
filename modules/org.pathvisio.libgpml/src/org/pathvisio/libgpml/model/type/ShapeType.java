@@ -126,6 +126,8 @@ public class ShapeType implements IShape {
 			ShapeCatalog.getPluggableShape(Internal.CELL_ICON));
 	public static final ShapeType MEMBRANE_ICON = new ShapeType("MembraneIcon",
 			ShapeCatalog.getPluggableShape(Internal.MEMBRANE_ICON));
+	public static final ShapeType DEGRADATION = new ShapeType("Degradation",
+			ShapeCatalog.getPluggableShape(Internal.DEGRADATION));
 
 	// ========================================
 	// Rarely used/Deprecated TODO
