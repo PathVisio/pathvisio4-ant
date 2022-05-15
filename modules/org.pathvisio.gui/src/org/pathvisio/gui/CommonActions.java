@@ -56,8 +56,10 @@ import org.pathvisio.core.view.model.VPathwayElement;
 import org.pathvisio.core.view.model.VPathwayModel;
 import org.pathvisio.core.view.model.ViewActions;
 import org.pathvisio.gui.dialogs.AboutDlg;
+import org.pathvisio.gui.dialogs.AnnotationDialog;
 import org.pathvisio.gui.dialogs.PathwayElementDialog;
 import org.pathvisio.gui.dialogs.CitationDialog;
+import org.pathvisio.gui.dialogs.EvidenceDialog;
 
 /**
  * A collection of {@link Action}s that may be used throughout the program (e.g.
@@ -688,7 +690,58 @@ public class CommonActions implements ApplicationEventListener {
 	}
 
 	/**
-	 * Provides direct access to the citation reference dialog
+	 * Provides direct access to the Annotation reference dialog
+	 * ({@link AnnotationDialog}) from the right click menu.
+	 * 
+	 * @author unknown, finterly
+	 */
+	public static class AddAnnotationAction extends PathwayElementDialogAction {
+		public AddAnnotationAction(SwingEngine swingEngine, Component parent, VElement e) {
+			super(swingEngine, parent, e);
+			putValue(NAME, "Add Annotation");
+			putValue(SHORT_DESCRIPTION, "Add a Annotation to this element");
+			setEnabled(e.getDrawing().isEditMode());
+		}
+
+		public void actionPerformed(ActionEvent e) {
+			if (element instanceof VPathwayElement) {
+				PathwayElement pwElm = ((VPathwayElement) element).getPathwayObject();
+				AnnotationDialog d = new AnnotationDialog(pwElm, null, null, parent);
+				d.setVisible(true);
+				if (d.getExitCode().equals(AnnotationDialog.OK)) {
+					// annotationRef was added
+				} else {
+					// nothing
+				}
+			}
+		}
+
+		protected String getSelectedPanel() {
+			return null;
+		}
+	}
+
+	/**
+	 * Pops up the pathway element dialog directly on the Annotations tab.
+	 * 
+	 * @author unknown, finterly
+	 */
+	public static class EditAnnotationAction extends PathwayElementDialogAction {
+
+		public EditAnnotationAction(SwingEngine swingEngine, Component parent, VElement e) {
+			super(swingEngine, parent, e);
+			putValue(NAME, "Edit Annotations");
+			putValue(SHORT_DESCRIPTION, "Edit the Annotations of this element");
+			setEnabled(e.getDrawing().isEditMode());
+		}
+
+		protected String getSelectedPanel() {
+			return PathwayElementDialog.TAB_ANNOTATIONS;
+		}
+	}
+
+	/**
+	 * Provides direct access to the Citation reference dialog
 	 * ({@link CitationDialog}) from the right click menu.
 	 * 
 	 * @author unknown, finterly
@@ -720,7 +773,7 @@ public class CommonActions implements ApplicationEventListener {
 	}
 
 	/**
-	 * Pops up the pathway element dialog directly on the citations tab.
+	 * Pops up the pathway element dialog directly on the Citations tab.
 	 * 
 	 * @author unknown, finterly
 	 */
@@ -735,6 +788,57 @@ public class CommonActions implements ApplicationEventListener {
 
 		protected String getSelectedPanel() {
 			return PathwayElementDialog.TAB_CITATIONS;
+		}
+	}
+
+	/**
+	 * Provides direct access to the Evidence reference dialog
+	 * ({@link EvidenceDialog}) from the right click menu.
+	 * 
+	 * @author unknown, finterly
+	 */
+	public static class AddEvidenceAction extends PathwayElementDialogAction {
+		public AddEvidenceAction(SwingEngine swingEngine, Component parent, VElement e) {
+			super(swingEngine, parent, e);
+			putValue(NAME, "Add Evidence");
+			putValue(SHORT_DESCRIPTION, "Add a Evidence to this element");
+			setEnabled(e.getDrawing().isEditMode());
+		}
+
+		public void actionPerformed(ActionEvent e) {
+			if (element instanceof VPathwayElement) {
+				PathwayElement pwElm = ((VPathwayElement) element).getPathwayObject();
+				EvidenceDialog d = new EvidenceDialog(pwElm, null, null, parent);
+				d.setVisible(true);
+				if (d.getExitCode().equals(EvidenceDialog.OK)) {
+					// evidenceRef was added
+				} else {
+					// nothing
+				}
+			}
+		}
+
+		protected String getSelectedPanel() {
+			return null;
+		}
+	}
+
+	/**
+	 * Pops up the pathway element dialog directly on the Evidences tab.
+	 * 
+	 * @author unknown, finterly
+	 */
+	public static class EditEvidenceAction extends PathwayElementDialogAction {
+
+		public EditEvidenceAction(SwingEngine swingEngine, Component parent, VElement e) {
+			super(swingEngine, parent, e);
+			putValue(NAME, "Edit Evidences");
+			putValue(SHORT_DESCRIPTION, "Edit the Evidences of this element");
+			setEnabled(e.getDrawing().isEditMode());
+		}
+
+		protected String getSelectedPanel() {
+			return PathwayElementDialog.TAB_EVIDENCES;
 		}
 	}
 

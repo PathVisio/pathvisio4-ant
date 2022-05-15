@@ -49,8 +49,12 @@ import org.pathvisio.core.view.model.VPathwayObject;
 import org.pathvisio.core.view.model.VState;
 import org.pathvisio.core.view.model.ViewActions;
 import org.pathvisio.core.view.model.ViewActions.PositionPasteAction;
+import org.pathvisio.gui.CommonActions.AddAnnotationAction;
 import org.pathvisio.gui.CommonActions.AddCitationAction;
+import org.pathvisio.gui.CommonActions.AddEvidenceAction;
+import org.pathvisio.gui.CommonActions.EditAnnotationAction;
 import org.pathvisio.gui.CommonActions.EditCitationAction;
+import org.pathvisio.gui.CommonActions.EditEvidenceAction;
 import org.pathvisio.gui.CommonActions.PropertiesAction;
 import org.pathvisio.gui.dialogs.PathwayElementDialog;
 import org.pathvisio.gui.view.VPathwayModelSwing;
@@ -182,7 +186,7 @@ public class PathwayElementMenuListener implements VPathwayModelListener {
 				if (dn.getAliasRef() != null) {
 					menu.add(vActions.unlinkAliasRef);
 				} else {
-					menu.add(vActions.linkAliasRef); //TODO 
+					menu.add(vActions.linkAliasRef); // TODO
 				}
 			}
 		}
@@ -264,16 +268,24 @@ public class PathwayElementMenuListener implements VPathwayModelListener {
 		// Literature View Actions TODO
 		// ========================================
 		if (e instanceof VPathwayElement) {
-			JMenu litMenu = new JMenu("References");
+			menu.addSeparator();
+			JMenu litMenu = new JMenu("Add References");
+			litMenu.add(new AddAnnotationAction(swingEngine, component, e));
 			litMenu.add(new AddCitationAction(swingEngine, component, e));
-			litMenu.add(new EditCitationAction(swingEngine, component, e));
+			litMenu.add(new AddEvidenceAction(swingEngine, component, e));
 			menu.add(litMenu);
+
+			JMenu litMenu2 = new JMenu("Edit References");
+			litMenu2.add(new EditAnnotationAction(swingEngine, component, e));
+			litMenu2.add(new EditCitationAction(swingEngine, component, e));
+			litMenu2.add(new EditEvidenceAction(swingEngine, component, e));
+			menu.add(litMenu2);
 
 			menu.addSeparator();
 			menu.add(new PropertiesAction(swingEngine, component, e));
 		}
 
-		if (pathLitRef != null) {
+		if (pathLitRef != null) { //TODO 
 			menu.addSeparator();
 			pathLitRef.add(new AddCitationAction(swingEngine, component,
 					swingEngine.getEngine().getActiveVPathwayModel().getVInfoBox()));
