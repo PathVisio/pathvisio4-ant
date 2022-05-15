@@ -2404,6 +2404,8 @@ public class VPathwayModel implements PathwayModelListener {
 			data.add(newerElement); // causes lastAdded to be set
 			// load references
 			newerElement.copyReferencesFrom(srcElement);
+			// print message if references copied
+			pasteReferencesMessage(newerElement);
 			// store information
 			newerToSource.put(newerElement, srcElement);
 			if (newerElement instanceof LineElement) {
@@ -2469,18 +2471,53 @@ public class VPathwayModel implements PathwayModelListener {
 						Group newerAliasRef = (Group) newerToSource.getKey(srcAliasRef);
 						if (newerAliasRef != null) {
 							((DataNode) newerElement).setAliasRef(newerAliasRef);
+							JOptionPane.showConfirmDialog(null,
+									"Copy of alias data node linked to Group " + newerElement.getElementId() + ".",
+									"Warning", JOptionPane.PLAIN_MESSAGE);
 						}
 					}
 					// otherwise aliasRef is not linked to any group
 					else {
-						JOptionPane.showConfirmDialog(null, "Copy of alias data node not linked to group.", "Warning",
-								JOptionPane.PLAIN_MESSAGE);
+						JOptionPane.showConfirmDialog(null, "Copy of alias data node not linked to any group.",
+								"Warning", JOptionPane.PLAIN_MESSAGE);
 					}
 				}
 			}
 		}
 		moveGraphicsTop(getSelectedGraphics());
 		redraw();
+	}
+
+	/**
+	 * Prints message if references copied for pasted element.
+	 * 
+	 * @param e the pathway element
+	 */
+	public void pasteReferencesMessage(PathwayElement e) {
+		// print message if references copied
+		String refStr = null;
+		boolean hasAnnt = !e.getAnnotationRefs().isEmpty();
+		boolean hasCit = !e.getCitationRefs().isEmpty();
+		boolean hasEvid = !e.getEvidenceRefs().isEmpty();
+		if (hasAnnt && hasCit && hasEvid) {
+			refStr = "References";
+		} else if (hasAnnt && hasCit) {
+			refStr = "Annotations and Citations";
+		} else if (hasAnnt && hasEvid) {
+			refStr = "Annotations and Evidences";
+		} else if (hasCit && hasEvid) {
+			refStr = "Citations and Evidences";
+		} else if (hasAnnt) {
+			refStr = "Annotations and Citations";
+		} else if (hasCit) {
+			refStr = "Annotations and Citations";
+		} else if (hasEvid) {
+			refStr = "Evidences";
+		}
+		if (refStr != null) {
+			JOptionPane.showMessageDialog(null, refStr + " copied for " + e.getObjectType().getTag() + ".", "Warning",
+					JOptionPane.WARNING_MESSAGE);
+		}
 	}
 
 	/**
