@@ -207,11 +207,14 @@ public class PathwayTableModel extends AbstractTableModel
 	}
 
 	public boolean isCellEditable(int rowIndex, int columnIndex) {
+		// do not allow editing of pathway authors for now TODO
+		if (getPropertyAt(rowIndex).getType() == StaticProperty.AUTHOR) {
+			return false;
+		}
 		// cannot directly edit aliasRef
 		if (getPropertyAt(rowIndex).getType() == StaticProperty.ALIASREF) {
 			return false;
 		}
-		// TODO some pathway properties should not be editable
 		return columnIndex == 1 && swingEngine.getEngine().hasVPathwayModel()
 				&& swingEngine.getEngine().getActiveVPathwayModel().isEditMode();
 
