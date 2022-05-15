@@ -372,7 +372,7 @@ public class PathwayModel {
 	 * @param aliasRef the group.
 	 * @return true if pathway model has aliasRef.
 	 */
-	protected boolean hasAliasRef(Group aliasRef) {
+	public boolean hasAliasRef(Group aliasRef) {
 		return aliasRefToAliases.containsKey(aliasRef);
 	}
 

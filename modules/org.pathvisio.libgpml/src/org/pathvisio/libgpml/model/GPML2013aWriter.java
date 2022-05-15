@@ -142,7 +142,6 @@ public class GPML2013aWriter extends GPML2013aFormatAbstract implements GpmlForm
 	 */
 	@Override
 	public Document createJdom(PathwayModel pathwayModel) throws ConverterException {
-
 		// removes empty groups
 		removeEmptyGroups(pathwayModel);
 

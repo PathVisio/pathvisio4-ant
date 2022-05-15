@@ -174,16 +174,21 @@ public class GPML2021Writer extends GPML2021FormatAbstract implements GpmlFormat
 	protected void writePathwayInfo(PathwayModel pathwayModel, Element root) throws ConverterException {
 		Pathway pathway = pathwayModel.getPathway();
 		root.setAttribute("title", pathway.getTitle());
-		if (pathway.getOrganism() != null)
+		if (pathway.getOrganism() != null) {
 			root.setAttribute("organism", pathway.getOrganism());
-		if (pathway.getSource() != null)
+		}
+		if (pathway.getSource() != null) {
 			root.setAttribute("source", pathway.getSource());
-		if (pathway.getVersion() != null)
+		}
+		if (pathway.getVersion() != null) {
 			root.setAttribute("version", pathway.getVersion());
-		if (pathway.getLicense() != null)
+		}
+		if (pathway.getLicense() != null) {
 			root.setAttribute("license", pathway.getLicense());
-		if (pathway.getXref() != null)
+		}
+		if (pathway.getXref() != null) {
 			writeXref(pathway.getXref(), root, false);
+		}
 		String description = pathway.getDescription();
 		if (description != null) {
 			Element desc = new Element("Description", root.getNamespace());

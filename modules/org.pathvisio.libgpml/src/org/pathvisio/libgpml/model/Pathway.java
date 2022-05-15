@@ -234,7 +234,7 @@ public class Pathway extends PathwayElement implements Xrefable {
 	 * @param v the description to set.
 	 */
 	public void setDescription(String v) {
-		if (v != null && !Utils.stringEquals(description, v)) {
+		if (v != null) {
 			description = v;
 			fireObjectModifiedEvent(PathwayObjectEvent.createSinglePropertyEvent(this, StaticProperty.DESCRIPTION));
 		}
@@ -373,6 +373,7 @@ public class Pathway extends PathwayElement implements Xrefable {
 				assert (false); // not going to happen
 			}
 		}
+		description = src.description;
 		organism = src.organism;
 		source = src.source;
 		version = src.version;
