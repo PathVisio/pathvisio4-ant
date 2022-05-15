@@ -2427,31 +2427,8 @@ public class VPathwayModel implements PathwayModelListener {
 
 		for (PathwayObject newerElement : newerToSource.keySet()) {
 			PathwayObject srcElement = newerToSource.get(newerElement);
-			// link LineElement LinePoint elementRefs
-			if (newerElement instanceof LineElement && srcElement instanceof LineElement) {
-				// set start elementRef
-				LinkableTo srcStartElementRef = ((LineElement) srcElement).getStartElementRef();
-				if (srcStartElementRef != null) {
-					LinkableTo newerStartElementRef = (LinkableTo) newerToSource.getKey(srcStartElementRef);
-					if (newerStartElementRef != null) {
-						((LineElement) newerElement).setStartElementRef(newerStartElementRef);
-					}
-				}
-				// set end elementRef
-				LinkableTo srcEndElementRef = ((LineElement) srcElement).getEndElementRef();
-				if (srcEndElementRef != null) {
-					LinkableTo newerEndElementRef = (LinkableTo) newerToSource.getKey(srcEndElementRef);
-					if (newerEndElementRef != null) {
-						((LineElement) newerElement).setEndElementRef(newerEndElementRef);
-					}
-				}
-				// refresh connector shapes
-				((LineElement) newerElement).getConnectorShape().recalculateShape(((LineElement) newerElement));
-			}
-
 			// add group members in new Group
-			else if (newerElement.getObjectType() == ObjectType.GROUP
-					&& srcElement.getObjectType() == ObjectType.GROUP) {
+			if (newerElement.getObjectType() == ObjectType.GROUP && srcElement.getObjectType() == ObjectType.GROUP) {
 				for (Groupable srcMember : ((Group) srcElement).getPathwayElements()) {
 					Groupable newerMember = (Groupable) newerToSource.getKey(srcMember);
 					if (newerMember != null) {
@@ -2459,9 +2436,8 @@ public class VPathwayModel implements PathwayModelListener {
 					}
 				}
 			}
-
 			// set aliasRef if any, and link to group if group also copied
-			if (newerElement.getObjectType() == ObjectType.DATANODE
+			else if (newerElement.getObjectType() == ObjectType.DATANODE
 					&& srcElement.getObjectType() == ObjectType.DATANODE) {
 				if (((DataNode) newerElement).getType() == DataNodeType.ALIAS
 						&& ((DataNode) srcElement).getType() == DataNodeType.ALIAS) {
@@ -2483,6 +2459,28 @@ public class VPathwayModel implements PathwayModelListener {
 					}
 				}
 			}
+			// link LineElement LinePoint elementRefs
+			else if (newerElement instanceof LineElement && srcElement instanceof LineElement) {
+				// set start elementRef
+				LinkableTo srcStartElementRef = ((LineElement) srcElement).getStartElementRef();
+				if (srcStartElementRef != null) {
+					LinkableTo newerStartElementRef = (LinkableTo) newerToSource.getKey(srcStartElementRef);
+					if (newerStartElementRef != null) {
+						((LineElement) newerElement).setStartElementRef(newerStartElementRef);
+					}
+				}
+				// set end elementRef
+				LinkableTo srcEndElementRef = ((LineElement) srcElement).getEndElementRef();
+				if (srcEndElementRef != null) {
+					LinkableTo newerEndElementRef = (LinkableTo) newerToSource.getKey(srcEndElementRef);
+					if (newerEndElementRef != null) {
+						((LineElement) newerElement).setEndElementRef(newerEndElementRef);
+					}
+				}
+				// refresh connector shapes
+				((LineElement) newerElement).getConnectorShape().recalculateShape(((LineElement) newerElement));
+			}
+
 		}
 		moveGraphicsTop(getSelectedGraphics());
 		redraw();

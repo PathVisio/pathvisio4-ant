@@ -102,7 +102,7 @@ public class PathwayModelTransferable implements Transferable {
 			}
 		}
 
-		// Map stores pathway object copy information.  
+		// Map stores pathway object copy information.
 		BidiMap<PathwayObject, PathwayObject> newerToSource = new DualHashBidiMap<>();
 
 		for (CopyElement copyElement : elements) {
@@ -128,11 +128,39 @@ public class PathwayModelTransferable implements Transferable {
 				}
 			}
 		}
-		
+
 		for (PathwayObject newerElement : newerToSource.keySet()) {
 			PathwayObject srcElement = newerToSource.get(newerElement);
+			// add group members in new Group
+			if (newerElement.getObjectType() == ObjectType.GROUP && srcElement.getObjectType() == ObjectType.GROUP) {
+				for (Groupable srcMember : ((Group) srcElement).getPathwayElements()) {
+					Groupable newerMember = (Groupable) newerToSource.getKey(srcMember);
+					if (newerMember != null) {
+						((Group) newerElement).addPathwayElement(newerMember);
+					}
+				}
+			}
+			// set aliasRef if any, and link to group if group also copied
+			else if (newerElement.getObjectType() == ObjectType.DATANODE
+					&& srcElement.getObjectType() == ObjectType.DATANODE) {
+				if (((DataNode) newerElement).getType() == DataNodeType.ALIAS
+						&& ((DataNode) srcElement).getType() == DataNodeType.ALIAS) {
+					Group srcAliasRef = ((DataNode) srcElement).getAliasRef();
+					if (srcAliasRef != null) {
+						Group newerAliasRef = (Group) newerToSource.getKey(srcAliasRef);
+						// if group aliasRef was also copied
+						if (newerAliasRef != null) {
+							((DataNode) newerElement).setAliasRef(newerAliasRef);
+						}
+					}
+					// otherwise aliasRef is not linked to any group
+					else {
+						System.out.println("Alias DataNode unlinked to group");
+					}
+				}
+			}
 			// link LineElement LinePoint elementRefs
-			if (newerElement instanceof LineElement && srcElement instanceof LineElement) {
+			else if (newerElement instanceof LineElement && srcElement instanceof LineElement) {
 				// set start elementRef
 				LinkableTo srcStartElementRef = ((LineElement) srcElement).getStartElementRef();
 				if (srcStartElementRef != null) {
@@ -150,40 +178,8 @@ public class PathwayModelTransferable implements Transferable {
 					}
 				}
 			}
-
-			// add group members in new Group
-			else if (newerElement.getObjectType() == ObjectType.GROUP
-					&& srcElement.getObjectType() == ObjectType.GROUP) {
-				for (Groupable srcMember : ((Group) srcElement).getPathwayElements()) {
-					Groupable newerMember = (Groupable) newerToSource.getKey(srcMember);
-					if (newerMember != null) {
-						((Group) newerElement).addPathwayElement(newerMember);
-					}
-				}
-			}
-
-			// set aliasRef if any, and link to group if group also copied
-			if (newerElement.getObjectType() == ObjectType.DATANODE
-					&& srcElement.getObjectType() == ObjectType.DATANODE) {
-				if (((DataNode) newerElement).getType() == DataNodeType.ALIAS
-						&& ((DataNode) srcElement).getType() == DataNodeType.ALIAS) {
-					Group srcAliasRef = ((DataNode) srcElement).getAliasRef();
-					if (srcAliasRef != null) {
-						Group newerAliasRef = (Group) newerToSource.getKey(srcAliasRef);
-						// if group aliasRef was also copied
-						if (newerAliasRef != null) {
-							((DataNode) newerElement).setAliasRef(newerAliasRef);
-						}
-					}
-					// otherwise aliasRef is not linked to any group 
-					else {
-						System.out.println("Alias DataNode unlinked to group");
-					}
-				}
-			}
 		}
-
-		// If no mappinfo, create a dummy one that we can recognize later on TODO 
+		// If no mappinfo, create a dummy one that we can recognize later on TODO
 		if (!infoFound) {
 			Pathway info = new Pathway();
 			info.setSource(INFO_DATASOURCE);

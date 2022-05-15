@@ -260,38 +260,38 @@ public class VGroup extends VShapedElement implements VElementMouseListener {
 		}
 	}
 
-//	/**
-//	 * TODO 
-//	 */
-//	@Override
-//	protected Shape calculateVOutline() {
-//		// Include rotation and stroke
-//		Area a = new Area(getVShape(true));
-//		return a;
-//	}
-//
-//	/**
-//	 * TODO 
-//	 */
-//	@Override
-//	protected Shape getVShape(boolean rotate) {
-//		Rectangle2D mb = null;
-//		if (rotate) {
-//			mb = getPathwayObject().getRotatedBounds();
-//		} else {
-//			mb = getPathwayObject().getBounds();
-//		}
-//		return canvas.vFromM(mb);
-//	}
-//
-//	/**
-//	 * TODO 
-//	 */
-//	@Override
-//	protected void setVScaleRectangle(Rectangle2D r) {
-//		// TODO Auto-generated method stub
-//
-//	}
+	/**
+	 * TODO 
+	 */
+	@Override
+	protected Shape calculateVOutline() {
+		// Include rotation and stroke
+		Area a = new Area(getVShape(true));
+		return a;
+	}
+
+	/**
+	 * TODO 
+	 */
+	@Override
+	protected Shape getVShape(boolean rotate) {
+		Rectangle2D mb = null;
+		if (rotate) {
+			mb = getPathwayObject().getRotatedBounds();
+		} else {
+			mb = getPathwayObject().getBounds();
+		}
+		return canvas.vFromM(mb);
+	}
+
+	/**
+	 * TODO 
+	 */
+	@Override
+	protected void setVScaleRectangle(Rectangle2D r) {
+		// TODO Auto-generated method stub
+
+	}
 
 	private LinkProvider linkAnchorDelegate = new DefaultLinkAnchorDelegate(this);
 	private boolean anchorsShowing = false;

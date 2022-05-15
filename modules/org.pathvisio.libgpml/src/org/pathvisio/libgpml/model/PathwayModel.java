@@ -1069,26 +1069,6 @@ public class PathwayModel {
 				}
 			}
 		}
-		// link LineElement LinePoint elementRefs
-		for (LineElement l : result.getLineElements()) {
-			LineElement src = (LineElement) newToSource.get(l);
-			// set start elementRef
-			LinkableTo srcStartElementRef = src.getStartElementRef();
-			if (srcStartElementRef != null) {
-				LinkableTo newStartElementRef = (LinkableTo) newToSource.getKey(srcStartElementRef);
-				if (newStartElementRef != null) {
-					l.setStartElementRef(newStartElementRef);
-				}
-			}
-			// set end elementRef
-			LinkableTo srcEndElementRef = src.getEndElementRef();
-			if (srcEndElementRef != null) {
-				LinkableTo newEndElementRef = (LinkableTo) newToSource.getKey(srcEndElementRef);
-				if (newEndElementRef != null) {
-					l.setEndElementRef(newEndElementRef);
-				}
-			}
-		}
 		// add group members in new Group
 		for (Group g : result.getGroups()) {
 			Group src = (Group) newToSource.get(g);
@@ -1106,6 +1086,26 @@ public class PathwayModel {
 				Group newAliasRef = (Group) newToSource.getKey(g);
 				if (newAlias != null && newAliasRef != null) {
 					newAlias.setAliasRef(newAliasRef);
+				}
+			}
+		}
+		// link LineElement LinePoint elementRefs
+		for (LineElement l : result.getLineElements()) {
+			LineElement src = (LineElement) newToSource.get(l);
+			// set start elementRef
+			LinkableTo srcStartElementRef = src.getStartElementRef();
+			if (srcStartElementRef != null) {
+				LinkableTo newStartElementRef = (LinkableTo) newToSource.getKey(srcStartElementRef);
+				if (newStartElementRef != null) {
+					l.setStartElementRef(newStartElementRef);
+				}
+			}
+			// set end elementRef
+			LinkableTo srcEndElementRef = src.getEndElementRef();
+			if (srcEndElementRef != null) {
+				LinkableTo newEndElementRef = (LinkableTo) newToSource.getKey(srcEndElementRef);
+				if (newEndElementRef != null) {
+					l.setEndElementRef(newEndElementRef);
 				}
 			}
 		}
@@ -1360,9 +1360,9 @@ public class PathwayModel {
 	private List<PathwayModelListener> listeners = new ArrayList<PathwayModelListener>();
 
 	/**
-	 * Adds listener to this pathway model. 
+	 * Adds listener to this pathway model.
 	 * 
-	 * @param v the pathway model listener to add. 
+	 * @param v the pathway model listener to add.
 	 */
 	public void addListener(PathwayModelListener v) {
 		if (!listeners.contains(v))
@@ -1370,9 +1370,9 @@ public class PathwayModel {
 	}
 
 	/**
-	 * Removes listener from this pathway model. 
+	 * Removes listener from this pathway model.
 	 * 
-	 * @param v the pathway model listener to removed. 
+	 * @param v the pathway model listener to removed.
 	 */
 	public void removeListener(PathwayModelListener v) {
 		listeners.remove(v);
@@ -1382,7 +1382,7 @@ public class PathwayModel {
 	 * Firing the ObjectModifiedEvent has the side effect of marking the Pathway as
 	 * changed.
 	 * 
-	 * @param e the pathway model event. 
+	 * @param e the pathway model event.
 	 */
 	public void fireObjectModifiedEvent(PathwayModelEvent e) {
 		markChanged();
@@ -1395,9 +1395,9 @@ public class PathwayModel {
 	// Helper Methods
 	// ================================================================================
 	/**
-	 * Prints a summary of this pathway model. 
+	 * Prints a summary of this pathway model.
 	 * 
-	 * @return the string summary of this pathway model. 
+	 * @return the string summary of this pathway model.
 	 */
 	public String summary() {
 		String result = "    " + toString() + "\n    with Objects:";
