@@ -18,7 +18,6 @@ package org.pathvisio.core.view.model;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Rectangle2D;
@@ -27,6 +26,7 @@ import java.util.Map;
 
 import org.pathvisio.core.util.ColorPalette;
 import org.pathvisio.libgpml.model.Group;
+import org.pathvisio.libgpml.model.PathwayModel;
 import org.pathvisio.libgpml.model.type.GroupType;
 import org.pathvisio.libgpml.model.type.LineStyleType;
 import org.pathvisio.libgpml.model.type.ShapeType;
@@ -35,13 +35,20 @@ import org.pathvisio.libgpml.util.ColorUtils;
 /**
  * Keeps track of all GroupPainters.
  * 
- * @author thomas
+ * @author thomas, finterly
+ */
+/**
+ * @author p70073399
+ *
+ */
+/**
+ * @author p70073399
+ *
  */
 public class GroupPainterRegistry {
 
-	public static final double DEFAULT_M_MARGIN = 8; // Make the bounds slightly
-	// larger than the summed bounds
-	// of the containing elements
+	// Make bounds slightly larger than the summed bounds of the enclosed elements
+	public static final double DEFAULT_M_MARGIN = 8;
 	public static final double COMPLEX_M_MARGIN = 12;
 
 	private static Map<String, GroupPainter> painters = new HashMap<String, GroupPainter>();
@@ -57,10 +64,10 @@ public class GroupPainterRegistry {
 	}
 
 	/**
-	 * Get the registered painter for the given group style.
+	 * Returns the registered painter for the given group style.
 	 * 
-	 * @param name The name of the group style (use {@link GroupType#toString()}.
-	 * @return The registered painter, or the default painter if no custom painters
+	 * @param name the name of the group style (use {@link GroupType#toString()}.
+	 * @return the registered painter, or the default painter if no custom painters
 	 *         are registered for the given group style.
 	 */
 	public static GroupPainter getPainter(String name) {
@@ -85,14 +92,14 @@ public class GroupPainterRegistry {
 	 * NB: "Group" (GPML2021) replaces "None" (GPML2013a).
 	 */
 	private static GroupPainter defaultPainter = new GroupPainter() {
-		public void drawGroup(Graphics2D g, VGroup group, int flags) {
+		public void drawGroup(Graphics2D g, VGroup vgroup, int flags) {
 			boolean mouseover = (flags & VGroup.FLAG_MOUSEOVER) != 0;
 			boolean anchors = (flags & VGroup.FLAG_ANCHORSVISIBLE) != 0;
 			boolean selected = (flags & VGroup.FLAG_SELECTED) != 0;
 
 			// Draw group outline
 			int sw = 1;
-			Rectangle2D rect = group.getVBounds();
+			Rectangle2D rect = vgroup.getVBounds();
 
 			// different alpha when selected and mouse over
 			int alpha = (mouseover || anchors || selected) ? TRANSLUCENCY_LEVEL : TRANSLUCENCY_LEVEL_HOVER;
@@ -106,12 +113,12 @@ public class GroupPainterRegistry {
 					new BasicStroke(sw, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 1, new float[] { 4, 2 }, 0));
 			g.drawRect((int) rect.getX(), (int) rect.getY(), (int) rect.getWidth() - sw, (int) rect.getHeight() - sw);
 
-			// set group properties of pathway model to match the view TODO
-			Group mgroup = group.getPathwayObject();
-			mgroup.setBorderColor(BORDER_GRAY);
-			mgroup.setBorderStyle(LineStyleType.DASHED);
-			mgroup.setFillColor(ColorUtils.makeTransparent(DEFAULT_GRAY, TRANSLUCENCY_LEVEL));
-			mgroup.setShapeType(ShapeType.RECTANGLE);
+			// draw elementId on mouseover if an Alias DataNode is linked to this group
+			mouseoverElementId(g, rect, mouseover, anchors, vgroup);
+			// set group graphics properties of pathway model to match the view
+			setGroupStyle(vgroup, BORDER_GRAY, LineStyleType.DASHED,
+					ColorUtils.makeTransparent(DEFAULT_GRAY, TRANSLUCENCY_LEVEL), ShapeType.RECTANGLE);
+
 		}
 	};
 
@@ -122,12 +129,12 @@ public class GroupPainterRegistry {
 	 * NB: "Transparent" (GPML2021) replaces "Group" (GPML2013a).
 	 */
 	private static GroupPainter transparentPainter = new GroupPainter() {
-		public void drawGroup(Graphics2D g, VGroup group, int flags) {
+		public void drawGroup(Graphics2D g, VGroup vgroup, int flags) {
 			boolean mouseover = (flags & VGroup.FLAG_MOUSEOVER) != 0;
 			boolean anchors = (flags & VGroup.FLAG_ANCHORSVISIBLE) != 0;
 			boolean selected = (flags & VGroup.FLAG_SELECTED) != 0;
 
-			Rectangle2D rect = group.getVBounds();
+			Rectangle2D rect = vgroup.getVBounds();
 
 			// Group highlight, on mouseover, linkanchors display and selection
 			if (mouseover || anchors || selected) {
@@ -145,10 +152,15 @@ public class GroupPainterRegistry {
 			// User hint is drawn on mouseover, if it fits within the group bounds
 			if (mouseover && !anchors) {
 				// Draw a hint to tell the user that click selects group
-				String hint = selected ? "Drag to move group" : "Click to select group";
-
+				String hint = selected ? "Drag to move Group" : "Click to select Group";
+				// if an alias datanode is linked to this group
+				Group mgroup = vgroup.getPathwayObject();
+				PathwayModel p = mgroup.getPathwayModel();
+				if (p.hasAliasRef(mgroup)) {
+					hint = hint + " " + mgroup.getElementId();
+				}
+				// center hint
 				Rectangle2D tb = g.getFontMetrics().getStringBounds(hint, g);
-
 				if (tb.getWidth() <= rect.getWidth()) {
 					int yoffset = (int) rect.getY();
 					int xoffset = (int) rect.getX() + (int) (rect.getWidth() / 2) - (int) (tb.getWidth() / 2);
@@ -156,13 +168,9 @@ public class GroupPainterRegistry {
 					g.drawString(hint, xoffset, yoffset);
 				}
 			}
-			
-			// set group properties of pathway model to match the view TODO
-			Group mgroup = group.getPathwayObject();
-			mgroup.setBorderColor(ColorPalette.TRANSPARENT);
-			mgroup.setBorderStyle(LineStyleType.SOLID);
-			mgroup.setFillColor(ColorPalette.TRANSPARENT);
-			mgroup.setShapeType(ShapeType.RECTANGLE);
+			// set group graphics properties of pathway model to match the view
+			setGroupStyle(vgroup, ColorPalette.TRANSPARENT, LineStyleType.SOLID, ColorPalette.TRANSPARENT,
+					ShapeType.RECTANGLE);
 		}
 	};
 
@@ -173,21 +181,21 @@ public class GroupPainterRegistry {
 	 * NB: the octagon shape is specially implemented.
 	 */
 	private static GroupPainter complexPainter = new GroupPainter() {
-		public void drawGroup(Graphics2D g, VGroup group, int flags) {
+		public void drawGroup(Graphics2D g, VGroup vgroup, int flags) {
 			boolean mouseover = (flags & VGroup.FLAG_MOUSEOVER) != 0;
 			boolean anchors = (flags & VGroup.FLAG_ANCHORSVISIBLE) != 0;
 			boolean selected = (flags & VGroup.FLAG_SELECTED) != 0;
 
 			// Draw group outline
 			int sw = 1;
-			Rectangle2D vRect = group.getVBounds();
+			Rectangle2D vRect = vgroup.getVBounds();
 			float vTop = (float) vRect.getMinY();
 			float vLeft = (float) vRect.getMinX();
 			float vBottom = (float) vRect.getMaxY() - sw;
 			float vRight = (float) vRect.getMaxX() - sw;
 
 			float vMargin = (float) Math.min(Math.min(vRect.getWidth() / 2.5, vRect.getHeight() / 2.5),
-					group.vFromM(COMPLEX_M_MARGIN * 1.5));
+					vgroup.vFromM(COMPLEX_M_MARGIN * 1.5));
 
 			GeneralPath outline = new GeneralPath();
 			outline.moveTo(vLeft + vMargin, vTop);
@@ -210,13 +218,12 @@ public class GroupPainterRegistry {
 			g.setColor(BORDER_GRAY);
 			g.setStroke(new BasicStroke());
 			g.draw(outline);
-			
-			// set group properties of pathway model to match the view TODO
-			Group mgroup = group.getPathwayObject();
-			mgroup.setBorderColor(BORDER_GRAY);
-			mgroup.setBorderStyle(LineStyleType.SOLID);
-			mgroup.setFillColor(ColorUtils.makeTransparent(DEFAULT_GRAY, TRANSLUCENCY_LEVEL));
-			mgroup.setShapeType(ShapeType.OCTAGON); //TODO 
+
+			// draw elementId on mouseover if an Alias DataNode is linked to this group
+			mouseoverElementId(g, vRect, mouseover, anchors, vgroup);
+			// set group graphics properties of pathway model to match the view
+			setGroupStyle(vgroup, BORDER_GRAY, LineStyleType.SOLID,
+					ColorUtils.makeTransparent(DEFAULT_GRAY, TRANSLUCENCY_LEVEL), ShapeType.OCTAGON);
 		}
 	};
 
@@ -225,13 +232,13 @@ public class GroupPainterRegistry {
 	 * gray dashed border.
 	 */
 	private static GroupPainter pathwayPainter = new GroupPainter() {
-		public void drawGroup(Graphics2D g, VGroup group, int flags) {
+		public void drawGroup(Graphics2D g, VGroup vgroup, int flags) {
 			boolean mouseover = (flags & VGroup.FLAG_MOUSEOVER) != 0;
 			boolean anchors = (flags & VGroup.FLAG_ANCHORSVISIBLE) != 0;
 			boolean selected = (flags & VGroup.FLAG_SELECTED) != 0;
 
 			int sw = 1;
-			Rectangle2D rect = group.getVBounds();
+			Rectangle2D rect = vgroup.getVBounds();
 
 			// different alpha when selected and mouse over
 			int alpha = (mouseover || anchors || selected) ? TRANSLUCENCY_LEVEL : TRANSLUCENCY_LEVEL_HOVER;
@@ -244,15 +251,56 @@ public class GroupPainterRegistry {
 			g.setStroke(
 					new BasicStroke(sw, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 1, new float[] { 4, 2 }, 0));
 			g.drawRect((int) rect.getX(), (int) rect.getY(), (int) rect.getWidth() - sw, (int) rect.getHeight() - sw);
-			
-			// set group properties of pathway model to match the view TODO
-			Group mgroup = group.getPathwayObject();
-			mgroup.setBorderColor(BORDER_GRAY);
-			mgroup.setBorderStyle(LineStyleType.DASHED);
-			mgroup.setFillColor(ColorUtils.makeTransparent(PATHWAY_GREEN, TRANSLUCENCY_LEVEL));
-			mgroup.setShapeType(ShapeType.RECTANGLE);
+
+			// draw elementId on mouseover if an Alias DataNode is linked to this group
+			mouseoverElementId(g, rect, mouseover, anchors, vgroup);
+			// set group graphics properties of pathway model to match the view
+			setGroupStyle(vgroup, BORDER_GRAY, LineStyleType.DASHED,
+					ColorUtils.makeTransparent(PATHWAY_GREEN, TRANSLUCENCY_LEVEL), ShapeType.RECTANGLE);
 		}
 	};
+
+	/**
+	 * Draws elementId when mouseover if an Alias DataNode is linked to this group.
+	 * 
+	 * @param g         the graphics2d.
+	 * @param rect      the rectangular bounds.
+	 * @param mouseover the boolean for mouseover.
+	 * @param anchors   the boolean for anchors.
+	 * @param vgroup    the view group.
+	 */
+	private static void mouseoverElementId(Graphics2D g, Rectangle2D rect, boolean mouseover, boolean anchors,
+			VGroup vgroup) {
+		if (mouseover && !anchors) {
+			Group group = vgroup.getPathwayObject();
+			PathwayModel p = group.getPathwayModel();
+			boolean hasAlias = p.hasAliasRef(group);
+			if (hasAlias) {
+				String id = "Group " + group.getElementId();
+				Rectangle2D tb = g.getFontMetrics().getStringBounds(id, g);
+				if (tb.getWidth() <= rect.getWidth()) {
+					int yoffset = (int) rect.getY();
+					int xoffset = (int) rect.getX() + (int) (rect.getWidth() / 2) - (int) (tb.getWidth() / 2);
+					yoffset += (int) (rect.getHeight() / 2) + (int) (tb.getHeight() / 2);
+					g.drawString(id, xoffset, yoffset);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Sets group graphics properties in pathway model to match view pathway model.
+	 * 
+	 * @param vgroup the view group.
+	 */
+	private static void setGroupStyle(VGroup vgroup, Color borderColor, LineStyleType borderStyle, Color fillColor,
+			ShapeType shapeType) {
+		Group group = vgroup.getPathwayObject();
+		group.setBorderColor(borderColor);
+		group.setBorderStyle(borderStyle);
+		group.setFillColor(fillColor);
+		group.setShapeType(shapeType);
+	}
 
 	// Register default painters
 	static {
