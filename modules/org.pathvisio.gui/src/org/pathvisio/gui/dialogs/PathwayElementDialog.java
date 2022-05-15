@@ -51,7 +51,9 @@ import org.pathvisio.gui.panels.PathwayElementPanel;
 public class PathwayElementDialog extends OkCancelDialog {
 
 	public static final String TAB_COMMENTS = "Comments";
+	public static final String TAB_ANNOTATIONS = "Annotations";
 	public static final String TAB_CITATIONS = "Citations";
+	public static final String TAB_EVIDENCES = "Evidences";
 	public static final String TAB_PROPERTIES = "Properties";
 
 	PathwayElement input;
@@ -134,9 +136,9 @@ public class PathwayElementDialog extends OkCancelDialog {
 
 	private void createTabs() {
 		addPathwayElementPanel(TAB_COMMENTS, new CommentPanel());
-		addPathwayElementPanel("Annotations", new AnnotationPanel(swingEngine));
+		addPathwayElementPanel(TAB_ANNOTATIONS, new AnnotationPanel(swingEngine));
 		addPathwayElementPanel(TAB_CITATIONS, new CitationPanel(swingEngine));
-		addPathwayElementPanel("Evidences", new EvidencePanel(swingEngine));
+		addPathwayElementPanel(TAB_EVIDENCES, new EvidencePanel(swingEngine));
 		addCustomTabs(dialogPane);
 	}
 
