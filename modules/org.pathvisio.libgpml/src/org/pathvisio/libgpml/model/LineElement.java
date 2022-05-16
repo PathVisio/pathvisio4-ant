@@ -1199,6 +1199,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 			addAnchor(new Anchor(a.getPosition(), a.getShapeType()));
 		}
 		lineColor = src.lineColor;
+		lineStyle = src.lineStyle;
 		lineWidth = src.lineWidth;
 		connectorType = src.connectorType;
 		zOrder = src.zOrder;
