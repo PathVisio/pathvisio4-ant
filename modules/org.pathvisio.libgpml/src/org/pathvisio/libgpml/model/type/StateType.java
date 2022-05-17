@@ -112,4 +112,13 @@ public class StateType {
 		return nameToStateType.values().toArray(new StateType[0]);
 	}
 
+	/**
+	 * Returns a string representation of this StateType.
+	 * 
+	 * @return name the identifier of this StateType.
+	 */
+	public String toString() {
+		return name;
+	}
+
 }

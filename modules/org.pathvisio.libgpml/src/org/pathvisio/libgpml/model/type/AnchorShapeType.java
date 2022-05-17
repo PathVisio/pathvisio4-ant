@@ -119,15 +119,6 @@ public class AnchorShapeType {
 	}
 
 	/**
-	 * Returns a string representation of this AnchorType.
-	 * 
-	 * @return name the identifier of this AnchorType.
-	 */
-	public String toString() {
-		return name;
-	}
-
-	/**
 	 * Returns the booleans disallowLinks.
 	 * 
 	 * @return disallowLinks the boolean if set to true nothing will be able to
@@ -135,6 +126,15 @@ public class AnchorShapeType {
 	 */
 	public boolean isDisallowLinks() {
 		return disallowLinks;
+	}
+
+	/**
+	 * Returns a string representation of this AnchorShapeType.
+	 * 
+	 * @return name the identifier of this AnchorShapeType.
+	 */
+	public String toString() {
+		return name;
 	}
 
 	/**

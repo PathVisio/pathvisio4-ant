@@ -81,4 +81,13 @@ public enum VAlignType {
 			result[i] = values()[i].name;
 		return result;
 	}
+	
+	/**
+	 * Returns a string representation of this VAlignType. 
+	 * 
+	 * @return name the identifier of this VAlignType.
+	 */
+	public String toString() {
+		return name;
+	}
 }

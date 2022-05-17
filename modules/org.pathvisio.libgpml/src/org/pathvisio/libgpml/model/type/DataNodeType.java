@@ -127,8 +127,7 @@ public class DataNodeType {
 	}
 
 	/**
-	 * Returns a string representation of this DataNodeType. Adds space between
-	 * lower and upper case letters to make more human readable.
+	 * Returns a string representation of this DataNodeType.
 	 * 
 	 * @return name the identifier of this DataNodeType.
 	 */

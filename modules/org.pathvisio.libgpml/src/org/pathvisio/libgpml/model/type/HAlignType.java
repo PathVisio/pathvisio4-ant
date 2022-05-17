@@ -82,4 +82,13 @@ public enum HAlignType {
 		return result;
 	}
 
+	/**
+	 * Returns a string representation of this HAlignType.
+	 * 
+	 * @return name the identifier of this HAlignType.
+	 */
+	public String toString() {
+		return name;
+	}
+
 }
