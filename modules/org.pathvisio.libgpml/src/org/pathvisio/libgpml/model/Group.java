@@ -125,19 +125,26 @@ public class Group extends ShapedElement implements Xrefable {
 			// add pathway element to this group
 			if (pathwayElement.getGroupRef() == this && !hasPathwayElement(pathwayElement)) {
 				pathwayElements.add(pathwayElement);
-				updateDimensions();
 			}
 		}
 	}
 
 	/**
-	 * Updates group centerX, centerY, width, and height. Called when pathway
-	 * element members are added.
+	 * Updates Group centerX, centerY, width, and height.
+	 * <p>
+	 * NB:
+	 * <ol>
+	 * <li>Generally called after {@link addPathwayElement} or setGroupRefTo
+	 * Methods, when pathway elements are added to group.
+	 * <li>Called after reading methods in {@link updateGroup}.
+	 * <li>Also called in copy and paste methods.
+	 * </ol>
 	 */
 	public void updateDimensions() {
-		// if newly created group TODO
-		if (getWidth() == 0 || getHeight() == 0) {
-			Rectangle2D r = getMinRotatedBounds();
+		// if newly created group (size 1 or smaller)
+		// or if width or height not yet updated (zero)
+		if (pathwayElements.size() <= 1 || getWidth() == 0 || getHeight() == 0) {
+			Rectangle2D r = getMinBounds(true);
 			setCenterX(r.getCenterX());
 			setCenterY(r.getCenterY());
 			setWidth(r.getWidth());
@@ -179,6 +186,7 @@ public class Group extends ShapedElement implements Xrefable {
 		for (Groupable pathwayElement : pathwayElements) {
 			addPathwayElement(pathwayElement);
 		}
+		updateDimensions();
 	}
 
 	/**
@@ -341,7 +349,7 @@ public class Group extends ShapedElement implements Xrefable {
 		AffineTransform t = new AffineTransform();
 		t.rotate(getRotation(), getCenterX(), getCenterY());
 		bounds = t.createTransformedShape(bounds).getBounds2D();
-		Rectangle2D minbounds = getMinRotatedBounds();
+		Rectangle2D minbounds = getMinBounds(true);
 		bounds.add(minbounds); // add bounds
 		return new Rectangle2D.Double(bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight());
 	}
@@ -354,56 +362,28 @@ public class Group extends ShapedElement implements Xrefable {
 	@Override
 	public Rectangle2D getBounds() {
 		Rectangle2D bounds = new Rectangle2D.Double(getLeft(), getTop(), getWidth(), getHeight());
-		Rectangle2D minbounds = getMinRotatedBounds();
+		Rectangle2D minbounds = getMinBounds(false);
 		bounds.add(minbounds); // add bounds
 		return new Rectangle2D.Double(bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight());
 	}
 
 	/**
 	 * Iterates over all group elements to find the MINIMAL total rectangular
-	 * bounds, taking into account rotation of the nested elements
+	 * bounds.
 	 *
-	 * @return the rectangular bounds for this group with rotation taken into
-	 *         account.
-	 */
-	public Rectangle2D getMinRotatedBounds() {
-		Rectangle2D bounds = null;
-		for (Groupable e : pathwayElements) {
-			if (e == this) {
-				continue; // To prevent recursion error
-			}
-			if (bounds == null) {
-				bounds = e.getRotatedBounds();
-			} else {
-				bounds.add(e.getRotatedBounds());
-			}
-		}
-		if (bounds != null) {
-			double margin = getMargin();
-			return new Rectangle2D.Double(bounds.getX() - margin, bounds.getY() - margin,
-					bounds.getWidth() + 2 * margin, bounds.getHeight() + 2 * margin);
-		} else {
-			return new Rectangle2D.Double();
-		}
-	}
-
-	/**
-	 * Iterates over all group elements to find the MINIMAL total rectangular
-	 * bounds. Note: doesn't include rotation of the nested elements. If you want to
-	 * include rotation, use {@link #getRotatedBounds()} instead.
-	 *
+	 * @param rotated if true, take into account rotation.
 	 * @return the rectangular bounds for this group.
 	 */
-	public Rectangle2D getMinBounds() {
+	public Rectangle2D getMinBounds(boolean rotated) {
 		Rectangle2D bounds = null;
 		for (Groupable e : pathwayElements) {
 			if (e == this) {
 				continue; // To prevent recursion error
 			}
 			if (bounds == null) {
-				bounds = e.getBounds();
+				bounds = rotated ? e.getRotatedBounds() : e.getBounds();
 			} else {
-				bounds.add(e.getBounds());
+				bounds.add(rotated ? e.getRotatedBounds() : e.getBounds());
 			}
 		}
 		if (bounds != null) {
