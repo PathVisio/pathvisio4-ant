@@ -621,14 +621,6 @@ public class VLineElement extends VPathwayElement implements VGroupable, Adjusta
 				}
 			}
 		}
-//		for (GraphRefContainer ref : gdata.getReferences()) { TODO 
-//			if (ref instanceof LinePoint) {
-//				VPoint vp = canvas.getPoint((LinePoint) ref);
-//				if (vp != null) {
-//					vp.getLine().recalculateConnector();
-//				}
-//			}
-//		}
 	}
 
 	private void setHandleLocation(VPoint vp) {

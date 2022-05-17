@@ -121,13 +121,14 @@ public class SelectionBox extends VElement implements Adjustable {
 	 * @param o
 	 */
 	public void removeFromSelection(VElement o) {
-		if (o == this)
+		if (o == this) {
 			return;
+		}
 		selection.remove(o);
 		o.deselect();
-		if (!isSelecting)
+		if (!isSelecting) {
 			fitToSelection();
-
+		}
 		fireSelectionEvent(new SelectionEvent(this, SelectionEvent.OBJECT_REMOVED, o));
 	}
 
