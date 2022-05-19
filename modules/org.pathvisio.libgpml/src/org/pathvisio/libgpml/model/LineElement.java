@@ -217,6 +217,8 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 	/**
 	 * Sets linePoints to the given list of LinePoints. Removes old points
 	 * {@link removeLinePoints}, if any, then adds new points {@link addLinePoints}.
+	 * In the case of updating waypoints, start and end line points are preserved
+	 * and should not be removed.
 	 *
 	 * @param points the list of points to set.
 	 */
@@ -226,8 +228,16 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 				throw new IllegalArgumentException("Points array should at least have two elements for "
 						+ getClass().getSimpleName() + " " + getElementId());
 			}
+			List<LinePoint> toRemove = new ArrayList<LinePoint>();
 			if (linePoints != null) {
-				removeLinePoints(); // remove points before setting new points
+				for (LinePoint linePoint : linePoints) {
+					// in some cases, start and end points are preserved and should not be removed
+					if (!points.contains(linePoint)
+							&& (linePoint == getStartLinePoint() || linePoint == getEndLinePoint())) {
+						toRemove.add(linePoint);
+					}
+				}
+				removeLinePoints(toRemove); // remove points before setting new points
 			}
 			addLinePoints(points); // adds points to pathway model and to this line
 			fireObjectModifiedEvent(PathwayObjectEvent.createCoordinatePropertyEvent(this));
@@ -239,7 +249,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 	 * model {@link PathwayModel#addPathwayObject} if applicable. This method is
 	 * called only by {@link #setLinePoints}.
 	 *
-	 * @param points the points.
+	 * @param points the points to add to pathway model..
 	 */
 	private void addLinePoints(List<LinePoint> points) {
 		for (LinePoint point : points) {
@@ -249,22 +259,34 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 			if (point.getLineElement() != this) {
 				throw new IllegalArgumentException("Cannot add point to line other than its parent line");
 			}
-			if (pathwayModel != null) {
+			// if start and end points already belong to the pathway model, do not add again
+			if (pathwayModel != null && !pathwayModel.hasPathwayObject(point)) {
 				pathwayModel.addPathwayObject(point);
 			}
 			linePoints.add(point);
 		}
-
 	}
 
 	/**
-	 * Removes all points from the linePoints list.
+	 * Removes all points from the given line points list.
+	 * 
+	 * <p>
+	 * NB:
+	 * <ol>
+	 * <li>Called from {@link setLinePoints}. For which in some cases, start and end
+	 * line points are preserved and should not be removed.
+	 * <li>When this line element is terminated {@link terminate}, all points of
+	 * linePoints list are removed.
+	 * </ol>
+	 * 
+	 * @param toRemove the list of points to remove.
 	 */
-	private void removeLinePoints() {
-		for (int i = linePoints.size() - 1; i >= 0; i--) {
-			LinePoint point = linePoints.get(i);
-			if (point.pathwayModel != null)
+	private void removeLinePoints(List<LinePoint> toRemove) {
+		for (int i = toRemove.size() - 1; i >= 0; i--) {
+			LinePoint point = toRemove.get(i);
+			if (point.pathwayModel != null) {
 				pathwayModel.removePathwayObject(point);
+			}
 		}
 		linePoints.clear();
 	}
@@ -1164,7 +1186,7 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 	 */
 	@Override
 	protected void terminate() {
-		removeLinePoints();
+		removeLinePoints(linePoints);
 		removeAnchors();
 		super.terminate();
 	}
@@ -1189,12 +1211,11 @@ public abstract class LineElement extends PathwayElement implements Groupable, C
 		groupRef = src.groupRef;
 		// copy line points
 		List<LinePoint> points = new ArrayList<LinePoint>();
-		for (LinePoint pt : src.linePoints) {
+		for (LinePoint pt : src.getLinePoints()) {
 			points.add(new LinePoint(pt.getX(), pt.getY()));
 		}
 		setLinePoints(points);
 		// copy anchors
-		anchors = new ArrayList<Anchor>();
 		for (Anchor a : src.anchors) {
 			addAnchor(new Anchor(a.getPosition(), a.getShapeType()));
 		}
