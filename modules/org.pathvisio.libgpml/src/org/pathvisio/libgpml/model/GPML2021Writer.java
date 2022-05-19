@@ -139,8 +139,8 @@ public class GPML2021Writer extends GPML2021FormatAbstract implements GpmlFormat
 	 */
 	@Override
 	public Document createJdom(PathwayModel pathwayModel) throws ConverterException {
-		// removes empty groups
-		removeEmptyGroups(pathwayModel);
+		// removes empty groups and updates group dimensions
+		updateGroups(pathwayModel);
 
 		Document doc = new Document();
 		Element root = new Element("Pathway", getGpmlNamespace());

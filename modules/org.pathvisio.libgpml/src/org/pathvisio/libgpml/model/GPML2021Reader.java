@@ -106,8 +106,10 @@ public class GPML2021Reader extends GPML2021FormatAbstract implements GpmlFormat
 		readInteractions(pathwayModel, root, refIdToJdomElement, elementToPoint);
 		readGraphicalLines(pathwayModel, root, refIdToJdomElement, elementToPoint);
 		readPointElementRefs(pathwayModel, elementToPoint);
-		// removes empty groups
-		removeEmptyGroups(pathwayModel);
+		// removes empty groups and updates group dimensions
+		updateGroups(pathwayModel);
+		// refreshes line elements
+		refreshLineElements(pathwayModel);
 	}
 
 	/**

@@ -133,8 +133,10 @@ public class GPML2013aReader extends GPML2013aFormatAbstract implements GpmlForm
 		readGraphicalLines(pathwayModel, root, elementIdSet, idToPublicationXref, groupIdToGroup, elementToPoint);
 		// reads line point elementRefs last
 		readPointElementRefs(pathwayModel, graphIdToGroup, elementToPoint);
-		// removes empty groups
-		removeEmptyGroups(pathwayModel);
+		// removes empty groups and updates group dimensions
+		updateGroups(pathwayModel);
+		// refreshes line elements
+		refreshLineElements(pathwayModel);
 	}
 
 	/**

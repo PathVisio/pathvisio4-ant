@@ -17,6 +17,7 @@
 package org.pathvisio.libgpml.model;
 
 import java.io.InputStream;
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +35,8 @@ import org.jdom2.output.SAXOutputter;
 import org.jdom2.output.XMLOutputter;
 import org.pathvisio.libgpml.debug.Logger;
 import org.pathvisio.libgpml.io.ConverterException;
+import org.pathvisio.libgpml.model.GraphLink.LinkableTo;
+import org.pathvisio.libgpml.model.type.ObjectType;
 import org.xml.sax.SAXException;
 
 /**
@@ -98,19 +101,26 @@ public abstract class GPMLFormatAbstract {
 	public static final Namespace OWL_NAMESPACE = Namespace.getNamespace("owl", "http://www.w3.org/2002/07/owl#");
 	public final static String RDF_STRING = "http://www.w3.org/2001/XMLSchema#string";
 
+	// ================================================================================
+	// Common Methods
+	// ================================================================================
 	/**
-	 * Removes group from pathwayModel if empty. Check executed after reading and
-	 * before writing.
+	 * Removes group from pathwayModel if empty. If group valid and not empty,
+	 * update group dimensions of Groups.
+	 * 
+	 * NB: Executed after reading and before writing.
 	 *
 	 * @param pathwayModel the pathway model.
 	 * @throws ConverterException
 	 */
-	protected void removeEmptyGroups(PathwayModel pathwayModel) throws ConverterException {
+	protected void updateGroups(PathwayModel pathwayModel) throws ConverterException {
 		List<Group> groups = pathwayModel.getGroups();
 		List<Group> groupsToRemove = new ArrayList<Group>();
 		for (Group group : groups) {
 			if (group.getPathwayElements().isEmpty()) {
 				groupsToRemove.add(group);
+			} else {
+				group.updateDimensions();
 			}
 		}
 		for (Group groupToRemove : groupsToRemove) {
@@ -119,6 +129,21 @@ public abstract class GPMLFormatAbstract {
 		}
 	}
 
+	/**
+	 * Refreshes line elements.
+	 * 
+	 * @param pathwayModel the pathway model.
+	 * @throws ConverterException
+	 */
+	protected static void refreshLineElements(PathwayModel pathwayModel) throws ConverterException {
+		for (LineElement pe : pathwayModel.getLineElements()) {
+			pe.getConnectorShape().recalculateShape(pe);
+		}
+	}
+
+	// ================================================================================
+	// Validate Method
+	// ================================================================================
 	/**
 	 * Validates a JDOM document against the xml-schema definition specified by
 	 * 'xsdFile.'
