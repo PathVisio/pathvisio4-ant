@@ -29,6 +29,8 @@ import org.pathvisio.core.view.Adjustable;
  * A Handle is a little marker (like a little yellow square) that the user can
  * grab with the mouse and drag around, and in that way adjust some property of
  * an object (such as its width, rotation, etc.)
+ * 
+ * @author unknown
  */
 public class Handle extends VElement {
 	// The direction this handle is allowed to move in

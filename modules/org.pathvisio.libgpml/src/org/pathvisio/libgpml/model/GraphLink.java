@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.Set;
 
 import org.pathvisio.libgpml.model.LineElement.LinePoint;
+import org.pathvisio.libgpml.model.type.ObjectType;
 import org.pathvisio.libgpml.util.Utils;
 
 /**
@@ -45,6 +46,13 @@ public abstract class GraphLink {
 		 * @return the elementId.
 		 */
 		String getElementId();
+
+		/**
+		 * Returns the object type of the pathway object.
+		 *
+		 * @return objectType the object type.
+		 */
+		ObjectType getObjectType();
 
 		/**
 		 * Returns {@link LinkableFrom}s {@link LineElement.LinePoint} for this pathway

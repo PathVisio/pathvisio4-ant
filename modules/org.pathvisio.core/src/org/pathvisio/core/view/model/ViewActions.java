@@ -719,11 +719,9 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 
 		private void removeWaypoint(LineElement l) {
 			// TODO: Instead of removing the last point, it would be better to adjust the
-			// context
-			// menu to remove a specific point (like with anchors). This could be done by
-			// making
-			// VPoint extend VPathwayElement so we can directly get the selected waypoint
-			// here.
+			// context menu to remove a specific point (like with anchors). This could be
+			// done by making VPoint extend VPathwayElement so we can directly get the
+			// selected waypoint here.
 			List<LinePoint> newPoints = new ArrayList<LinePoint>(l.getLinePoints());
 			newPoints.remove(newPoints.size() - 2);
 			l.setLinePoints(newPoints);
@@ -741,7 +739,6 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 			// with an offset if needed
 			List<LinePoint> oldPoints = l.getLinePoints();
 			List<LinePoint> newPoints = new ArrayList<LinePoint>(oldPoints);
-
 			int i = oldPoints.size() - 1; // MPoints size always >= 2
 			LinePoint mp = oldPoints.get(i);
 			LinePoint mp2 = oldPoints.get(i - 1);
