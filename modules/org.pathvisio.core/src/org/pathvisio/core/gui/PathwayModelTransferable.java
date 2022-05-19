@@ -41,11 +41,13 @@ import org.pathvisio.libgpml.io.ConverterException;
 import org.pathvisio.libgpml.model.GpmlFormat;
 import org.pathvisio.libgpml.model.PathwayModel;
 import org.pathvisio.libgpml.model.PathwayObject;
+import org.pathvisio.libgpml.model.connector.ConnectorRestrictions;
 import org.pathvisio.libgpml.model.Pathway;
 import org.pathvisio.libgpml.model.Group;
 import org.pathvisio.libgpml.model.PathwayElement;
 import org.pathvisio.libgpml.model.CopyElement;
 import org.pathvisio.libgpml.model.DataNode;
+import org.pathvisio.libgpml.model.GraphLink.LinkableFrom;
 import org.pathvisio.libgpml.model.GraphLink.LinkableTo;
 import org.pathvisio.libgpml.model.Groupable;
 import org.pathvisio.libgpml.model.LineElement;
@@ -110,7 +112,6 @@ public class PathwayModelTransferable implements Transferable {
 			PathwayElement srcElement = copyElement.getSourceElement();
 			CopyElement copyOfCopyElement = newElement.copy();
 			PathwayElement newerElement = copyOfCopyElement.getNewElement();
-
 			pnew.add(newerElement);
 			// load references
 			newerElement.copyReferencesFrom(srcElement);
@@ -128,7 +129,6 @@ public class PathwayModelTransferable implements Transferable {
 				}
 			}
 		}
-
 		for (PathwayObject newerElement : newerToSource.keySet()) {
 			PathwayObject srcElement = newerToSource.get(newerElement);
 			// add group members in new Group
@@ -139,6 +139,7 @@ public class PathwayModelTransferable implements Transferable {
 						((Group) newerElement).addPathwayElement(newerMember);
 					}
 				}
+				((Group) newerElement).updateDimensions();
 			}
 			// set aliasRef if any, and link to group if group also copied
 			else if (newerElement.getObjectType() == ObjectType.DATANODE
@@ -159,14 +160,16 @@ public class PathwayModelTransferable implements Transferable {
 					}
 				}
 			}
-			// link LineElement LinePoint elementRefs
+			// link LineElement linePoint elementRefs
 			else if (newerElement instanceof LineElement && srcElement instanceof LineElement) {
 				// set start elementRef
 				LinkableTo srcStartElementRef = ((LineElement) srcElement).getStartElementRef();
 				if (srcStartElementRef != null) {
 					LinkableTo newerStartElementRef = (LinkableTo) newerToSource.getKey(srcStartElementRef);
 					if (newerStartElementRef != null) {
-						((LineElement) newerElement).setStartElementRef(newerStartElementRef);
+						LinePoint startPoint = ((LineElement) newerElement).getStartLinePoint();
+						LinePoint srcPoint = ((LineElement) srcElement).getStartLinePoint();
+						startPoint.linkTo(newerStartElementRef, srcPoint.getRelX(), srcPoint.getRelY());
 					}
 				}
 				// set end elementRef
@@ -174,10 +177,16 @@ public class PathwayModelTransferable implements Transferable {
 				if (srcEndElementRef != null) {
 					LinkableTo newerEndElementRef = (LinkableTo) newerToSource.getKey(srcEndElementRef);
 					if (newerEndElementRef != null) {
-						((LineElement) newerElement).setEndElementRef(newerEndElementRef);
+						LinePoint endPoint = ((LineElement) newerElement).getEndLinePoint();
+						LinePoint srcPoint = ((LineElement) srcElement).getEndLinePoint();
+						endPoint.linkTo(newerEndElementRef, srcPoint.getRelX(), srcPoint.getRelY());
 					}
 				}
 			}
+		}
+		// refresh connector shapes
+		for (LineElement o : pnew.getLineElements()) {
+			o.getConnectorShape().recalculateShape(o);
 		}
 		// If no mappinfo, create a dummy one that we can recognize later on TODO
 		if (!infoFound) {
@@ -277,7 +286,6 @@ public class PathwayModelTransferable implements Transferable {
 	public static PathwayModel pathwayFromTransferable(Transferable t)
 			throws ConverterException, MalformedURLException, UnsupportedFlavorException, IOException {
 		PathwayModel pnew = new PathwayModel();
-
 		String xml = getText(t);
 		if (xml != null) {
 			GpmlFormat.readFromXml(pnew, new StringReader(xml), true);

@@ -54,6 +54,7 @@ import org.pathvisio.libgpml.model.CopyElement;
 import org.pathvisio.libgpml.model.DataNode;
 import org.pathvisio.libgpml.model.DataNode.State;
 import org.pathvisio.libgpml.model.Drawable;
+import org.pathvisio.libgpml.model.GraphLink.LinkableFrom;
 import org.pathvisio.libgpml.model.GraphLink.LinkableTo;
 import org.pathvisio.libgpml.model.GraphicalLine;
 import org.pathvisio.libgpml.model.Group;
@@ -930,8 +931,17 @@ public class VPathwayModel implements PathwayModelListener {
 	 * @param removeFromModel Whether to remove the model representation or not
 	 */
 	public void removeDrawingObjects(List<VElement> toRemove, boolean removeFromModel) {
+		// first remove view citations (to workaround a bug)
 		for (VElement o : toRemove) {
-			removeDrawingObject(o, removeFromModel);
+			if (o.getClass() == VCitation.class) {
+				removeDrawingObject(o, removeFromModel);
+			}
+		}
+		// then remove other view elements
+		for (VElement o : toRemove) {
+			if (o.getClass() != VCitation.class) {
+				removeDrawingObject(o, removeFromModel);
+			}
 		}
 		selection.fitToSelection();
 		cleanUp();
@@ -946,9 +956,9 @@ public class VPathwayModel implements PathwayModelListener {
 			selection.removeFromSelection(toRemove); // Remove from selection
 			toRemove.destroy(); // Object will remove itself from the drawing
 			if (removeFromModel) {
-				if (toRemove instanceof VPathwayObject) {
+				if (toRemove instanceof VPathwayElement) {
 					// Remove the model object
-					data.remove(((VPathwayObject) toRemove).getPathwayObject());
+					data.remove(((VPathwayElement) toRemove).getPathwayObject());
 				}
 			}
 			cleanUp();
@@ -2363,22 +2373,17 @@ public class VPathwayModel implements PathwayModelListener {
 	public void paste(List<CopyElement> elements, double xShift, double yShift) {
 		undoManager.newAction("Paste");
 		clearSelection();
-
 		/*
 		 * This map provides PathwayObject "relationship" reference information. For
 		 * example, if both a LineElement and the DataNode it is pointing to are copied,
 		 * then they need to be reconnected.
 		 */
 		BidiMap<PathwayObject, PathwayObject> newerToSource = new DualHashBidiMap<>();
-
+		boolean showWarning = true;
 		// Copy pathway objects of given list
 		for (CopyElement copyElement : elements) {
 			PathwayElement newElement = copyElement.getNewElement();
 			PathwayElement srcElement = copyElement.getSourceElement();
-//			// if pathway, skip because it should be unique TODO 
-//			if (newElement.getObjectType() == ObjectType.PATHWAY) {
-//				continue;
-//			}
 			lastAdded = null;
 			// shift location of pathway element for pasting
 			if (newElement instanceof LineElement) {
@@ -2405,26 +2410,29 @@ public class VPathwayModel implements PathwayModelListener {
 			// load references
 			newerElement.copyReferencesFrom(srcElement);
 			// print message if references copied
-			pasteReferencesMessage(newerElement);
-			// store information
-			newerToSource.put(newerElement, srcElement);
-			if (newerElement instanceof LineElement) {
-				Iterator<Anchor> it1 = ((LineElement) newerElement).getAnchors().iterator();
-				Iterator<Anchor> it2 = ((LineElement) srcElement).getAnchors().iterator();
-				while (it1.hasNext() && it2.hasNext()) {
-					Anchor na = it1.next();
-					Anchor sa = it2.next();
-					if (na != null && sa != null) {
-						newerToSource.put(na, sa);
+			if (showWarning) {
+				showWarning = pasteReferencesMessage(newerElement);
+			}
+			// skip these steps if pathway
+			if (newerElement.getObjectType() != ObjectType.PATHWAY) {
+				// store information
+				newerToSource.put(newerElement, srcElement);
+				// specially store anchor information
+				if (newerElement instanceof LineElement) {
+					Iterator<Anchor> it1 = ((LineElement) newerElement).getAnchors().iterator();
+					Iterator<Anchor> it2 = ((LineElement) srcElement).getAnchors().iterator();
+					while (it1.hasNext() && it2.hasNext()) {
+						Anchor na = it1.next();
+						Anchor sa = it2.next();
+						if (na != null && sa != null) {
+							newerToSource.put(na, sa);
+						}
 					}
 				}
-			}
-			lastAdded.select();
-			if (!(lastAdded instanceof VGroup)) { // avoids "double selecting" grouped objects
+				lastAdded.select();
 				selection.addToSelection(lastAdded);
 			}
 		}
-
 		for (PathwayObject newerElement : newerToSource.keySet()) {
 			PathwayObject srcElement = newerToSource.get(newerElement);
 			// add group members in new Group
@@ -2435,6 +2443,7 @@ public class VPathwayModel implements PathwayModelListener {
 						((Group) newerElement).addPathwayElement(newerMember);
 					}
 				}
+				((Group) newerElement).updateDimensions();
 			}
 			// set aliasRef if any, and link to group if group also copied
 			else if (newerElement.getObjectType() == ObjectType.DATANODE
@@ -2459,14 +2468,16 @@ public class VPathwayModel implements PathwayModelListener {
 					}
 				}
 			}
-			// link LineElement LinePoint elementRefs
+			// link LineElement linePoint elementRefs
 			else if (newerElement instanceof LineElement && srcElement instanceof LineElement) {
 				// set start elementRef
 				LinkableTo srcStartElementRef = ((LineElement) srcElement).getStartElementRef();
 				if (srcStartElementRef != null) {
 					LinkableTo newerStartElementRef = (LinkableTo) newerToSource.getKey(srcStartElementRef);
 					if (newerStartElementRef != null) {
-						((LineElement) newerElement).setStartElementRef(newerStartElementRef);
+						LinePoint startPoint = ((LineElement) newerElement).getStartLinePoint();
+						LinePoint srcPoint = ((LineElement) srcElement).getStartLinePoint();
+						startPoint.linkTo(newerStartElementRef, srcPoint.getRelX(), srcPoint.getRelY());
 					}
 				}
 				// set end elementRef
@@ -2474,13 +2485,16 @@ public class VPathwayModel implements PathwayModelListener {
 				if (srcEndElementRef != null) {
 					LinkableTo newerEndElementRef = (LinkableTo) newerToSource.getKey(srcEndElementRef);
 					if (newerEndElementRef != null) {
-						((LineElement) newerElement).setEndElementRef(newerEndElementRef);
+						LinePoint endPoint = ((LineElement) newerElement).getEndLinePoint();
+						LinePoint srcPoint = ((LineElement) srcElement).getEndLinePoint();
+						endPoint.linkTo(newerEndElementRef, srcPoint.getRelX(), srcPoint.getRelY());
 					}
 				}
-				// refresh connector shapes
-				((LineElement) newerElement).getConnectorShape().recalculateShape(((LineElement) newerElement));
 			}
-
+		}
+		// refresh connector shapes
+		for (LineElement o : data.getLineElements()) {
+			o.getConnectorShape().recalculateShape(o);
 		}
 		moveGraphicsTop(getSelectedGraphics());
 		redraw();
@@ -2491,7 +2505,7 @@ public class VPathwayModel implements PathwayModelListener {
 	 * 
 	 * @param e the pathway element
 	 */
-	public void pasteReferencesMessage(PathwayElement e) {
+	public boolean pasteReferencesMessage(PathwayElement e) {
 		// print message if references copied
 		String refStr = null;
 		boolean hasAnnt = !e.getAnnotationRefs().isEmpty();
@@ -2513,9 +2527,14 @@ public class VPathwayModel implements PathwayModelListener {
 			refStr = "Evidences";
 		}
 		if (refStr != null) {
-			JOptionPane.showMessageDialog(null, refStr + " copied for " + e.getObjectType().getTag() + ".", "Warning",
-					JOptionPane.WARNING_MESSAGE);
+			Object[] options = { "Ok", "Ok All" };
+			int n = JOptionPane.showOptionDialog(null, refStr + " copied for " + e.getObjectType().getTag() + ".",
+					"Warning", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+			if (n == 1) { // do not show this dialog again for pasting session
+				return false;
+			}
 		}
+		return true;
 	}
 
 	/**
