@@ -42,6 +42,7 @@ import org.pathvisio.libgpml.model.DataNode.State;
 import org.pathvisio.libgpml.model.GraphLink.LinkableFrom;
 import org.pathvisio.libgpml.model.GraphLink.LinkableTo;
 import org.pathvisio.libgpml.model.LineElement.Anchor;
+import org.pathvisio.libgpml.model.LineElement.LinePoint;
 import org.pathvisio.libgpml.util.Utils;
 
 /**
@@ -921,8 +922,7 @@ public class PathwayModel {
 			addEvidence((Evidence) o);
 			break;
 		default:
-			System.out.println(o);
-			throw new IllegalArgumentException("Pathway object cannot be directly added to pathway model.");
+			// nothing
 		}
 	}
 
@@ -937,6 +937,9 @@ public class PathwayModel {
 		switch (o.getObjectType()) {
 		case DATANODE:
 			removeDataNode((DataNode) o);
+			break;
+		case STATE: // states are removed from datanodes, not pathway model
+			((State) o).getDataNode().removeState((State) o);
 			break;
 		case INTERACTION:
 			removeInteraction((Interaction) o);
@@ -963,7 +966,7 @@ public class PathwayModel {
 			removeEvidence((Evidence) o);
 			break;
 		default:
-			throw new IllegalArgumentException("Pathway object cannot be removed from pathway model.");
+			// nothing
 		}
 	}
 
@@ -1078,6 +1081,7 @@ public class PathwayModel {
 					g.addPathwayElement(newMember);
 				}
 			}
+			g.updateDimensions();
 		}
 		// set aliasRef if any
 		for (Group g : getAliasRefs()) {
@@ -1097,7 +1101,9 @@ public class PathwayModel {
 			if (srcStartElementRef != null) {
 				LinkableTo newStartElementRef = (LinkableTo) newToSource.getKey(srcStartElementRef);
 				if (newStartElementRef != null) {
-					l.setStartElementRef(newStartElementRef);
+					LinePoint startPoint = l.getStartLinePoint();
+					LinePoint srcPoint = src.getStartLinePoint();
+					startPoint.linkTo(newStartElementRef, srcPoint.getRelX(), srcPoint.getRelY());
 				}
 			}
 			// set end elementRef
@@ -1105,9 +1111,15 @@ public class PathwayModel {
 			if (srcEndElementRef != null) {
 				LinkableTo newEndElementRef = (LinkableTo) newToSource.getKey(srcEndElementRef);
 				if (newEndElementRef != null) {
-					l.setEndElementRef(newEndElementRef);
+					LinePoint endPoint = l.getEndLinePoint();
+					LinePoint srcPoint = src.getEndLinePoint();
+					endPoint.linkTo(newEndElementRef, srcPoint.getRelX(), srcPoint.getRelY());
 				}
 			}
+		}
+		// refresh connector shapes
+		for (LineElement o : result.getLineElements()) {
+			o.getConnectorShape().recalculateShape(o);
 		}
 		result.changed = changed;
 		if (sourceFile != null) {
