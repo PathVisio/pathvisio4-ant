@@ -84,7 +84,7 @@ public class VLineElement extends VPathwayElement implements VGroupable, Adjusta
 		addPoint(o.getStartLinePoint());
 		addPoint(o.getEndLinePoint());
 		setAnchors();
-		getConnectorShape().recalculateShape(getMLine());
+		getConnectorShape().recalculateShape(getPathwayObject());
 //		updateSegmentHandles();
 		updateCitationPosition();
 	}
@@ -113,10 +113,6 @@ public class VLineElement extends VPathwayElement implements VGroupable, Adjusta
 		setHandleLocation(vp);
 	}
 
-	private LineElement getMLine() {
-		return (LineElement) gdata;
-	}
-
 	public void createHandles() {
 		createSegmentHandles();
 
@@ -136,8 +132,9 @@ public class VLineElement extends VPathwayElement implements VGroupable, Adjusta
 		WayPoint[] waypoints = cs.getWayPoints();
 
 		// Destroy the old handles, just to be sure
-		for (Handle h : segmentHandles)
+		for (Handle h : segmentHandles) {
 			h.destroy();
+		}
 		segmentHandles.clear();
 
 		// Create the new handles
@@ -162,7 +159,6 @@ public class VLineElement extends VPathwayElement implements VGroupable, Adjusta
 	private void updateSegmentHandles() {
 		ConnectorShape cs = getConnectorShape();
 		WayPoint[] waypoints = cs.getWayPoints();
-
 		// Destroy and recreate the handles if the number
 		// doesn't match the waypoints number
 		if (waypoints.length != segmentHandles.size()) {
@@ -188,12 +184,16 @@ public class VLineElement extends VPathwayElement implements VGroupable, Adjusta
 			if (points.size() - 2 != (waypoints.length)) {
 				// Recreate points from segments
 				points = new ArrayList<LinePoint>();
+				// start point is preserved
 				points.add(getPathwayObject().getStartLinePoint());
+				// waypoints
 				for (int i = 0; i < waypoints.length; i++) {
 					LinePoint p = getPathwayObject().new LinePoint(waypoints[i].getX(), waypoints[i].getY());
 					points.add(p);
 				}
+				// end point is preserved
 				points.add(getPathwayObject().getEndLinePoint());
+				// set points
 				gdata.dontFireEvents(1);
 				getPathwayObject().setLinePoints(points);
 			}
@@ -206,7 +206,7 @@ public class VLineElement extends VPathwayElement implements VGroupable, Adjusta
 	}
 
 	private ConnectorShape getConnectorShape() {
-		return getMLine().getConnectorShape();
+		return getPathwayObject().getConnectorShape();
 	}
 
 	/**
@@ -631,7 +631,7 @@ public class VLineElement extends VPathwayElement implements VGroupable, Adjusta
 	}
 
 	public void recalculateConnector() {
-		getConnectorShape().recalculateShape(getMLine());
+		getConnectorShape().recalculateShape(getPathwayObject());
 		updateAnchorPositions();
 		updateCitationPosition();
 		for (VPoint vp : points)
@@ -644,14 +644,15 @@ public class VLineElement extends VPathwayElement implements VGroupable, Adjusta
 	 */
 	@Override
 	public void gmmlObjectModified(PathwayObjectEvent e) {
-		getConnectorShape().recalculateShape(getMLine());
+
+		getConnectorShape().recalculateShape(getPathwayObject());
 
 		WayPoint[] wps = getConnectorShape().getWayPoints();
 		List<LinePoint> mps = getPathwayObject().getLinePoints();
-		if (wps.length == mps.size() - 2 && getConnectorShape().hasValidWaypoints(getMLine())) {
-			getMLine().adjustWayPointPreferences(wps);
+		if (wps.length == mps.size() - 2 && getConnectorShape().hasValidWaypoints(getPathwayObject())) {
+			getPathwayObject().adjustWayPointPreferences(wps);
 		} else {
-			getMLine().resetWayPointPreferences();
+			getPathwayObject().resetWayPointPreferences();
 		}
 
 		updateSegmentHandles();
