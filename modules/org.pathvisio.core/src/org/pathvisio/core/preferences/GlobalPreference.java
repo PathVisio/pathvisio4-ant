@@ -143,7 +143,7 @@ public enum GlobalPreference implements Preference {
 			getApplicationDir();
 		}
 		if (dirPlugin == null) {
-			dirPlugin = new File(getApplicationDir(), "plugins");
+			dirPlugin = new File(getApplicationDir(), "plugins4");
 			if (!dirPlugin.exists())
 				dirPlugin.mkdir();
 		}
@@ -155,7 +155,7 @@ public enum GlobalPreference implements Preference {
 			getApplicationDir();
 		}
 		if (dirBundle == null) {
-			dirBundle = new File(getApplicationDir(), ".bundles");
+			dirBundle = new File(getApplicationDir(), ".bundles4");
 			if (!dirBundle.exists())
 				dirBundle.mkdir();
 		}
