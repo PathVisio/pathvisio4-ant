@@ -36,7 +36,7 @@ import org.jdom2.output.XMLOutputter;
 import org.pathvisio.core.Engine;
 import org.pathvisio.libgpml.debug.Logger;
 import org.pathvisio.libgpml.io.ConverterException;
-import org.pathvisio.libgpml.model.GpmlFormat;
+import org.pathvisio.libgpml.model.GPMLFormat;
 import org.pathvisio.libgpml.model.PathwayModel;
 import org.pathvisio.libgpml.model.PathwayObject;
 import org.pathvisio.libgpml.model.connector.ConnectorRestrictions;
@@ -194,7 +194,7 @@ public class PathwayModelTransferable implements Transferable {
 		}
 
 		try {
-			Document doc = new GpmlFormat(GpmlFormat.CURRENT).createJdom(pnew);
+			Document doc = new GPMLFormat(GPMLFormat.CURRENT).createJdom(pnew);
 			out = xmlout.outputString(doc);
 		} catch (Exception e) {
 			Logger.log.error("Unable to copy to clipboard", e);
@@ -286,7 +286,7 @@ public class PathwayModelTransferable implements Transferable {
 		PathwayModel pnew = new PathwayModel();
 		String xml = getText(t);
 		if (xml != null) {
-			GpmlFormat.readFromXml(pnew, new StringReader(xml), true);
+			GPMLFormat.readFromXml(pnew, new StringReader(xml), true);
 
 			List<PathwayObject> elements = new ArrayList<PathwayObject>();
 			for (PathwayObject elm : pnew.getPathwayObjects()) { // TODO pathway object or element?

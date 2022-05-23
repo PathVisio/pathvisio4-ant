@@ -55,7 +55,7 @@ import org.pathvisio.gui.MainPanel;
 import org.pathvisio.gui.SwingEngine;
 import org.pathvisio.gui.SwingEngine.Browser;
 import org.pathvisio.libgpml.debug.Logger;
-import org.pathvisio.libgpml.model.GpmlFormat;
+import org.pathvisio.libgpml.model.GPMLFormat;
 
 /**
  * Main class for the Swing GUI. This class creates and shows the GUI.
@@ -371,12 +371,12 @@ public class GuiMain implements GdbEventListener {
 	 * @param engine
 	 */
 	private void initImporters(Engine engine) {
-		engine.addPathwayModelImporter(new GpmlFormat(GpmlFormat.CURRENT));
+		engine.addPathwayModelImporter(new GPMLFormat(GPMLFormat.CURRENT));
 	}
 
 	private void initExporters(Engine engine, GdbManager gdbManager) {
-		engine.addPathwayModelExporter(new GpmlFormat(GpmlFormat.CURRENT));
-		engine.addPathwayModelExporter(new GpmlFormat(GpmlFormat.PREVIOUS));
+		engine.addPathwayModelExporter(new GPMLFormat(GPMLFormat.CURRENT));
+		engine.addPathwayModelExporter(new GPMLFormat(GPMLFormat.PREVIOUS));
 		engine.addPathwayModelExporter(new RasterImageExporter(ImageExporter.TYPE_PNG));
 		engine.addPathwayModelExporter(new BatikImageExporter(ImageExporter.TYPE_SVG));
 		engine.addPathwayModelExporter(new BatikImageExporter(ImageExporter.TYPE_PDF));

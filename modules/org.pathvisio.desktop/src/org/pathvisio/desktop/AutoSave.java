@@ -28,7 +28,7 @@ import org.pathvisio.core.Engine;
 import org.pathvisio.gui.SwingEngine;
 import org.pathvisio.libgpml.debug.Logger;
 import org.pathvisio.libgpml.io.ConverterException;
-import org.pathvisio.libgpml.model.GpmlFormat;
+import org.pathvisio.libgpml.model.GPMLFormat;
 import org.pathvisio.libgpml.model.PathwayModel;
 
 /**
@@ -54,7 +54,7 @@ public class AutoSave {
 	private void autoSaveFile() throws ConverterException {
 		PathwayModel p = engine.getActivePathwayModel();
 		if (p != null) {
-			GpmlFormat g = new GpmlFormat(GpmlFormat.CURRENT);
+			GPMLFormat g = new GPMLFormat(GPMLFormat.CURRENT);
 			g.writeToXml(p, autoSaveFile, true);
 			Logger.log.info("Autosaved");
 		}

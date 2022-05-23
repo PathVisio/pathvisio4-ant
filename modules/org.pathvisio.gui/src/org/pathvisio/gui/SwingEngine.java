@@ -55,7 +55,7 @@ import org.pathvisio.gui.view.VPathwayModelSwing;
 import org.pathvisio.libgpml.debug.Logger;
 import org.pathvisio.libgpml.io.ConverterException;
 import org.pathvisio.libgpml.io.PathwayModelIO;
-import org.pathvisio.libgpml.model.GpmlFormat;
+import org.pathvisio.libgpml.model.GPMLFormat;
 import org.pathvisio.libgpml.model.PathwayModel;
 import org.pathvisio.libgpml.model.PathwayModel.StatusFlagEvent;
 import org.pathvisio.libgpml.util.Utils;
@@ -311,7 +311,7 @@ public class SwingEngine implements ApplicationEventListener, PathwayModel.Statu
 			for (PathwayModelIO exp : exporters) {
 				FileFilter ff = new PathwayFileFilter(exp);
 				jfc.addChoosableFileFilter(ff);
-				if (exp instanceof GpmlFormat) {
+				if (exp instanceof GPMLFormat) {
 					selectedFilter = ff;
 				}
 			}
@@ -438,7 +438,7 @@ public class SwingEngine implements ApplicationEventListener, PathwayModel.Statu
 	}
 
 	private final Set<PathwayModelIO> GPML_FORMAT_ONLY = Utils
-			.setOf((PathwayModelIO) new GpmlFormat(GpmlFormat.CURRENT));
+			.setOf((PathwayModelIO) new GPMLFormat(GPMLFormat.CURRENT));
 
 	/**
 	 * Opens a file chooser dialog, and opens the chosen pathway.

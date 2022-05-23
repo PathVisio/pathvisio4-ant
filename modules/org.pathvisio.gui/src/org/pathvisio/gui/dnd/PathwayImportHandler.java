@@ -39,7 +39,7 @@ import org.pathvisio.gui.view.VPathwayModelSwing;
 import org.pathvisio.libgpml.debug.Logger;
 import org.pathvisio.libgpml.io.ConverterException;
 import org.pathvisio.libgpml.model.CopyElement;
-import org.pathvisio.libgpml.model.GpmlFormat;
+import org.pathvisio.libgpml.model.GPMLFormat;
 import org.pathvisio.libgpml.model.Groupable;
 import org.pathvisio.libgpml.model.LineElement;
 import org.pathvisio.libgpml.model.Pathway;
@@ -105,7 +105,7 @@ public class PathwayImportHandler extends TransferHandler implements ClipboardOw
 	private boolean importGpml(JComponent comp, String xml, Point p)
 			throws UnsupportedFlavorException, IOException, ConverterException {
 		PathwayModel pnew = new PathwayModel();
-		GpmlFormat.readFromXml(pnew, new StringReader(xml), true);
+		GPMLFormat.readFromXml(pnew, new StringReader(xml), true);
 
 		List<CopyElement> elements = new ArrayList<CopyElement>();
 		for (PathwayElement elm : pnew.getPathwayElements()) {
