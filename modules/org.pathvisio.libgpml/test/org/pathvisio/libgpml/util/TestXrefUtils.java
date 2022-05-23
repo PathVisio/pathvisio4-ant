@@ -3,7 +3,6 @@ package org.pathvisio.libgpml.util;
 import org.bridgedb.DataSource;
 import org.bridgedb.Xref;
 import org.bridgedb.bio.DataSourceTxt;
-import org.pathvisio.libgpml.util.XrefUtils;
 
 import junit.framework.TestCase;
 

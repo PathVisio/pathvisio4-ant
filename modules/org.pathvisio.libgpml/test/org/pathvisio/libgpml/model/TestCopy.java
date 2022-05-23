@@ -21,14 +21,6 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.pathvisio.libgpml.model.Citation;
-import org.pathvisio.libgpml.model.CopyElement;
-import org.pathvisio.libgpml.model.DataNode;
-import org.pathvisio.libgpml.model.GraphicalLine;
-import org.pathvisio.libgpml.model.Interaction;
-import org.pathvisio.libgpml.model.Label;
-import org.pathvisio.libgpml.model.PathwayModel;
-import org.pathvisio.libgpml.model.Shape;
 import org.pathvisio.libgpml.model.DataNode.State;
 import org.pathvisio.libgpml.model.LineElement.LinePoint;
 import org.pathvisio.libgpml.model.PathwayElement.CitationRef;

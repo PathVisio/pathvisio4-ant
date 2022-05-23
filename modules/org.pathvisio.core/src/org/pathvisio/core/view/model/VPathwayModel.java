@@ -2520,9 +2520,9 @@ public class VPathwayModel implements PathwayModelListener {
 		} else if (hasCit && hasEvid) {
 			refStr = "Citations and Evidences";
 		} else if (hasAnnt) {
-			refStr = "Annotations and Citations";
+			refStr = "Annotations";
 		} else if (hasCit) {
-			refStr = "Annotations and Citations";
+			refStr = "Citations";
 		} else if (hasEvid) {
 			refStr = "Evidences";
 		}

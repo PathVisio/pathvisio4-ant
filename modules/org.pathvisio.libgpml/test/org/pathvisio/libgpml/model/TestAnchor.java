@@ -21,8 +21,6 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.pathvisio.libgpml.model.Interaction;
-import org.pathvisio.libgpml.model.PathwayModel;
 import org.pathvisio.libgpml.model.LineElement.Anchor;
 import org.pathvisio.libgpml.model.LineElement.LinePoint;
 import org.pathvisio.libgpml.model.type.AnchorShapeType;

@@ -17,7 +17,6 @@
 package org.pathvisio.libgpml.model;
 
 import java.io.InputStream;
-import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,8 +34,6 @@ import org.jdom2.output.SAXOutputter;
 import org.jdom2.output.XMLOutputter;
 import org.pathvisio.libgpml.debug.Logger;
 import org.pathvisio.libgpml.io.ConverterException;
-import org.pathvisio.libgpml.model.GraphLink.LinkableTo;
-import org.pathvisio.libgpml.model.type.ObjectType;
 import org.xml.sax.SAXException;
 
 /**
