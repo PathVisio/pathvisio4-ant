@@ -15,7 +15,7 @@
  * the License.
  ******************************************************************************/
 
-package org.pathvisio.core.util;
+package org.pathvisio.libgpml.util;
 
 import java.io.BufferedOutputStream;
 import java.io.File;

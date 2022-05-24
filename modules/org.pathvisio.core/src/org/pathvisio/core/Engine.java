@@ -35,8 +35,8 @@ import org.pathvisio.libgpml.io.ConverterException;
 import org.pathvisio.libgpml.model.PathwayModel;
 import org.pathvisio.libgpml.io.PathwayModelExporter;
 import org.pathvisio.libgpml.io.PathwayModelImporter;
+import org.pathvisio.libgpml.util.FileUtils;
 import org.pathvisio.libgpml.util.Utils;
-import org.pathvisio.core.util.FileUtils;
 import org.pathvisio.core.view.model.VPathwayModel;
 import org.pathvisio.core.view.model.VPathwayModelWrapper;
 
