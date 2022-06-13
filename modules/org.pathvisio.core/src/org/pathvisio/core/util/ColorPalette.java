@@ -27,7 +27,7 @@ import org.pathvisio.libgpml.util.ColorUtils;
  */
 public abstract class ColorPalette {
 
-	// Wikipathways Color Palette
+	// WikiPathways Color Palette
 	public static final Color WP_BLACK = Color.BLACK;
 	public static final Color WP_WHITE = Color.WHITE;
 	public static final Color WP_GREY = Color.decode("#F5F6F6");

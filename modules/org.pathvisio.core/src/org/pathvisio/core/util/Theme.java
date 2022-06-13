@@ -32,9 +32,8 @@ import org.pathvisio.libgpml.model.type.ShapeType;
 /**
  * Color Theme class. For coloring of pathway model objects.
  * 
- * NB: Sets colors to given Theme. Preserves all other graphics attributes.
- * 
- * TODO How to set group color....
+ * NB: Sets colors and shape of DataNode(s) to given Theme. Preserves all other
+ * graphics attributes.
  * 
  * @author finterly
  */
@@ -42,8 +41,8 @@ public class Theme {
 	// ================================================================================
 	// Theme Names
 	// ================================================================================
-	public static final String WP = "Wikipathways";
-	public static final String WP_MIN = "Wikipathways minimal";
+	public static final String WP = "WikiPathways";
+	public static final String WP_MIN = "WikiPathways minimal";
 
 	// ================================================================================
 	// Instantiate Themes
