@@ -68,8 +68,8 @@ public class Converter {
 		DataSourceTxt.init();
 		PreferenceManager.init();
 		Engine engine = new Engine();
-		engine.addPathwayModelImporter(new GPMLFormat(GPMLFormat.CURRENT));
-		engine.addPathwayModelExporter(new GPMLFormat(GPMLFormat.PREVIOUS));
+		engine.addPathwayModelImporter(new GPMLFormat(GPMLFormat.GPML2021));
+		engine.addPathwayModelExporter(new GPMLFormat(GPMLFormat.GPML2013a));
 		engine.addPathwayModelExporter(new BatikImageExporter(ImageExporter.TYPE_SVG));
 		engine.addPathwayModelExporter(new RasterImageExporter(ImageExporter.TYPE_PNG));
 		engine.addPathwayModelExporter(new BatikImageExporter(ImageExporter.TYPE_PDF));

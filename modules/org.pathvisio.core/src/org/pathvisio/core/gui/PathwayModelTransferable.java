@@ -194,7 +194,7 @@ public class PathwayModelTransferable implements Transferable {
 		}
 
 		try {
-			Document doc = new GPMLFormat(GPMLFormat.CURRENT).createJdom(pnew);
+			Document doc = new GPMLFormat(GPMLFormat.GPML2021).createJdom(pnew);
 			out = xmlout.outputString(doc);
 		} catch (Exception e) {
 			Logger.log.error("Unable to copy to clipboard", e);
