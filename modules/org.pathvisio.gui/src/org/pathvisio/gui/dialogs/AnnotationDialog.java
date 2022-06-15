@@ -77,7 +77,7 @@ public class AnnotationDialog extends ReferenceDialog {
 	private final static String TYPE = "Type *";
 	private final static String XREF_IDENTIFIER = "Identifier";
 	private final static String XREF_DATASOURCE = "Database";
-	private final static String URL_LINK = "Url link";
+	private final static String URL_LINK = "URL link";
 
 	// fields
 	private JTextField valueText;
@@ -142,7 +142,7 @@ public class AnnotationDialog extends ReferenceDialog {
 		if (annotationRef != null) {
 			// sets value
 			valueText.setText(annotationRef.getAnnotation().getValue());
-			valueText.setFont(new Font("Tahoma", Font.PLAIN, 10));// UI Design
+			valueText.setFont(new JLabel().getFont());// UI Design default font
 			// sets type
 			String type = annotationRef.getAnnotation().getType().toString();
 			typeCombo.setSelectedItem(AnnotationType.fromName(type));

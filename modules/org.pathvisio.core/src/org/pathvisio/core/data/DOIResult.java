@@ -24,26 +24,15 @@ import java.util.List;
  * This contains all information about a pubmed record, such as title, authors, source
  * and year.
  */
-public class PubMedResult {
+public class DOIResult {
 	
-	private boolean error; // true if pmid not found
+	private boolean valid;
 	private String id;
 	private String title;
 	private String source;
 	private String year;
 	private List<String> authors = new ArrayList<String>();
 
-	/**
-	 * Returns pmid, e.g. "17588266"
-	 */
-	public boolean getError() {
-		return error;
-	}
-
-	void setError(boolean error) {
-		this.error = error;
-	}
-	
 	/**
 	 * Returns pmid, e.g. "17588266"
 	 */

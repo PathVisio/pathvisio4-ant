@@ -24,6 +24,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -49,6 +50,9 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.bridgedb.DataSource;
 import org.bridgedb.Xref;
+import org.pathvisio.core.data.DOIQuery;
+import org.pathvisio.core.data.DOIQuery2;
+import org.pathvisio.core.data.DOIResult2;
 import org.pathvisio.core.data.PubMedQuery;
 import org.pathvisio.core.data.PubMedResult;
 import org.pathvisio.core.util.ProgressKeeper;
@@ -72,11 +76,11 @@ import org.xml.sax.SAXException;
 public class CitationDialog extends ReferenceDialog {
 
 	// labels
-	private final static String QUERY = "Query PubMed"; // button
+	private final static String QUERY = "Query/Validate"; // button
 	private final static String XREF_IDENTIFIER = "Identifier *";
 	private final static String XREF_DATASOURCE = "Database *";
-	private final static String INSTRUCTION = "Database:Id And/Or Url link required ";
-	private final static String URL_LINK = "Url link*";
+	private final static String INSTRUCTION = "Database:Id And/Or URL link required ";
+	private final static String URL_LINK = "URL link*";
 
 	// fields
 	private JTextField xrefIdentifier;
@@ -168,7 +172,7 @@ public class CitationDialog extends ReferenceDialog {
 		if (newUrl.equals("") && (newId.equals("") && newDs == null)) {
 			done = false;
 			JOptionPane.showMessageDialog(this,
-					"A Citation requires a valid Database:id and/or Url link.\nPlease input more information.", "Error",
+					"A Citation requires a valid Database:id and/or URL link.\nPlease input more information.", "Error",
 					JOptionPane.ERROR_MESSAGE);
 		}
 		if (!newId.equals("") && newDs == null) {
@@ -203,7 +207,81 @@ public class CitationDialog extends ReferenceDialog {
 	 * When "Query" button is pressed.
 	 */
 	protected void queryPressed() {
-		final PubMedQuery pmq = new PubMedQuery(xrefIdentifier.getText().trim());
+		String id = xrefIdentifier.getText().trim();
+		DataSource ds = (DataSource) dsm.getSelectedItem();
+		// Query DOI
+		if (ds != null) {
+			String dsName = ds.getFullName();
+			switch (dsName) {
+			case "DOI":
+				queryDOI(id);
+				break;
+			case "PubMed":
+				queryPubMed(id);
+				break;
+			default: // nothing
+			}
+		}
+		// If no database selected, query DOI or PubMed depending on identifier pattern
+		else {
+			// DOI regex 
+			String regex = "10.\\d{4,9}/[-._;()/:A-Z0-9]+" + "|10.1002/[^\\s]+"
+					+ "|10.\\d{4}/\\d+-\\d+X?(\\d+)\\d+<[\\d\\w]+:[\\d\\w]*>\\d+.\\d+.\\w+;\\d" + "|10.1021/\\w\\w\\d++"
+					+ "|10.1207/[\\w\\d]+\\&\\d+_\\d+";
+			Pattern p = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+			Matcher m = p.matcher(id);
+			// identifier is DOI
+			if (m.find()) {
+				queryDOI(id);
+			}
+			// identifier is PubMed id (pmid)
+			else if (id.matches("[0-9]+") && id.length() <= 8 && id.length() >= 1) {
+				queryPubMed(id);
+				// identifier is neither
+			} else {
+				System.out.println("Identifier is neither valid doi nor pmid");
+			}
+		}
+
+	}
+
+	/**
+	 * Query DOI.
+	 * 
+	 * @param identifier
+	 */
+	public void queryDOI(String id) {
+		final DOIQuery2 dq = new DOIQuery2(id);
+		final ProgressKeeper pk2 = new ProgressKeeper();
+		ProgressDialog d2 = new ProgressDialog(JOptionPane.getFrameForComponent(this), "", pk2, true, true);
+
+		SwingWorker<Void, Void> sw2 = new SwingWorker<Void, Void>() {
+
+			protected Void doInBackground() throws SAXException, IOException, ParserConfigurationException {
+				pk2.setTaskName("Querying DOI");
+				dq.execute();
+				pk2.finished();
+				return null;
+			}
+		};
+
+		sw2.execute();
+		d2.setVisible(true);
+		DOIResult2 dqr = dq.getResult();
+		if (dqr != null) {
+			xrefIdentifier.setText(dqr.getId()); // write the trimmed pmid to the dialog
+			dsm.setSelectedItem(DataSource.getExistingByFullName("DOI")); // TODO
+		}
+	}
+
+	/**
+	 * Query PubMed.
+	 * 
+	 * @param identifier
+	 */
+	public void queryPubMed(String id) {
+		// if PubMed
+		final PubMedQuery pmq = new PubMedQuery(id);
 		final ProgressKeeper pk = new ProgressKeeper();
 		ProgressDialog d = new ProgressDialog(JOptionPane.getFrameForComponent(this), "", pk, true, true);
 
@@ -218,11 +296,10 @@ public class CitationDialog extends ReferenceDialog {
 
 		sw.execute();
 		d.setVisible(true);
-
 		PubMedResult pmr = pmq.getResult();
 		if (pmr != null) {
 			xrefIdentifier.setText(pmr.getId()); // write the trimmed pmid to the dialog
-			dsm.setSelectedItem(dsm); // TODO
+			dsm.setSelectedItem(DataSource.getExistingByFullName("PubMed")); // TODO
 		}
 	}
 

@@ -43,6 +43,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.bridgedb.DataSource;
 import org.bridgedb.Xref;
+import org.pathvisio.core.data.ECOQuery;
 import org.pathvisio.core.data.PubMedQuery;
 import org.pathvisio.core.data.PubMedResult;
 import org.pathvisio.core.util.ProgressKeeper;
@@ -64,17 +65,17 @@ import org.xml.sax.SAXException;
 public class EvidenceDialog extends ReferenceDialog {
 
 	// labels
-	private final static String QUERY = "Query PubMed"; // TODO button
-	private final static String VALUE = "Value";
+	private final static String QUERY = "Query ECO"; // TODO button
 	private final static String XREF_IDENTIFIER = "Identifier *";
 	private final static String XREF_DATASOURCE = "Database *";
-	private final static String URL_LINK = "Url link";
+	private final static String VALUE = "Term"; // optional
+	private final static String URL_LINK = "URL link"; // optional
 
 	// fields
-	private JTextField valueText;
 	private JTextField xrefIdentifier;
 	private DataSourceModel dsm; // for xref dataSource
 	private PermissiveComboBox dbCombo; // all registered datasource
+	private JTextField valueText;
 	private JTextField urlLinkText;
 
 	private Evidenceable evidenceable;
@@ -132,7 +133,7 @@ public class EvidenceDialog extends ReferenceDialog {
 		if (evidenceRef != null) {
 			// sets value
 			valueText.setText(evidenceRef.getEvidence().getValue());
-			valueText.setFont(new Font("Tahoma", Font.PLAIN, 10));// UI Design
+			valueText.setFont(new JLabel().getFont());// UI Design default font
 			// sets xref
 			String id = XrefUtils.getIdentifier(evidenceRef.getEvidence().getXref());
 			setText(id, xrefIdentifier);
@@ -141,7 +142,7 @@ public class EvidenceDialog extends ReferenceDialog {
 			dsm.setObjectTypeFilter(ObjectType.EVIDENCE);
 			// sets urlLink
 			urlLinkText.setText(evidenceRef.getEvidence().getUrlLink());
-			urlLinkText.setFont(new Font("Tahoma", Font.PLAIN, 10));// UI Design
+			urlLinkText.setFont(new JLabel().getFont());// UI Design default font
 		}
 	}
 
@@ -156,20 +157,20 @@ public class EvidenceDialog extends ReferenceDialog {
 		// ========================================
 		// New information
 		// ========================================
-		String newValue = valueText.getText();
 		String newId = xrefIdentifier.getText().trim();
 		DataSource newDs = (DataSource) dsm.getSelectedItem();
+		String newValue = valueText.getText();
 		String newUrl = urlLinkText.getText();
 		// ========================================
 		// Check requirements
 		// ========================================
-		if ((newId.equals("") || newDs == null)) {
+		if ((newId.equals("") && newDs == null)) {
 			done = false;
 			JOptionPane.showMessageDialog(this,
-					"An Evidence requires a valid Database:id.\nPlease input more information.", "Error",
+					"An Evidence requires a valid identifier and database.\nPlease input more information.", "Error",
 					JOptionPane.ERROR_MESSAGE);
 		}
-		if (!newId.equals("") && newDs == null) {
+		else if (!newId.equals("") && newDs == null) {
 			done = false;
 			JOptionPane.showMessageDialog(this,
 					"This Evidence has an identifier but no database.\nPlease specify a database system.", "Error",
@@ -200,7 +201,7 @@ public class EvidenceDialog extends ReferenceDialog {
 	 * When "Query" button is pressed.
 	 */
 	protected void queryPressed() {
-		final PubMedQuery pmq = new PubMedQuery(xrefIdentifier.getText().trim());
+		final ECOQuery pmq = new ECOQuery(xrefIdentifier.getText().trim());
 		final ProgressKeeper pk = new ProgressKeeper();
 		ProgressDialog d = new ProgressDialog(JOptionPane.getFrameForComponent(this), "", pk, true, true);
 
@@ -245,17 +246,18 @@ public class EvidenceDialog extends ReferenceDialog {
 		JPanel contents = new JPanel();
 		contents.setLayout(new GridBagLayout());
 
-		JLabel lblValue = new JLabel(VALUE);
 		JLabel lblXrefIdentifier = new JLabel(XREF_IDENTIFIER);
 		JLabel lblXrefDataSource = new JLabel(XREF_DATASOURCE);
+		JLabel lblValue = new JLabel(VALUE);
 		JLabel lblUrlLink = new JLabel(URL_LINK);
 
-		valueText = new JTextField();
 		xrefIdentifier = new JTextField();
 		dsm = new DataSourceModel();
 		dsm.setPrimaryFilter(true);
 		dsm.setObjectTypeFilter(ObjectType.EVIDENCE);
 		dbCombo = new PermissiveComboBox(dsm);
+		dbCombo.setSelectedIndex(0); // TODO always ECO
+		valueText = new JTextField();
 		urlLinkText = new JTextField();
 
 		final DefaultStyledDocument doc = new DefaultStyledDocument();
@@ -292,17 +294,17 @@ public class EvidenceDialog extends ReferenceDialog {
 		c.gridx = 0;
 		c.gridy = GridBagConstraints.RELATIVE;
 		c.weightx = 0;
-		contents.add(lblValue, c);
 		contents.add(lblXrefIdentifier, c);
 		contents.add(lblXrefDataSource, c);
+		contents.add(lblValue, c);
 		contents.add(lblUrlLink, c);
 
 		c.gridx = 1;
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.weightx = 1;
-		contents.add(valueText, c);
 		contents.add(xrefIdentifier, c);
 		contents.add(dbCombo, c);
+		contents.add(valueText, c);
 		contents.add(urlLinkText, c);
 
 		c.gridx = 2;

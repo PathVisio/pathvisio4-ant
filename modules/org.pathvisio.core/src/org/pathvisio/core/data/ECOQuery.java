@@ -20,8 +20,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
-import javax.swing.JOptionPane;
-
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -30,13 +28,13 @@ import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
 
 /**
- * This class can handle a query for a pubmed record. Just instantiate this
- * class with a given pubmed id (pmid), and run execute() (this method may
- * block, so don't call it from the UI thread) The result can then be obtained
- * with getResult() TODO: move DefaultHandler methods to private subclass, they
- * don't need to be exposed.
+ * This class can handle a query for a ECO record. Just instantiate this class
+ * with a given ECO id (ECO), and run execute() (this method may block, so don't
+ * call it from the UI thread) The result can then be obtained with getResult()
+ * TODO: move DefaultHandler methods to private subclass, they don't need to be
+ * exposed.
  */
-public class PubMedQuery extends DefaultHandler {
+public class ECOQuery extends DefaultHandler {
 	static final String URL_BASE = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi";
 
 	String id;
@@ -45,7 +43,7 @@ public class PubMedQuery extends DefaultHandler {
 	/**
 	 * Prepares a new pubmed query for the given pmid, e.g. "17588266".
 	 */
-	public PubMedQuery(String id) {
+	public ECOQuery(String id) {
 		this.id = id;
 	}
 
@@ -70,11 +68,6 @@ public class PubMedQuery extends DefaultHandler {
 		xmlReader.parse(new InputSource(is));
 
 		is.close();
-		if(!result.getError()) {
-			JOptionPane.showConfirmDialog(null, "PubMed identifier found.", "Message", JOptionPane.PLAIN_MESSAGE);
-		} else {
-			JOptionPane.showConfirmDialog(null, "PubMed identifier not found.", "Warning", JOptionPane.PLAIN_MESSAGE);
-		}
 	}
 
 	/**
@@ -94,9 +87,6 @@ public class PubMedQuery extends DefaultHandler {
 		parsingElement = localName;
 		parsingName = attributes.getValue(NAME);
 		parsingValue = "";
-		if (localName == "ERROR") {
-			result.setError(true);
-		}
 	}
 
 	public void characters(char[] ch, int start, int length) throws SAXException {
@@ -110,7 +100,7 @@ public class PubMedQuery extends DefaultHandler {
 			parsingId = parsingValue;
 		}
 		if (TITLE.equalsIgnoreCase(parsingName)) {
-//			System.out.println("Parsing title: " + parsingValue);
+//			System.out.println("Parsing title: " + value);
 			result.setTitle(parsingValue);
 		} else if (PUBDATE.equalsIgnoreCase(parsingName)) {
 //			System.out.println("Parsing pubdate: " + value);
@@ -137,52 +127,4 @@ public class PubMedQuery extends DefaultHandler {
 	static final String AUTHOR_LIST = "AuthorList";
 	static final String AUTHOR = "Author";
 
-	/*
-	 * <DocSum> <Id>17588266</Id> <Item Name="PubDate" Type="Date">2007 Jun
-	 * 24</Item> <Item Name="EPubDate" Type="Date">2007 Jun 24</Item> <Item
-	 * Name="Source" Type="String">BMC Bioinformatics</Item> <Item Name="AuthorList"
-	 * Type="List">
-	 * 
-	 * <Item Name="Author" Type="String">Salomonis N</Item> <Item Name="Author"
-	 * Type="String">Hanspers K</Item> <Item Name="Author" Type="String">Zambon
-	 * AC</Item> <Item Name="Author" Type="String">Vranizan K</Item> <Item
-	 * Name="Author" Type="String">Lawlor SC</Item> <Item Name="Author"
-	 * Type="String">Dahlquist KD</Item>
-	 * 
-	 * <Item Name="Author" Type="String">Doniger SW</Item> <Item Name="Author"
-	 * Type="String">Stuart J</Item> <Item Name="Author" Type="String">Conklin
-	 * BR</Item> <Item Name="Author" Type="String">Pico AR</Item> </Item> <Item
-	 * Name="LastAuthor" Type="String">Pico AR</Item>
-	 * 
-	 * <Item Name="Title" Type="String">GenMAPP 2: new features and resources for
-	 * pathway analysis.</Item> <Item Name="Volume" Type="String">8</Item> <Item
-	 * Name="Issue" Type="String"></Item> <Item Name="Pages"
-	 * Type="String">217</Item> <Item Name="LangList" Type="List"> <Item Name="Lang"
-	 * Type="String">English</Item> </Item>
-	 * 
-	 * <Item Name="NlmUniqueID" Type="String">100965194</Item> <Item Name="ISSN"
-	 * Type="String"></Item> <Item Name="ESSN" Type="String">1471-2105</Item> <Item
-	 * Name="PubTypeList" Type="List"> <Item Name="PubType" Type="String">Journal
-	 * Article</Item> </Item> <Item Name="RecordStatus" Type="String">PubMed - in
-	 * process</Item>
-	 * 
-	 * <Item Name="PubStatus" Type="String">epublish</Item> <Item Name="ArticleIds"
-	 * Type="List"> <Item Name="pii" Type="String">1471-2105-8-217</Item> <Item
-	 * Name="doi" Type="String">10.1186/1471-2105-8-217</Item> <Item Name="pubmed"
-	 * Type="String">17588266</Item> </Item> <Item Name="DOI"
-	 * Type="String">10.1186/1471-2105-8-217</Item>
-	 * 
-	 * <Item Name="History" Type="List"> <Item Name="received"
-	 * Type="Date">2006/11/16 00:00</Item> <Item Name="accepted"
-	 * Type="Date">2007/06/24 00:00</Item> <Item Name="aheadofprint"
-	 * Type="Date">2007/06/24 00:00</Item> <Item Name="pubmed"
-	 * Type="Date">2007/06/26 09:00</Item> <Item Name="medline"
-	 * Type="Date">2007/06/26 09:00</Item>
-	 * 
-	 * </Item> <Item Name="References" Type="List"></Item> <Item Name="HasAbstract"
-	 * Type="Integer">1</Item> <Item Name="PmcRefCount" Type="Integer">0</Item>
-	 * <Item Name="FullJournalName" Type="String">BMC bioinformatics</Item> <Item
-	 * Name="SO" Type="String">2007 Jun 24;8:217</Item> </DocSum>
-	 * 
-	 */
 }
