@@ -138,7 +138,7 @@ public class DataNodeDialog extends PathwayElementDialog {
 		super.refresh();
 		// sets text label
 		symText.setText(getInput().getTextLabel());
-		symText.setFont(new Font("Tahoma", Font.PLAIN, 10));// UI Design
+		symText.setFont(new JLabel().getFont());// UI Design default font
 		// sets xref
 		Xref xref = getInput().getXref();
 		String id = XrefUtils.getIdentifier(xref);

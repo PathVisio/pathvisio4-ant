@@ -88,7 +88,7 @@ public class LabelDialog extends PathwayElementDialog {
 			fontPreview.setText(f.getName());
 			// set href
 			href.setText(input.getHref());
-			href.setFont(new Font("Tahoma", Font.PLAIN, 10));// UI Design
+			href.setFont(new JLabel().getFont());// UI Design default font
 		} else {
 			text.setText("");
 			fontPreview.setText("");

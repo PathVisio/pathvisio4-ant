@@ -119,7 +119,7 @@ public class GroupDialog extends PathwayElementDialog implements ItemListener {
 		super.refresh();
 		// sets text label
 		labelText.setText(getInput().getTextLabel());
-		labelText.setFont(new Font("Tahoma", Font.PLAIN, 10));// UI Design
+		labelText.setFont(new JLabel().getFont());// UI Design default font
 		// sets xref
 		Xref xref = getInput().getXref();
 		String id = XrefUtils.getIdentifier(xref);

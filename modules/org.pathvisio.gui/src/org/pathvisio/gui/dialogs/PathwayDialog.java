@@ -184,7 +184,7 @@ public class PathwayDialog extends PathwayElementDialog {
 		organismComboBox = new PermissiveComboBox(Organism.latinNamesArray());
 		organismComboBox.setSelectedItem(swingEngine.getEngine().getActivePathwayModel().getPathway().getOrganism());
 		descriptionArea = new JTextArea(swingEngine.getEngine().getActivePathwayModel().getPathway().getDescription());
-		descriptionArea.setFont(new Font("Tahoma", Font.PLAIN, 10)); // UI Design
+		descriptionArea.setFont(new JLabel().getFont());// UI Design default font
 
 		GridBagConstraints c = new GridBagConstraints();
 		c.anchor = GridBagConstraints.FIRST_LINE_START;

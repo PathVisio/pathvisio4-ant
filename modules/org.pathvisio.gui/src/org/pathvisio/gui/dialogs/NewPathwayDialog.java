@@ -85,7 +85,7 @@ public class NewPathwayDialog extends OkCancelDialog {
 		organismComboBox = new PermissiveComboBox(Organism.latinNamesArray());
 		organismComboBox.setSelectedItem("Homo sapiens");
 		descriptionArea = new JTextArea();
-		descriptionArea.setFont(new Font("Tahoma", Font.PLAIN, 10)); // UI Design
+		descriptionArea.setFont(new JLabel().getFont());// UI Design default font
 
 		GridBagConstraints c = new GridBagConstraints();
 		c.anchor = GridBagConstraints.FIRST_LINE_START;
