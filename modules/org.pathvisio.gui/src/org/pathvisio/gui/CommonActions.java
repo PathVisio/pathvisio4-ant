@@ -147,8 +147,7 @@ public class CommonActions implements ApplicationEventListener {
 		undoAction = new ViewActions.UndoAction(se.getEngine());
 		copyAction = new ViewActions.CopyAction(se.getEngine());
 		pasteAction = new ViewActions.PasteAction(se.getEngine());
-		applyThemeActions = new Action[] { new ApplyThemeAction(se.getEngine(), Theme.WIKIPATHWAYS),
-				new ApplyThemeAction(se.getEngine(), Theme.WIKIPATHWAYS_MIN) }; // TODO
+		applyThemeActions = new Action[] { new ApplyThemeAction(se.getEngine(), Theme.WIKIPATHWAYS)}; // TODO
 		showUnlinkedAction = new ViewActions.ShowUnlinkedAction(se.getEngine());
 
 		exportAction = new ExportAction(se);

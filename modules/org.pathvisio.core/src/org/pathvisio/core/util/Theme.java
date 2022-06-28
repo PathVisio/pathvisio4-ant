@@ -42,13 +42,11 @@ public class Theme {
 	// Theme Names
 	// ================================================================================
 	public static final String WP = "WikiPathways";
-	public static final String WP_MIN = "WikiPathways minimal";
 
 	// ================================================================================
 	// Instantiate Themes
 	// ================================================================================
 	public static final Theme WIKIPATHWAYS = new Theme(WP);
-	public static final Theme WIKIPATHWAYS_MIN = new Theme(WP_MIN);
 
 	// ================================================================================
 	// Sets: also used in {@link DefaultTemplates}
@@ -99,18 +97,6 @@ public class Theme {
 			colorShapeFill = ColorPalette.TRANSPARENT;
 			colorShapeGrey = ColorPalette.WP_CUSTOM_PV_MGREY;
 			colorShapeDarkGrey = ColorPalette.WP_DGREY;
-		} else if (name == WP_MIN) {
-			description = "WikiPathways minimal theme (graphical elements grayscale)";
-			colorBackground = ColorPalette.WP_WHITE;
-			colorDefault = ColorPalette.WP_BLACK;
-			colorMetabolite = ColorPalette.WP_BLUE;
-			colorPathway = ColorPalette.WP_DGREEN;
-			colorDataNodeFill = ColorPalette.WP_WHITE;
-			colorLabel = ColorPalette.WP_BLACK;
-			colorShapeFill = ColorPalette.TRANSPARENT;
-			colorShapeGrey = ColorPalette.WP_CUSTOM_PV_MGREY;
-			colorShapeDarkGrey = ColorPalette.WP_DGREY;
-			colorShapes = true;
 		}
 	}
 
