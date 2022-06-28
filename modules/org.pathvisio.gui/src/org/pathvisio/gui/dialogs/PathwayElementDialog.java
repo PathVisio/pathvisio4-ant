@@ -74,7 +74,7 @@ public class PathwayElementDialog extends OkCancelDialog {
 		panels = new HashMap<String, PathwayElementPanel>();
 		createTabs();
 		setInput(e);
-		setSize(320, 300);// UI Design
+		setSize(320, 360);// UI Design
 
 	}
 
