@@ -34,4 +34,34 @@ public class TestOnline extends TestCase
 		assertTrue(pmr.getId().equals(id));
 		assertTrue("GenMAPP 2: new features and resources for pathway analysis.".equals(pmr.getTitle()));
 	}
+
+	public void testDOI() {
+		String id = "10.1016/0006-291X(75)90498-2";
+		DOIQuery3 doiq = new DOIQuery3(id);
+		try {
+			doiq.execute();
+		} catch (Exception e) {
+			fail(e.getMessage());
+		}
+
+		DOIResult pmr = doiq.getResult();
+		assertTrue(pmr.getId().equals(id));
+		assertEquals("Metal substitutions in carbonic anhydrase: A halide ion probe study", pmr.getTitle());
+		assertEquals("1975", pmr.getYear());
+	}
+
+	public void testPubMedQuery3() {
+		String id = "17588266";
+		PubMedQuery3 doiq = new PubMedQuery3(id);
+		try {
+			doiq.execute();
+		} catch (Exception e) {
+			fail(e.getMessage());
+		}
+
+		PubMedResult pmr = doiq.getResult();
+		assertTrue(pmr.getId().equals(id));
+		assertEquals("GenMAPP 2: new features and resources for pathway analysis", pmr.getTitle());
+	}
+
 }
