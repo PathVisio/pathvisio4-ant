@@ -123,7 +123,9 @@ public class BackpageTextProvider {
 						{ "Synonyms", Utils.oneOf(attributes.get("Synonyms")) },
 						{ "Chromosome", Utils.oneOf(attributes.get("Chromosome")) },
 						{ "Molecular Formula", Utils.oneOf(attributes.get("BrutoFormula")) },
-						{ "Direction", Utils.oneOf(attributes.get("Direction")) } };
+						{ "Direction", Utils.oneOf(attributes.get("Direction")) },
+						{ "Primary", (xref.isPrimary() ? "true" : "false") }
+				};
 
 				for (String[] row : table) {
 					if (!(row[1] == null)) {
