@@ -115,6 +115,7 @@
 				<include name="commons*.jar" />
 				<include name="osgi*.jar" />
 				<include name="jaxb*.jar" />
+				<include name="json-20220320.jar" />
 			</fileset>
 		</copy>
 		<unjar src="modules/org.pathvisio.launcher.jar" dest="build/exe" />
