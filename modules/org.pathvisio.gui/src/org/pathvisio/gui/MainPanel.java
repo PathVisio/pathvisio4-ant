@@ -197,18 +197,19 @@ public class MainPanel extends JPanel implements VPathwayModelListener, Applicat
 
 		objectsPane = new ObjectsPane(swingEngine);
 		int numItemsPerRow = 10;
-		objectsPane.addButtons(actions.newMoleculeDatanodeActions, "Molecules", numItemsPerRow);
-		objectsPane.addButtons(actions.newConceptDatanodeActions, "Concepts", numItemsPerRow);
-		objectsPane.addButtons(actions.newInteractionPanelActions, "Interactions", numItemsPerRow);
+		objectsPane.addButtons(actions.newMolecularDatanodeActions, "Molecular DataNodes", numItemsPerRow);
+		objectsPane.addButtons(actions.newConceptDatanodeActions, "Concept DataNodes", numItemsPerRow);
+		objectsPane.addButtons(actions.newBasicInteractionActions, "Basic Interactions", numItemsPerRow);
+		objectsPane.addButtons(actions.newInteractionActions, "Interactions (Recommended)", numItemsPerRow);
 		// objectsPane.addButtons(actions.newRLInteractionActions, "Receptor/ligand",
 		// numItemsPerRow);
 		// objectsPane.addButtons(actions.newAnnotationActions, "Annotations",
 		// numItemsPerRow);
-		objectsPane.addButtons(actions.newShapeActions, "Graphical elements", numItemsPerRow);
+		objectsPane.addButtons(actions.newShapeActions, "Graphical Elements", numItemsPerRow);
 
-		objectsPane.addButtons(actions.newCellularComponentActions, "Cellular compartments", numItemsPerRow);
+		objectsPane.addButtons(actions.newCellularComponentActions, "Cellular Compartments", numItemsPerRow);
 
-		objectsPane.addButtons(actions.newMiscShapeActions, "Miscellaneous shapes", numItemsPerRow);
+		objectsPane.addButtons(actions.newMiscShapeActions, "Miscellaneous Shapes", numItemsPerRow);
 
 		objectsPane.addButtons(actions.newTemplateActions, "Templates", numItemsPerRow);
 
@@ -346,28 +347,29 @@ public class MainPanel extends JPanel implements VPathwayModelListener, Applicat
 		// define the drop-down menu for data nodes
 		GraphicsChoiceButton datanodeButton = new GraphicsChoiceButton();
 		datanodeButton.setToolTipText("Select a data node to draw");
-		datanodeButton.addButtons("Molecules", actions.newMoleculeDatanodeActions);
-		datanodeButton.addButtons("Concepts", actions.newConceptDatanodeActions);
+		datanodeButton.addButtons("Molecular DataNodes", actions.newMolecularDatanodeActions);
+		datanodeButton.addButtons("Concept DataNodes", actions.newConceptDatanodeActions);
 //		datanodeButton.addButtons("Annotations", actions.newAnnotationActions);
 		addToToolbar(datanodeButton, TB_GROUP_SHOW_IF_EDITMODE);
+		tb.addSeparator(new Dimension(2, 0));
+
+		// define the drop-down menu for interactions
+		GraphicsChoiceButton lineButton = new GraphicsChoiceButton();
+		lineButton.setToolTipText("Select an interaction to draw");
+		lineButton.addButtons("Basic Interactions", actions.newBasicInteractionActions);
+		lineButton.addButtons("Interactions (Recommended)", actions.newInteractionActions);
+		addToToolbar(lineButton, TB_GROUP_SHOW_IF_EDITMODE);
 		tb.addSeparator(new Dimension(2, 0));
 
 		// define the drop-down menu for shapes
 		GraphicsChoiceButton shapeButton = new GraphicsChoiceButton();
 		shapeButton.setToolTipText("Select a shape to draw");
 		itemsDropDown = shapeButton;
-		shapeButton.addButtons("Basic shapes", actions.newShapeActions);
-		shapeButton.addButtons("Cellular components", actions.newCellularComponentActions);
-		shapeButton.addButtons("Miscellaneous shapes", actions.newMiscShapeActions);
+		shapeButton.addButtons("Graphical Elements", actions.newShapeActions);
+		shapeButton.addButtons("Cellular Components", actions.newCellularComponentActions);
+		shapeButton.addButtons("Miscellaneous Shapes", actions.newMiscShapeActions);
 		// TODO
 		addToToolbar(shapeButton, TB_GROUP_SHOW_IF_EDITMODE);
-		tb.addSeparator(new Dimension(2, 0));
-
-		// define the drop-down menu for interactions
-		GraphicsChoiceButton lineButton = new GraphicsChoiceButton();
-		lineButton.setToolTipText("Select an interaction to draw");
-		lineButton.addButtons("Interaction panel", actions.newInteractionPanelActions);
-		addToToolbar(lineButton, TB_GROUP_SHOW_IF_EDITMODE);
 		tb.addSeparator(new Dimension(2, 0));
 
 		// define the drop-down menu for templates

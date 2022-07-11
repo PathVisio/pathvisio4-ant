@@ -118,10 +118,11 @@ public class CommonActions implements ApplicationEventListener {
 	public final Action[] layoutActions;
 
 	// Objects Side Panel
-	public final Action[] newMoleculeDatanodeActions;
+	public final Action[] newMolecularDatanodeActions;
 	public final Action[] newConceptDatanodeActions;
-	public final Action[] newInteractionPanelActions;
-	public final Action[] newRLInteractionActions; // TODO
+	public final Action[] newBasicInteractionActions;
+	public final Action[] newInteractionActions;
+//	public final Action[] newRLInteractionActions; // TODO
 	public final Action[] newLabelActions;
 	public final Action[] newShapeActions;
 	public final Action[] newCellularComponentActions;
@@ -147,7 +148,7 @@ public class CommonActions implements ApplicationEventListener {
 		undoAction = new ViewActions.UndoAction(se.getEngine());
 		copyAction = new ViewActions.CopyAction(se.getEngine());
 		pasteAction = new ViewActions.PasteAction(se.getEngine());
-		applyThemeActions = new Action[] { new ApplyThemeAction(se.getEngine(), Theme.WIKIPATHWAYS)}; // TODO
+		applyThemeActions = new Action[] { new ApplyThemeAction(se.getEngine(), Theme.WIKIPATHWAYS) }; // TODO
 		showUnlinkedAction = new ViewActions.ShowUnlinkedAction(se.getEngine());
 
 		exportAction = new ExportAction(se);
@@ -182,9 +183,9 @@ public class CommonActions implements ApplicationEventListener {
 		};
 
 		// ================================================================================
-		// New Molecule DataNode Actions
+		// New Molecular DataNode Actions
 		// ================================================================================
-		newMoleculeDatanodeActions = new Action[] {
+		newMolecularDatanodeActions = new Action[] {
 				new NewElementAction(e, new DefaultTemplates.DataNodeTemplate(DataNodeType.GENEPRODUCT)),
 				new NewElementAction(e, new DefaultTemplates.DataNodeTemplate(DataNodeType.METABOLITE)),
 				new NewElementAction(e, new DefaultTemplates.DataNodeTemplate(DataNodeType.PROTEIN)),
@@ -230,7 +231,7 @@ public class CommonActions implements ApplicationEventListener {
 		};
 
 		// actions for "Receptor/ligand interactions" section
-		newRLInteractionActions = new Action[] {
+//		newRLInteractionActions = new Action[] {
 //				new NewElementAction(e,
 //						new DefaultTemplates.InteractionTemplate("ligandround", LineStyleType.SOLID,
 //								ArrowHeadType.UNDIRECTED, ArrowHeadType.LIGAND_ROUND, ConnectorType.STRAIGHT)),
@@ -242,18 +243,22 @@ public class CommonActions implements ApplicationEventListener {
 //								ArrowHeadType.UNDIRECTED, ArrowHeadType.RECEPTOR_ROUND, ConnectorType.STRAIGHT)),
 //				new NewElementAction(e, new DefaultTemplates.InteractionTemplate("receptorsquare", LineStyleType.SOLID,
 //						ArrowHeadType.UNDIRECTED, ArrowHeadType.RECEPTOR_SQUARE, ConnectorType.STRAIGHT)),
-		};
+//		};
+
+		// ================================================================================
+		// New Basic Interaction Panel Actions
+		// ================================================================================
+		newBasicInteractionActions = new Action[] {
+				new NewElementAction(e,
+						new DefaultTemplates.InteractionTemplate("Undirected", LineStyleType.SOLID,
+								ArrowHeadType.UNDIRECTED, ArrowHeadType.UNDIRECTED, ConnectorType.STRAIGHT)),
+				new NewElementAction(e, new DefaultTemplates.InteractionTemplate("Directed", LineStyleType.SOLID,
+						ArrowHeadType.UNDIRECTED, ArrowHeadType.DIRECTED, ConnectorType.STRAIGHT)), };
 
 		// ================================================================================
 		// New Interaction Panel Actions
 		// ================================================================================
-		newInteractionPanelActions = new Action[] {
-				new NewElementAction(e,
-						new DefaultTemplates.InteractionTemplate("Undirected", LineStyleType.SOLID,
-								ArrowHeadType.UNDIRECTED, ArrowHeadType.UNDIRECTED, ConnectorType.STRAIGHT)),
-				new NewElementAction(e,
-						new DefaultTemplates.InteractionTemplate("Directed", LineStyleType.SOLID,
-								ArrowHeadType.UNDIRECTED, ArrowHeadType.DIRECTED, ConnectorType.STRAIGHT)),
+		newInteractionActions = new Action[] {
 				new NewElementAction(e,
 						new DefaultTemplates.InteractionTemplate("Conversion", LineStyleType.SOLID,
 								ArrowHeadType.UNDIRECTED, ArrowHeadType.CONVERSION, ConnectorType.STRAIGHT)),

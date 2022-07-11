@@ -65,7 +65,7 @@ public class ImageTextButton extends JButton {
 	 * Instantiates an ImageTextButton.
 	 * 
 	 * @param a        the action.
-	 * @param category the button category (e.g. Molecules, Concepts,
+	 * @param category the button category (e.g. Molecular DataNodes, Concept DataNodes,
 	 *                 Interactions...).
 	 */
 	public ImageTextButton(Action a) {
@@ -132,14 +132,14 @@ public class ImageTextButton extends JButton {
 	private void setImageShape() {
 		Shape sh = null;
 		switch (getText()) {
-		case "GeneProduct": // Molecules
+		case "GeneProduct": // Molecular DataNodes
 		case "Metabolite":
 		case "Protein":
 		case "DNA":
 		case "RNA":
 			sh = new Rectangle(4, 6, 24, 20);
 			break;
-		case "Pathway": // Concepts
+		case "Pathway": // Concept DataNodes
 		case "Disease":
 		case "Phenotype":
 		case "Event":
@@ -227,12 +227,12 @@ public class ImageTextButton extends JButton {
 		case "Undefined":
 			t = "?";
 			break;
-		case "GeneProduct": // Molecules
+		case "GeneProduct": // Molecular DataNodes
 		case "Metabolite":
 		case "Protein":
 		case "DNA":
 		case "RNA":
-		case "Pathway": // Concepts
+		case "Pathway": // Concept DataNodes
 		case "Disease":
 		case "Phenotype":
 		case "Event":
