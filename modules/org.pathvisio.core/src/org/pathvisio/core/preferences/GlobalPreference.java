@@ -31,7 +31,7 @@ import org.pathvisio.libgpml.util.Utils;
  * The preferences in this enum are used by the core and the GUI application,
  * but not by plug-ins.
  * 
- * @author unknown 
+ * @author unknown
  */
 public enum GlobalPreference implements Preference {
 	FILE_LOG(new File(getApplicationDir(), "PathVisio.log")),
@@ -58,7 +58,7 @@ public enum GlobalPreference implements Preference {
 
 	SNAP_TO_ANCHOR(Boolean.toString(true)),
 
-	GUI_SIDEPANEL_SIZE("30"),
+	GUI_SIDEPANEL_SIZE("33"), // note: make wide enough for Object panel buttons to look nice
 
 	// pathway base dir
 	DIR_PWFILES(new File(getDataDir(), "pathways").toString()),
