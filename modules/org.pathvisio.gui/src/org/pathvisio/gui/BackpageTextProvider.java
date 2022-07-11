@@ -112,8 +112,8 @@ public class BackpageTextProvider {
 				StringBuilder bpInfo = new StringBuilder("<TABLE border = 1>");
 
 				Map<String, Set<String>> attributes = null;
-				if (((Xrefable) e).getXref().getDataSource() != null) {
-					attributes = attributeMapper.getAttributes(((Xrefable) e).getXref());
+				if (xref.getDataSource() != null) {
+					attributes = attributeMapper.getAttributes(xref);
 				} else {
 					attributes = new HashMap<String, Set<String>>();
 				}
@@ -123,7 +123,9 @@ public class BackpageTextProvider {
 						{ "Synonyms", Utils.oneOf(attributes.get("Synonyms")) },
 						{ "Chromosome", Utils.oneOf(attributes.get("Chromosome")) },
 						{ "Molecular Formula", Utils.oneOf(attributes.get("BrutoFormula")) },
-						{ "Direction", Utils.oneOf(attributes.get("Direction")) } };
+						{ "Direction", Utils.oneOf(attributes.get("Direction")) },
+						{ "Primary", (xref.isPrimary() ? "true" : "false") }
+				};
 
 				for (String[] row : table) {
 					if (!(row[1] == null)) {
