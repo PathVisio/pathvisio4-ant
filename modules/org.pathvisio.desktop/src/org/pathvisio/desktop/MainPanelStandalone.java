@@ -107,7 +107,7 @@ public class MainPanelStandalone extends MainPanel {
 		editMenu.add(selectionMenu);
 
 		// ========================================
-		// Data Menu: Removed for now TODO 
+		// Data Menu: Removed for now TODO
 		// ========================================
 		// Select database actions moved to Menu -> File -> Load Identifier Mapping..
 		// JMenu dataMenu = new JMenu("Data");
@@ -131,17 +131,10 @@ public class MainPanelStandalone extends MainPanel {
 		pluginsMenu.add(standaloneActions.loadLocalBundlesAction);
 
 		// ========================================
-		// Help Menu
-		// ========================================
-		JMenu helpMenu = new JMenu("Help");
-		helpMenu.add(actions.aboutAction);
-		helpMenu.add(standaloneActions.helpAction);
-
-		// ========================================
 		// Tools Menu
 		// ========================================
-		JMenu toolMenu = new JMenu("Tools"); 
-		JMenu curationMenu = new JMenu("Curation"); 
+		JMenu toolMenu = new JMenu("Tools");
+		JMenu curationMenu = new JMenu("Curation");
 		addToMenu(actions.showUnlinkedAction, curationMenu);
 		toolMenu.add(curationMenu);
 		JMenu themeMenu = new JMenu("Apply Theme");
@@ -150,13 +143,20 @@ public class MainPanelStandalone extends MainPanel {
 			addToMenu(a, themeMenu);
 		}
 
+		// ========================================
+		// Help Menu
+		// ========================================
+		JMenu helpMenu = new JMenu("Help");
+		helpMenu.add(actions.aboutAction);
+		helpMenu.add(standaloneActions.helpAction);
+		
 		mb.add(fileMenu);
 		mb.add(editMenu);
-		// mb.add(dataMenu); TODO Removed for now  
+		// mb.add(dataMenu); TODO Removed for now
 		mb.add(viewMenu);
 		mb.add(pluginsMenu);
-		mb.add(helpMenu);
 		mb.add(toolMenu);
+		mb.add(helpMenu);
 	}
 
 	private final PvDesktop desktop;
