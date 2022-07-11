@@ -9,6 +9,7 @@
       <root url="jar://$PROJECT_DIR$/lib/jakarta.activation-2.0.1.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/jakarta.xml.bind-api-3.0.1.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/jnlp.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/json-20220320.jar!/" />         
       <root url="jar://$PROJECT_DIR$/lib/junit.jar!/" />         
       <root url="jar://$PROJECT_DIR$/lib/org.apache.felix.bundlerepository-1.6.6.jar!/" />     
       <root url="jar://$PROJECT_DIR$/lib/org.apache.felix.gogo.command-1.1.2.jar!/" />
@@ -19,12 +20,12 @@
       <root url="jar://$PROJECT_DIR$/lib/org.apache.xalan_2.7.1.v201005080400.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/org.apache.xml.resolver_1.2.0.v201005080400.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/org.apache.xml.serializer_2.7.1.v201005080400.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/org.bridgedb.bio-3.0.13.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/org.bridgedb-3.0.13.gui.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/org.bridgedb.rdb.construct-3.0.13.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/org.bridgedb.rdb-3.0.13.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/org.bridgedb.webservice.bridgerest-3.0.13.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/org.bridgedb-3.0.13.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/org.bridgedb.bio-3.0.16.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/org.bridgedb-3.0.16.gui.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/org.bridgedb.rdb.construct-3.0.16.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/org.bridgedb.rdb-3.0.16.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/org.bridgedb.webservice.bridgerest-3.0.16.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/org.bridgedb-3.0.16.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/org.eclipse.equinox.console-1.4.500.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/org.eclipse.osgi.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/org.pathvisio.jgoodies.forms.jar!/" />

@@ -15,14 +15,15 @@ Export-Package: org.pathvisio.core,
 Require-Bundle: org.pathvisio.libgpml;bundle-version="4.0.0",
  org.apache.servicemix.bundles.jdom;bundle-version="2.0.6",
  org.pathvisio.pdftranscoder;bundle-version="1.7.0",
- org.bridgedb;bundle-version="3.0.13",
- org.bridgedb.bio;bundle-version="3.0.13",
- org.bridgedb.rdb;bundle-version="3.0.13",
+ org.bridgedb;bundle-version="3.0.16",
+ org.bridgedb.bio;bundle-version="3.0.16",
+ org.bridgedb.rdb;bundle-version="3.0.16",
  org.apache.servicemix.bundles.batik;bundle-version="1.14",
  org.apache.xml.resolver;bundle-version="1.2.0",
  org.apache.xml.serializer;bundle-version="2.7.1",
  derby;bundle-version="10.14.2000000",
- org.apache.commons.commons-collections4;bundle-version="4.4"
+ org.apache.commons.commons-collections4;bundle-version="4.4",
+ json;bundle-version="20220320.0.0"
 Import-Package: javax.swing,
  org.osgi.framework;version="1.5.0"
 Bundle-License: http://www.apache.org/licenses/LICENSE-2.0

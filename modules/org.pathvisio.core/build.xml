@@ -27,6 +27,7 @@ class Revision
 			<include name="org.bridgedb.bio*.jar" />
 			<include name="org.bridgedb.rdb*.jar" />
 			<include name="commons*.jar" />
+			<include name="json-20220320.jar" />
 		</fileset>
 		<fileset dir="${bundle.dest}">
 			<include name="org.pathvisio.libgpml.jar" />

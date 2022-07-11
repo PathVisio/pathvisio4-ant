@@ -1,5 +1,7 @@
-/* Copyright 2006-2022 BiGCaT Bioinformatics, WikiPathways
- *                2022 Egon Willighagen
+/*******************************************************************************
+ * PathVisio, a tool for data visualization and analysis using biological pathways
+ * Copyright 2006-2022 BiGCaT Bioinformatics, WikiPathways
+ *           2022 Egon Willighagen
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License.  You may obtain a copy
@@ -12,7 +14,7 @@
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the
  * License for the specific language governing permissions and limitations under
  * the License.
- */
+ ******************************************************************************/
 package org.pathvisio.core.data;
 
 /**
@@ -21,6 +23,8 @@ package org.pathvisio.core.data;
  * call it from the UI thread) The result can then be obtained with getResult()
  * TODO: move DefaultHandler methods to private subclass, they don't need to be
  * exposed.
+ * 
+ * @author Egon Willighagen
  */
 public class DOIQuery3 extends JSONCSLQuery {
 
