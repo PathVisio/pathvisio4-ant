@@ -18,24 +18,15 @@ package org.pathvisio.gui.dialogs;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Font;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.io.IOException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTextField;
-import javax.swing.JTextPane;
-import javax.swing.SwingWorker;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultStyledDocument;
@@ -44,25 +35,15 @@ import javax.swing.text.JTextComponent;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
-import javax.xml.parsers.ParserConfigurationException;
-
 import org.bridgedb.DataSource;
 import org.bridgedb.Xref;
-import org.pathvisio.core.data.PubMedQuery;
-import org.pathvisio.core.data.PubMedResult;
-import org.pathvisio.core.util.ProgressKeeper;
 import org.pathvisio.gui.DataSourceModel;
-import org.pathvisio.gui.ProgressDialog;
 import org.pathvisio.gui.util.PermissiveComboBox;
-import org.pathvisio.libgpml.model.Annotation;
-import org.pathvisio.libgpml.model.PathwayElement;
 import org.pathvisio.libgpml.model.PathwayElement.AnnotationRef;
 import org.pathvisio.libgpml.model.Referenceable.Annotatable;
 import org.pathvisio.libgpml.model.type.AnnotationType;
-import org.pathvisio.libgpml.model.type.GroupType;
 import org.pathvisio.libgpml.model.type.ObjectType;
 import org.pathvisio.libgpml.util.XrefUtils;
-import org.xml.sax.SAXException;
 
 /**
  * Dialog for entering annotations. For convenience, you can enter a pubmed id

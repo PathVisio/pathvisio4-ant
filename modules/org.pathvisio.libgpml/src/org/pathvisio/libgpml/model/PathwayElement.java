@@ -1796,14 +1796,16 @@ public abstract class PathwayElement extends PathwayObject implements Cloneable,
 					if (semicolon) {
 						builder.append("; ");
 					}
-					builder.append("<A href='" + xref.getKnownUrl()).append("'>").append(ds).append(" ").append(id)
-							.append("</A>");
+					builder.append(ds).append(":").append(id);
 					semicolon = true;
 				}
 			}
 			// Value and Type
 			String value = evidence.getValue();
-			if (value != null && !Utils.stringEquals(value, "")){
+			if (value != null && !Utils.stringEquals(value, "")) {
+				if (semicolon) {
+					builder.append("; ");
+				}
 				builder.append(value);
 				semicolon = true;
 			}

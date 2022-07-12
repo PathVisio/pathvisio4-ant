@@ -18,7 +18,6 @@ package org.pathvisio.gui.dialogs;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Font;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -26,17 +25,12 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTextField;
-import javax.swing.JTextPane;
 import javax.swing.SwingWorker;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
@@ -51,19 +45,18 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.bridgedb.DataSource;
 import org.bridgedb.Xref;
 import org.pathvisio.core.data.DOIQuery;
-import org.pathvisio.core.data.DOIQuery2;
-import org.pathvisio.core.data.DOIResult2;
+import org.pathvisio.core.data.DOIResult;
 import org.pathvisio.core.data.PubMedQuery;
 import org.pathvisio.core.data.PubMedResult;
 import org.pathvisio.core.util.ProgressKeeper;
 import org.pathvisio.gui.DataSourceModel;
 import org.pathvisio.gui.ProgressDialog;
 import org.pathvisio.gui.util.PermissiveComboBox;
-import org.pathvisio.libgpml.model.PathwayElement;
-import org.pathvisio.libgpml.model.PathwayElement.AnnotationRef;
+import org.pathvisio.libgpml.debug.Logger;
 import org.pathvisio.libgpml.model.PathwayElement.CitationRef;
 import org.pathvisio.libgpml.model.Referenceable.Citable;
 import org.pathvisio.libgpml.model.type.ObjectType;
+import org.pathvisio.libgpml.util.Utils;
 import org.pathvisio.libgpml.util.XrefUtils;
 import org.xml.sax.SAXException;
 
@@ -209,8 +202,8 @@ public class CitationDialog extends ReferenceDialog {
 	protected void queryPressed() {
 		String id = xrefIdentifier.getText().trim();
 		DataSource ds = (DataSource) dsm.getSelectedItem();
-		// Query DOI
-		if (ds != null) {
+		// query
+		if (ds != null && id != null && !Utils.stringEquals(id, "")) {
 			String dsName = ds.getFullName();
 			switch (dsName) {
 			case "DOI":
@@ -219,65 +212,75 @@ public class CitationDialog extends ReferenceDialog {
 			case "PubMed":
 				queryPubMed(id);
 				break;
-			default: // nothing
+			case "ISBN":
+				JOptionPane.showConfirmDialog(null, "Query/validate not yet available for ISBN.", "Message",
+						JOptionPane.PLAIN_MESSAGE); // ISBN TODO
+				break;
+			default:
 			}
 		}
-		// If no database selected, query DOI or PubMed depending on identifier pattern
-		else {
-			// DOI regex 
-			String regex = "10.\\d{4,9}/[-._;()/:A-Z0-9]+" + "|10.1002/[^\\s]+"
-					+ "|10.\\d{4}/\\d+-\\d+X?(\\d+)\\d+<[\\d\\w]+:[\\d\\w]*>\\d+.\\d+.\\w+;\\d" + "|10.1021/\\w\\w\\d++"
-					+ "|10.1207/[\\w\\d]+\\&\\d+_\\d+";
-			Pattern p = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
-			Matcher m = p.matcher(id);
-			// identifier is DOI
-			if (m.find()) {
-				queryDOI(id);
-			}
-			// identifier is PubMed id (pmid)
-			else if (id.matches("[0-9]+") && id.length() <= 8 && id.length() >= 1) {
-				queryPubMed(id);
-				// identifier is neither
-			} else {
-				System.out.println("Identifier is neither valid doi nor pmid");
-			}
+		// warning: missing id and database
+		else if (id == null || Utils.stringEquals(id, "") && ds == null) {
+			JOptionPane.showConfirmDialog(null, "Please enter an Identifier and Database.", "Message",
+					JOptionPane.PLAIN_MESSAGE);
 		}
-
+		// warning: missing id
+		else if (id == null || Utils.stringEquals(id, "")) {
+			JOptionPane.showConfirmDialog(null, "Please enter an Identifier.", "Message", JOptionPane.PLAIN_MESSAGE);
+		}
+		// warning: missing database
+		else if (ds == null) {
+			JOptionPane.showConfirmDialog(null, "Please select a Database.", "Message", JOptionPane.PLAIN_MESSAGE);
+		}
 	}
 
 	/**
 	 * Query DOI.
 	 * 
-	 * @param identifier
+	 * @param id
 	 */
 	public void queryDOI(String id) {
-		final DOIQuery2 dq = new DOIQuery2(id);
+		final DOIQuery dq = new DOIQuery(id);
 		final ProgressKeeper pk2 = new ProgressKeeper();
 		ProgressDialog d2 = new ProgressDialog(JOptionPane.getFrameForComponent(this), "", pk2, true, true);
-
 		SwingWorker<Void, Void> sw2 = new SwingWorker<Void, Void>() {
-
 			protected Void doInBackground() throws SAXException, IOException, ParserConfigurationException {
 				pk2.setTaskName("Querying DOI");
-				dq.execute();
+				try {
+					dq.execute();
+					DOIResult dqr = dq.getResult();
+					if (dqr != null) {
+						String title = dqr.getTitle();
+						String source = dqr.getSource();
+						String year = dqr.getYear();
+						// print message
+						JOptionPane.showConfirmDialog(null, "DOI found for identifier.\n\nTitle: " + title
+								+ "\nSource: " + source + "\nYear: " + year, "Message", JOptionPane.PLAIN_MESSAGE);
+						// set values
+						xrefIdentifier.setText(dqr.getId()); // write the trimmed pmid to the dialog
+						dsm.setSelectedItem(DataSource.getExistingByFullName("DOI")); // TODO
+					}
+				}
+				// not found
+				catch (FileNotFoundException e) {
+					JOptionPane.showConfirmDialog(null, "DOI not found for identifier.", "Warning",
+							JOptionPane.PLAIN_MESSAGE);
+					Logger.log.error("DOI identifier not found");
+				} catch (Exception e) {
+					Logger.log.error("DOI identifier not found");
+				}
 				pk2.finished();
 				return null;
 			}
 		};
-
 		sw2.execute();
 		d2.setVisible(true);
-		DOIResult2 dqr = dq.getResult();
-		if (dqr != null) {
-			xrefIdentifier.setText(dqr.getId()); // write the trimmed pmid to the dialog
-			dsm.setSelectedItem(DataSource.getExistingByFullName("DOI")); // TODO
-		}
 	}
 
 	/**
 	 * Query PubMed.
 	 * 
-	 * @param identifier
+	 * @param id
 	 */
 	public void queryPubMed(String id) {
 		// if PubMed
@@ -288,7 +291,26 @@ public class CitationDialog extends ReferenceDialog {
 		SwingWorker<Void, Void> sw = new SwingWorker<Void, Void>() {
 			protected Void doInBackground() throws SAXException, IOException, ParserConfigurationException {
 				pk.setTaskName("Querying PubMed");
-				pmq.execute();
+				try {
+					pmq.execute();
+					PubMedResult pmr = pmq.getResult();
+					if (pmr != null) {
+						String title = pmr.getTitle();
+						String source = pmr.getSource();
+						String year = pmr.getYear();
+						// print message
+						JOptionPane.showConfirmDialog(null, "PubMed found for identifier.\n\nTitle: " + title
+								+ "\nSource: " + source + "\nYear: " + year, "Message", JOptionPane.PLAIN_MESSAGE);
+						xrefIdentifier.setText(pmr.getId()); // write the trimmed pmid to the dialog
+						dsm.setSelectedItem(DataSource.getExistingByFullName("PubMed")); // TODO
+					}
+				} catch (FileNotFoundException e) {
+					JOptionPane.showConfirmDialog(null, "PubMed not found for identifier.", "Warning",
+							JOptionPane.PLAIN_MESSAGE);
+					Logger.log.error("PubMed identifier not found");
+				} catch (Exception e) {
+					Logger.log.error("PubMed identifier not found");
+				}
 				pk.finished();
 				return null;
 			}
@@ -296,11 +318,6 @@ public class CitationDialog extends ReferenceDialog {
 
 		sw.execute();
 		d.setVisible(true);
-		PubMedResult pmr = pmq.getResult();
-		if (pmr != null) {
-			xrefIdentifier.setText(pmr.getId()); // write the trimmed pmid to the dialog
-			dsm.setSelectedItem(DataSource.getExistingByFullName("PubMed")); // TODO
-		}
 	}
 
 	/**

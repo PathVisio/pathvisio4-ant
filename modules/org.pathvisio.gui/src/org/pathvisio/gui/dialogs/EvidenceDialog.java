@@ -18,12 +18,13 @@ package org.pathvisio.gui.dialogs;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Font;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -43,16 +44,20 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.bridgedb.DataSource;
 import org.bridgedb.Xref;
+import org.pathvisio.core.data.DOIQuery;
+import org.pathvisio.core.data.DOIResult;
 import org.pathvisio.core.data.ECOQuery;
-import org.pathvisio.core.data.PubMedQuery;
+import org.pathvisio.core.data.ECOResult;
 import org.pathvisio.core.data.PubMedResult;
 import org.pathvisio.core.util.ProgressKeeper;
 import org.pathvisio.gui.DataSourceModel;
 import org.pathvisio.gui.ProgressDialog;
 import org.pathvisio.gui.util.PermissiveComboBox;
+import org.pathvisio.libgpml.debug.Logger;
 import org.pathvisio.libgpml.model.PathwayElement.EvidenceRef;
 import org.pathvisio.libgpml.model.Referenceable.Evidenceable;
 import org.pathvisio.libgpml.model.type.ObjectType;
+import org.pathvisio.libgpml.util.Utils;
 import org.pathvisio.libgpml.util.XrefUtils;
 import org.xml.sax.SAXException;
 
@@ -169,8 +174,7 @@ public class EvidenceDialog extends ReferenceDialog {
 			JOptionPane.showMessageDialog(this,
 					"An Evidence requires a valid identifier and database.\nPlease input more information.", "Error",
 					JOptionPane.ERROR_MESSAGE);
-		}
-		else if (!newId.equals("") && newDs == null) {
+		} else if (!newId.equals("") && newDs == null) {
 			done = false;
 			JOptionPane.showMessageDialog(this,
 					"This Evidence has an identifier but no database.\nPlease specify a database system.", "Error",
@@ -201,27 +205,74 @@ public class EvidenceDialog extends ReferenceDialog {
 	 * When "Query" button is pressed.
 	 */
 	protected void queryPressed() {
-		final ECOQuery pmq = new ECOQuery(xrefIdentifier.getText().trim());
+		String id = xrefIdentifier.getText().trim();
+		DataSource ds = (DataSource) dsm.getSelectedItem();
+		// query
+		if (ds != null && id != null && !Utils.stringEquals(id, "")) {
+			String dsName = ds.getFullName();
+			switch (dsName) {
+			case "ECO":
+				queryECO(id);
+				break;
+			default:
+			}
+		}
+		// warning: missing id and database
+		else if (id == null || Utils.stringEquals(id, "") && ds == null) {
+			JOptionPane.showConfirmDialog(null, "Please enter an Identifier and Database.", "Message",
+					JOptionPane.PLAIN_MESSAGE);
+		}
+		// warning: missing id
+		else if (id == null || Utils.stringEquals(id, "")) {
+			JOptionPane.showConfirmDialog(null, "Please enter an Identifier.", "Message", JOptionPane.PLAIN_MESSAGE);
+		}
+		// warning: missing database
+		else if (ds == null) {
+			JOptionPane.showConfirmDialog(null, "Please select a Database.", "Message", JOptionPane.PLAIN_MESSAGE);
+		}
+	}
+
+	/**
+	 * Query ECO.
+	 * 
+	 * @param id
+	 */
+	public void queryECO(String id) {
+		final ECOQuery ecoq = new ECOQuery(xrefIdentifier.getText().trim());
 		final ProgressKeeper pk = new ProgressKeeper();
 		ProgressDialog d = new ProgressDialog(JOptionPane.getFrameForComponent(this), "", pk, true, true);
 
 		SwingWorker<Void, Void> sw = new SwingWorker<Void, Void>() {
 			protected Void doInBackground() throws SAXException, IOException, ParserConfigurationException {
-				pk.setTaskName("Querying PubMed");
-				pmq.execute();
+				pk.setTaskName("Querying ECO");
+				try {
+					ecoq.execute();
+					ECOResult ecor = ecoq.getResult();
+					if (ecor != null) {
+						String term = ecor.getTerm();
+						// print message
+						JOptionPane.showConfirmDialog(null, "ECO found for identifier.\n\nTerm: " + term, "Message",
+								JOptionPane.PLAIN_MESSAGE);
+						// set values
+						xrefIdentifier.setText(ecor.getId()); // write the trimmed pmid to the dialog
+						valueText.setText(ecor.getTerm()); // write the trimmed pmid to the dialog
+						dsm.setSelectedItem(DataSource.getExistingByFullName("ECO")); // TODO
+					}
+				}
+				// not found
+				catch (FileNotFoundException e) {
+					JOptionPane.showConfirmDialog(null, "ECO not found for identifier.", "Warning",
+							JOptionPane.PLAIN_MESSAGE);
+					Logger.log.error("ECO identifier not found");
+				} catch (Exception e) {
+					Logger.log.error("ECO identifier not found");
+				}
 				pk.finished();
 				return null;
 			}
 		};
-
 		sw.execute();
 		d.setVisible(true);
-
-		PubMedResult pmr = pmq.getResult();
-		if (pmr != null) {
-			xrefIdentifier.setText(pmr.getId()); // write the trimmed pmid to the dialog
-			dsm.setSelectedItem(dsm); // TODO
-		}
 	}
 
 	/**
@@ -256,7 +307,7 @@ public class EvidenceDialog extends ReferenceDialog {
 		dsm.setPrimaryFilter(true);
 		dsm.setObjectTypeFilter(ObjectType.EVIDENCE);
 		dbCombo = new PermissiveComboBox(dsm);
-		dbCombo.setSelectedIndex(0); // TODO always ECO
+		dbCombo.setSelectedIndex(0); // always ECO
 		valueText = new JTextField();
 		urlLinkText = new JTextField();
 

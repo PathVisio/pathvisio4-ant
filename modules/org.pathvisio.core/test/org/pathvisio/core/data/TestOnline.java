@@ -37,7 +37,7 @@ public class TestOnline extends TestCase
 
 	public void testDOI() {
 		String id = "10.1016/0006-291X(75)90498-2";
-		DOIQuery3 doiq = new DOIQuery3(id);
+		DOIQuery doiq = new DOIQuery(id);
 		try {
 			doiq.execute();
 		} catch (Exception e) {
@@ -52,7 +52,7 @@ public class TestOnline extends TestCase
 
 	public void testPubMedQuery3() {
 		String id = "17588266";
-		PubMedQuery3 doiq = new PubMedQuery3(id);
+		PubMedQuery doiq = new PubMedQuery(id);
 		try {
 			doiq.execute();
 		} catch (Exception e) {

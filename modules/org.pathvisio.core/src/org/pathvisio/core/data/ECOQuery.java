@@ -16,16 +16,14 @@
  ******************************************************************************/
 package org.pathvisio.core.data;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
-
-import org.xml.sax.Attributes;
-import org.xml.sax.InputSource;
+import java.io.InputStreamReader;
+import java.net.URISyntaxException;
+import java.util.HashMap;
 import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
-import org.xml.sax.helpers.XMLReaderFactory;
 
 /**
  * This class can handle a query for a ECO record. Just instantiate this class
@@ -35,13 +33,12 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * exposed.
  */
 public class ECOQuery extends DefaultHandler {
-	static final String URL_BASE = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi";
 
 	String id;
-	PubMedResult result;
+	ECOResult result;
 
 	/**
-	 * Prepares a new pubmed query for the given pmid, e.g. "17588266".
+	 * Prepares a new ECO query for the given id, e.g. "[ECO_0000253]".
 	 */
 	public ECOQuery(String id) {
 		this.id = id;
@@ -50,81 +47,40 @@ public class ECOQuery extends DefaultHandler {
 	/**
 	 * Execute a query. Don't call this from the UI thread, because this method
 	 * blocks.
+	 * 
+	 * @throws URISyntaxException
 	 */
-	public void execute() throws IOException, SAXException {
-		// TODO: assert not being in UI thread
-		String urlString = URL_BASE;
-		urlString += "?db=pubmed&id=" + id;
-
-		URL url = new URL(urlString);
-		InputStream is = url.openStream();
-
-		XMLReader xmlReader = XMLReaderFactory.createXMLReader();
-		xmlReader.setContentHandler(this);
-		xmlReader.setEntityResolver(this);
-
-		result = new PubMedResult();
+	public void execute() throws IOException, SAXException, URISyntaxException {
+		HashMap<String, String> termToId = new HashMap<String, String>();
+		ClassLoader cl = ECOQuery.class.getClassLoader();
+		InputStream is = cl.getResourceAsStream("/data/eco.csv");
+		String line = "";
+		try {
+			BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+			if (is != null) {
+				while ((line = reader.readLine()) != null) {
+					String[] row = line.split(",");
+					termToId.put(row[1], row[0]);
+				}
+			}
+			reader.close();
+		} finally {
+			try {
+				is.close();
+			} catch (Throwable ignore) {
+			}
+		}
+		String term = termToId.get("[ECO_" + id + "]"); // TODO format depends on the eco.csv file
+		result = new ECOResult();
 		result.setId(id);
-		xmlReader.parse(new InputSource(is));
-
-		is.close();
+		result.setTerm(term);
 	}
 
 	/**
 	 * get the result, after execute() has finished.
 	 */
-	public PubMedResult getResult() {
+	public ECOResult getResult() {
 		return result;
 	}
-
-	String parsingId;
-	String parsingName;
-	String parsingElement;
-	String parsingValue;
-
-	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-//		System.out.println("New element: " + localName + ", " + attributes.getValue(NAME));
-		parsingElement = localName;
-		parsingName = attributes.getValue(NAME);
-		parsingValue = "";
-	}
-
-	public void characters(char[] ch, int start, int length) throws SAXException {
-		parsingValue += new String(ch, start, length).trim();
-//		System.out.println("characters: " + new String(ch, start, length).trim());
-	}
-
-	public void endElement(String uri, String localName, String qName) throws SAXException {
-//		System.out.println("End element: " + localName);
-		if (parsingElement == ID) {
-			parsingId = parsingValue;
-		}
-		if (TITLE.equalsIgnoreCase(parsingName)) {
-//			System.out.println("Parsing title: " + value);
-			result.setTitle(parsingValue);
-		} else if (PUBDATE.equalsIgnoreCase(parsingName)) {
-//			System.out.println("Parsing pubdate: " + value);
-			if (parsingValue.length() >= 4)
-				parsingValue = parsingValue.substring(0, 4);
-			result.setYear(parsingValue);
-		} else if (SOURCE.equalsIgnoreCase(parsingName)) {
-//			System.out.println("Parsing source: " + value);
-			result.setSource(parsingValue);
-		} else if (AUTHOR.equalsIgnoreCase(parsingName)) {
-//			System.out.println("Parsed author: " + parsingValue);
-			result.addAuthor(parsingValue);
-		}
-		parsingElement = "";
-		parsingName = "";
-	}
-
-	static final String ITEM = "Item";
-	static final String ID = "Id";
-	static final String NAME = "Name";
-	static final String TITLE = "Title";
-	static final String PUBDATE = "PubDate";
-	static final String SOURCE = "Source";
-	static final String AUTHOR_LIST = "AuthorList";
-	static final String AUTHOR = "Author";
 
 }

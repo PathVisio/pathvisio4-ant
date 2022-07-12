@@ -19,6 +19,7 @@ package org.pathvisio.gui.handler;
 import java.awt.Component;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -81,8 +82,9 @@ public class DataSourceHandler extends DefaultCellEditor
 		final Set<String> types = new HashSet<String>();
 		// if citation TODO
 		if (objectType == ObjectType.CITATION) {
-			result.add(DataSource.getExistingByFullName("PubMed"));
 			result.add(DataSource.getExistingByFullName("DOI"));
+			result.add(DataSource.getExistingByFullName("ISBN"));
+			result.add(DataSource.getExistingByFullName("PubMed"));
 			return result;
 		}
 		// if evidence TODO
@@ -95,12 +97,29 @@ public class DataSourceHandler extends DefaultCellEditor
 			types.addAll(Arrays.asList(type));
 		}
 		for (DataSource ds : DataSource.getDataSources()) {
-			if ((primary == null || primary == ds.isPrimary()) && (type == null || types.contains(ds.getType()))
+//			System.out.println(ds.getCategories());
+
+			if ((primary == null || primary == ds.isPrimary())
+					&& (type == null || listContainsArrayElement(types, ds.getCategories()))
 					&& (o == null || ds.getOrganism() == null || o == ds.getOrganism())) {
 				result.add(ds);
 			}
 		}
 		return result;
+	}
+
+	/**
+	 * @param set1
+	 * @param array
+	 * @return
+	 */
+	public static boolean listContainsArrayElement(Set<String> set1, String[] array) {
+		if (array == null) {
+			return false;
+		}
+//		System.out.println(array);
+		Set<String> set2 = new HashSet<>(Arrays.asList(array));
+		return Collections.disjoint(set1, set2);
 	}
 
 	public static final Map<String, String[]> DSTYPE_BY_DNTYPE = new HashMap<String, String[]>();
@@ -116,12 +135,12 @@ public class DataSourceHandler extends DefaultCellEditor
 		DSTYPE_BY_DNTYPE.put(DataNodeType.COMPLEX.getName(), null);
 		// concept
 		DSTYPE_BY_DNTYPE.put(DataNodeType.PATHWAY.getName(), new String[] { "pathway" });
-		DSTYPE_BY_DNTYPE.put(DataNodeType.DISEASE.getName(), null);
-		DSTYPE_BY_DNTYPE.put(DataNodeType.PHENOTYPE.getName(), null);
-		DSTYPE_BY_DNTYPE.put(DataNodeType.ALIAS.getName(), null);
-		DSTYPE_BY_DNTYPE.put(DataNodeType.EVENT.getName(), null);
-		DSTYPE_BY_DNTYPE.put(DataNodeType.CELL_NODE.getName(), null);
-		DSTYPE_BY_DNTYPE.put(DataNodeType.ORGAN.getName(), null);
+		DSTYPE_BY_DNTYPE.put(DataNodeType.DISEASE.getName(), new String[] { "disease" });
+		DSTYPE_BY_DNTYPE.put(DataNodeType.PHENOTYPE.getName(), new String[] { "phenotype" });
+		DSTYPE_BY_DNTYPE.put(DataNodeType.ALIAS.getName(), new String[] { "alias" });
+		DSTYPE_BY_DNTYPE.put(DataNodeType.EVENT.getName(), new String[] { "event" });
+		DSTYPE_BY_DNTYPE.put(DataNodeType.CELL_NODE.getName(), new String[] { "cell" });
+		DSTYPE_BY_DNTYPE.put(DataNodeType.ORGAN.getName(), new String[] { "organ" });
 		// TODO
 	}
 
@@ -146,9 +165,9 @@ public class DataSourceHandler extends DefaultCellEditor
 		});
 
 		String[] dsType = null; // null is default: no filtering
-		if (DSTYPE_BY_DNTYPE.containsKey(dnType))
+		if (DSTYPE_BY_DNTYPE.containsKey(dnType)) { // filtering here
 			dsType = DSTYPE_BY_DNTYPE.get(dnType);
-
+		}
 		dataSources.addAll(
 				getFilteredSetAlt(true, dsType, Organism.fromLatinName(pathway.getPathway().getOrganism()), null));
 
