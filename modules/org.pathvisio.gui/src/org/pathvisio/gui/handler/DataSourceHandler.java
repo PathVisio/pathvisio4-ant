@@ -97,8 +97,6 @@ public class DataSourceHandler extends DefaultCellEditor
 			types.addAll(Arrays.asList(type));
 		}
 		for (DataSource ds : DataSource.getDataSources()) {
-//			System.out.println(ds.getCategories());
-
 			if ((primary == null || primary == ds.isPrimary())
 					&& (type == null || listContainsArrayElement(types, ds.getCategories()))
 					&& (o == null || ds.getOrganism() == null || o == ds.getOrganism())) {
@@ -109,17 +107,19 @@ public class DataSourceHandler extends DefaultCellEditor
 	}
 
 	/**
-	 * @param set1
-	 * @param array
+	 * Returns true if the given Set and String Array have at least one element in
+	 * common, false if they are completely disjoint.
+	 * 
+	 * @param set1  the set.
+	 * @param array the array.
 	 * @return
 	 */
 	public static boolean listContainsArrayElement(Set<String> set1, String[] array) {
 		if (array == null) {
 			return false;
 		}
-//		System.out.println(array);
 		Set<String> set2 = new HashSet<>(Arrays.asList(array));
-		return Collections.disjoint(set1, set2);
+		return !Collections.disjoint(set1, set2);
 	}
 
 	public static final Map<String, String[]> DSTYPE_BY_DNTYPE = new HashMap<String, String[]>();
