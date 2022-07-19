@@ -64,7 +64,7 @@ import org.pathvisio.libgpml.model.GPMLFormat;
  * actions before showing the GUI.
  * 
  * @author thomas, anwesha, finterly
- */ 
+ */
 public class GuiMain implements GdbEventListener {
 
 	GuiMain() {
@@ -379,8 +379,8 @@ public class GuiMain implements GdbEventListener {
 		engine.addPathwayModelExporter(new GPMLFormat(GPMLFormat.GPML2013a));
 		engine.addPathwayModelExporter(new RasterImageExporter(ImageExporter.TYPE_PNG));
 		engine.addPathwayModelExporter(new BatikImageExporter(ImageExporter.TYPE_SVG));
-		engine.addPathwayModelExporter(new BatikImageExporter(ImageExporter.TYPE_PDF));
-		engine.addPathwayModelExporter(new DataNodeListExporter(gdbManager));
+//		engine.addPathwayModelExporter(new BatikImageExporter(ImageExporter.TYPE_PDF)); // TODO 
+//		engine.addPathwayModelExporter(new DataNodeListExporter(gdbManager)); // TODO
 		engine.addPathwayModelExporter(new EUGeneExporter());
 	}
 

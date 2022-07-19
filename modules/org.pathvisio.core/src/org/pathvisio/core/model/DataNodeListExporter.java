@@ -38,19 +38,20 @@ import org.pathvisio.libgpml.util.XrefUtils;
 
 /**
  * Exporter that writes a pathway as a list of DataNodes, using their database
- * references
+ * references TODO 
  * 
  * @author thomas
  */
 public class DataNodeListExporter implements PathwayModelExporter {
 	/**
-	 * Use this String as argument in {@link #setResultCode(String)}
-	 * to indicate that the exporter has to keep the original database
-	 * code as used in the pathway
+	 * Use this String as argument in {@link #setResultCode(String)} to indicate
+	 * that the exporter has to keep the original database code as used in the
+	 * pathway
 	 */
 	public static final String DB_ORIGINAL = "original"; // Use the id/code as in database
-	private DataSource resultDs = DataSource.register(DB_ORIGINAL, DB_ORIGINAL).asDataSource(); // workaround by EgonW
+//	private DataSource resultDs = DataSource.register(DB_ORIGINAL, DB_ORIGINAL).asDataSource(); // workaround by EgonW
 //	private DataSource resultDs = DataSource.getExistingBySystemCode(DB_ORIGINAL);
+	private DataSource resultDs = null;
 	private String multiRefSep = ", ";
 
 	/**
@@ -139,7 +140,7 @@ public class DataNodeListExporter implements PathwayModelExporter {
 		printHeaders(out);
 		for (DataNode elm : pathwayModel.getDataNodes()) { // TODO datanodes instead of elm
 			String line = "";
-			String id = XrefUtils.getIdentifier(elm.getXref()); //TODO 
+			String id = XrefUtils.getIdentifier(elm.getXref()); // TODO
 			DataSource ds = ((DataNode) elm).getXref().getDataSource();
 			if (!checkString(id) || ds == null) {
 				continue; // Skip empty id/codes
