@@ -68,8 +68,9 @@ public class ECOQuery extends DefaultHandler {
 			} catch (Throwable ignore) {
 			}
 		}
-		String idQuery = id.replace(":", "_");
-		String term = termToId.get("[" + idQuery + "]"); // TODO format from eco.csv file
+		//remove all non-numeric char from id 
+		id = id.replaceAll("\\D", "");
+		String term = termToId.get("[ECO_" + id + "]"); // TODO format from eco.csv file
 		if (term != null) { // was found, otherwise result is null 
 			result = new ECOResult();
 			result.setId(id);

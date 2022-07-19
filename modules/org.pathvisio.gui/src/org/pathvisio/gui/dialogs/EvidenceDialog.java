@@ -66,7 +66,7 @@ import org.xml.sax.SAXException;
 public class EvidenceDialog extends ReferenceDialog {
 
 	// labels
-	private final static String INSTRUCTION = "Please enter identifier in ECO format (e.g. ECO:0000253)";
+	private final static String INSTRUCTION = "";
 	private final static String QUERY = "Query ECO"; // TODO button
 	private final static String XREF_IDENTIFIER = "Identifier * ";
 	private final static String XREF_DATASOURCE = "Database *";
@@ -249,7 +249,7 @@ public class EvidenceDialog extends ReferenceDialog {
 					if (ecor != null) {
 						String term = ecor.getTerm();
 						// print message
-						JOptionPane.showConfirmDialog(null, "ECO found for identifier.\n\nTerm: " + term, "Message",
+						JOptionPane.showConfirmDialog(null, "ECO found for identifier " + ecor.getId() + ".\n\nTerm: " + term, "Message",
 								JOptionPane.PLAIN_MESSAGE);
 						// set values
 						xrefIdentifier.setText(ecor.getId());
@@ -274,7 +274,7 @@ public class EvidenceDialog extends ReferenceDialog {
 	 */
 	public void ecoQueryFailMessage() {
 		JOptionPane.showConfirmDialog(null,
-				"ECO not found for identifier. Make sure to enter \nidentifier in ECO format (e.g. ECO:0000253)",
+				"ECO not found for identifier.",
 				"Warning", JOptionPane.PLAIN_MESSAGE);
 		Logger.log.error("ECO identifier not found");
 	}

@@ -254,7 +254,7 @@ public class CitationDialog extends ReferenceDialog {
 						String source = dqr.getSource();
 						String year = dqr.getYear();
 						// print message
-						JOptionPane.showConfirmDialog(null, "DOI found for identifier.\n\nTitle: " + title
+						JOptionPane.showConfirmDialog(null, "DOI found for identifier " + dqr.getId() + ".\n\nTitle: " + title
 								+ "\nSource: " + source + "\nYear: " + year, "Message", JOptionPane.PLAIN_MESSAGE);
 						// set values
 						xrefIdentifier.setText(dqr.getId()); 
@@ -299,7 +299,7 @@ public class CitationDialog extends ReferenceDialog {
 						String source = pmr.getSource();
 						String year = pmr.getYear();
 						// print message
-						JOptionPane.showConfirmDialog(null, "PubMed found for identifier.\n\nTitle: " + title
+						JOptionPane.showConfirmDialog(null, "PubMed found for identifier " + pmr.getId() + ".\n\nTitle: " + title
 								+ "\nSource: " + source + "\nYear: " + year, "Message", JOptionPane.PLAIN_MESSAGE);
 						xrefIdentifier.setText(pmr.getId());
 						dsm.setSelectedItem(DataSource.getExistingByFullName("PubMed")); // TODO
