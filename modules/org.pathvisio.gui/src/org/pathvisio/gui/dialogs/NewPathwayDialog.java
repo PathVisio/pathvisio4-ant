@@ -116,7 +116,7 @@ public class NewPathwayDialog extends OkCancelDialog {
 		} else {
 			super.okPressed();
 			swingEngine.getEngine().getActivePathwayModel().getPathway().setTitle(titleField.getText());
-
+			swingEngine.getEngine().getActivePathwayModel().getPathway().setDescription(descriptionArea.getText());
 			String itemSelectedFromDropDown = (String) organismComboBox.getSelectedItem();
 			if (itemSelectedFromDropDown != null)
 				swingEngine.getEngine().getActivePathwayModel().getPathway().setOrganism(itemSelectedFromDropDown);
