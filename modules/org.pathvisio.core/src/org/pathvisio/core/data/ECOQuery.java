@@ -47,8 +47,6 @@ public class ECOQuery extends DefaultHandler {
 	/**
 	 * Execute a query. Don't call this from the UI thread, because this method
 	 * blocks.
-	 * 
-	 * @throws URISyntaxException
 	 */
 	public void execute() throws IOException, SAXException, URISyntaxException {
 		HashMap<String, String> termToId = new HashMap<String, String>();
@@ -70,10 +68,13 @@ public class ECOQuery extends DefaultHandler {
 			} catch (Throwable ignore) {
 			}
 		}
-		String term = termToId.get("[ECO_" + id + "]"); // TODO format depends on the eco.csv file
-		result = new ECOResult();
-		result.setId(id);
-		result.setTerm(term);
+		String idQuery = id.replace(":", "_");
+		String term = termToId.get("[" + idQuery + "]"); // TODO format from eco.csv file
+		if (term != null) { // was found, otherwise result is null 
+			result = new ECOResult();
+			result.setId(id);
+			result.setTerm(term);
+		}
 	}
 
 	/**

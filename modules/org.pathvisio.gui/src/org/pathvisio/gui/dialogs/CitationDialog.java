@@ -257,7 +257,7 @@ public class CitationDialog extends ReferenceDialog {
 						JOptionPane.showConfirmDialog(null, "DOI found for identifier.\n\nTitle: " + title
 								+ "\nSource: " + source + "\nYear: " + year, "Message", JOptionPane.PLAIN_MESSAGE);
 						// set values
-						xrefIdentifier.setText(dqr.getId()); // write the trimmed pmid to the dialog
+						xrefIdentifier.setText(dqr.getId()); 
 						dsm.setSelectedItem(DataSource.getExistingByFullName("DOI")); // TODO
 					}
 				}
@@ -301,7 +301,7 @@ public class CitationDialog extends ReferenceDialog {
 						// print message
 						JOptionPane.showConfirmDialog(null, "PubMed found for identifier.\n\nTitle: " + title
 								+ "\nSource: " + source + "\nYear: " + year, "Message", JOptionPane.PLAIN_MESSAGE);
-						xrefIdentifier.setText(pmr.getId()); // write the trimmed pmid to the dialog
+						xrefIdentifier.setText(pmr.getId());
 						dsm.setSelectedItem(DataSource.getExistingByFullName("PubMed")); // TODO
 					}
 				} catch (FileNotFoundException e) {

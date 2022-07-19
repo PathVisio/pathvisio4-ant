@@ -21,10 +21,9 @@ import java.awt.Component;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.URISyntaxException;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -44,11 +43,8 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.bridgedb.DataSource;
 import org.bridgedb.Xref;
-import org.pathvisio.core.data.DOIQuery;
-import org.pathvisio.core.data.DOIResult;
 import org.pathvisio.core.data.ECOQuery;
 import org.pathvisio.core.data.ECOResult;
-import org.pathvisio.core.data.PubMedResult;
 import org.pathvisio.core.util.ProgressKeeper;
 import org.pathvisio.gui.DataSourceModel;
 import org.pathvisio.gui.ProgressDialog;
@@ -70,8 +66,9 @@ import org.xml.sax.SAXException;
 public class EvidenceDialog extends ReferenceDialog {
 
 	// labels
+	private final static String INSTRUCTION = "Please enter identifier in ECO format (e.g. ECO:0000253)";
 	private final static String QUERY = "Query ECO"; // TODO button
-	private final static String XREF_IDENTIFIER = "Identifier *";
+	private final static String XREF_IDENTIFIER = "Identifier * ";
 	private final static String XREF_DATASOURCE = "Database *";
 	private final static String VALUE = "Term"; // optional
 	private final static String URL_LINK = "URL link"; // optional
@@ -235,7 +232,7 @@ public class EvidenceDialog extends ReferenceDialog {
 	/**
 	 * Query ECO.
 	 * 
-	 * @param id
+	 * @param id the identifier.
 	 */
 	public void queryECO(String id) {
 		final ECOQuery ecoq = new ECOQuery(xrefIdentifier.getText().trim());
@@ -248,24 +245,21 @@ public class EvidenceDialog extends ReferenceDialog {
 				try {
 					ecoq.execute();
 					ECOResult ecor = ecoq.getResult();
+					// result is not null if identifier found
 					if (ecor != null) {
 						String term = ecor.getTerm();
 						// print message
 						JOptionPane.showConfirmDialog(null, "ECO found for identifier.\n\nTerm: " + term, "Message",
 								JOptionPane.PLAIN_MESSAGE);
 						// set values
-						xrefIdentifier.setText(ecor.getId()); // write the trimmed pmid to the dialog
-						valueText.setText(ecor.getTerm()); // write the trimmed pmid to the dialog
-						dsm.setSelectedItem(DataSource.getExistingByFullName("ECO")); // TODO
+						xrefIdentifier.setText(ecor.getId());
+						valueText.setText(ecor.getTerm());
+						dsm.setSelectedItem(DataSource.getByCompactIdentifierPrefix("ECO")); // TODO
+					} else {
+						ecoQueryFailMessage();
 					}
-				}
-				// not found
-				catch (FileNotFoundException e) {
-					JOptionPane.showConfirmDialog(null, "ECO not found for identifier.", "Warning",
-							JOptionPane.PLAIN_MESSAGE);
-					Logger.log.error("ECO identifier not found");
 				} catch (Exception e) {
-					Logger.log.error("ECO identifier not found");
+					ecoQueryFailMessage();
 				}
 				pk.finished();
 				return null;
@@ -273,6 +267,16 @@ public class EvidenceDialog extends ReferenceDialog {
 		};
 		sw.execute();
 		d.setVisible(true);
+	}
+
+	/**
+	 * Message dialog when query fails to find entered ECO identifier.
+	 */
+	public void ecoQueryFailMessage() {
+		JOptionPane.showConfirmDialog(null,
+				"ECO not found for identifier. Make sure to enter \nidentifier in ECO format (e.g. ECO:0000253)",
+				"Warning", JOptionPane.PLAIN_MESSAGE);
+		Logger.log.error("ECO identifier not found");
 	}
 
 	/**
@@ -294,8 +298,19 @@ public class EvidenceDialog extends ReferenceDialog {
 	 * @return
 	 */
 	protected Component createDialogPane() {
+
+		JPanel overall = new JPanel();
+		overall.setLayout(new GridBagLayout());
 		JPanel contents = new JPanel();
-		contents.setLayout(new GridBagLayout());
+		GridBagConstraints pc = new GridBagConstraints();
+		pc.fill = GridBagConstraints.BOTH;
+		pc.gridx = 0;
+		pc.weightx = 1;
+//		pc.weighty = 1;
+		pc.insets = new Insets(2, 2, 2, 2);
+		pc.gridy = GridBagConstraints.RELATIVE;
+		overall.add(new JLabel(INSTRUCTION));
+		overall.add(contents, pc);
 
 		JLabel lblXrefIdentifier = new JLabel(XREF_IDENTIFIER);
 		JLabel lblXrefDataSource = new JLabel(XREF_DATASOURCE);
@@ -339,6 +354,7 @@ public class EvidenceDialog extends ReferenceDialog {
 		query.addActionListener(this);
 		query.setToolTipText("Query publication information from PubMed");
 
+		contents.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		c.ipadx = c.ipady = 5;
 		c.anchor = GridBagConstraints.FIRST_LINE_START;
@@ -362,6 +378,6 @@ public class EvidenceDialog extends ReferenceDialog {
 		c.fill = GridBagConstraints.NONE;
 		contents.add(query);
 
-		return contents;
+		return overall;
 	}
 }
