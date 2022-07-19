@@ -70,10 +70,10 @@ public class CitationDialog extends ReferenceDialog {
 
 	// labels
 	private final static String QUERY = "Query/Validate"; // button
-	private final static String XREF_IDENTIFIER = "Identifier *";
-	private final static String XREF_DATASOURCE = "Database *";
+	private final static String XREF_IDENTIFIER = "Identifier ";
+	private final static String XREF_DATASOURCE = "Database ";
 	private final static String INSTRUCTION = "Database:Id And/Or URL link required ";
-	private final static String URL_LINK = "URL link*";
+	private final static String URL_LINK = "URL link";
 
 	// fields
 	private JTextField xrefIdentifier;
