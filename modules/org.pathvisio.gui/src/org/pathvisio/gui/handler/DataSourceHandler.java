@@ -130,17 +130,17 @@ public class DataSourceHandler extends DefaultCellEditor
 		DSTYPE_BY_DNTYPE.put(DataNodeType.GENEPRODUCT.getName(), new String[] { "gene", "protein" });
 		DSTYPE_BY_DNTYPE.put(DataNodeType.METABOLITE.getName(), new String[] { "metabolite" });
 		DSTYPE_BY_DNTYPE.put(DataNodeType.PROTEIN.getName(), new String[] { "gene", "protein" });
-		DSTYPE_BY_DNTYPE.put(DataNodeType.DNA.getName(), new String[] { "gene", "protein" });
+		DSTYPE_BY_DNTYPE.put(DataNodeType.DNA.getName(), new String[] { "gene" });
 		DSTYPE_BY_DNTYPE.put(DataNodeType.RNA.getName(), new String[] { "gene", "protein" });
-		DSTYPE_BY_DNTYPE.put(DataNodeType.COMPLEX.getName(), null);
+		DSTYPE_BY_DNTYPE.put(DataNodeType.COMPLEX.getName(), new String[] { "complex" });
 		// concept
 		DSTYPE_BY_DNTYPE.put(DataNodeType.PATHWAY.getName(), new String[] { "pathway" });
 		DSTYPE_BY_DNTYPE.put(DataNodeType.DISEASE.getName(), new String[] { "disease" });
-		DSTYPE_BY_DNTYPE.put(DataNodeType.PHENOTYPE.getName(), new String[] { "phenotype" });
+		DSTYPE_BY_DNTYPE.put(DataNodeType.PHENOTYPE.getName(), new String[] { "phenotype", "ontology" });
 		DSTYPE_BY_DNTYPE.put(DataNodeType.ALIAS.getName(), new String[] { "alias" });
 		DSTYPE_BY_DNTYPE.put(DataNodeType.EVENT.getName(), new String[] { "event" });
-		DSTYPE_BY_DNTYPE.put(DataNodeType.CELL_NODE.getName(), new String[] { "cell" });
-		DSTYPE_BY_DNTYPE.put(DataNodeType.ORGAN.getName(), new String[] { "organ" });
+		DSTYPE_BY_DNTYPE.put(DataNodeType.CELL_NODE.getName(), new String[] { "cell", "ontology" });
+		DSTYPE_BY_DNTYPE.put(DataNodeType.ORGAN.getName(), new String[] { "organ", "ontology" });
 		// TODO
 	}
 
