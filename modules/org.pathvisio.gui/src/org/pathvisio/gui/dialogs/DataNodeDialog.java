@@ -115,7 +115,7 @@ public class DataNodeDialog extends PathwayElementDialog {
 		curDlg = this;
 		getRootPane().setDefaultButton(null);
 		setButton.requestFocus();
-		setPreferredSize(new Dimension(320, 360)); // UI Design
+		setPreferredSize(new Dimension(340, 380)); // UI Design
 	}
 
 	// ================================================================================

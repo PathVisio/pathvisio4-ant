@@ -96,7 +96,7 @@ public class InteractionDialog extends PathwayElementDialog implements ItemListe
 		super(swingEngine, e, readonly, frame, "Interaction properties", locationComp);
 		getRootPane().setDefaultButton(null);
 		setButton.requestFocus();
-		setPreferredSize(new Dimension(320, 300)); // UI Design
+		setPreferredSize(new Dimension(340, 300)); // UI Design
 	}
 
 	// ================================================================================
