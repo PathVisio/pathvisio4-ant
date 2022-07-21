@@ -847,12 +847,46 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 	/**
 	 * Group actions.
 	 * 
-	 * @author unknown
+	 * @author unknown, Finterly
 	 */
 	private class GroupAction extends GroupActionBase {
 		public GroupAction(GroupType type) {
-			super(type.getName(), "Break group", "Group selected elements", "Ungroup selected group", type);
+			super(type.getName(), "Break group", getGroupTt(type), "Ungroup selected group", type);
 		}
+	}
+
+	/**
+	 * Returns the hover description for different Group Types when creating a group
+	 * with GroupAction.
+	 * 
+	 * @param type the group type.
+	 * @return label the hover description.
+	 */
+	private static String getGroupTt(GroupType type) {
+		String label = null;
+		switch (type.getName()) {
+		case "Group":
+			label = "Group related elements (default)";
+			break;
+		case "Complex":
+			label = "Group proteins forming a protein complex";
+			break;
+		case "Pathway":
+			label = "Group elements of a pathway ";
+			break;
+		case "Analog":
+			label = "Group genes or metabolites with similar function";
+			break;
+		case "Paralog":
+			label = "Group related genes in the same species";
+			break;
+		case "Transparent":
+			label = "Group related elements (transparent style)";
+			break;
+		default:
+			// nothing
+		}
+		return label;
 	}
 
 	/**
@@ -865,12 +899,11 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 		private GroupType type;
 
 		/**
-		 * @param groupLbl
-		 * @param ungroupLbl
-		 * @param groupTt
-		 * @param ungroupTt
-		 * @param type
-		 * @param keyStroke
+		 * @param groupLbl   the label for group type.
+		 * @param ungroupLbl the label for ungrouping.
+		 * @param groupTt    the hover description for grouping .
+		 * @param ungroupTt  the hover description for ungrouping.
+		 * @param type       the group type.
 		 */
 		public GroupActionBase(String groupLbl, String ungroupLbl, String groupTt, String ungroupTt, GroupType type) {
 			super();
