@@ -168,7 +168,6 @@
 			<packageset dir="${src.dir}/org.pathvisio.pluginmanager/src" />
 			<packageset dir="${src.dir}/org.pathvisio.gui/src" />
 			<packageset dir="${src.dir}/org.pathvisio.desktop/src" />
-			<packageset dir="${src.dir}/org.wikipathways.applet/src" />
 			<sourcepath>
 				<pathelement location="${src.dir}/org.pathvisio.libgpml/src" />
 				<pathelement location="${src.dir}/org.pathvisio.core/src" />
@@ -264,7 +263,7 @@
 				<filter token="PV_APP_VERSION" value="${pathvisio.version}" />
 				<filter token="PV_APP_SHORT_VERSION" value="${pathvisio.version}" />
 				<filter token="PV_APP_ICON" value="${app.icon}" />
-				<filter token="PV_APP_COPYRIGHT" value="2006-${year} BiGCaT Bioinformatics" />
+				<filter token="PV_APP_COPYRIGHT" value="2022-${year} BiGCaT Bioinformatics" />
 			</filterset>
 		</copy>
 		<zip destfile="${release.dir}/${app.name}.app.zip">
