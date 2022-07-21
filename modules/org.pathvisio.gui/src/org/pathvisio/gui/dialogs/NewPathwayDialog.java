@@ -88,23 +88,24 @@ public class NewPathwayDialog extends OkCancelDialog {
 		descriptionArea.setFont(new JLabel().getFont());// UI Design default font
 
 		GridBagConstraints c = new GridBagConstraints();
+		c.insets = new Insets(0, 5, 0, 5); // top padding
 		c.anchor = GridBagConstraints.FIRST_LINE_START;
 		c.weightx = 0;
 		c.gridx = 0;
 		c.gridy = GridBagConstraints.RELATIVE;
 		fieldPanel.add(titleFieldLabel, c);
 		fieldPanel.add(orgComboLabel, c);
-		c.insets = new Insets(15, 0, 0, 0); // top padding
+		c.insets = new Insets(15, 5, 0, 5); // top padding
 		fieldPanel.add(descriptionLabel, c);
 
-		c.insets = new Insets(0, 0, 0, 0);
+		c.insets = new Insets(0, 5, 0, 5);
 		c.gridx = 1;
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.weightx = 1;
 		fieldPanel.add(titleField, c);
 		fieldPanel.add(organismComboBox, c);
 		c.ipady = 40; // taller text area for description
-		c.insets = new Insets(15, 0, 0, 0); // top padding
+		c.insets = new Insets(15, 5, 0, 5); // top padding
 		fieldPanel.add(new JScrollPane(descriptionArea), c);
 
 	}

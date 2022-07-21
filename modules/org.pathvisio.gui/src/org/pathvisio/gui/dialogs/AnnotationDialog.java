@@ -88,7 +88,7 @@ public class AnnotationDialog extends ReferenceDialog {
 		this.annotatable = annotatable;
 		this.annotationRef = annotationRef;
 		setDialogComponent(createDialogPane());
-		setSize(300, 250);// UI Design
+//		setSize(300, 250);// UI Design
 		refresh();
 	}
 

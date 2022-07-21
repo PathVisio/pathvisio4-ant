@@ -20,6 +20,7 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Frame;
 import java.awt.GridBagLayout;
@@ -58,6 +59,7 @@ public class ShapeDialog extends PathwayElementDialog {
 			Component locationComp) {
 		super(swingEngine, e, readonly, frame, "Shape properties", locationComp);
 		text.requestFocus();
+		setPreferredSize(new Dimension(370, 300)); // UI Design
 	}
 
 	/**

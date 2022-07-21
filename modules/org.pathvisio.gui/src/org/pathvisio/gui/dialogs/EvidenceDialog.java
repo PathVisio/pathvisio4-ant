@@ -100,7 +100,7 @@ public class EvidenceDialog extends ReferenceDialog {
 		this.evidenceable = evidenceable;
 		this.evidenceRef = evidenceRef;
 		setDialogComponent(createDialogPane());
-		setSize(300, 250);// UI Design
+//		setSize(300, 250);// UI Design
 		refresh();
 	}
 
@@ -356,6 +356,7 @@ public class EvidenceDialog extends ReferenceDialog {
 
 		contents.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
+		c.insets = new Insets(0, 5, 0, 5);
 		c.ipadx = c.ipady = 5;
 		c.anchor = GridBagConstraints.FIRST_LINE_START;
 		c.gridx = 0;

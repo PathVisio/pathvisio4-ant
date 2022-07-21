@@ -45,6 +45,7 @@ public abstract class ReferenceDialog extends OkCancelDialog {
 	// ================================================================================
 	public ReferenceDialog(Frame frame, String title, Component locationComp, boolean modal, boolean cancellable) {
 		super(frame, title, locationComp, modal, cancellable);
+		setSize(300, 250);// UI Design
 	}
 
 	// ================================================================================

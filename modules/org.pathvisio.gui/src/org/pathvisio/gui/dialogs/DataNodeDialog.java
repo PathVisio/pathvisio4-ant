@@ -17,8 +17,6 @@
 package org.pathvisio.gui.dialogs;
 
 import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -59,11 +57,7 @@ import org.pathvisio.libgpml.debug.Logger;
 import org.pathvisio.libgpml.model.type.DataNodeType;
 import org.pathvisio.libgpml.util.XrefUtils;
 import org.pathvisio.libgpml.model.DataNode;
-import org.pathvisio.libgpml.model.Xrefable;
-import org.pathvisio.libgpml.model.PathwayElement.CitationRef;
 import org.pathvisio.core.util.ProgressKeeper;
-import org.pathvisio.core.view.model.UndoAction;
-import org.pathvisio.core.view.model.VPathwayModel;
 import org.pathvisio.gui.DataSourceModel;
 import org.pathvisio.gui.ProgressDialog;
 import org.pathvisio.gui.SwingEngine;
@@ -115,7 +109,7 @@ public class DataNodeDialog extends PathwayElementDialog {
 		curDlg = this;
 		getRootPane().setDefaultButton(null);
 		setButton.requestFocus();
-		setPreferredSize(new Dimension(340, 380)); // UI Design
+//		setPreferredSize(new Dimension(370, 360)); // UI Design
 	}
 
 	// ================================================================================

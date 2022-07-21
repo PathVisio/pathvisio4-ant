@@ -17,13 +17,11 @@
 package org.pathvisio.gui.dialogs;
 
 import java.awt.Component;
-import java.awt.Font;
+import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -49,13 +47,9 @@ import org.bridgedb.IDMapperStack;
 import org.bridgedb.Xref;
 import org.bridgedb.bio.Organism;
 import org.pathvisio.libgpml.model.Pathway;
-import org.pathvisio.libgpml.model.type.ArrowHeadType;
-import org.pathvisio.libgpml.model.type.DataNodeType;
-import org.pathvisio.libgpml.model.type.ObjectType;
 import org.pathvisio.libgpml.util.XrefUtils;
 import org.pathvisio.gui.DataSourceModel;
 import org.pathvisio.gui.SwingEngine;
-import org.pathvisio.gui.completer.CompleterQueryTextArea;
 import org.pathvisio.gui.completer.CompleterQueryTextField;
 import org.pathvisio.gui.completer.OptionProvider;
 import org.pathvisio.gui.util.PermissiveComboBox;
@@ -91,6 +85,8 @@ public class PathwayDialog extends PathwayElementDialog {
 		super(swingEngine, e, readonly, frame, "Pathway properties", locationComp);
 		getRootPane().setDefaultButton(null);
 		setButton.requestFocus();
+		setPreferredSize(new Dimension(370, 330)); // UI Design
+		pack();
 	}
 
 	// ================================================================================

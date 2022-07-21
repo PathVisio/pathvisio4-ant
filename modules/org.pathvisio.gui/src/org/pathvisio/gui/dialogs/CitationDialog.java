@@ -73,7 +73,7 @@ public class CitationDialog extends ReferenceDialog {
 	private final static String XREF_IDENTIFIER = "Identifier ";
 	private final static String XREF_DATASOURCE = "Database ";
 	private final static String INSTRUCTION = "Database:Id And/Or URL link required ";
-	private final static String URL_LINK = "URL link";
+	private final static String URL_LINK = "URL link ";
 
 	// fields
 	private JTextField xrefIdentifier;
@@ -101,7 +101,7 @@ public class CitationDialog extends ReferenceDialog {
 		this.citable = citable;
 		this.citationRef = citationRef;
 		setDialogComponent(createDialogPane());
-		setSize(300, 250);// UI Design
+//		setSize(300, 250);// UI Design
 		refresh();
 	}
 
@@ -396,6 +396,7 @@ public class CitationDialog extends ReferenceDialog {
 
 		xrefPanel.setLayout(new GridBagLayout());
 		GridBagConstraints xc = new GridBagConstraints();
+		xc.insets = new Insets(0, 5, 0, 5);
 		xc.anchor = GridBagConstraints.FIRST_LINE_START;
 		xc.gridx = 0;
 		xc.gridy = GridBagConstraints.RELATIVE;
@@ -419,6 +420,7 @@ public class CitationDialog extends ReferenceDialog {
 
 		urlPanel.setLayout(new GridBagLayout());
 		GridBagConstraints uc = new GridBagConstraints();
+		uc.insets = new Insets(0, 5, 0, 5);
 		uc.anchor = GridBagConstraints.FIRST_LINE_START;
 		uc.gridx = 0;
 		uc.gridy = GridBagConstraints.RELATIVE;
