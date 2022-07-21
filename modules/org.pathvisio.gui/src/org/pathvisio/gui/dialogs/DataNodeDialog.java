@@ -249,11 +249,13 @@ public class DataNodeDialog extends PathwayElementDialog {
 	 */
 	private void applyAutoFill(XrefWithSymbol ref) {
 		String sym = ref.getSymbol();
-		if (sym == null || sym.equals(""))
+		if (sym == null || sym.equals("")) {
 			sym = ref.getId();
+		}
 		symText.setText(sym);
+		dsm.setSelectedItem(ref.getDataSource()); // TODO must set datasource first...
 		idText.setText(ref.getId());
-		String type = ref.getDataSource().getType();
+		String type = ref.getDataSource().getType(); //TODO update to categories? 
 		switch (type) {
 		// default
 		case "undefined":
@@ -297,19 +299,9 @@ public class DataNodeDialog extends PathwayElementDialog {
 		case "organ":
 			typeCombo.setSelectedItem(DataNodeType.ORGAN);
 			break;
-
 		default:
 			// do nothing
 		}
-//		else if ("gene".equals(type))
-//			typeCombo.setSelectedItem(DataNodeType.CELL); TODO 
-//		else if ("gene".equals(type))
-//			typeCombo.setSelectedItem(DataNodeType.ORGAN);
-//		else if ("gene".equals(type))
-//			typeCombo.setSelectedItem(DataNodeType.GENEPRODUCT);
-
-		dsm.setSelectedItem(ref.getDataSource());
-
 	}
 
 	// ================================================================================
@@ -543,7 +535,7 @@ public class DataNodeDialog extends PathwayElementDialog {
 				refresh();
 			}
 		});
-		
+
 		// ========================================
 		// Etc
 		// ========================================
