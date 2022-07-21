@@ -20,6 +20,7 @@ import java.awt.Color;
 import java.awt.Shape;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
@@ -406,6 +407,7 @@ public class ActionDropDownButton extends JButton implements ActionListener {
 		 */
 		protected void updateButton(String text, Shape shape, Color color, BasicStroke stroke) {
 			this.setText(text);
+			this.setFont(new Font("Tahoma", Font.PLAIN, 9)); // UI Design
 			this.imageShape = shape;
 			this.imageColor = color;
 			this.imageStroke = stroke;

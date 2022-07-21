@@ -46,6 +46,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
+import javax.swing.SwingConstants;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
@@ -333,8 +334,8 @@ public class MainPanel extends JPanel implements VPathwayModelListener, Applicat
 		tb.addSeparator();
 
 		// zoom drop-down
-		JLabel zoomLabel = new JLabel("Zoom:", JLabel.LEFT);
-		zoomLabel.setVerticalAlignment(JLabel.CENTER);
+		JLabel zoomLabel = new JLabel("Zoom:", JLabel.RIGHT);
+		zoomLabel.setPreferredSize(new Dimension(50, 20));
 		addToToolbar(zoomLabel);
 		zoomCombo = new JComboBox(actions.zoomActions);
 		zoomCombo.setMaximumSize(zoomCombo.getPreferredSize());
