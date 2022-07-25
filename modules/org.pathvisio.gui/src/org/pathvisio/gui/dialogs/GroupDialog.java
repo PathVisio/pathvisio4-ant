@@ -96,7 +96,7 @@ public class GroupDialog extends PathwayElementDialog implements ItemListener {
 		super(swingEngine, e, readonly, frame, "Group properties", locationComp);
 		getRootPane().setDefaultButton(null);
 		setButton.requestFocus();
-		setPreferredSize(new Dimension(370, 300)); // UI Design
+		setPreferredSize(new Dimension(340, 300)); // UI Design
 	}
 
 	// ================================================================================

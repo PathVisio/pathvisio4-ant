@@ -59,7 +59,7 @@ public class ShapeDialog extends PathwayElementDialog {
 			Component locationComp) {
 		super(swingEngine, e, readonly, frame, "Shape properties", locationComp);
 		text.requestFocus();
-		setPreferredSize(new Dimension(370, 300)); // UI Design
+		setPreferredSize(new Dimension(340, 300)); // UI Design
 	}
 
 	/**

@@ -139,7 +139,7 @@ public class CitationDialog extends ReferenceDialog {
 			setText(id, xrefIdentifier);
 			DataSource ds = XrefUtils.getDataSource(citationRef.getCitation().getXref());
 			dsm.setSelectedItem(ds);
-			dsm.setObjectTypeFilter(ObjectType.CITATION);
+			dsm.setCitationFilter(true);
 			// sets urlLink
 			setText(citationRef.getCitation().getUrlLink(), urlLinkText);
 		}
@@ -388,7 +388,7 @@ public class CitationDialog extends ReferenceDialog {
 		xrefIdentifier = new JTextField();
 		dsm = new DataSourceModel();
 		dsm.setPrimaryFilter(true);
-		dsm.setObjectTypeFilter(ObjectType.CITATION);
+		dsm.setCitationFilter(true);
 		dbCombo = new PermissiveComboBox(dsm);
 		JButton query = new JButton(QUERY);
 		query.addActionListener(this);

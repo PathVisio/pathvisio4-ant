@@ -80,19 +80,13 @@ public class DataSourceHandler extends DefaultCellEditor
 	public static Set<DataSource> getFilteredSetAlt(Boolean primary, String[] type, Object o, ObjectType objectType) {
 		final Set<DataSource> result = new HashSet<DataSource>();
 		final Set<String> types = new HashSet<String>();
-		// if citation TODO
-		if (objectType == ObjectType.CITATION) {
-			result.add(DataSource.getExistingByFullName("DOI"));
-			result.add(DataSource.getExistingByFullName("ISBN"));
-			result.add(DataSource.getExistingByFullName("PubMed"));
-			return result;
-		}
 		// if evidence TODO
 		if (objectType == ObjectType.EVIDENCE) {
 			DataSource eco = DataSource.register("ECO", "ECO").compactIdentifierPrefix("ECO").asDataSource(); // TODO
 			result.add(eco);
 			return result;
 		}
+		// if annotation TODO 
 		if (type != null) {
 			types.addAll(Arrays.asList(type));
 		}

@@ -17,6 +17,7 @@
 package org.pathvisio.gui.dialogs;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.URL;
@@ -55,13 +56,14 @@ public class AboutDlg {
 		aboutDlg.setBackground(Color.white);
 		FormLayout layout = new FormLayout(" 4dlu, left:230dlu:grow, 4dlu",
 				"4dlu, pref, 4dlu, 240dlu:grow, 4dlu, pref, 4dlu");
-
 		JEditorPane label = new JEditorPane();
+		label.putClientProperty(JEditorPane.HONOR_DISPLAY_PROPERTIES, Boolean.TRUE);// UI Design
+		label.setFont(new Font("Tahoma", Font.PLAIN, 11)); // UI Design
 		label.setBackground(Color.white);
 		label.setContentType("text/html");
 		label.setEditable(false);
 		label.setText(swingEngine.getEngine().getApplicationName() + "<br><br><hr><br>"
-				// Core Developers
+		// Core Developers
 				+ "<html><b>Core developers</b><br>"
 				+ "Martina Kutmon, Finterly Hu, Nuno Nunes, Alexander Pico, Egon Willighagen, Denise Slenter, Kristina Hanspers<br><br><hr><br>"
 				// Former Developers

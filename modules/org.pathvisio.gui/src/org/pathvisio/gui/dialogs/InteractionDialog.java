@@ -96,7 +96,7 @@ public class InteractionDialog extends PathwayElementDialog implements ItemListe
 		super(swingEngine, e, readonly, frame, "Interaction properties", locationComp);
 		getRootPane().setDefaultButton(null);
 		setButton.requestFocus();
-		setPreferredSize(new Dimension(370, 300)); // UI Design
+		setPreferredSize(new Dimension(340, 300)); // UI Design
 	}
 
 	// ================================================================================
@@ -128,7 +128,8 @@ public class InteractionDialog extends PathwayElementDialog implements ItemListe
 		startTypeCombo.setSelectedItem(ArrowHeadType.fromName(startType));
 		String endType = getInput().getEndArrowHeadType().toString();
 		endTypeCombo.setSelectedItem(ArrowHeadType.fromName(endType));
-		dsm.setObjectTypeFilter(ObjectType.INTERACTION);
+		dsm.setInteractionFilter(true);
+//		dsm.setObjectTypeFilter(ObjectType.INTERACTION);
 		pack();
 	}
 

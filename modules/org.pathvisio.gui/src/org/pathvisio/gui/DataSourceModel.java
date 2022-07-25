@@ -149,9 +149,23 @@ public class DataSourceModel implements ComboBoxModel {
 		initItems();
 	}
 
-	public void setMetaboliteFilter(Boolean aMetabolite) {
-		type = new String[] { "metabolite" };
-		initItems();
+//	public void setMetaboliteFilter(Boolean aMetabolite) {
+//		type = new String[] { "metabolite" };
+//		initItems();
+//	}
+
+	public void setInteractionFilter(Boolean aInteraction) {
+		if (aInteraction) {
+			type = new String[] { "interaction" };
+			initItems();
+		}
+	}
+
+	public void setCitationFilter(Boolean aCitation) {
+		if (aCitation) {
+			type = new String[] { "publication" };
+			initItems();
+		}
 	}
 
 	public void setPrimaryFilter(Boolean aPrimary) {
