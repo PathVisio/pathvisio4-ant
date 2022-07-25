@@ -67,7 +67,7 @@ public class EvidenceDialog extends ReferenceDialog {
 
 	// labels
 	private final static String INSTRUCTION = "";
-	private final static String QUERY = "Query ECO"; // TODO button
+	private final static String QUERY = "Query/Validate"; // TODO button
 	private final static String XREF_IDENTIFIER = "Identifier * ";
 	private final static String XREF_DATASOURCE = "Database *";
 	private final static String VALUE = "Term"; // optional
