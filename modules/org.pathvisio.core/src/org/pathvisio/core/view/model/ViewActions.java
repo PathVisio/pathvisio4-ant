@@ -869,7 +869,7 @@ public class ViewActions implements VPathwayModelListener, SelectionListener {
 			label = "Group related elements (default)";
 			break;
 		case "Complex":
-			label = "Group proteins forming a protein complex";
+			label = "Group proteins and cofactors forming a protein complex";
 			break;
 		case "Pathway":
 			label = "Group elements of a pathway ";
