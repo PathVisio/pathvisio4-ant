@@ -87,7 +87,7 @@ public class ShapeType implements IShape {
 	public static final ShapeType ENDOPLASMIC_RETICULUM = new ShapeType("EndoplasmicReticulum",
 			ShapeCatalog.getPluggableShape(Internal.ENDOPLASMIC_RETICULUM));
 	public static final ShapeType GOLGI_APPARATUS = new ShapeType("GolgiApparatus",
-			ShapeCatalog.getPluggableShape(Internal.ENDOPLASMIC_RETICULUM));
+			ShapeCatalog.getPluggableShape(Internal.GOLGI_APPARATUS));
 
 	// ========================================
 	// Cellular components (basic shape)
