@@ -2457,7 +2457,7 @@ public class VPathwayModel implements PathwayModelListener {
 						if (newerAliasRef != null) {
 							((DataNode) newerElement).setAliasRef(newerAliasRef);
 							JOptionPane.showConfirmDialog(null,
-									"Copy of alias data node linked to Group " + newerElement.getElementId() + ".",
+									"Copy of alias data node linked to Group " + newerAliasRef.getElementId() + ".",
 									"Warning", JOptionPane.PLAIN_MESSAGE);
 						}
 					}
