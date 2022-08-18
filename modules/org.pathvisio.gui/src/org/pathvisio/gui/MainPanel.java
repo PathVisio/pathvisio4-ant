@@ -200,8 +200,7 @@ public class MainPanel extends JPanel implements VPathwayModelListener, Applicat
 		int numItemsPerRow = 10;
 		objectsPane.addButtons(actions.newMolecularDatanodeActions, "Molecular DataNodes", numItemsPerRow);
 		objectsPane.addButtons(actions.newConceptDatanodeActions, "Concept DataNodes", numItemsPerRow);
-		objectsPane.addButtons(actions.newBasicInteractionActions, "Basic Interactions", numItemsPerRow);
-		objectsPane.addButtons(actions.newInteractionActions, "Interactions (Recommended)", numItemsPerRow);
+		objectsPane.addButtons(actions.newInteractionActions, "Interactions", numItemsPerRow);
 		// objectsPane.addButtons(actions.newRLInteractionActions, "Receptor/ligand",
 		// numItemsPerRow);
 		// objectsPane.addButtons(actions.newAnnotationActions, "Annotations",
@@ -357,8 +356,7 @@ public class MainPanel extends JPanel implements VPathwayModelListener, Applicat
 		// define the drop-down menu for interactions
 		GraphicsChoiceButton lineButton = new GraphicsChoiceButton();
 		lineButton.setToolTipText("Select an interaction to draw");
-		lineButton.addButtons("Basic Interactions", actions.newBasicInteractionActions);
-		lineButton.addButtons("Interactions (Recommended)", actions.newInteractionActions);
+		lineButton.addButtons("Interactions", actions.newInteractionActions);
 		addToToolbar(lineButton, TB_GROUP_SHOW_IF_EDITMODE);
 		tb.addSeparator(new Dimension(2, 0));
 

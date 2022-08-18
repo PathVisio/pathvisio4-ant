@@ -120,7 +120,6 @@ public class CommonActions implements ApplicationEventListener {
 	// Objects Side Panel
 	public final Action[] newMolecularDatanodeActions;
 	public final Action[] newConceptDatanodeActions;
-	public final Action[] newBasicInteractionActions;
 	public final Action[] newInteractionActions;
 //	public final Action[] newRLInteractionActions; // TODO
 	public final Action[] newLabelActions;
@@ -246,19 +245,12 @@ public class CommonActions implements ApplicationEventListener {
 //		};
 
 		// ================================================================================
-		// New Basic Interaction Panel Actions
-		// ================================================================================
-		newBasicInteractionActions = new Action[] {
-				new NewElementAction(e,
-						new DefaultTemplates.InteractionTemplate("Undirected", LineStyleType.SOLID,
-								ArrowHeadType.UNDIRECTED, ArrowHeadType.UNDIRECTED, ConnectorType.STRAIGHT)),
-				new NewElementAction(e, new DefaultTemplates.InteractionTemplate("Directed", LineStyleType.SOLID,
-						ArrowHeadType.UNDIRECTED, ArrowHeadType.DIRECTED, ConnectorType.STRAIGHT)), };
-
-		// ================================================================================
 		// New Interaction Panel Actions
 		// ================================================================================
 		newInteractionActions = new Action[] {
+				new NewElementAction(e,
+						new DefaultTemplates.InteractionTemplate("Undirected", LineStyleType.SOLID,
+								ArrowHeadType.UNDIRECTED, ArrowHeadType.UNDIRECTED, ConnectorType.STRAIGHT)),
 				new NewElementAction(e,
 						new DefaultTemplates.InteractionTemplate("Conversion", LineStyleType.SOLID,
 								ArrowHeadType.UNDIRECTED, ArrowHeadType.CONVERSION, ConnectorType.STRAIGHT)),
@@ -280,7 +272,9 @@ public class CommonActions implements ApplicationEventListener {
 				new NewElementAction(e,
 						new DefaultTemplates.InteractionTemplate("Transcription-translation", LineStyleType.SOLID,
 								ArrowHeadType.UNDIRECTED, ArrowHeadType.TRANSCRIPTION_TRANSLATION,
-								ConnectorType.STRAIGHT)), };
+								ConnectorType.STRAIGHT)),
+				new NewElementAction(e, new DefaultTemplates.InteractionTemplate("Directed", LineStyleType.SOLID,
+						ArrowHeadType.UNDIRECTED, ArrowHeadType.DIRECTED, ConnectorType.STRAIGHT)), };
 
 		// ================================================================================
 		// New Cellular Compartment Shape Actions
