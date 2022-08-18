@@ -126,16 +126,6 @@ public class ShapeType implements IShape {
 	public static final ShapeType DEGRADATION = new ShapeType("Degradation",
 			ShapeCatalog.getPluggableShape(Internal.DEGRADATION));
 
-	// ========================================
-	// Rarely used/Deprecated TODO
-	// ========================================
-	// Cellular components (rarely used) TODO
-	public static final ShapeType NUCLEOLUS = new ShapeType("Nucleolus", null);
-	public static final ShapeType VACUOLE = new ShapeType("Vacuole", null);
-	public static final ShapeType LYSOSOME = new ShapeType("Lysosome", null);
-	public static final ShapeType CYTOSOL_REGION = new ShapeType("CytosolRegion", null);
-	public static final ShapeType MEMBRANE_REGION = new ShapeType("MembraneRegion", null);
-
 	// ================================================================================
 	// Properties
 	// ================================================================================

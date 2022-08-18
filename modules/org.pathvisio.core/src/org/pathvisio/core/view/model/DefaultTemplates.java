@@ -341,8 +341,7 @@ public abstract class DefaultTemplates {
 			IShape type = e.getShapeType();
 			if (shapeType == ShapeType.CELL || type == ShapeType.NUCLEUS || type == ShapeType.ORGANELLE) {
 				e.setBorderStyle(LineStyleType.DOUBLE);
-			} else if (type == ShapeType.CYTOSOL_REGION || type == ShapeType.EXTRACELLULAR_REGION
-					|| type == ShapeType.MEMBRANE_REGION) {
+			} else if (type == ShapeType.EXTRACELLULAR_REGION) {
 				e.setBorderStyle(LineStyleType.DASHED); // TODO membrane/cytosol never implemented?
 			} else {
 				e.setBorderStyle(LineStyleType.SOLID);
