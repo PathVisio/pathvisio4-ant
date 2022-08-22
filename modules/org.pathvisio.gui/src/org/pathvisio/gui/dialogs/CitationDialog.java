@@ -212,8 +212,9 @@ public class CitationDialog extends ReferenceDialog {
 			case "PubMed":
 				queryPubMed(id);
 				break;
+			case "ISSN":
 			case "ISBN":
-				JOptionPane.showConfirmDialog(null, "Query/validate not yet available for ISBN.", "Message",
+				JOptionPane.showConfirmDialog(null, "Query/validate not yet available for " + dsName + ".", "Message",
 						JOptionPane.PLAIN_MESSAGE); // ISBN TODO
 				break;
 			default:
@@ -254,10 +255,13 @@ public class CitationDialog extends ReferenceDialog {
 						String source = dqr.getSource();
 						String year = dqr.getYear();
 						// print message
-						JOptionPane.showConfirmDialog(null, "DOI found for identifier " + dqr.getId() + ".\n\nTitle: " + title
-								+ "\nSource: " + source + "\nYear: " + year, "Message", JOptionPane.PLAIN_MESSAGE);
+						JOptionPane
+								.showConfirmDialog(null,
+										"DOI found for identifier " + dqr.getId() + ".\n\nTitle: " + title
+												+ "\nSource: " + source + "\nYear: " + year,
+										"Message", JOptionPane.PLAIN_MESSAGE);
 						// set values
-						xrefIdentifier.setText(dqr.getId()); 
+						xrefIdentifier.setText(dqr.getId());
 						dsm.setSelectedItem(DataSource.getExistingByFullName("DOI")); // TODO
 					}
 				}
@@ -299,8 +303,10 @@ public class CitationDialog extends ReferenceDialog {
 						String source = pmr.getSource();
 						String year = pmr.getYear();
 						// print message
-						JOptionPane.showConfirmDialog(null, "PubMed found for identifier " + pmr.getId() + ".\n\nTitle: " + title
-								+ "\nSource: " + source + "\nYear: " + year, "Message", JOptionPane.PLAIN_MESSAGE);
+						JOptionPane.showConfirmDialog(
+								null, "PubMed found for identifier " + pmr.getId() + ".\n\nTitle: " + title
+										+ "\nSource: " + source + "\nYear: " + year,
+								"Message", JOptionPane.PLAIN_MESSAGE);
 						xrefIdentifier.setText(pmr.getId());
 						dsm.setSelectedItem(DataSource.getExistingByFullName("PubMed")); // TODO
 					}
