@@ -49,6 +49,8 @@ public class GdbManager extends AbstractListModel {
 
 	public GdbManager() {
 		try {
+//			Class.forName("org.apache.derby.jdbc.EmbeddedDriver"); // TODO
+//			Class.forName("org.apache.derby.jdbc.ClientDriver"); // TODO
 			Class.forName("org.bridgedb.file.IDMapperText");
 			Class.forName("org.bridgedb.rdb.IDMapperRdb");
 		} catch (ClassNotFoundException ex) {
@@ -80,8 +82,7 @@ public class GdbManager extends AbstractListModel {
 		removeMapper(genes);
 		genes = null;
 		if (connectString != null) {
-			System.out.println("Print" + connectString);
-			genes = BridgeDb.connect(connectString);
+			genes = BridgeDb.connect(connectString); // TODO
 			if (genes != null) {
 				PreferenceManager.getCurrent().set(GlobalPreference.DB_CONNECTSTRING_GDB, (connectString));
 				addMapper(genes, connectString);

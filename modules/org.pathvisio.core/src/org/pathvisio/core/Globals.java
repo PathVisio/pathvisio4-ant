@@ -19,8 +19,7 @@ package org.pathvisio.core;
 /**
  * Global Project-wide Constants
  */
-public class Globals
-{
+public class Globals {
 	public static final String APPLICATION_NAME = "PathVisio";
 	public static final String HELP_URL = "https://pathvisio.org/documentation";
 	// for inclusion in certain error messages.
