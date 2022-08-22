@@ -128,9 +128,9 @@ public enum GlobalPreference implements Preference {
 		if (dirApplication == null) {
 			// Windows specific directory configuration
 			if (Utils.getOS() == Utils.OS_WINDOWS) {
-				dirApplication = new File(System.getenv("APPDATA"), "PathVisio");
+				dirApplication = new File(System.getenv("APPDATA"), "PathVisio4");
 			} else { // All other OS
-				dirApplication = new File(System.getProperty("user.home"), ".PathVisio");
+				dirApplication = new File(System.getProperty("user.home"), ".PathVisio4");
 			}
 			if (!dirApplication.exists())
 				dirApplication.mkdir();

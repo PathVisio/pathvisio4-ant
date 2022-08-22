@@ -348,9 +348,9 @@ public class PathVisioMain {
 		File appDir;
 		String os = System.getProperty("os.name");
 		if(os.startsWith("Win")) {	
-			appDir = new File(System.getenv("APPDATA"), "PathVisio");
+			appDir = new File(System.getenv("APPDATA"), "PathVisio4");
 		} else { //All other OS
-			appDir = new File(System.getProperty("user.home"), ".PathVisio");
+			appDir = new File(System.getProperty("user.home"), ".PathVisio4");
 		}
 		if(!appDir.exists()) appDir.mkdirs();
 		return new File(appDir.getAbsolutePath(), "bundle-cache");
