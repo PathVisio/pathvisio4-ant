@@ -17,36 +17,28 @@
 package org.pathvisio.gui.dialogs;
 
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.Frame;
-import java.awt.Toolkit;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 
-import org.pathvisio.libgpml.model.PathwayModel;
-import org.pathvisio.libgpml.model.Xrefable;
-import org.pathvisio.libgpml.model.PathwayElement;
-import org.pathvisio.libgpml.prop.StaticProperty;
-import org.pathvisio.libgpml.util.XrefUtils;
-import org.bridgedb.DataSource;
-import org.bridgedb.Xref;
 import org.pathvisio.core.view.model.UndoAction;
 import org.pathvisio.core.view.model.VPathwayModel;
 import org.pathvisio.gui.SwingEngine;
 import org.pathvisio.gui.panels.AnnotationPanel;
 import org.pathvisio.gui.panels.CitationPanel;
-import org.pathvisio.gui.panels.CitationTreePanel;
 import org.pathvisio.gui.panels.CommentPanel;
 import org.pathvisio.gui.panels.EvidencePanel;
 import org.pathvisio.gui.panels.PathwayElementPanel;
+import org.pathvisio.libgpml.model.PathwayElement;
+import org.pathvisio.libgpml.model.PathwayModel;
+import org.pathvisio.libgpml.prop.StaticProperty;
 
 /**
  * Dialog that allows you to display and edit properties of a PathwayElement
  * 
- * @author thomas
+ * @author thomas, finterly
  */
 public class PathwayElementDialog extends OkCancelDialog {
 
@@ -74,7 +66,7 @@ public class PathwayElementDialog extends OkCancelDialog {
 		panels = new HashMap<String, PathwayElementPanel>();
 		createTabs();
 		setInput(e);
-		setSize(340, 300);// UI Design
+		setSize(380, 300);// UI Design
 	}
 
 	protected Component createDialogPane() {

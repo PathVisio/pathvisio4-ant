@@ -47,7 +47,6 @@ import org.bridgedb.IDMapperException;
 import org.bridgedb.IDMapperStack;
 import org.bridgedb.Xref;
 import org.pathvisio.libgpml.model.type.ArrowHeadType;
-import org.pathvisio.libgpml.model.type.ObjectType;
 import org.pathvisio.libgpml.util.XrefUtils;
 import org.pathvisio.libgpml.model.Interaction;
 import org.pathvisio.gui.DataSourceModel;

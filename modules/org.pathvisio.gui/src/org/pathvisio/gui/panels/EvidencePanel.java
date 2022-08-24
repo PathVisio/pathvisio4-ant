@@ -56,6 +56,7 @@ import org.pathvisio.gui.SwingEngine;
 import org.pathvisio.gui.dialogs.EvidenceDialog;
 
 /**
+ * Class for Evidences Panel.
  * 
  * @author finterly
  */

@@ -37,14 +37,6 @@ import org.pathvisio.libgpml.util.ColorUtils;
  * 
  * @author thomas, finterly
  */
-/**
- * @author p70073399
- *
- */
-/**
- * @author p70073399
- *
- */
 public class GroupPainterRegistry {
 
 	// Make bounds slightly larger than the summed bounds of the enclosed elements

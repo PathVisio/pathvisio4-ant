@@ -55,7 +55,6 @@ import org.pathvisio.gui.util.PermissiveComboBox;
 import org.pathvisio.libgpml.debug.Logger;
 import org.pathvisio.libgpml.model.PathwayElement.CitationRef;
 import org.pathvisio.libgpml.model.Referenceable.Citable;
-import org.pathvisio.libgpml.model.type.ObjectType;
 import org.pathvisio.libgpml.util.Utils;
 import org.pathvisio.libgpml.util.XrefUtils;
 import org.xml.sax.SAXException;

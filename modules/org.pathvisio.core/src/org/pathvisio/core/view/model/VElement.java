@@ -34,6 +34,8 @@ import org.pathvisio.core.preferences.PreferenceManager;
  * VPathwayElement includes purely visual helpers that do not have direct
  * correspondence in the model, such as handles and a selection box. TODO naming
  * - better named VElement, because there is no connection to PathwayElement.
+ * 
+ * @author unknown, finterly
  */
 public abstract class VElement implements Comparable<VElement> {
 	protected static final BasicStroke DEFAULT_STROKE = new BasicStroke();

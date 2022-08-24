@@ -16,9 +16,6 @@
  ******************************************************************************/
 package org.pathvisio.core.util;
 
-import java.net.URL;
-
-import org.pathvisio.libgpml.debug.Logger;
 
 import junit.framework.TestCase;
 

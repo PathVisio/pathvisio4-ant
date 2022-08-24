@@ -30,13 +30,7 @@ import org.pathvisio.libgpml.util.XrefUtils;
 import org.pathvisio.libgpml.model.DataNode;
 import org.pathvisio.libgpml.model.Interaction;
 import org.pathvisio.libgpml.model.Label;
-import org.pathvisio.libgpml.model.PathwayElement;
 import org.pathvisio.core.preferences.PreferenceManager;
-import org.pathvisio.core.view.model.VDataNode;
-import org.pathvisio.core.view.model.VDrawable;
-import org.pathvisio.core.view.model.VElement;
-import org.pathvisio.core.view.model.VPathwayModel;
-import org.pathvisio.core.view.model.VPathwayObject;
 
 public class Test extends TestCase {
 

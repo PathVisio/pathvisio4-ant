@@ -31,6 +31,8 @@ import org.xml.sax.helpers.DefaultHandler;
  * call it from the UI thread) The result can then be obtained with getResult()
  * TODO: move DefaultHandler methods to private subclass, they don't need to be
  * exposed.
+ * 
+ * @author Egon Willighagen, finterly
  */
 public class ECOQuery extends DefaultHandler {
 

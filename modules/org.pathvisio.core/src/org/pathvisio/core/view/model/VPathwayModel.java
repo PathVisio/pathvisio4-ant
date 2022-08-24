@@ -54,7 +54,6 @@ import org.pathvisio.libgpml.model.CopyElement;
 import org.pathvisio.libgpml.model.DataNode;
 import org.pathvisio.libgpml.model.DataNode.State;
 import org.pathvisio.libgpml.model.Drawable;
-import org.pathvisio.libgpml.model.GraphLink.LinkableFrom;
 import org.pathvisio.libgpml.model.GraphLink.LinkableTo;
 import org.pathvisio.libgpml.model.GraphicalLine;
 import org.pathvisio.libgpml.model.Group;

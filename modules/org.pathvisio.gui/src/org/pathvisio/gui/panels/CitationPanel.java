@@ -53,6 +53,7 @@ import org.pathvisio.gui.SwingEngine;
 import org.pathvisio.gui.dialogs.CitationDialog;
 
 /**
+ * Class for Citations Panel.
  * 
  * @author unknown, finterly
  */

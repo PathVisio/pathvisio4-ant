@@ -36,7 +36,6 @@ import org.pathvisio.libgpml.model.connector.ConnectorShape.WayPoint;
 import org.pathvisio.libgpml.model.GraphLink.LinkableFrom;
 import org.pathvisio.libgpml.model.type.LineStyleType;
 import org.pathvisio.libgpml.model.type.ArrowHeadType;
-import org.pathvisio.libgpml.model.Group;
 import org.pathvisio.libgpml.model.LineElement;
 import org.pathvisio.libgpml.model.LineElement.Anchor;
 import org.pathvisio.libgpml.model.LineElement.LinePoint;

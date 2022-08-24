@@ -29,7 +29,6 @@ import org.pathvisio.libgpml.model.Label;
 import org.pathvisio.libgpml.model.Pathway;
 import org.pathvisio.libgpml.model.PathwayElement;
 import org.pathvisio.libgpml.model.Shape;
-import org.pathvisio.libgpml.model.ShapedElement;
 import org.pathvisio.gui.SwingEngine;
 
 /**

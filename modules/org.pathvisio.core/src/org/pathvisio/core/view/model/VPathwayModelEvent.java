@@ -25,6 +25,8 @@ import org.pathvisio.core.view.MouseEvent;
 
 /**
  * event sent by VPathway upon modification of one or more VPathwayElements.
+ * 
+ * @author unknown
  */
 public class VPathwayModelEvent extends EventObject {
 

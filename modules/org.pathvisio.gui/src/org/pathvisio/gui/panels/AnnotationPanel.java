@@ -56,6 +56,7 @@ import org.pathvisio.gui.SwingEngine;
 import org.pathvisio.gui.dialogs.AnnotationDialog;
 
 /**
+ * Class for Annotations Panel.
  * 
  * @author finterly
  */

@@ -18,10 +18,12 @@ package org.pathvisio.core.data;
 
 import junit.framework.TestCase;
 
-public class TestOnline extends TestCase
-{
-	public void testPubMedQuery()
-	{
+/**
+ * 
+ * @author unknown, Egon Willighagen
+ */
+public class TestOnline extends TestCase {
+	public void testPubMedQuery() {
 		String id = "17588266";
 		PubMedQuery pmq = new PubMedQuery(id);
 		try {

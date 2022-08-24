@@ -24,13 +24,13 @@ import javax.swing.Action;
 import javax.swing.KeyStroke;
 
 import org.pathvisio.libgpml.model.CopyElement;
-import org.pathvisio.libgpml.model.PathwayElement;
 import org.pathvisio.libgpml.model.PathwayModel;
-import org.pathvisio.libgpml.model.PathwayObject;
 
 /**
  * Wrapper for VPathwayModel that handles toolkit (swing / SWT) dependent
  * differences.
+ * 
+ * @author unknown
  */
 public abstract interface VPathwayModelWrapper {
 	public void redraw();

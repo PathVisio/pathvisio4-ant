@@ -44,6 +44,7 @@ import org.pathvisio.libgpml.model.PathwayElement.Comment;
 import org.pathvisio.core.util.Resources;
 
 /**
+ * Class for Comment Panel.
  * 
  * @author unknown
  */

@@ -32,8 +32,8 @@ import org.pathvisio.libgpml.model.type.ShapeType;
 /**
  * Color Theme class. For coloring of pathway model objects.
  * 
- * NB: Sets colors and shape of DataNode(s) to given Theme. Preserves all other
- * graphics attributes.
+ * NB: Sets colors and shape of DataNode(s) to given Theme. Sets pathway
+ * background color. Preserves all other graphics attributes.
  * 
  * @author finterly
  */
@@ -75,7 +75,6 @@ public class Theme {
 	private Color colorMetabolite;
 	private Color colorPathway;
 	private Color colorDataNodeFill;
-	private Color colorLabel;
 	private Color colorShapeFill;
 	private Color colorShapeGrey;
 	private Color colorShapeDarkGrey;
@@ -93,7 +92,6 @@ public class Theme {
 			colorMetabolite = ColorPalette.WP_BLUE;
 			colorPathway = ColorPalette.WP_DGREEN;
 			colorDataNodeFill = ColorPalette.WP_WHITE;
-			colorLabel = ColorPalette.WP_BLACK;
 			colorShapeFill = ColorPalette.TRANSPARENT;
 			colorShapeGrey = ColorPalette.WP_CUSTOM_PV_MGREY;
 			colorShapeDarkGrey = ColorPalette.WP_DGREY;
@@ -126,8 +124,12 @@ public class Theme {
 	// Color PathwayModel
 	// ================================================================================
 	/**
-	 * @param p
-	 * @param theme
+	 * Sets pathway background color, datanode shapes, and datanode colors. Other
+	 * graphics properties such as shape colors can be set optionally depending on
+	 * the theme.
+	 * 
+	 * @param p the pathway model.
+	 * @param theme the theme to set. 
 	 */
 	public void colorPathwayModel(PathwayModel p) {
 		p.getPathway().setBackgroundColor(colorBackground);
