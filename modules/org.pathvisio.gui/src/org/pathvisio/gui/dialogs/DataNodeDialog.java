@@ -109,7 +109,7 @@ public class DataNodeDialog extends PathwayElementDialog {
 		curDlg = this;
 		getRootPane().setDefaultButton(null);
 		setButton.requestFocus();
-//		setPreferredSize(new Dimension(370, 360)); // UI Design
+//		setPreferredSize(new Dimension(380, 360)); // UI Design
 	}
 
 	// ================================================================================
@@ -255,7 +255,7 @@ public class DataNodeDialog extends PathwayElementDialog {
 		symText.setText(sym);
 		dsm.setSelectedItem(ref.getDataSource()); // TODO must set datasource first...
 		idText.setText(ref.getId());
-		String type = ref.getDataSource().getType(); //TODO update to categories? 
+		String type = ref.getDataSource().getType(); // TODO update to categories?
 		switch (type) {
 		// default
 		case "undefined":
