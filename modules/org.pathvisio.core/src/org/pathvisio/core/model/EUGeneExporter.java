@@ -115,17 +115,20 @@ public class EUGeneExporter implements PathwayModelExporter {
 					continue; // Skip non-datanodes
 				}
 				Xref ref = ((DataNode) elm).getXref();
+				if (ref == null) { // skip datanodes with incomplete annotation (avoid NullPointerException)
+					continue;
+				}
 				DataSource ds = ref.getDataSource();
 				if (ref == null || ref.getId().equals("") || ref.getDataSource() == null) {
 					continue; // Skip datanodes with incomplete annotation
 				}
 				refs.add(ref);
-
 				// Increase code count for this code
-				if (codeCount.containsKey(ref.getDataSource()))
+				if (codeCount.containsKey(ref.getDataSource())) {
 					codeCount.put(ds, codeCount.get(ds) + 1);
-				else
+				} else {
 					codeCount.put(ds, 1);
+				}
 			}
 
 			// Get most occuring systemcode
