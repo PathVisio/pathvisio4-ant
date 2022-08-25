@@ -354,13 +354,15 @@ public class CommonActions implements ApplicationEventListener {
 				engine.getActiveVPathwayModel().getUndoManager().newAction("Apply Theme"); // TODO
 				theme.colorPathwayModel(p);
 				engine.getActiveVPathwayModel().redraw();
-				int n = JOptionPane.showConfirmDialog(null,
-						"Applying theme will overwrite pathway model\ngraphics properties. Are you sure you want to continue?",
-						"Warning", JOptionPane.YES_NO_OPTION);
-				if (n == JOptionPane.YES_OPTION) { // yes
+
+				String[] options = new String[] { "Keep changes", "Revert" };
+				int response = JOptionPane.showOptionDialog(null,
+						"Keep these theme settings? Applying theme will overwrite \npathway model graphics properties.",
+						"Warning", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
+				if (response == 0) { // Keep changes
 					JOptionPane.showMessageDialog(null, theme.getName() + " theme applied.");
 				}
-				if (n == JOptionPane.NO_OPTION) { // no
+				if (response == 1) { // Revert
 					engine.getActiveVPathwayModel().undo();
 					JOptionPane.showMessageDialog(null, "Theme not applied.");
 				}
