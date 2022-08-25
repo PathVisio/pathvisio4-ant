@@ -5,6 +5,7 @@
 
 	<path id="project.class.path">
 		<fileset dir="../../lib">
+			<include name="org.pathvisio.libgpml*.jar" />
 			<include name="org.apache.servicemix.bundles.jdom*.jar" />
 			<include name="org.bridgedb*.jar" />
 			<include name="org.bridgedb.bio*.jar" />
@@ -12,7 +13,6 @@
 			<include name="org.pathvisio.jgoodies.forms*.jar" />
 		</fileset>
 		<fileset dir="${bundle.dest}">
-			<include name="org.pathvisio.libgpml.jar" />
 			<include name="org.pathvisio.core.jar" />
 		</fileset>
 	</path>

@@ -17,6 +17,7 @@ class Revision
 
 	<path id="project.class.path">
 		<fileset dir="../../lib">
+			<include name="org.pathvisio.libgpml*.jar" />
 			<include name="derby*.jar" />
 			<include name="org.apache.xml*.jar" />
 			<include name="org.apache.xalan*.jar" />
@@ -29,9 +30,6 @@ class Revision
 			<include name="org.bridgedb.rdb*.jar" />
 			<include name="commons*.jar" />
 			<include name="json-20220320.jar" />
-		</fileset>
-		<fileset dir="${bundle.dest}">
-			<include name="org.pathvisio.libgpml.jar" />
 		</fileset>
 	</path>
 

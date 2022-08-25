@@ -5,6 +5,7 @@
 
 	<path id="project.class.path">
 		<fileset dir="../../lib">
+			<include name="org.pathvisio.libgpml*.jar" />
 			<include name="org.eclipse.osgi.jar" />
 			<include name="org.apache.servicemix.bundles.jdom*.jar" />
 			<include name="org.pathvisio.jgoodies.forms.jar" />
@@ -15,7 +16,6 @@
 			<!--<include name="osgi-resource-locator*.jar" />-->
 		</fileset>
 		<fileset dir="${bundle.dest}">
-			<include name="org.pathvisio.libgpml.jar" />
 			<include name="org.pathvisio.core.jar" />
 			<include name="org.pathvisio.gui.jar" />
 			<include name="org.pathvisio.desktop.jar" />
