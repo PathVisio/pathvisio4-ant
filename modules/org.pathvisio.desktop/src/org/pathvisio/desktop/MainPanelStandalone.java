@@ -100,7 +100,7 @@ public class MainPanelStandalone extends MainPanel {
 		editMenu.addSeparator();
 		addToMenu(standaloneActions.preferencesAction, editMenu);
 
-		JMenu selectionMenu = new JMenu("Selection");
+		JMenu selectionMenu = new JMenu("Layout Tools");
 		for (Action a : actions.layoutActions)
 			addToMenu(a, selectionMenu);
 
