@@ -59,7 +59,7 @@ public class StandaloneActions implements ApplicationEventListener {
 	public final Action selectMetaboliteDbAction;
 	public final Action selectInteractionDbAction;
 	public final Action preferencesAction;
-	public final Action searchAction;
+	// public final Action searchAction; // TODO Removed
 	public final Action newPluginManagerAction;
 	public final Action loadLocalBundlesAction;
 	public final Action printAction;
@@ -76,7 +76,7 @@ public class StandaloneActions implements ApplicationEventListener {
 		 */
 		selectInteractionDbAction = new SelectGeneDbAction(desktop, "Interaction");
 		preferencesAction = new PreferencesAction(desktop);
-		searchAction = new SearchAction(swingEngine);
+		// searchAction = new SearchAction(swingEngine); // TODO Removed
 		newPluginManagerAction = new NewPluginManagerAction(desktop);
 		loadLocalBundlesAction = new LoadLocalBundlesAction(desktop);
 		// registering this class to receive Application level events (used in
@@ -259,28 +259,28 @@ public class StandaloneActions implements ApplicationEventListener {
 		}
 	}
 
-	/** activates search pane */
-	public static class SearchAction extends AbstractAction {
-
-		SwingEngine swingEngine;
-
-		public SearchAction(SwingEngine swingEngine) {
-			super();
-			this.swingEngine = swingEngine;
-			putValue(NAME, "Search Pathways");
-			putValue(SHORT_DESCRIPTION, "Search pathways for a symbol or identifier");
-		}
-
-		public void actionPerformed(ActionEvent e) {
-			// TODO: right now only shows search pane in side panel
-			// really should pop up search dialog.
-			JTabbedPane pane = swingEngine.getApplicationPanel().getSideBarTabbedPane();
-			int index = pane.indexOfTab("Search");
-			if (index > 0) {
-				pane.setSelectedIndex(index);
-			}
-		}
-	}
+	/** activates search pane - TODO Removed */
+//	public static class SearchAction extends AbstractAction {
+//
+//		SwingEngine swingEngine;
+//
+//		public SearchAction(SwingEngine swingEngine) {
+//			super();
+//			this.swingEngine = swingEngine;
+//			putValue(NAME, "Search Pathways");
+//			putValue(SHORT_DESCRIPTION, "Search pathways for a symbol or identifier");
+//		}
+//
+//		public void actionPerformed(ActionEvent e) {
+//			// TODO: right now only shows search pane in side panel
+//			// really should pop up search dialog.
+//			JTabbedPane pane = swingEngine.getApplicationPanel().getSideBarTabbedPane();
+//			int index = pane.indexOfTab("Search");
+//			if (index > 0) {
+//				pane.setSelectedIndex(index);
+//			}
+//		}
+//	}
 
 	/**
 	 * Print menu item. Prints the current Pathway

@@ -96,7 +96,7 @@ public class MainPanelStandalone extends MainPanel {
 		addToMenu(actions.undoAction, editMenu);
 		addToMenu(actions.copyAction, editMenu);
 		addToMenu(actions.pasteAction, editMenu);
-		addToMenu(standaloneActions.searchAction, editMenu);
+		// addToMenu(standaloneActions.searchAction, editMenu); // TODO Removed
 		editMenu.addSeparator();
 		addToMenu(standaloneActions.preferencesAction, editMenu);
 
