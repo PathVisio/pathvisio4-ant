@@ -531,6 +531,13 @@ public class DataNodeDialog extends PathwayElementDialog {
 		typeCombo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				DataNodeType item = (DataNodeType) typeCombo.getSelectedItem();
+				if (item != DataNodeType.ALIAS && getInput().getType() == DataNodeType.ALIAS && getInput().getAliasRef() != null) {
+					int n = JOptionPane.showConfirmDialog(null, "Warning: aliasRef connection will be lost", "Warning",
+							JOptionPane.OK_CANCEL_OPTION);
+					if (n == JOptionPane.CANCEL_OPTION) {
+						return; // do not set new data node type
+					} 
+				}
 				getInput().setType(item);
 				refresh();
 			}
