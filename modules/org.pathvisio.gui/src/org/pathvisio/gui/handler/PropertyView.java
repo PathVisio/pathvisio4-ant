@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import javax.swing.JOptionPane;
 
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellEditor;
@@ -27,9 +28,13 @@ import javax.swing.table.TableCellRenderer;
 
 import org.pathvisio.core.view.model.VPathwayModel;
 import org.pathvisio.gui.SwingEngine;
+import org.pathvisio.libgpml.model.type.ObjectType;
+import org.pathvisio.libgpml.model.type.DataNodeType;
+import org.pathvisio.libgpml.model.DataNode;
 import org.pathvisio.libgpml.model.PathwayElement;
 import org.pathvisio.libgpml.model.PathwayObject;
 import org.pathvisio.libgpml.prop.Property;
+import org.pathvisio.libgpml.util.Utils;
 
 /**
  * PropertyView ties together functionality to view / edit a property on one or
@@ -165,6 +170,18 @@ public class PropertyView implements Comparable<PropertyView> {
 				vPathwayModel.getUndoManager().newAction("Change " + type + " property");
 			}
 			for (PathwayObject pe : elements.toArray(new PathwayObject[0])) {
+				// Dialog box for when type = DATANODETYPE and value not ALIAS
+				if (pe.getObjectType() == ObjectType.DATANODE) {
+					if (!Utils.stringEquals(value.toString(), "Alias")
+							&& ((DataNode) pe).getType() == DataNodeType.ALIAS
+							&& ((DataNode) pe).getAliasRef() != null) {
+						int n = JOptionPane.showConfirmDialog(null, "Warning: aliasRef connection will be lost",
+								"Warning", JOptionPane.OK_CANCEL_OPTION);
+						if (n == JOptionPane.CANCEL_OPTION) {
+							return; // do not set new data node type
+						}
+					}
+				}
 				pe.setPropertyEx(type, value);
 			}
 		}
