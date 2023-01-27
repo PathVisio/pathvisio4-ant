@@ -371,16 +371,15 @@ public class GuiMain implements GdbEventListener {
 	 * @param engine
 	 */
 	private void initImporters(Engine engine) {
+		engine.addPathwayModelImporter(new GPMLFormat(GPMLFormat.GPML2013a));
 		engine.addPathwayModelImporter(new GPMLFormat(GPMLFormat.GPML2021));
 	}
 
 	private void initExporters(Engine engine, GdbManager gdbManager) {
-		engine.addPathwayModelExporter(new GPMLFormat(GPMLFormat.GPML2021));
 		engine.addPathwayModelExporter(new GPMLFormat(GPMLFormat.GPML2013a));
+		engine.addPathwayModelExporter(new GPMLFormat(GPMLFormat.GPML2021));
 		engine.addPathwayModelExporter(new RasterImageExporter(ImageExporter.TYPE_PNG));
 		engine.addPathwayModelExporter(new BatikImageExporter(ImageExporter.TYPE_SVG));
-//		engine.addPathwayModelExporter(new BatikImageExporter(ImageExporter.TYPE_PDF)); // TODO 
-//		engine.addPathwayModelExporter(new DataNodeListExporter(gdbManager)); // TODO
 		engine.addPathwayModelExporter(new EUGeneExporter());
 	}
 

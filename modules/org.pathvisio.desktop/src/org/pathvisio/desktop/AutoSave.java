@@ -54,7 +54,7 @@ public class AutoSave {
 	private void autoSaveFile() throws ConverterException {
 		PathwayModel p = engine.getActivePathwayModel();
 		if (p != null) {
-			GPMLFormat g = new GPMLFormat(GPMLFormat.GPML2021);
+			GPMLFormat g = new GPMLFormat(GPMLFormat.GPML2013a);
 			g.writeToXml(p, autoSaveFile, true);
 			Logger.log.info("Autosaved");
 		}

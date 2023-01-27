@@ -437,8 +437,7 @@ public class SwingEngine implements ApplicationEventListener, PathwayModel.Statu
 		return false;
 	}
 
-	private final Set<PathwayModelIO> GPML_FORMAT_ONLY = Utils
-			.setOf((PathwayModelIO) new GPMLFormat(GPMLFormat.GPML2021));
+	private final Set<PathwayModelIO> GPML_FORMAT_ONLY = Utils.setOf((PathwayModelIO) new GPMLFormat(GPMLFormat.GPML2013a));
 
 	/**
 	 * Opens a file chooser dialog, and opens the chosen pathway.
