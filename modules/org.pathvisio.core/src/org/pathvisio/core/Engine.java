@@ -32,6 +32,7 @@ import javax.swing.SwingUtilities;
 
 import org.pathvisio.libgpml.debug.Logger;
 import org.pathvisio.libgpml.io.ConverterException;
+import org.pathvisio.libgpml.model.GPML2013aWriter;
 import org.pathvisio.libgpml.model.PathwayModel;
 import org.pathvisio.libgpml.io.PathwayModelExporter;
 import org.pathvisio.libgpml.io.PathwayModelImporter;
@@ -232,7 +233,9 @@ public class Engine {
 	public void savePathwayModel(PathwayModel pathwayModel, File toFile) throws ConverterException {
 		// make sure there are no problems with references.
 		// p.fixReferences(); TODO not needed anymore?
-		pathwayModel.writeToXml(toFile, true);
+		// default save to format 2013a - 2021 only via export 
+		GPML2013aWriter.GPML2013aWRITER.writeToXml(pathwayModel, toFile, true);
+//		pathwayModel.writeToXml(toFile, true);
 		fireApplicationEvent(new ApplicationEvent(pathwayModel, ApplicationEvent.Type.PATHWAY_SAVE));
 	}
 
